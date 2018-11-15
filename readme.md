@@ -1,1 +1,1 @@
-# Case Study on Open Policy Analysis on Fiscal Impacts of Deworming interventions. 
+# Case Study on Open Policy Analysis about Fiscal Impacts of Deworming Interventions. 
