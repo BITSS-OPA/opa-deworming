@@ -1,0 +1,81 @@
+---
+title: "Dynamic Document for Fiscal Impacts of Deworming"
+output:
+  html_document:
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+\def\blue{\color{blue}}
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Who are the policy makers?
+ - Ministries of Health, Education and Finance. 
+
+## What is the relevant output that should be used to inform them?
+ - NPV
+ 
+ Proposed output: 
+```{r sample-output, echo=FALSE, warning=FALSE, message=FALSE}
+set.seed(1234)
+library(tidyverse)
+
+ggplot() +
+  geom_density(aes(x = rnorm(1000, mean = 1),
+                   alpha = 1/2), bw=.11, kernel = "gau") +
+  geom_vline(xintercept = c(0, 1), col="blue") +
+  coord_cartesian(xlim = c(-3,3)) +
+  scale_x_discrete(limits = c(0,1))  +   
+  guides(alpha = "none", colour="none") +
+  labs(y = NULL,
+       x = "NPV" ,
+       title = "Figure 1: Distribution NPV of Fiscal Impacts of Deworming")+
+  theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+
+
+
+```
+ 
+
+
+
+
+## Main Equation (the model)
+
+
+\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} w_{t} 
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\label{eq:1}
+\tag{1}
+\end{equation}
+
+
+```{r npv}
+# Gamma is used to index gender. 
+
+npv <- function(n_female, n_male, periods, 
+                interest_r, wage, lambda1_male,lambda_1_female, 
+                saturation, coverage, cost_of_schooling, delta_ed_male, 
+                delta_ed_female, lambda2_male, lambda2_female, 
+                s1, q1, s2, q2, periods) {
+
+  sum( n
+    ) 
+    
+  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} w_{t} 
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+  
+}
+```
+
