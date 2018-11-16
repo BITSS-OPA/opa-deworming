@@ -13,13 +13,35 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+```{r paramters}
+## Data 
+gov_bonds <- 	0.1185	  #Kenyan interest on sovereign debt (Central Bank of Kenya)
+inlfation <- 0.02       #Kenyan inflation rate (World Bank Development Indicators)
+
+# Discount Rate	0.0985	(sovereign - inflation)
+
+#Deworming Cost per person per year (KSH)	43.66	Deworm the World
+
+## Guess work
+
+
+## Research
+
+
+```
+
+    
+
 ## Who are the policy makers?
  - Ministries of Health, Education and Finance. 
 
 ## What is the relevant output that should be used to inform them?
  - NPV
  
- Proposed output: 
+## Proposed output:    
+ 
+ 
 ```{r sample-output, echo=FALSE, warning=FALSE, message=FALSE}
 set.seed(1234)
 library(tidyverse)
@@ -35,17 +57,9 @@ ggplot() +
        x = "NPV" ,
        title = "Figure 1: Distribution NPV of Fiscal Impacts of Deworming")+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-
-
-
 ```
  
-
-
-
-
 ## Main Equation (the model)
-
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
@@ -58,24 +72,38 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 \end{equation}
 
 
-```{r npv}
+```{r model}
+
 # Gamma is used to index gender. 
-
-npv <- function(n_female, n_male, periods, 
-                interest_r, wage, lambda1_male,lambda_1_female, 
-                saturation, coverage, cost_of_schooling, delta_ed_male, 
-                delta_ed_female, lambda2_male, lambda2_female, 
-                s1, q1, s2, q2, periods) {
-
-  sum( n
-    ) 
-    
-  \sum_{\gamma} N_{\gamma} \left[ 
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} w_{t} 
-\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
-K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
-\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+npv <- function(n_male=1, n_female=1, 
+                interest_r_f=0.0985, 
+                wage=1, lambda1_male=1,
+                lambda1_female=1, 
+                tax=0.16575, 
+                saturation=1, coverage=1, cost_of_schooling=1, 
+                delta_ed_male=1, delta_ed_female=1, lambda2_male=1, lambda2_female=1, 
+                s1=1, q1=1, s2=1, q2=1, periods=50) {
+  ns <- c(n_male, n_female)
+  lambda1s <- c(lambda1_male, lambda1_female)
+  lambda2s <- c(lambda2_male, lambda2_female)
+  index_t <- 1:periods
+  delta_ed_s <- c(delta_ed_male, delta_ed_female)
   
+  res1 <- sum( ns * (
+          tax * sum( ( 1 / (1 + interest_r) )^index_t * wage * 
+                     ( lambda1s + saturation * lambda2s / coverage ) ) - 
+          cost_of_schooling * sum( ( 1 / (1 + interest_r) )^index_t * 
+                                    delta_ed_s )
+          )
+          ) - (s2 * q2  - s1 * q1) 
+  return(res1)  
 }
 ```
 
+## Additinal documentation
+
+
+## Questions (for Michael, Ted or Grace)
+
+- where are the $M_\lambda$ in the spreadsheet?
+- 
