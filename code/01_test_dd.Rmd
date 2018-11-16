@@ -16,9 +16,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r paramters}
 ## Data 
-gov_bonds <- 	0.1185	  #Kenyan interest on sovereign debt (Central Bank of Kenya)
-inlfation <- 0.02       #Kenyan inflation rate (World Bank Development Indicators)
-
+gov_bonds <- 	0.1185	    #Kenyan interest on sovereign debt (Central Bank of Kenya)
+inflation <-  0.02        #Kenyan inflation rate (World Bank Development Indicators)
+interst_r_val <- gov_bonds - inflation
 # Discount Rate	0.0985	(sovereign - inflation)
 
 #Deworming Cost per person per year (KSH)	43.66	Deworm the World
@@ -76,7 +76,7 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 
 # Gamma is used to index gender. 
 npv <- function(n_male=1, n_female=1, 
-                interest_r_f=0.0985, 
+                interest_r_f=interst_r_val, 
                 wage=1, lambda1_male=1,
                 lambda1_female=1, 
                 tax=0.16575, 
@@ -99,6 +99,81 @@ npv <- function(n_male=1, n_female=1,
   return(res1)  
 }
 ```
+
+
+## Sub components: 
+
+### "$r$"
+
+\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50} \blue{\left(  \frac{1}{1 + r}\right)}^{t} w_{t} 
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \blue{\left( \frac{1}{1 + r}\right)}^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}
+
+The real interest rate $r$ is obtained from the interest rate on goberment bonds (`r round(gov_bonds, 3)`) minus the inflation rate (`r inflation`). 
+
+```{r real-int-rate}
+interst_r_val <- gov_bonds - inflation
+```
+
+
+### "$w_{t}$"
+
+\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \blue{ w_{t} }
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}
+
+
+\begin{equation}
+w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+\end{equation}
+
+Wage at time $t$ is the weekely starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
+
+#### "$w_0$"
+
+\begin{equation}
+w_t =  \text{#weeks} \times \blue{w_0} (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+\end{equation}
+
+\begin{equation}
+w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+\end{equation}
+
+ **Question**: hrs ag = Assumps&Panel A Calcs B25 - still not sure how it came from table 4 (no panel D and ) 
+
+      - Mean starting wage (KSh) = Ag wage (Suri, 2011) * share of hrs in ag + working wage * share of hrs working for wages + self-emp wage * share of hours in self-emp
+        - share of hrs in ag = Control hrs per week, agriculture/(agric + working for wages+ self-employment) AQUI VOY
+        - share of hrs in ag ...
+        - share of hrs in self-emp ...
+        - working wage = Control group hourly wage, working for wages (conditional on >=10 hrs per week)
+        - self-emp wage = Monthly self-employed profits/(4.5*weekly self-employed hrs, cond hrs>0)
+          - Monthly self-employed profits = Control group monthly self-employed profits
+          - weekly self-employed hrs, cond hrs>0) = Control group weekly self-employed hours, conditional on hrs >0
+
+```{r wage_t, eval=FALSE}
+wage_t
+
+wage_0
+```
+
+
+### "$\lambda_{1,\gamma}$"
+
+\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
+\left(\blue{ \lambda_{1, \gamma} } + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}
 
 ## Additinal documentation
 

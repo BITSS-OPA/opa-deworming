@@ -387,6 +387,18 @@ $(document).ready(function () {
 
 
 
+<pre class="r"><code>## Data 
+gov_bonds &lt;-    0.1185      #Kenyan interest on sovereign debt (Central Bank of Kenya)
+inflation &lt;-  0.02        #Kenyan inflation rate (World Bank Development Indicators)
+interst_r_val &lt;- gov_bonds - inflation
+# Discount Rate 0.0985  (sovereign - inflation)
+
+#Deworming Cost per person per year (KSH)   43.66   Deworm the World
+
+## Guess work
+
+
+## Research</code></pre>
 <div id="who-are-the-policy-makers" class="section level2">
 <h2>Who are the policy makers?</h2>
 <ul>
@@ -415,12 +427,14 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 \tag{1}
 \end{equation}\]</span></p>
 <pre class="r"><code># Gamma is used to index gender. 
-npv &lt;- function(n_male=1, n_female=1, interest_r=1, wage=1, lambda1_male=1,
+npv &lt;- function(n_male=1, n_female=1, 
+                interest_r_f=interst_r_val, 
+                wage=1, lambda1_male=1,
                 lambda1_female=1, 
                 tax=0.16575, 
                 saturation=1, coverage=1, cost_of_schooling=1, 
                 delta_ed_male=1, delta_ed_female=1, lambda2_male=1, lambda2_female=1, 
-                s1=1, q1=1, s2=1, q2=1, periods=1) {
+                s1=1, q1=1, s2=1, q2=1, periods=50) {
   ns &lt;- c(n_male, n_female)
   lambda1s &lt;- c(lambda1_male, lambda1_female)
   lambda2s &lt;- c(lambda2_male, lambda2_female)
@@ -436,6 +450,69 @@ npv &lt;- function(n_male=1, n_female=1, interest_r=1, wage=1, lambda1_male=1,
           ) - (s2 * q2  - s1 * q1) 
   return(res1)  
 }</code></pre>
+</div>
+<div id="sub-components" class="section level2">
+<h2>Sub components:</h2>
+<div id="r" class="section level3">
+<h3>“<span class="math inline">\(r\)</span>”</h3>
+<p><span class="math display">\[\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50} \color{blue}{\left(  \frac{1}{1 + r}\right)}^{t} w_{t} 
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \color{blue}{\left( \frac{1}{1 + r}\right)}^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}\]</span></p>
+<p>The real interest rate <span class="math inline">\(r\)</span> is obtained from the interest rate on goberment bonds (0.118) minus the inflation rate (0.02).</p>
+<pre class="r"><code>interst_r_val &lt;- gov_bonds - inflation</code></pre>
+</div>
+<div id="w_t" class="section level3">
+<h3>“<span class="math inline">\(w_{t}\)</span>”</h3>
+<p><span class="math display">\[\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \color{blue}{ w_{t} }
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+\end{equation}\]</span></p>
+<p>Wage at time <span class="math inline">\(t\)</span> is the weekely starting wage in USD (<span class="math inline">\(w_0\)</span>) that has a base growth rate equal to the per capita GDP growth (<span class="math inline">\(g\)</span>) applied to however many years of work (<span class="math inline">\(Xp\)</span>). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile (<span class="math inline">\(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2\)</span>).</p>
+<div id="w_0" class="section level4">
+<h4>“<span class="math inline">\(w_0\)</span>”</h4>
+<p><span class="math display">\[\begin{equation}
+w_t =  \text{#weeks} \times \color{blue}{w_0} (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+\end{equation}\]</span></p>
+<p><strong>Question</strong>: hrs ag = Assumps&amp;Panel A Calcs B25 - still not sure how it came from table 4 (no panel D and )</p>
+<pre><code>  - Mean starting wage (KSh) = Ag wage (Suri, 2011) * share of hrs in ag + working wage * share of hrs working for wages + self-emp wage * share of hours in self-emp
+    - share of hrs in ag = Control hrs per week, agriculture/(agric + working for wages+ self-employment) AQUI VOY
+    - share of hrs in ag ...
+    - share of hrs in self-emp ...
+    - working wage = Control group hourly wage, working for wages (conditional on &gt;=10 hrs per week)
+    - self-emp wage = Monthly self-employed profits/(4.5*weekly self-employed hrs, cond hrs&gt;0)
+      - Monthly self-employed profits = Control group monthly self-employed profits
+      - weekly self-employed hrs, cond hrs&gt;0) = Control group weekly self-employed hours, conditional on hrs &gt;0</code></pre>
+<pre class="r"><code>wage_t
+
+wage_0</code></pre>
+</div>
+</div>
+<div id="lambda_1gamma" class="section level3">
+<h3>“<span class="math inline">\(\lambda_{1,\gamma}\)</span>”</h3>
+<p><span class="math display">\[\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
+\left(\color{blue}{ \lambda_{1, \gamma} } + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}\]</span></p>
+</div>
+</div>
+<div id="additinal-documentation" class="section level2">
+<h2>Additinal documentation</h2>
 </div>
 <div id="questions-for-michael-ted-or-grace" class="section level2">
 <h2>Questions (for Michael, Ted or Grace)</h2>
