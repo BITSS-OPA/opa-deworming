@@ -387,18 +387,41 @@ $(document).ready(function () {
 
 
 
+<pre class="r"><code>#starting point is
+# Calcs-Table 5!N21 =
+# 'Assumps&amp;Panel A Calcs'!$B$135 * 'Assumps&amp;Panel A Calcs'!$B$10 * 
+# 'Model Params&amp;Exp Profiles'!R9 * 'Model Params&amp;Exp Profiles'!R8</code></pre>
 <pre class="r"><code>## Data 
-gov_bonds &lt;-    0.1185      #Kenyan interest on sovereign debt (Central Bank of Kenya)
-inflation &lt;-  0.02        #Kenyan inflation rate (World Bank Development Indicators)
-interst_r_val &lt;- gov_bonds - inflation
-# Discount Rate 0.0985  (sovereign - inflation)
-
+gov_bonds &lt;-    0.1185        #Kenyan interest on sovereign debt - Central Bank of Kenya
+inflation &lt;-  0.02          #Kenyan inflation rate - World Bank Development Indicators
+wage_ag_val &lt;-  11.84         #Mean hourly wage rate (KSH) - Suri 2011 
+wage_ww_val &lt;-  14.5850933  #Control group hourly wage, ww (cond &gt;=10 hrs per week) - Table 4, Panel B
+profits_se_val &lt;- 1766      #Control group monthly self-employed profits - Table 4, Panel A
+hours_se_cond_val &lt;- 38.1   #Control group weekly self-employed hours, conditional on hrs &gt;0 - Table D13, Panel D
+hours_ag_val &lt;- 8.3         #Control group hrs per week, agriculture - Table 4, Panel D
+hours_ww_val &lt;- 6.9         #Control group hrs per week, working for wages - Table 4, Panel B
+hours_se_val &lt;- 3.3         #Control group hrs per week, self-employment - Table 4, Panel A
+ex_rate_val &lt;- 85           #Exchange Rate - Central Bank of Kenya 
+growth_rate_val &lt;- 1.52/100 #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -  World Bank - see notes
+coverage_val  &lt;- 0.681333333#Fraction of treated primary school students within 6 km - from W@W - see note
+saturation_val &lt;-  0.511    #Overall Saturation - not reported in table, average of T &amp; C
+full_saturation_val &lt;- 0.75
+tax_val &lt;- 0.16575          #ADD INFO
 #Deworming Cost per person per year (KSH)   43.66   Deworm the World
 
 ## Guess work
+periods_val &lt;- 50           #Total number of periods to forecast wages
+time_to_jm_val &lt;- 10        #Time from intial period until individual join the labor force
+coef_exp_val &lt;- c(0, 0)     #Years of experience coefficients (1-linear, 2-cuadratic)   - see notes 
 
+## Research
+lambda1s_vals &lt;- c(3.49, 0) #Hrs per week increase for men and women
+lambda2_val &lt;- 10.2        #Externality effect (proportional) - Table 3, Panel B
 
-## Research</code></pre>
+#Notes: 
+# on growth_rate_val: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on &quot;Kenya GDP per capita&quot; tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
+# on coef_exp_val: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, female dummy, indicators for attained primary/secondary/beyond, and province dummies. Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle adjustment beyond KLPS-3 (likely a conservative assumption).
+# coverage_val: Overall Saturation (0.511) / 0.75 - not reported in table, average of T &amp; C</code></pre>
 <div id="who-are-the-policy-makers" class="section level2">
 <h2>Who are the policy makers?</h2>
 <ul>
@@ -428,17 +451,24 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 \end{equation}\]</span></p>
 <pre class="r"><code># Gamma is used to index gender. 
 npv &lt;- function(n_male=1, n_female=1, 
-                interest_r_f=interst_r_val, 
-                wage=1, lambda1_male=1,
-                lambda1_female=1, 
-                tax=0.16575, 
-                saturation=1, coverage=1, cost_of_schooling=1, 
-                delta_ed_male=1, delta_ed_female=1, lambda2_male=1, lambda2_female=1, 
-                s1=1, q1=1, s2=1, q2=1, periods=50) {
+                interest_r=interst_r_val, 
+                wage=wage_t_val, 
+                lambda1_male=lambda1s_vals[1],
+                lambda1_female=lambda1s_vals[2], 
+                tax=tax_val, 
+                saturation=saturation_val, 
+                coverage=coverage_val, 
+                cost_of_schooling=1, 
+                delta_ed_male=1, 
+                delta_ed_female=1, 
+                lambda2_male=1, 
+                lambda2_female=1, 
+                s1=1, q1=1, s2=1, q2=1, 
+                periods=periods_val) {
   ns &lt;- c(n_male, n_female)
   lambda1s &lt;- c(lambda1_male, lambda1_female)
   lambda2s &lt;- c(lambda2_male, lambda2_female)
-  index_t &lt;- 1:periods
+  index_t &lt;- 0:periods
   delta_ed_s &lt;- c(delta_ed_male, delta_ed_female)
   
   res1 &lt;- sum( ns * (
@@ -475,38 +505,111 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50
 \end{equation}\]</span></p>
-<p>Wage at time <span class="math inline">\(t\)</span> is the weekely starting wage in USD (<span class="math inline">\(w_0\)</span>) that has a base growth rate equal to the per capita GDP growth (<span class="math inline">\(g\)</span>) applied to however many years of work (<span class="math inline">\(Xp\)</span>). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile (<span class="math inline">\(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2\)</span>).</p>
+<p>ndividual in the data are assumed to enter the labor force 10 years after the (data) present day (<span class="math inline">\(w_t = 0\)</span> for <span class="math inline">\(t&lt;10\)</span>). Wage at time <span class="math inline">\(t\)</span> is the weekely starting wage in USD (<span class="math inline">\(w_0\)</span>) that has a base growth rate equal to the per capita GDP growth (<span class="math inline">\(g\)</span>) applied to however many years of work (<span class="math inline">\(Xp\)</span>). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile (<span class="math inline">\(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2\)</span>).</p>
 <div id="w_0" class="section level4">
 <h4>“<span class="math inline">\(w_0\)</span>”</h4>
 <p><span class="math display">\[\begin{equation}
 w_t =  \text{#weeks} \times \color{blue}{w_0} (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
 \end{equation}\]</span></p>
-<p><strong>Question</strong>: hrs ag = Assumps&amp;Panel A Calcs B25 - still not sure how it came from table 4 (no panel D and )</p>
-<pre><code>  - Mean starting wage (KSh) = Ag wage (Suri, 2011) * share of hrs in ag + working wage * share of hrs working for wages + self-emp wage * share of hours in self-emp
-    - share of hrs in ag = Control hrs per week, agriculture/(agric + working for wages+ self-employment) AQUI VOY
-    - share of hrs in ag ...
-    - share of hrs in self-emp ...
-    - working wage = Control group hourly wage, working for wages (conditional on &gt;=10 hrs per week)
-    - self-emp wage = Monthly self-employed profits/(4.5*weekly self-employed hrs, cond hrs&gt;0)
-      - Monthly self-employed profits = Control group monthly self-employed profits
-      - weekly self-employed hrs, cond hrs&gt;0) = Control group weekly self-employed hours, conditional on hrs &gt;0</code></pre>
-<pre class="r"><code>wage_t
+<p>The initial wage in dollars (<span class="math inline">\(w_{0}\)</span>) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors (<span class="math inline">\(ag, ww, se\)</span>). The weights correspond to the average number of hours in each sector (<span class="math inline">\(h_l\)</span>) relative to the sum of the average number of hours in each sector.</p>
+<p>The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and its defined as hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage (<span class="math inline">\(w_{se}\)</span>) was constructed as follows:</p>
+<p><span class="math display">\[\begin{equation}
+w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}&gt;0] }
+\end{equation}\]</span></p>
+<p>Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs &gt;0 - <span class="math inline">\(E[h_{se}|h_{se}&gt;0]\)</span> -) come from the data (ww paper).</p>
+<ul>
+<li><p><strong>Question</strong>: hrs ag = Assumps&amp;Panel A Calcs B25 - still not sure how it came from table 4 (no panel D and )</p></li>
+<li><p><strong>Question</strong>: explain diff betwee <span class="math inline">\(E[h_{se}|h_{se}&gt;0]\)</span> and <span class="math inline">\(h_{se}\)</span> (why used differently)</p></li>
+</ul>
+<pre class="r"><code>wage_0_f &lt;- function(wage_ag = wage_ag_val, 
+                     wage_ww = wage_ww_val, 
+                     profits_se = profits_se_val, 
+                     hours_se_cond = hours_se_cond_val, 
+                     hours_ag = hours_ag_val, 
+                     hours_ww = hours_ww_val, 
+                     hours_se = hours_se_val, 
+                     ex_rate = ex_rate_val) {
+  wage_se &lt;- profits_se / (4.5 * hours_se_cond)
+  wage_ls &lt;- c(wage_ag, wage_ww, wage_se)
+  alpha_ls &lt;- c(hours_ag, hours_ww, hours_se) / sum( c(hours_ag, hours_ww, hours_se) )
+  res1 &lt;- 1/ex_rate * sum( wage_ls * alpha_ls )
+  return(res1)
+}
 
-wage_0</code></pre>
+#close to value from spreadsheet (Assumps&amp;Panel A Calcs!B137 = 0.1481084), 
+#but I suspect diff due to computational precision 
+
+wage_0_val &lt;- wage_0_f()  
+
+experience_val &lt;- 0:periods_val - time_to_jm_val
+
+wage_t &lt;- function(wage_0 = wage_0_val, 
+                   growth_rate = growth_rate_val, 
+                   experience = experience_val, 
+                   coef_exp1 = coef_exp_val[1], 
+                   coef_exp2 = coef_exp_val[2]) {
+  res1 &lt;- 52 * wage_0 *( ( 1 + growth_rate )^experience ) * 
+    ( 1 + coef_exp1 * experience + coef_exp2 * experience^2 ) * 
+    ifelse(0:periods_val &gt;= time_to_jm_val, 1, 0)
+  return(res1) 
+}
+
+#close to value from spreadsheet (Calcs-Table 5!N21.. = 7.701634678), 
+#but I suspect diff due to computational precision 
+wage_t_val &lt;- wage_t()</code></pre>
 </div>
 </div>
-<div id="lambda_1gamma" class="section level3">
-<h3>“<span class="math inline">\(\lambda_{1,\gamma}\)</span>”</h3>
+<div id="lambda_1gamma-and-lambda_2gamma" class="section level3">
+<h3>“<span class="math inline">\(\lambda_{1,\gamma}\)</span>” and “<span class="math inline">\(\lambda_{2,\gamma}\)</span>”</h3>
 <p><span class="math display">\[\begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
 \tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
-\left(\color{blue}{ \lambda_{1, \gamma} } + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+\left(\color{blue}{ \lambda_{1, \gamma} } + \frac{p \color{blue}{\lambda_{2, \gamma}}}{R} \right) - 
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}\]</span></p>
+<p><span class="math inline">\(\lambda_{1,\gamma}\)</span> represents the estimated impact of deworming on hours of work for men a womam. This two parameter are combined with a unwweighted mean:</p>
+<p><span class="math display">\[\begin{equation}
+\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female} 
+\end{equation}\]</span> Its components come research (W@W).</p>
+<p><span class="math inline">\(\lambda_{2,\gamma}\)</span> the estimated externality effect (EXPLAIN) and comes research (W@W). Note that this parameter in not estimated by gender, so we repeat its value two times.</p>
+<pre class="r"><code>lambda1_val &lt;- 0.5 * lambda1s_vals[1] + 0.5 *lambda1s_vals[2]
+lambda2s_vals &lt;- rep(lambda2_val, 2)</code></pre>
+</div>
+<div id="r-and-p" class="section level3">
+<h3><span class="math inline">\(R\)</span> and <span class="math inline">\(p\)</span></h3>
+<p><span class="math display">\[\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
+\left( \lambda_{1, \gamma}  + \frac{\color{blue}{p} \lambda_{2, \gamma}}{\color{blue}{R}} \right) - 
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}\]</span></p>
+<p><span class="math inline">\(R\)</span> is the fraction of treated primary school students within 6 km. Computed as <span class="math display">\[\begin{equation}
+R = \frac{\text{Overall Saturation}  }{Q(full)}
+\end{equation}\]</span></p>
+<p><span class="math inline">\(p\)</span> is the saturation of the intervention, defined as:</p>
+<p><span class="math display">\[\begin{equation}
+p = Q(full) \times R
+\end{equation}\]</span></p>
+<p><strong>Note:</strong> there is a circularity on how parameters are defined here. Everything depends on Full Saturation (<span class="math inline">\(Q(full)\)</span>) at the end of the day.</p>
+<pre class="r"><code>#R
+coverage_val &lt;-  saturation_val / full_saturation_val
+#p
+saturation_val &lt;- full_saturation_val * coverage_val</code></pre>
+</div>
+<div id="k" class="section level3">
+<h3><span class="math inline">\(K\)</span></h3>
+<p><span class="math display">\[\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
+\left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+\color{blue}{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}\]</span></p>
 </div>
@@ -518,7 +621,16 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 <h2>Questions (for Michael, Ted or Grace)</h2>
 <ul>
 <li>where are the <span class="math inline">\(M_\lambda\)</span> in the spreadsheet?</li>
-<li></li>
+<li>To me: should I add small output after each subsection?</li>
+<li>What are the terms behind the calculation of <span class="math inline">\(R\)</span>?</li>
+<li>Clarify circularity behing <span class="math inline">\(R\)</span> and <span class="math inline">\(p\)</span></li>
+</ul>
+</div>
+<div id="next-steps" class="section level2">
+<h2>Next steps:</h2>
+<ul>
+<li>set up each primitive parama as normal(value,something).</li>
+<li>run 1000? 10000? times and obtain figure 1.</li>
 </ul>
 </div>
 
