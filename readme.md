@@ -8,6 +8,7 @@ Looking for w_t:
     - Mean starting wage, USD = Mean starting wage (KSh) / exchange rate
       - Mean starting wage (KSh) = Ag wage (Suri, 2011) * share of hrs in ag + working wage * share of hrs working for wages + self-emp wage * share of hours in self-emp
         - share of hrs in ag = Control hrs per week, agriculture/(agric + working for wages+ self-employment)
+          - hrs ag = Assumps&Panel A Calcs B25 - still not sure how it came from table 4 (no panel D and )
         - share of hrs in ag ...
         - share of hrs in self-emp ...
         - working wage = Control group hourly wage, working for wages (conditional on >=10 hrs per week)

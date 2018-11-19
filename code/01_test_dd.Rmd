@@ -39,16 +39,37 @@ coverage_val  <- 0.681333333#Fraction of treated primary school students within 
 saturation_val <-  0.511    #Overall Saturation - not reported in table, average of T & C
 full_saturation_val <- 0.75
 tax_val <- 0.16575          #ADD INFO
-#Deworming Cost per person per year (KSH)	43.66	Deworm the World
+unit_cost_local_val <- 43.66#Deworm the World
+years_of_treat_val <- 2.41  #Additional Years of Treatment - Table 1, Panel A
+
+
+## Research
+lambda1_vals <- c(3.49, 0) #Hrs per week increase for men and women CONFIRM
+lambda2_val <- 10.2         #Externality effect (proportional) - Table 3, Panel B
+q_full_val <- 0.75          #Take up rates with full subsidy. From Miguel and Kremmer (2007)
 
 ## Guess work
 periods_val <- 50           #Total number of periods to forecast wages
 time_to_jm_val <- 10        #Time from intial period until individual join the labor force
 coef_exp_val <- c(0, 0)     #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes 
+teach_sal_val <- 5041       #Yearly secondary schooling compensation	5041 - from ROI materials
+teach_ben_val <- 217.47     #Yearly secondary schooling teacher benefits	217.47
+n_students_val <- 45        #Average pupils per teacher	45
 
-## Research
-lambda1s_vals <- c(3.49, 0) #Hrs per week increase for men and women
-lambda2_val <- 10.2        #Externality effect (proportional) - Table 3, Panel B
+
+
+# (Delta E) Additional direct seconday schooling increase (from Joan)	
+delta_ed_vals <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183, 
+  0.0239963665555466, 0.027301406306074, 0.0234125454594173, 0.0279278879439199, 
+  0.00647044449446303, 0.00835739437790601)                                     
+
+delta_ed_vals <- cbind(delta_ed_vals, 1999:2007)
+
+
+-0.011012691	0.014044855	-0.003463629	0.011294021	0.057160818	-0.056054679	0.055828476	0.154626484	0.005596149
+-0.011012691	0.014044855	-0.003463629	0.011294021	0.057160818	-0.056054679	0.055828476	0.154626484	0.005596149
+-0.011012691	0.014044855	-0.003463629	0.011294021	0.057160818	-0.056054679	0.055828476	0.154626484	0.005596149
+
 
 #Notes: 
 # on growth_rate_val: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
@@ -66,9 +87,8 @@ lambda2_val <- 10.2        #Externality effect (proportional) - Table 3, Panel B
  
 ## Proposed output:    
  
- 
 ```{r sample-output, echo=FALSE, warning=FALSE, message=FALSE}
-set.seed(1234)
+set.seed(1234) 
 library(tidyverse)
 
 ggplot() +
@@ -80,7 +100,8 @@ ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
-       title = "Figure 1: Distribution NPV of Fiscal Impacts of Deworming")+
+       title = "PROPOSED OUTPUT [NOT REAL DATA]:", 
+       subtitle = "Distribution NPV of Fiscal Impacts of Deworming")+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
 ```
  
@@ -98,34 +119,38 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 
 
 ```{r model}
-
 # Gamma is used to index gender. 
-npv <- function(n_male=1, n_female=1, 
+npv <- function(n_male=1/2, n_female=1/2, 
                 interest_r=interst_r_val, 
                 wage=wage_t_val, 
-                lambda1_male=lambda1s_vals[1],
-                lambda1_female=lambda1s_vals[2], 
+                lambda1_male=lambda1_vals[1],
+                lambda1_female=lambda1_vals[2], 
                 tax=tax_val, 
                 saturation=saturation_val, 
                 coverage=coverage_val, 
-                cost_of_schooling=1, 
-                delta_ed_male=1, 
-                delta_ed_female=1, 
-                lambda2_male=1, 
-                lambda2_female=1, 
-                s1=1, q1=1, s2=1, q2=1, 
+                cost_of_schooling=cost_per_student, 
+                delta_ed_male=delta_ed_vals[,1], 
+                delta_ed_female=delta_ed_vals[,1], 
+                lambda2_male=lambda2s_vals[1], 
+                lambda2_female=lambda2s_vals[2], 
+                s1=0, q1=0, s2=s2_val, q2=q2_val, 
                 periods=periods_val) {
   ns <- c(n_male, n_female)
   lambda1s <- c(lambda1_male, lambda1_female)
   lambda2s <- c(lambda2_male, lambda2_female)
   index_t <- 0:periods
-  delta_ed_s <- c(delta_ed_male, delta_ed_female)
+  delta_ed_s <- cbind(delta_ed_male, delta_ed_female) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) ) 
   
-  res1 <- sum( ns * (
-          tax * sum( ( 1 / (1 + interest_r) )^index_t * wage * 
-                     ( lambda1s + saturation * lambda2s / coverage ) ) - 
-          cost_of_schooling * sum( ( 1 / (1 + interest_r) )^index_t * 
-                                    delta_ed_s )
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r) )^index_t * wage * 
+                     ( lambda1s[i] + saturation * lambda2s[i] / coverage ) 
+  }
+  
+  res1 <- sum( ns * ( tax * apply(benef, 2, sum) - 
+            apply( ( 1 / (1 + interest_r) )^index_t * 
+                     delta_ed_s * cost_of_schooling, 2, sum)
           )
           ) - (s2 * q2  - s1 * q1) 
   return(res1)  
@@ -194,7 +219,7 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
  - **Question**: explain diff betwee $E[h_{se}|h_{se}>0]$ and $h_{se}$ (why used differently)    
  
 
-```{r wage_t, eval=FALSE}
+```{r wage_t}
 wage_0_f <- function(wage_ag = wage_ag_val, 
                      wage_ww = wage_ww_val, 
                      profits_se = profits_se_val, 
@@ -253,8 +278,8 @@ Its components come research (W\@W).
 
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times. 
 
-```{r lambda1}
-lambda1_val <- 0.5 * lambda1s_vals[1] + 0.5 *lambda1s_vals[2]
+```{r lambdas}
+lambda1_vals <- rep(0.5 * lambda1_vals[1] + 0.5 *lambda1_vals[2], 2)
 lambda2s_vals <- rep(lambda2_val, 2)
 ```
 
@@ -291,29 +316,81 @@ coverage_val <-  saturation_val / full_saturation_val
 saturation_val <- full_saturation_val * coverage_val
 ```
 
-### $K$  
+### $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
 \tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
 \left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) - 
-\blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{ \Delta \overline{E}_{\gamma t}(S1,S2) }
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
+$K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher. 
+ 
+\begin{equation}
+K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
+\end{equation}
 
+```{r cost-per-student}
+cost_per_student <- (teach_sal_val + teach_ben_val) / n_students_val
+```
+
+This is the $\overline{E}_{\gamma t}(S1,S2)$   
+
+**Note:** need to understand better the date of each component (of the model, not only this section). 
+
+```{r delta-ed}
+# Nothing here yet, but would like to incorporate model from Joan
+delta_ed_vals <- delta_ed_vals
+```
+
+### $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
+
+\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
+\left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \blue{ \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) }
+\end{equation}
+
+#### $S_{1}Q(S_{1}) = 0$
+There is no subsidy for deworming under the status quo.   
+
+
+#### $S_{2}$
+
+- `Calcs-Table 5!D46` = `=-'Model Params&Exp Profiles'!$B$9 * 'Model Params&Exp Profiles'!$B$14 / (1+$B46) ^ D$44`  
+
+- `'Model Params&Exp Profiles'!$B$9`  
+    - Total direct cost of deworming = Cost per person per year (USD) * Additional Years of Treatment  
+    - Cost per person per year (USD) = Deworming Cost per person per year (KSH)		 / Exchange Rate
+
+#### $Q_{2}$
+
+
+- `'Model Params&Exp Profiles'!$B$14`  
+    - Q(S_F)
+Take-up rate, full subsidy	0.75	Miguel and Kremer (2007)	
+
+```{r costs}
+#s2_val <- (Deworming Cost per person per year (KSH) / Exchange Rate) * Additional Years of Treatment  
+q2_val <- q_full_val
+s2_val <- ( unit_cost_local_val / ex_rate_val ) * years_of_treat_val
+```
 
 
 ## Additinal documentation
 
-
 ## Questions (for Michael, Ted or Grace)
 
-- where are the $M_\lambda$ in the spreadsheet?
+- where are the $N_\lambda$ in the spreadsheet?
 - To me: should I add small output after each subsection?
 - What are the terms behind the calculation of $R$?
 - Clarify circularity behing $R$ and $p$
+- Why $\Delta \overline{E}_{\gamma t}(S1,S2)$ is not used for separate groups (men and female)
 
 ## Next steps:   
-- set up each primitive parama as normal(value,something). 
+- set up each primitive parama as normal(value,sd = something). 
 - run 1000? 10000? times and obtain figure 1. 
