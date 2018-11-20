@@ -44,7 +44,7 @@ years_of_treat_val <- 2.41  #Additional Years of Treatment - Table 1, Panel A
 
 
 ## Research
-lambda1_vals <- c(3.49, 0) #Hrs per week increase for men and women CONFIRM
+lambda1_vals <- c(3.49, 0)  #Hrs per week increase for men and women CONFIRM
 lambda2_val <- 10.2         #Externality effect (proportional) - Table 3, Panel B
 q_full_val <- 0.75          #Take up rates with full subsidy. From Miguel and Kremmer (2007)
 
@@ -62,13 +62,14 @@ n_students_val <- 45        #Average pupils per teacher	45
 delta_ed_vals <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183, 
   0.0239963665555466, 0.027301406306074, 0.0234125454594173, 0.0279278879439199, 
   0.00647044449446303, 0.00835739437790601)                                     
-
 delta_ed_vals <- cbind(delta_ed_vals, 1999:2007)
 
+#Additional externality secondary schooling increase (from Joan)
+delta_ed_ext_vals <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545585,
+                       0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
+                       0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
+delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
 
--0.011012691	0.014044855	-0.003463629	0.011294021	0.057160818	-0.056054679	0.055828476	0.154626484	0.005596149
--0.011012691	0.014044855	-0.003463629	0.011294021	0.057160818	-0.056054679	0.055828476	0.154626484	0.005596149
--0.011012691	0.014044855	-0.003463629	0.011294021	0.057160818	-0.056054679	0.055828476	0.154626484	0.005596149
 
 
 #Notes: 
@@ -131,8 +132,8 @@ npv <- function(n_male=1/2, n_female=1/2,
                 cost_of_schooling=cost_per_student, 
                 delta_ed_male=delta_ed_vals[,1], 
                 delta_ed_female=delta_ed_vals[,1], 
-                lambda2_male=lambda2s_vals[1], 
-                lambda2_female=lambda2s_vals[2], 
+                lambda2_male=lambda2_vals[1], 
+                lambda2_female=lambda2_vals[2], 
                 s1=0, q1=0, s2=s2_val, q2=q2_val, 
                 periods=periods_val) {
   ns <- c(n_male, n_female)
@@ -150,9 +151,9 @@ npv <- function(n_male=1/2, n_female=1/2,
   
   res1 <- sum( ns * ( tax * apply(benef, 2, sum) - 
             apply( ( 1 / (1 + interest_r) )^index_t * 
-                     delta_ed_s * cost_of_schooling, 2, sum)
-          )
+                     delta_ed_s * cost_of_schooling, 2, sum) )
           ) - (s2 * q2  - s1 * q1) 
+#  browser()
   return(res1)  
 }
 ```
@@ -160,7 +161,7 @@ npv <- function(n_male=1/2, n_female=1/2,
 
 ## Sub components: 
 
-### "$r$"
+### 1 - "$r$"
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
@@ -177,7 +178,7 @@ interst_r_val <- gov_bonds - inflation
 ```
 
 
-### "$w_{t}$"
+### 2 - "$w_{t}$"
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
@@ -259,7 +260,7 @@ wage_t_val <- wage_t()
 ```
 
 
-### "$\lambda_{1,\gamma}$"  and  "$\lambda_{2,\gamma}$"
+### 3 - "$\lambda_{1,\gamma}$"  and  "$\lambda_{2,\gamma}$"
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
@@ -280,11 +281,11 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes resear
 
 ```{r lambdas}
 lambda1_vals <- rep(0.5 * lambda1_vals[1] + 0.5 *lambda1_vals[2], 2)
-lambda2s_vals <- rep(lambda2_val, 2)
+lambda2_vals <- rep(lambda2_val, 2)
 ```
 
 
-### $R$ and $p$  
+### 4 - $R$ and $p$  
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
@@ -310,13 +311,13 @@ p = Q(full) \times R
 **Note:** there is a circularity on how parameters are defined here. Everything depends on Full Saturation ($Q(full)$) at the end of the day.
 
 ```{r coverage-and-saturation}
-#R
+#R 
 coverage_val <-  saturation_val / full_saturation_val
-#p
+#p 
 saturation_val <- full_saturation_val * coverage_val
 ```
 
-### $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$
+### 5 - $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
@@ -345,7 +346,7 @@ This is the $\overline{E}_{\gamma t}(S1,S2)$
 delta_ed_vals <- delta_ed_vals
 ```
 
-### $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
+### 6 - $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
@@ -381,6 +382,120 @@ s2_val <- ( unit_cost_local_val / ex_rate_val ) * years_of_treat_val
 ```
 
 
+### Main results
+
+```{r}
+#yes externality NPV
+npv(delta_ed_male = (delta_ed_ext_vals[,1] + delta_ed_vals[,1]), 
+    delta_ed_female = (delta_ed_ext_vals[,1] + delta_ed_vals[,1] ) )
+
+#no externality NPV
+npv(lambda2_male = 0, lambda2_female = 0)
+```
+
+
+
+```{r sa}
+nsims <- 1e4
+set.seed(123)
+#Defaoult dist: normal, default sd: 0.1* mean
+## Data 
+gov_bonds_sim <- 	rnorm(n = nsims, mean = gov_bonds, sd = 0.1 * gov_bonds)	
+inflation_sim <- rnorm(nsims, inflation, 0.1 * inflation)
+wage_ag_val_sim <- rnorm(nsims, wage_ag_val, 0.1 * wage_ag_val)
+wage_ww_val_sim <- rnorm(nsims, wage_ww_val, 0.1 * wage_ww_val)
+profits_se_val_sim <- rnorm(nsims, profits_se_val, 0.1 * profits_se_val)
+hours_se_cond_val_sim <- rnorm(nsims, hours_se_cond_val, 0.1 * hours_se_cond_val)
+hours_ag_val_sim <- rnorm(nsims, hours_ag_val, 0.1 * hours_ag_val)
+hours_ww_val_sim <- rnorm(nsims, hours_ww_val, 0.1 * hours_ww_val)
+hours_se_val_sim <- rnorm(nsims, hours_se_val, 0.1 * hours_se_val)
+ex_rate_val_sim <- rnorm(nsims, ex_rate_val, 0.1 * ex_rate_val)
+growth_rate_val_sim <- rnorm(nsims, growth_rate_val, 0.1 * growth_rate_val)
+coverage_val_sim <- rnorm(nsims, coverage_val, 0.1 * coverage_val)
+saturation_val_sim <- rnorm(nsims, saturation_val, 0.1 * saturation_val)
+full_saturation_val_sim <- rnorm(nsims, full_saturation_val, 0.1 * full_saturation_val)
+tax_val_sim <- rnorm(nsims, tax_val, 0.1 * tax_val)
+unit_cost_local_val_sim <- rnorm(nsims, unit_cost_local_val, 0.1 * unit_cost_local_val)
+years_of_treat_val_sim <- rnorm(nsims, years_of_treat_val, 0.1 * years_of_treat_val)
+
+## Research
+lambda1_vals_sim <- sapply(lambda1_vals, function(x)  rnorm(nsims, mean = x, sd = 0.1 * x) )
+lambda2_val_sim <- rnorm(nsims, lambda2_val, 0.1 * lambda2_val)
+q_full_val_sim <- rnorm(nsims, q_full_val, 0.1 * q_full_val)
+
+## Guess work
+periods_val <- 50           #Total number of periods to forecast wages
+time_to_jm_val <- 10        #Time from intial period until individual join the labor force
+coef_exp_val_sim <-  sapply(coef_exp_val, function(x)  rnorm(nsims, mean = x, sd = 0.001))
+teach_sal_val_sim <- rnorm(nsims, teach_sal_val, 0.1 * teach_sal_val)
+teach_ben_val_sim <- rnorm(nsims, teach_ben_val, 0.1 * teach_ben_val)
+n_students_val_sim <- rnorm(nsims, n_students_val, 0.1 * n_students_val)
+
+delta_ed_vals_sim <- sapply(delta_ed_vals[,1], function(x)  rnorm(nsims, mean = x, sd = sd(delta_ed_vals[,1])))
+colnames(delta_ed_vals_sim) <- 1999:2007
+
+delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean = x, sd = sd(delta_ed_ext_vals[,1])))
+colnames(delta_ed_ext_vals_sim) <- 1999:2007
+
+
+npv_sim <- rep(NA, nsims)
+#yes externality NPV
+for (i in 1:nsims) {
+  interst_r_val <- gov_bonds_sim[i] - inflation_sim[i]
+  wage_0_val <- wage_0_f(wage_ag = wage_ag_val_sim[i], 
+                       wage_ww = wage_ww_val_sim[i], 
+                       profits_se = profits_se_val_sim[i], 
+                       hours_se_cond = hours_se_cond_val_sim[i], 
+                       hours_ag = hours_ag_val_sim[i], 
+                       hours_ww = hours_ww_val_sim[i], 
+                       hours_se = hours_se_val_sim[i], 
+                       ex_rate = ex_rate_val_sim[i])  
+  experience_val <- 0:periods_val - time_to_jm_val
+  wage_t_val <- wage_t(wage_0 = wage_0_val, 
+                   growth_rate = growth_rate_val_sim[i], 
+                   experience = experience_val, 
+                   coef_exp1 = coef_exp_val_sim[i,1], 
+                   coef_exp2 = coef_exp_val_sim[i,2])
+  lambda1_vals_aux <- rep(0.5 * lambda1_vals_sim[i,1] + 0.5 * lambda1_vals_sim[i,2], 2)
+  lambda2_vals <- rep(lambda2_val_sim[i], 2)
+  coverage_val_aux <-  saturation_val_sim[i] / full_saturation_val_sim[i]
+  saturation_val_aux <- full_saturation_val_sim[i] * coverage_val_sim[i]
+  cost_per_student <- (teach_sal_val_sim[i] + teach_ben_val_sim[i]) / n_students_val_sim[i]
+  q2_val_aux <- q_full_val_sim[i]
+  s2_val_aux <- ( unit_cost_local_val_sim[i] / ex_rate_val_sim[i] ) * years_of_treat_val_sim[i]
+  npv_sim[i] <- npv(interest_r = interst_r_val, 
+                       wage = wage_t_val, 
+                       lambda1_male = lambda1_vals_aux[1], 
+                       lambda1_female = lambda1_vals_aux[2], 
+                       lambda2_male =  lambda2_vals[1], 
+                       lambda2_female =  lambda2_vals[2],
+                    coverage = coverage_val_aux,
+                    saturation = saturation_val_aux,
+                       tax = tax_val_sim[i], 
+                       delta_ed_male = (delta_ed_ext_vals_sim[i,]+delta_ed_vals_sim[i,]), 
+                       delta_ed_female = (delta_ed_ext_vals_sim[i,]+delta_ed_vals_sim[i,] ), 
+                    q2 = q2_val_aux, 
+                    s2 = s2_val_aux)
+}
+
+
+ggplot() +
+  geom_density(aes(x = npv_sim,
+                   alpha = 1/2), kernel = "gau") +
+  geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
+  coord_cartesian(xlim = c(-30,100)) +
+  guides(alpha = "none", colour="none") +
+  labs(y = NULL,
+       x = "NPV" ,
+       title = "Distribution NPV of Fiscal Impacts of Deworming")+
+  theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+
+sd(lambda1_vals_sim)
+lambda2_vals
+sd(npv_sim)
+``` 
+
+
 ## Additinal documentation
 
 ## Questions (for Michael, Ted or Grace)
@@ -392,5 +507,8 @@ s2_val <- ( unit_cost_local_val / ex_rate_val ) * years_of_treat_val
 - Why $\Delta \overline{E}_{\gamma t}(S1,S2)$ is not used for separate groups (men and female)
 
 ## Next steps:   
-- set up each primitive parama as normal(value,sd = something). 
-- run 1000? 10000? times and obtain figure 1. 
+- set up each primitive parama as normal(value,sd = something). DONE
+- run 1000? 10000? times and obtain figure 1. DONE
+- Finish description of last component
+- deploy shiny app with one slider.
+- 
