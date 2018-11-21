@@ -12,10 +12,10 @@ library(shiny)
 
 ui <- fluidPage(
   sidebarPanel(id = "tPanel",style = "overflow-y:scroll; max-height: 500px; position:relative;",
-               numericInput("param1", label = h3("N Sims = "), value = 1e1),
+               numericInput("param1", label = h3("N Sims = "), value = 1e4),
                br("Data"), 
                sliderInput("param2", label = "Govt bonds = ",
-                           min = 0.001, max = 0.2, value = gov_bonds, round = -5), 
+                           min = 0.001, max = 0.2, value = gov_bonds), 
                sliderInput("param3", label = "Inflation = ",
                            min = 0.001, max = 0.2, value = inflation), 
                sliderInput("param4", label = "W_ag = ",
@@ -161,7 +161,7 @@ server <- function(input, output) {
                            coef_exp2 = coef_exp_val_sim[i,2])
       lambda1_vals_aux <- rep(0.5 * lambda1_vals_sim[i,1] + 0.5 * lambda1_vals_sim[i,2], 2)
       lambda2_vals <- rep(lambda2_val_sim[i], 2)
-      coverage_val_aux <- saturation_val_sim[i] / full_saturation_val_sim[i]
+      coverage_val_aux <-  saturation_val_sim[i] / full_saturation_val_sim[i]
       saturation_val_aux <- full_saturation_val_sim[i] * coverage_val_sim[i]
       cost_per_student <- (teach_sal_val_sim[i] + teach_ben_val_sim[i]) / n_students_val_sim[i]
       q2_val_aux <- q_full_val_sim[i]
@@ -182,13 +182,14 @@ server <- function(input, output) {
                         lambda2_female =  lambda2_vals[2],
                         coverage = coverage_val_aux,
                         saturation = saturation_val_aux,
-                        cost_of_schooling=cost_per_student, 
                         tax = tax_val_sim[i], 
+                        cost_of_schooling=cost_per_student, 
                         delta_ed_male = delta_ed_final, 
                         delta_ed_female = delta_ed_final, 
                         q2 = q2_val_aux, 
                         s2 = s2_val_aux)
     }
+    
     
     return(npv_sim)
   }
@@ -228,7 +229,7 @@ server <- function(input, output) {
   
   output$plot1 <- renderPlot({
     npv_sim <- reactive.data1()
-    npv_for_text <- paste("Median NPV:\n ", round(mean(npv_sim), 2))
+    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
     ggplot() +
       geom_density(aes(x = npv_sim,
                        alpha = 1/2), kernel = "gau") +
