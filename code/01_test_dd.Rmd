@@ -24,38 +24,37 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r paramters}
 ## Data 
-gov_bonds <- 	0.1185	      #Kenyan interest on sovereign debt - Central Bank of Kenya
-inflation <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
-wage_ag_val <- 	11.84	      #Mean hourly wage rate (KSH) - Suri 2011 
-wage_ww_val <- 	14.5850933  #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
-profits_se_val <- 1766      #Control group monthly self-employed profits - Table 4, Panel A
-hours_se_cond_val <- 38.1   #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
-hours_ag_val <- 8.3         #Control group hrs per week, agriculture - Table 4, Panel D
-hours_ww_val <- 6.9         #Control group hrs per week, working for wages - Table 4, Panel B
-hours_se_val <- 3.3         #Control group hrs per week, self-employment - Table 4, Panel A
-ex_rate_val <- 85           #Exchange Rate - Central Bank of Kenya 
-growth_rate_val <- 1.52/100 #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
-coverage_val  <- 0.681333333#Fraction of treated primary school students within 6 km - from W@W - see note
-saturation_val <-  0.511    #Overall Saturation - not reported in table, average of T & C
-full_saturation_val <- 0.75
-tax_val <- 0.16575          #ADD INFO
-unit_cost_local_val <- 43.66#Deworm the World
-years_of_treat_val <- 2.41  #Additional Years of Treatment - Table 1, Panel A
-
-
-## Research
-lambda1_vals <- c(3.49, 0)  #Hrs per week increase for men and women CONFIRM
-lambda2_val <- 10.2         #Externality effect (proportional) - Table 3, Panel B
-q_full_val <- 0.75          #Take up rates with full subsidy. From Miguel and Kremmer (2007)
-
-## Guess work
-periods_val <- 50           #Total number of periods to forecast wages
-time_to_jm_val <- 10        #Time from intial period until individual join the labor force
-coef_exp_val <- c(0, 0)     #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes 
-teach_sal_val <- 5041       #Yearly secondary schooling compensation	5041 - from ROI materials
-teach_ben_val <- 217.47     #Yearly secondary schooling teacher benefits	217.47
-n_students_val <- 45        #Average pupils per teacher	45
-
+gov_bonds <- 	0.1185	          #Kenyan interest on sovereign debt - Central Bank of Kenya
+inflation <-  0.02              #Kenyan inflation rate - World Bank Development Indicators
+wage_ag_val <- 	11.84	          #Mean hourly wage rate (KSH) - Suri 2011 
+wage_ww_val <- 	14.5850933      #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
+profits_se_val <- 1766          #Control group monthly self-employed profits - Table 4, Panel A
+hours_se_cond_val <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
+hours_ag_val <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
+hours_ww_val <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
+hours_se_val <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
+ex_rate_val <- 85               #Exchange Rate - Central Bank of Kenya 
+growth_rate_val <- 1.52/100     #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
+coverage_val  <- 0.681333333    #Fraction of treated primary school students within 6 km - from W@W - see note
+saturation_val <-  0.511        #Overall Saturation - not reported in table, average of T & C
+full_saturation_val <- 0.75     #REPEATED WITH q_full_val in Research component
+tax_val <- 0.16575              #ADD INFO
+unit_cost_local_val <- 43.66    #Deworm the World
+years_of_treat_val <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    
+    
+## Research   
+lambda1_vals <- c(3.49, 0)      #Hrs per week increase for men and women CONFIRM
+lambda2_val <- 10.2             #Externality effect (proportional) - Table 3, Panel B
+q_full_val <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
+    
+## Guess work   
+periods_val <- 50               #Total number of periods to forecast wages
+time_to_jm_val <- 10            #Time from intial period until individual join the labor force
+coef_exp_val <- c(0, 0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes 
+teach_sal_val <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
+teach_ben_val <- 217.47         #Yearly secondary schooling teacher benefits	217.47
+n_students_val <- 45            #Average pupils per teacher	45
 
 
 # (Delta E) Additional direct seconday schooling increase (from Joan)	
@@ -71,6 +70,38 @@ delta_ed_ext_vals <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545
 delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
 
 
+## Data 
+gov_bonds <- 	0.118	          #Kenyan interest on sovereign debt - Central Bank of Kenya
+inflation <-  0.02              #Kenyan inflation rate - World Bank Development Indicators
+wage_ag_val <- 	11.8	          #Mean hourly wage rate (KSH) - Suri 2011 
+wage_ww_val <- 	14.6      #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
+profits_se_val <- 1766          #Control group monthly self-employed profits - Table 4, Panel A
+hours_se_cond_val <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
+hours_ag_val <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
+hours_ww_val <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
+hours_se_val <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
+ex_rate_val <- 85               #Exchange Rate - Central Bank of Kenya 
+growth_rate_val <- 1.52/100     #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
+coverage_val  <- 0.68    #Fraction of treated primary school students within 6 km - from W@W - see note
+saturation_val <-  0.51        #Overall Saturation - not reported in table, average of T & C
+full_saturation_val <- 0.75     #REPEATED WITH q_full_val in Research component
+tax_val <- 0.166              #ADD INFO
+unit_cost_local_val <- 43.7    #Deworm the World
+years_of_treat_val <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    
+    
+## Research   
+lambda1_vals <- c(3.49, 0)      #Hrs per week increase for men and women CONFIRM
+lambda2_val <- 10.2             #Externality effect (proportional) - Table 3, Panel B
+q_full_val <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
+    
+## Guess work   
+periods_val <- 50               #Total number of periods to forecast wages
+time_to_jm_val <- 10            #Time from intial period until individual join the labor force
+coef_exp_val <- c(0, 0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes 
+teach_sal_val <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
+teach_ben_val <- 217         #Yearly secondary schooling teacher benefits	217.47
+n_students_val <- 45            #Average pupils per teacher	45
 
 #Notes: 
 # on growth_rate_val: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
@@ -195,7 +226,7 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 
 ndividual in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0$ for $t<10$). Wage at time $t$ is the weekely starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$). 
 
-#### "$w_0$"
+#### 2.1 - "$w_0$"
 
 \begin{equation}
 w_t =  \text{#weeks} \times \blue{w_0} (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
@@ -275,9 +306,9 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 \begin{equation}
 \lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female} 
 \end{equation}
-Its components come research (W\@W). 
+Its components come from research (W\@W). 
 
-$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times. 
+$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times. 
 
 ```{r lambdas}
 lambda1_vals <- rep(0.5 * lambda1_vals[1] + 0.5 *lambda1_vals[2], 2)
@@ -337,14 +368,18 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 cost_per_student <- (teach_sal_val + teach_ben_val) / n_students_val
 ```
 
-This is the $\overline{E}_{\gamma t}(S1,S2)$   
+For $\Delta \overline{E}_{\gamma t}(S1,S2)$ we use a series of estimated effects the additional direct increase in seconday schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`]. 
 
-**Note:** need to understand better the date of each component (of the model, not only this section). 
+This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series. 
+
 
 ```{r delta-ed}
-# Nothing here yet, but would like to incorporate model from Joan
-delta_ed_vals <- delta_ed_vals
+# Nothing here yet with delta_ed_vals, but would like to incorporate model from Joan
+# delta_ed_vals <- 
+delta_ed_ext_total <- delta_ed_ext_vals[,1] + delta_ed_vals[,1]
 ```
+
+**Note:** need to understand better the date of each component (of the model, not only this section). 
 
 ### 6 - $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
 
@@ -356,51 +391,51 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 \right] - \blue{ \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) }
 \end{equation}
 
-#### $S_{1}Q(S_{1}) = 0$
+#### 6.1 - $S_{1}Q(S_{1}) = 0$
 There is no subsidy for deworming under the status quo.   
 
 
-#### $S_{2}$
+#### 6.2 - $S_{2}$: complete subsidy to per capita costs of deworming. 
 
-- `Calcs-Table 5!D46` = `=-'Model Params&Exp Profiles'!$B$9 * 'Model Params&Exp Profiles'!$B$14 / (1+$B46) ^ D$44`  
+With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
 
-- `'Model Params&Exp Profiles'!$B$9`  
-    - Total direct cost of deworming = Cost per person per year (USD) * Additional Years of Treatment  
-    - Cost per person per year (USD) = Deworming Cost per person per year (KSH)		 / Exchange Rate
+\begin{equation}
+S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\ 
+\end{equation}
 
-#### $Q_{2}$
-
-
-- `'Model Params&Exp Profiles'!$B$14`  
-    - Q(S_F)
-Take-up rate, full subsidy	0.75	Miguel and Kremer (2007)	
+#### 6.3 - $Q_{2}$
+The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of `r q_full_val`.
 
 ```{r costs}
-#s2_val <- (Deworming Cost per person per year (KSH) / Exchange Rate) * Additional Years of Treatment  
-q2_val <- q_full_val
 s2_val <- ( unit_cost_local_val / ex_rate_val ) * years_of_treat_val
+q2_val <- q_full_val
 ```
 
 
 ### Main results
 
 ```{r}
-#yes externality NPV
-npv(delta_ed_male = (delta_ed_ext_vals[,1] + delta_ed_vals[,1]), 
-    delta_ed_female = (delta_ed_ext_vals[,1] + delta_ed_vals[,1] ) )
-
 #no externality NPV
-npv(lambda2_male = 0, lambda2_female = 0)
+res_npv_no_ext <- npv(lambda2_male = 0, lambda2_female = 0)
+
+#yes externality NPV
+res_npv_yes_ext <- npv(delta_ed_male = delta_ed_ext_total, 
+                       delta_ed_female = delta_ed_ext_total )
 ```
 
+- **NPV without externalities ($\lambda_2 = 0$):** `r round(res_npv_no_ext,4)`    
 
+- **NPV with externalities ($\lambda_2 = `r round(lambda2_val,2)`$ ):** `r round(res_npv_yes_ext,4)`
+
+## Montecarlo simulations  
 
 ```{r sa}
-nsims <- 1e4
-set.seed(123)
+#34.8401
+nsims <- 1e1
+set.seed(1234)
 #Defaoult dist: normal, default sd: 0.1* mean
 ## Data 
-gov_bonds_sim <- 	rnorm(n = nsims, mean = gov_bonds, sd = 0.1 * gov_bonds)	
+gov_bonds_sim <- rnorm(n = nsims, mean = gov_bonds, sd = 0.1 * gov_bonds)	
 inflation_sim <- rnorm(nsims, inflation, 0.1 * inflation)
 wage_ag_val_sim <- rnorm(nsims, wage_ag_val, 0.1 * wage_ag_val)
 wage_ww_val_sim <- rnorm(nsims, wage_ww_val, 0.1 * wage_ww_val)
@@ -437,7 +472,6 @@ colnames(delta_ed_vals_sim) <- 1999:2007
 delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean = x, sd = sd(delta_ed_ext_vals[,1])))
 colnames(delta_ed_ext_vals_sim) <- 1999:2007
 
-
 npv_sim <- rep(NA, nsims)
 #yes externality NPV
 for (i in 1:nsims) {
@@ -463,22 +497,37 @@ for (i in 1:nsims) {
   cost_per_student <- (teach_sal_val_sim[i] + teach_ben_val_sim[i]) / n_students_val_sim[i]
   q2_val_aux <- q_full_val_sim[i]
   s2_val_aux <- ( unit_cost_local_val_sim[i] / ex_rate_val_sim[i] ) * years_of_treat_val_sim[i]
+  delta_ed_ext_total_sim <- delta_ed_vals_sim[i,] + delta_ed_ext_vals_sim[i,]
+ 
+  include_ext <- TRUE
+  if (include_ext==TRUE){
+    delta_ed_final <-  delta_ed_ext_total_sim
+  }else{
+    delta_ed_final <- delta_ed_vals_sim[i,]
+  }
+  
   npv_sim[i] <- npv(interest_r = interst_r_val, 
-                       wage = wage_t_val, 
-                       lambda1_male = lambda1_vals_aux[1], 
-                       lambda1_female = lambda1_vals_aux[2], 
-                       lambda2_male =  lambda2_vals[1], 
-                       lambda2_female =  lambda2_vals[2],
-                    coverage = coverage_val_aux,
-                    saturation = saturation_val_aux,
-                       tax = tax_val_sim[i], 
-                       delta_ed_male = (delta_ed_ext_vals_sim[i,]+delta_ed_vals_sim[i,]), 
-                       delta_ed_female = (delta_ed_ext_vals_sim[i,]+delta_ed_vals_sim[i,] ), 
-                    q2 = q2_val_aux, 
-                    s2 = s2_val_aux)
+                     wage = wage_t_val, 
+                     lambda1_male = lambda1_vals_aux[1], 
+                     lambda1_female = lambda1_vals_aux[2], 
+                     lambda2_male =  lambda2_vals[1], 
+                     lambda2_female =  lambda2_vals[2],
+                     coverage = coverage_val_aux,
+                     saturation = saturation_val_aux,
+                     tax = tax_val_sim[i], 
+                     cost_of_schooling=cost_per_student, 
+                     delta_ed_male = delta_ed_final, 
+                     delta_ed_female = delta_ed_final, 
+                     q2 = q2_val_aux, 
+                     s2 = s2_val_aux)
 }
 
+# unit test
+if (abs(sd(npv_sim) - 30.5607)>0.0001 ) {
+  print("Output has change")
+}
 
+npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 ggplot() +
   geom_density(aes(x = npv_sim,
                    alpha = 1/2), kernel = "gau") +
@@ -487,16 +536,23 @@ ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
-       title = "Distribution NPV of Fiscal Impacts of Deworming")+
+       title = "Distribution NPV of Fiscal Impacts of Deworming", 
+       subtitle = "With Externalities")+
+  annotate("text", x = 2.2 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-
-sd(lambda1_vals_sim)
-lambda2_vals
-sd(npv_sim)
 ``` 
 
 
-## Additinal documentation
+## Sensitivity Analysis  
+
+If we combinde all the subcomponents of equation 1 into on single, very large, expression, we obtain:
+
+\begin{equation}
+THE\quad MONSTER\quad HERE
+\end{equation}
+
+
+## Additional documentation
 
 ## Questions (for Michael, Ted or Grace)
 
@@ -509,6 +565,9 @@ sd(npv_sim)
 ## Next steps:   
 - set up each primitive parama as normal(value,sd = something). DONE
 - run 1000? 10000? times and obtain figure 1. DONE
-- Finish description of last component
-- deploy shiny app with one slider.
-- 
+- Finish description of last component. DONE
+- deploy shiny app with one slider. DONE
+  - wrap everything in a horrible function DONE
+  - add aditional sliders DONE 
+- Display value for NPV
+- reproduce results with and without externalities reactively
