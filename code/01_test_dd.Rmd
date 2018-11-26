@@ -3,7 +3,9 @@ title: "Dynamic Document for Fiscal Impacts of Deworming"
 output:
   html_document:
     code_folding: hide
-editor_options: 
+  word_document: default
+  pdf_document: default
+editor_options:
   chunk_output_type: console
 ---
 \def\blue{\color{blue}}
@@ -394,6 +396,10 @@ res_npv_yes_ext <- npv(delta_ed_male = delta_ed_ext_total,
 - **NPV with externalities ($\lambda_2 = `r round(lambda2_val,2)`$ ):** `r round(res_npv_yes_ext,4)`
 
 ## Montecarlo simulations  
+Describe approach to MC:  
+ - Eveything normal with sd= 0.1 * mean     
+ - Need to work with experts to add more realistic   parameters and distributions.
+
 
 ```{r sa}
 #34.8401
@@ -510,6 +516,7 @@ ggplot() +
 
 
 ## Sensitivity Analysis  
+Describe how we can move each component. Link to shiny app. 
 
 If we combinde all the subcomponents of equation 1 into on single, very large, expression, we obtain:
 
@@ -535,5 +542,20 @@ THE\quad MONSTER\quad HERE
 - deploy shiny app with one slider. DONE
   - wrap everything in a horrible function DONE
   - add aditional sliders DONE 
-- Display value for NPV
-- reproduce results with and without externalities reactively
+- Display value for NPV  DONE
+- reproduce results with and without externalities reactively DONE  
+- describe MC and SA. 
+- deploy shiny app and build layered document. 
+- buid gif for slides
+- add sliders for SD of each component
+- built two examples: one highly negative and other highly positive.
+- Look for insights out of the shiny app.
+  - Tax?
+  - $\lambda_2 = 0$ but current prices. 
+  - play with SDs  
+  - returns to ed 
+  - $R, p, Q$
+  - Unit costs  
+  - Example to connect with power calc?
+  
+  

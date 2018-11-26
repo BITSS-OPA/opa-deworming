@@ -691,6 +691,9 @@ res_npv_yes_ext &lt;- npv(delta_ed_male = delta_ed_ext_total,
 </div>
 <div id="montecarlo-simulations" class="section level2">
 <h2>Montecarlo simulations</h2>
+<p>Describe approach to MC:<br />
+- Eveything normal with sd= 0.1 * mean<br />
+- Need to work with experts to add more realistic parameters and distributions.</p>
 <pre class="r"><code>#34.8401
 nsims &lt;- 1e4
 set.seed(1234)
@@ -805,6 +808,7 @@ ggplot() +
 </div>
 <div id="sensitivity-analysis" class="section level2">
 <h2>Sensitivity Analysis</h2>
+<p>Describe how we can move each component. Link to shiny app.</p>
 <p>If we combinde all the subcomponents of equation 1 into on single, very large, expression, we obtain:</p>
 <p><span class="math display">\[\begin{equation}
 THE\quad MONSTER\quad HERE
@@ -834,8 +838,26 @@ THE\quad MONSTER\quad HERE
 <li>wrap everything in a horrible function DONE</li>
 <li>add aditional sliders DONE</li>
 </ul></li>
-<li>Display value for NPV</li>
-<li>reproduce results with and without externalities reactively</li>
+<li>Display value for NPV DONE</li>
+<li>reproduce results with and without externalities reactively DONE<br />
+</li>
+<li>describe MC and SA.</li>
+<li>deploy shiny app and build layered document.</li>
+<li>buid gif for slides</li>
+<li>add sliders for SD of each component</li>
+<li>built two examples: one highly negative and other highly positive.</li>
+<li>Look for insights out of the shiny app.
+<ul>
+<li>Tax?</li>
+<li><span class="math inline">\(\lambda_2 = 0\)</span> but current prices.</li>
+<li>play with SDs<br />
+</li>
+<li>returns to ed</li>
+<li><span class="math inline">\(R, p, Q\)</span></li>
+<li>Unit costs<br />
+</li>
+<li>Example to connect with power calc?</li>
+</ul></li>
 </ul>
 </div>
 

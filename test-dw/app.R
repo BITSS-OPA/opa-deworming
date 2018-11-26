@@ -11,17 +11,25 @@ library(shiny)
 
 
 ui <- fluidPage(
-  sidebarPanel(id = "tPanel",style = "overflow-y:scroll; max-height: 500px; position:relative;",
+  sidebarPanel(id = "tPanel",style = "overflow-y:scroll; max-height: 400px; position:relative;",
                numericInput("param1", label = h3("N Sims = "), value = 1e4),
                br("Data"), 
                sliderInput("param2", label = "Govt bonds = ",
                            min = 0.001, max = 0.2, value = gov_bonds), 
+               sliderInput("param2_1", label = "SD = ",
+                           min = 0.00001, max = 0.4 * gov_bonds, value = 0.1 * gov_bonds), 
                sliderInput("param3", label = "Inflation = ",
                            min = 0.001, max = 0.2, value = inflation), 
+               sliderInput("param3_1", label = "SD = ",
+                           min = 0.001, max = 0.4 * inflation, value = 0.1 * inflation), 
                sliderInput("param4", label = "W_ag = ",
                            min = wage_ag_val / 2, max = 2 * wage_ag_val, value = wage_ag_val),
+               sliderInput("param4_1", label = "SD = ",
+                           min = 0.01* wage_ag_val, max = 1 * wage_ag_val, value = 0.1 * wage_ag_val), 
                sliderInput("param5", label = "W_ww = ",
                            min = wage_ww_val / 2, max = 2 * wage_ww_val, value = wage_ww_val),
+               sliderInput("param5_1", label = "SD = ",
+                           min = 0.01* wage_ww_val, max = 1 * wage_ww_val, value = 0.1 * wage_ww_val), 
                sliderInput("param6", label = "Profits se = ",
                            min = profits_se_val / 2, max = 2 * profits_se_val, value = profits_se_val),
                sliderInput("param7", label = "Hours se (>0) = ",
@@ -74,11 +82,15 @@ ui <- fluidPage(
 )
 server <- function(input, output) {
 
-  sim.data1 <- function(nsims = 1e1, 
+  sim.data1 <- function(nsims = 1e4, 
                         gov_bonds_vari,                #Data
-                        inflation_vari, 
-                        wage_ag_vari, 
-                        wage_ww_vari, 
+                        gov_bonds_sd,
+                        inflation_vari,
+                        inflation_sd,
+                        wage_ag_vari,
+                        wage_ag_sd,
+                        wage_ww_vari,
+                        wage_ww_sd,
                         profits_se_vari,
                         hours_se_cond_vari, 
                         hours_ag_vari, 
@@ -104,10 +116,10 @@ server <- function(input, output) {
     set.seed(1234)
     #Defaoult dist: normal, default sd: 0.1* mean
     ## Data 
-    gov_bonds_sim <- rnorm(n = nsims, mean = gov_bonds_vari, sd = 0.1 * gov_bonds_vari)	
-    inflation_sim <- rnorm(nsims, inflation_vari, 0.1 * inflation_vari)
-    wage_ag_val_sim <- rnorm(nsims, wage_ag_vari, 0.1 * wage_ag_vari)
-    wage_ww_val_sim <- rnorm(nsims, wage_ww_vari, 0.1 * wage_ww_vari)
+    gov_bonds_sim <- rnorm(n = nsims, mean = gov_bonds_vari, sd = gov_bonds_sd)	
+    inflation_sim <- rnorm(nsims, inflation_vari, inflation_sd)
+    wage_ag_val_sim <- rnorm(nsims, wage_ag_vari, wage_ag_sd)
+    wage_ww_val_sim <- rnorm(nsims, wage_ww_vari, wage_ww_sd)
     profits_se_val_sim <- rnorm(nsims, profits_se_vari, 0.1 * profits_se_vari)
     hours_se_cond_val_sim <- rnorm(nsims, hours_se_cond_vari, 0.1 * hours_se_cond_vari)
     hours_ag_val_sim <- rnorm(nsims, hours_ag_vari, 0.1 * hours_ag_vari)
@@ -200,9 +212,13 @@ server <- function(input, output) {
   reactive.data1 <- reactive( {
     sim.data1(nsims = as.numeric(input$param1), 
               gov_bonds_vari = as.numeric(input$param2), 
-              inflation_vari = as.numeric(input$param3), 
-              wage_ag_vari = as.numeric(input$param4), 
+              gov_bonds_sd = as.numeric(input$param2_1),
+              inflation_vari = as.numeric(input$param3),
+              inflation_sd = as.numeric(input$param3_1),
+              wage_ag_vari = as.numeric(input$param4),
+              wage_ag_sd = as.numeric(input$param4_1),
               wage_ww_vari = as.numeric(input$param5),
+              wage_ww_sd = as.numeric(input$param5_1),
               profits_se_vari = as.numeric(input$param6), 
               hours_se_cond_vari = as.numeric(input$param7), 
               hours_ag_vari = as.numeric(input$param8), 
