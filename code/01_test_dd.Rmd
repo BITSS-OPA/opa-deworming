@@ -75,54 +75,6 @@ delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
 # on growth_rate_val: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
 # on coef_exp_val: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, female dummy, indicators for attained primary/secondary/beyond, and province dummies. Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle adjustment beyond KLPS-3 (likely a conservative assumption).
 # coverage_val: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
-
-
-## Data 
-gov_bonds <- 	0.118	          #Kenyan interest on sovereign debt - Central Bank of Kenya
-inflation <-  0.02              #Kenyan inflation rate - World Bank Development Indicators
-wage_ag_val <- 	11.8	          #Mean hourly wage rate (KSH) - Suri 2011 
-wage_ww_val <- 	14.6      #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
-profits_se_val <- 1766          #Control group monthly self-employed profits - Table 4, Panel A
-hours_se_cond_val <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
-hours_ag_val <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
-hours_ww_val <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
-hours_se_val <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
-ex_rate_val <- 85               #Exchange Rate - Central Bank of Kenya 
-growth_rate_val <- 1.52/100     #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
-coverage_val  <- 0.68    #Fraction of treated primary school students within 6 km - from W@W - see note
-saturation_val <-  0.51        #Overall Saturation - not reported in table, average of T & C
-full_saturation_val <- 0.75     #REPEATED WITH q_full_val in Research component
-tax_val <- 0.166              #ADD INFO
-unit_cost_local_val <- 43.7    #Deworm the World
-years_of_treat_val <- 2.41      #Additional Years of Treatment - Table 1, Panel A
-    
-    
-## Research   
-lambda1_vals <- c(3.49, 0)      #Hrs per week increase for men and women CONFIRM
-lambda2_val <- 10.2             #Externality effect (proportional) - Table 3, Panel B
-q_full_val <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
-    
-## Guess work   
-periods_val <- 50               #Total number of periods to forecast wages
-time_to_jm_val <- 10            #Time from intial period until individual join the labor force
-coef_exp_val <- c(0, 0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes 
-teach_sal_val <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
-teach_ben_val <- 217         #Yearly secondary schooling teacher benefits	217.47
-n_students_val <- 45            #Average pupils per teacher	45
-
-
-# (Delta E) Additional direct seconday schooling increase (from Joan)	
-delta_ed_vals <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183, 
-  0.0239963665555466, 0.027301406306074, 0.0234125454594173, 0.0279278879439199, 
-  0.00647044449446303, 0.00835739437790601)                                     
-delta_ed_vals <- cbind(delta_ed_vals, 1999:2007)
-
-#Additional externality secondary schooling increase (from Joan)
-delta_ed_ext_vals <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545585,
-                       0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
-                       0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
-delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
-
 ```
 
     
