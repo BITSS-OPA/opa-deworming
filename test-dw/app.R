@@ -85,7 +85,7 @@ ui <- fluidPage(
                numericInput("param18_2", label = h3("Lambda 1_f = "), value = lambda1_vals[2]),
                numericInput("param18_2_1", label = h3("sd = "), value = 0.17),
                sliderInput("param19", label = "Lambda 2 = ",
-                           min = 0, max = 2 * lambda2_val, value = lambda2_val),
+                           min = 0, max = 2 * lambda2_val, value = lambda2_val * 1),
                sliderInput("param19_1", label = "SD = ",
                            min = 0.0000001* lambda2_val, max = 1 * lambda2_val, value = 0.1 * lambda2_val), 
                sliderInput("param20", label = "Take-up = ",
@@ -346,8 +346,17 @@ server <- function(input, output) {
     ) 
   } )
   
+  
   output$plot1 <- renderPlot({
     npv_sim <- reactive.data1()
+    
+    #unit test
+    if (abs(sd(npv_sim) - 30.72)<0.01 ) {
+      plot_title <- "Distribution NPV of Fiscal Impacts of Deworming"
+    } else {
+      plot_title <- "OUTPUT CHANGE" 
+    }
+    
     npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
     npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
     ggplot() +
@@ -358,7 +367,7 @@ server <- function(input, output) {
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
            x = "NPV" ,
-           title = "Distribution NPV of Fiscal Impacts of Deworming", 
+           title = plot_title, 
            subtitle = "With Externalities")+
       annotate("text", x = 70, y = 0.012, label = npv_for_text, size = 6)+
       annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+

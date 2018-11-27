@@ -75,6 +75,54 @@ delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
 # on growth_rate_val: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
 # on coef_exp_val: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, female dummy, indicators for attained primary/secondary/beyond, and province dummies. Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle adjustment beyond KLPS-3 (likely a conservative assumption).
 # coverage_val: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
+
+
+## Data 
+gov_bonds <- 	0.118	          #Kenyan interest on sovereign debt - Central Bank of Kenya
+inflation <-  0.02              #Kenyan inflation rate - World Bank Development Indicators
+wage_ag_val <- 	11.8	          #Mean hourly wage rate (KSH) - Suri 2011 
+wage_ww_val <- 	14.6      #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
+profits_se_val <- 1766          #Control group monthly self-employed profits - Table 4, Panel A
+hours_se_cond_val <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
+hours_ag_val <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
+hours_ww_val <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
+hours_se_val <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
+ex_rate_val <- 85               #Exchange Rate - Central Bank of Kenya 
+growth_rate_val <- 1.52/100     #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
+coverage_val  <- 0.68    #Fraction of treated primary school students within 6 km - from W@W - see note
+saturation_val <-  0.51        #Overall Saturation - not reported in table, average of T & C
+full_saturation_val <- 0.75     #REPEATED WITH q_full_val in Research component
+tax_val <- 0.166              #ADD INFO
+unit_cost_local_val <- 43.7    #Deworm the World
+years_of_treat_val <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    
+    
+## Research   
+lambda1_vals <- c(3.49, 0)      #Hrs per week increase for men and women CONFIRM
+lambda2_val <- 10.2             #Externality effect (proportional) - Table 3, Panel B
+q_full_val <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
+    
+## Guess work   
+periods_val <- 50               #Total number of periods to forecast wages
+time_to_jm_val <- 10            #Time from intial period until individual join the labor force
+coef_exp_val <- c(0, 0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes 
+teach_sal_val <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
+teach_ben_val <- 217         #Yearly secondary schooling teacher benefits	217.47
+n_students_val <- 45            #Average pupils per teacher	45
+
+
+# (Delta E) Additional direct seconday schooling increase (from Joan)	
+delta_ed_vals <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183, 
+  0.0239963665555466, 0.027301406306074, 0.0234125454594173, 0.0279278879439199, 
+  0.00647044449446303, 0.00835739437790601)                                     
+delta_ed_vals <- cbind(delta_ed_vals, 1999:2007)
+
+#Additional externality secondary schooling increase (from Joan)
+delta_ed_ext_vals <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545585,
+                       0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
+                       0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
+delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
+
 ```
 
     
@@ -481,17 +529,8 @@ sim.data1 <- function(nsims = 1e4,
   years_of_treat_val_sim <- rnorm(nsims, years_of_treat_vari, years_of_treat_sd)
   
   ## Research
-  #aux1 <- lapply(1:2,function(x) c(lambda1_vari[x],lambda1_sd[x]) )
-  #lambda1_vals_sim <- sapply(aux1, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) ) 
-
-  #old
-  lambda1_vals_sim <- sapply(lambda1_vals, function(x)  rnorm(nsims, mean = x, sd = 0.170) )
- # print(lambda1_vals_sim)  
-  
-##          [,1]     [,2]
-## [1,] 1.468054 1.374393
-## [2,] 1.546505 1.517031
-  
+  aux1 <- lapply(1:2,function(x) c(lambda1_vari[x],lambda1_sd[x]) )
+  lambda1_vals_sim <- sapply(aux1, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) ) 
   lambda2_val_sim <- rnorm(nsims, lambda2_vari, lambda2_sd)
   q_full_val_sim <- rnorm(nsims, q_full_vari, q_full_sd)
   
@@ -575,50 +614,50 @@ npv_sim <- sim.data1(nsims = 1e4,
           inflation_vari = inflation,
           inflation_sd = 0.1 * inflation,
           wage_ag_vari = wage_ag_val,
-          wage_ag_sd = 0.1 * wage_ag_val,
+          wage_ag_sd = 1.2,
           wage_ww_vari = wage_ww_val,
-          wage_ww_sd = 0.1 * wage_ww_val,
+          wage_ww_sd = 1.5,
           profits_se_vari = profits_se_val,
-          profits_se_sd = 0.1 * profits_se_val,
+          profits_se_sd = 177,
           hours_se_cond_vari = hours_se_cond_val, 
-          hours_se_cond_sd = 0.1 * hours_se_cond_val, 
+          hours_se_cond_sd = 3.8, 
           hours_ag_vari = hours_ag_val,  
-          hours_ag_sd = 0.1 * hours_ag_val, 
+          hours_ag_sd = 0.8, 
           hours_ww_vari = hours_ww_val, 
-          hours_ww_sd = 0.1 * hours_ww_val, 
+          hours_ww_sd = 0.69, 
           hours_se_vari = hours_se_val, 
           hours_se_sd = 0.1 * hours_se_val,
           ex_rate_vari = ex_rate_val,
-          ex_rate_sd = 0.1 * ex_rate_val,
+          ex_rate_sd = 9,
           growth_rate_vari = growth_rate_val, 
-          growth_rate_sd = 0.1 * growth_rate_val, 
+          growth_rate_sd = 0.0015, 
           coverage_vari = coverage_val,
           coverage_sd = 0.1 * coverage_val,
           saturation_vari = saturation_val,
           saturation_sd = 0.1 * saturation_val,
           tax_vari = tax_val, 
-          tax_sd = 0.1 * tax_val, 
+          tax_sd = 0.0170, 
           unit_cost_local_vari = unit_cost_local_val, 
-          unit_cost_local_sd = 0.1 * unit_cost_local_val, 
+          unit_cost_local_sd = 4.4, 
           years_of_treat_vari = years_of_treat_val,
-          years_of_treat_sd = 0.1 * years_of_treat_val,
+          years_of_treat_sd = 0.24,
           lambda1_vari = c(lambda1_vals[1], lambda1_vals[2]),
           lambda1_sd = c(0.17, 0.17),
           lambda2_vari = lambda2_val, 
-          lambda2_sd = 0.1 * lambda2_val, 
+          lambda2_sd = 1, 
           q_full_vari = q_full_val, 
-          q_full_sd = 0.1 * q_full_val, 
+          q_full_sd = 0.07, 
           coef_exp_vari = c(coef_exp_val[1], coef_exp_val[2]), 
           coef_exp_sd = c(0.001 , 0.001), 
           teach_sal_vari = teach_sal_val,
-          teach_sal_sd = 0.1 * teach_sal_val,
+          teach_sal_sd = 504,
           teach_ben_vari = teach_ben_val,
-          teach_ben_sd = 0.1 * teach_ben_val,
+          teach_ben_sd = 22,
           n_students_vari = n_students_val, 
           n_students_sd = 0.1 * n_students_val, 
           include_ext_vari = TRUE, 
           full_saturation_vari = full_saturation_val,
-          full_saturation_sd = 0.1 * full_saturation_val,
+          full_saturation_sd = 0.07,
           delta_ed_par1 = 1,
           delta_ed_sd1 = 1,
           delta_ed_par2 = 1,
@@ -730,8 +769,10 @@ for (i in 1:nsims) {
 if (abs(sd(npv_sim) - 30.5598)>0.0001 ) {
   print("Output has change")
 }
-
+  
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+
 ggplot() +
   geom_density(aes(x = npv_sim,
                    alpha = 1/2), kernel = "gau") +
@@ -743,6 +784,7 @@ ggplot() +
        title = "Distribution NPV of Fiscal Impacts of Deworming", 
        subtitle = "With Externalities")+
   annotate("text", x = 2.2 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
+  annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
 ``` 
 
