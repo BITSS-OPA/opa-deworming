@@ -83,7 +83,8 @@ delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
  - Ministries of Health, Education and Finance. 
 
 ## What is the relevant output that should be used to inform them?
- - NPV
+ - NPV from govermment perspective.   
+ - NPV from social planner perspective.  
  
 ## Proposed output:    
  
@@ -398,7 +399,7 @@ res_npv_yes_ext <- npv(delta_ed_male = delta_ed_ext_total,
 ## Montecarlo simulations  
 Describe approach to MC:  
  - Eveything normal with sd= 0.1 * mean     
- - Need to work with experts to add more realistic   parameters and distributions.
+ - Need to work with experts to add more realistic parameters and distributions.
 
 
 ```{r sa}
@@ -527,6 +528,9 @@ THE\quad MONSTER\quad HERE
 
 ## Additional documentation
 
+**Note:** results seems to be **highly**  insentive to unit costs  
+
+
 ## Questions (for Michael, Ted or Grace)
 
 - where are the $N_\lambda$ in the spreadsheet?
@@ -544,10 +548,11 @@ THE\quad MONSTER\quad HERE
   - add aditional sliders DONE 
 - Display value for NPV  DONE
 - reproduce results with and without externalities reactively DONE  
+- buid gif for slides                           DONE
+- add sliders for SD of each component                DONE 
 - describe MC and SA. 
 - deploy shiny app and build layered document. 
-- buid gif for slides
-- add sliders for SD of each component
+
 - built two examples: one highly negative and other highly positive.
 - Look for insights out of the shiny app.
   - Tax?
@@ -557,5 +562,12 @@ THE\quad MONSTER\quad HERE
   - $R, p, Q$
   - Unit costs  
   - Example to connect with power calc?
+  
+- Made flexible to 20 years   
+- Overall wellfare    
+- Scale lambda 1 to infection rates.  
+
+
+
   
   
