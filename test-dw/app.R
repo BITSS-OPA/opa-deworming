@@ -96,17 +96,17 @@ ui <- fluidPage(
                sliderInput("param26", label = "x * Delta E = ",
                            min = 0.0000001, max = 4, value = 1), 
                sliderInput("param26_1", label = "SD = ",
-                           min = 0.0000001, max = 4, value = .1), 
+                           min = 0.0000001, max = 4, value = 1), 
                sliderInput("param27", label = "x * Delta E (ext)  = ",
                            min = 0.0000001, max = 4, value = 1), 
                sliderInput("param27_1", label = "SD = ",
-                           min = 0.0000001, max = 4, value = .1), 
+                           min = 0.0000001, max = 4, value = 1), 
                
                br("Guesswork"),
                numericInput("param21_1", label = h3("Coef Xp = "), value = coef_exp_val[1]),
-               numericInput("param21_1_1", label = h3("SD = "), value = 0.0001),
+               numericInput("param21_1_1", label = h3("SD = "), value = 0.001),
                numericInput("param21_2", label = h3("Coef Xp^2 = "), value = coef_exp_val[2]),
-               numericInput("param21_2_1", label = h3("SD = "), value = 0.0001),
+               numericInput("param21_2_1", label = h3("SD = "), value = 0.001),
                sliderInput("param22", label = "Teacher salary = ",
                            min = teach_sal_val / 2, max = 2 * teach_sal_val, value = teach_sal_val),
                sliderInput("param22_1", label = "SD = ",
@@ -229,6 +229,7 @@ server <- function(input, output) {
     delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean = 
                                                                                 x * delta_ed_par2, 
                                                                               sd = delta_ed_sd2 * sd(delta_ed_ext_vals[,1])))
+    
     colnames(delta_ed_ext_vals_sim) <- 1999:2007
     
     npv_sim <- rep(NA, nsims)
@@ -351,7 +352,7 @@ server <- function(input, output) {
     npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
     ggplot() +
       geom_density(aes(x = npv_sim,
-                       alpha = 1/8), kernel = "gau", bw=1) +
+                       alpha = 1/2), kernel = "gau") +
       geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
       coord_cartesian(xlim = c(-30,100)) +
       guides(alpha = "none", colour="none") +
@@ -360,7 +361,7 @@ server <- function(input, output) {
            title = "Distribution NPV of Fiscal Impacts of Deworming", 
            subtitle = "With Externalities")+
       annotate("text", x = 70, y = 0.012, label = npv_for_text, size = 6)+
-      annotate("text", x = 90, y = 0.004, label = npv_for_text2, size = 6)+
+      annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
   })
   
