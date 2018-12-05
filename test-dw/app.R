@@ -11,22 +11,23 @@ library(shiny)
 
 
 ui <- fluidPage(
-  sidebarPanel(id = "tPanel",style = "overflow-y:scroll; max-height: 400px; position:relative;",
+  sidebarPanel(id = "tPanel",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                numericInput("param1", label = h3("N Sims = "), value = 1e4),
                br("Data"), 
-               sliderInput("param2", label = "Govt bonds = ",
+               withMathJax(),
+               sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
                            min = 0.001, max = 0.2, value = gov_bonds), 
                sliderInput("param2_1", label = "SD = ",
                            min = 0.0000001, max = 0.4 * gov_bonds, value = 0.1 * gov_bonds), 
-               sliderInput("param3", label = "Inflation = ",
+               sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
                            min = 0.001, max = 0.2, value = inflation), 
                sliderInput("param3_1", label = "SD = ",
                            min = 0.0000001, max = 0.4 * inflation, value = 0.1 * inflation), 
-               sliderInput("param4", label = "W_ag = ",
+               sliderInput("param4", label = "Agri Wages (\\( w_{ag} \\))",
                            min = wage_ag_val / 2, max = 2 * wage_ag_val, value = wage_ag_val),
                sliderInput("param4_1", label = "SD = ",
                            min = 0.0000001* wage_ag_val, max = 1 * wage_ag_val, value = 0.1 * wage_ag_val), 
-               sliderInput("param5", label = "W_ww = ",
+               sliderInput("param5", label = "Work-non ag-Wages  (\\( w_{ww} \\))",
                            min = wage_ww_val / 2, max = 2 * wage_ww_val, value = wage_ww_val),
                sliderInput("param5_1", label = "SD = ",
                            min = 0.0000001* wage_ww_val, max = 1 * wage_ww_val, value = 0.1 * wage_ww_val), 
@@ -184,7 +185,7 @@ server <- function(input, output) {
                         n_students_vari,
                         n_students_sd, 
                         include_ext_vari=TRUE
-                        ) {
+  ) {
     set.seed(1234)
     #Defaoult dist: normal, default sd: 0.1* mean
     ## Data 
@@ -223,13 +224,12 @@ server <- function(input, output) {
     
     delta_ed_vals_sim <- sapply(delta_ed_vals[,1], function(x)  rnorm(nsims, mean = 
                                                                         x * delta_ed_par1, 
-                                                                      sd = delta_ed_sd1 * sd(delta_ed_vals[,1])))
+                                                                      sd = delta_ed_sd1 * sd(delta_ed_vals[,1]) ) )
     colnames(delta_ed_vals_sim) <- 1999:2007
     
     delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean = 
                                                                                 x * delta_ed_par2, 
                                                                               sd = delta_ed_sd2 * sd(delta_ed_ext_vals[,1])))
-    
     colnames(delta_ed_ext_vals_sim) <- 1999:2007
     
     npv_sim <- rep(NA, nsims)
@@ -252,8 +252,8 @@ server <- function(input, output) {
                            coef_exp2 = coef_exp_val_sim[i,2])
       lambda1_vals_aux <- rep(0.5 * lambda1_vals_sim[i,1] + 0.5 * lambda1_vals_sim[i,2], 2)
       lambda2_vals <- rep(lambda2_val_sim[i], 2)
-      coverage_val_aux <-  saturation_val_sim[i] / full_saturation_val_sim[i]
-      saturation_val_aux <- full_saturation_val_sim[i] * coverage_val_sim[i]
+      #coverage_val_aux <-  saturation_val_sim[i] / full_saturation_val_sim[i]
+      #saturation_val_aux <- full_saturation_val_sim[i] * coverage_val_sim[i]
       cost_per_student <- (teach_sal_val_sim[i] + teach_ben_val_sim[i]) / n_students_val_sim[i]
       q2_val_aux <- q_full_val_sim[i]
       s2_val_aux <- ( unit_cost_local_val_sim[i] / ex_rate_val_sim[i] ) * years_of_treat_val_sim[i]
@@ -271,8 +271,8 @@ server <- function(input, output) {
                         lambda1_female = lambda1_vals_aux[2], 
                         lambda2_male =  lambda2_vals[1], 
                         lambda2_female =  lambda2_vals[2],
-                        coverage = coverage_val_aux,
-                        saturation = saturation_val_aux,
+                        coverage = coverage_val_sim[i],
+                        saturation = saturation_val_sim[i],
                         tax = tax_val_sim[i], 
                         cost_of_schooling=cost_per_student, 
                         delta_ed_male = delta_ed_final, 
@@ -284,7 +284,6 @@ server <- function(input, output) {
     
     return(npv_sim)
   }
-  
   
   
    
@@ -351,14 +350,14 @@ server <- function(input, output) {
     npv_sim <- reactive.data1()
     
     #unit test
-    if (abs(sd(npv_sim) - 30.72)<0.01 ) {
+    if (TRUE) {
       plot_title <- "Distribution NPV of Fiscal Impacts of Deworming"
     } else {
       plot_title <- "OUTPUT CHANGE" 
     }
     
     npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+    #npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
     ggplot() +
       geom_density(aes(x = npv_sim,
                        alpha = 1/2), kernel = "gau") +
@@ -370,7 +369,7 @@ server <- function(input, output) {
            title = plot_title, 
            subtitle = "With Externalities")+
       annotate("text", x = 70, y = 0.012, label = npv_for_text, size = 6)+
-      annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+
+      #annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
   })
   
