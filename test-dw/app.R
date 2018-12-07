@@ -93,6 +93,10 @@ ui <- fluidPage(
                            min = q_full_val / 2, max = 2 * q_full_val, value = q_full_val), 
                sliderInput("param20_1", label = "SD = ",
                            min = 0.00000001* q_full_val, max = 1 * q_full_val, value = 0.1 * q_full_val), 
+               sliderInput("param28", label = "Take-up with no subsidy = ",
+                           min = q_zero_val / 2, max = 2 * q_zero_val, value = q_zero_val), 
+               sliderInput("param28_1", label = "SD = ",
+                           min = 0.00000001* q_zero_val, max = 1 * q_zero_val, value = 0.1 * q_zero_val), 
                checkboxInput("checkbox1", label = "Use additional education with externalities", value = TRUE),
                sliderInput("param26", label = "x * Delta E = ",
                            min = 0.0000001, max = 4, value = 1), 
@@ -131,159 +135,164 @@ ui <- fluidPage(
 )
 server <- function(input, output) {
 
-  sim.data1 <- function(nsims = 1e4, 
-                        gov_bonds_vari,                #Data
-                        gov_bonds_sd,
-                        inflation_vari,
-                        inflation_sd,
-                        wage_ag_vari,
-                        wage_ag_sd,
-                        wage_ww_vari,
-                        wage_ww_sd,
-                        profits_se_vari,
-                        profits_se_sd,
-                        hours_se_cond_vari,
-                        hours_se_cond_sd,
-                        hours_ag_vari, 
-                        hours_ag_sd,
-                        hours_ww_vari,
-                        hours_ww_sd,
-                        hours_se_vari,
-                        hours_se_sd,
-                        ex_rate_vari,
-                        ex_rate_sd,
-                        growth_rate_vari, 
-                        growth_rate_sd, 
-                        coverage_vari,
-                        coverage_sd,
-                        full_saturation_vari, 
-                        full_saturation_sd, 
-                        saturation_vari,
-                        saturation_sd,
-                        tax_vari, 
-                        tax_sd, 
-                        unit_cost_local_vari, 
-                        unit_cost_local_sd, 
-                        years_of_treat_vari,
-                        years_of_treat_sd,
-                        lambda1_vari,                   #Research
-                        lambda1_sd, 
-                        lambda2_vari,
-                        lambda2_sd,
-                        q_full_vari, 
-                        q_full_sd,
-                        delta_ed_par1,
-                        delta_ed_sd1,
-                        delta_ed_par2,
-                        delta_ed_sd2,
-                        coef_exp_vari,                  #Guesswork
-                        coef_exp_sd,
-                        teach_sal_vari,
-                        teach_sal_sd,
-                        teach_ben_vari,
-                        teach_ben_sd,
-                        n_students_vari,
-                        n_students_sd, 
-                        include_ext_vari=TRUE
-  ) {
-    set.seed(1234)
-    #Defaoult dist: normal, default sd: 0.1* mean
-    ## Data 
-    gov_bonds_sim <- rnorm(n = nsims, mean = gov_bonds_vari, sd = gov_bonds_sd)	
-    inflation_sim <- rnorm(nsims, inflation_vari, inflation_sd)
-    wage_ag_val_sim <- rnorm(nsims, wage_ag_vari, wage_ag_sd)
-    wage_ww_val_sim <- rnorm(nsims, wage_ww_vari, wage_ww_sd)
-    profits_se_val_sim <- rnorm(nsims, profits_se_vari, profits_se_sd)
-    hours_se_cond_val_sim <- rnorm(nsims, hours_se_cond_vari, hours_se_cond_sd)
-    hours_ag_val_sim <- rnorm(nsims, hours_ag_vari, hours_ag_sd)
-    hours_ww_val_sim <- rnorm(nsims, hours_ww_vari, hours_ww_sd)
-    hours_se_val_sim <- rnorm(nsims, hours_se_vari, hours_se_sd)
-    ex_rate_val_sim <- rnorm(nsims, ex_rate_vari, ex_rate_sd)
-    growth_rate_val_sim <- rnorm(nsims, growth_rate_vari, growth_rate_sd)
-    coverage_val_sim <- rnorm(nsims, coverage_vari, coverage_sd)
-    saturation_val_sim <- rnorm(nsims, saturation_vari, saturation_sd)
-    full_saturation_val_sim <- rnorm(nsims, full_saturation_vari, full_saturation_sd) ###Check here later
-    tax_val_sim <- rnorm(nsims, tax_vari, tax_sd)
-    unit_cost_local_val_sim <- rnorm(nsims, unit_cost_local_vari, unit_cost_local_sd)
-    years_of_treat_val_sim <- rnorm(nsims, years_of_treat_vari, years_of_treat_sd)
-    
-    ## Research
-    aux1 <- lapply(1:2,function(x) c(lambda1_vari[x],lambda1_sd[x]) )
-    lambda1_vals_sim <- sapply(aux1, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) ) 
-    lambda2_val_sim <- rnorm(nsims, lambda2_vari, lambda2_sd)
-    q_full_val_sim <- rnorm(nsims, q_full_vari, q_full_sd)
-    
-    ## Guess work
-    periods_val <- 50           #Total number of periods to forecast wages
-    time_to_jm_val <- 10        #Time from intial period until individual join the labor force
-    aux2 <- lapply(1:2,function(x) c(coef_exp_vari[x],coef_exp_sd[x]) )
-    coef_exp_val_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
-    teach_sal_val_sim <- rnorm(nsims, teach_sal_vari, teach_sal_sd)
-    teach_ben_val_sim <- rnorm(nsims, teach_ben_vari, teach_ben_sd)
-    n_students_val_sim <- rnorm(nsims, n_students_vari, n_students_sd)
-    
-    delta_ed_vals_sim <- sapply(delta_ed_vals[,1], function(x)  rnorm(nsims, mean = 
-                                                                        x * delta_ed_par1, 
-                                                                      sd = delta_ed_sd1 * sd(delta_ed_vals[,1]) ) )
-    colnames(delta_ed_vals_sim) <- 1999:2007
-    
-    delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean = 
-                                                                                x * delta_ed_par2, 
-                                                                              sd = delta_ed_sd2 * sd(delta_ed_ext_vals[,1])))
-    colnames(delta_ed_ext_vals_sim) <- 1999:2007
-    
-    npv_sim <- rep(NA, nsims)
-    #yes externality NPV
-    for (i in 1:nsims) {
-      interst_r_val <- gov_bonds_sim[i] - inflation_sim[i]
-      wage_0_val <- wage_0_f(wage_ag = wage_ag_val_sim[i], 
-                             wage_ww = wage_ww_val_sim[i], 
-                             profits_se = profits_se_val_sim[i], 
-                             hours_se_cond = hours_se_cond_val_sim[i], 
-                             hours_ag = hours_ag_val_sim[i], 
-                             hours_ww = hours_ww_val_sim[i], 
-                             hours_se = hours_se_val_sim[i], 
-                             ex_rate = ex_rate_val_sim[i])  
-      experience_val <- 0:periods_val - time_to_jm_val
-      wage_t_val <- wage_t(wage_0 = wage_0_val, 
-                           growth_rate = growth_rate_val_sim[i], 
-                           experience = experience_val, 
-                           coef_exp1 = coef_exp_val_sim[i,1], 
-                           coef_exp2 = coef_exp_val_sim[i,2])
-      lambda1_vals_aux <- rep(0.5 * lambda1_vals_sim[i,1] + 0.5 * lambda1_vals_sim[i,2], 2)
-      lambda2_vals <- rep(lambda2_val_sim[i], 2)
-      #coverage_val_aux <-  saturation_val_sim[i] / full_saturation_val_sim[i]
-      #saturation_val_aux <- full_saturation_val_sim[i] * coverage_val_sim[i]
-      cost_per_student <- (teach_sal_val_sim[i] + teach_ben_val_sim[i]) / n_students_val_sim[i]
-      q2_val_aux <- q_full_val_sim[i]
-      s2_val_aux <- ( unit_cost_local_val_sim[i] / ex_rate_val_sim[i] ) * years_of_treat_val_sim[i]
-      delta_ed_ext_total_sim <- delta_ed_vals_sim[i,] + delta_ed_ext_vals_sim[i,]
+    sim.data1 <- function(nsims = 1e4, 
+                          gov_bonds_vari,                #Data
+                          gov_bonds_sd,
+                          inflation_vari,
+                          inflation_sd,
+                          wage_ag_vari,
+                          wage_ag_sd,
+                          wage_ww_vari,
+                          wage_ww_sd,
+                          profits_se_vari,
+                          profits_se_sd,
+                          hours_se_cond_vari,
+                          hours_se_cond_sd,
+                          hours_ag_vari, 
+                          hours_ag_sd,
+                          hours_ww_vari,
+                          hours_ww_sd,
+                          hours_se_vari,
+                          hours_se_sd,
+                          ex_rate_vari,
+                          ex_rate_sd,
+                          growth_rate_vari, 
+                          growth_rate_sd, 
+                          coverage_vari,
+                          coverage_sd,
+                          full_saturation_vari, 
+                          full_saturation_sd, 
+                          saturation_vari,
+                          saturation_sd,
+                          tax_vari, 
+                          tax_sd, 
+                          unit_cost_local_vari, 
+                          unit_cost_local_sd, 
+                          years_of_treat_vari,
+                          years_of_treat_sd,
+                          lambda1_vari,                   #Research
+                          lambda1_sd, 
+                          lambda2_vari,
+                          lambda2_sd,
+                          q_full_vari, 
+                          q_full_sd,
+                          q_zero_vari,
+                          q_zero_sd,
+                          delta_ed_par1,
+                          delta_ed_sd1,
+                          delta_ed_par2,
+                          delta_ed_sd2,
+                          coef_exp_vari,                  #Guesswork
+                          coef_exp_sd,
+                          teach_sal_vari,
+                          teach_sal_sd,
+                          teach_ben_vari,
+                          teach_ben_sd,
+                          n_students_vari,
+                          n_students_sd, 
+                          include_ext_vari=TRUE
+    ) {
+      set.seed(1234)
+      #Defaoult dist: normal, default sd: 0.1* mean
+      ## Data 
+      gov_bonds_sim <- rnorm(n = nsims, mean = gov_bonds_vari, sd = gov_bonds_sd)	
+      inflation_sim <- rnorm(nsims, inflation_vari, inflation_sd)
+      wage_ag_val_sim <- rnorm(nsims, wage_ag_vari, wage_ag_sd)
+      wage_ww_val_sim <- rnorm(nsims, wage_ww_vari, wage_ww_sd)
+      profits_se_val_sim <- rnorm(nsims, profits_se_vari, profits_se_sd)
+      hours_se_cond_val_sim <- rnorm(nsims, hours_se_cond_vari, hours_se_cond_sd)
+      hours_ag_val_sim <- rnorm(nsims, hours_ag_vari, hours_ag_sd)
+      hours_ww_val_sim <- rnorm(nsims, hours_ww_vari, hours_ww_sd)
+      hours_se_val_sim <- rnorm(nsims, hours_se_vari, hours_se_sd)
+      ex_rate_val_sim <- rnorm(nsims, ex_rate_vari, ex_rate_sd)
+      growth_rate_val_sim <- rnorm(nsims, growth_rate_vari, growth_rate_sd)
+      coverage_val_sim <- rnorm(nsims, coverage_vari, coverage_sd)
+      saturation_val_sim <- rnorm(nsims, saturation_vari, saturation_sd)
+      full_saturation_val_sim <- rnorm(nsims, full_saturation_vari, full_saturation_sd) ###Check here later
+      tax_val_sim <- rnorm(nsims, tax_vari, tax_sd)
+      unit_cost_local_val_sim <- rnorm(nsims, unit_cost_local_vari, unit_cost_local_sd)
+      years_of_treat_val_sim <- rnorm(nsims, years_of_treat_vari, years_of_treat_sd)
       
-      if (include_ext_vari==TRUE){
-        delta_ed_final <-  delta_ed_ext_total_sim
-      }else{
-        delta_ed_final <- delta_ed_vals_sim[i,]
+      ## Research
+      aux1 <- lapply(1:2,function(x) c(lambda1_vari[x],lambda1_sd[x]) )
+      lambda1_vals_sim <- sapply(aux1, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) ) 
+      lambda2_val_sim <- rnorm(nsims, lambda2_vari, lambda2_sd)
+      q_full_val_sim <- rnorm(nsims, q_full_vari, q_full_sd)
+      q_zero_val_sim <- rnorm(nsims, q_zero_vari, q_zero_sd)
+      
+      
+      ## Guess work
+      periods_val <- 50           #Total number of periods to forecast wages
+      time_to_jm_val <- 10        #Time from intial period until individual join the labor force
+      aux2 <- lapply(1:2,function(x) c(coef_exp_vari[x],coef_exp_sd[x]) )
+      coef_exp_val_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
+      teach_sal_val_sim <- rnorm(nsims, teach_sal_vari, teach_sal_sd)
+      teach_ben_val_sim <- rnorm(nsims, teach_ben_vari, teach_ben_sd)
+      n_students_val_sim <- rnorm(nsims, n_students_vari, n_students_sd)
+      
+      delta_ed_vals_sim <- sapply(delta_ed_vals[,1], function(x)  rnorm(nsims, mean = 
+                                                                          x * delta_ed_par1, 
+                                                                        sd = delta_ed_sd1 * sd(delta_ed_vals[,1]) ) )
+      colnames(delta_ed_vals_sim) <- 1999:2007
+      
+      delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean = 
+                                                                                  x * delta_ed_par2, 
+                                                                                sd = delta_ed_sd2 * sd(delta_ed_ext_vals[,1])))
+      colnames(delta_ed_ext_vals_sim) <- 1999:2007
+      
+      npv_sim <- rep(NA, nsims)
+      #yes externality NPV
+      for (i in 1:nsims) {
+        interst_r_val <- gov_bonds_sim[i] - inflation_sim[i]
+        wage_0_val <- wage_0_f(wage_ag = wage_ag_val_sim[i], 
+                               wage_ww = wage_ww_val_sim[i], 
+                               profits_se = profits_se_val_sim[i], 
+                               hours_se_cond = hours_se_cond_val_sim[i], 
+                               hours_ag = hours_ag_val_sim[i], 
+                               hours_ww = hours_ww_val_sim[i], 
+                               hours_se = hours_se_val_sim[i], 
+                               ex_rate = ex_rate_val_sim[i])  
+        experience_val <- 0:periods_val - time_to_jm_val
+        wage_t_val <- wage_t(wage_0 = wage_0_val, 
+                             growth_rate = growth_rate_val_sim[i], 
+                             experience = experience_val, 
+                             coef_exp1 = coef_exp_val_sim[i,1], 
+                             coef_exp2 = coef_exp_val_sim[i,2])
+        lambda1_vals_aux <- rep(0.5 * lambda1_vals_sim[i,1] + 0.5 * lambda1_vals_sim[i,2], 2)
+        lambda2_vals <- rep(lambda2_val_sim[i], 2)
+        #coverage_val_aux <-  saturation_val_sim[i] / full_saturation_val_sim[i]
+        #saturation_val_aux <- full_saturation_val_sim[i] * coverage_val_sim[i]
+        cost_per_student <- (teach_sal_val_sim[i] + teach_ben_val_sim[i]) / n_students_val_sim[i]
+        q2_val_aux <- q_full_val_sim[i]
+        s2_val_aux <- ( unit_cost_local_val_sim[i] / ex_rate_val_sim[i] ) * years_of_treat_val_sim[i]
+        delta_ed_ext_total_sim <- delta_ed_vals_sim[i,] + delta_ed_ext_vals_sim[i,]
+        
+        if (include_ext_vari==TRUE){
+          delta_ed_final <-  delta_ed_ext_total_sim
+        }else{
+          delta_ed_final <- delta_ed_vals_sim[i,]
+        }
+        
+        npv_sim[i] <- npv(interest_r = interst_r_val, 
+                          wage = wage_t_val, 
+                          lambda1_male = lambda1_vals_aux[1], 
+                          lambda1_female = lambda1_vals_aux[2], 
+                          lambda2_male =  lambda2_vals[1], 
+                          lambda2_female =  lambda2_vals[2],
+                          coverage = coverage_val_sim[i],
+                          saturation = saturation_val_sim[i],
+                          tax = tax_val_sim[i], 
+                          cost_of_schooling=cost_per_student, 
+                          delta_ed_male = delta_ed_final, 
+                          delta_ed_female = delta_ed_final, 
+                          q2 = q2_val_aux, 
+                          s2 = s2_val_aux)
       }
       
-      npv_sim[i] <- npv(interest_r = interst_r_val, 
-                        wage = wage_t_val, 
-                        lambda1_male = lambda1_vals_aux[1], 
-                        lambda1_female = lambda1_vals_aux[2], 
-                        lambda2_male =  lambda2_vals[1], 
-                        lambda2_female =  lambda2_vals[2],
-                        coverage = coverage_val_sim[i],
-                        saturation = saturation_val_sim[i],
-                        tax = tax_val_sim[i], 
-                        cost_of_schooling=cost_per_student, 
-                        delta_ed_male = delta_ed_final, 
-                        delta_ed_female = delta_ed_final, 
-                        q2 = q2_val_aux, 
-                        s2 = s2_val_aux)
+      
+      return(npv_sim)
     }
     
-    
-    return(npv_sim)
-  }
   
   
    
@@ -327,6 +336,8 @@ server <- function(input, output) {
               lambda2_sd = as.numeric(input$param19_1), 
               q_full_vari = as.numeric(input$param20), 
               q_full_sd = as.numeric(input$param20_1), 
+              q_zero_vari = as.numeric(input$param28), 
+              q_zero_sd = as.numeric(input$param28_1), 
               coef_exp_vari = c(as.numeric(input$param21_1), as.numeric(input$param21_2)), 
               coef_exp_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)), 
               teach_sal_vari = as.numeric(input$param22),

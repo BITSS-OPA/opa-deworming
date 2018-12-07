@@ -31,7 +31,7 @@ gov_bonds <- 	0.1185	          #Kenyan interest on sovereign debt - Central Bank
 inflation <-  0.02              #Kenyan inflation rate - World Bank Development Indicators
 wage_ag_val <- 	11.84	          #Mean hourly wage rate (KSH) - Suri 2011 
 wage_ww_val <- 	14.5850933      #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
-profits_se_val <- 1766          #Control group monthly self-employed profits - Table 4, Panel A
+profits_se_val <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
 hours_se_cond_val <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
 hours_ag_val <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
 hours_ww_val <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
@@ -50,6 +50,7 @@ years_of_treat_val <- 2.41      #Additional Years of Treatment - Table 1, Panel 
 lambda1_vals <- c(3.49, 0)      #Hrs per week increase for men and women CONFIRM
 lambda2_val <- 10.2             #Externality effect (proportional) - Table 3, Panel B
 q_full_val <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
+q_zero_val <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
     
 ## Guess work   
 periods_val <- 50               #Total number of periods to forecast wages
@@ -214,12 +215,8 @@ The wage in agriculture comes from research (Suri, 2011), the working wage comes
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
 \end{equation}
 
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  
+Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of workin age in the sample (hence capturing the relative inportance of the self employed sector in the economy)
 
- - **Question**: hrs ag = Assumps&Panel A Calcs B25 - still not sure how it came from table 4 (no panel D and )  
- 
- - **Question**: explain diff between $E[h_{se}|h_{se}>0]$ and $h_{se}$ (why used differently)    
- 
 
 ```{r wage_t}
 wage_0_f <- function(wage_ag = wage_ag_val, 
@@ -287,7 +284,9 @@ lambda2_vals <- rep(lambda2_val, 2)
 
 
 ### 4 - $R$ and $p$ 
+
 (until clarify will be using $R$ and $p$ as the primitive values)
+
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[ 
 \tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
@@ -298,24 +297,29 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 
 
 
-$R$ is the fraction of treated primary school students within 6 km. Computed as 
-\begin{equation}
-R = \frac{\text{Overall Saturation}  }{Q(full)}
-\end{equation}
-
-$p$ is the saturation of the intervention, defined as: 
+The coverage, $R$, is defined as the fraction, among all neighboring of schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). $R$ is computed from the data fraction of treated primary school students. It is computed from the data as: 
 
 \begin{equation}
-p = Q(full) \times R
+R \equiv \frac{\text{Overall Saturation}  }{Q(full)}
 \end{equation}
+
+*Overall Saturation* is set at `r saturation_val` [ASK TED ABOUT A DEFINITION FOR THIS PARAM]. And $Q(full)$ is the take-up of the treatment with full subsidy, taken from the literature to be at `r q_full_val` (Miguel and Kremer [add page, table, col, row]).
+
+The saturation of the intervention, $p$, measures the fraction of the population that is effectively usign the treatment and is defined as:  
+
+\begin{equation}
+p = R \times Q(full)  + (1 - R) \times Q(0)
+\end{equation}
+
+Here R is taken as given [CHECK WITH TED] and $Q(0)$ is assinged the value of `r q_zero_val` per the same research source. 
 
 **Note:** there is a circularity on how parameters are defined here. Everything depends on Full Saturation ($Q(full)$) at the end of the day.
 
 ```{r coverage-and-saturation}
 #R 
-#coverage_val <-  saturation_val / full_saturation_val
+#coverage_val <-  saturation_val / q_full_val
 #p 
-#saturation_val <- full_saturation_val * coverage_val
+#saturation_val <- coverage_val * q_full_val + ( 1 - coverage_val ) * q_zero_val
 ```
 
 ### 5 - $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$
@@ -446,6 +450,8 @@ sim.data1 <- function(nsims = 1e4,
                       lambda2_sd,
                       q_full_vari, 
                       q_full_sd,
+                      q_zero_vari,
+                      q_zero_sd,
                       delta_ed_par1,
                       delta_ed_sd1,
                       delta_ed_par2,
@@ -486,6 +492,8 @@ sim.data1 <- function(nsims = 1e4,
   lambda1_vals_sim <- sapply(aux1, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) ) 
   lambda2_val_sim <- rnorm(nsims, lambda2_vari, lambda2_sd)
   q_full_val_sim <- rnorm(nsims, q_full_vari, q_full_sd)
+  q_zero_val_sim <- rnorm(nsims, q_zero_vari, q_zero_sd)
+
   
   ## Guess work
   periods_val <- 50           #Total number of periods to forecast wages
@@ -600,6 +608,8 @@ npv_sim <- sim.data1(nsims = 1e4,
           lambda2_sd = 0.1 * lambda2_val, 
           q_full_vari = q_full_val, 
           q_full_sd = 0.1 * q_full_val, 
+          q_zero_vari = q_zero_val, 
+          q_zero_sd = 0.1 * q_zero_val, 
           coef_exp_vari = c(coef_exp_val[1], coef_exp_val[2]), 
           coef_exp_sd = c(0.001 , 0.001), 
           teach_sal_vari = teach_sal_val,
@@ -622,8 +632,8 @@ if (abs(sd(npv_sim) - 28.38155)>0.0001 ) {
   print("Output has change")
 }
   
-npv_for_text <- paste("Median NPV:\n ", 34.6)
-#npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 ggplot() +
   geom_density(aes(x = npv_sim,
@@ -636,7 +646,7 @@ ggplot() +
        title = "Distribution NPV of Fiscal Impacts of Deworming", 
        subtitle = "With Externalities")+
   annotate("text", x = 2.2 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
-  #annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+
+  annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
 ``` 
 
@@ -715,6 +725,8 @@ npv_sim <- sim.data1(nsims = 1e4,
           lambda2_sd = 0.5 * lambda2_val, 
           q_full_vari = q_full_val, 
           q_full_sd = 0.1 * q_full_val, 
+          q_zero_vari = q_zero_val, 
+          q_zero_sd = 0.1 * q_zero_val, 
           coef_exp_vari = c(0.002, -0.0002), 
           coef_exp_sd = c(0.001 , 0.001), 
           teach_sal_vari = 7000,
@@ -787,6 +799,7 @@ ggplot() +
 - Made flexible to 20 years   
 - Overall welfare  NEXT  
 - Scale lambda 1 to infection rates.  
+- Embed restrictions that come from theory (or empirical regularities) like relationship between unemployment and inflation. 
 
 
 
