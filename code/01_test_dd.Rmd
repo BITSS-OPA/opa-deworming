@@ -79,7 +79,9 @@ delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
 # coverage_val: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-    
+
+[Original paper paper](https://academic.oup.com/qje/article/131/4/1637/2468871)    
+
 
 ## Who are the policy makers?
  - Ministries of Health, Education and Finance. 
@@ -297,7 +299,7 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 
 
 
-The coverage, $R$, is defined as the fraction, among all neighboring of schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). $R$ is computed from the data fraction of treated primary school students. It is computed from the data as: 
+The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). It is computed from the data as: 
 
 \begin{equation}
 R \equiv \frac{\text{Overall Saturation}  }{Q(full)}

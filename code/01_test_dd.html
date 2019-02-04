@@ -442,6 +442,7 @@ delta_ed_ext_vals &lt;- cbind(delta_ed_ext_vals, 1999:2007)
 # on growth_rate_val: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on &quot;Kenya GDP per capita&quot; tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
 # on coef_exp_val: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, female dummy, indicators for attained primary/secondary/beyond, and province dummies. Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle adjustment beyond KLPS-3 (likely a conservative assumption).
 # coverage_val: Overall Saturation (0.511) / 0.75 - not reported in table, average of T &amp; C</code></pre>
+<p><a href="https://academic.oup.com/qje/article/131/4/1637/2468871">Original paper paper</a></p>
 <div id="who-are-the-policy-makers" class="section level2">
 <h2>Who are the policy makers?</h2>
 <ul>
@@ -549,9 +550,6 @@ w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} \\ \quad \text{wit
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}&gt;0] }
 \end{equation}\]</span></p>
 <p>Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs &gt;0 - <span class="math inline">\(E[h_{se}|h_{se}&gt;0]\)</span> -) come from the data (ww paper). The measure of hours in self employment used to compute wages is (<span class="math inline">\(E[h_{se}|h_{se}&gt;0]\)</span>) is different from the one is to compute the weights <span class="math inline">\(\alpha_l\)</span> above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of workin age in the sample (hence capturing the relative inportance of the self employed sector in the economy)</p>
-<ul>
-<li><strong>Question</strong>: explain diff between <span class="math inline">\(E[h_{se}|h_{se}&gt;0]\)</span> and <span class="math inline">\(h_{se}\)</span> (why used differently)</li>
-</ul>
 <pre class="r"><code>wage_0_f &lt;- function(wage_ag = wage_ag_val, 
                      wage_ww = wage_ww_val, 
                      profits_se = profits_se_val, 
@@ -617,7 +615,7 @@ NPV =  \sum_{\gamma} N_{\gamma} \left[
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}\]</span></p>
-<p>The coverage, <span class="math inline">\(R\)</span>, is defined as the fraction, among all neighboring of schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). <span class="math inline">\(R\)</span> is computed from the data fraction of treated primary school students. It is computed from the data as:</p>
+<p>The coverage, <span class="math inline">\(R\)</span>, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). It is computed from the data as:</p>
 <p><span class="math display">\[\begin{equation}
 R \equiv \frac{\text{Overall Saturation}  }{Q(full)}
 \end{equation}\]</span></p>
