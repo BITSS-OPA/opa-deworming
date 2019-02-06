@@ -20,60 +20,58 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, eval=FALSE}
 #starting point is
 # Calcs-Table 5!N21 =
-# 'Assumps&Panel A Calcs'!$B$135 * 'Assumps&Panel A Calcs'!$B$10 * 
+# 'Assumps&Panel A Calcs'!$B$135 * 'Assumps&Panel A Calcs'!$B$10 *
 # 'Model Params&Exp Profiles'!R9 * 'Model Params&Exp Profiles'!R8
 ```
 
 
 ```{r paramters}
-## Data 
+
+##### Data  
+#############
 gov_bonds <- 	0.1185	          #Kenyan interest on sovereign debt - Central Bank of Kenya
 inflation <-  0.02              #Kenyan inflation rate - World Bank Development Indicators
-wage_ag_val <- 	11.84	          #Mean hourly wage rate (KSH) - Suri 2011 
+wage_ag_val <- 	11.84	          #Mean hourly wage rate (KSH) - Suri 2011
 wage_ww_val <- 	14.5850933      #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
 profits_se_val <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
 hours_se_cond_val <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
 hours_ag_val <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
 hours_ww_val <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
 hours_se_val <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
-ex_rate_val <- 85               #Exchange Rate - Central Bank of Kenya 
+ex_rate_val <- 85               #Exchange Rate - Central Bank of Kenya
 growth_rate_val <- 1.52/100     #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
 coverage_val  <- 0.681333333    # (R) Fraction of treated primary school students within 6 km - from W@W - see note
-saturation_val <-  0.511        # (p) Overall Saturation - not reported in table, average of T & C
-full_saturation_val <- 0.75     #REPEATED WITH q_full_val in Research component
 tax_val <- 0.16575              #ADD INFO
 unit_cost_local_val <- 43.66    #Deworm the World
 years_of_treat_val <- 2.41      #Additional Years of Treatment - Table 1, Panel A
-    
-    
-## Research   
+
+##### Research
+#############    
 lambda1_vals <- c(3.49, 0)      #Hrs per week increase for men and women CONFIRM
 lambda2_val <- 10.2             #Externality effect (proportional) - Table 3, Panel B
 q_full_val <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
 q_zero_val <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
-    
-## Guess work   
+delta_ed_vals <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct seconday schooling increase (from Joan)
+                    0.0239963665555466, 0.027301406306074, 0.0234125454594173,
+                   0.0279278879439199, 0.00647044449446303, 0.00835739437790601)                                     
+delta_ed_vals <- cbind(delta_ed_vals, 1999:2007)
+delta_ed_ext_vals <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545585,  #Additional externality secondary schooling increase (from Joan)
+                       0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
+                       0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
+delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)    
+
+##### Guess work   
+#############
 periods_val <- 50               #Total number of periods to forecast wages
 time_to_jm_val <- 10            #Time from intial period until individual join the labor force
-coef_exp_val <- c(0, 0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes 
+coef_exp_val <- c(0, 0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes
 teach_sal_val <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
 teach_ben_val <- 217.47         #Yearly secondary schooling teacher benefits	217.47
 n_students_val <- 45            #Average pupils per teacher	45
 
 
-# (Delta E) Additional direct seconday schooling increase (from Joan)	
-delta_ed_vals <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183, 
-                    0.0239963665555466, 0.027301406306074, 0.0234125454594173, 
-                   0.0279278879439199, 0.00647044449446303, 0.00835739437790601)                                     
-delta_ed_vals <- cbind(delta_ed_vals, 1999:2007)
-
-#Additional externality secondary schooling increase (from Joan)
-delta_ed_ext_vals <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545585,
-                       0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
-                       0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
-delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
-
-#Notes: 
+##### Notes:
+#############
 # on growth_rate_val: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
 # on coef_exp_val: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, female dummy, indicators for attained primary/secondary/beyond, and province dummies. Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle adjustment beyond KLPS-3 (likely a conservative assumption).
 # coverage_val: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
@@ -84,16 +82,16 @@ delta_ed_ext_vals <- cbind(delta_ed_ext_vals, 1999:2007)
 
 
 ## Who are the policy makers?
- - Ministries of Health, Education and Finance. 
+ - Ministries of Health, Education and Finance.
 
 ## What is the relevant output that should be used to inform them?
  - NPV from government perspective.   
  - NPV from social planner perspective.  
- 
+
 ## Proposed output:    
- 
+
 ```{r sample-output, echo=FALSE, warning=FALSE, message=FALSE}
-set.seed(1234) 
+set.seed(1234)
 library(tidyverse)
 library(ggplot2)
 ggplot() +
@@ -105,17 +103,17 @@ ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
-       title = "PROPOSED OUTPUT [NOT REAL DATA]:", 
+       title = "PROPOSED OUTPUT [NOT REAL DATA]:",
        subtitle = "Distribution NPV of Fiscal Impacts of Deworming")+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
 ```
- 
+
 ## Main Equation (the model)
 
 \begin{equation}
-NPV =  \sum_{\gamma} N_{\gamma} \left[ 
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} w_{t} 
-\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} w_{t}
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \label{eq:1}
@@ -124,58 +122,58 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 
 
 ```{r model}
-# Gamma is used to index gender. 
-npv <- function(n_male=1/2, n_female=1/2, 
-                interest_r=interst_r_val, 
-                wage=wage_t_val, 
+# Gamma is used to index gender.
+npv <- function(n_male=1/2, n_female=1/2,
+                interest_r=interst_r_val,
+                wage=wage_t_val,
                 lambda1_male=lambda1_vals[1],
-                lambda1_female=lambda1_vals[2], 
-                tax=tax_val, 
-                saturation=saturation_val, 
-                coverage=coverage_val, 
-                cost_of_schooling=cost_per_student, 
-                delta_ed_male=delta_ed_vals[,1], 
-                delta_ed_female=delta_ed_vals[,1], 
-                lambda2_male=lambda2_vals[1], 
-                lambda2_female=lambda2_vals[2], 
-                s1=0, q1=0, s2=s2_val, q2=q2_val, 
+                lambda1_female=lambda1_vals[2],
+                tax=tax_val,
+                saturation=saturation_val,             
+                coverage=coverage_val,
+                cost_of_schooling=cost_per_student,
+                delta_ed_male=delta_ed_vals[,1],
+                delta_ed_female=delta_ed_vals[,1],
+                lambda2_male=lambda2_vals[1],
+                lambda2_female=lambda2_vals[2],
+                s1=0, q1=0, s2=s2_val, q2=q2_val,
                 periods=periods_val) {
   ns <- c(n_male, n_female)
   lambda1s <- c(lambda1_male, lambda1_female)
   lambda2s <- c(lambda2_male, lambda2_female)
   index_t <- 0:periods
-  delta_ed_s <- cbind(delta_ed_male, delta_ed_female) 
-  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) ) 
-  
+  delta_ed_s <- cbind(delta_ed_male, delta_ed_female)
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+
   benef <- matrix(NA, 51,2)
   for (i in 1:2){
-  benef[,i] <- ( 1 / (1 + interest_r) )^index_t * wage * 
-                     ( lambda1s[i] + saturation * lambda2s[i] / coverage ) 
+  benef[,i] <- ( 1 / (1 + interest_r) )^index_t * wage *
+                     ( lambda1s[i] + saturation * lambda2s[i] / coverage )
   }
-  
-  res1 <- sum( ns * ( tax * apply(benef, 2, sum) - 
-            apply( ( 1 / (1 + interest_r) )^index_t * 
+
+  res1 <- sum( ns * ( tax * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r) )^index_t *
                      delta_ed_s * cost_of_schooling, 2, sum) )
-          ) - (s2 * q2  - s1 * q1) 
+          ) - (s2 * q2  - s1 * q1)
 #  browser()
   return(res1)  
 }
 ```
 
 
-## Sub components: 
+## Sub components:
 
 ### 1 - "$r$"
 
 \begin{equation}
-NPV =  \sum_{\gamma} N_{\gamma} \left[ 
-\tau \sum_{t=0}^{50} \blue{\left(  \frac{1}{1 + r}\right)}^{t} w_{t} 
-\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\tau \sum_{t=0}^{50} \blue{\left(  \frac{1}{1 + r}\right)}^{t} w_{t}
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) -
 K \sum_{t=0}^{50} \blue{\left( \frac{1}{1 + r}\right)}^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
-The real interest rate $r$ is obtained from the interest rate on betterment bonds (`r round(gov_bonds, 3)`) minus the inflation rate (`r inflation`). 
+The real interest rate $r$ is obtained from the interest rate on betterment bonds (`r round(gov_bonds, 3)`) minus the inflation rate (`r inflation`).
 
 ```{r real-int-rate}
 interst_r_val <- gov_bonds - inflation
@@ -185,9 +183,9 @@ interst_r_val <- gov_bonds - inflation
 ### 2 - "$w_{t}$"
 
 \begin{equation}
-NPV =  \sum_{\gamma} N_{\gamma} \left[ 
+NPV =  \sum_{\gamma} N_{\gamma} \left[
 \tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \blue{ w_{t} }
-\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
@@ -197,7 +195,7 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50
 \end{equation}
 
-individual in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0$ for $t<10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$). 
+individual in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0$ for $t<10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
 
 #### 2.1 - "$w_0$"
 
@@ -209,9 +207,9 @@ w_t =  \text{#weeks} \times \blue{w_0} (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{
 w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
 \end{equation}
 
-The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector. 
+The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.
 
-The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and its defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows: 
+The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and its defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows:
 
 \begin{equation}
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
@@ -221,13 +219,13 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 
 
 ```{r wage_t}
-wage_0_f <- function(wage_ag = wage_ag_val, 
-                     wage_ww = wage_ww_val, 
-                     profits_se = profits_se_val, 
-                     hours_se_cond = hours_se_cond_val, 
-                     hours_ag = hours_ag_val, 
-                     hours_ww = hours_ww_val, 
-                     hours_se = hours_se_val, 
+wage_0_f <- function(wage_ag = wage_ag_val,  
+                     wage_ww = wage_ww_val,
+                     profits_se = profits_se_val,
+                     hours_se_cond = hours_se_cond_val,  
+                     hours_ag = hours_ag_val,
+                     hours_ww = hours_ww_val,
+                     hours_se = hours_se_val,
                      ex_rate = ex_rate_val) {
   wage_se <- profits_se / (4.5 * hours_se_cond)
   wage_ls <- c(wage_ag, wage_ww, wage_se)
@@ -236,26 +234,26 @@ wage_0_f <- function(wage_ag = wage_ag_val,
   return(res1)
 }
 
-#close to value from spreadsheet (Assumps&Panel A Calcs!B137 = 0.1481084), 
-#but I suspect diff due to computational precision 
+#close to value from spreadsheet (Assumps&Panel A Calcs!B137 = 0.1481084),
+#but I suspect diff due to computational precision
 
 wage_0_val <- wage_0_f()  
 
 experience_val <- 0:periods_val - time_to_jm_val
 
-wage_t <- function(wage_0 = wage_0_val, 
-                   growth_rate = growth_rate_val, 
-                   experience = experience_val, 
-                   coef_exp1 = coef_exp_val[1], 
+wage_t <- function(wage_0 = wage_0_val,
+                   growth_rate = growth_rate_val,
+                   experience = experience_val,
+                   coef_exp1 = coef_exp_val[1],
                    coef_exp2 = coef_exp_val[2]) {
-  res1 <- 52 * wage_0 *( ( 1 + growth_rate )^experience ) * 
-    ( 1 + coef_exp1 * experience + coef_exp2 * experience^2 ) * 
+  res1 <- 52 * wage_0 *( ( 1 + growth_rate )^experience ) *
+    ( 1 + coef_exp1 * experience + coef_exp2 * experience^2 ) *
     ifelse(0:periods_val >= time_to_jm_val, 1, 0)
-  return(res1) 
+  return(res1)
 }
 
-#close to value from spreadsheet (Calcs-Table 5!N21.. = 7.701634678), 
-#but I suspect diff due to computational precision 
+#close to value from spreadsheet (Calcs-Table 5!N21.. = 7.701634678),
+#but I suspect diff due to computational precision
 wage_t_val <- wage_t()
 ```
 
@@ -263,21 +261,21 @@ wage_t_val <- wage_t()
 ### 3 - "$\lambda_{1,\gamma}$"  and  "$\lambda_{2,\gamma}$"
 
 \begin{equation}
-NPV =  \sum_{\gamma} N_{\gamma} \left[ 
-\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
-\left(\blue{ \lambda_{1, \gamma} } + \frac{p \blue{\lambda_{2, \gamma}}}{R} \right) - 
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t}
+\left(\blue{ \lambda_{1, \gamma} } + \frac{p \blue{\lambda_{2, \gamma}}}{R} \right) -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
-$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a underweighted mean: 
+$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a underweighted mean:
 
 \begin{equation}
-\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female} 
+\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}
 \end{equation}
-Its components come from research (W\@W). 
+Its components come from research (W\@W).
 
-$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times. 
+$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
 
 ```{r lambdas}
 lambda1_vals <- rep(0.5 * lambda1_vals[1] + 0.5 *lambda1_vals[2], 2)
@@ -285,21 +283,21 @@ lambda2_vals <- rep(lambda2_val, 2)
 ```
 
 
-### 4 - $R$ and $p$ 
+### 4 - $R$ and $p$
 
 (until clarify will be using $R$ and $p$ as the primitive values)
 
 \begin{equation}
-NPV =  \sum_{\gamma} N_{\gamma} \left[ 
-\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
-\left( \lambda_{1, \gamma}  + \frac{\blue{p} \lambda_{2, \gamma}}{\blue{R}} \right) - 
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t}
+\left( \lambda_{1, \gamma}  + \frac{\blue{p} \lambda_{2, \gamma}}{\blue{R}} \right) -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
 
 
-The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). It is computed from the data as: 
+The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper).
 
 \begin{equation}
 R \equiv \frac{\text{Overall Saturation}  }{Q(full)}
@@ -313,29 +311,28 @@ The saturation of the intervention, $p$, measures the fraction of the population
 p = R \times Q(full)  + (1 - R) \times Q(0)
 \end{equation}
 
-Here R is taken as given [CHECK WITH TED] and $Q(0)$ is assinged the value of `r q_zero_val` per the same research source. 
+Here R is taken as given [CHECK WITH TED] and $Q(0)$ is assinged the value of `r q_zero_val` per the same research source.
 
 **Note:** there is a circularity on how parameters are defined here. Everything depends on Full Saturation ($Q(full)$) at the end of the day.
 
 ```{r coverage-and-saturation}
-#R 
-#coverage_val <-  saturation_val / q_full_val
-#p 
-#saturation_val <- coverage_val * q_full_val + ( 1 - coverage_val ) * q_zero_val
+#R
+#p
+saturation_val <- coverage_val * q_full_val + ( 1 - coverage_val ) * q_zero_val
 ```
 
 ### 5 - $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$
 
 \begin{equation}
-NPV =  \sum_{\gamma} N_{\gamma} \left[ 
-\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
-\left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t}
+\left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) -
 \blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{ \Delta \overline{E}_{\gamma t}(S1,S2) }
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
-$K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher. 
- 
+$K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
+
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 \end{equation}
@@ -344,25 +341,25 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 cost_per_student <- (teach_sal_val + teach_ben_val) / n_students_val
 ```
 
-For $\Delta \overline{E}_{\gamma t}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`]. 
+For $\Delta \overline{E}_{\gamma t}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
 
-This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series. 
+This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
 
 
 ```{r delta-ed}
 # Nothing here yet with delta_ed_vals, but would like to incorporate model from Joan
-# delta_ed_vals <- 
+# delta_ed_vals <-
 delta_ed_ext_total <- delta_ed_ext_vals[,1] + delta_ed_vals[,1]
 ```
 
-**Note:** need to understand better the date of each component (of the model, not only this section). 
+**Note:** need to understand better the date of each component (of the model, not only this section).
 
 ### 6 - $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
 
 \begin{equation}
-NPV =  \sum_{\gamma} N_{\gamma} \left[ 
-\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t} 
-\left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) - 
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t}
+\left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \blue{ \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) }
 \end{equation}
@@ -371,12 +368,12 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 There is no subsidy for deworming under the status quo.   
 
 
-#### 6.2 - $S_{2}$: complete subsidy to per capita costs of deworming. 
+#### 6.2 - $S_{2}$: complete subsidy to per capita costs of deworming.
 
 With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
 
 \begin{equation}
-S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\ 
+S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
 \end{equation}
 
 #### 6.3 - $Q_{2}$
@@ -390,12 +387,12 @@ q2_val <- q_full_val
 
 ### Main results
 
-```{r res1} 
+```{r res1}
 #no externality NPV
 res_npv_no_ext <- npv(lambda2_male = 0, lambda2_female = 0)
- 
+
 #yes externality NPV
-res_npv_yes_ext <- npv(delta_ed_male = delta_ed_ext_total, 
+res_npv_yes_ext <- npv(delta_ed_male = delta_ed_ext_total,
                        delta_ed_female = delta_ed_ext_total )
 ```
 
@@ -411,92 +408,107 @@ Describe approach to MC:
 
 ```{r mc}
 #34.8401
-sim.data1 <- function(nsims = 1e4, 
-                      gov_bonds_vari,                #Data
-                      gov_bonds_sd,
-                      inflation_vari,
-                      inflation_sd,
-                      wage_ag_vari,
-                      wage_ag_sd,
-                      wage_ww_vari,
-                      wage_ww_sd,
-                      profits_se_vari,
-                      profits_se_sd,
-                      hours_se_cond_vari,
-                      hours_se_cond_sd,
-                      hours_ag_vari, 
-                      hours_ag_sd,
-                      hours_ww_vari,
-                      hours_ww_sd,
-                      hours_se_vari,
-                      hours_se_sd,
-                      ex_rate_vari,
-                      ex_rate_sd,
-                      growth_rate_vari, 
-                      growth_rate_sd, 
-                      coverage_vari,
-                      coverage_sd,
-                      full_saturation_vari, 
-                      full_saturation_sd, 
-                      saturation_vari,
-                      saturation_sd,
-                      tax_vari, 
-                      tax_sd, 
-                      unit_cost_local_vari, 
-                      unit_cost_local_sd, 
-                      years_of_treat_vari,
-                      years_of_treat_sd,
-                      lambda1_vari,                   #Research
-                      lambda1_sd, 
-                      lambda2_vari,
-                      lambda2_sd,
-                      q_full_vari, 
-                      q_full_sd,
-                      q_zero_vari,
-                      q_zero_sd,
-                      delta_ed_par1,
-                      delta_ed_sd1,
-                      delta_ed_par2,
-                      delta_ed_sd2,
-                      coef_exp_vari,                  #Guesswork
-                      coef_exp_sd,
-                      teach_sal_vari,
-                      teach_sal_sd,
-                      teach_ben_vari,
-                      teach_ben_sd,
-                      n_students_vari,
-                      n_students_sd, 
-                      include_ext_vari=TRUE
+
+# generate draws of primitive values:
+#  inputs: K primitive means and K standard deviations
+#  output: K vectors with draws from simulations
+# compute the elements of the model
+#  input: K vectors with draws from sims
+#  output: Input vectors for NPV function
+# run the model Nsims times
+#  input: Input vectors for NPV function
+#  output: one vector of NPVs (of lenght Nsims)
+
+# All variable args should use the _var subscript
+sim.data1 <- function(nsims = 1e4,                                           
+                      gov_bonds_var,                #Data
+                      gov_bonds_sd_var,
+                      inflation_var,
+                      inflation_sd_var,
+                      wage_ag_var,
+                      wage_ag_sd_var,
+                      wage_ww_var,
+                      wage_ww_sd_var,
+                      profits_se_var,
+                      profits_se_sd_var,
+                      hours_se_cond_var,
+                      hours_se_cond_sd_var,
+                      hours_ag_var,
+                      hours_ag_sd_var,
+                      hours_ww_var,
+                      hours_ww_sd_var,
+                      hours_se_var,
+                      hours_se_sd_var,
+                      ex_rate_var,
+                      ex_rate_sd_var,
+                      growth_rate_var,
+                      growth_rate_sd_var,
+                      coverage_var,
+                      coverage_sd_var,
+                      full_saturation_var,
+                      full_saturation_sd_var,
+                      saturation_var,
+                      saturation_sd_var,
+                      tax_var,
+                      tax_sd_var,
+                      unit_cost_local_var,
+                      unit_cost_local_sd_var,
+                      years_of_treat_var,
+                      years_of_treat_sd_var,
+                      lambda1_var,                   #Research
+                      lambda1_sd_var,
+                      lambda2_var,
+                      lambda2_sd_var,
+                      q_full_var,
+                      q_full_sd_var,
+                      q_zero_var,
+                      q_zero_sd_var,
+                      delta_ed_par1_var,
+                      delta_ed_sd1_var,
+                      delta_ed_par2_var,
+                      delta_ed_sd2_var,
+                      coef_exp_var,                  #Guesswork
+                      coef_exp_sd_var,
+                      teach_sal_var,
+                      teach_sal_sd_var,
+                      teach_ben_var,
+                      teach_ben_sd_var,
+                      n_students_var,
+                      n_students_sd_var,
+                      include_ext_var=TRUE
                       ) {
   set.seed(1234)
+
+  ########
+  #FUNCTION1
   #Defaoult dist: normal, default sd: 0.1* mean
-  ## Data 
-  gov_bonds_sim <- rnorm(n = nsims, mean = gov_bonds_vari, sd = gov_bonds_sd)	
-  inflation_sim <- rnorm(nsims, inflation_vari, inflation_sd)
-  wage_ag_val_sim <- rnorm(nsims, wage_ag_vari, wage_ag_sd)
-  wage_ww_val_sim <- rnorm(nsims, wage_ww_vari, wage_ww_sd)
-  profits_se_val_sim <- rnorm(nsims, profits_se_vari, profits_se_sd)
-  hours_se_cond_val_sim <- rnorm(nsims, hours_se_cond_vari, hours_se_cond_sd)
-  hours_ag_val_sim <- rnorm(nsims, hours_ag_vari, hours_ag_sd)
-  hours_ww_val_sim <- rnorm(nsims, hours_ww_vari, hours_ww_sd)
-  hours_se_val_sim <- rnorm(nsims, hours_se_vari, hours_se_sd)
-  ex_rate_val_sim <- rnorm(nsims, ex_rate_vari, ex_rate_sd)
-  growth_rate_val_sim <- rnorm(nsims, growth_rate_vari, growth_rate_sd)
-  coverage_val_sim <- rnorm(nsims, coverage_vari, coverage_sd)
-  saturation_val_sim <- rnorm(nsims, saturation_vari, saturation_sd)
-  full_saturation_val_sim <- rnorm(nsims, full_saturation_vari, full_saturation_sd) ###Check here later
-  tax_val_sim <- rnorm(nsims, tax_vari, tax_sd)
-  unit_cost_local_val_sim <- rnorm(nsims, unit_cost_local_vari, unit_cost_local_sd)
-  years_of_treat_val_sim <- rnorm(nsims, years_of_treat_vari, years_of_treat_sd)
-  
+  ## Data
+  gov_bonds_sim <-            rnorm(n = nsims, mean = gov_bonds_vari, sd = gov_bonds_sd)
+  inflation_sim <-            rnorm(nsims, inflation_vari, inflation_sd)
+  wage_ag_val_sim <-          rnorm(nsims, wage_ag_vari, wage_ag_sd)
+  wage_ww_val_sim <-          rnorm(nsims, wage_ww_vari, wage_ww_sd)
+  profits_se_val_sim <-       rnorm(nsims, profits_se_vari, profits_se_sd)
+  hours_se_cond_val_sim <-    rnorm(nsims, hours_se_cond_vari, hours_se_cond_sd)
+  hours_ag_val_sim <-         rnorm(nsims, hours_ag_vari, hours_ag_sd)
+  hours_ww_val_sim <-         rnorm(nsims, hours_ww_vari, hours_ww_sd)
+  hours_se_val_sim <-         rnorm(nsims, hours_se_vari, hours_se_sd)
+  ex_rate_val_sim <-          rnorm(nsims, ex_rate_vari, ex_rate_sd)
+  growth_rate_val_sim <-      rnorm(nsims, growth_rate_vari, growth_rate_sd)
+  coverage_val_sim <-         rnorm(nsims, coverage_vari, coverage_sd)
+  saturation_val_sim <-       rnorm(nsims, saturation_vari, saturation_sd)    #TO DELETE
+  full_saturation_val_sim <-  rnorm(nsims, full_saturation_vari, full_saturation_sd) ###Check here later
+  tax_val_sim <-              rnorm(nsims, tax_vari, tax_sd)
+  unit_cost_local_val_sim <-  rnorm(nsims, unit_cost_local_vari, unit_cost_local_sd)
+  years_of_treat_val_sim <-   rnorm(nsims, years_of_treat_vari, years_of_treat_sd)
+
   ## Research
   aux1 <- lapply(1:2,function(x) c(lambda1_vari[x],lambda1_sd[x]) )
-  lambda1_vals_sim <- sapply(aux1, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) ) 
+  lambda1_vals_sim <- sapply(aux1, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
   lambda2_val_sim <- rnorm(nsims, lambda2_vari, lambda2_sd)
   q_full_val_sim <- rnorm(nsims, q_full_vari, q_full_sd)
   q_zero_val_sim <- rnorm(nsims, q_zero_vari, q_zero_sd)
 
-  
+
   ## Guess work
   periods_val <- 50           #Total number of periods to forecast wages
   time_to_jm_val <- 10        #Time from intial period until individual join the labor force
@@ -505,73 +517,84 @@ sim.data1 <- function(nsims = 1e4,
   teach_sal_val_sim <- rnorm(nsims, teach_sal_vari, teach_sal_sd)
   teach_ben_val_sim <- rnorm(nsims, teach_ben_vari, teach_ben_sd)
   n_students_val_sim <- rnorm(nsims, n_students_vari, n_students_sd)
-  
-  delta_ed_vals_sim <- sapply(delta_ed_vals[,1], function(x)  rnorm(nsims, mean = 
-                                                                     x * delta_ed_par1, 
+
+  delta_ed_vals_sim <- sapply(delta_ed_vals[,1], function(x)  rnorm(nsims, mean =
+                                                                     x * delta_ed_par1,
                                                                      sd = delta_ed_sd1 * sd(delta_ed_vals[,1]) ) )
   colnames(delta_ed_vals_sim) <- 1999:2007
-  
-  delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean = 
-                                                                              x * delta_ed_par2, 
+
+  delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean =
+                                                                              x * delta_ed_par2,
                                                                             sd = delta_ed_sd2 * sd(delta_ed_ext_vals[,1])))
   colnames(delta_ed_ext_vals_sim) <- 1999:2007
-  
+
+  ########
+  #FUNCTION2
+
+  # - Model
   npv_sim <- rep(NA, nsims)
   #yes externality NPV
   for (i in 1:nsims) {
+    # 1 - "r""
     interst_r_val <- gov_bonds_sim[i] - inflation_sim[i]
-    wage_0_val <- wage_0_f(wage_ag = wage_ag_val_sim[i], 
-                           wage_ww = wage_ww_val_sim[i], 
-                           profits_se = profits_se_val_sim[i], 
-                           hours_se_cond = hours_se_cond_val_sim[i], 
-                           hours_ag = hours_ag_val_sim[i], 
-                           hours_ww = hours_ww_val_sim[i], 
-                           hours_se = hours_se_val_sim[i], 
+    # 2 - "w_t"
+    wage_0_val <- wage_0_f(wage_ag = wage_ag_val_sim[i],
+                           wage_ww = wage_ww_val_sim[i],
+                           profits_se = profits_se_val_sim[i],
+                           hours_se_cond = hours_se_cond_val_sim[i],
+                           hours_ag = hours_ag_val_sim[i],
+                           hours_ww = hours_ww_val_sim[i],
+                           hours_se = hours_se_val_sim[i],
                            ex_rate = ex_rate_val_sim[i])  
     experience_val <- 0:periods_val - time_to_jm_val
-    wage_t_val <- wage_t(wage_0 = wage_0_val, 
-                         growth_rate = growth_rate_val_sim[i], 
-                         experience = experience_val, 
-                         coef_exp1 = coef_exp_val_sim[i,1], 
+    wage_t_val <- wage_t(wage_0 = wage_0_val,
+                         growth_rate = growth_rate_val_sim[i],
+                         experience = experience_val,
+                         coef_exp1 = coef_exp_val_sim[i,1],
                          coef_exp2 = coef_exp_val_sim[i,2])
+    # 3 - “λ1,γ” and “λ2,γ”
     lambda1_vals_aux <- rep(0.5 * lambda1_vals_sim[i,1] + 0.5 * lambda1_vals_sim[i,2], 2)
     lambda2_vals <- rep(lambda2_val_sim[i], 2)
+    # 4 - R and p
     #coverage_val_aux <-  saturation_val_sim[i] / full_saturation_val_sim[i]
     #saturation_val_aux <- full_saturation_val_sim[i] * coverage_val_sim[i]
+    # 5 - K and ΔE⎯⎯⎯⎯γt(S1,S2)
     cost_per_student <- (teach_sal_val_sim[i] + teach_ben_val_sim[i]) / n_students_val_sim[i]
-    q2_val_aux <- q_full_val_sim[i]
-    s2_val_aux <- ( unit_cost_local_val_sim[i] / ex_rate_val_sim[i] ) * years_of_treat_val_sim[i]
     delta_ed_ext_total_sim <- delta_ed_vals_sim[i,] + delta_ed_ext_vals_sim[i,]
-    
     if (include_ext_vari==TRUE){
       delta_ed_final <-  delta_ed_ext_total_sim
     }else{
       delta_ed_final <- delta_ed_vals_sim[i,]
     }
-    
-    npv_sim[i] <- npv(interest_r = interst_r_val, 
-                      wage = wage_t_val, 
-                      lambda1_male = lambda1_vals_aux[1], 
-                      lambda1_female = lambda1_vals_aux[2], 
-                      lambda2_male =  lambda2_vals[1], 
+
+    #6 - (S2Q(S2)−S1Q(S1))
+    q2_val_aux <- q_full_val_sim[i]
+    s2_val_aux <- ( unit_cost_local_val_sim[i] / ex_rate_val_sim[i] ) * years_of_treat_val_sim[i]
+
+    npv_sim[i] <- npv(interest_r = interst_r_val,
+                      wage = wage_t_val,
+                      lambda1_male = lambda1_vals_aux[1],
+                      lambda1_female = lambda1_vals_aux[2],
+                      lambda2_male =  lambda2_vals[1],
                       lambda2_female =  lambda2_vals[2],
                       coverage = coverage_val_sim[i],
                       saturation = saturation_val_sim[i],
-                      tax = tax_val_sim[i], 
-                      cost_of_schooling=cost_per_student, 
-                      delta_ed_male = delta_ed_final, 
-                      delta_ed_female = delta_ed_final, 
-                      q2 = q2_val_aux, 
+                      tax = tax_val_sim[i],
+                      cost_of_schooling=cost_per_student,
+                      delta_ed_male = delta_ed_final,
+                      delta_ed_female = delta_ed_final,
+                      q2 = q2_val_aux,
                       s2 = s2_val_aux)
   }
-  
-  
+
+
   return(npv_sim)
 }
 
 
-
-npv_sim <- sim.data1(nsims = 1e4, 
+  ########
+  #FUNCTION3
+npv_sim <- sim.data1(nsims = 1e4,
           gov_bonds_vari = gov_bonds,                #Data
           gov_bonds_sd = 0.1 * gov_bonds,
           inflation_vari = inflation,
@@ -582,58 +605,63 @@ npv_sim <- sim.data1(nsims = 1e4,
           wage_ww_sd = 0.1 * wage_ww_val,
           profits_se_vari = profits_se_val,
           profits_se_sd = 0.1 * profits_se_val,
-          hours_se_cond_vari = hours_se_cond_val, 
-          hours_se_cond_sd = 0.1 * hours_se_cond_val, 
+          hours_se_cond_vari = hours_se_cond_val,
+          hours_se_cond_sd = 0.1 * hours_se_cond_val,
           hours_ag_vari = hours_ag_val,  
-          hours_ag_sd = 0.1 * hours_ag_val, 
-          hours_ww_vari = hours_ww_val, 
-          hours_ww_sd = 0.1 * hours_ww_val, 
-          hours_se_vari = hours_se_val, 
+          hours_ag_sd = 0.1 * hours_ag_val,
+          hours_ww_vari = hours_ww_val,
+          hours_ww_sd = 0.1 * hours_ww_val,
+          hours_se_vari = hours_se_val,
           hours_se_sd = 0.1 * hours_se_val,
           ex_rate_vari = ex_rate_val,
           ex_rate_sd = 0.1 * ex_rate_val,
-          growth_rate_vari = growth_rate_val, 
-          growth_rate_sd = 0.1 * growth_rate_val, 
+          growth_rate_vari = growth_rate_val,
+          growth_rate_sd = 0.1 * growth_rate_val,
           coverage_vari = coverage_val,
           coverage_sd = 0.1 * coverage_val,
           saturation_vari = saturation_val,
           saturation_sd = 0.1 * saturation_val,
-          tax_vari = tax_val, 
-          tax_sd = 0.1 * tax_val, 
-          unit_cost_local_vari = unit_cost_local_val, 
-          unit_cost_local_sd = 0.1 * unit_cost_local_val, 
+          tax_vari = tax_val,
+          tax_sd = 0.1 * tax_val,
+          unit_cost_local_vari = unit_cost_local_val,
+          unit_cost_local_sd = 0.1 * unit_cost_local_val,
           years_of_treat_vari = years_of_treat_val,
           years_of_treat_sd = 0.1 * years_of_treat_val,
           lambda1_vari = c(lambda1_vals[1], lambda1_vals[2]),
           lambda1_sd = c(0.17, 0.17),
-          lambda2_vari = lambda2_val, 
-          lambda2_sd = 0.1 * lambda2_val, 
-          q_full_vari = q_full_val, 
-          q_full_sd = 0.1 * q_full_val, 
-          q_zero_vari = q_zero_val, 
-          q_zero_sd = 0.1 * q_zero_val, 
-          coef_exp_vari = c(coef_exp_val[1], coef_exp_val[2]), 
-          coef_exp_sd = c(0.001 , 0.001), 
+          lambda2_vari = lambda2_val,
+          lambda2_sd = 0.1 * lambda2_val,
+          q_full_vari = q_full_val,
+          q_full_sd = 0.1 * q_full_val,
+          q_zero_vari = q_zero_val,
+          q_zero_sd = 0.1 * q_zero_val,
+          coef_exp_vari = c(coef_exp_val[1], coef_exp_val[2]),
+          coef_exp_sd = c(0.001 , 0.001),
           teach_sal_vari = teach_sal_val,
           teach_sal_sd = 0.1 * teach_sal_val,
           teach_ben_vari = teach_ben_val,
           teach_ben_sd = 0.1 * teach_ben_val,
-          n_students_vari = n_students_val, 
-          n_students_sd = 0.1 * n_students_val, 
-          include_ext_vari = TRUE, 
+          n_students_vari = n_students_val,
+          n_students_sd = 0.1 * n_students_val,
+          include_ext_vari = TRUE,
           full_saturation_vari = full_saturation_val,
           full_saturation_sd = 0.1 * full_saturation_val,
           delta_ed_par1 = 1,
           delta_ed_sd1 = 1,
           delta_ed_par2 = 1,
           delta_ed_sd2 = 1
-          ) 
+          )
+
+
+
+########
+# ANALYSE OUTPUT
 
 # unit test
 if (abs(sd(npv_sim) - 28.38155)>0.0001 ) {
   print("Output has change")
 }
-  
+
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
@@ -645,16 +673,16 @@ ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
-       title = "Distribution NPV of Fiscal Impacts of Deworming", 
+       title = "Distribution NPV of Fiscal Impacts of Deworming",
        subtitle = "With Externalities")+
   annotate("text", x = 2.2 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
   annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-``` 
+```
 
 
 ## Sensitivity Analysis  
-Describe how we can move each component. Link to shiny app. 
+Describe how we can move each component. Link to shiny app.
 
 First we abbreviate all the remaining components of the model that were still written in english into one parameter:   
 
@@ -663,16 +691,16 @@ First we abbreviate all the remaining components of the model that were still wr
  - \# Students: $P_3$  
  - Cost per person per year (\$KSH): $P_4$
  - Additional years of treatment: $P_5$
- 
+
 Now we can combine all the sub components of equation 1 into on single, very large, expression obtaining:
 
-  
+
 \begin{equation}
 NPV =  
-\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + (i - \pi)}\right)^{t} 
-\left( \frac{52}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}} 
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + (i - \pi)}\right)^{t}
+\left( \frac{52}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}
 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \right)I(t\geq 10) \times \\
-\left(\frac{\lambda_{1,male} + \lambda_{1,female}}{2} + \frac{p \lambda_{2}}{R} \right) - 
+\left(\frac{\lambda_{1,male} + \lambda_{1,female}}{2} + \frac{p \lambda_{2}}{R} \right) -
 \frac{P_1 + P_2}{P_3} \sum_{t=0}^{50} \left( \frac{1}{1 + (i - \pi)}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 -  
 \left( \frac{P_4	}{ex}\times P_5 \right) Q(S_{2})  
@@ -688,7 +716,7 @@ NPV =
 
 ```{r bias-against}
 
-npv_sim <- sim.data1(nsims = 1e4, 
+npv_sim <- sim.data1(nsims = 1e4,
           gov_bonds_vari = 0.129,                #Data
           gov_bonds_sd = 0.1 * gov_bonds,
           inflation_vari = inflation,
@@ -699,52 +727,52 @@ npv_sim <- sim.data1(nsims = 1e4,
           wage_ww_sd = 0.1 * wage_ww_val,
           profits_se_vari = profits_se_val,
           profits_se_sd = 0.1 * profits_se_val,
-          hours_se_cond_vari = 43, 
-          hours_se_cond_sd = 0.1 * hours_se_cond_val, 
+          hours_se_cond_vari = 43,
+          hours_se_cond_sd = 0.1 * hours_se_cond_val,
           hours_ag_vari = hours_ag_val,  
-          hours_ag_sd = 0.1 * 7, 
-          hours_ww_vari = 6, 
-          hours_ww_sd = 0.1 * hours_ww_val, 
-          hours_se_vari = 5, 
+          hours_ag_sd = 0.1 * 7,
+          hours_ww_vari = 6,
+          hours_ww_sd = 0.1 * hours_ww_val,
+          hours_se_vari = 5,
           hours_se_sd = 0.1 * hours_se_val,
           ex_rate_vari = ex_rate_val,
           ex_rate_sd = 0.1 * 110,
-          growth_rate_vari = 0.01, 
-          growth_rate_sd = 0.1 * growth_rate_val, 
+          growth_rate_vari = 0.01,
+          growth_rate_sd = 0.1 * growth_rate_val,
           coverage_vari = 0.8,
           coverage_sd = 0.1 * coverage_val,
           saturation_vari = 0.45,
           saturation_sd = 0.1 * saturation_val,
-          tax_vari = 0.16, 
-          tax_sd = 0.1 * tax_val, 
-          unit_cost_local_vari = unit_cost_local_val, 
-          unit_cost_local_sd = 0.1 * unit_cost_local_val, 
+          tax_vari = 0.16,
+          tax_sd = 0.1 * tax_val,
+          unit_cost_local_vari = unit_cost_local_val,
+          unit_cost_local_sd = 0.1 * unit_cost_local_val,
           years_of_treat_vari = years_of_treat_val,
           years_of_treat_sd = 0.1 * years_of_treat_val,
           lambda1_vari = c(lambda1_vals[1], lambda1_vals[2]),
           lambda1_sd = c(0.17, 0.17),
-          lambda2_vari = lambda2_val, 
-          lambda2_sd = 0.5 * lambda2_val, 
-          q_full_vari = q_full_val, 
-          q_full_sd = 0.1 * q_full_val, 
-          q_zero_vari = q_zero_val, 
-          q_zero_sd = 0.1 * q_zero_val, 
-          coef_exp_vari = c(0.002, -0.0002), 
-          coef_exp_sd = c(0.001 , 0.001), 
+          lambda2_vari = lambda2_val,
+          lambda2_sd = 0.5 * lambda2_val,
+          q_full_vari = q_full_val,
+          q_full_sd = 0.1 * q_full_val,
+          q_zero_vari = q_zero_val,
+          q_zero_sd = 0.1 * q_zero_val,
+          coef_exp_vari = c(0.002, -0.0002),
+          coef_exp_sd = c(0.001 , 0.001),
           teach_sal_vari = 7000,
           teach_sal_sd = 0.1 * teach_sal_val,
           teach_ben_vari = teach_ben_val,
           teach_ben_sd = 0.1 * teach_ben_val,
-          n_students_vari = 36, 
-          n_students_sd = 0.1 * n_students_val, 
-          include_ext_vari = TRUE, 
+          n_students_vari = 36,
+          n_students_sd = 0.1 * n_students_val,
+          include_ext_vari = TRUE,
           full_saturation_vari = full_saturation_val,
           full_saturation_sd = 0.1 * full_saturation_val,
           delta_ed_par1 = 1,
           delta_ed_sd1 = 1,
           delta_ed_par2 = 1,
           delta_ed_sd2 = 1
-          ) 
+          )
 
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 
@@ -756,7 +784,7 @@ ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
-       title = "Distribution NPV of Fiscal Impacts of Deworming", 
+       title = "Distribution NPV of Fiscal Impacts of Deworming",
        subtitle = "With Externalities")+
   annotate("text", x = 2.2 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
@@ -780,30 +808,25 @@ ggplot() +
 - Finish description of last component. DONE
 - deploy shiny app with one slider. DONE
   - wrap everything in a horrible function DONE
-  - add additional sliders DONE 
+  - add additional sliders DONE
 - Display value for NPV  DONE
 - reproduce results with and without externalities reactively DONE  
 - bud gif for slides                           DONE
-- add sliders for SD of each component                DONE 
+- add sliders for SD of each component                DONE
 - describe MC and SA.       DONE
-- deploy shiny app and build layered document. 
+- deploy shiny app and build layered document.
 
 - built two examples: one highly negative and other highly positive.
 - Look for insights out of the shiny app.
   - Tax?
-  - $\lambda_2 = 0$ but current prices. 
+  - $\lambda_2 = 0$ but current prices.
   - play with SDs  
-  - returns to ed 
+  - returns to ed
   - $R, p, Q$
   - Unit costs  
   - Example to connect with power calc?
-  
+
 - Made flexible to 20 years   
 - Overall welfare  NEXT  
 - Scale lambda 1 to infection rates.  
-- Embed restrictions that come from theory (or empirical regularities) like relationship between unemployment and inflation. 
-
-
-
-  
-  
+- Embed restrictions that come from theory (or empirical regularities) like relationship between unemployment and inflation.
