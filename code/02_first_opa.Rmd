@@ -142,7 +142,7 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
             apply( ( 1 / (1 + interest_r_var) )^index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
           ) - (s2_var * q2_var  - s1_var * q1_var)
-#  browser()
+#  wser()
   return(res1)   
 }
 ```
@@ -154,7 +154,7 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
 
 The real interest rate $r$ is obtained from the interest rate on betterment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
 
-```{r interest-rate}
+```{r interest-rate} 
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
 interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
@@ -206,7 +206,8 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 
 
 ```{r wage_t} 
-
+#inputs:
+#outputs:
 wages_f <- function(wage_ag_var_h1 = wage_ag_so,  
                      wage_ww_var_h1 = wage_ww_so,
                      profits_se_var_h1 = profits_se_so,
@@ -451,6 +452,8 @@ invisible( list2env(ed_costs_in_f(include_ext_var = TRUE),.GlobalEnv) )
 invisible( list2env(costs_f(),.GlobalEnv) )
 
 npv_mo_f(lambda2_male_var = 0, lambda2_female_var = 0)
+
+#re-write above without list2env(). Just use lists
 ```
 
 # Montecarlo simulations  
@@ -564,23 +567,13 @@ asd(asd1)
 }
 
 # -0.6096942
-
-rm(list = ls()[!(ls() %in% ls(pattern = "_f\\b") )])
-
-set.seed(1427857)
-
-list2env(call_params_f(), .GlobalEnv)
-list2env(onedraw_sim_f(), .GlobalEnv)
-
-track_env <- environment()
-
-asd1 <- function(..., n_sims_var = 10, track_env_var = track_env) {
+sims_f <- function(..., n_sims_var = 10) {
+track_env_var <- .GlobalEnv
 
     npv_sim <- rep(NA, n_sims_var)
-    
     for (i in 1:n_sims_var) {
-    #rm(list = ls(pattern= "_so\\b") )
- 
+    #if (i>=2) {rm(ls(pattern = "_sim\\b"))}
+    #rm(list = ls()[!(ls() %in% (ls(pattern = "_so\\b") )])
     invisible( list2env(onedraw_sim_f(...), envir = track_env_var ) )
     # 1 - "r""
     invisible( list2env( interest_in_f(gov_bonds_sim, inflation_sim), envir = track_env_var ) )
@@ -632,8 +625,20 @@ asd1 <- function(..., n_sims_var = 10, track_env_var = track_env) {
     return(npv_sim)
 }
 
+``` 
 
-npv_sim <- asd1(n_sims_var = 1e4)
+
+```{r runs}
+rm(list = ls()[!(ls() %in% ls(pattern = "_f\\b") )])
+
+set.seed(142857)
+
+invisible( list2env(call_params_f(), .GlobalEnv) )
+
+track_env <- environment()
+
+
+npv_sim <- sims_f(n_sims_var = 1e4)
 
 ########
 # ANALYSE OUTPUT
@@ -659,7 +664,6 @@ ggplot() +
   annotate("text", x = 2.2 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
   annotate("text", x = 80, y = 0.004, label = npv_for_text2, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-
 ```
 
 
