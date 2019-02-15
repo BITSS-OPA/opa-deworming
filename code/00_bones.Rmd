@@ -59,8 +59,13 @@ y = f(x)
 \end{equation}
 
 ```{r model}
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
+# - inputs: 
+# - outputs: 
+FUNCTION_NAME_f <- function(){
+    
+    return(list(OBJECTS_TO_RETURN)) 
+} 
+invisible( list2env(FUNCTION_NAME_f(),.GlobalEnv) )
 ```
 
 
