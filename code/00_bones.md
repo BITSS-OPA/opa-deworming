@@ -1,6 +1,6 @@
 ---
 title: "Template"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: "16 April, 2019"
 output:
   html_document:
     code_folding: hide
@@ -20,23 +20,11 @@ editor_options:
 \def\blue{\color{blue}}
 
 
-```{r setup, include=FALSE} 
-# Loading required libraries
-list.of.packages <- c("tidyverse", "haven", "here", "kableExtra")
-
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages, repos= "http://cran.cnr.berkeley.edu/")
-
-lapply(list.of.packages, library, character.only = TRUE)
-
-knitr::opts_knit$set(root.dir = here())
-knitr::opts_chunk$set(echo = TRUE)
-
-print_code <- TRUE
-``` 
 
 
-```{r parameters, echo=print_code}
+
+
+```r
 # Do not run data set on git/github until privacy has been cleared
 ################
 ##### Data  
@@ -61,8 +49,7 @@ print_code <- TRUE
 
 # Key policy estimates for policy makers  
 
-```{r final-output}
-```
+
 
 # Methodology
 
@@ -74,7 +61,8 @@ y = f(x)
 \tag{1}
 \end{equation}
 
-```{r model}
+
+```r
 # - inputs: tax_rev_init_mo, top_tax_base_in
 # - outputs: total_rev_pe
 ```
@@ -84,19 +72,22 @@ y = f(x)
 
 ### 1 - Component 1 ("$r$")
 
-```{r comp1,  echo=print_code}
+
+```r
 # - inputs: tax_rev_init_mo, top_tax_base_in
 # - outputs: total_rev_pe
 ```
 # Main results
-```{r main-results,  echo=print_code}
+
+```r
 # - inputs: tax_rev_init_mo, top_tax_base_in
 # - outputs: total_rev_pe
 ```
 
 
 # Montecarlo simulations  
-```{r,  echo=print_code}
+
+```r
 # Draws
 # Compute inputs
 # Compute model

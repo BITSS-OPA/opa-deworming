@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: "16 April, 2019"
 output:
   html_document:
     code_folding: hide
@@ -19,23 +19,11 @@ editor_options:
 ---
 \def\blue{\color{blue}}
 
-```{r setup, include=FALSE} 
-# Loading required libraries
-list.of.packages <- c("tidyverse", "haven", "here", "kableExtra")
-
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages, repos= "http://cran.cnr.berkeley.edu/")
-
-lapply(list.of.packages, library, character.only = TRUE)
-
-knitr::opts_knit$set(root.dir = here())
-knitr::opts_chunk$set(echo = TRUE)
-
-print_code <- TRUE
-``` 
 
 
-```{r parameters, echo=print_code}
+
+
+```r
 # chante _vals to _so
 call_params_f <- function(){
     #############
@@ -104,9 +92,7 @@ invisible( list2env(call_params_f(),.GlobalEnv) )
 
 # Key policy estimates for policy makers  
 
-```{r final-output}
 
-```
 
 # Methodology
 
@@ -123,7 +109,8 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 \end{equation}
 
 
-```{r model} 
+
+```r
 # add suffix _var to args 
 # - inputs: tax_rev_init_mo, top_tax_base_in  
 # - outputs: total_rev_pe 
@@ -170,9 +157,10 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
 
 ### 1 - "$r$"  
 
-The real interest rate $r$ is obtained from the interest rate on betterment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
+The real interest rate $r$ is obtained from the interest rate on betterment bonds (0.118) minus the inflation rate (0.02).
 
-```{r interest-rate} 
+
+```r
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
 interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
@@ -182,7 +170,7 @@ interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflati
 invisible( list2env(interest_in_f(),.GlobalEnv) )
 ```
 
-The resulting value is a $r$ = `r paste(round(100*interest_in,2), "%", sep="")`
+The resulting value is a $r$ = 9.85%
 
 ### 2 - "$w_{t}$"
 
@@ -223,7 +211,8 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 
 
 
-```{r wage_t} 
+
+```r
 #inputs:
 #outputs:
 wages_f <- function(wage_ag_var_h1 = wage_ag_so,  
@@ -284,7 +273,6 @@ wages_f <- function(wage_ag_var_h1 = wage_ag_so,
 }
 
 invisible( list2env(wages_f(),.GlobalEnv) )
-
 ```
 
 
@@ -307,7 +295,8 @@ Its components come from research (W\@W).
 
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
 
-```{r lambdas}
+
+```r
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
 lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so){
@@ -330,7 +319,7 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
-The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was appplied to approximatedly two thirds of the population, $R$ is set to: $R  = `r round(coverage_so, 2)`$.  
+The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was appplied to approximatedly two thirds of the population, $R$ is set to: $R  = 0.68$.  
 
 The saturation of the intervention, $p$, measures the fraction of the population that is effectively usign the treatment and is defined as:  
 
@@ -338,9 +327,10 @@ The saturation of the intervention, $p$, measures the fraction of the population
 p = R \times Q(full)  + (1 - R) \times Q(0)
 \end{equation}
 
-For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assinged the value of `r q_zero_so`. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = `r q_full_so`$.
+For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assinged the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = 0.75$.
 
-```{r coverage-and-saturation} 
+
+```r
 # - inputs: coverage_so, q_full_so, q_zero_so 
 # - outputs: saturation_in 
 saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so){
@@ -372,8 +362,8 @@ For $\Delta \overline{E}_{\gamma t}(S1,S2)$ we use a series of estimated effects
 
 This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
 
-```{r ed-costs}
 
+```r
 include_ext_mo <- TRUE
 # - inputs: coverage_so, q_full_so, q_zero_so 
 # - outputs: saturation_in 
@@ -422,9 +412,10 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 \end{equation}
 
 #### 6.3 - $Q_{2}$
-The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of `r q_full_so`.
+The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of 0.75.
 
-```{r costs}
+
+```r
 # - inputs: 
 # - outputs: 
 costs_f <- function(unit_cost_local_var = unit_cost_local_so, ex_rate_var = ex_rate_so,
@@ -434,13 +425,12 @@ costs_f <- function(unit_cost_local_var = unit_cost_local_so, ex_rate_var = ex_r
     return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
 } 
 invisible( list2env(costs_f(),.GlobalEnv) )
-
-
 ```
 
 # Main results
 
-```{r main-results} 
+
+```r
 #no externality NPV
 res_npv_no_ext_pe <- npv_mo_f(lambda2_male_var = 0, lambda2_female_var = 0)
 
@@ -453,13 +443,14 @@ res_npv_yes_ext_pe <- npv_mo_f(delta_ed_male_var = delta_ed_ext_total_in,
 
 
 
-- **NPV without externalities ($\lambda_2 = 0$):** `r round(res_npv_no_ext_pe,4)`    
+- **NPV without externalities ($\lambda_2 = 0$):** -0.6097    
 
-- **NPV with externalities ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(res_npv_yes_ext_pe,4)`
+- **NPV with externalities ($\lambda_2 = 10.2$ ):** 34.3187
 
 
 
-```{r test}
+
+```r
 rm(list = ls()[!(ls() %in% ls(pattern = "_f\\b"))])
 invisible( list2env(call_params_f(), .GlobalEnv) )
 invisible( list2env(interest_in_f(),.GlobalEnv) )
@@ -470,12 +461,19 @@ invisible( list2env(ed_costs_in_f(include_ext_var = TRUE),.GlobalEnv) )
 invisible( list2env(costs_f(),.GlobalEnv) )
 
 npv_mo_f(lambda2_male_var = 0, lambda2_female_var = 0)
+```
 
+```
+## [1] -0.6096942
+```
+
+```r
 #re-write above without list2env(). Just use lists
 ```
 
 # Montecarlo simulations  
-```{r draws-for-sims, eval=TRUE}
+
+```r
 # run the model 
 #  input: Input vectors for NPV function
 #  output: one vector of NPVs (of lenght Nsims)
@@ -564,11 +562,10 @@ onedraw_sim_f <- function(gov_bonds_var = gov_bonds_so, gov_bonds_sd_var  = 0.1 
 # compute the elements of the model
 #  input: K vectors with draws from sims
 #  output: Input vectors for NPV functions
+```
 
-``` 
 
-```{r sims}
-
+```r
 if (FALSE){
 asd1 <- sapply( ls(pattern = "_so"), function(x) get(x) )
 gov_bonds_so <- 42
@@ -642,11 +639,11 @@ track_env_var <- .GlobalEnv
     }
     return(npv_sim)
 }
+```
 
-``` 
 
 
-```{r runs}
+```r
 rm(list = ls()[!(ls() %in% ls(pattern = "_f\\b") )])
 
 set.seed(142857)
@@ -665,7 +662,13 @@ npv_sim <- sims_f(n_sims_var = 1e4)
 if (abs(sd(npv_sim) - 28.38155)>0.0001 ) {
   print("Output has change")
 }
+```
 
+```
+## [1] "Output has change"
+```
+
+```r
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
@@ -684,11 +687,13 @@ ggplot() +
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
 ```
 
+![](02_first_opa_files/figure-html/runs-1.png)<!-- -->
 
 
 
-```{r test2, eval=FALSE}
 
+
+```r
 rm(list = ls()[!(ls() %in% ls(pattern = "_f\\b") )])
 
 
@@ -742,7 +747,6 @@ list2env(call_params_f(), .GlobalEnv)
                     lambda2_female_var = 0,
                     s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
                     periods_var = periods_so)
-
 ```
 
 

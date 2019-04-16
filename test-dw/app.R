@@ -9,94 +9,95 @@
 
 library(shiny)
 
-
+saturation_so <- 1
+full_saturation_so <- 1
 ui <- fluidPage(
   sidebarPanel(id = "tPanel",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                numericInput("param1", label = h3("N Sims = "), value = 1e4),
                br("Data"), 
                withMathJax(),
                sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
-                           min = 0.001, max = 0.2, value = gov_bonds), 
+                           min = 0.001, max = 0.2, value = gov_bonds_so), 
                sliderInput("param2_1", label = "SD = ",
-                           min = 0.0000001, max = 0.4 * gov_bonds, value = 0.1 * gov_bonds), 
+                           min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so), 
                sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
-                           min = 0.001, max = 0.2, value = inflation), 
+                           min = 0.001, max = 0.2, value = inflation_so), 
                sliderInput("param3_1", label = "SD = ",
-                           min = 0.0000001, max = 0.4 * inflation, value = 0.1 * inflation), 
+                           min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so), 
                sliderInput("param4", label = "Agri Wages (\\( w_{ag} \\))",
-                           min = wage_ag_val / 2, max = 2 * wage_ag_val, value = wage_ag_val),
+                           min = wage_ag_so / 2, max = 2 * wage_ag_so, value = wage_ag_so),
                sliderInput("param4_1", label = "SD = ",
-                           min = 0.0000001* wage_ag_val, max = 1 * wage_ag_val, value = 0.1 * wage_ag_val), 
+                           min = 0.0000001* wage_ag_so, max = 1 * wage_ag_so, value = 0.1 * wage_ag_so), 
                sliderInput("param5", label = "Work-non ag-Wages  (\\( w_{ww} \\))",
-                           min = wage_ww_val / 2, max = 2 * wage_ww_val, value = wage_ww_val),
+                           min = wage_ww_so / 2, max = 2 * wage_ww_so, value = wage_ww_so),
                sliderInput("param5_1", label = "SD = ",
-                           min = 0.0000001* wage_ww_val, max = 1 * wage_ww_val, value = 0.1 * wage_ww_val), 
+                           min = 0.0000001* wage_ww_so, max = 1 * wage_ww_so, value = 0.1 * wage_ww_so), 
                sliderInput("param6", label = "Profits se = ",
-                           min = profits_se_val / 2, max = 2 * profits_se_val, value = profits_se_val),
+                           min = profits_se_so / 2, max = 2 * profits_se_so, value = profits_se_so),
                sliderInput("param6_1", label = "SD = ",
-                           min = 0.000001* profits_se_val, max = 1 * profits_se_val, value = 0.1 * profits_se_val), 
+                           min = 0.000001* profits_se_so, max = 1 * profits_se_so, value = 0.1 * profits_se_so), 
                sliderInput("param7", label = "Hours se (>0) = ",
-                           min = hours_se_cond_val / 2, max = 2 * hours_se_cond_val, value = hours_se_cond_val),
+                           min = hours_se_cond_so / 2, max = 2 * hours_se_cond_so, value = hours_se_cond_so),
                sliderInput("param7_1", label = "SD = ",
-                           min = 0.000001* hours_se_cond_val, max = 1 * hours_se_cond_val, value = 0.1 * hours_se_cond_val), 
+                           min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so), 
                sliderInput("param8", label = "H_ag = ",
-                           min = hours_ag_val / 2, max = 2 * hours_ag_val, value = hours_ag_val),
+                           min = hours_ag_so / 2, max = 2 * hours_ag_so, value = hours_ag_so),
                sliderInput("param8_1", label = "SD = ",
-                           min = 0.000001* hours_ag_val, max = 1 * hours_ag_val, value = 0.1 * hours_ag_val), 
+                           min = 0.000001* hours_ag_so, max = 1 * hours_ag_so, value = 0.1 * hours_ag_so), 
                sliderInput("param9", label = "H_ww = ", 
-                           min = hours_ww_val / 2, max = 2 * hours_ww_val, value = hours_ww_val),
+                           min = hours_ww_so / 2, max = 2 * hours_ww_so, value = hours_ww_so),
                sliderInput("param9_1", label = "SD = ", 
-                           min = 0.000001* hours_ww_val, max = 1 * hours_ww_val, value = 0.1 * hours_ww_val), 
+                           min = 0.000001* hours_ww_so, max = 1 * hours_ww_so, value = 0.1 * hours_ww_so), 
                sliderInput("param10", label = "H_se = ",
-                           min = hours_se_val / 2, max = 2 * hours_se_val, value = hours_se_val),
+                           min = hours_se_so / 2, max = 2 * hours_se_so, value = hours_se_so),
                sliderInput("param10_1", label = "SD = ",
-                           min = 0.000001* hours_se_val, max = 1 * hours_se_val, value = 0.1 * hours_se_val), 
+                           min = 0.000001* hours_se_so, max = 1 * hours_se_so, value = 0.1 * hours_se_so), 
                sliderInput("param11", label = "Exchange rate = ",
-                           min = ex_rate_val / 2, max = 2 * ex_rate_val, value = ex_rate_val),
+                           min = ex_rate_so / 2, max = 2 * ex_rate_so, value = ex_rate_so),
                sliderInput("param11_1", label = "SD = ",
-                           min = 0.000001* ex_rate_val, max = 1 * ex_rate_val, value = 0.1 * ex_rate_val), 
+                           min = 0.000001* ex_rate_so, max = 1 * ex_rate_so, value = 0.1 * ex_rate_so), 
                sliderInput("param12", label = "growth = ",
-                           min = growth_rate_val / 2, max = 2 * growth_rate_val, value = growth_rate_val),
+                           min = growth_rate_so / 2, max = 2 * growth_rate_so, value = growth_rate_so),
                sliderInput("param12_1", label = "SD = ",
-                           min = 0.000001* growth_rate_val, max = 1 * growth_rate_val, value = 0.1 * growth_rate_val), 
+                           min = 0.000001* growth_rate_so, max = 1 * growth_rate_so, value = 0.1 * growth_rate_so), 
                sliderInput("param13", label = "Coverage (R) = ", 
-                           min = coverage_val / 2, max = 2 * coverage_val, value = coverage_val),
+                           min = coverage_so / 2, max = 2 * coverage_so, value = coverage_so),
                sliderInput("param13_1", label = "SD = ", 
-                           min = 0.000001* coverage_val, max = 1 * coverage_val, value = 0.1 * coverage_val), 
+                           min = 0.000001* coverage_so, max = 1 * coverage_so, value = 0.1 * coverage_so), 
                sliderInput("param14", label = "Saturation (p) = ",
-                           min = saturation_val / 2, max = 2 * saturation_val, value = saturation_val),
+                           min = saturation_so / 2, max = 2 * saturation_so, value = saturation_so),
                sliderInput("param14_1", label = "SD = ",
-                           min = 0.0000001* saturation_val, max = 1 * saturation_val, value = 0.1 * saturation_val), 
+                           min = 0.0000001* saturation_so, max = 1 * saturation_so, value = 0.1 * saturation_so), 
                sliderInput("param15", label = "Tax rate = ",
-                           min = tax_val / 2, max = 2 * tax_val, value = tax_val, step = 0.001),
+                           min = tax_so / 2, max = 2 * tax_so, value = tax_so, step = 0.001),
                sliderInput("param15_1", label = "SD = ",
-                           min = 0.00001* tax_val, max = 1 * tax_val, value = 0.1 * tax_val), 
+                           min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so), 
                sliderInput("param16", label = "Costs ot T (local $) = ",
-                           min = unit_cost_local_val / 2, max = 2 * unit_cost_local_val, value = unit_cost_local_val),
+                           min = unit_cost_local_so / 2, max = 2 * unit_cost_local_so, value = unit_cost_local_so),
                sliderInput("param16_1", label = "SD = ",                
-                           min = 0.000001* unit_cost_local_val, max = 1 * unit_cost_local_val, value = 0.1 * unit_cost_local_val), 
+                           min = 0.000001* unit_cost_local_so, max = 1 * unit_cost_local_so, value = 0.1 * unit_cost_local_so), 
                sliderInput("param17", label = "Years of T = ",
-                           min = years_of_treat_val / 2, max = 2 * years_of_treat_val, value = years_of_treat_val),
+                           min = years_of_treat_so / 2, max = 2 * years_of_treat_so, value = years_of_treat_so),
                sliderInput("param17_1", label = "SD = ",
-                           min = 0.000001* years_of_treat_val, max = 1 * years_of_treat_val, value = 0.1 * years_of_treat_val), 
+                           min = 0.000001* years_of_treat_so, max = 1 * years_of_treat_so, value = 0.1 * years_of_treat_so), 
                
                br("Research"),
-               numericInput("param18_1", label = h3("Lambda 1_m = "), value = lambda1_vals[1]),
+               numericInput("param18_1", label = h3("Lambda 1_m = "), value = lambda1_so[1]),
                numericInput("param18_1_1", label = h3("sd = "), value = 0.17),
-               numericInput("param18_2", label = h3("Lambda 1_f = "), value = lambda1_vals[2]),
+               numericInput("param18_2", label = h3("Lambda 1_f = "), value = lambda1_so[2]),
                numericInput("param18_2_1", label = h3("sd = "), value = 0.17),
                sliderInput("param19", label = "Lambda 2 = ",
-                           min = 0, max = 2 * lambda2_val, value = lambda2_val * 1),
+                           min = 0, max = 2 * lambda2_so, value = lambda2_so * 1),
                sliderInput("param19_1", label = "SD = ",
-                           min = 0.0000001* lambda2_val, max = 1 * lambda2_val, value = 0.1 * lambda2_val), 
+                           min = 0.0000001* lambda2_so, max = 1 * lambda2_so, value = 0.1 * lambda2_so), 
                sliderInput("param20", label = "Take-up = ",
-                           min = q_full_val / 2, max = 2 * q_full_val, value = q_full_val), 
+                           min = q_full_so / 2, max = 2 * q_full_so, value = q_full_so), 
                sliderInput("param20_1", label = "SD = ",
-                           min = 0.00000001* q_full_val, max = 1 * q_full_val, value = 0.1 * q_full_val), 
+                           min = 0.00000001* q_full_so, max = 1 * q_full_so, value = 0.1 * q_full_so), 
                sliderInput("param28", label = "Take-up with no subsidy = ",
-                           min = q_zero_val / 2, max = 2 * q_zero_val, value = q_zero_val), 
+                           min = q_zero_so / 2, max = 2 * q_zero_so, value = q_zero_so), 
                sliderInput("param28_1", label = "SD = ",
-                           min = 0.00000001* q_zero_val, max = 1 * q_zero_val, value = 0.1 * q_zero_val), 
+                           min = 0.00000001* q_zero_so, max = 1 * q_zero_so, value = 0.1 * q_zero_so), 
                checkboxInput("checkbox1", label = "Use additional education with externalities", value = TRUE),
                sliderInput("param26", label = "x * Delta E = ",
                            min = 0.0000001, max = 4, value = 1), 
@@ -108,26 +109,26 @@ ui <- fluidPage(
                            min = 0.0000001, max = 4, value = 1), 
                
                br("Guesswork"),
-               numericInput("param21_1", label = h3("Coef Xp = "), value = coef_exp_val[1]),
+               numericInput("param21_1", label = h3("Coef Xp = "), value = coef_exp_so[1]),
                numericInput("param21_1_1", label = h3("SD = "), value = 0.001),
-               numericInput("param21_2", label = h3("Coef Xp^2 = "), value = coef_exp_val[2]),
+               numericInput("param21_2", label = h3("Coef Xp^2 = "), value = coef_exp_so[2]),
                numericInput("param21_2_1", label = h3("SD = "), value = 0.001),
                sliderInput("param22", label = "Teacher salary = ",
-                           min = teach_sal_val / 2, max = 2 * teach_sal_val, value = teach_sal_val),
+                           min = teach_sal_so / 2, max = 2 * teach_sal_so, value = teach_sal_so),
                sliderInput("param22_1", label = "SD = ",
-                           min = 0.00000001* teach_sal_val, max = 1 * teach_sal_val, value = 0.1 * teach_sal_val), 
+                           min = 0.00000001* teach_sal_so, max = 1 * teach_sal_so, value = 0.1 * teach_sal_so), 
                sliderInput("param23", label = "Teacher benefits = ",
-                           min = teach_ben_val / 2, max = 2 * teach_ben_val, value = teach_ben_val),
+                           min = teach_ben_so / 2, max = 2 * teach_ben_so, value = teach_ben_so),
                sliderInput("param23_1", label = "SD = ",
-                           min = 0.0000001* teach_ben_val, max = 1 * teach_ben_val, value = 0.1 * teach_ben_val), 
+                           min = 0.0000001* teach_ben_so, max = 1 * teach_ben_so, value = 0.1 * teach_ben_so), 
                sliderInput("param24", label = "Student per teach = ",
-                           min = n_students_val / 2, max = 2 * n_students_val, value = n_students_val),
+                           min = n_students_so / 2, max = 2 * n_students_so, value = n_students_so),
                sliderInput("param24_1", label = "SD = ",
-                           min = 0.0000001* n_students_val, max = 1 * n_students_val, value = 0.1 * n_students_val), 
+                           min = 0.0000001* n_students_so, max = 1 * n_students_so, value = 0.1 * n_students_so), 
                sliderInput("param25", label = "Full Saturation (Q(F)) = ",
-                           min = full_saturation_val / 2, max = 2 * full_saturation_val, value = full_saturation_val), 
+                           min = full_saturation_so / 2, max = 2 * full_saturation_so, value = full_saturation_so), 
                sliderInput("param25_1", label = "SD = ",
-                           min = 0.0000001* full_saturation_val, max = 1 * full_saturation_val, value = 0.1 * full_saturation_val) 
+                           min = 0.0000001* full_saturation_so, max = 1 * full_saturation_so, value = 0.1 * full_saturation_so) 
                ),
   mainPanel(
     plotOutput("plot1")
@@ -230,34 +231,34 @@ server <- function(input, output) {
       teach_ben_val_sim <- rnorm(nsims, teach_ben_vari, teach_ben_sd)
       n_students_val_sim <- rnorm(nsims, n_students_vari, n_students_sd)
       
-      delta_ed_vals_sim <- sapply(delta_ed_vals[,1], function(x)  rnorm(nsims, mean = 
+      delta_ed_vals_sim <- sapply(delta_ed_so[,1], function(x)  rnorm(nsims, mean = 
                                                                           x * delta_ed_par1, 
-                                                                        sd = delta_ed_sd1 * sd(delta_ed_vals[,1]) ) )
+                                                                        sd = delta_ed_sd1 * sd(delta_ed_so[,1]) ) )
       colnames(delta_ed_vals_sim) <- 1999:2007
       
-      delta_ed_ext_vals_sim <- sapply(delta_ed_ext_vals[,1], function(x)  rnorm(nsims, mean = 
+      delta_ed_ext_vals_sim <- sapply(delta_ed_ext_so[,1], function(x)  rnorm(nsims, mean = 
                                                                                   x * delta_ed_par2, 
-                                                                                sd = delta_ed_sd2 * sd(delta_ed_ext_vals[,1])))
+                                                                                sd = delta_ed_sd2 * sd(delta_ed_ext_so[,1])))
       colnames(delta_ed_ext_vals_sim) <- 1999:2007
       
       npv_sim <- rep(NA, nsims)
       #yes externality NPV
       for (i in 1:nsims) {
         interst_r_val <- gov_bonds_sim[i] - inflation_sim[i]
-        wage_0_val <- wage_0_f(wage_ag = wage_ag_val_sim[i], 
-                               wage_ww = wage_ww_val_sim[i], 
-                               profits_se = profits_se_val_sim[i], 
-                               hours_se_cond = hours_se_cond_val_sim[i], 
-                               hours_ag = hours_ag_val_sim[i], 
-                               hours_ww = hours_ww_val_sim[i], 
-                               hours_se = hours_se_val_sim[i], 
-                               ex_rate = ex_rate_val_sim[i])  
+        wage_0_val <- wage_0_mo_f(wage_ag_var = wage_ag_val_sim[i], 
+                               wage_ww_var = wage_ww_val_sim[i], 
+                               profits_se_var = profits_se_val_sim[i], 
+                               hours_se_cond_var = hours_se_cond_val_sim[i], 
+                               hours_ag_var = hours_ag_val_sim[i], 
+                               hours_ww_var = hours_ww_val_sim[i], 
+                               hours_se_var = hours_se_val_sim[i], 
+                               ex_rate_var = ex_rate_val_sim[i])  
         experience_val <- 0:periods_val - time_to_jm_val
-        wage_t_val <- wage_t(wage_0 = wage_0_val, 
-                             growth_rate = growth_rate_val_sim[i], 
-                             experience = experience_val, 
-                             coef_exp1 = coef_exp_val_sim[i,1], 
-                             coef_exp2 = coef_exp_val_sim[i,2])
+        wage_t_val <- wage_t_mo_f(wage_0_var = wage_0_val, 
+                             growth_rate_var = growth_rate_val_sim[i], 
+                             experience_var = experience_val, 
+                             coef_exp1_var = coef_exp_val_sim[i,1], 
+                             coef_exp2_var = coef_exp_val_sim[i,2])
         lambda1_vals_aux <- rep(0.5 * lambda1_vals_sim[i,1] + 0.5 * lambda1_vals_sim[i,2], 2)
         lambda2_vals <- rep(lambda2_val_sim[i], 2)
         #coverage_val_aux <-  saturation_val_sim[i] / full_saturation_val_sim[i]
@@ -273,20 +274,20 @@ server <- function(input, output) {
           delta_ed_final <- delta_ed_vals_sim[i,]
         }
         
-        npv_sim[i] <- npv(interest_r = interst_r_val, 
-                          wage = wage_t_val, 
-                          lambda1_male = lambda1_vals_aux[1], 
-                          lambda1_female = lambda1_vals_aux[2], 
-                          lambda2_male =  lambda2_vals[1], 
-                          lambda2_female =  lambda2_vals[2],
-                          coverage = coverage_val_sim[i],
-                          saturation = saturation_val_sim[i],
-                          tax = tax_val_sim[i], 
-                          cost_of_schooling=cost_per_student, 
-                          delta_ed_male = delta_ed_final, 
-                          delta_ed_female = delta_ed_final, 
-                          q2 = q2_val_aux, 
-                          s2 = s2_val_aux)
+        npv_sim[i] <- npv_mo_f(interest_r_var = interst_r_val, 
+                          wage_var = wage_t_val, 
+                          lambda1_male_var = lambda1_vals_aux[1], 
+                          lambda1_female_var = lambda1_vals_aux[2], 
+                          lambda2_male_var =  lambda2_vals[1], 
+                          lambda2_female_var =  lambda2_vals[2],
+                          coverage_var = coverage_val_sim[i],
+                          saturation_var = saturation_val_sim[i],
+                          tax_var = tax_val_sim[i], 
+                          cost_of_schooling_var=cost_per_student, 
+                          delta_ed_male_var = delta_ed_final, 
+                          delta_ed_female_var = delta_ed_final, 
+                          q2_var = q2_val_aux, 
+                          s2_var = s2_val_aux)
       }
       
       
