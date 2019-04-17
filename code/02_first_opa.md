@@ -24,7 +24,7 @@ editor_options:
 
 
 ```r
-# chante _vals to _so
+# change _vals to _so
 call_params_f <- function(){
     #############
     ##### Data  

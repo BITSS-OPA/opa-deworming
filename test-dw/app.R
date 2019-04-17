@@ -134,6 +134,10 @@ ui <- fluidPage(
     plotOutput("plot1")
   )
 )
+
+
+
+
 server <- function(input, output) {
 
     sim.data1 <- function(nsims = 1e4, 
@@ -283,7 +287,7 @@ server <- function(input, output) {
                           coverage_var = coverage_val_sim[i],
                           saturation_var = saturation_val_sim[i],
                           tax_var = tax_val_sim[i], 
-                          cost_of_schooling_var=cost_per_student, 
+                          cost_of_schooling_var = cost_per_student, 
                           delta_ed_male_var = delta_ed_final, 
                           delta_ed_female_var = delta_ed_final, 
                           q2_var = q2_val_aux, 
