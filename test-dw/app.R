@@ -431,8 +431,6 @@ server <- function(input, output) {
     }
 
       
-  
-  
    
   reactive.data1 <- reactive( {
     sim.data1(nsims = as.numeric(input$param1), 
