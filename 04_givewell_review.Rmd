@@ -90,7 +90,7 @@ used to track groups, like geographies, time, and other catergories. For example
 ### Costs ("$C$")
 Here is a description of costs 
 Additional narrative of cost
-Additional edits from Grace
+Additional edits from Grace. We are goin to get a conflict. 
 This comments are great. 
 
 
