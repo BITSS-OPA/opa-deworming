@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.3.7)  29 MAY 2019 10:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.3.7)  29 MAY 2019 14:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -637,8 +637,7 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
-)
-No file 04_givewell_review.aux.
+) (./04_givewell_review.aux)
 \openout1 = `04_givewell_review.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 140.
@@ -716,6 +715,7 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 140.
 LaTeX Info: Redefining \pageref on input line 140.
 LaTeX Info: Redefining \nameref on input line 140.
+(./04_givewell_review.out) (./04_givewell_review.out)
 \@outlinefile=\write4
 \openout4 = `04_givewell_review.out'.
 
@@ -784,22 +784,356 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 179.
 (/Users/fhoces/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 188.
 
-! LaTeX Error: Bad math environment delimiter.
+(/Users/fhoces/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Underfull \hbox (badness 10000) in paragraph at lines 188--190
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.180 \begin{equation}
-                       
+ []
+
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 212.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 212.
+LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 212
+.
+(/Users/fhoces/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
+File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [1
+
+{/Users/fhoces/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+
+Package xcolor Warning: Incompatible color definition on input line 223.
+
+
+Package xcolor Warning: Incompatible color definition on input line 228.
+
+
+Package xcolor Warning: Incompatible color definition on input line 228.
+
+pdfTeX warning (ext4): destination with the same identifier (name{equation.0.1}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.230 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.230 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.230 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.230 \begin{equation}
+                      
+Underfull \hbox (badness 10000) in paragraph at lines 240--243
+
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{equation.0.1}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.247 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.247 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.247 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.247 \begin{equation}
+                      
+Underfull \hbox (badness 10000) in paragraph at lines 256--260
+
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{equation.0.1}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.264 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.264 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.264 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.264 \begin{equation}
+                      
+Underfull \hbox (badness 10000) in paragraph at lines 272--275
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 275--278
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 278--281
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 281--284
+
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{equation.0.1}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.293 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.293 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.293 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.293 \begin{equation}
+                       [2]pdfTeX warning (ext4): destination with the same iden
+tifier (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.317 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.317 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.317 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.317 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.336 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.336 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.336 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.336 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.359 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.359 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.359 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.359 \begin{equation}
+                      
+Underfull \hbox (badness 10000) in paragraph at lines 371--376
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 376--382
+
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{equation.0.1}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.390 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.390 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.390 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.390 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.405 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.405 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.405 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.405 \begin{equation}
+                       [3]
+Underfull \hbox (badness 10000) in paragraph at lines 418--421
+
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{equation.0.1}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.425 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.425 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.425 \begin{equation}
+                      pdfTeX warning (ext4): destination with the same identifi
+er (name{equation.0.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.425 \begin{equation}
+                      
+Underfull \hbox (badness 10000) in paragraph at lines 436--439
+
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 447.
+
+
+Package xcolor Warning: Incompatible color definition on input line 452.
+
+
+Package xcolor Warning: Incompatible color definition on input line 452.
+
+
+Package xcolor Warning: Incompatible color definition on input line 457.
+
+
+Package xcolor Warning: Incompatible color definition on input line 462.
+
+
+Package xcolor Warning: Incompatible color definition on input line 462.
+
+
+Package xcolor Warning: Incompatible color definition on input line 467.
+
+
+Package xcolor Warning: Incompatible color definition on input line 474.
+
+
+Package xcolor Warning: Incompatible color definition on input line 474.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 480.
+[4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 480.
+(./04_givewell_review.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 480.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 480.
+Package rerunfilecheck Info: File `04_givewell_review.out' has not changed.
+(rerunfilecheck)             Checksum: A3C385B147C009AA1A0EE4B95711CDA5;1360.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 480.
+ ) 
 Here is how much of TeX's memory you used:
- 12473 strings out of 494590
- 176323 string characters out of 6177082
- 255131 words of memory out of 5000000
- 15913 multiletter control sequences out of 15000+600000
- 39663 words of font info for 41 fonts, out of 8000000 for 9000
+ 12643 strings out of 494590
+ 178877 string characters out of 6177082
+ 263307 words of memory out of 5000000
+ 16019 multiletter control sequences out of 15000+600000
+ 60641 words of font info for 58 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 28i,3n,35p,243b,290s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 28i,8n,35p,303b,387s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/Users/fhoces/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/
+Users/fhoces/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/fh
+oces/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/fhoces/Li
+brary/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/fhoces/Library/Ti
+nyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/Users/fhoces/Library/TinyTe
+X/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}</Users/fhoces/Library/TinyTeX/te
+xmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/fhoces/Library/TinyTeX/texmf-
+dist/fonts/type1/public/lm/lmbx12.pfb></Users/fhoces/Library/TinyTeX/texmf-dist
+/fonts/type1/public/lm/lmex10.pfb></Users/fhoces/Library/TinyTeX/texmf-dist/fon
+ts/type1/public/lm/lmmi10.pfb></Users/fhoces/Library/TinyTeX/texmf-dist/fonts/t
+ype1/public/lm/lmmi7.pfb></Users/fhoces/Library/TinyTeX/texmf-dist/fonts/type1/
+public/lm/lmr10.pfb></Users/fhoces/Library/TinyTeX/texmf-dist/fonts/type1/publi
+c/lm/lmr17.pfb></Users/fhoces/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/
+lmr5.pfb></Users/fhoces/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.p
+fb></Users/fhoces/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></U
+sers/fhoces/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/f
+hoces/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb></Users/fhoce
+s/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/fhoces/Li
+brary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/fhoces/Library
+/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/fhoces/Library/Tin
+yTeX/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></Users/fhoces/Library/TinyTeX/
+texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
+Output written on 04_givewell_review.pdf (4 pages, 310469 bytes).
+PDF statistics:
+ 179 PDF objects out of 1000 (max. 8388607)
+ 154 compressed objects within 2 object streams
+ 37 named destinations out of 1000 (max. 500000)
+ 73 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-!  ==> Fatal error occurred, no output PDF file produced!
