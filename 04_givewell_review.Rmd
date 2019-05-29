@@ -101,6 +101,7 @@ $$
 \begin{equation}
 C = \sum_{i \in G_{1} (countries) } F^{i}_{1} P^{i}_{1}
 Another term \label{eq:2}
+More edits
 \tag{2}
 \end{equation}
 $$
