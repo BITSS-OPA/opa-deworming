@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "18 April, 2019"
+date: "07 May, 2019"
 output:
   html_document:
     code_folding: hide
@@ -26,10 +26,10 @@ editor_options:
 ```r
 # To do:
 # 1 - Re-write w_t with w_0 outside.                DONE
-# 2 - use app functions for sims in DD              HERE 
-# 3 - run app based on DD
-# 4 - add starting values from script into app
-# 5 - deploy
+# 2 - use app functions for sims in DD              DONE 
+# 3 - run app based on DD                           DONE
+# 4 - add starting values from script into app      DONE
+# 5 - deploy                                        DONE
 # - scale lambda 1 to infection rates
 # - add small output after each section
 # - ...
@@ -556,9 +556,6 @@ wage_t_mo_f <- function(wage_0_var, growth_rate_var, experience_var,
     ifelse(0:periods_so >= time_to_jm_so, 1, 0)
   return(res1)
 }
-
-
-
 set.seed(1234)
 nsims <- 1e4
 include_ext_mo <- TRUE
