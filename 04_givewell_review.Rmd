@@ -90,7 +90,7 @@ used to track groups, like geographies, time, and other catergories. For example
 ### Costs ("$C$")
 Here is a description of costs 
 Additional narrative of cost 
-Additional change
+Additional changes
 
 ```{r comp1}
 # - inputs: tax_rev_init_mo, top_tax_base_in
