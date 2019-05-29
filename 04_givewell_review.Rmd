@@ -88,6 +88,7 @@ in percentages, monetary units (US dollars and local currency) and quantities re
 used to track groups, like geographies, time, and other catergories. For example $Q^{i}_{2}$ represents the second quantity described in this analysis (total adjusted number childred dewormed per year) in location $i$. At the end of each description we will show in parenthesis the original location of the parameter in GiveWell's spreadsheets (using the notation `file, sheet number, cell`[^1]).
 
 ### Costs ("$C$")
+Here is a description of costs 
 
 ```{r comp1}
 # - inputs: tax_rev_init_mo, top_tax_base_in
