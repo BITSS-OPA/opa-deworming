@@ -100,7 +100,7 @@ This comments are great.
 $$
 \begin{equation}
 C = \sum_{i \in G_{1} (countries) } F^{i}_{1} P^{i}_{1}
-\label{eq:2}
+Another term \label{eq:2}
 \tag{2}
 \end{equation}
 $$
