@@ -123,7 +123,52 @@ P^{i}_{1} = \left(P^{i}_{3} + P^{i}_{4} + P^{i}_{5} + P^{i}_{6} + P^{i}_{7}  \ri
 - $P^{i}_{6}$: Goverment financial costs per year (`F1, 1, X41`).  
 - $P^{i}_{7}$: Goverment staff value time (`F1, 2, N42`).  
 
-- $Q^{i}_{2}$: estimated number of treatments delivered and commited (`F1, 2, C:G7`).  
+- $Q^{i}_{2}$: total adjusted children dewormed per year (`F1, 1, Z15`).  
+
+$P^{i}_{2}$ and $F^{i}_{2}$ are defined in terms of some of the previous elements. 
+
+\begin{equation}
+F^{i}_{2} = \frac{P^{i}_{2}}{P^{i}_{1}}\\
+P^{i}_{2} = \frac{P^{i}_{3}}{Q^{i}_{2}}
+\label{eq:5}
+\tag{5}
+\end{equation}
+
+- $P^{i}_{2}$: DtW costs per children per year (`F1, 2, C:G14`).  
+
+The total costs of DtW across all years ($P^{i}_{3}$) is aggregated across years, regions (within country), type of cost activity (Policy & advocacy, Prevalence surveys, Drug procurement & management, Training & distribution, Public mobilization & community sensitization, Monitoring & evaluation, Program management, GiveWell added costs[^2]) and month (February or August)
+
+\begin{equation}
+P^{i}_{3} = \sum_{t \in years (G_{2})} 
+\sum_{r \in region (G_{3})} 
+\sum_{a \in activ (G_{4})} 
+\sum_{m \in month (G_{5})} P^{itram}_{3}
+\label{eq:6}
+\tag{6}
+\end{equation}
+
+
+- $P^{itram}_{3}$: costs by year, location, region, activity, and month. (`F1, [r+m+y], E15:21`)
+
+Total number of adjusted children ($Q^{i}_{2}$) is computed as follows: 
+
+\begin{equation}
+Q^{i}_{2} = \sum_{t \in G_{2}} 
+\sum_{r \in G_{3}} 
+ Q^{itr}_{2} \\
+ Q^{itr}_{2} = \frac{\widetilde{Q}^{itr, Feb}_{2} - \widetilde{Q}^{itr, Aug}_{2}}{Q^{itr}_{3}}\\
+ \widetilde{Q}^{itr, m}_{2} = \sum_{s \in sch.age (G_{6})} \left( 
+\sum_{e \in enr.st(G_{7})} \widetilde{Q}^{itrmse}_{2}\right) Q_{4}^{itrm}
+ 
+\label{eq:7}
+\tag{7}
+\end{equation}
+
+
+- $Q^{itr}_{2}$: ADD (`ADD`)
+- $Q^{itr}_{3}$: ADD (`ADD`)
+- $Q^{itrm}_{4}$: ADD (`ADD`)
+- $Q^{itrmse}_{2}$: ADD (`ADD`)
 
 
 ```{r model}
@@ -153,3 +198,6 @@ P^{i}_{1} = \left(P^{i}_{3} + P^{i}_{4} + P^{i}_{5} + P^{i}_{6} + P^{i}_{7}  \ri
 [^1]: `F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]`  
 `F2 = 2019 GiveWell Cost-effectiveness Analysis — Version 3`  
 `F3 = 2018 Worm Intensity Workbook — Version 1` Sheets are named the first time and numbered thereafter. 
+
+
+[^2]: to account for several high-level activities Deworm the World does not include in its cost per treatment analyses, as they are not directly related to any particular program
