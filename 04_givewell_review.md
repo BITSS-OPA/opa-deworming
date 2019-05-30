@@ -75,11 +75,6 @@ in percentages, monetary units (US dollars and local currency) and quantities re
 used to track groups, like geographies, time, and other catergories. For example $Q^{i}_{2}$ represents the second quantity described in this analysis (total adjusted number childred dewormed per year) in location $i$. At the end of each description we will show in parenthesis the original location of the parameter in GiveWell's spreadsheets (using the notation `file, sheet number, cell`[^1]).
 
 ### Costs ("$C$")
-Here is a description of costs  
-Additional narrative of cost  
-Additional edits from Grace this will be an issue  
-This comments are great.  
-
 
 
 ```r
@@ -90,7 +85,6 @@ This comments are great.
 \begin{equation}
 C = \sum_{i \in G_{1} (countries) } F^{i}_{1} P^{i}_{1}
 \label{eq:2}
-More edits
 \tag{2}
 \end{equation}
 
@@ -167,7 +161,7 @@ Q^{i}_{2} = \sum_{t \in G_{2}}
 
 
 \begin{equation}
-Q^{itrm}_{4} = 1 - \left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} - F^{itrm}_{3} F^{itrm}_{4} F^{itrm}_{5} \right)  / \left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} \right)
+Q^{itrm}_{4} = 1 - \left.\left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} - F^{itrm}_{3} F^{itrm}_{4} F^{itrm}_{5} \right)  \middle/ \left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} \right) \right.
 \label{eq:8}
 \tag{8}
 \end{equation}
@@ -215,9 +209,45 @@ P^{i}_{6} = \sum_{t}
 \tag{11}
 \end{equation}
 
-- $P^{itr}_{8}$: (``).  
+- $P^{itr}_{8}$: Total costs across activities, including GiveWell (`F1, 1, [rtc]11`).  
 
+\begin{equation}
+P^{itr}_{8} = \widetilde{P}^{itr}_{8} + P^{itr}_{9}\\
+\widetilde{P}^{itr}_{8} = \sum_{m}
+\sum_{a} \widetilde{P}^{itrma}_{8}  \\
+\widetilde{P}^{itr}_{9} = \widetilde{P}^{itr}_{8} \frac{F_{6}}{1 - F_{6}}
+\label{eq:12}
+\tag{12}
+\end{equation}
 
+- $P^{itr}_{9}$: Total costs across activities, including GiveWell (`F1, 1, [rtc]10`).  
+- $F_{6}$: Percentage of costs that go into high-level activities (`F1, 1, E62`) 
+
+\begin{equation}
+P^{i}_{7} = \sum_{t} \sum_{r} \left(  \sum_{j \in G_8} \left( \sum_{k \in G_9}\widetilde{P}^{itrjk}_{7}/2  \right) \right)
+\label{eq:13}
+\tag{13}
+\end{equation}
+
+- $\widetilde{P}^{itrjk}_{7}$:  Cost per treatment imputed to trainning and deworming day (`F1, 3, K23`).  
+
+\begin{equation}
+\widetilde{P}^{i}_{7} = \frac{P_{10}/P_{11}}{Q_{6}}
+\label{eq:14}
+\tag{14}
+\end{equation}
+
+- $P^{itr}_{10}$: Cost of trainning and DD in local currency (`F1, 3, H23`).  
+- $P^{itr}_{11}$: Exchange rate (1 USD =  X local currency) (`F1, 3, J16`).  
+- $Q_{6}$:  Total number of children treated in location r (`F1, 3, J17`) 
+
+\begin{equation}
+Q^{i}_{1} = \left. \left( \sum_{t\in 16, 17} P_{3}^{it}  P_{12}^{i}\right) \middle/ P_{2}^{i}\right.
+\label{eq:15}
+\tag{15}
+\end{equation}
+
+- $P^{itr}_{12}$: Cost of trainning and DD in local currency (`F1, 3, H23`).  
 
 ### Benefits ("$B$")
 
