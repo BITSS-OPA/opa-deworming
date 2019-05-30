@@ -299,7 +299,7 @@ F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 - $\widetilde{F}^{r}_{16}$: Weight before winzorizing (`F3, 1, U14`)  
 - $F_{19}$: Intensity adjustment to account for S. haem (`F3, 1, K14`)  
 - $F_{20}$: Average intermediate intensity adjustment across regions and charities (`F3, 1, G50`) - $F^{r}_{21}$: Average Goblal Burden of Decease adjustment across regions and charities (`F3, 1, L50`)  
-- $F_{22}$: Goblal Burden of Decease adjustment for DtW in specific region (`F3, 1, L14`)  
+- $F_{22}$: Goblal Burden of Decease (GBD) adjustment for DtW in specific region (`F3, 1, L14`)  
 
 \begin{equation}
 F^{r}_{19} = F^{r}_{23} +  F^{r}_{24}
@@ -313,7 +313,7 @@ F^{r}_{19} = F^{r}_{23} +  F^{r}_{24}
 
 \begin{equation}
 F^{r}_{23} = F^{r}_{25} F^{r}_{26} F^{r}_{27}\\
-F^{r}_{24} = 0.2 F^{r}_{23}\frac{\sum_{all} F^{r}_{23}}{0.8}
+F^{r}_{24} = 0.2 F^{r}_{28}\frac{\sum_{all} F^{r}_{23}}{0.8}
 \label{eq:20}
 \tag{20}
 \end{equation}
@@ -322,6 +322,56 @@ F^{r}_{24} = 0.2 F^{r}_{23}\frac{\sum_{all} F^{r}_{23}}{0.8}
 - $F^{r}_{26}$: Adjustment for representativeness (=100%)  (`F3, 1, E14`).   
 - $F^{r}_{27}$: Adjustment for co-infection (=100%)    (`F3, 1, EF4`).  
 - $F^{r}_{28}$: Prevalence rate of schisto haem  (`F3, 1, I14` --> `F3, 3, O18`)   
+
+\begin{equation}
+F^{r}_{22} = \sum_{d\in G_{11}}F^{d}_{29}F^{d}_{33}\\
+F^{r}_{25} = \sum_{d\in G_{11}}F^{d}_{29}F^{d}_{30}\\
+F^{r}_{28} = \frac{\widetilde{F}^{r}_{28}}{ \sum_{all} \widetilde{F}^{r}_{28} }\\
+F^{r}_{30} = \frac{F_{31}}{F_{32}}
+\label{eq:21}
+\tag{21}
+\end{equation}
+
+
+- $F^{r}_{29}$: Infection weight (`F3, 4, B:E2`).  
+- $F^{r}_{30}$: Prevalence rates of each infection by location (`F3, 4, BE:27`).  
+- $F^{r}_{31}$: Eggs per gram in [location] and [condition] (`F3, 3, E18`).  
+- $F^{r}_{32}$: Egg per gram in original study by [condition] (`F3, 3, E4`).  
+- $F^{r}_{33}$: Intensity adjustment from GBD (`F3, 7, F18`).  
+
+
+\begin{equation}
+F^{r}_{32} = F_{22}\\
+F^{r}_{34} = \sum_{d\in G_{11}}F^{d}_{29}F^{d}_{30}\\
+\label{eq:22}
+\tag{22}
+\end{equation}
+
+
+- $F^{r}_{35}$:  (``).  
+
+\begin{equation}
+F^{r}_{17} = \frac{F^{r}_{36}F^{r}_{37}}{\sum_{r}F^{r}_{36}F^{r}_{37}}
+\label{eq:23}
+\tag{23}
+\end{equation}
+
+- $F^{r}_{36}$: (`F3, 10, J26`).  
+- $F^{r}_{37}$: (`F3, 10, H26->D42`).  
+
+\begin{equation}
+F^{r}_{36} = \frac{Q^{r}_{11}}{\sum_{r}Q^{r}_{11}}\\
+F^{r}_{37} = \frac{P^{r}_{13}}{P^{r}_{14}}\\
+Q^{r}_{11} = \frac{Q_{12} Q^{r}_{13}}{\sum_{r}Q^{r}_{13}}
+\label{eq:24}
+\tag{24}
+\end{equation}
+
+- $Q^{r}_{11}$: 2017-2020 projected treatments (`F3, 10, E26`).  
+- $Q_{12}$: 168,996,327 (in `F3, 10, E26`).  
+- $Q^{r}_{13}$: Treatments in [location]  in 2015-16 (`F3, 10, D26`).  
+- $P^{r}_{13}$: DtWI costs in [location] (`F3, 10, B42`).  
+- $P^{r}_{14}$: Total costs in [location] (`F3, 10, C42`).  
 
 
 
