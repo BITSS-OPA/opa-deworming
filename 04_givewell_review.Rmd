@@ -354,18 +354,18 @@ F^{r}_{29} = \frac{F_{30}}{F_{31}}
 
 \begin{equation}
 F^{r}_{31} = F_{21}\\
-F^{r}_{32} = \frac{Q^{dr}_{9}}{Q_{10}}\\
-F^{r}_{33} = F_{34,1} + F_{34,2}\\
-Q^{dr}_{9} = 
+F^{r}_{32} = \frac{Q^{dr}_{9}}{Q^{d}_{10}}\\
+Q^{dr}_{9} = Q_{11,1}(F^{dr}_{33})^3 + Q_{11,2}(F^{dr}_{33})^2 + Q_{11,3}F^{dr}_{33}\\
+F^{r}_{33} = F_{34,1} + F_{34,2}
 \label{eq:22}
 \tag{22}
 \end{equation}
 
 
-- $F^{r}_{33}$:  (``).  
-- $F^{r}_{34}$:  (``).  
-- $Q^{dr}_{9}$:  
-- $Q_{10}$:  
+- $F^{r}_{33}$: Average prevalence for two age groups (`F3, 7, J18`).  
+- $Q^{dr}_{9}$: Intensity (eggs per gram) (`F3, 6, V17`).    
+- $F^{r}_{34, age}$: Prevalence for each age group (`F3, 6, T:S17`).  
+- $Q^{d}_{10}$: Eggs per gram by type of desease (`F3, 7, B:E5`).    
 
 \begin{equation}
 F^{r}_{17} = \frac{F^{r}_{35}F^{r}_{36}}{\sum_{r}F^{r}_{35}F^{r}_{36}}
@@ -373,8 +373,8 @@ F^{r}_{17} = \frac{F^{r}_{35}F^{r}_{36}}{\sum_{r}F^{r}_{35}F^{r}_{36}}
 \tag{23}
 \end{equation}
 
-- $F^{r}_{35}$: (`F3, 10, J26`).  
-- $F^{r}_{36}$: (`F3, 10, H26->D42`).  
+- $F^{r}_{35}$: Proportion of projected treatments in [location] from 2017-2020 (`F3, 10, J26`).  
+- $F^{r}_{36}$: Proportion of all costs paid by DtW in 2014-2015 (`F3, 10, H26->D42`).  
 
 \begin{equation}
 F^{r}_{35} = \frac{Q^{r}_{11}}{\sum_{r}Q^{r}_{11}}\\
