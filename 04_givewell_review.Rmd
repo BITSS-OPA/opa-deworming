@@ -291,7 +291,7 @@ F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 \tag{17}
 \end{equation}
 
-- $F^{r}_{16}$: DtW weight for worm intensity by location, adjusted (`F3, 1, X14`)  
+- $F^{r}_{16}$: DtW weight for worm intensity by location, adjusted (windorinzation) (`F3, 1, X14`)  
 - $F^{r}_{17}$: DtW weight for worm intensity by location, unadjusted (`F3, 1, C14` --> `F3, 10, K26`)  
 
 
@@ -310,7 +310,8 @@ F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 
 - $\widetilde{F}^{r}_{16}$: Weight before winzorizing (`F3, 1, U14`)  
 - $F_{18}$: Intensity adjustment to account for S. haem (`F3, 1, K14`)  
-- $F_{19}$: Average intermediate intensity adjustment across regions and charities (`F3, 1, G50`) - $F^{r}_{21}$: Average Goblal Burden of Decease adjustment across regions and charities (`F3, 1, L50`)     
+- $F_{19}$: Average intermediate intensity adjustment across regions and charities (`F3, 1, G50`)   
+- $F^{r}_{21}$: Average Goblal Burden of Decease adjustment across regions and charities (`F3, 1, L50`)   
 - $F_{21}$: Goblal Burden of Decease (GBD) adjustment for DtW in specific region (`F3, 1, L14`)  
 
 \begin{equation}
@@ -346,14 +347,13 @@ F^{r}_{29} = \frac{F_{30}}{F_{31}}
 
 
 - $F^{r}_{28}$: Infection weight (`F3, 4, B:E2`).  
-- $F^{r}_{29}$: Prevalence rates of each infection by location (`F3, 4, BE:27`).  
+- $F^{r}_{29}$: Prevalence rates of each infection by location (`F3, 4, B:E27`).  
 - $F^{r}_{30}$: Eggs per gram in [location] and [condition] (`F3, 3, E18`).  
 - $F^{r}_{31}$: Eggs per gram in original study by [condition] (`F3, 3, E4`).  
 - $F^{r}_{32}$: Intensity adjustment from GBD (`F3, 7, F18`).  
 
 
 \begin{equation}
-F^{r}_{31} = F_{21}\\
 F^{r}_{32} = \frac{Q^{dr}_{9}}{Q^{d}_{10}}\\
 Q^{dr}_{9} = Q_{11,1}(F^{dr}_{33})^3 + Q_{11,2}(F^{dr}_{33})^2 + Q_{11,3}F^{dr}_{33}\\
 F^{r}_{33} = F_{34,1} + F_{34,2}
