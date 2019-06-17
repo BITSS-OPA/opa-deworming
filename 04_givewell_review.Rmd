@@ -100,6 +100,8 @@ C = \sum_{i \in G_{1} (countries) } F^{i}_{1} P^{i}_{1}
 \tag{2}
 \end{equation}
 
+The final cost is a weighted average of the unit cost across countries. 
+
 - $F^{i}_{1}$: Weight for the weighted average (`F1, 2, H16`).  
 - $P^{i}_{1}$: Total cost per child, per year in region $i$ (`F1, 2, C:G16`).  
 
@@ -109,6 +111,8 @@ F^{i}_{1} = \frac{F^{i}_{2} Q^{i}_{1}}{\sum_{j \in G_{1}} F^{j}_{2} Q^{j}_{1}}
 \label{eq:3}
 \tag{3}
 \end{equation}
+
+The weight for each country is defined by ... (DEFINE F1 IN WORDS)
 
 - $F^{i}_{2}$: is the proportion of the costs that are paid by the Deworm the World initiative (DtW from now on) (`F1, 2, C:G6`).  
 - $Q^{i}_{1}$: estimated number of treatments delivered and commited (`F1, 2, C:G7`).  
@@ -434,14 +438,14 @@ Q^{r}_{11} = \frac{Q_{12} Q^{r}_{13}}{\sum_{r}Q^{r}_{13}}
  A rough model for estimating a value for this parameter is available at https://docs.google.com/spreadsheets/d/112uuyYt6QLRZuJojwz6fHv4JQ-GHNeIpiT-SauY3kmM/edit#gid=0. The appropriate value for this parameter will depend on many uncertain factors (e.g. household composition and how household composition changes overtime). We currently use a default value of 2.0. Our rough model suggests values close to 2 under a range of reasonable assumptions."
 
 
-[^6]: Updated cell note for the parameter:
+[^6]: "Updated cell note for the parameter:
 Baird et al. 2016 compares the first two groups of schools to receive deworming (as treatment group) to group 3 (control).  
  Our worm intensity adjustment is calculated by comparing baseline intensity of infection in group 1 schools with baseline intensity of infection in the areas where our charities work.  
  This adjustment accounts for group 2 having a significantly higher baseline intensity of infection than group 1, likely due to flooding from an unusually strong El Niño event.   
  The average of baseline worm intensity in groups 1 and 2 was ~45% higher than in group 1 only (based on data we do not have permission to share). Taking the odds ratio implies an adjustment of ~65%.   
- (Last updated September 2018 | Link to Baird et al. 2016: https://doi.org/10.1093/qje/qjw022 | Link to Miguel and Kremer 2004: http://www.jstor.org/stable/3598853) Suggested value:65%.  More info here: https://docs.google.com/document/d/1pyGpVYcerlUSObdaIz7_6Tmv1D8O0L4IGQx1HtzTVbk/edit
+ (Last updated September 2018 | Link to Baird et al. 2016: https://doi.org/10.1093/qje/qjw022 | Link to Miguel and Kremer 2004: http://www.jstor.org/stable/3598853) Suggested value:65%.  More info here: https://docs.google.com/document/d/1pyGpVYcerlUSObdaIz7_6Tmv1D8O0L4IGQx1HtzTVbk/edit"
 
-[^7]:This is a really complicated input. I'm going with a value of 75% for now since it seems like a lot of deworming programs are in their infancy and hence will be providing early years of treatments to targeted children, but I think that my best guess would vary between 60-100% depending on the charity if I were just thinking on the margin. (In particular, SCI closer to 60%, DtWI closer to 100%.) Right now there isn't a great way to change this input for each charity, so I'm taking something toward the lower end of the range for all charities.  
+[^7]:"This is a really complicated input. I'm going with a value of 75% for now since it seems like a lot of deworming programs are in their infancy and hence will be providing early years of treatments to targeted children, but I think that my best guess would vary between 60-100% depending on the charity if I were just thinking on the margin. (In particular, SCI closer to 60%, DtWI closer to 100%.) Right now there isn't a great way to change this input for each charity, so I'm taking something toward the lower end of the range for all charities. 
  I think in the long-run we should do a better job answering the question, "How many years of deworming treatment have children already received on average in places where our charities would spend marginal funds?" This would involve figuring out whether LF programs had been operating, whether pre-school-aged kids receive deworming, etc.   
  A major reason one might want to use ~70-100%: for a few charities, the bulk of their marginal funding seems to be going toward starting deworming programs in regions that may not have received any deworming before. In those cases, if I look at just the next few years of deworming impact, I probably wouldn't discount for years of treatment vs. Baird at all because the average year of deworming treatment being provided will be a kid's ~second year, similar to the deworming treatment effect that we're observing in Baird. However, thinking marginally like this complicates our CEA: we'll need to change this discount over time as charities' programs mature (assuming they continued to operate). I'm not sure about the best philosophical approach to CEAs here, but am currently thinking I'll change this discount in the future as charities' programs mature.  
 If you just look at the long run and assume that on average charities will be providing kids' ~4th year of deworming treatment, then I think a discount like 65% is probably more appropriate.  
@@ -450,7 +454,7 @@ A few factors I considered that pushed in opposite directions:
 - OTOH, it may be that in some cases our charities are operating in places where children received deworming as pre-schoolers, which would decrease marginal value of additional years of treatment. We don't have good information yet on how common this is.
 - The deworming coverage rates in Miguel and Kremer were low, so it might be appropriate to think of the treatments provided in that study as roughly a kid's ~2nd and 3rd year of treatment rather than ~3rd and 4th. That pushes in favor of discounting charities' impact more.
 - In the long run, I'm not sure how many years of treatment an average child will receive who is targeted by our charities' programs. It depends on the composition of ages in schools where our charities treat, how often kids drop out, how often kids miss deworming treatment over the course of their time in school, etc. I think just looking at the average age of child treated and knowing whether there are pre-school treatments would be useful here. In general I guessed that the average kid will receive ~8 years of treatment in the long-run.  
- As a sensitivity check to account for the above, I edited James's model for this input here: https://docs.google.com/spreadsheets/d/1lLF28COf90edQFipk4ZC7BPZd-kKoj9sNDDt1oH8_vc/edit?usp=sharing . That sheet is very rough and may be difficult to follow. It includes some information on Natalie's guesses about the average number of years of deworming that kids have received in each charity's program.
+ As a sensitivity check to account for the above, I edited James's model for this input here: https://docs.google.com/spreadsheets/d/1lLF28COf90edQFipk4ZC7BPZd-kKoj9sNDDt1oH8_vc/edit?usp=sharing . That sheet is very rough and may be difficult to follow. It includes some information on Natalie's guesses about the average number of years of deworming that kids have received in each charity's program."
 
 [^8]: https://docs.google.com/document/d/13Tb3AnIT7zPgmKcGuwH365gQj6chWd0-blBlbzXjKpA/edit?usp=sharing
 
