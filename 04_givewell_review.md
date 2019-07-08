@@ -1,6 +1,6 @@
 ---
 title: "Notes on Givewell's Cost Effectiveness Analysis on Deworming "
-date: "30 May, 2019"
+date: "08 July, 2019"
 output:
   html_document:
     code_folding: hide
@@ -87,6 +87,8 @@ C = \sum_{i \in G_{1} (countries) } F^{i}_{1} P^{i}_{1}
 \label{eq:2}
 \tag{2}
 \end{equation}
+
+GiveWell calculates the cost per child dewormed across all geographies where Evidence Action provides technical assistance. 
 
 The final cost is a weighted average of the unit cost across countries. 
 
