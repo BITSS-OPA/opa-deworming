@@ -100,6 +100,8 @@ C = \sum_{i \in G_{1} (countries) } F^{i}_{1} P^{i}_{1}
 \tag{2}
 \end{equation}
 
+GiveWell calculates the cost per child dewormed across geographies where Evidence Action is actively providing technical assistance. 
+
 The final cost is a weighted average of the unit cost across countries. 
 
 - $F^{i}_{1}$: Weight for the weighted average (`F1, 2, H16`).  
