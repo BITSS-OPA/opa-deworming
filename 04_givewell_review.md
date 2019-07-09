@@ -1,6 +1,6 @@
 ---
 title: "Notes on Givewell's Cost Effectiveness Analysis on Deworming "
-date: "08 July, 2019"
+date: "09 July, 2019"
 output:
   html_document:
     code_folding: hide
@@ -88,7 +88,9 @@ C = \sum_{i \in G_{1} (countries) } F^{i}_{1} P^{i}_{1}
 \tag{2}
 \end{equation}
 
-GiveWell calculates the cost per child dewormed across all geographies where Evidence Action provides technical assistance. 
+GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance.These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such the cost of drugs donated by WHO. 
+
+Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
 
 The final cost is a weighted average of the unit cost across countries. 
 
@@ -102,7 +104,7 @@ F^{i}_{1} = \frac{F^{i}_{2} Q^{i}_{1}}{\sum_{j \in G_{1}} F^{j}_{2} Q^{j}_{1}}
 \tag{3}
 \end{equation}
 
-The weight for each country is defined by ... (DEFINE F1 IN WORDS)
+The weight for each country takes into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. 
 
 - $F^{i}_{2}$: is the proportion of the costs that are paid by the Deworm the World initiative (DtW from now on) (`F1, 2, C:G6`).  
 - $Q^{i}_{1}$: estimated number of treatments delivered and commited (`F1, 2, C:G7`).  
@@ -132,7 +134,7 @@ P^{i}_{2} = \frac{P^{i}_{3}}{Q^{i}_{2}}
 
 - $P^{i}_{2}$: DtW costs per children per year (`F1, 2, C:G14`).  
 
-The total costs of DtW across all years ($P^{i}_{3}$) is aggregated across years, regions (within country), type of cost activity (policy & advocacy, prevalence surveys, drug procurement & management, training & distribution, public mobilization & community sensitization, monitoring & evaluation, program management, giveWell added costs[^2]) and month (February or August)
+The total costs of DtW across all years ($P^{i}_{3}$) is aggregated across years, regions (within country), cost activity (policy & advocacy, prevalence surveys, drug procurement & management, training & distribution, public mobilization & community sensitization, monitoring & evaluation, program management, giveWell added costs[^2]) and deworming round (often February or August)
 
 \begin{equation}
 P^{i}_{3} = \sum_{t \in years (G_{2})}
@@ -176,7 +178,7 @@ Q^{itrm}_{4} = 1 - \left.\left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} - F^{i
 - $Q^{itrms, en}_{5}$: Total enrolled school-aged children targeted (`F1, C, [rtm]13`)
 - $F^{itrm}_{3}$: Percentage of schools visited during coverage validation (and/or during process monitoring) that distributed deworming tablets on deworming day and/or mop-up day (`F1, C, [rtm]22 `).   
 - $F^{itrm}_{4}$: Percentage of enrolled school-aged children attending school on deworming day or mop-up day, according to attendance registers viewed in schools visited during coverage validation (and/or during process monitoring) (`F1, C, [rtm]23 `).   
-- $F^{itrm}_{5}$: Of children enrolled in a school that distributed deworming tablets on deworming day and/or mop-up day and who attended school on deworming day and/or mop-up day, percentage who reported consuming deworming tablets (according to student interviews during coverage validation and/or process monitoring) (`F1, C, [rtm]24 `).  
+- $F^{itrm}_{5}$: Percentage Of children enrolled in a school that distributed deworming tablets on deworming day and/or mop-up day and who attended school on deworming day and/or mop-up day, percentage who reported consuming deworming tablets (according to student interviews during coverage validation and/or process monitoring) (`F1, C, [rtm]24 `).  
 
 
 \begin{equation}
@@ -235,7 +237,7 @@ P^{i}_{7} = \sum_{t} \sum_{r} \left(  \sum_{j \in G_8} \left( \sum_{k \in G_9}\w
 \tag{13}
 \end{equation}
 
-- $\widetilde{P}^{itrjk}_{7}$:  Cost per treatment imputed to trainning and deworming day (`F1, 3, K23`).  
+- $\widetilde{P}^{itrjk}_{7}$:  Cost per treatment imputed to training and deworming day (`F1, 3, K23`).  
 
 \begin{equation}
 \widetilde{P}^{i}_{7} = \frac{P_{10}/P_{11}}{Q_{6}}
@@ -243,7 +245,7 @@ P^{i}_{7} = \sum_{t} \sum_{r} \left(  \sum_{j \in G_8} \left( \sum_{k \in G_9}\w
 \tag{14}
 \end{equation}
 
-- $P^{itr}_{10}$: Cost of trainning and DD in local currency (`F1, 3, H23`).  
+- $P^{itr}_{10}$: Cost of training and DD in local currency (`F1, 3, H23`).  
 - $P^{itr}_{11}$: Exchange rate (1 USD =  X local currency) (`F1, 3, J16`).  
 - $Q_{6}$:  Total number of children treated in location r (`F1, 3, J17`) 
 
@@ -305,7 +307,7 @@ F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 - $\widetilde{F}^{r}_{16}$: Weight before winzorizing (`F3, 1, U14`)  
 - $F_{18}$: Intensity adjustment to account for S. haem (`F3, 1, K14`)  
 - $F_{19}$: Average intermediate intensity adjustment across regions and charities (`F3, 1, G50`)   
-- $F^{r}_{21}$: Average Goblal Burden of Decease adjustment across regions and charities (`F3, 1, L50`)   
+- $F^{r}_{21}$: Average Goblal Burden of Disease adjustment across regions and charities (`F3, 1, L50`)   
 - $F_{21}$: Goblal Burden of Decease (GBD) adjustment for DtW in specific region (`F3, 1, L14`)  
 
 \begin{equation}
