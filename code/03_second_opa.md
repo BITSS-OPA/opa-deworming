@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "29 May, 2019"
+date: "29 July, 2019"
 output:
   html_document:
     code_folding: hide
@@ -22,6 +22,9 @@ editor_options:
 
 
 
+```r
+options(tinytex.verbose = TRUE)
+```
 
 
 
