@@ -10,7 +10,7 @@ output:
     number_sections: yes
     smooth_scroll: no
     toc: yes
-    toc_depth: 2
+    toc_depth: 3
     toc_float: yes
   pdf_document: default
   word_document: default
@@ -26,27 +26,72 @@ editor_options:
 
 
 
+
 ```r
-# Do not run data set on git/github until privacy has been cleared
-################
-##### Data  
-################
-################
-##### Research
-################
-################
-##### Guess work   
-################
-################
+################ 
 #####  Notes:
-################
-### Source ---->  Input ----> Model ----> Policy Estimates (output)
-###  (_so)        (_in)       (_mo)        (_pe)
-### values      functions   functions      values
-###             & values    & values
+################ 
+### Source ---------->  Input ---------->  Model ---------->  Policy Estimates (output)
+###  (_so)              (_in)              (_mo)                (_pe)
+### values            functions          functions              values
+###                   & values           & values             
+# - call_sources_f- tax_elasticity_in_f  - tax_revenue_mo_f     - ten_year_revenue_pe
+# - policy_f      - est_billionares_in_f - total_rev_mo_f       - ten_year_top_tax_pe
+#                                        - ten_years_mo_f       - total_rev_pe
 ### arguments in functions should used "_var" and functions should "_f"
-#invisible( list2env(call_params_f(),.GlobalEnv) )
+
+
+# DESCRIBE FUNCTIONS STRUCTURE
+# - inputs: list
+# - outputs: list
+#### function:  
+#sample_function_f <- function(){
+########################################## 
+##########################################  
+#
+#    ...
+#
+########################################## 
+##########################################  
+#    return( )                                  # A list with all (most?) the elements 
+#}                                              # generated inside the function 
+#invisible( list2env(sample_function_f(),.GlobalEnv) ) 
+#
 ```
+
+
+
+```r
+# - inputs: none
+# - outputs: all the original source values
+call_sources_f <- function(){
+############################################################################### 
+###############################################################################   
+
+    ################  
+    ####### Research:
+    ################  
+
+  
+    
+    ################
+    ###### Data:
+    ################ 
+
+  
+    
+    ################ 
+    #####  Guesswork:
+    ################ 
+    
+
+############################################################################### 
+############################################################################### 
+    return( sapply( ls(pattern= "_so\\b"), function(x) get(x) ) ) 
+}
+invisible( list2env(call_sources_f(),.GlobalEnv) )
+```
+
 
 
 # Key policy estimates for policy makers  
@@ -54,33 +99,59 @@ editor_options:
 
 
 # Methodology
+The analysis so far, consists in claryfying what equations underlie the cost-effectivenss analysis performed by GivewWell. We work off [this](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274) spreadsheet (an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  
 
 ## Main Equation (the model)
 
+The key result for policy makers is defined as the cost effectivness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)). 
+
 \begin{equation}
-CEA = \frac{B (1 + F_{0})}{C}
+CEA_{deworming} = \frac{B (1 + F_{0})}{C}
 \label{eq:1}
 \tag{1}
 \end{equation}
 
- - $C$ is the costs per person dewormed.   
- - $B$ is the benefits per person dewormed .
- - $F_{0}$ is a factor to account for leverage/fudging [not reviewed in this excercise][^12]
+ - $C$ is the costs per person dewormed.     
+ - $B$ is the benefits per person dewormed.
+ - **$F_{0}$ is a factor to account for leverage/fudging [not reviewed in this excercise][^12]**
 
 
-## Sub components:
+Also this quantity could be expressed in relative terms to the benchmark of cash transfers (cell [`Results!B9`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1034883018&range=B9)): 
 
-We begin by describing the underlying analysis behind the costs. Through this excercise we use the following notation the letters $F, P, Q$ denote components
-in percentages, monetary units (US dollars and local currency) and quantities respectively. Each new element will be tracked using a sub-index, and supra-indecis will be
-used to track groups, like geographies, time, and other catergories. For example $Q^{i}_{2}$ represents the second quantity described in this analysis (total adjusted number childred dewormed per year) in location $i$. At the end of each description we will show in parenthesis the original location of the parameter in GiveWell's spreadsheets (using the notation `file, sheet number, cell`[^1]).
+\begin{equation}
+RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
+\end{equation}
 
-### Costs ("$C$")
 
 
 ```r
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
+# - inputs: total per capita benefits, total per capita costs, fudging factor 
+# - outputs: Cost-effectiveness ratio & ratio to cash CEA
+policy_est_f <- function(){
+############################################################################### 
+###############################################################################  
+  
+    CEA_pe <- function(benefits_var = 1, fudging_var = 1,
+                       costs_var = 1) {
+     ( benefits_var * ( 1 + fudging_var ) ) / costs_var
+    }
+    RCEA_pe <- function(CEA_var = 1, CEA_cash_var = 1) CEA_var / CEA_cash_var
+      
+############################################################################### 
+###############################################################################  
+    return(list("CEA_pe" = CEA_pe, 
+                "RCEA_pe" = RCEA_pe))
+}
+invisible( list2env(policy_est_f(),.GlobalEnv) )
 ```
+
+## Sub-components:
+
+We begin by describing the underlying analysis behind the costs. Through this excercise we use the following notation the letters $F, P, Q$ denote components
+in percentages, monetary units (US dollars and local currency) and quantities respectively. Each new element will be tracked using a sub-index, and supra-indecis will be
+used to track groups, like geographies, time, and other catergories. For example $Q^{i}_{2}$ represents the second quantity described in this analysis (total adjusted number childred dewormed per year) in location $i$. At the end of each description we will show in parenthesis the original location of the parameter in GiveWell's spreadsheets (using the notation `file, sheet number, cell`[^1]). When a parameter in an equation does not depend on any subsequent component, it is highlighted in bold.
+
+### Costs ("$C$")
 
 \begin{equation}
 C = \sum_{i \in G_{1} (countries) } F^{i}_{1} P^{i}_{1}
@@ -98,6 +169,28 @@ The final cost is a weighted average of the unit cost across countries.
 - $P^{i}_{1}$: Total cost per child, per year in region $i$ (`F1, 2, C:G16`).  
 
 
+
+
+```r
+# - inputs: nothing
+# - outputs: function that computs the weighted sum of country costs
+costs_f <- function(){
+############################################################################### 
+###############################################################################  
+  
+    final_cost <- function(country_w_var = 1, region_cost_var = 1) {
+      sum(country_w_var * region_cost_var)
+    }
+      
+############################################################################### 
+###############################################################################  
+    return(list("final_cost" = final_cost))
+}
+invisible( list2env(costs_f(),.GlobalEnv) )
+```
+
+
+
 \begin{equation}
 F^{i}_{1} = \frac{F^{i}_{2} Q^{i}_{1}}{\sum_{j \in G_{1}} F^{j}_{2} Q^{j}_{1}}
 \label{eq:3}
@@ -108,6 +201,27 @@ The weight for each country takes into account the number of treatments provided
 
 - $F^{i}_{2}$: is the proportion of the costs that are paid by the Deworm the World initiative (DtW from now on) (`F1, 2, C:G6`).  
 - $Q^{i}_{1}$: estimated number of treatments delivered and commited (`F1, 2, C:G7`).  
+
+
+
+```r
+# - inputs: nothing
+# - outputs: function that computes the country weights used in the final costs
+country_w_f <- function(){
+############################################################################### 
+###############################################################################  
+  
+    country_w <- function(prop_cost_dtw_var = 1, num_treat = 1) {
+        prop_cost_dtw_var * num_treat / sum( prop_cost_dtw_var * num_treat )
+    }
+      
+############################################################################### 
+###############################################################################  
+    return(list("country_w" = country_w))
+}
+invisible( list2env(country_w_f(),.GlobalEnv) )
+```
+
 
 \begin{equation}
 P^{i}_{1} = \left(P^{i}_{3} + P^{i}_{4} + P^{i}_{5} + P^{i}_{6} + P^{i}_{7}  \right)\frac{1}{Q^{i}_{2}}
@@ -122,6 +236,32 @@ P^{i}_{1} = \left(P^{i}_{3} + P^{i}_{4} + P^{i}_{5} + P^{i}_{6} + P^{i}_{7}  \ri
 - $P^{i}_{7}$: Goverment staff value time (`F1, 2, N42`).  
 
 - $Q^{i}_{2}$: total adjusted children dewormed per year (`F1, 1, Z15`).  
+
+
+```r
+# - inputs: nothing
+# - outputs: 
+country_cost_f <- function(){
+############################################################################### 
+###############################################################################  
+# cost_dtw - p3   
+# cost_donat - p4   
+# cost_part - p5   
+# cost_govt - p6   
+# cost_govt_staff - p7   
+# adjust_dw - q2   
+    country_cost <- function(cost_dtw_var, cost_donat_var, cost_part_var,
+                             cost_govt_var, cost_govt_staff_var, adjust_dw_var) {
+        ( cost_dtw_var + cost_donat_var + cost_part_var + cost_govt_var + 
+            cost_govt_staff_var ) / adjust_dw_var
+    }
+############################################################################### 
+###############################################################################  
+    return(list("country_cost" = country_cost))
+}
+invisible( list2env(country_cost_f(),.GlobalEnv) )
+```
+
 
 $P^{i}_{2}$ and $F^{i}_{2}$ are defined in terms of some of the previous elements.
 
@@ -147,6 +287,7 @@ P^{i}_{3} = \sum_{t \in years (G_{2})}
 
 
 - $P^{itram}_{3}$: costs by year, location, region, activity, and month. (`F1, [r+m+y], E15:21`)
+
 
 Total number of adjusted children ($Q^{i}_{2}$) is computed as follows:
 
