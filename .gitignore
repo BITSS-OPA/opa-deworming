@@ -36,3 +36,8 @@ vignettes/*.pdf
 *.knit.md
 
 
+# All files in code folder except .R and .rmd
+code/*
+!code/*.Rmd
+!code/*.R
+
