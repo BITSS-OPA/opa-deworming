@@ -1,6 +1,6 @@
 ---
 title: "Notes on Givewell's Cost Effectiveness Analysis on Deworming "
-date: "22 August, 2019"
+date: "26 August, 2019"
 output:
   html_document:
     code_folding: hide
@@ -16,8 +16,11 @@ output:
   word_document: default
 editor_options:
   chunk_output_type: console
+pdf_document:
+  extra_dependencies: ["xcolor"]
 ---
 \def\blue{\color{blue}}
+\def\red{\color{red}}
 
 
 
@@ -98,6 +101,8 @@ invisible( list2env(call_sources_f(),.GlobalEnv) )
 
 
 
+
+
 # Methodology
 The analysis so far, consists in claryfying what equations underlie the cost-effectivenss analysis performed by GivewWell. We work off [this](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274) spreadsheet (an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  
 
@@ -106,14 +111,14 @@ The analysis so far, consists in claryfying what equations underlie the cost-eff
 The key result for policy makers is defined as the cost effectivness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)). 
 
 \begin{equation}
-CEA_{deworming} = \frac{B (1 + F_{0})}{C}
+CEA_{deworming} = \frac{B (1 + \blue{F_{0}})}{C}
 \label{eq:1}
 \tag{1}
 \end{equation}
 
- - $C$ is the costs per person dewormed.     
- - $B$ is the benefits per person dewormed.
- - **$F_{0}$ is a factor to account for leverage/fudging [not reviewed in this excercise][^12]**
+ - $C$ is the costs per person dewormed (`F2, 4,B23` --> [`F1, 2, H16`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=H16)).     
+ - $B$ is the benefits per person dewormed (`F2, 4,B22`).
+ - $\blue{F_{0}}$ is a factor to account for leverage/fudging [not reviewed in this excercise] ([`F2, 6, D259`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1611790402&range=D259))
 
 
 Also this quantity could be expressed in relative terms to the benchmark of cash transfers (cell [`Results!B9`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1034883018&range=B9)): 
@@ -165,7 +170,7 @@ Costs can vary by geography due to factors of scale, treatment strategies, age o
 
 The final cost is a weighted average of the unit cost across countries. 
 
-- $F^{i}_{1}$: Weight for the weighted average (`F1, 2, H16`).  
+- $F^{i}_{1}$: Weight for the weighted average ([`F1, 2, C:G8`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=C8:G8)).  
 - $P^{i}_{1}$: Total cost per child, per year in region $i$ (`F1, 2, C:G16`).  
 
 
@@ -230,12 +235,12 @@ P^{i}_{1} = \left(P^{i}_{3} + P^{i}_{4} + P^{i}_{5} + P^{i}_{6} + P^{i}_{7}  \ri
 \end{equation}
 
 - $P^{i}_{3}$: Total cost of DtW across all years (`F1, 1, Z39`).  
-- $P^{i}_{4}$: Cost of donated drugs per year (`F1, 1, Z13`).  
-- $P^{i}_{5}$: Additional partner costs (other than drugs) (`F1, 1, Z50`).  
-- $P^{i}_{6}$: Goverment financial costs per year (`F1, 1, X41`).  
-- $P^{i}_{7}$: Goverment staff value time (`F1, 2, N42`).  
+- $P^{i}_{4}$: Cost of donated drugs across all years (`F1, 1, Z13`).  
+- $P^{i}_{5}$: Additional partner costs across all years (other than drugs) (`F1, 1, Z50`).  
+- $P^{i}_{6}$: Goverment financial costs across all years (`F1, 1, X41`).  
+- $P^{i}_{7}$: Goverment staff value time across all years (`F1, 2, N42`).  
 
-- $Q^{i}_{2}$: total adjusted children dewormed per year (`F1, 1, Z15`).  
+- $Q^{i}_{2}$: total adjusted children dewormed across all years (`F1, 1, Z15`).  
 
 
 ```r
@@ -244,15 +249,15 @@ P^{i}_{1} = \left(P^{i}_{3} + P^{i}_{4} + P^{i}_{5} + P^{i}_{6} + P^{i}_{7}  \ri
 country_cost_f <- function(){
 ############################################################################### 
 ###############################################################################  
-# cost_dtw - p3   
+# cost_dtw_total - p3   
 # cost_donat - p4   
 # cost_part - p5   
 # cost_govt - p6   
 # cost_govt_staff - p7   
 # adjust_dw - q2   
-    country_cost <- function(cost_dtw_var, cost_donat_var, cost_part_var,
+    country_cost <- function(cost_dtw_total_var, cost_donat_var, cost_part_var,
                              cost_govt_var, cost_govt_staff_var, adjust_dw_var) {
-        ( cost_dtw_var + cost_donat_var + cost_part_var + cost_govt_var + 
+        ( cost_dtw_total_var + cost_donat_var + cost_part_var + cost_govt_var + 
             cost_govt_staff_var ) / adjust_dw_var
     }
 ############################################################################### 
@@ -266,13 +271,39 @@ invisible( list2env(country_cost_f(),.GlobalEnv) )
 $P^{i}_{2}$ and $F^{i}_{2}$ are defined in terms of some of the previous elements.
 
 \begin{equation}
-F^{i}_{2} = \frac{P^{i}_{2}}{P^{i}_{1}}\\
-P^{i}_{2} = \frac{P^{i}_{3}}{Q^{i}_{2}}
+P^{i}_{2} = \frac{P^{i}_{3}}{Q^{i}_{2}}\\
+F^{i}_{2} = \frac{P^{i}_{2}}{P^{i}_{1}}
 \label{eq:5}
 \tag{5}
 \end{equation}
 
 - $P^{i}_{2}$: DtW costs per children per year (`F1, 2, C:G14`).  
+
+
+
+```r
+# - inputs: nothing
+# - outputs: 
+prop_cost_dtw_f <- function(){
+############################################################################### 
+###############################################################################  
+
+  # eq 5.1 
+  costs_dtw_pc <- function(cost_dtw_total_var, adjust_dw_var){
+      cost_dtw_total_var / adjust_dw_var
+  }  
+  
+  # eq 5.2     
+  prop_cost_dtw <- function(costs_dtw_pc_var, region_cost_var) {
+      costs_dtw_pc_var / region_cost_var
+  }
+
+############################################################################### 
+###############################################################################  
+    return(list("prop_cost_dtw" = prop_cost_dtw))
+}
+invisible( list2env(prop_cost_dtw_f(),.GlobalEnv) )
+```
 
 The total costs of DtW across all years ($P^{i}_{3}$) is aggregated across years, regions (within country), cost activity (policy & advocacy, prevalence surveys, drug procurement & management, training & distribution, public mobilization & community sensitization, monitoring & evaluation, program management, giveWell added costs[^2]) and deworming round (often February or August)
 
@@ -280,14 +311,43 @@ The total costs of DtW across all years ($P^{i}_{3}$) is aggregated across years
 P^{i}_{3} = \sum_{t \in years (G_{2})}
 \sum_{r \in region (G_{3})}
 \sum_{a \in activ (G_{4})}
-\sum_{m \in month (G_{5})} P^{itram}_{3}
+\sum_{m \in month (G_{5})} \blue{P^{itram}_{3}}
 \label{eq:6}
 \tag{6}
 \end{equation}
 
+- $\blue{P^{itram}_{3}:}$
+<font color='blue'>costs by year, location, region, activity, and month. </font> (`F1, [r+m+y], E15:21`) 
 
-- $P^{itram}_{3}$: costs by year, location, region, activity, and month. (`F1, [r+m+y], E15:21`)
 
+```r
+# - inputs: nothing
+# - outputs: 
+cost_dtw_total_f <- function(){
+############################################################################### 
+###############################################################################  
+# 1 - call data spreadsheets
+# 2 - extract relevant value
+# 3 - record: month, activ, region, years
+# 4 - sum over components 
+# 
+
+  cost_dtw_total <- function(){
+#     month_sum <- sum(cost_dtw_month)
+#     activ_sum <- sum(month_sum) 
+#     region_sum <- sum(activ_sum) 
+#     years_sum <- sum(region_sum)
+#     return(years_sum)  
+    }
+      
+  
+############################################################################### 
+###############################################################################  
+    return(list("cost_dtw_total" = cost_dtw_total))
+}
+
+invisible( list2env(cost_dtw_total_f(),.GlobalEnv) )
+```
 
 Total number of adjusted children ($Q^{i}_{2}$) is computed as follows:
 
@@ -295,32 +355,99 @@ Total number of adjusted children ($Q^{i}_{2}$) is computed as follows:
 Q^{i}_{2} = \sum_{t \in G_{2}}
 \sum_{r \in G_{3}}
  Q^{itr}_{2} \\
- Q^{itr}_{2} = \frac{\widetilde{Q}^{itr, Feb}_{2} - \widetilde{Q}^{itr, Aug}_{2}}{Q^{itr}_{3}}\\
- \widetilde{Q}^{itr, m}_{2} = \sum_{s \in sch.age (G_{6})} \left(
-\sum_{e \in enr.st(G_{7})} \widetilde{Q}^{itrmse}_{2}\right) Q_{4}^{itrm}
+ Q^{itr}_{2} = \frac{\widetilde{Q}^{itr, Feb}_{2} - \widetilde{Q}^{itr, Aug}_{2}}{Q^{itr}_{3}} + \widetilde{Q}^{itr, Aug}_{2}\\
+ \widetilde{Q}^{itr, m}_{2} = Q_{4}^{itrm} \sum_{s \in sch.age (G_{6})} \left(
+\sum_{e \in enr.st(G_{7})} \blue{\widetilde{ \widetilde{Q}^{itrmse}_{2} } } \right) 
 \label{eq:7}
 \tag{7}
 \end{equation}
 
 
 
-- $Q^{itr}_{2}$, and $Q^{itrm}_{2}$ (`F1, 4, B19` and `F1, [country] num of children (C), AB:AC34`)
-- $Q^{itr}_{3}$: Actual treatment rounds per year (`F1, 4, D[crt]`)
+- $Q^{itr}_{2}$: (`F1, 4, B19`)   
+- $\widetilde{Q^{itrm}_{2}}$:  (`F1, [country] num of children (C), AB:AC34`)
+- $\blue{ \widetilde{\widetilde{ Q^{itrmse}_{2} } } }$:  (`F1, [country] num of children (C), AC4:8`)
+
+- $\blue{ Q^{itr}_{3} }$: <font color='blue'>Actual treatment rounds per year. </font>  (`F1, 4, D[crt]`)
 - $Q^{itrm}_{4}$: Adjustment factor (`F1, C, [rmt]25`)
 
 
+```r
+# - inputs: nothing
+# - outputs: 
+adjust_dw_f <- function(){
+############################################################################### 
+###############################################################################  
+# 1 -
+# 
+
+  #eq - 7.1
+  adjust_dw <- function(region_within_country){
+    country_year <- sum(region_within_country)
+    sum(country_year)    
+  }
+  
+  #eq - 7.2 
+  region <- function(){
+#   
+#  (region_adj_t-1_tilde - region_todal_adj_t_tilde)/region_actual_round_treat_tilde + region_todal_adj_t_tilde
+# 
+# 
+#   
+    }
+  #eq - 7.3    
+  region_tilde <- function(){
+    # res_pre-k <-  sum (enrolled,unenrolled)
+    # sum(res_pre-k , res_post-k ) * asj_factor
+  }  
+############################################################################### 
+###############################################################################  
+    return(list("adjust_dw" = adjust_dw))
+}
+
+invisible( list2env(adjust_dw_f(),.GlobalEnv) )
+```
+
 \begin{equation}
-Q^{itrm}_{4} = 1 - \left.\left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} - F^{itrm}_{3} F^{itrm}_{4} F^{itrm}_{5} \right)  \middle/ \left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} \right) \right.
+Q^{itrm}_{4} = \blue{  1 - \left.\left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} -  F^{itrm}_{3} F^{itrm}_{4} F^{itrm}_{5}  \right)  \middle/ \left( \frac{Q^{itrms,en}_{2}}{Q^{itrms,en}_{5}} \right) \right. }
 \label{eq:8}
 \tag{8}
 \end{equation}
 
 
-- $Q^{itrms, en}_{5}$: Total enrolled school-aged children targeted (`F1, C, [rtm]13`)
-- $F^{itrm}_{3}$: Percentage of schools visited during coverage validation (and/or during process monitoring) that distributed deworming tablets on deworming day and/or mop-up day (`F1, C, [rtm]22 `).   
-- $F^{itrm}_{4}$: Percentage of enrolled school-aged children attending school on deworming day or mop-up day, according to attendance registers viewed in schools visited during coverage validation (and/or during process monitoring) (`F1, C, [rtm]23 `).   
-- $F^{itrm}_{5}$: Percentage Of children enrolled in a school that distributed deworming tablets on deworming day and/or mop-up day and who attended school on deworming day and/or mop-up day, percentage who reported consuming deworming tablets (according to student interviews during coverage validation and/or process monitoring) (`F1, C, [rtm]24 `).  
+- $\blue{ Q^{itrms, en}_{5} }$: Total enrolled school-aged children targeted (`F1, C, [rtm]13`)
+- $\blue{ F^{itrm}_{3} }$: Percentage of schools visited during coverage validation (and/or during process monitoring) that distributed deworming tablets on deworming day and/or mop-up day (`F1, C, [rtm]22 `).   
+- $\blue{ F^{itrm}_{4} }$: Percentage of enrolled school-aged children attending school on deworming day or mop-up day, according to attendance registers viewed in schools visited during coverage validation (and/or during process monitoring) (`F1, C, [rtm]23 `).   
+- $\blue{ F^{itrm}_{5} }$: Percentage Of children enrolled in a school that distributed deworming tablets on deworming day and/or mop-up day and who attended school on deworming day and/or mop-up day, percentage who reported consuming deworming tablets (according to student interviews during coverage validation and/or process monitoring) (`F1, C, [rtm]24 `).  
 
+
+```r
+# - inputs: nothing
+# - outputs: 
+adjust_factor_f <- function(){
+############################################################################### 
+###############################################################################  
+# 1 -
+# 
+
+ 
+  adjust_factor <- function(){
+#   
+#  1 - (  q2/q5 - f3 * f4 * f5  ) / ( q2 / q5 )
+# 
+# 
+#     
+  }
+  
+############################################################################### 
+###############################################################################  
+    return(list("adjust_factor" = adjust_factor))
+}
+
+invisible( list2env(adjust_factor_f(),.GlobalEnv) )
+```
+
+-------
 
 \begin{equation}
 P^{i}_{4} = \sum_{t}
@@ -344,9 +471,6 @@ P^{i}_{5} = \sum_{t}
 \tag{10}
 \end{equation}
 
-
-
-- $P^{itrm}_{4}$: Cost of donated drugs in country, location, year, month (`F1, [crtm], E18`).  
 - $\widetilde{P}^{itrm}_{5}$: Total partner costs (incl. drugs) (`F1, [crtm], E23`).
 
 
@@ -399,25 +523,25 @@ Q^{i}_{1} = \left. \left( \sum_{t\in 16, 17} P_{3}^{it}  P_{12}^{i}\right) \midd
 - $P^{itr}_{12}$: DtW spending commitments for the future (2018-2020) (`F1, 2, C:G4`).  
 
 ### Benefits ("$B$")
-
+[(`F2, 4,B22`)](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B22)
 
 \begin{equation}
 B = \left( \frac{1}{1 + F_{7}} \right)^{Q_{7}} \sum_{t = 0}^{Q_{8} - 1}
-\frac{ln( 1 + F_{8})}{(1 + F_{7})}F_{9}F_{10}F_{11}F_{12}F_{13}\frac{F_{15}}{F_{14}}W
+\frac{ln( 1 + \red{ F_{8} })}{(1 + F_{7})^{t}}F_{9}F_{10}F_{11}F_{12}F_{13}\frac{ \red{ F_{15} } }{F_{14}}W
 \label{eq:16}
 \tag{16}
 \end{equation}
 
 
 - $F_{7}$: Discount rate[^3] (`F2, 2, B3`).  
-- $F_{8}$: Treatment effect of deworming on earnings (15.4%)[^4] (`F2, 2, B3`).  
+- $\red{F_{8}}$: Treatment effect of deworming on earnings (15.4%)[^4] (`F2, 2, B3`).  
 - $F_{9}$: Multiplier for resource sharing within households[^5] (`F2, 2, B9`).   
 - $F_{10}$: Adjustment for El Niño[^6] (`F2, 4, B10`).  
 - $F_{11}$: Adjustment for years of treatment in Miguel and Kremer vs. years of treatment in charities' programs[^7] (`F2, 4, B11`).  
 - $F_{12}$: Replicability adjustment[^8] (`F2, 4, B12`).  
 - $F_{13}$: Additional years of treatment assigned to the treatment group from Miguel and Kremer[^9] (ITT to TOT?) (`F2, 4, B13`).  
 - $F_{14}$: Proportion of deworming going to children — DtW (`F2, 4, B18`).  
-- $F_{15}$: Worm intensity adjustment (`F3, 1, I52`).  
+- $\red{ F_{15} }$: Worm intensity adjustment ([`F3, 1, I52`](https://docs.google.com/spreadsheets/d/1joUnjoxdlVVkXAc2kcoi-_MrIROjddSXF3qScPBoKTE/edit#gid=2095417847&range=I52)).  
 - $Q_{7}$: Time to labor market[^10]  (`F2, 4, B5`).  
 - $Q_{8}$: Time in the labor market (`F2, 4, B7`).  
 - $W$: Moral weights (conversion from increase in earnings to utils) [^11] (`F2, 3, B21`).  
@@ -429,7 +553,8 @@ F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 \end{equation}
 
 - $F^{r}_{16}$: DtW weight for worm intensity by location, adjusted (windorinzation) (`F3, 1, X14`)  
-- $F^{r}_{17}$: DtW weight for worm intensity by location, unadjusted (`F3, 1, C14` --> `F3, 10, K26`)  
+- $F^{r}_{17}$: DtW weight for worm intensity by location, unadjusted (different from above)   
+(`F3, 1, C14` --> [`F3, 10, K26`](https://docs.google.com/spreadsheets/d/1joUnjoxdlVVkXAc2kcoi-_MrIROjddSXF3qScPBoKTE/edit#gid=1162875528&range=K26))  
 
 
 \begin{align}
@@ -448,8 +573,8 @@ F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 - $\widetilde{F}^{r}_{16}$: Weight before winzorizing (`F3, 1, U14`)  
 - $F_{18}$: Intensity adjustment to account for S. haem (`F3, 1, K14`)  
 - $F_{19}$: Average intermediate intensity adjustment across regions and charities (`F3, 1, G50`)   
-- $F^{r}_{21}$: Average Goblal Burden of Disease adjustment across regions and charities (`F3, 1, L50`)   
-- $F_{21}$: Goblal Burden of Decease (GBD) adjustment for DtW in specific region (`F3, 1, L14`)  
+- $F_{20}$: Average Goblal Burden of Disease adjustment across regions and charities (`F3, 1, L50`)   
+- $F^{r}_{21}$: Goblal Burden of Decease (GBD) adjustment for DtW in specific region (`F3, 1, L14`)  
 
 \begin{equation}
 F^{r}_{18} = F^{r}_{22} +  F^{r}_{23}
@@ -468,22 +593,23 @@ F^{r}_{23} = 0.2 F^{r}_{27}\frac{\sum_{all} F^{r}_{22}}{0.8}
 \tag{20}
 \end{equation}
 
-- $F^{r}_{24}$: Calculated [location] intensity adjustment (`F3, 4, H27`).  
+- $F^{r}_{24}$: Calculated [location] intensity adjustment ([`F3, 4, H27`](https://docs.google.com/spreadsheets/d/1joUnjoxdlVVkXAc2kcoi-_MrIROjddSXF3qScPBoKTE/edit#gid=1839934728&range=H27)).  
 - $F^{r}_{25}$: Adjustment for representativeness (=100%)  (`F3, 1, E14`).   
 - $F^{r}_{26}$: Adjustment for co-infection (=100%)    (`F3, 1, EF4`).  
-- $F^{r}_{27}$: Prevalence rate of schisto haem  (`F3, 1, I14` --> `F3, 3, O18`)   
-
+- $F^{r}_{27}$: Prevalence rate of schisto haem  (`F3, 1, I14`)   
+  
 \begin{equation}
-F^{r}_{21} = \sum_{d\in G_{11}}F^{d}_{28}F^{d}_{32}\\
-F^{r}_{24} = \sum_{d\in G_{11}}F^{d}_{28}F^{d}_{29}\\
-F^{r}_{27} = \frac{\widetilde{F}^{r}_{27}}{ \sum_{all} \widetilde{F}^{r}_{27} }\\
+F^{r}_{21} = \sum_{d\in G_{11}}\blue{F^{d}_{28}}F^{d}_{32}\\
+F^{r}_{24} = \sum_{d\in G_{11}}\blue{F^{d}_{28}}F^{d}_{29}\\
+F^{r}_{27} = \blue{ \frac{\widetilde{F}^{r}_{27}}{ \sum_{all} \widetilde{F}^{r}_{27} } }\\
 F^{r}_{29} = \frac{F_{30}}{F_{31}}
 \label{eq:21}
 \tag{21}
 \end{equation}
 
 
-- $F^{r}_{28}$: Infection weight (`F3, 4, B:E2`).  
+- $\blue{ \widetilde{F}^{r}_{27} }$: GiveWell S. haem. prevalence estimate ([`F1,1, H14`](https://docs.google.com/spreadsheets/d/1joUnjoxdlVVkXAc2kcoi-_MrIROjddSXF3qScPBoKTE/edit#gid=2095417847&range=H14) --> [`F3, 3, O18`](https://docs.google.com/spreadsheets/d/1joUnjoxdlVVkXAc2kcoi-_MrIROjddSXF3qScPBoKTE/edit#gid=2041655207&range=O18))
+- $\blue{F^{r}_{28}}$: Infection weight (`F3, 4, B:E2`).  
 - $F^{r}_{29}$: Prevalence rates of each infection by location (`F3, 4, B:E27`).  
 - $F^{r}_{30}$: Eggs per gram in [location] and [condition] (`F3, 3, E18`).  
 - $F^{r}_{31}$: Eggs per gram in original study by [condition] (`F3, 3, E4`).  
@@ -555,7 +681,7 @@ Q^{r}_{11} = \frac{Q_{12} Q^{r}_{13}}{\sum_{r}Q^{r}_{13}}
 # Sensitivity Analysis  
 
 
-[^1]: `F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]`  
+[^1]: `F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]` Original [here](https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857), editable version [here](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=509033857)
 `F2 = 2019 GiveWell Cost-effectiveness Analysis — Version 3`  
 `F3 = 2018 Worm Intensity Workbook — Version 1` Sheets are named the first time and numbered thereafter.
 
@@ -618,6 +744,3 @@ d) So far I've mainly been thinking about spillovers on school-aged children. Ho
 
 [^11]: "Our model accounts for changes in the natural log of consumption. The logarithmic model captures the idea that money has diminishing value as you get more and more of it.   
  For example, our model considers a 50% increase in income as a little better than 50% as good as an 100% increase in income." https://www.givewell.org/how-we-work/our-criteria/cost-effectiveness/comparing-moral-weights
- 
- 
- [^12]: (`F2, 4, D259`)

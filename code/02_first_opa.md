@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "16 April, 2019"
+date: "26 August, 2019"
 output:
   html_document:
     code_folding: hide
@@ -297,7 +297,7 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from r
 
 
 ```r
-# - inputs: gov_bonds_so, inflation_so
+# - inputs: 
 # - outputs: interest_in
 lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so){
     lambda1_in <- rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
