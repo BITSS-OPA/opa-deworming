@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "29 July, 2019"
+date: "23 September, 2019"
 output:
   html_document:
     code_folding: hide
@@ -114,6 +114,8 @@ invisible( list2env(call_params_f(),.GlobalEnv) )
 
 
 # Methodology
+ 
+The target parameter to reproduce corresponds to the NPV of deworming, including spillovers, and can be found in the file `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Calcs-Table 5`, cell `C51`. 
 
 ## Main Equation (the model)
 
