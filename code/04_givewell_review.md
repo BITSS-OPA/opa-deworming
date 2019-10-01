@@ -1,6 +1,6 @@
 ---
 title: "Notes on Givewell's Cost Effectiveness Analysis on Deworming "
-date: "23 September, 2019"
+date: "01 October, 2019"
 output:
   html_document:
     code_folding: hide
