@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "01 October, 2019"
+date: "02 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -522,8 +522,11 @@ Where:
  - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
  - $\lambda_{2}^{eff}$: ?. **[discuss with Ted/Michael]**
  
+**WARNING: the next paragraph has a bunch of hard coded numbers that need to be reviewed and coded up**   
 
-Its components come from  the W\@W paper. 
+In the original evaluation, $\alpha = 0.9$ [**NEED TO INSERT THE TRUE NUMBER HERE**], hence $\lambda_{1}^{eff} = 1.75/0.9 = 1.94$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
+
+Its components come from the W\@W paper. 
 
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
 
@@ -584,7 +587,7 @@ F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 - $F^{r}_{17}$: DtW weight for worm intensity by location, unadjusted (different from above)   
 (`F3, 1, C14` --> [`F3, 10, K26`](https://docs.google.com/spreadsheets/d/1joUnjoxdlVVkXAc2kcoi-_MrIROjddSXF3qScPBoKTE/edit#gid=1162875528&range=K26))  
 
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 \begin{align}
   F^{r}_{16} &= \left\{
   \begin{array}{lr}

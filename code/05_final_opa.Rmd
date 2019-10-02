@@ -541,19 +541,23 @@ Where:
  - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
  - $\lambda_{2}^{eff}$: ?. **[discuss with Ted/Michael]**
  
+**WARNING: the next paragraph has a bunch of hard coded numbers that need to be reviewed and coded up**   
 
-Its components come from  the W\@W paper. 
+In the original evaluation, $\alpha = 0.9$ [**NEED TO INSERT THE TRUE NUMBER HERE**], hence $\lambda_{1}^{eff} = 1.75/0.9 = 1.94$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
+
+Its components come from the W\@W paper. 
 
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
 
 ```{r lambdas}
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
-lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so, alpha_var = 1){
-    lambda1_temp <- alpha_var * lambda1_var 
+lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so, alpha_0_var = 1, alpha_r_var=1){
+    lambda1_eff_temp <- lambda1_var / alpha_0_var
+    lambda1_r_in <- lambda1_eff_temp * alpha_r_var 
     lambda1_in <- rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
     lambda2_in <- rep(lambda2_var, 2)
-    return(list("lambda1_in" = lambda1_in, "lambda2_in" = lambda2_in))  
+    return(list("lambda1_in" = lambda1_in, "lambda2_in" = lambda2_in, "lambda1_r_in" = lambda1_r_in))  
 }
 
 invisible( list2env(lambdas_in_f(),.GlobalEnv) )
@@ -591,6 +595,8 @@ invisible( list2env(saturation_in_f(),.GlobalEnv) )
 
 ---------------------
 
+
+
 \begin{equation}
 F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 \label{eq:17}
@@ -601,7 +607,7 @@ F_{15} = \frac{\sum_{r \in G_{10}} F^{r}_{16} F^{r}_{17}}{\sum_{r}  F^{r}_{17}}
 - $F^{r}_{17}$: DtW weight for worm intensity by location, unadjusted (different from above)   
 (`F3, 1, C14` --> [`F3, 10, K26`](https://docs.google.com/spreadsheets/d/1joUnjoxdlVVkXAc2kcoi-_MrIROjddSXF3qScPBoKTE/edit#gid=1162875528&range=K26))  
 
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 \begin{align}
   F^{r}_{16} &= \left\{
   \begin{array}{lr}
