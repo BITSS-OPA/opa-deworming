@@ -52,8 +52,9 @@ pdf_document:
 ########################################## 
 ##########################################  
 #
-#    ...
-#
+#    ... hello boop
+#  hello from Fernando's computer
+#  another edit (Noor)
 ########################################## 
 ##########################################  
 #    return( )                                  # A list with all (most?) the elements 
@@ -329,13 +330,14 @@ $N_{i}, C_{i,k,l}, \delta_{g}$
 Bair et al. (2016) compute benefits like this:
 
 \begin{equation}
-B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \blue{ w_{t} }
-\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right) 
+B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \label{eq:4}
 \tag{4}
 \end{equation}
 
 **Note:** The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender. 
+
+
  
 Where:   
  - $r$: is the discount rate
@@ -422,7 +424,6 @@ costs_f <- function(){
     return(list("final_cost" = final_cost))
 }
 
-
 invisible( list2env(costs_f(),.GlobalEnv) )
 ```
 
@@ -431,7 +432,20 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 The resulting value is a $r$ = 9.85%
 
-#### "$w_{t}$"
+
+
+#### Earnings
+Where $E_t$ represents earnings in period $t$. That can be computed in two ways. 
+
+
+##### numer one 
+
+\begin{equation}
+E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right) 
+\end{equation}
+
+
+###### "$w_{t}$"
 
 The wages/earnings are determined by:  
 
@@ -441,7 +455,7 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 
 individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0$ for $t<10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
 
-##### "$w_0$"
+###### "$w_0$"
 
 \begin{equation}
 w_t =  \text{#weeks} \times \blue{w_0} (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
@@ -538,7 +552,7 @@ wages_f <- function(wage_ag_var_h1 = wage_ag_so,
 invisible( list2env(wages_f(),.GlobalEnv) )
 ```
 
-#### "$\lambda_{1}$"  and  "$\lambda_{2}$"
+##### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
 $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a underweighted mean:
 
@@ -579,7 +593,7 @@ invisible( list2env(lambdas_in_f(),.GlobalEnv) )
 
 
 
-#### $R$ and $p$
+##### $R$ and $p$
 
 
 The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was appplied to approximatedly two thirds of the population, $R$ is set to: $R  = 0.68$.  
@@ -601,6 +615,37 @@ saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so, 
     return(list("saturation_in" = saturation_in)) 
 } 
 invisible( list2env(saturation_in_f(),.GlobalEnv) )
+```
+
+
+##### Number two
+
+\begin{equation}
+E_t = \Delta Y_t = I(10 \leq t < 15) \lambda_{1}^{k1} + I(15 \leq t < 20) \lambda_{1}^{k2} + I(20 \leq t < 25) \lambda_{1}^{k3}  
+\end{equation}
+
+Where   
+ - $I(10 \leq t < 15)$ represents ...  
+ - $\lambda_{1}^{k1}$ represents ...  
+ 
+
+```r
+# - inputs: nothing
+# - outputs: function that computs the weighted sum of country costs
+NAME_f <- function(){
+############################################################################### 
+###############################################################################  
+  
+    delta_earnings <- function(country_w_var = 1, country_cost_var = 1) {
+        sum(country_w_var * country_cost_var)
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("final_cost" = final_cost))
+}
+
+invisible( list2env(costs_f(),.GlobalEnv) )
 ```
 
 

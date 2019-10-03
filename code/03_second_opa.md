@@ -17,6 +17,7 @@ output:
 editor_options:
   chunk_output_type: console
 ---
+
 \def\blue{\color{blue}}
 
 
@@ -25,6 +26,7 @@ editor_options:
 ```r
 options(tinytex.verbose = TRUE)
 ```
+
 
 
 
@@ -46,7 +48,7 @@ call_params_f <- function(){
     #############
     ##### Data  
     #############
-    gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
+    gov_bonds_so <- 	0.1385	     #Kenyan interest on sovereign debt - Central Bank of Kenya
     inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
     wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
@@ -178,7 +180,7 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
 
 ### 1 - "$r$"  
 
-The real interest rate $r$ is obtained from the interest rate on betterment bonds (0.118) minus the inflation rate (0.02).
+The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.138) minus the inflation rate (0.02).
 
 
 ```r
@@ -191,7 +193,7 @@ interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflati
 invisible( list2env(interest_in_f(),.GlobalEnv) )
 ```
 
-The resulting value is a $r$ = 9.85%
+The resulting value is a $r$ = 11.85%
 
 ### 2 - "$w_{t}$"
 
@@ -475,9 +477,9 @@ res_npv_yes_ext_pe <- npv_mo_f(delta_ed_male_var = delta_ed_ext_total_in,
 
 
 
-- **NPV without externalities ($\lambda_2 = 0$):** -0.6097    
+- **NPV without externalities ($\lambda_2 = 0$):** -2.9978    
 
-- **NPV with externalities ($\lambda_2 = 10.2$ ):** 34.3187
+- **NPV with externalities ($\lambda_2 = 10.2$ ):** 19.0778
 
 
 
@@ -695,7 +697,13 @@ npv_sim[i] <- npv_mo_f(n_male_var = 1/2, n_female_var = 1/2,
 if (abs(sd(npv_sim) - 27.23765)>0.0001 ) {
   print("Output has change")
 }
+```
 
+```
+## [1] "Output has change"
+```
+
+```r
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 

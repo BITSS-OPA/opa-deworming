@@ -17,6 +17,7 @@ output:
 editor_options:
   chunk_output_type: console
 ---
+
 \def\blue{\color{blue}}
 
 
@@ -24,6 +25,7 @@ editor_options:
 ```{r, include=TRUE}
 options(tinytex.verbose = TRUE)
 ```
+
 
 
 ```{r setup, include=FALSE} 
@@ -192,7 +194,7 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
 
 ### 1 - "$r$"  
 
-The real interest rate $r$ is obtained from the interest rate on betterment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
+The real interest rate $r$ is obtained from the interest rate on goverment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
 
 ```{r interest-rate} 
 # - inputs: gov_bonds_so, inflation_so
