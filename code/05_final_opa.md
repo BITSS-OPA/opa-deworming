@@ -259,7 +259,7 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 
 \begin{equation}
-w_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
+\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
 c_{i} = \frac{C_{i}}{N_{i}} \\
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
 C_{i,k} = \sum_{l \in items}C_{i,k,l}
@@ -322,7 +322,7 @@ invisible( list2env(costs_inp_f(),.GlobalEnv) )
 
 #### Data requiered to compute costs.
 
-$N_{i}, C_{i,k,l}$
+$N_{i}, C_{i,k,l}, \delta_{g}$
 
 ### Benefits ("$B$")  
 
@@ -338,61 +338,59 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \blue{ w_{t} }
 **Note:** The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender. 
  
 Where:   
- - $w_t$: earnings in period $t$.   
- - $\lambda_{1}$: direct effects of deworming on earnings.  
- - $\lambda_{2}$: indirect effects of deworming on earnings.   
+ - $r$: is the discount rate
+ - $w_t$: are the earnings in period $t$.   
+ - $\lambda_{1}$: is the direct effects of deworming on earnings.  
+ - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
  - $p$: saturation, measures the fraction of the population that is effectively usign the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
 
 
 
 ```r
-# add suffix _var to args 
-# - inputs: tax_rev_init_mo, top_tax_base_in  
-# - outputs: total_rev_pe 
-# Gamma is used to index gender.
-npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2, 
-                interest_r_var = interest_in,
-                wage_var = wage_t_mo,
-                lambda1_male_var = lambda1_so[1],
-                lambda1_female_var = lambda1_so[2], 
-                tax_var = tax_so,
-                saturation_var = saturation_in,             
-                coverage_var = coverage_so,
-                cost_of_schooling_var = cost_per_student_in,
-                delta_ed_male_var = delta_ed_so[,1],
-                delta_ed_female_var = delta_ed_so[,1], 
-                lambda2_male_var = lambda2_in[1],
-                lambda2_female_var = lambda2_in[2],
-                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
-                periods_var = periods_so) {
-  ns <- c(n_male_var, n_female_var)
-  lambda1s <- c(lambda1_male_var, lambda1_female_var)
-  lambda2s <- c(lambda2_male_var, lambda2_female_var)
-  index_t <- 0:periods_var
-  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
-  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+# - inputs: nothing
+# - outputs: function that computes the country weights used in the final costs
+benefits_f <- function(){
+############################################################################### 
+###############################################################################  
+      
+    # Gamma is used to index gender.
+    pv_benef <- function(n_male_var = 1/2, n_female_var = 1/2, 
+                    interest_r_var = interest_in,
+                    wage_var = wage_t_mo,
+                    lambda1_male_var = lambda1_so[1],
+                    lambda1_female_var = lambda1_so[2], 
+                    saturation_var = saturation_in,             
+                    coverage_var = coverage_so,
+                    lambda2_male_var = lambda2_in[1],
+                    lambda2_female_var = lambda2_in[2],
+                    periods_var = periods_so) {
+      ns <- c(n_male_var, n_female_var)
+      lambda1s <- c(lambda1_male_var, lambda1_female_var)
+      lambda2s <- c(lambda2_male_var, lambda2_female_var)
+      index_t <- 0:periods_var
 
-  benef <- matrix(NA, 51,2)
-  for (i in 1:2){
-  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * wage_var *
-                     ( lambda1s[i] + saturation_var * lambda2s[i] / coverage_var )
-  }
-
-  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
-            apply( ( 1 / (1 + interest_r_var) )^index_t *
-                     delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)
-#  wser()
-  return(res1)   
+      benef <- matrix(NA, 51,2)
+      for (i in 1:2){
+      benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * wage_var *
+                         ( lambda1s[i] + saturation_var * lambda2s[i] / coverage_var )
+      }
+    
+      res1 <- sum( ns * ( apply(benef, 2, sum) ) )
+    #  wser()
+      return(res1)   
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("pv_benef" = pv_benef))
 }
+invisible( list2env(benefits_f(),.GlobalEnv) )
 ```
-
-
 
 #### "$r$"  
 
-The real interest rate $r$ is obtained from the interest rate on betterment bonds (0.118) minus the inflation rate (0.02).
+The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.118) minus the inflation rate (0.02).
 
 
 ```r
@@ -444,7 +442,7 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so), 
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so), 
 #  growth rate (growth_rate_so), mincer coef (coef_exp_so[1], coef_exp_so[2])
-#
+# 
 #outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trayectory:
 #  value (wage_t_mo) and function (wage_t_mo_f).
 wages_f <- function(wage_ag_var_h1 = wage_ag_so,  
@@ -523,14 +521,14 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 \lambda_{1,\gamma} = \alpha \lambda^{eff}_{1,\gamma} + (1 -  \alpha) \times 0
 \end{equation}
 
-Where: 
+Where:   
  - $\alpha$: represents the incidence of the condition.  
  - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
  - $\lambda_{2}^{eff}$: ?. **[discuss with Ted/Michael]**
  
 **WARNING: the next paragraph has a bunch of hard coded numbers that need to be reviewed and coded up**   
 
-In the original evaluation, $\alpha = 0.9$ [**NEED TO INSERT THE TRUE NUMBER HERE**], hence $\lambda_{1}^{eff} = 1.75/0.9 = 1.94$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
+In the original evaluation, $\alpha = 0.92$ [**NEED TO INSERT THE TRUE NUMBER HERE**], hence $\lambda_{1}^{eff} = 1.75/0.92 = 1.94$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
 Its components come from the W\@W paper. 
 
@@ -540,7 +538,7 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from r
 ```r
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
-lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so, alpha_0_var = 1, alpha_r_var=1){
+lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so, alpha_0_var = 0.92, alpha_r_var=0.3){
     lambda1_eff_temp <- lambda1_var / alpha_0_var
     lambda1_r_in <- lambda1_eff_temp * alpha_r_var 
     lambda1_in <- rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
