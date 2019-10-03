@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "02 October, 2019"
+date: "03 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -217,7 +217,7 @@ used to track groups, like geographies, time, and other catergories. For example
 ### Costs ("$C$")
 
 \begin{equation}
-C = \sum_{i \in Countries } w_{i} c_{i}
+C = \sum_{i \in Countries } \omega_{i} c_{i}
 \label{eq:2}
 \tag{2}
 \end{equation}
@@ -228,7 +228,7 @@ Costs can vary by geography due to factors of scale, treatment strategies, age o
 
 The final cost is a weighted average of the unit cost across countries. 
 
-- $w_{i}$: Weight for the weighted average ([`F1, 2, C:G8`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=C8:G8)).  
+- $\omega_{i}$: Weight for the weighted average ([`F1, 2, C:G8`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=C8:G8)).  
 - $c_{i}$: Total cost per child, per year in country $i$ (`F1, 2, C:G16`).  
 
 Build $c_i$ as a function of three stakeholders: DtW, other donors, goverment.  
@@ -273,7 +273,7 @@ All costs are in USD.
 GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
 
    
-- $N_{i}$: Number of treatet children in country $i$.  
+- $N_{i}$: Number of treated children in country $i$.  
 - $Ex_{i}$: Exchange rate from country $i$ to USD.  
 - $k$: Costs distribute across $k$ payers.   
 - $l$: Each payers costs come from $l$ items.   
@@ -402,6 +402,32 @@ interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflati
 }
 invisible( list2env(interest_in_f(),.GlobalEnv) )
 ```
+
+START HERE
+
+
+```r
+# - inputs: nothing
+# - outputs: function that computs the weighted sum of country costs
+costs_f <- function(){
+############################################################################### 
+###############################################################################  
+  
+    final_cost <- function(country_w_var = 1, country_cost_var = 1) {
+        sum(country_w_var * country_cost_var)
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("final_cost" = final_cost))
+}
+
+
+invisible( list2env(costs_f(),.GlobalEnv) )
+```
+
+
+
 
 The resulting value is a $r$ = 9.85%
 

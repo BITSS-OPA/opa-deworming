@@ -294,7 +294,7 @@ All costs are in USD.
 GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
 
    
-- $N_{i}$: Number of treatet children in country $i$.  
+- $N_{i}$: Number of treated children in country $i$.  
 - $Ex_{i}$: Exchange rate from country $i$ to USD.  
 - $k$: Costs distribute across $k$ payers.   
 - $l$: Each payers costs come from $l$ items.   
@@ -438,7 +438,6 @@ costs_f <- function(){
 ###############################################################################  
     return(list("final_cost" = final_cost))
 }
-
 
 invisible( list2env(costs_f(),.GlobalEnv) )
 ```

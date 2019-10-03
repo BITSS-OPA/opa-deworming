@@ -15,3 +15,9 @@ Looking for w_t:
         - self-emp wage = Monthly self-employed profits/(4.5*weekly self-employed hrs, cond hrs>0)
           - Monthly self-employed profits = Control group monthly self-employed profits
           - weekly self-employed hrs, cond hrs>0) = Control group weekly self-employed hours, conditional on hrs >0
+
+
+## Questions about DW KLPS analysis  
+ - lambda_1^{x} is in which units (hour wage, five year wage?)  
+ - Display output as NPV  
+ - 
