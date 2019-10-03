@@ -74,7 +74,7 @@ colorize = function(x, color){
 ##########################################  
 #
 #    ... hello boop
-#
+#  hello from Fernando's computer
 ########################################## 
 ##########################################  
 #    return( )                                  # A list with all (most?) the elements 
