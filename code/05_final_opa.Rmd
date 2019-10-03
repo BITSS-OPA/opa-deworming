@@ -649,8 +649,8 @@ NAME_f <- function(){
 ############################################################################### 
 ###############################################################################  
   
-    delta_earnings <- function(country_w_var = 1, country_cost_var = 1) {
-        sum(country_w_var * country_cost_var)
+    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
+        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
     }
     
 ############################################################################### 
