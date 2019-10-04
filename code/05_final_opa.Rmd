@@ -438,19 +438,18 @@ earnings1_f <- function(){
     
     earnings1 <- function(wage_var = wage_in,
                           lambda1_var = lambda1_so, 
-                          lalmbda2_var = lambda2_so, 
+                          lambda2_var = lambda2_so, 
                           saturation_var = saturation, coverage_var) {  
-        wage_var * ( lambda1_var + saturation_var * lambda2_var / coverage_var )
-        return(list("interest_in" = interest_in))
+        res1 <- wage_var * ( lambda1_var + saturation_var * lambda2_var / coverage_var )
+        return(res1)
     }
     
 ############################################################################### 
 ###############################################################################  
-    return(list("interest" = interest))
+    return(list("earnings1" = earnings1))
 }
 
-invisible( list2env(interest_f(),.GlobalEnv) )
-interest <- as.numeric( interest() )
+invisible( list2env(earnings1_f(),.GlobalEnv) )
 ```
 
 ###### "$w_{t}$"
@@ -492,34 +491,22 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 # 
 #outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trayectory:
 #  value (wage_t_mo) and function (wage_t_mo_f).
-wages_f <- function(wage_ag_var_h1 = wage_ag_so,  
-                     wage_ww_var_h1 = wage_ww_so,
-                     profits_se_var_h1 = profits_se_so,
-                     hours_se_cond_var_h1 = hours_se_cond_so,  
-                     hours_ag_var_h1 = hours_ag_so,
-                     hours_ww_var_h1 = hours_ww_so,
-                     hours_se_var_h1 = hours_se_so,
-                     ex_rate_var_h1 = ex_rate_so, 
-                     periods_var_h1 = periods_so, 
-                     time_to_jm_var_h1 = time_to_jm_so, 
-                     growth_rate_var_h1 = growth_rate_so,
-                     coef_exp1_var_h1 = coef_exp_so[1],
-                     coef_exp2_var_h1 = coef_exp_so[2]){
+wages_f <- function(){
 ################################################################################
 ################################################################################  
 
-    experience_aux <- 0:periods_var_h1 - time_to_jm_var_h1
+    experience_aux <- 0:periods_so - time_to_jm_so
 
     #close to value from spreadsheet (Assumps&Panel A Calcs!B137 = 0.1481084),
     #but I suspect diff due to computational precision
     
     wage_0_mo_f <- function(wage_ag_var, wage_ww_var, profits_se_var, hours_se_cond_var, 
                             hours_ag_var, hours_ww_var, hours_se_var, ex_rate_var) {
-      wage_se <- profits_se_var / (4.5 * hours_se_cond_var)
-      wage_ls <- c(wage_ag_var, wage_ww_var, wage_se)
-      alpha_ls <- c(hours_ag_var, hours_ww_var, hours_se_var) / sum( c(hours_ag_var, hours_ww_var, hours_se_var) )
-      res1 <- 1/ex_rate_var * sum( wage_ls * alpha_ls )
-      return(res1)
+        wage_se <- profits_se_var / (4.5 * hours_se_cond_var)
+        wage_ls <- c(wage_ag_var, wage_ww_var, wage_se)
+        alpha_ls <- c(hours_ag_var, hours_ww_var, hours_se_var) / sum( c(hours_ag_var, hours_ww_var, hours_se_var) )
+        res1 <- 1/ex_rate_var * sum( wage_ls * alpha_ls )
+        return(res1)
     }
     
     wage_t_mo_f <- function(wage_0_var,
@@ -527,28 +514,28 @@ wages_f <- function(wage_ag_var_h1 = wage_ag_so,
                        experience_var,
                        coef_exp1_var,
                        coef_exp2_var) {
-      res1 <- 52 * wage_0_var *( ( 1 + growth_rate_var )^experience_var ) *
-        ( 1 + coef_exp1_var * experience_var + coef_exp2_var * experience_var^2 ) *
-        ifelse(0:periods_var_h1 >= time_to_jm_var_h1, 1, 0)
-      return(res1)
+        res1 <- 52 * wage_0_var *( ( 1 + growth_rate_var )^experience_var ) *
+          ( 1 + coef_exp1_var * experience_var + coef_exp2_var * experience_var^2 ) *
+          ifelse(0:periods_so >= time_to_jm_so, 1, 0)
+        return(res1)
     }
     
-    wage_0_mo <- wage_0_mo_f(wage_ag_var = wage_ag_var_h1,  
-                         wage_ww_var = wage_ww_var_h1,
-                         profits_se_var = profits_se_var_h1,
-                         hours_se_cond_var = hours_se_cond_var_h1,  
-                         hours_ag_var = hours_ag_var_h1,
-                         hours_ww_var = hours_ww_var_h1,
-                         hours_se_var = hours_se_var_h1,
-                         ex_rate_var = ex_rate_var_h1)  
+    wage_0_mo <- wage_0_mo_f(wage_ag_var = wage_ag_so,  
+                         wage_ww_var = wage_ww_so,
+                         profits_se_var = profits_se_so,
+                         hours_se_cond_var = hours_se_cond_so,  
+                         hours_ag_var = hours_ag_so,
+                         hours_ww_var = hours_ww_so,
+                         hours_se_var = hours_se_so,
+                         ex_rate_var = ex_rate_so)  
 
     #close to value from spreadsheet (Calcs-Table 5!N21.. = 7.701634678),
     #but I suspect diff due to computational precision
     wage_t_mo <- wage_t_mo_f(wage_0_var = wage_0_mo,
-                       growth_rate_var = growth_rate_var_h1,
+                       growth_rate_var = growth_rate_so,
                        experience_var = experience_aux,
-                       coef_exp1_var = coef_exp1_var_h1,
-                       coef_exp2_var = coef_exp2_var_h1)
+                       coef_exp1_var = coef_exp_so[1],
+                       coef_exp2_var = coef_exp_so[2])
 
 ################################################################################
 ################################################################################
@@ -562,36 +549,42 @@ invisible( list2env(wages_f(),.GlobalEnv) )
 
 
 
-```{r earnings1, eval=FALSE}
-    # wage_var *
-    #                  ( lambda1s[i] + saturation_var * lambda2s[i] / coverage_var )
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in
-asd_f <- function(){
+##### Number two
+
+\begin{equation}
+E_t = \Delta Y_t = I(10 \leq t < 15) \lambda_{1}^{k1} + I(15 \leq t < 20) \lambda_{1}^{k2} + I(20 \leq t < 25) \lambda_{1}^{k3}  
+\end{equation}
+
+Where   
+ - $I(10 \leq t < 15)$ represents ...  
+ - $\lambda_{1}^{k1}$ represents ...  
+ 
+```{r delta-earnings, eval=FALSE}
+# - inputs: nothing
+# - outputs: function that computs the weighted sum of country costs
+NAME_f <- function(){
 ############################################################################### 
 ###############################################################################  
-    
-    wages <- function(wage_var = wage_in,
-                          lambda1_var = lambda1_so, 
-                          lalmbda2_var = lambda2_so, 
-                          saturation_var = saturation, coverage_var) {  
-        wage_var * ( lambda1_var + saturation_var * lambda2_var / coverage_var )
-        return(list("interest_in" = interest_in))
+  
+    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
+        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
     }
     
 ############################################################################### 
 ###############################################################################  
-    return(list("interest" = interest))
+    return(list("delta_earnings" = delta_earnings))
 }
 
-invisible( list2env(interest_f(),.GlobalEnv) )
-interest <- as.numeric( interest() )
+invisible( list2env(NAME_f(),.GlobalEnv) )
 ```
 
 
-##### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
-$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a underweighted mean:
+
+
+#### "$\lambda_{1}$"  and  "$\lambda_{2}$"
+
+$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a simple mean:
 
 \begin{equation}
 \lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female} \\
@@ -629,7 +622,7 @@ invisible( list2env(lambdas_in_f(),.GlobalEnv) )
 
 
 
-##### $R$ and $p$
+#### $R$ and $p$
 
 
 The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was appplied to approximatedly two thirds of the population, $R$ is set to: $R  = `r round(coverage_so, 2)`$.  
@@ -651,37 +644,6 @@ saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so, 
 } 
 invisible( list2env(saturation_in_f(),.GlobalEnv) )
 ```
-
-
-##### Number two
-
-\begin{equation}
-E_t = \Delta Y_t = I(10 \leq t < 15) \lambda_{1}^{k1} + I(15 \leq t < 20) \lambda_{1}^{k2} + I(20 \leq t < 25) \lambda_{1}^{k3}  
-\end{equation}
-
-Where   
- - $I(10 \leq t < 15)$ represents ...  
- - $\lambda_{1}^{k1}$ represents ...  
- 
-```{r delta-earnings, eval=FALSE}
-# - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
-NAME_f <- function(){
-############################################################################### 
-###############################################################################  
-  
-    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
-    }
-    
-############################################################################### 
-###############################################################################  
-    return(list("delta_earnings" = delta_earnings))
-}
-
-invisible( list2env(NAME_f(),.GlobalEnv) )
-```
-
 
 
 
