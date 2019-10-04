@@ -595,15 +595,33 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from r
 ```r
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
-lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so, 
-                         alpha_0_var = 0.92, alpha_r_var=0.3){
-    lambda1_eff_temp <- lambda1_var / alpha_0_var
-    lambda1_r_in <- lambda1_eff_temp * alpha_r_var 
-    lambda1_in <- rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
-    lambda2_in <- rep(lambda2_var, 2)
-    return(list("lambda1_in" = lambda1_in, "lambda2_in" = lambda2_in, "lambda1_r_in" = lambda1_r_in))  
-}
+lambdas_in_f <- function(){
+############################################################################### 
+###############################################################################    
+      
+        lambda_r_f <- function(lambda1_var = lambda1_so, alpha_0_var = 0.92,
+                             alpha_r_var=0.3){
+            lambda1_eff_temp <- lambda1_var[1] / alpha_0_var
+            return( lambda1_eff_temp * alpha_r_var )
+        }  
+        lambda1_r_in <- lambda_r_f()
+        
+        lambda1_in_f <- function(lambda1_var = lambda1_so) {
+          rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
+        }
+        lambda1_in <- lambda1_in_f()
+        
+        lambda2_in_f <- function(lambda2_var = lambda2_so){
+            rep(lambda2_var, 2)
+        }
+        lambda2_in <- lambda2_in_f()
 
+############################################################################## 
+###############################################################################  
+    return(list("lambda_r_f" = lambda_r_f, "lambda1_r_in" = lambda1_r_in, 
+                "lambda1_in_f" = lambda1_in_f, "lambda1_in" = lambda1_in, 
+                "lambda2_in_f" = lambda2_in_f, "lambda2_in" = lambda2_in))
+}
 invisible( list2env(lambdas_in_f(),.GlobalEnv) )
 ```
 

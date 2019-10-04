@@ -74,11 +74,26 @@ y = f(x)
 \tag{1}
 \end{equation}
 
-```{r model}
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
-```
+```{r test, eval=FALSE}
+# - inputs: nothing
+# - outputs: function that computs the weighted sum of country costs
+chunk_test <- function(){
+############################################################################### 
+###############################################################################  
+  
+    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
+        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("delta_earnings" = delta_earnings))    # Try to return only functions
+}
+invisible( list2env(NAME_f(),.GlobalEnv) )
 
+##### Execute values of the functions above when needed for the text:
+
+```
 
 ## Sub components:
 

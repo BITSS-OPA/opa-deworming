@@ -547,8 +547,6 @@ invisible( list2env(wages_f(),.GlobalEnv) )
 ```
 
 
-
-
 ##### Number two
 
 \begin{equation}
@@ -559,29 +557,6 @@ Where
 
  - $I(10 \leq t < 15)$ represents ...  
  - $\lambda_{1}^{k1}$ represents ...  
- 
-```{r delta-earnings, eval=FALSE}
-# - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
-NAME_f <- function(){
-############################################################################### 
-###############################################################################  
-  
-    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
-    }
-    
-############################################################################### 
-###############################################################################  
-    return(list("delta_earnings" = delta_earnings))
-}
-
-invisible( list2env(NAME_f(),.GlobalEnv) )
-```
-
-
-
-
 
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
@@ -612,46 +587,32 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from r
 lambdas_in_f <- function(){
 ############################################################################### 
 ###############################################################################    
-
-    lambdas <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so, 
-                         alpha_0_var = 0.92, alpha_r_var=0.3){  
-        lambda1_eff_temp <- lambda1_var / alpha_0_var
-        lambda1_r_in <- lambda1_eff_temp * alpha_r_var 
-        lambda1_in <- rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
-        lambda2_in <- rep(lambda2_var, 2)
+      
+        lambda_r_f <- function(lambda1_var = lambda1_so, alpha_0_var = 0.92,
+                             alpha_r_var=0.3){
+            lambda1_eff_temp <- lambda1_var[1] / alpha_0_var
+            return( lambda1_eff_temp * alpha_r_var )
+        }  
+        lambda1_r_in <- lambda_r_f()
         
-        return(list("lambda1_in" = lambda1_in, "lambda2_in" = lambda2_in, 
-                "lambda1_r_in" = lambda1_r_in))  
-    }
-    
+        lambda1_in_f <- function(lambda1_var = lambda1_so) {
+          rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
+        }
+        lambda1_in <- lambda1_in_f()
+        
+        lambda2_in_f <- function(lambda2_var = lambda2_so){
+            rep(lambda2_var, 2)
+        }
+        lambda2_in <- lambda2_in_f()
+
 ############################################################################## 
 ###############################################################################  
-    return(list("lambdas" = lambdas))
+    return(list("lambda_r_f" = lambda_r_f, "lambda1_r_in" = lambda1_r_in, 
+                "lambda1_in_f" = lambda1_in_f, "lambda1_in" = lambda1_in, 
+                "lambda2_in_f" = lambda2_in_f, "lambda2_in" = lambda2_in))
 }
 invisible( list2env(lambdas_in_f(),.GlobalEnv) )
 ```
-
-
-
-```{r test, eval=FALSE}
-# - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
-NAME_f <- function(){
-############################################################################### 
-###############################################################################  
-  
-    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
-    }
-    
-############################################################################### 
-###############################################################################  
-    return(list("delta_earnings" = delta_earnings))
-}
-
-invisible( list2env(NAME_f(),.GlobalEnv) )
-```
-
 
 
 #### $R$ and $p$
@@ -676,6 +637,32 @@ saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so, 
 } 
 invisible( list2env(saturation_in_f(),.GlobalEnv) )
 ```
+
+```{r coverage-and-saturation}
+# - inputs: nothing
+# - outputs: function that computs the weighted sum of country costs
+chunk_coverage <- function(){
+############################################################################### 
+###############################################################################  
+
+    saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so, 
+                                q_zero_var = q_zero_so){
+        saturation_in <- coverage_so * q_full_so + ( 1 - coverage_so ) * q_zero_so
+        return(list("saturation_in" = saturation_in)) 
+    } 
+    
+############################################################################### 
+###############################################################################  
+    return(list("saturation_in_f" = saturation_in_f))    # Try to return only functions
+}
+invisible( list2env(chunk_coverage(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+
+```
+
+
+
 
 
 
