@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "03 October, 2019"
+date: "04 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -89,13 +89,11 @@ call_params_f <- function(){
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
     
     
-    
-    df_costs <- read_excel("~/Downloads/mock data on costs.xlsx",
+    df_costs <- read_excel("~/Desktop/mock data on costs.xlsx",
                            sheet = "costs")
 
-    
     # ADD COUNTS DATA
-    df_counts <- read_excel("~/Downloads/mock data on costs.xlsx",
+    df_counts <- read_excel("~/Desktop/mock data on costs.xlsx",
                             sheet = "counts")
 
     #############
@@ -161,7 +159,6 @@ The benefits will account for the direct effects of deworming and plus the indir
 
 
 # Methodology
-
 
 This analaysis contains elements from GiveWell's cost effectiveness analaysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
 
@@ -340,7 +337,8 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 
  
 Where:   
- - $r$: is the discount rate
+
+ - $r$: is the discount rate  
  - $w_t$: are the earnings in period $t$.   
  - $\lambda_{1}$: is the direct effects of deworming on earnings.  
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
@@ -356,30 +354,10 @@ benefits_f <- function(){
 ############################################################################### 
 ###############################################################################  
       
-    # Gamma is used to index gender.
-    pv_benef <- function(n_male_var = 1/2, n_female_var = 1/2, 
-                    interest_r_var = interest_in,
-                    wage_var = wage_t_mo,
-                    lambda1_male_var = lambda1_so[1],
-                    lambda1_female_var = lambda1_so[2], 
-                    saturation_var = saturation_in,             
-                    coverage_var = coverage_so,
-                    lambda2_male_var = lambda2_in[1],
-                    lambda2_female_var = lambda2_in[2],
+    pv_benef <- function(earnings_var = earnings_in, interest_r_var = interest_in,
                     periods_var = periods_so) {
-      ns <- c(n_male_var, n_female_var)
-      lambda1s <- c(lambda1_male_var, lambda1_female_var)
-      lambda2s <- c(lambda2_male_var, lambda2_female_var)
       index_t <- 0:periods_var
-
-      benef <- matrix(NA, 51,2)
-      for (i in 1:2){
-      benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * wage_var *
-                         ( lambda1s[i] + saturation_var * lambda2s[i] / coverage_var )
-      }
-    
-      res1 <- sum( ns * ( apply(benef, 2, sum) ) )
-    #  wser()
+      res1 <- ( 1 / (1 + interest_r_var) )^index_t * earnings_var
       return(res1)   
     }
     
@@ -398,36 +376,23 @@ The real interest rate $r$ is obtained from the interest rate on goverment bonds
 ```r
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
-interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
-  interest_in = gov_bonds_var - inflation_var 
-  return(list("interest_in" = interest_in))
-}
-invisible( list2env(interest_in_f(),.GlobalEnv) )
-```
-
-START HERE
-
-
-```r
-# - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
-costs_f <- function(){
+interest_f <- function(){
 ############################################################################### 
 ###############################################################################  
   
-    final_cost <- function(country_w_var = 1, country_cost_var = 1) {
-        sum(country_w_var * country_cost_var)
+    interest <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
+        interest_in = gov_bonds_var - inflation_var 
+        return(list("interest_in" = interest_in))
     }
-    
+
 ############################################################################### 
 ###############################################################################  
-    return(list("final_cost" = final_cost))
+    return(list("interest" = interest))
 }
 
-invisible( list2env(costs_f(),.GlobalEnv) )
+invisible( list2env(interest_f(),.GlobalEnv) )
+interest <- as.numeric( interest() )
 ```
-
-
 
 
 The resulting value is a $r$ = 9.85%
@@ -444,6 +409,32 @@ Where $E_t$ represents earnings in period $t$. That can be computed in two ways.
 E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right) 
 \end{equation}
 
+
+```r
+    # wage_var *
+    #                  ( lambda1s[i] + saturation_var * lambda2s[i] / coverage_var )
+# - inputs: gov_bonds_so, inflation_so
+# - outputs: interest_in
+earnings1_f <- function(){
+############################################################################### 
+###############################################################################  
+    
+    earnings1 <- function(wage_var = wage_in,
+                          lambda1_var = lambda1_so, 
+                          lalmbda2_var = lambda2_so, 
+                          saturation_var = saturation, coverage_var) {  
+        wage_var * ( lambda1_var + saturation_var * lambda2_var / coverage_var )
+        return(list("interest_in" = interest_in))
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("interest" = interest))
+}
+
+invisible( list2env(interest_f(),.GlobalEnv) )
+interest <- as.numeric( interest() )
+```
 
 ###### "$w_{t}$"
 
@@ -636,16 +627,16 @@ NAME_f <- function(){
 ############################################################################### 
 ###############################################################################  
   
-    delta_earnings <- function(country_w_var = 1, country_cost_var = 1) {
-        sum(country_w_var * country_cost_var)
+    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
+        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
     }
     
 ############################################################################### 
 ###############################################################################  
-    return(list("final_cost" = final_cost))
+    return(list("delta_earnings" = delta_earnings))
 }
 
-invisible( list2env(costs_f(),.GlobalEnv) )
+invisible( list2env(NAME_f(),.GlobalEnv) )
 ```
 
 
