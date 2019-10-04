@@ -421,19 +421,18 @@ earnings1_f <- function(){
     
     earnings1 <- function(wage_var = wage_in,
                           lambda1_var = lambda1_so, 
-                          lalmbda2_var = lambda2_so, 
+                          lambda2_var = lambda2_so, 
                           saturation_var = saturation, coverage_var) {  
-        wage_var * ( lambda1_var + saturation_var * lambda2_var / coverage_var )
-        return(list("interest_in" = interest_in))
+        res1 <- wage_var * ( lambda1_var + saturation_var * lambda2_var / coverage_var )
+        return(res1)
     }
     
 ############################################################################### 
 ###############################################################################  
-    return(list("interest" = interest))
+    return(list("earnings1" = earnings1))
 }
 
-invisible( list2env(interest_f(),.GlobalEnv) )
-interest <- as.numeric( interest() )
+invisible( list2env(earnings1_f(),.GlobalEnv) )
 ```
 
 ###### "$w_{t}$"
@@ -540,7 +539,8 @@ invisible( list2env(wages_f(),.GlobalEnv) )
 E_t = \Delta Y_t = I(10 \leq t < 15) \lambda_{1}^{k1} + I(15 \leq t < 20) \lambda_{1}^{k2} + I(20 \leq t < 25) \lambda_{1}^{k3}  
 \end{equation}
 
-Where   
+Where     
+
  - $I(10 \leq t < 15)$ represents ...  
  - $\lambda_{1}^{k1}$ represents ...  
  
@@ -577,7 +577,8 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 \lambda_{1,\gamma} = \alpha \lambda^{eff}_{1,\gamma} + (1 -  \alpha) \times 0
 \end{equation}
 
-Where:   
+Where:      
+
  - $\alpha$: represents the incidence of the condition.  
  - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
  - $\lambda_{2}^{eff}$: ?. **[discuss with Ted/Michael]**
@@ -594,7 +595,8 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from r
 ```r
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
-lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so, alpha_0_var = 0.92, alpha_r_var=0.3){
+lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so, 
+                         alpha_0_var = 0.92, alpha_r_var=0.3){
     lambda1_eff_temp <- lambda1_var / alpha_0_var
     lambda1_r_in <- lambda1_eff_temp * alpha_r_var 
     lambda1_in <- rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
@@ -606,6 +608,26 @@ invisible( list2env(lambdas_in_f(),.GlobalEnv) )
 ```
 
 
+
+
+```r
+# - inputs: nothing
+# - outputs: function that computs the weighted sum of country costs
+NAME_f <- function(){
+############################################################################### 
+###############################################################################  
+  
+    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
+        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("delta_earnings" = delta_earnings))
+}
+
+invisible( list2env(NAME_f(),.GlobalEnv) )
+```
 
 
 
