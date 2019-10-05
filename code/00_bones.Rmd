@@ -75,24 +75,24 @@ y = f(x)
 \end{equation}
 
 ```{r test, eval=FALSE}
-# - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
+# - inputs: 
+# - outputs: 
 chunk_test <- function(){
 ############################################################################### 
 ###############################################################################  
   
-    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
+    somefunction_f <- function(somethinig_var = somethinig_default) {
+        somethinig_var
     }
     
 ############################################################################### 
 ###############################################################################  
-    return(list("delta_earnings" = delta_earnings))    # Try to return only functions
+    return(list("somefunction_f" = delta_earnings))    # Try to return only functions
 }
-invisible( list2env(NAME_f(),.GlobalEnv) )
+invisible( list2env(chunk_test(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-
+somefunction_in <- somefunction_f()
 ```
 
 ## Sub components:

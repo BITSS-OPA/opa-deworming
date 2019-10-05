@@ -31,9 +31,9 @@ pdf_document:
 
 
 ```r
-################ 
+################
 #####  Notes:
-################ 
+################
 ### Source ---------->  Input ---------->  Model ---------->  Policy Estimates (output)
 ###  (_so)              (_in)              (_mo)                (_pe)
 ### values            functions          functions              values
@@ -49,17 +49,17 @@ pdf_document:
 # - outputs: list
 #### function:  
 #sample_function_f <- function(){
-########################################## 
+##########################################
 ##########################################  
 #
 #    ... hello boop
 #  hello from Fernando's computer
 #  another edit (Noor)
-########################################## 
+##########################################
 ##########################################  
-#    return( )                                  # A list with all (most?) the elements 
-#}                                              # generated inside the function 
-#invisible( list2env(sample_function_f(),.GlobalEnv) ) 
+#    return( )                                  # A list with all (most?) the elements
+#}                                              # generated inside the function
+#invisible( list2env(sample_function_f(),.GlobalEnv) )
 #
 ```
 
@@ -87,8 +87,7 @@ call_params_f <- function(){
     tax_so <- 0.16575              #ADD INFO!
     unit_cost_local_so <- 43.66    #Deworm the World
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
-    
-    
+
     df_costs <- read_excel("~/Desktop/mock data on costs.xlsx",
                            sheet = "costs")
 
@@ -112,7 +111,7 @@ call_params_f <- function(){
                            0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
     delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)    
     include_ext_so <- TRUE
-    
+
     #############
     ##### Guess work   
     #############
@@ -122,7 +121,7 @@ call_params_f <- function(){
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     n_students_so <- 45            #Average pupils per teacher	45
-    return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) ) 
+    return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 }
 invisible( list2env(call_params_f(),.GlobalEnv) )
 
@@ -133,7 +132,7 @@ invisible( list2env(call_params_f(),.GlobalEnv) )
 ### Source ---->  Input ----> Model ----> Policy Estimates (output)
 ###  (_so)        (_in)       (_mo)        (_pe)
 ### values      functions   functions      values
-###             & values    & values 
+###             & values    & values
 ### arguments in functions should used "_var" and functions should "_f"
 
 #invisible( list2env(call_params_f(),.GlobalEnv) )
@@ -147,7 +146,7 @@ invisible( list2env(call_params_f(),.GlobalEnv) )
 
 # Key policy estimates for policy makers  
 
-The key policy estimate consists of a cost effectiveness analysis that compares the present 
+The key policy estimate consists of a cost effectiveness analysis that compares the present
 value of benefits and costs. The benefits quantified here are the effects on wages an the
 costs are those of delivering the deworming treatment.  
 
@@ -155,7 +154,7 @@ costs are those of delivering the deworming treatment.
 
 
 
-The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population. 
+The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population.
 
 
 # Methodology
@@ -164,7 +163,7 @@ This analaysis contains elements from GiveWell's cost effectiveness analaysis (s
 
 ## Main Equation (the model)
 
-The key result for policy makers is defined as the cost effectivness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)). 
+The key result for policy makers is defined as the cost effectivness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
 
 \begin{equation}
 CEA_{deworming} = \frac{B (1 + \blue{F_{0}})}{C}
@@ -177,7 +176,7 @@ CEA_{deworming} = \frac{B (1 + \blue{F_{0}})}{C}
  - $\blue{F_{0}}$ is a factor to account for leverage/fudging [not reviewed in this excercise] ([`F2, 6, D259`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1611790402&range=D259))
 
 
-Also this quantity could be expressed in relative terms to the benchmark of cash transfers (cell [`Results!B9`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1034883018&range=B9)): 
+Also this quantity could be expressed in relative terms to the benchmark of cash transfers (cell [`Results!B9`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1034883018&range=B9)):
 
 \begin{equation}
 RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
@@ -186,22 +185,27 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 
 
 ```r
-# - inputs: total per capita benefits, total per capita costs, fudging factor 
+# - inputs: total per capita benefits, total per capita costs, fudging factor
 # - outputs: Cost-effectiveness ratio & ratio to cash CEA
 policy_est_f <- function(){
-############################################################################### 
+###############################################################################
 ###############################################################################  
-  
+
     CEA_pe <- function(benefits_var = 1, fudging_var = 1,
                        costs_var = 1) {
-     ( benefits_var * ( 1 + fudging_var ) ) / costs_var
+      ( benefits_var * ( 1 + fudging_var ) ) / costs_var
     }
     RCEA_pe <- function(CEA_var = 1, CEA_cash_var = 1) CEA_var / CEA_cash_var
-      
-############################################################################### 
+
+    NPV_pe <- function(benefits_var = 1, costs_var = 1){
+        benefits_var - costs_var
+    }
+
+###############################################################################
 ###############################################################################  
-    return(list("CEA_pe" = CEA_pe, 
-                "RCEA_pe" = RCEA_pe))
+    return(list("CEA_pe" = CEA_pe,
+                "RCEA_pe" = RCEA_pe,
+                "NPV_pe" = NPV_pe))
 }
 invisible( list2env(policy_est_f(),.GlobalEnv) )
 ```
@@ -220,32 +224,32 @@ C = \sum_{i \in Countries } \omega_{i} c_{i}
 \tag{2}
 \end{equation}
 
-GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance.These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such the cost of drugs donated by WHO. 
+GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance.These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such the cost of drugs donated by WHO.
 
 Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
 
-The final cost is a weighted average of the unit cost across countries. 
+The final cost is a weighted average of the unit cost across countries.
 
 - $\omega_{i}$: Weight for the weighted average ([`F1, 2, C:G8`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=C8:G8)).  
 - $c_{i}$: Total cost per child, per year in country $i$ (`F1, 2, C:G16`).  
 
 Build $c_i$ as a function of three stakeholders: DtW, other donors, goverment.  
 Each stakeholders spends on: line items.    
-Incorporate currency. 
+Incorporate currency.
 
 
 ```r
 # - inputs: nothing
 # - outputs: function that computs the weighted sum of country costs
 costs_f <- function(){
-############################################################################### 
+###############################################################################
 ###############################################################################  
-  
+
     final_cost <- function(country_w_var = 1, country_cost_var = 1) {
         sum(country_w_var * country_cost_var)
     }
-    
-############################################################################### 
+
+###############################################################################
 ###############################################################################  
     return(list("final_cost" = final_cost))
 }
@@ -253,7 +257,7 @@ costs_f <- function(){
 
 invisible( list2env(costs_f(),.GlobalEnv) )
 ```
-    
+
 
 
 \begin{equation}
@@ -266,11 +270,11 @@ C_{i,k} = \sum_{l \in items}C_{i,k,l}
 \end{equation}
 
 
-All costs are in USD. 
+All costs are in USD.
 
 GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
 
-   
+
 - $N_{i}$: Number of treated children in country $i$.  
 - $Ex_{i}$: Exchange rate from country $i$ to USD.  
 - $k$: Costs distribute across $k$ payers.   
@@ -282,36 +286,36 @@ GW original analysis weights each country to take into account the number of tre
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 costs_inp_f <- function(){
-############################################################################### 
+###############################################################################
 ###############################################################################  
-  
+
     costs_inp <- function(df_counts_var = df_counts, df_costs_var = df_costs){
-      
+
       # values for last year
-      df_costs_last <- df_costs_var %>% 
-        group_by(country) %>% 
-        summarise("last_year" = max(year)) %>% 
-        right_join(df_costs_var, by = "country") %>% 
+      df_costs_last <- df_costs_var %>%
+        group_by(country) %>%
+        summarise("last_year" = max(year)) %>%
+        right_join(df_costs_var, by = "country") %>%
         filter(year == last_year)
-      
+
       # Country weights
       country_w <- df_counts_var$treated / sum(df_counts_var$treated)
-      
+
       num_countries_temp <- length(unique(df_counts_var$country))
       cost_payer_temp <- numeric(num_countries_temp)
-      
-      costs_by_payer_temp <- df_costs_last %>% 
-                          group_by(country, item) %>% 
+
+      costs_by_payer_temp <- df_costs_last %>%
+                          group_by(country, item) %>%
                           summarise("costs" = sum(costs))
-      
-      country_cost <- costs_by_payer_temp %>% 
-                          group_by(country) %>% 
+
+      country_cost <- costs_by_payer_temp %>%
+                          group_by(country) %>%
                           summarise("costs" = sum(costs))  
-      
+
       return( list("country_w" = country_w, "country_cost" = country_cost) )
     }
-      
-############################################################################### 
+
+###############################################################################
 ###############################################################################  
     return(list("costs_inp" = costs_inp))
 }
@@ -334,9 +338,36 @@ $N_{i}, C_{i,k,l}, \delta_{g}$
 C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
-##### $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$ 
+
+```r
+# - inputs: 
+# - outputs: 
+chunk_cost2 <- function(){
+############################################################################### 
+###############################################################################  
+  
+    cost2_f <- function(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
+               interest_r_var = interest, cost_of_schooling_var = cost_per_student_in,
+               s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in) {
+        index_t <- 0:periods_var
+        delta_ed_s <- c(0, delta_ed_var, rep(0,41))
+        sum( ( 1 / (1 + interest_r_var) )^index_t *
+                delta_ed_s * cost_of_schooling_var) +
+        (s2_var * q2_var  - s1_var * q1_var)
+      }
+
+############################################################################### 
+###############################################################################  
+    return(list("cost2_f" = cost2_f))    # Try to return only functions
+}
+invisible( list2env(chunk_cost2(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:  
+```
 
 
+
+##### $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$
 
 $K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
 
@@ -346,31 +377,42 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 
 For $\Delta \overline{E}_{\gamma t}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
 
-This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
+This series does not take into account the externality effects. To incorporate it we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
 
 
 ```r
-include_ext_mo <- TRUE
-# - inputs: coverage_so, q_full_so, q_zero_so 
-# - outputs: saturation_in 
-ed_costs_in_f <- function(teach_sal_var = teach_sal_so, teach_ben_var = teach_ben_so, 
-                          n_students_var = n_students_so, delta_ed_ext_var = delta_ed_ext_so,
-                          delta_ed_var = delta_ed_so, include_ext_var = include_ext_mo){
-    
-    cost_per_student_in <- (teach_sal_var + teach_ben_var) / n_students_var
-    
-    # Nothing here yet with delta_ed_vals, but would like to incorporate model from Joan
-    delta_ed_ext_total_in <- delta_ed_ext_var[,1] + delta_ed_var[,1]
-    
-    if (include_ext_var == TRUE){
-      delta_ed_final_in <-  delta_ed_ext_total_in
-    }else{
-      delta_ed_final_in <- delta_ed_var[,1]
+# - inputs: 
+# - outputs: 
+chunk_edcosts <- function(){
+############################################################################### 
+###############################################################################    
+
+    cost_per_student_f <- function(teach_sal_var = teach_sal_so, 
+                                    teach_ben_var = teach_ben_so, 
+                                    n_students_var = n_students_so) {
+        (teach_sal_var + teach_ben_var) / n_students_var
     }
-    return(list("cost_per_student_in" = cost_per_student_in, "delta_ed_final_in" = 
-                  delta_ed_final_in,  "delta_ed_ext_total_in" = delta_ed_ext_total_in)) 
-} 
-invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
+
+    delta_ed_final_f <- function(include_ext_var = include_ext_so, delta_ed_var = delta_ed_so, 
+                           delta_ed_ext_var = delta_ed_ext_so){
+        if (include_ext_var == TRUE){
+            delta_ed_final_in <-  delta_ed_ext_var[,1] + delta_ed_var[,1]
+        }else{
+            delta_ed_final_in <- delta_ed_var[,1]
+        }
+        return(delta_ed_final_in)
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("cost_per_student_f" = cost_per_student_f, 
+                "delta_ed_final_f" = delta_ed_final_f))
+}
+invisible( list2env(chunk_edcosts(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+cost_per_student_in <- cost_per_student_f()
+delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 ```
 
 **Note:** need to understand better the date of each component (of the model, not only this section).
@@ -394,23 +436,24 @@ The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kr
 
 
 ```r
-# - inputs: 
-# - outputs: 
-costs_f <- function(unit_cost_local_var = unit_cost_local_so, ex_rate_var = ex_rate_so,
-                    years_of_treat_var = years_of_treat_so, q_full_var = q_full_so){
-    s2_in <- ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
-    q2_in <- q_full_var
-    return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
-} 
-invisible( list2env(costs_f(),.GlobalEnv) )
+# - inputs:
+# - outputs:
+chunk_unit_costs2 <- function(){
+############################################################################### 
+###############################################################################  
+
+    s2_f <- function(unit_cost_local_var = unit_cost_local_so, 
+                     ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so) {
+      ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
+    }
+  
+############################################################################### 
+###############################################################################  
+    return(list("s2_f" = s2_f) )
+}
+invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
+##### Execute values of the functions above when needed for the text:
 ```
-
-
-
-
-
-
-
 
 
 
@@ -425,10 +468,10 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \tag{4}
 \end{equation}
 
-**Note:** The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender. 
+**Note:** The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
 
- 
+
 Where:   
 
  - $r$: is the discount rate  
@@ -444,17 +487,17 @@ Where:
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 benefits_f <- function(){
-############################################################################### 
+###############################################################################
 ###############################################################################  
-      
+
     pv_benef <- function(earnings_var = earnings_in, interest_r_var = interest_in,
                     periods_var = periods_so) {
       index_t <- 0:periods_var
-      res1 <- ( 1 / (1 + interest_r_var) )^index_t * earnings_var
+      res1 <- sum( ( 1 / (1 + interest_r_var) )^index_t * earnings_var )
       return(res1)   
     }
-    
-############################################################################### 
+
+###############################################################################
 ###############################################################################  
     return(list("pv_benef" = pv_benef))
 }
@@ -469,22 +512,22 @@ The real interest rate $r$ is obtained from the interest rate on goverment bonds
 ```r
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
-interest_f <- function(){
-############################################################################### 
+chunk_interest <- function(){
+###############################################################################
 ###############################################################################  
-  
-    interest <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
-        interest_in = gov_bonds_var - inflation_var 
+
+    interest_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
+        interest_in = gov_bonds_var - inflation_var
         return(list("interest_in" = interest_in))
     }
 
-############################################################################### 
+###############################################################################
 ###############################################################################  
-    return(list("interest" = interest))
+    return(list("interest_f" = interest_f))
 }
 
-invisible( list2env(interest_f(),.GlobalEnv) )
-interest <- as.numeric( interest() )
+invisible( list2env(chunk_interest(),.GlobalEnv) )
+interest <- as.numeric( interest_f() )
 ```
 
 
@@ -493,13 +536,13 @@ The resulting value is a $r$ = 9.85%
 
 
 #### Earnings
-Where $E_t$ represents earnings in period $t$. That can be computed in two ways. 
+Where $E_t$ represents earnings in period $t$. That can be computed in two ways.
 
 
-##### numer one 
+##### numer one
 
 \begin{equation}
-E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right) 
+E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 \end{equation}
 
 
@@ -509,18 +552,18 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
 earnings1_f <- function(){
-############################################################################### 
+###############################################################################
 ###############################################################################  
-    
+
     earnings1 <- function(wage_var = wage_in,
-                          lambda1_var = lambda1_so, 
-                          lambda2_var = lambda2_so, 
+                          lambda1_var = lambda1_so,
+                          lambda2_var = lambda2_so,
                           saturation_var = saturation, coverage_var) {  
         res1 <- wage_var * ( lambda1_var + saturation_var * lambda2_var / coverage_var )
         return(res1)
     }
-    
-############################################################################### 
+
+###############################################################################
 ###############################################################################  
     return(list("earnings1" = earnings1))
 }
@@ -561,42 +604,43 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 
 
 ```r
-#inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so, 
-#  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so), 
-#  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so), 
+#inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
+#  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
+#  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
 #  growth rate (growth_rate_so), mincer coef (coef_exp_so[1], coef_exp_so[2])
-# 
+#
 #outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trayectory:
 #  value (wage_t_mo) and function (wage_t_mo_f).
 wages_f <- function(){
 ################################################################################
 ################################################################################  
 
-    experience_aux <- 0:periods_so - time_to_jm_so
+    
 
     #close to value from spreadsheet (Assumps&Panel A Calcs!B137 = 0.1481084),
     #but I suspect diff due to computational precision
-    
-    wage_0_mo_f <- function(wage_ag_var, wage_ww_var, profits_se_var, hours_se_cond_var, 
+
+    wage_0_mo_f <- function(wage_ag_var, wage_ww_var, profits_se_var, hours_se_cond_var,
                             hours_ag_var, hours_ww_var, hours_se_var, ex_rate_var) {
+        experience_aux <- 0:periods_so - time_to_jm_so
         wage_se <- profits_se_var / (4.5 * hours_se_cond_var)
         wage_ls <- c(wage_ag_var, wage_ww_var, wage_se)
         alpha_ls <- c(hours_ag_var, hours_ww_var, hours_se_var) / sum( c(hours_ag_var, hours_ww_var, hours_se_var) )
         res1 <- 1/ex_rate_var * sum( wage_ls * alpha_ls )
         return(res1)
     }
-    
+
     wage_t_mo_f <- function(wage_0_var,
                        growth_rate_var,
-                       experience_var,
                        coef_exp1_var,
                        coef_exp2_var) {
-        res1 <- 52 * wage_0_var *( ( 1 + growth_rate_var )^experience_var ) *
-          ( 1 + coef_exp1_var * experience_var + coef_exp2_var * experience_var^2 ) *
+        experience_aux <- 0:periods_so - time_to_jm_so
+        res1 <- 52 * wage_0_var *( ( 1 + growth_rate_var )^experience_aux ) *
+          ( 1 + coef_exp1_var * experience_aux + coef_exp2_var * experience_aux^2 ) *
           ifelse(0:periods_so >= time_to_jm_so, 1, 0)
         return(res1)
     }
-    
+
     wage_0_mo <- wage_0_mo_f(wage_ag_var = wage_ag_so,  
                          wage_ww_var = wage_ww_so,
                          profits_se_var = profits_se_so,
@@ -610,13 +654,12 @@ wages_f <- function(){
     #but I suspect diff due to computational precision
     wage_t_mo <- wage_t_mo_f(wage_0_var = wage_0_mo,
                        growth_rate_var = growth_rate_so,
-                       experience_var = experience_aux,
                        coef_exp1_var = coef_exp_so[1],
                        coef_exp2_var = coef_exp_so[2])
 
 ################################################################################
 ################################################################################
-    return(list("wage_0_mo_f" = wage_0_mo_f, "wage_0_mo" = wage_0_mo, 
+    return(list("wage_0_mo_f" = wage_0_mo_f, "wage_0_mo" = wage_0_mo,
                 "wage_t_mo_f" = wage_t_mo_f, "wage_t_mo" = wage_t_mo))
 }
 
@@ -649,48 +692,48 @@ Where:
  - $\alpha$: represents the incidence of the condition.  
  - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
  - $\lambda_{2}^{eff}$: ?. **[discuss with Ted/Michael]**
- 
+
 **WARNING: the next paragraph has a bunch of hard coded numbers that need to be reviewed and coded up**   
 
 In the original evaluation, $\alpha = 0.92$ [**NEED TO INSERT THE TRUE NUMBER HERE**], hence $\lambda_{1}^{eff} = 1.75/0.92 = 1.94$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
-Its components come from the W\@W paper. 
+Its components come from the W\@W paper.
 
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
 
 
 ```r
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in
+# - inputs: 
+# - outputs: 
 lambdas_in_f <- function(){
-############################################################################### 
+###############################################################################
 ###############################################################################    
-      
-        lambda_r_f <- function(lambda1_var = lambda1_so, alpha_0_var = 0.92,
-                             alpha_r_var=0.3){
-            lambda1_eff_temp <- lambda1_var[1] / alpha_0_var
-            return( lambda1_eff_temp * alpha_r_var )
-        }  
-        
-        lambda1_in_f <- function(lambda1_var = lambda1_so) {
-          rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
-        }
-        
-        lambda2_in_f <- function(lambda2_var = lambda2_so){
-            rep(lambda2_var, 2)
-        }
 
-############################################################################## 
+    lambda1_in_f <- function(lambda1_var = lambda1_so) {
+        rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
+    }
+    
+    lambda_r_f <- function(lambda1_var = lambda1_in_f(), alpha_0_var = 0.92,
+                         alpha_r_var=0.3){
+        lambda1_eff_temp <- lambda1_var / alpha_0_var
+        return( lambda1_eff_temp * alpha_r_var )
+    }  
+    
+    lambda2_in_f <- function(lambda2_var = lambda2_so){
+        rep(lambda2_var, 2)
+    }
+
+##############################################################################
 ###############################################################################  
     return(list("lambda_r_f" = lambda_r_f,     
-                "lambda1_in_f" = lambda1_in_f, 
+                "lambda1_in_f" = lambda1_in_f,
                 "lambda2_in_f" = lambda2_in_f ) )
 }
 invisible( list2env(lambdas_in_f(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-lambda1_r_in <- lambda_r_f()
 lambda1_in <- lambda1_in_f()
+lambda1_r_in <- lambda_r_f()
 lambda2_in <- lambda2_in_f()
 ```
 
@@ -710,19 +753,19 @@ For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row
 
 
 ```r
-# - inputs: coverage_so, q_full_so, q_zero_so 
-# - outputs: saturation_in 
+# - inputs: coverage_so, q_full_so, q_zero_so
+# - outputs: saturation_in
 chunk_coverage <- function(){
-############################################################################### 
+###############################################################################
 ###############################################################################  
 
-    saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so, 
+    saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so,
                                 q_zero_var = q_zero_so){
         saturation_in <- coverage_so * q_full_so + ( 1 - coverage_so ) * q_zero_so
-        return(list("saturation_in" = saturation_in)) 
-    } 
-    
-############################################################################### 
+        return(list("saturation_in" = saturation_in))
+    }
+
+###############################################################################
 ###############################################################################  
     return(list("saturation_in_f" = saturation_in_f))    # Try to return only functions
 }
@@ -735,18 +778,119 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 ### Get the same value from before (with and without externalities)
 
 
+```r
+#CEA_pe RCEA_pe NPV_pe
+#CEA_pe(benefits_var = , fudging_var = 1, costs_var = )
+```
+
 
 
 ---------------------
 
 
+```r
+# NPV
+# ├──── pv_benef
+# │      ├──── earnings
+# │      |      ├──── wage_t
+# │      |      |      └──── wage_0
+# |      |      ├──── lambda1
+# |      |      ├──── lambda2
+# │      |      └──── saturation
+# │      └──── interest_f
+# └──── costs1 = 11.63818
+# │      ├──── glyphicons-halflings-regular.eot
+# │      ├──── glyphicons-halflings-regular.svg
+# │      ├──── glyphicons-halflings-regular.ttf
+# │      └──── glyphicons-halflings-regular.woff
+# └──── costs2
+#        ├──── delta_ed_final_f
+#        ├──── interest_f
+#        ├──── s2_f
+#        └──── cost_per_student_f
+
+
+# Write only functions here. And make all arguments explicit 
+#--------------- Inputs for wage_t ---------------------------------------------
+# List non-function inputs:
+wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_so, wage_ww_var = wage_ww_so, 
+            profits_se_var = profits_se_so, hours_se_cond_var = hours_se_cond_so,  
+            hours_ag_var = hours_ag_so, hours_ww_var = hours_ww_so,
+            hours_se_var = hours_se_so, ex_rate_var = ex_rate_so)
+
+#--------------- Inputs for earnings -------------------------------------------
+# List non-function inputs:
+wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_so, 
+            coef_exp1_var = coef_exp_so[1], coef_exp2_var = coef_exp_so[2])
+lambda1_in <- lambda1_in_f(lambda1_var = lambda1_so)
+lambda2_in <- lambda2_in_f(lambda2_var = lambda2_so)
+saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so,
+                                 q_zero_var = q_zero_so) )
+
+#--------------- Inputs for pv_benef -------------------------------------------
+# List non-function inputs:
+earnings_in_no_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[1], 
+            lambda2_var = 0, saturation_var = saturation_in, 
+            coverage_var = coverage_so)
+earnings_in_yes_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[1], 
+            lambda2_var = lambda2_in[1], saturation_var = saturation_in, 
+            coverage_var = coverage_so)
+interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
+
+#--------------- Inputs for costs1 ---------------------------------------------
+# List non-function inputs:
+#costs1_in <- cost1_f()
+#--------------- Inputs for costs2 ---------------------------------------------
+# List non-function inputs:
+delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE, 
+                                      delta_ed_var = delta_ed_so, 
+                                      delta_ed_ext_var = delta_ed_ext_so)
+delta_ed_final_in_x <- delta_ed_final_f(include_ext_var = TRUE, 
+                                      delta_ed_var = delta_ed_so, 
+                                      delta_ed_ext_var = delta_ed_ext_so)
+
+interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
+cost_per_student_in <- cost_per_student_f(teach_sal_var = teach_sal_so, 
+                                          teach_ben_var = teach_ben_so,
+                                          n_students_var = n_students_so)
+s2_in <- s2_f(unit_cost_local_var = unit_cost_local_so, 
+                     ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so)
+#--------------- Inputs for NPV ------------------------------------------------
+# List non-function inputs:
+pv_benef_in <- pv_benef(earnings_var = earnings_in_no_ext * tax_so, 
+                        interest_r_var = interest_in, periods_var = periods_so)
+pv_benef_in_x <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
+                        interest_r_var = interest_in, periods_var = periods_so)
+
+costs2_in <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
+           interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
+           s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
+costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in_x,
+           interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
+           s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
+```
+
+
 
 # Main results
 
+
 ```r
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
+#no externality NPV
+res_npv_no_ext_pe <- NPV_pe(benefits_var = pv_benef_in, costs_var = costs2_in)
+
+#yes externality NPV
+res_npv_yes_ext_pe <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
 ```
+
+
+
+
+
+- **NPV without externalities ($\lambda_2 = 0$):** -0.6097    
+
+- **NPV with externalities ($\lambda_2 = 10.2$ ):** 34.3187
+
 
 
 # Montecarlo simulations  
@@ -787,7 +931,7 @@ Baird et al. 2016 compares the first two groups of schools to receive deworming 
  The average of baseline worm intensity in groups 1 and 2 was ~45% higher than in group 1 only (based on data we do not have permission to share). Taking the odds ratio implies an adjustment of ~65%.   
  (Last updated September 2018 | Link to Baird et al. 2016: https://doi.org/10.1093/qje/qjw022 | Link to Miguel and Kremer 2004: http://www.jstor.org/stable/3598853) Suggested value:65%.  More info here: https://docs.google.com/document/d/1pyGpVYcerlUSObdaIz7_6Tmv1D8O0L4IGQx1HtzTVbk/edit"
 
-[^7]:"This is a really complicated input. I'm going with a value of 75% for now since it seems like a lot of deworming programs are in their infancy and hence will be providing early years of treatments to targeted children, but I think that my best guess would vary between 60-100% depending on the charity if I were just thinking on the margin. (In particular, SCI closer to 60%, DtWI closer to 100%.) Right now there isn't a great way to change this input for each charity, so I'm taking something toward the lower end of the range for all charities. 
+[^7]:"This is a really complicated input. I'm going with a value of 75% for now since it seems like a lot of deworming programs are in their infancy and hence will be providing early years of treatments to targeted children, but I think that my best guess would vary between 60-100% depending on the charity if I were just thinking on the margin. (In particular, SCI closer to 60%, DtWI closer to 100%.) Right now there isn't a great way to change this input for each charity, so I'm taking something toward the lower end of the range for all charities.
  I think in the long-run we should do a better job answering the question, "How many years of deworming treatment have children already received on average in places where our charities would spend marginal funds?" This would involve figuring out whether LF programs had been operating, whether pre-school-aged kids receive deworming, etc.   
  A major reason one might want to use ~70-100%: for a few charities, the bulk of their marginal funding seems to be going toward starting deworming programs in regions that may not have received any deworming before. In those cases, if I look at just the next few years of deworming impact, I probably wouldn't discount for years of treatment vs. Baird at all because the average year of deworming treatment being provided will be a kid's ~second year, similar to the deworming treatment effect that we're observing in Baird. However, thinking marginally like this complicates our CEA: we'll need to change this discount over time as charities' programs mature (assuming they continued to operate). I'm not sure about the best philosophical approach to CEAs here, but am currently thinking I'll change this discount in the future as charities' programs mature.  
 If you just look at the long run and assume that on average charities will be providing kids' ~4th year of deworming treatment, then I think a discount like 65% is probably more appropriate.  
@@ -806,14 +950,14 @@ A few factors I considered that pushed in opposite directions:
 More details below.  
 More detailed background:
 - Our CEA uses a treatment-on-the-treated (TOT) framework on the cost side: i.e., we estimate the cost per child actually dewormed by our recommended charities. However, we've been using an intention-to-treat (ITT) framework on the benefits side: We implicitly assumed that Miguel and Kremer 2004 achieved 100% coverage (i.e., the treatment group received the full additional 2.41 years of deworming that were assigned to it), when the actual difference in coverage between treatment and control was much smaller, more like 50-60%. [It seems the average coverage rate for each round was roughly in the 50-60% range in the treatment group and ~1% in the control group. See Table III, Pg. 170, Miguel and Kremer 2004. Note that in the text it says, "Take-up rates were approximately 75% in the treatment group and 5% in the control group." (p. 8), implying a relative difference of ~70% coverage. It seems like that was meant to estimate what portion of the treatment and control groups ever received any treatment, which is less directly comparable to the coverage rates we estimate for our charities' programs.]
-- A simple way to inflate the ITT effect to a TOT effect is to divide the ITT effect by the difference in coverage rates between treatment and control. 
+- A simple way to inflate the ITT effect to a TOT effect is to divide the ITT effect by the difference in coverage rates between treatment and control.
 - However, there are potential issues with doing this: a major one is that other members of the treatment group may have substantially benefitted from spillovers of deworming treatment (i.e., less transmission of worms since nearby children had been treated). When we estimate the treatment effect under ITT, we're partially counting the direct benefits of treatment but also counting spillover benefits. So it exaggerates the benefits to just divide by the coverage rate; you're attributing a bigger effect for the full sample than we'd actually expect to exist if everyone were treated.  
 I think the key question for deciding whether to simply inflate the ITT effect is: How do we expect the magnitude of spillover benefits per person dewormed in Miguel and Kremer to compare to the magnitude of spillover benefits in charities' programs? If the spillover benefits per person dewormed in Miguel and Kremer were equal to or smaller than in our charities' programs, then I think we would not be overestimating the benefits of deworming by using this simple inflator. Otherwise, we are.  
  My current best guess is that the spillover benefits were probably somewhat larger in the Miguel and Kremer study than in our charities' programs. But, I have huge uncertainty about the relative magnitudes; I'd likely need to do more research and formal modeling to answer it well.  
  Several complications with thinking about the magnitude of spillover benefits are:
 a) We also expect that the control group may have benefitted from spillovers from the treatment group. This would lead the impact of deworming as measured in M&K relative to the true counterfactual of deworming treatment to be underestimated. Because this was a cluster RCT and worm transmission is geographically determined, it seems likely that the spillover benefits in control clusters were smaller than in untreated children in treatment clusters, but still may have been meaningful.
 b) Children who are treated may also benefit from spillovers to some extent: if a higher portion of one's community is treated, then worm transmission may be more effectively reduced, leading to lower reinfection rates. This kind of benefit would also occur in charities' programs.
-c) The relative impact of spillovers seems like it would depend substantially on: 1) coverage rates of deworming programs, 2) baseline intensity of worm infections. 
+c) The relative impact of spillovers seems like it would depend substantially on: 1) coverage rates of deworming programs, 2) baseline intensity of worm infections.
 - Re coverage, our charities aim to treat everyone in their target regions and according to our reviews of SCI and Deworm the World Initiative may achieve coverage rates of ~80-95%, a higher coverage rate than was achieved in Miguel and Kremer. This means that there is a smaller untreated portion of the population that could receive spillover benefits. On the other hand, perhaps the relationship between coverage and spillovers is nonlinear: maybe if nearly all people in the community are treated then reinfection rates drop by a nonlinear amount.
 - Re intensity, as Chris mentioned, perhaps spillover effects are larger when the worm burden is especially bad, in a nonlinear way. (We're currently adjusting linearly for worm intensity in our CEA.) OTOH, I could see an argument that spillovers are especially good at lower intensity levels, since maybe you could get closer to eliminating any infections.
 d) So far I've mainly been thinking about spillovers on school-aged children. However, our model doesn't count any spillover benefits to pre-school-aged children even though they may exist (though could also depend on whether pre-school-aged children are receiving treatment in areas where our charities work). This is another reason you might expect that spillovers in charities' programs are actually larger than the amount of spillovers that we're including in our estimate when inflating the M&K effect.  

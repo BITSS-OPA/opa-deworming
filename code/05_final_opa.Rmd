@@ -359,20 +359,34 @@ $N_{i}, C_{i,k,l}, \delta_{g}$
 C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
-```{r, eval=FALSE}
-  function(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
-           interest_r_var = interest, cost_of_schooling_var = cost_per_student_in,
-           s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in) {
-      index_t <- 0:periods_var
-      #delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var)
-      #delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
-      delta_ed_s <- c(0, delta_ed_var, rep(0,41))
-      sum( ( 1 / (1 + interest_r_var) )^index_t *
-              delta_ed_s * cost_of_schooling_var) +
-      (s2_var * q2_var  - s1_var * q1_var)
-  }
+```{r cost2}
+# - inputs: 
+# - outputs: 
+chunk_cost2 <- function(){
+############################################################################### 
+###############################################################################  
+  
+    cost2_f <- function(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
+               interest_r_var = interest, cost_of_schooling_var = cost_per_student_in,
+               s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in) {
+        index_t <- 0:periods_var
+        delta_ed_s <- c(0, delta_ed_var, rep(0,41))
+        sum( ( 1 / (1 + interest_r_var) )^index_t *
+                delta_ed_s * cost_of_schooling_var) +
+        (s2_var * q2_var  - s1_var * q1_var)
+      }
+
+############################################################################### 
+###############################################################################  
+    return(list("cost2_f" = cost2_f))    # Try to return only functions
+}
+invisible( list2env(chunk_cost2(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:  
+
 
 ```
+
 
 
 ##### $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$
@@ -388,29 +402,38 @@ For $\Delta \overline{E}_{\gamma t}(S1,S2)$ we use a series of estimated effects
 This series does not take into account the externality effects. To incorporate it we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
 
 ```{r ed-costs}
-#### NEED TO FORMAT
+# - inputs: 
+# - outputs: 
+chunk_edcosts <- function(){
+############################################################################### 
+###############################################################################    
 
-include_ext_mo <- FALSE
-# - inputs: coverage_so, q_full_so, q_zero_so
-# - outputs: saturation_in
-ed_costs_in_f <- function(teach_sal_var = teach_sal_so, teach_ben_var = teach_ben_so,
-                          n_students_var = n_students_so, delta_ed_ext_var = delta_ed_ext_so,
-                          delta_ed_var = delta_ed_so, include_ext_var = include_ext_mo){
-
-    cost_per_student_in <- (teach_sal_var + teach_ben_var) / n_students_var
-
-    # Nothing here yet with delta_ed_vals, but would like to incorporate model from Joan
-    delta_ed_ext_total_in <- delta_ed_ext_var[,1] + delta_ed_var[,1]
-
-    if (include_ext_var == TRUE){
-      delta_ed_final_in <-  delta_ed_ext_total_in
-    }else{
-      delta_ed_final_in <- delta_ed_var[,1]
+    cost_per_student_f <- function(teach_sal_var = teach_sal_so, 
+                                    teach_ben_var = teach_ben_so, 
+                                    n_students_var = n_students_so) {
+        (teach_sal_var + teach_ben_var) / n_students_var
     }
-    return(list("cost_per_student_in" = cost_per_student_in, "delta_ed_final_in" =
-                  delta_ed_final_in,  "delta_ed_ext_total_in" = delta_ed_ext_total_in))
+
+    delta_ed_final_f <- function(include_ext_var = include_ext_so, delta_ed_var = delta_ed_so, 
+                           delta_ed_ext_var = delta_ed_ext_so){
+        if (include_ext_var == TRUE){
+            delta_ed_final_in <-  delta_ed_ext_var[,1] + delta_ed_var[,1]
+        }else{
+            delta_ed_final_in <- delta_ed_var[,1]
+        }
+        return(delta_ed_final_in)
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("cost_per_student_f" = cost_per_student_f, 
+                "delta_ed_final_f" = delta_ed_final_f))
 }
-invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
+invisible( list2env(chunk_edcosts(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+cost_per_student_in <- cost_per_student_f()
+delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 ```
 
 **Note:** need to understand better the date of each component (of the model, not only this section).
@@ -432,29 +455,27 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 ###### 6.3 - $Q_{2}$
 The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of `r q_full_so`.
 
-```{r costs}
+```{r unit_costs2}
 # - inputs:
 # - outputs:
+chunk_unit_costs2 <- function(){
+############################################################################### 
+###############################################################################  
 
-#### NEED TO FORMAT
-
-costs_f <- function(unit_cost_local_var = unit_cost_local_so, ex_rate_var = ex_rate_so,
-                    years_of_treat_var = years_of_treat_so, q_full_var = q_full_so){
-    s2_in <- ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
-    q2_in <- q_full_var
-    return(list("s2_in" = s2_in, "q2_in" = q2_in))
+    s2_f <- function(unit_cost_local_var = unit_cost_local_so, 
+                     ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so) {
+      ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
+    }
+  
+############################################################################### 
+###############################################################################  
+    return(list("s2_f" = s2_f) )
 }
-invisible( list2env(costs_f(),.GlobalEnv) )
+invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
+##### Execute values of the functions above when needed for the text:
 
 
 ```
-
-
-
-
-
-
-
 
 
 
@@ -699,25 +720,25 @@ Its components come from the W\@W paper.
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
 
 ```{r lambdas}
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in
+# - inputs: 
+# - outputs: 
 lambdas_in_f <- function(){
 ###############################################################################
 ###############################################################################    
 
-        lambda_r_f <- function(lambda1_var = lambda1_so, alpha_0_var = 0.92,
-                             alpha_r_var=0.3){
-            lambda1_eff_temp <- lambda1_var[1] / alpha_0_var
-            return( lambda1_eff_temp * alpha_r_var )
-        }  
-
-        lambda1_in_f <- function(lambda1_var = lambda1_so) {
-          rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
-        }
-
-        lambda2_in_f <- function(lambda2_var = lambda2_so){
-            rep(lambda2_var, 2)
-        }
+    lambda1_in_f <- function(lambda1_var = lambda1_so) {
+        rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
+    }
+    
+    lambda_r_f <- function(lambda1_var = lambda1_in_f(), alpha_0_var = 0.92,
+                         alpha_r_var=0.3){
+        lambda1_eff_temp <- lambda1_var / alpha_0_var
+        return( lambda1_eff_temp * alpha_r_var )
+    }  
+    
+    lambda2_in_f <- function(lambda2_var = lambda2_so){
+        rep(lambda2_var, 2)
+    }
 
 ##############################################################################
 ###############################################################################  
@@ -728,8 +749,8 @@ lambdas_in_f <- function(){
 invisible( list2env(lambdas_in_f(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-lambda1_r_in <- lambda_r_f()
 lambda1_in <- lambda1_in_f()
+lambda1_r_in <- lambda_r_f()
 lambda2_in <- lambda2_in_f()
 ```
 
@@ -777,93 +798,115 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 #CEA_pe RCEA_pe NPV_pe
 #CEA_pe(benefits_var = , fudging_var = 1, costs_var = )
 
-
-# NPV <-- pv_benf <-- earnings1 <-- wage_t_mo_f <-- wage_0_mo_f
-#           ↑_____interest 	 
-NPV_pe(benefits_var =
-  pv_benef(
-    earnings_var = earnings1(
-      wage_var = wage_t_mo_f(
-        wage_0_var = wage_0_mo_f(
-          wage_ag_var = wage_ag_so,  
-          wage_ww_var = wage_ww_so,
-          profits_se_var = profits_se_so,
-          hours_se_cond_var = hours_se_cond_so,  
-          hours_ag_var = hours_ag_so,
-          hours_ww_var = hours_ww_so,
-          hours_se_var = hours_se_so,
-          ex_rate_var = ex_rate_so
-          ),
-        growth_rate_var = growth_rate_so,
-        coef_exp1_var = coef_exp_so[1],
-        coef_exp2_var = coef_exp_so[2]
-        ),
-      lambda1_var = lambda1_in[1],
-      lambda2_var = 0,
-      saturation_var = as.numeric( saturation_in_f() ),
-      coverage_var = coverage_so),
-    interest_r_var = as.numeric( interest_f() ),
-    periods_var = periods_so) * 0.16575, 
-  costs_var = 11.63818)
 ```
 
 
 
 ---------------------
 
-```{r, eval=FALSE}
+```{r all-steps}
+
 # NPV
-# ├── pv_benef
-# │   ├── earnings
-# │   |   ├── wage_t
-# │   |   | └── wage_0
-# |   |   ├── lambda1
-# |   |   ├── lambda2
-# │   |   └── saturation
-# │   └── interest
-# └── pv_costs = 11.63818
-#     ├── glyphicons-halflings-regular.eot
-#     ├── glyphicons-halflings-regular.svg
-#     ├── glyphicons-halflings-regular.ttf
-#     └── glyphicons-halflings-regular.woff
+# ├──── pv_benef
+# │      ├──── earnings
+# │      |      ├──── wage_t
+# │      |      |      └──── wage_0
+# |      |      ├──── lambda1
+# |      |      ├──── lambda2
+# │      |      └──── saturation
+# │      └──── interest_f
+# └──── costs1
+# │      ├──── ADD
+# │      ├──── ADD
+# │      ├──── ADD
+# │      └──── ADD
+# └──── costs2 = 11.63818
+#        ├──── delta_ed_final_f
+#        ├──── interest_f
+#        ├──── s2_f
+#        └──── cost_per_student_f
 
 
+# Write only functions here. And make all arguments explicit 
 #--------------- Inputs for wage_t ---------------------------------------------
 # List non-function inputs:
-wage_0_mo_f()
+wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_so, wage_ww_var = wage_ww_so, 
+            profits_se_var = profits_se_so, hours_se_cond_var = hours_se_cond_so,  
+            hours_ag_var = hours_ag_so, hours_ww_var = hours_ww_so,
+            hours_se_var = hours_se_so, ex_rate_var = ex_rate_so)
 
 #--------------- Inputs for earnings -------------------------------------------
 # List non-function inputs:
-wage_t_mo_f()
-lambda1_in_f()
-lambda2_in_f()
-saturation_in_f()
+wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_so, 
+            coef_exp1_var = coef_exp_so[1], coef_exp2_var = coef_exp_so[2])
+lambda1_in <- lambda1_in_f(lambda1_var = lambda1_so)
+lambda2_in <- lambda2_in_f(lambda2_var = lambda2_so)
+saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so,
+                                 q_zero_var = q_zero_so) )
 
 #--------------- Inputs for pv_benef -------------------------------------------
 # List non-function inputs:
-earnings1_f()
-interest_f()
+earnings_in_no_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[1], 
+            lambda2_var = 0, saturation_var = saturation_in, 
+            coverage_var = coverage_so)
+earnings_in_yes_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[1], 
+            lambda2_var = lambda2_in[1], saturation_var = saturation_in, 
+            coverage_var = coverage_so)
+interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
 
-#--------------- Inputs for pv_costs -------------------------------------------
+#--------------- Inputs for costs1 ---------------------------------------------
 # List non-function inputs:
+#costs1_in <- cost1_f()
 
+#--------------- Inputs for costs2 ---------------------------------------------
+# List non-function inputs:
+delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE, 
+                                      delta_ed_var = delta_ed_so, 
+                                      delta_ed_ext_var = delta_ed_ext_so)
+delta_ed_final_in_x <- delta_ed_final_f(include_ext_var = TRUE, 
+                                      delta_ed_var = delta_ed_so, 
+                                      delta_ed_ext_var = delta_ed_ext_so)
+
+interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
+cost_per_student_in <- cost_per_student_f(teach_sal_var = teach_sal_so, 
+                                          teach_ben_var = teach_ben_so,
+                                          n_students_var = n_students_so)
+s2_in <- s2_f(unit_cost_local_var = unit_cost_local_so, 
+                     ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so)
 #--------------- Inputs for NPV ------------------------------------------------
 # List non-function inputs:
-pv_benef()
-pv_costs()
+pv_benef_in <- pv_benef(earnings_var = earnings_in_no_ext * tax_so, 
+                        interest_r_var = interest_in, periods_var = periods_so)
+pv_benef_in_x <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
+                        interest_r_var = interest_in, periods_var = periods_so)
 
+costs2_in <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
+           interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
+           s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
+costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in_x,
+           interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
+           s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
 
 ```
-
-
 
 
 
 # Main results
-```{r main-results}
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
+
+```{r main-results} 
+#no externality NPV
+res_npv_no_ext_pe <- NPV_pe(benefits_var = pv_benef_in, costs_var = costs2_in)
+
+#yes externality NPV
+res_npv_yes_ext_pe <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
+
 ```
+
+
+- **NPV without externalities ($\lambda_2 = 0$):** `r round(res_npv_no_ext_pe,4)`    
+
+- **NPV with externalities ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(res_npv_yes_ext_pe,4)`
+
 
 
 # Montecarlo simulations  
