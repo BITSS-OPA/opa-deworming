@@ -108,7 +108,7 @@ call_params_f <- function(){
     unit_cost_local_so <- 43.66    #Deworm the World
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
 
-
+    # AQUI VOY
     df_costs <- read_excel("~/Desktop/mock data on costs.xlsx",
                            sheet = "costs")
 
