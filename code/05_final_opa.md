@@ -322,6 +322,99 @@ invisible( list2env(costs_inp_f(),.GlobalEnv) )
 
 $N_{i}, C_{i,k,l}, \delta_{g}$
 
+
+
+
+
+
+
+#### Alternative calculation for costs
+
+\begin{equation}
+C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}
+
+##### $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$ 
+
+
+
+$K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
+
+\begin{equation}
+K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
+\end{equation}
+
+For $\Delta \overline{E}_{\gamma t}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
+
+This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
+
+
+```r
+include_ext_mo <- TRUE
+# - inputs: coverage_so, q_full_so, q_zero_so 
+# - outputs: saturation_in 
+ed_costs_in_f <- function(teach_sal_var = teach_sal_so, teach_ben_var = teach_ben_so, 
+                          n_students_var = n_students_so, delta_ed_ext_var = delta_ed_ext_so,
+                          delta_ed_var = delta_ed_so, include_ext_var = include_ext_mo){
+    
+    cost_per_student_in <- (teach_sal_var + teach_ben_var) / n_students_var
+    
+    # Nothing here yet with delta_ed_vals, but would like to incorporate model from Joan
+    delta_ed_ext_total_in <- delta_ed_ext_var[,1] + delta_ed_var[,1]
+    
+    if (include_ext_var == TRUE){
+      delta_ed_final_in <-  delta_ed_ext_total_in
+    }else{
+      delta_ed_final_in <- delta_ed_var[,1]
+    }
+    return(list("cost_per_student_in" = cost_per_student_in, "delta_ed_final_in" = 
+                  delta_ed_final_in,  "delta_ed_ext_total_in" = delta_ed_ext_total_in)) 
+} 
+invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
+```
+
+**Note:** need to understand better the date of each component (of the model, not only this section).
+
+##### 6 - $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
+
+###### 6.1 - $S_{1}Q(S_{1}) = 0$
+There is no subsidy for deworming under the status quo.   
+
+
+###### 6.2 - $S_{2}$: complete subsidy to per capita costs of deworming.
+
+With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
+
+\begin{equation}
+S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
+\end{equation}
+
+###### 6.3 - $Q_{2}$
+The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of 0.75.
+
+
+```r
+# - inputs: 
+# - outputs: 
+costs_f <- function(unit_cost_local_var = unit_cost_local_so, ex_rate_var = ex_rate_so,
+                    years_of_treat_var = years_of_treat_so, q_full_var = q_full_so){
+    s2_in <- ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
+    q2_in <- q_full_var
+    return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
+} 
+invisible( list2env(costs_f(),.GlobalEnv) )
+```
+
+
+
+
+
+
+
+
+
+
+
 ### Benefits ("$B$")  
 
 Bair et al. (2016) compute benefits like this:
@@ -531,8 +624,6 @@ invisible( list2env(wages_f(),.GlobalEnv) )
 ```
 
 
-
-
 ##### Number two
 
 \begin{equation}
@@ -543,30 +634,6 @@ Where
 
  - $I(10 \leq t < 15)$ represents ...  
  - $\lambda_{1}^{k1}$ represents ...  
- 
-
-```r
-# - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
-NAME_f <- function(){
-############################################################################### 
-###############################################################################  
-  
-    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
-    }
-    
-############################################################################### 
-###############################################################################  
-    return(list("delta_earnings" = delta_earnings))
-}
-
-invisible( list2env(NAME_f(),.GlobalEnv) )
-```
-
-
-
-
 
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
@@ -604,49 +671,28 @@ lambdas_in_f <- function(){
             lambda1_eff_temp <- lambda1_var[1] / alpha_0_var
             return( lambda1_eff_temp * alpha_r_var )
         }  
-        lambda1_r_in <- lambda_r_f()
         
         lambda1_in_f <- function(lambda1_var = lambda1_so) {
           rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
         }
-        lambda1_in <- lambda1_in_f()
         
         lambda2_in_f <- function(lambda2_var = lambda2_so){
             rep(lambda2_var, 2)
         }
-        lambda2_in <- lambda2_in_f()
 
 ############################################################################## 
 ###############################################################################  
-    return(list("lambda_r_f" = lambda_r_f, "lambda1_r_in" = lambda1_r_in, 
-                "lambda1_in_f" = lambda1_in_f, "lambda1_in" = lambda1_in, 
-                "lambda2_in_f" = lambda2_in_f, "lambda2_in" = lambda2_in))
+    return(list("lambda_r_f" = lambda_r_f,     
+                "lambda1_in_f" = lambda1_in_f, 
+                "lambda2_in_f" = lambda2_in_f ) )
 }
 invisible( list2env(lambdas_in_f(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+lambda1_r_in <- lambda_r_f()
+lambda1_in <- lambda1_in_f()
+lambda2_in <- lambda2_in_f()
 ```
-
-
-
-
-```r
-# - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
-NAME_f <- function(){
-############################################################################### 
-###############################################################################  
-  
-    delta_earnings <- function(t_var = 1, lambda1k1_var = 1, lambda1k2_var = 1, lambda1k3_var = 1) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
-    }
-    
-############################################################################### 
-###############################################################################  
-    return(list("delta_earnings" = delta_earnings))
-}
-
-invisible( list2env(NAME_f(),.GlobalEnv) )
-```
-
 
 
 #### $R$ and $p$
@@ -666,12 +712,28 @@ For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row
 ```r
 # - inputs: coverage_so, q_full_so, q_zero_so 
 # - outputs: saturation_in 
-saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so){
-    saturation_in <- coverage_so * q_full_so + ( 1 - coverage_so ) * q_zero_so
-    return(list("saturation_in" = saturation_in)) 
-} 
-invisible( list2env(saturation_in_f(),.GlobalEnv) )
+chunk_coverage <- function(){
+############################################################################### 
+###############################################################################  
+
+    saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so, 
+                                q_zero_var = q_zero_so){
+        saturation_in <- coverage_so * q_full_so + ( 1 - coverage_so ) * q_zero_so
+        return(list("saturation_in" = saturation_in)) 
+    } 
+    
+############################################################################### 
+###############################################################################  
+    return(list("saturation_in_f" = saturation_in_f))    # Try to return only functions
+}
+invisible( list2env(chunk_coverage(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
 ```
+
+
+### Get the same value from before (with and without externalities)
+
 
 
 
