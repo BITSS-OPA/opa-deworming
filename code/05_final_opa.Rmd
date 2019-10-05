@@ -811,6 +811,52 @@ NPV_pe(benefits_var =
 
 ---------------------
 
+```{r, eval=FALSE}
+# NPV
+# ├── pv_benef
+# │   ├── earnings
+# │   |   ├── wage_t
+# │   |   | └── wage_0
+# |   |   ├── lambda1
+# |   |   ├── lambda2
+# │   |   └── saturation
+# │   └── interest
+# └── pv_costs = 11.63818
+#     ├── glyphicons-halflings-regular.eot
+#     ├── glyphicons-halflings-regular.svg
+#     ├── glyphicons-halflings-regular.ttf
+#     └── glyphicons-halflings-regular.woff
+
+
+#--------------- Inputs for wage_t ---------------------------------------------
+# List non-function inputs:
+wage_0_mo_f()
+
+#--------------- Inputs for earnings -------------------------------------------
+# List non-function inputs:
+wage_t_mo_f()
+lambda1_in_f()
+lambda2_in_f()
+saturation_in_f()
+
+#--------------- Inputs for pv_benef -------------------------------------------
+# List non-function inputs:
+earnings1_f()
+interest_f()
+
+#--------------- Inputs for pv_costs -------------------------------------------
+# List non-function inputs:
+
+#--------------- Inputs for NPV ------------------------------------------------
+# List non-function inputs:
+pv_benef()
+pv_costs()
+
+
+```
+
+
+
 
 
 # Main results
