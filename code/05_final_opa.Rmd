@@ -317,7 +317,8 @@ costs_inp_f <- function(){
 
 
 
-      df_costs_cw <- df_costs_cw %>% right_join(df_costs, by = "Country/State") %>% select(-Country.y) %>% rename(Country = Country.x)
+      df_costs <- df_costs_cw %>% right_join(df_costs, by = "Country/State") %>% select(-Country.y) %>% rename(Country = Country.x)
+      df_counts <- df_costs_cw %>% right_join(df_counts, by = "Country/State")
   
       
             # values for last year
@@ -328,7 +329,7 @@ costs_inp_f <- function(){
         filter(Year == last_year)    
       
       # Country weights
-      country_w <- df_counts_var$treated / sum(df_counts_var$treated)
+      country_w <- df_counts_var$`# dewormed` / sum(df_counts_var$`# dewormed`)
 
       num_countries_temp <- length(unique(df_counts_var$country))
       cost_payer_temp <- numeric(num_countries_temp)
