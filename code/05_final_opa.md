@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "03 October, 2019"
+date: "07 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -88,15 +88,11 @@ call_params_f <- function(){
     unit_cost_local_so <- 43.66    #Deworm the World
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
     
-    
-    
-    df_costs <- read_excel("~/Downloads/mock data on costs.xlsx",
-                           sheet = "costs")
+   # df_costs <- read_excel("~/Downloads/mock data on costs.xlsx", sheet = "costs")
 
     
     # ADD COUNTS DATA
-    df_counts <- read_excel("~/Downloads/mock data on costs.xlsx",
-                            sheet = "counts")
+   # df_counts <- read_excel("~/Downloads/mock data on costs.xlsx",  sheet = "counts")
 
     #############
     ##### Research
@@ -438,7 +434,7 @@ The resulting value is a $r$ = 9.85%
 Where $E_t$ represents earnings in period $t$. That can be computed in two ways. 
 
 
-##### numer one 
+##### number one 
 
 \begin{equation}
 E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right) 
@@ -636,16 +632,16 @@ NAME_f <- function(){
 ############################################################################### 
 ###############################################################################  
   
-    delta_earnings <- function(country_w_var = 1, country_cost_var = 1) {
-        sum(country_w_var * country_cost_var)
+    delta_earnings <- function(t_var = 1, lambda1k1_var = 87, lambda1k2_var = 83, lambda1k3_var = 81) {
+        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
     }
     
 ############################################################################### 
 ###############################################################################  
-    return(list("final_cost" = final_cost))
+    return(list("delta_earnings" = delta_earnings))
 }
 
-invisible( list2env(costs_f(),.GlobalEnv) )
+invisible( list2env(NAME_f(),.GlobalEnv) )
 ```
 
 
