@@ -88,15 +88,15 @@ call_params_f <- function(){
     unit_cost_local_so <- 43.66    #Deworm the World
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
 
-    # AQUI VOY REimbursment first
-    df_costs <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+    # Add costs data
+    df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Costs")
-    
-    df_costs_cw <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+    # Add crosswalk data on region and country
+    df_costs_cw_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "state_country")
 
-    # ADD COUNTS DATA
-    df_counts <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+    # Add data on number of treated children
+    df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Treatment #s")
 
     #############
@@ -128,7 +128,6 @@ call_params_f <- function(){
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 }
 invisible( list2env(call_params_f(),.GlobalEnv) )
-
 
 #############
 ##### Notes:
@@ -715,6 +714,14 @@ NAME_f <- function(){
         1*(10 <= t_var & t_var < 15) * 
         lambda1k1_var + 1*(15 <= t_var & t_var < 20) * 
         lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
+    }
+    
+############################################################################### 
+###############################################################################             
+    return(list("delta_earnings" = delta_earnings))
+}
+
+invisible( list2env(NAME_f(),.GlobalEnv) )
 ```
 
 
@@ -909,6 +916,13 @@ costs2_in <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
 costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in_x,
            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
+
+
+#HERE ARE NOOR's results LOOK HERE
+pv_benef_in <- pv_benef(earnings_var = 0:50 * tax_so, 
+                        interest_r_var = interest_in, periods_var = periods_so)
+pv_benef_in_x <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
+                        interest_r_var = interest_in, periods_var = periods_so)
 ```
 
 
@@ -925,7 +939,7 @@ res_npv_yes_ext_pe <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in
 ```
 
 
-- **NPV without externalities ($\lambda_2 = 0$):** -0.6097    
+- **NPV without externalities ($\lambda_2 = 0$):** 6.1897    
 
 - **NPV with externalities ($\lambda_2 = 10.2$ ):** 34.3187
 

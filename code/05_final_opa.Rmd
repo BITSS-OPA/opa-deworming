@@ -108,15 +108,15 @@ call_params_f <- function(){
     unit_cost_local_so <- 43.66    #Deworm the World
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
 
-    # AQUI VOY REimbursment first
-    df_costs <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+    # Add costs data
+    df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Costs")
-    
-    df_costs_cw <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+    # Add crosswalk data on region and country
+    df_costs_cw_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "state_country")
 
-    # ADD COUNTS DATA
-    df_counts <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+    # Add data on number of treated children
+    df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Treatment #s")
 
     #############
@@ -148,7 +148,6 @@ call_params_f <- function(){
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 }
 invisible( list2env(call_params_f(),.GlobalEnv) )
-
 
 #############
 ##### Notes:
