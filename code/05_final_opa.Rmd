@@ -650,7 +650,9 @@ NAME_f <- function(){
                                lambda1k1_var = lambda1[1], 
                                lambda1k2_var = lambda1[2], 
                                lambda1k3_var = lambda1[3]) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
+        1*(10 <= t_var & t_var < 15) * 
+        lambda1k1_var + 1*(15 <= t_var & t_var < 20) * 
+        lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
     }
     
 ############################################################################### 
