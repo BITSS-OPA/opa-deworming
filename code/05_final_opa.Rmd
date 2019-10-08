@@ -715,6 +715,28 @@ Where
  - $I(10 \leq t < 15)$ represents ...  
  - $\lambda_{1}^{k1}$ represents ...  
 
+
+
+
+
+```{r delta-earnings, eval=FALSE}
+# - inputs: 
+# - outputs: 
+NAME_f <- function(){
+############################################################################### 
+###############################################################################  
+  
+    delta_earnings <- function(t_var = 1, 
+                               lambda1k1_var = lambda1[1], 
+                               lambda1k2_var = lambda1[2], 
+                               lambda1k3_var = lambda1[3]) {
+        1*(10 <= t_var & t_var < 15) * 
+        lambda1k1_var + 1*(15 <= t_var & t_var < 20) * 
+        lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
+      
+``` 
+
+
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
 $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a simple mean:
