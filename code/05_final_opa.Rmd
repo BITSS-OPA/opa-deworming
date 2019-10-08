@@ -733,7 +733,15 @@ NAME_f <- function(){
         1*(10 <= t_var & t_var < 15) * 
         lambda1k1_var + 1*(15 <= t_var & t_var < 20) * 
         lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
-      
+    }
+    
+############################################################################### 
+###############################################################################             
+    return(list("delta_earnings" = delta_earnings))
+}
+
+invisible( list2env(NAME_f(),.GlobalEnv) )
+
 ``` 
 
 
@@ -927,6 +935,14 @@ costs2_in <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
 costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in_x,
            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
+
+
+#HERE ARE NOOR's results LOOK HERE
+pv_benef_in <- pv_benef(earnings_var = 0:50 * tax_so, 
+                        interest_r_var = interest_in, periods_var = periods_so)
+pv_benef_in_x <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
+                        interest_r_var = interest_in, periods_var = periods_so)
+
 
 ```
 

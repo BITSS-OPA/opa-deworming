@@ -295,9 +295,11 @@ costs_inp_f <- function(){
 
     costs_inp <- function(df_counts_var = df_counts, df_costs_var = df_costs){
 
-      df_costs <- df_costs_cw %>% right_join(df_costs, by = "Country/State") %>% select(-Country.y) %>% rename(Country = Country.x)
-      df_counts <- df_costs_cw %>% right_join(df_counts, by = "Country/State")
+      df_costs_var <- df_costs_cw %>% right_join(df_costs, by = "Country/State") %>% select(-Country.y) %>% rename(Country = Country.x) %>% mutate(Country = tolower(Country))
+      df_counts_var <- df_costs_cw %>% right_join(df_counts, by = "Country/State") %>% mutate(Country = tolower(Country))
   
+      
+      
       
             # values for last year
       df_costs_last <- df_costs_var %>%
@@ -318,14 +320,15 @@ costs_inp_f <- function(){
       num_countries_temp <- length(unique(df_counts_var$country))
       cost_payer_temp <- numeric(num_countries_temp)
 
-      #summing across regions
-      costs_by_payer_temp <- df_costs_last %>%
+      #summing across items (last equation)
+      costs_by_payer_temp <- df_costs_last %>% 
                           group_by(Country, `Program Area`) %>%
-                          summarise("costs" = sum(as.numeric(Cost), na.rm = TRUE))
+                          summarise("costs_by_region" = sum(as.numeric(Cost), na.rm = TRUE)) 
 
+      #sum across conutry/state and multiply by delta
       country_cost <- costs_by_payer_temp %>%
-                          group_by(country) %>%
-                          summarise("costs" = sum(costs))  
+                          group_by(Country) %>%
+                          summarise("costs_by_country" = sum(costs_by_region))  
 
       return( list("country_w" = country_w, "country_cost" = country_cost) )
     }
@@ -692,6 +695,28 @@ Where
 
  - $I(10 \leq t < 15)$ represents ...  
  - $\lambda_{1}^{k1}$ represents ...  
+
+
+
+
+
+
+```r
+# - inputs: 
+# - outputs: 
+NAME_f <- function(){
+############################################################################### 
+###############################################################################  
+  
+    delta_earnings <- function(t_var = 1, 
+                               lambda1k1_var = lambda1[1], 
+                               lambda1k2_var = lambda1[2], 
+                               lambda1k3_var = lambda1[3]) {
+        1*(10 <= t_var & t_var < 15) * 
+        lambda1k1_var + 1*(15 <= t_var & t_var < 20) * 
+        lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
+```
+
 
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
