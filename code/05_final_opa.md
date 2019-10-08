@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "04 October, 2019"
+date: "08 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -88,12 +88,16 @@ call_params_f <- function(){
     unit_cost_local_so <- 43.66    #Deworm the World
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
 
-    df_costs <- read_excel("~/Desktop/mock data on costs.xlsx",
-                           sheet = "costs")
+    # AQUI VOY REimbursment first
+    df_costs <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+                           sheet = "DtW Costs")
+    
+    df_costs_cw <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+                           sheet = "state_country")
 
     # ADD COUNTS DATA
-    df_counts <- read_excel("~/Desktop/mock data on costs.xlsx",
-                            sheet = "counts")
+    df_counts <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
+                           sheet = "DtW Treatment #s")
 
     #############
     ##### Research
@@ -291,22 +295,33 @@ costs_inp_f <- function(){
 
     costs_inp <- function(df_counts_var = df_counts, df_costs_var = df_costs){
 
-      # values for last year
+      df_costs <- df_costs_cw %>% right_join(df_costs, by = "Country/State") %>% select(-Country.y) %>% rename(Country = Country.x)
+      df_counts <- df_costs_cw %>% right_join(df_counts, by = "Country/State")
+  
+      
+            # values for last year
       df_costs_last <- df_costs_var %>%
-        group_by(country) %>%
-        summarise("last_year" = max(year)) %>%
-        right_join(df_costs_var, by = "country") %>%
-        filter(year == last_year)
-
+        group_by(Country) %>%
+        summarise("last_year" = max(Year)) %>%
+        right_join(df_costs_var, by = "Country") %>%
+        filter(Year == last_year)    
+      
+      # create country weights
+      df_counts <- df_counts %>% 
+        group_by(Country, Year) %>% 
+        mutate("total_by_country" = sum(`# dewormed`, na.rm = TRUE), 
+               "country_w" = total_by_country / sum(total_by_country) ) %>% ungroup()            
+      
       # Country weights
-      country_w <- df_counts_var$treated / sum(df_counts_var$treated)
+      country_w <- df_counts_var$`# dewormed` / sum(df_counts_var$`# dewormed`)
 
       num_countries_temp <- length(unique(df_counts_var$country))
       cost_payer_temp <- numeric(num_countries_temp)
 
+      #summing across regions
       costs_by_payer_temp <- df_costs_last %>%
-                          group_by(country, item) %>%
-                          summarise("costs" = sum(costs))
+                          group_by(Country, `Program Area`) %>%
+                          summarise("costs" = sum(as.numeric(Cost), na.rm = TRUE))
 
       country_cost <- costs_by_payer_temp %>%
                           group_by(country) %>%
@@ -798,12 +813,12 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 # |      |      ├──── lambda2
 # │      |      └──── saturation
 # │      └──── interest_f
-# └──── costs1 = 11.63818
-# │      ├──── glyphicons-halflings-regular.eot
-# │      ├──── glyphicons-halflings-regular.svg
-# │      ├──── glyphicons-halflings-regular.ttf
-# │      └──── glyphicons-halflings-regular.woff
-# └──── costs2
+# └──── costs1
+# │      ├──── ADD
+# │      ├──── ADD
+# │      ├──── ADD
+# │      └──── ADD
+# └──── costs2 = 11.63818
 #        ├──── delta_ed_final_f
 #        ├──── interest_f
 #        ├──── s2_f
@@ -840,6 +855,7 @@ interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_va
 #--------------- Inputs for costs1 ---------------------------------------------
 # List non-function inputs:
 #costs1_in <- cost1_f()
+
 #--------------- Inputs for costs2 ---------------------------------------------
 # List non-function inputs:
 delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE, 
@@ -884,9 +900,6 @@ res_npv_yes_ext_pe <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in
 ```
 
 
-
-
-
 - **NPV without externalities ($\lambda_2 = 0$):** -0.6097    
 
 - **NPV with externalities ($\lambda_2 = 10.2$ ):** 34.3187
@@ -914,57 +927,3 @@ res_npv_yes_ext_pe <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in
 
 
 [^3]: https://docs.google.com/document/d/1BkQLyLYQmy9O7FISge78PnWy9urMo0k31RwI5tOhJE4/edit
-
-[^4]: "Roughly 10 years after the initial experiment described in Miguel and Kremer 2004, The Kenya Life Panel Survey 2 (KLPS-2) measured earnings in the Miguel and Kremer 2004 study population. This was followed by a 15 year follow-up survey, the KLPS-3.   
- We estimate that the average treatment household experienced a 15.4% increase in earnings. This corresponds to an increase in ln(earnings) of 0.143. This estimate is based on a preliminary, confidential analysis by Ted Miguel and others that pools earnings data from the KLPS-2 and KLPS-3. The estimate is formed using the total earnings findings across the whole sample (including individuals with zero earnings) and trimming the top 1% of earners in both the treatment and control groups. We take the log effect of earnings at the sample mean. The p-value for this result is .019. The authors have graciously shared their preliminary estimates with us, but we cannot yet publish the full details.   
-  Note that this is an intention-to-treat effect. Not all individuals in the study population received treatment. We adjust this estimate for treatment compliance later using a parameter that captures the additional years of deworming received by the treatment group. A private, internal-only document related to this parameter is available to GiveWell staff at https://docs.google.com/document/d/1AK1H5kZi7-60zcxZs1vpZORVXk6M2y3DkkKymU50FkY/edit#heading=h.fm1rpvmo3lo. "
-
-[^5]: "If a person treated for worms earns additional income and supports a family, then multiple people may benefit—not just the person who was dewormed.   
- In a multi-person household with one wage earner, a 10% increase in wages could enable every member of the household to consume 10% more. However, many households will have multiple wage earners, and household size may change overtime.  
- A rough model for estimating a value for this parameter is available at https://docs.google.com/spreadsheets/d/112uuyYt6QLRZuJojwz6fHv4JQ-GHNeIpiT-SauY3kmM/edit#gid=0. The appropriate value for this parameter will depend on many uncertain factors (e.g. household composition and how household composition changes overtime). We currently use a default value of 2.0. Our rough model suggests values close to 2 under a range of reasonable assumptions."
-
-
-[^6]: "Updated cell note for the parameter:
-Baird et al. 2016 compares the first two groups of schools to receive deworming (as treatment group) to group 3 (control).  
- Our worm intensity adjustment is calculated by comparing baseline intensity of infection in group 1 schools with baseline intensity of infection in the areas where our charities work.  
- This adjustment accounts for group 2 having a significantly higher baseline intensity of infection than group 1, likely due to flooding from an unusually strong El Niño event.   
- The average of baseline worm intensity in groups 1 and 2 was ~45% higher than in group 1 only (based on data we do not have permission to share). Taking the odds ratio implies an adjustment of ~65%.   
- (Last updated September 2018 | Link to Baird et al. 2016: https://doi.org/10.1093/qje/qjw022 | Link to Miguel and Kremer 2004: http://www.jstor.org/stable/3598853) Suggested value:65%.  More info here: https://docs.google.com/document/d/1pyGpVYcerlUSObdaIz7_6Tmv1D8O0L4IGQx1HtzTVbk/edit"
-
-[^7]:"This is a really complicated input. I'm going with a value of 75% for now since it seems like a lot of deworming programs are in their infancy and hence will be providing early years of treatments to targeted children, but I think that my best guess would vary between 60-100% depending on the charity if I were just thinking on the margin. (In particular, SCI closer to 60%, DtWI closer to 100%.) Right now there isn't a great way to change this input for each charity, so I'm taking something toward the lower end of the range for all charities.
- I think in the long-run we should do a better job answering the question, "How many years of deworming treatment have children already received on average in places where our charities would spend marginal funds?" This would involve figuring out whether LF programs had been operating, whether pre-school-aged kids receive deworming, etc.   
- A major reason one might want to use ~70-100%: for a few charities, the bulk of their marginal funding seems to be going toward starting deworming programs in regions that may not have received any deworming before. In those cases, if I look at just the next few years of deworming impact, I probably wouldn't discount for years of treatment vs. Baird at all because the average year of deworming treatment being provided will be a kid's ~second year, similar to the deworming treatment effect that we're observing in Baird. However, thinking marginally like this complicates our CEA: we'll need to change this discount over time as charities' programs mature (assuming they continued to operate). I'm not sure about the best philosophical approach to CEAs here, but am currently thinking I'll change this discount in the future as charities' programs mature.  
-If you just look at the long run and assume that on average charities will be providing kids' ~4th year of deworming treatment, then I think a discount like 65% is probably more appropriate.  
-A few factors I considered that pushed in opposite directions:
-- I think that on average our charities are treating kids who are slightly younger than were treated in Miguel and Kremer, pushing things slightly in favor of our charities since I expect deworming effects to be larger at younger ages.
-- OTOH, it may be that in some cases our charities are operating in places where children received deworming as pre-schoolers, which would decrease marginal value of additional years of treatment. We don't have good information yet on how common this is.
-- The deworming coverage rates in Miguel and Kremer were low, so it might be appropriate to think of the treatments provided in that study as roughly a kid's ~2nd and 3rd year of treatment rather than ~3rd and 4th. That pushes in favor of discounting charities' impact more.
-- In the long run, I'm not sure how many years of treatment an average child will receive who is targeted by our charities' programs. It depends on the composition of ages in schools where our charities treat, how often kids drop out, how often kids miss deworming treatment over the course of their time in school, etc. I think just looking at the average age of child treated and knowing whether there are pre-school treatments would be useful here. In general I guessed that the average kid will receive ~8 years of treatment in the long-run.  
- As a sensitivity check to account for the above, I edited James's model for this input here: https://docs.google.com/spreadsheets/d/1lLF28COf90edQFipk4ZC7BPZd-kKoj9sNDDt1oH8_vc/edit?usp=sharing . That sheet is very rough and may be difficult to follow. It includes some information on Natalie's guesses about the average number of years of deworming that kids have received in each charity's program."
-
-[^8]: https://docs.google.com/document/d/13Tb3AnIT7zPgmKcGuwH365gQj6chWd0-blBlbzXjKpA/edit?usp=sharing
-
-
-[^9]: "Josh: I broadly agree with Chris's argument here, so moving to 1.69. Note that this makes a ~30% difference to the bottom line.  
- In summary: on the cost side of our CEA we use a TOT framework, but on the benefits side we use an ITT effect. That's conservative; Miguel and Kremer only achieved ~50-60% coverage in an average deworming round. If they'd achieved 100% coverage we should expect that the impact of the program would've been much larger. One way to convert ITT to TOT is to just divide by the coverage rate achieved in the experiment. This method is imperfect because there were likely spillover effects of deworming, which substantially complicates the analysis. I think a key question for how much to update is what you expect the relative magnitude of spillover benefits per person dewormed to be in Miguel and Kremer compared to our charities' programs. This is a complex question, but I'd guess that spillover benefits were slightly larger in Miguel and Kremer. As with Chris, rough estimates of offsetting effects lead me to want to make a ~70% adjustment here. (I'd decrease this adjustment by ~10-20% since I'd guess that spillover benefits were ~10-20% larger in M&K, but that's offset by a ~10-20% adjustment for lower coverage in the average round of the experiment.)   
-More details below.  
-More detailed background:
-- Our CEA uses a treatment-on-the-treated (TOT) framework on the cost side: i.e., we estimate the cost per child actually dewormed by our recommended charities. However, we've been using an intention-to-treat (ITT) framework on the benefits side: We implicitly assumed that Miguel and Kremer 2004 achieved 100% coverage (i.e., the treatment group received the full additional 2.41 years of deworming that were assigned to it), when the actual difference in coverage between treatment and control was much smaller, more like 50-60%. [It seems the average coverage rate for each round was roughly in the 50-60% range in the treatment group and ~1% in the control group. See Table III, Pg. 170, Miguel and Kremer 2004. Note that in the text it says, "Take-up rates were approximately 75% in the treatment group and 5% in the control group." (p. 8), implying a relative difference of ~70% coverage. It seems like that was meant to estimate what portion of the treatment and control groups ever received any treatment, which is less directly comparable to the coverage rates we estimate for our charities' programs.]
-- A simple way to inflate the ITT effect to a TOT effect is to divide the ITT effect by the difference in coverage rates between treatment and control.
-- However, there are potential issues with doing this: a major one is that other members of the treatment group may have substantially benefitted from spillovers of deworming treatment (i.e., less transmission of worms since nearby children had been treated). When we estimate the treatment effect under ITT, we're partially counting the direct benefits of treatment but also counting spillover benefits. So it exaggerates the benefits to just divide by the coverage rate; you're attributing a bigger effect for the full sample than we'd actually expect to exist if everyone were treated.  
-I think the key question for deciding whether to simply inflate the ITT effect is: How do we expect the magnitude of spillover benefits per person dewormed in Miguel and Kremer to compare to the magnitude of spillover benefits in charities' programs? If the spillover benefits per person dewormed in Miguel and Kremer were equal to or smaller than in our charities' programs, then I think we would not be overestimating the benefits of deworming by using this simple inflator. Otherwise, we are.  
- My current best guess is that the spillover benefits were probably somewhat larger in the Miguel and Kremer study than in our charities' programs. But, I have huge uncertainty about the relative magnitudes; I'd likely need to do more research and formal modeling to answer it well.  
- Several complications with thinking about the magnitude of spillover benefits are:
-a) We also expect that the control group may have benefitted from spillovers from the treatment group. This would lead the impact of deworming as measured in M&K relative to the true counterfactual of deworming treatment to be underestimated. Because this was a cluster RCT and worm transmission is geographically determined, it seems likely that the spillover benefits in control clusters were smaller than in untreated children in treatment clusters, but still may have been meaningful.
-b) Children who are treated may also benefit from spillovers to some extent: if a higher portion of one's community is treated, then worm transmission may be more effectively reduced, leading to lower reinfection rates. This kind of benefit would also occur in charities' programs.
-c) The relative impact of spillovers seems like it would depend substantially on: 1) coverage rates of deworming programs, 2) baseline intensity of worm infections.
-- Re coverage, our charities aim to treat everyone in their target regions and according to our reviews of SCI and Deworm the World Initiative may achieve coverage rates of ~80-95%, a higher coverage rate than was achieved in Miguel and Kremer. This means that there is a smaller untreated portion of the population that could receive spillover benefits. On the other hand, perhaps the relationship between coverage and spillovers is nonlinear: maybe if nearly all people in the community are treated then reinfection rates drop by a nonlinear amount.
-- Re intensity, as Chris mentioned, perhaps spillover effects are larger when the worm burden is especially bad, in a nonlinear way. (We're currently adjusting linearly for worm intensity in our CEA.) OTOH, I could see an argument that spillovers are especially good at lower intensity levels, since maybe you could get closer to eliminating any infections.
-d) So far I've mainly been thinking about spillovers on school-aged children. However, our model doesn't count any spillover benefits to pre-school-aged children even though they may exist (though could also depend on whether pre-school-aged children are receiving treatment in areas where our charities work). This is another reason you might expect that spillovers in charities' programs are actually larger than the amount of spillovers that we're including in our estimate when inflating the M&K effect.  
-  I made a super rough model that one could play around with here: https://docs.google.com/spreadsheets/d/1oNyirkpFB-HYbXVMorloEZYpNm8k4XTFKV9egjXIPA4/edit?usp=sharing. I think there are probably major issues with it, so not putting weight on it, but it didn't make it seem like obviously we should expect much smaller spillover benefits in charities' programs than M&K; my current best guess was maybe ~10% less."
-
-[^10]: https://docs.google.com/document/d/1NxN6SO8GNv1AhpHMy1-IGu-tStT7py29W8AFU0u_bLw/edit?ts=599b4840
-
-
-[^11]: "Our model accounts for changes in the natural log of consumption. The logarithmic model captures the idea that money has diminishing value as you get more and more of it.   
- For example, our model considers a 50% increase in income as a little better than 50% as good as an 100% increase in income." https://www.givewell.org/how-we-work/our-criteria/cost-effectiveness/comparing-moral-weights

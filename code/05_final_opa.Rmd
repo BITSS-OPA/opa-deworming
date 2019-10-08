@@ -306,7 +306,7 @@ GW original analysis weights each country to take into account the number of tre
 - $l$: Each payers costs come from $l$ items.   
 
 
-```{r eq_3, echo=print_code}
+```{r eq_3, echo=print_code, eval=FALSE}
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 costs_inp_f <- function(){
@@ -317,9 +317,11 @@ costs_inp_f <- function(){
 
 
 
-      df_costs <- df_costs_cw %>% right_join(df_costs, by = "Country/State") %>% select(-Country.y) %>% rename(Country = Country.x)
-      df_counts <- df_costs_cw %>% right_join(df_counts, by = "Country/State")
+      df_costs_var <- df_costs_cw %>% right_join(df_costs, by = "Country/State") %>% select(-Country.y) %>% rename(Country = Country.x) %>% mutate(Country = tolower(Country))
+      df_counts_var <- df_costs_cw %>% right_join(df_counts, by = "Country/State") %>% mutate(Country = tolower(Country))
   
+      
+      
       
             # values for last year
       df_costs_last <- df_costs_var %>%
@@ -328,19 +330,27 @@ costs_inp_f <- function(){
         right_join(df_costs_var, by = "Country") %>%
         filter(Year == last_year)    
       
+      # create country weights
+      df_counts <- df_counts %>% 
+        group_by(Country, Year) %>% 
+        mutate("total_by_country" = sum(`# dewormed`, na.rm = TRUE), 
+               "country_w" = total_by_country / sum(total_by_country) ) %>% ungroup()            
+      
       # Country weights
       country_w <- df_counts_var$`# dewormed` / sum(df_counts_var$`# dewormed`)
 
       num_countries_temp <- length(unique(df_counts_var$country))
       cost_payer_temp <- numeric(num_countries_temp)
 
-      costs_by_payer_temp <- df_costs_last %>%
-                          group_by(country, item) %>%
-                          summarise("costs" = sum(costs))
+      #summing across items (last equation)
+      costs_by_payer_temp <- df_costs_last %>% 
+                          group_by(Country, `Program Area`) %>%
+                          summarise("costs_by_region" = sum(as.numeric(Cost), na.rm = TRUE)) 
 
+      #sum across conutry/state and multiply by delta
       country_cost <- costs_by_payer_temp %>%
-                          group_by(country) %>%
-                          summarise("costs" = sum(costs))  
+                          group_by(Country) %>%
+                          summarise("costs_by_country" = sum(costs_by_region))  
 
       return( list("country_w" = country_w, "country_cost" = country_cost) )
     }
