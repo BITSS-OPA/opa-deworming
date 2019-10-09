@@ -906,9 +906,9 @@ unit_test(interest_in, 0.0985)
 
 #--------------- Inputs for costs1 ---------------------------------------------
 # List non-function inputs:
-costs1_in <-  costs1_in_f(df_counts_var = df_counts_so, df_costs_var = df_costs_so, 
+costs1_country <-  costs1_in_f(df_counts_var = df_counts_so, df_costs_var = df_costs_so, 
                         df_costs_cw_var = df_costs_cw_so, staff_time_var = staff_time_so)
-unit_test(unlist(costs1_in),  0.3995372)
+unit_test(unlist(costs1_country),  0.3995372)
 #--------------- Inputs for costs2 ---------------------------------------------
 # List non-function inputs:
 delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE, 
@@ -933,21 +933,15 @@ unit_test(s2_in, 1.237889)
 pv_benef_in <- pv_benef(earnings_var = earnings_in_no_ext * tax_so, 
                         interest_r_var = interest_in, periods_var = periods_so)
 unit_test(pv_benef_in, 11.02849)
-print(pv_benef_in)
-```
 
-```
-## [1] 11.02849
-```
-
-```r
 pv_benef_in_x <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
                         interest_r_var = interest_in, periods_var = periods_so)
 unit_test(pv_benef_in_x, 59.37686)
 
-cost1_in <- costs1_f(country_w_var = costs1_in$country_w, 
-                     country_cost_var = costs1_in$country_cost)
+cost1_in <- costs1_f(country_w_var = costs1_country$country_w, 
+                     country_cost_var = costs1_country$country_cost)
 unit_test(cost1_in,  0.08480686)
+
 costs2_in <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
@@ -972,15 +966,33 @@ pv_benef_in_x_noor <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so,
 ```r
 #no externality NPV
 res_npv_no_ext_pe <- NPV_pe(benefits_var = pv_benef_in, costs_var = costs2_in)
-
+unit_test(res_npv_no_ext_pe, -0.6096942)
 #yes externality NPV
 res_npv_yes_ext_pe <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
+unit_test(res_npv_yes_ext_pe, 34.31866)
+
+#no externality NPV using EAs costs
+res_npv_no_ext_ea <- NPV_pe(benefits_var = pv_benef_in, costs_var = cost1_in)
+#yes externality NPV using EAs costs
+res_npv_yes_ext_ea <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = cost1_in)
+
+
+#KLPS2019
+res_npv_no_ext_klps <- NPV_pe(benefits_var = 0, costs_var = cost1_in)
 ```
 
 
-- **NPV without externalities ($\lambda_2 = 0$):** -0.6097    
+- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** -0.6097    
 
-- **NPV with externalities ($\lambda_2 = 10.2$ ):** 34.3187
+- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = 10.2$ ):** 34.3187
+
+- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 10.9437    
+
+- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 59.2921
+
+- **NPV without externalities in KLPS 2019:** -0.0848    
+
+
 
 
 
