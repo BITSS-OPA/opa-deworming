@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "08 October, 2019"
+date: "09 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -247,21 +247,21 @@ Incorporate currency.
 ```r
 # - inputs: nothing
 # - outputs: function that computs the weighted sum of country costs
-costs_f <- function(){
+chunk_cost1 <- function(){
 ###############################################################################
 ###############################################################################  
 
-    final_cost <- function(country_w_var = 1, country_cost_var = 1) {
+    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
         sum(country_w_var * country_cost_var)
     }
 
 ###############################################################################
 ###############################################################################  
-    return(list("final_cost" = final_cost))
+    return(list("costs1_f" = costs1_f))
 }
 
 
-invisible( list2env(costs_f(),.GlobalEnv) )
+invisible( list2env(chunk_cost1(),.GlobalEnv) )
 ```
 
 
@@ -291,33 +291,34 @@ GW original analysis weights each country to take into account the number of tre
 ```r
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
-costs_inp_f <- function(){
+chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
 
-    costs_inp <- function(df_counts_var = df_counts_so, df_costs_var = df_costs_so, 
+    costs1_in_f <- function(df_counts_var = df_counts_so, df_costs_var = df_costs_so, 
                           df_costs_cw_var = df_costs_cw_so, staff_time_var = staff_time_so){
-
-      df_costs_var <- df_costs_cw_var %>% right_join(df_costs_var, by = "Country/State") %>% select(-Country.y) %>% rename(Country = Country.x) %>% mutate(Country = tolower(Country))
-      df_counts_var <- df_costs_cw_var %>% right_join(df_counts_var, by = "Country/State") %>% mutate(Country = tolower(Country))
+      # Add country to both data sets
+      df_costs_var <- df_costs_cw_var %>% 
+        right_join(df_costs_var, by = "Country/State") %>% 
+        select(-Country.y) %>% rename(Country = Country.x) %>% 
+        mutate(Country = tolower(Country))
+      df_counts_var <- df_costs_cw_var %>% 
+        right_join(df_counts_var, by = "Country/State") %>% 
+        mutate(Country = tolower(Country))
   
       
-      
-      
-        # values for last year
+      # values for last year with cost information
       df_costs_last <- df_costs_var %>%
         group_by(Country) %>%
         summarise("last_year" = max(Year)) %>%
         right_join(df_costs_var, by = "Country") %>%
         filter(Year == last_year)    
-      
-        df_counts_last <- df_counts_var %>%
+      df_counts_last <- df_counts_var %>%
         group_by(Country) %>%
         summarise("last_year" = max(Year)) %>%
         right_join(df_counts_var, by = "Country") %>%
         filter(Year == last_year)    
-      
-      
+
       # create country weight
       c_weights <- df_counts_last %>% 
         group_by(Country, Year) %>% 
@@ -326,16 +327,18 @@ costs_inp_f <- function(){
         mutate(country_w = total / sum(total))
 
       #summing across payers and regions (last equation)
-      costs_by_item_temp <- df_costs_last %>% filter(Payer != "Total") %>% 
-                          group_by(Country, `Program Area`) %>%
-                          summarise("costs_by_region" = sum(as.numeric(Cost), na.rm = TRUE)) 
+      costs_by_item_temp <- df_costs_last %>% 
+        filter(Payer != "Total") %>% 
+        group_by(Country, `Program Area`) %>%
+        summarise("costs_by_region" = sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE)) 
 
       #sum across conutry/state and multiply by delta
-      country_cost <- costs_by_item_temp %>%
-                          group_by(Country) %>%
-                          summarise("costs_by_country" = sum(costs_by_region) * (1 + staff_time_var))  
+      country_cost <- costs_by_item_temp %>% 
+        group_by(Country) %>% 
+        summarise("costs_by_country" = sum(costs_by_region) * (1 + staff_time_var))  
 
-       country_cost <- country_cost %>% 
+      # Compute the per capita cost for each country
+      country_cost <- country_cost %>% 
          left_join(c_weights, by = "Country") %>% 
          mutate("per_cap" = costs_by_country / total) 
       
@@ -344,20 +347,14 @@ costs_inp_f <- function(){
 
 ###############################################################################
 ###############################################################################  
-    return(list("costs_inp" = costs_inp))
+    return(list("costs1_in_f" = costs1_in_f))
 }
-invisible( list2env(costs_inp_f(),.GlobalEnv) )
+invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```
 
 #### Data requiered to compute costs.
 
 $N_{i}, C_{i,k,l}, \delta_{g}$
-
-
-
-
-
-
 
 #### Alternative calculation for costs
 
@@ -641,9 +638,6 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 wages_f <- function(){
 ################################################################################
 ################################################################################  
-
-    
-
     #close to value from spreadsheet (Assumps&Panel A Calcs!B137 = 0.1481084),
     #but I suspect diff due to computational precision
 
@@ -855,16 +849,26 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 # |      |      ├──── lambda2
 # │      |      └──── saturation
 # │      └──── interest_f
-# └──── costs1
-# │      ├──── ADD
-# │      ├──── ADD
-# │      ├──── ADD
-# │      └──── ADD
-# └──── costs2 = 11.63818
+# └──── cost1_f
+#        └──── costs1_in_f
+# └──── cost2_f = 11.63818
 #        ├──── delta_ed_final_f
 #        ├──── interest_f
 #        ├──── s2_f
 #        └──── cost_per_student_f
+
+
+#unit test
+unit_test <- function(to_test_var, original_var){
+    if (length(to_test_var) > 1) {
+        fails_test <- ( abs(sd(to_test_var) - original_var)>0.0001 )
+    } else {
+        fails_test <- ( abs(to_test_var - original_var)>0.0001 )
+    }
+    if (fails_test) {
+        print(paste("Output has change at", deparse(substitute(to_test_var)) ) )
+    }
+}
 
 
 # Write only functions here. And make all arguments explicit 
@@ -874,6 +878,7 @@ wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_so, wage_ww_var = wage_ww_so,
             profits_se_var = profits_se_so, hours_se_cond_var = hours_se_cond_so,  
             hours_ag_var = hours_ag_so, hours_ww_var = hours_ww_so,
             hours_se_var = hours_se_so, ex_rate_var = ex_rate_so)
+unit_test(wage_0_in, 0.1481084)
 
 #--------------- Inputs for earnings -------------------------------------------
 # List non-function inputs:
@@ -883,6 +888,7 @@ lambda1_in <- lambda1_in_f(lambda1_var = lambda1_so)
 lambda2_in <- lambda2_in_f(lambda2_var = lambda2_so)
 saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so,
                                  q_zero_var = q_zero_so) )
+unit_test(wage_t_in, 4.572308)
 
 #--------------- Inputs for pv_benef -------------------------------------------
 # List non-function inputs:
@@ -894,44 +900,67 @@ earnings_in_yes_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[
             coverage_var = coverage_so)
 interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
 
+unit_test(earnings_in_no_ext, 7.978677)
+unit_test(earnings_in_yes_ext, 42.95683)
+unit_test(interest_in, 0.0985)
+
 #--------------- Inputs for costs1 ---------------------------------------------
 # List non-function inputs:
-#costs1_in <- cost1_f()
-
+costs1_in <-  costs1_in_f(df_counts_var = df_counts_so, df_costs_var = df_costs_so, 
+                        df_costs_cw_var = df_costs_cw_so, staff_time_var = staff_time_so)
+unit_test(unlist(costs1_in),  0.3995372)
 #--------------- Inputs for costs2 ---------------------------------------------
 # List non-function inputs:
 delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE, 
                                       delta_ed_var = delta_ed_so, 
                                       delta_ed_ext_var = delta_ed_ext_so)
+unit_test(delta_ed_final_in, 0.01134819)
 delta_ed_final_in_x <- delta_ed_final_f(include_ext_var = TRUE, 
                                       delta_ed_var = delta_ed_so, 
                                       delta_ed_ext_var = delta_ed_ext_so)
-
+unit_test(delta_ed_final_in_x,  0.05911765)
 interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
+unit_test(interest_in, 0.0985)
 cost_per_student_in <- cost_per_student_f(teach_sal_var = teach_sal_so, 
                                           teach_ben_var = teach_ben_so,
                                           n_students_var = n_students_so)
+unit_test(cost_per_student_in,  116.8549) 
 s2_in <- s2_f(unit_cost_local_var = unit_cost_local_so, 
-                     ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so)
+              ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so)
+unit_test(s2_in, 1.237889)
 #--------------- Inputs for NPV ------------------------------------------------
 # List non-function inputs:
 pv_benef_in <- pv_benef(earnings_var = earnings_in_no_ext * tax_so, 
                         interest_r_var = interest_in, periods_var = periods_so)
+unit_test(pv_benef_in, 11.02849)
+print(pv_benef_in)
+```
+
+```
+## [1] 11.02849
+```
+
+```r
 pv_benef_in_x <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
                         interest_r_var = interest_in, periods_var = periods_so)
+unit_test(pv_benef_in_x, 59.37686)
 
+cost1_in <- costs1_f(country_w_var = costs1_in$country_w, 
+                     country_cost_var = costs1_in$country_cost)
+unit_test(cost1_in,  0.08480686)
 costs2_in <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
+unit_test(costs2_in, 11.63818)
 costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in_x,
            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
-
+unit_test(costs2_in_x,  25.05821)
 
 #HERE ARE NOOR's results LOOK HERE
-pv_benef_in <- pv_benef(earnings_var = 0:50 * tax_so, 
+pv_benef_in_noor <- pv_benef(earnings_var = 0:50 * tax_so, 
                         interest_r_var = interest_in, periods_var = periods_so)
-pv_benef_in_x <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
+pv_benef_in_x_noor <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
                         interest_r_var = interest_in, periods_var = periods_so)
 ```
 
@@ -949,7 +978,7 @@ res_npv_yes_ext_pe <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in
 ```
 
 
-- **NPV without externalities ($\lambda_2 = 0$):** 6.1897    
+- **NPV without externalities ($\lambda_2 = 0$):** -0.6097    
 
 - **NPV with externalities ($\lambda_2 = 10.2$ ):** 34.3187
 
