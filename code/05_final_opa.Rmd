@@ -73,9 +73,7 @@ colorize = function(x, color){
 ##########################################
 ##########################################  
 #
-#    ... hello boop
-#  hello from Fernando's computer
-#  another edit (Noor)
+#
 ##########################################
 ##########################################  
 #    return( )                                  # A list with all (most?) the elements
@@ -92,11 +90,11 @@ call_params_f <- function(){
     #############
     ##### Data  
     #############
-    gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
-    inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
-    wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
-    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
-    profits_se_so <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
+    gov_bonds_so <-  0.1185	        #Kenyan interest on sovereign debt - Central Bank of Kenya
+    inflation_so <-  0.02           #Kenyan inflation rate - World Bank Development Indicators
+    wage_ag_so <- 	 11.84	        #Mean hourly wage rate (KSH) - Suri 2011
+    wage_ww_so <- 	 14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
+    profits_se_so <- 1766           #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
     hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
     hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
     hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
@@ -109,15 +107,12 @@ call_params_f <- function(){
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
 
     # AQUI VOY REimbursment first
-    df_costs <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
-                           sheet = "DtW Costs")
+    #df_costs <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx", sheet = "DtW Costs")
     
-    df_costs_cw <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
-                           sheet = "state_country")
+    #df_costs_cw <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx", sheet = "state_country")
 
     # ADD COUNTS DATA
-    df_counts <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx",
-                           sheet = "DtW Treatment #s")
+    #df_counts <- read_excel("~/Downloads/DtW Cost per Child Data.xlsx", sheet = "DtW Treatment #s")
 
     #############
     ##### Research
