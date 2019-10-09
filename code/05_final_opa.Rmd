@@ -109,15 +109,12 @@ call_params_f <- function(){
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
 
     # Add costs data
-    df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
-                           sheet = "DtW Costs")
+    #df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx", sheet = "DtW Costs")
     # Add crosswalk data on region and country
-    df_costs_cw_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
-                           sheet = "state_country")
+    #df_costs_cw_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx", sheet = "state_country")
 
     # Add data on number of treated children
-    df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
-                           sheet = "DtW Treatment #s")
+    #df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx", sheet = "DtW Treatment #s")
 
     #############
     ##### Research

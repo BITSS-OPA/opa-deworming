@@ -20,13 +20,9 @@ editor_options:
 
 \def\blue{\color{blue}}
 
-
-
 ```{r, include=TRUE}
 options(tinytex.verbose = TRUE)
 ```
-
-
 
 ```{r setup, include=FALSE} 
 # Loading required libraries
@@ -42,7 +38,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 print_code <- TRUE
 ``` 
-
 
 ```{r parameters, echo=print_code}
 
@@ -79,8 +74,7 @@ call_params_f <- function(){
     #############
     ##### Research
     #############    
-    lambda1_so <- c(3.49, 0)       #Hrs per week increase for men and women CONFIRM
-    lambda2_so <- 10.2             #Externality effect (proportional) - Table 3, Panel B
+    lambda1_so <- c(87, 83, 81)    #Treatment effect on earnings (direct)
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
     delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct seconday schooling increase (from Joan)
@@ -92,6 +86,7 @@ call_params_f <- function(){
                            0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
     delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)    
     include_ext_so <- TRUE
+    
     
     #############
     ##### Guess work   
@@ -132,14 +127,13 @@ invisible( list2env(call_params_f(),.GlobalEnv) )
 
 # Methodology
  
-The target parameter to reproduce corresponds to the NPV of deworming, including spillovers, and can be found in the file `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Calcs-Table 5`, cell `C51`. 
+EDIT THIS. The target parameter to reproduce corresponds to the NPV of deworming, including spillovers, and can be found in the file `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Calcs-Table 5`, cell `C51`. 
 
 ## Main Equation (the model)
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} w_{t}
-\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) -
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta Y_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \label{eq:1}
@@ -154,9 +148,7 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 # Gamma is used to index gender.
 npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2, 
                 interest_r_var = interest_in,
-                wage_var = wage_t_mo,
-                lambda1_male_var = lambda1_so[1],
-                lambda1_female_var = lambda1_so[2], 
+                delta_earnings_var = delta_earnings_so, 
                 tax_var = tax_so,
                 saturation_var = saturation_in,             
                 coverage_var = coverage_so,
@@ -176,8 +168,7 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
 
   benef <- matrix(NA, 51,2)
   for (i in 1:2){
-  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * wage_var *
-                     ( lambda1s[i] + saturation_var * lambda2s[i] / coverage_var )
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * delta_earnings_var
   }
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
@@ -342,15 +333,7 @@ Its components come from research (W\@W).
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
 
 ```{r lambdas}
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in
-lambdas_in_f <- function(lambda1_var = lambda1_so, lambda2_var = lambda2_so){
-    lambda1_in <- rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
-    lambda2_in <- rep(lambda2_var, 2)
-    return(list("lambda1_in" = lambda1_in, "lambda2_in" = lambda2_in))  
-}
 
-invisible( list2env(lambdas_in_f(),.GlobalEnv) )
 ```
 
 
@@ -527,9 +510,7 @@ invisible( list2env(call_params_f(), .GlobalEnv) )
 
 npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2, 
                 interest_r_var = interest_in,
-                wage_var = wage_t_mo,
-                lambda1_male_var = lambda1_so[1],
-                lambda1_female_var = lambda1_so[2], 
+                delta_earnings_var = delta_earnings,
                 tax_var = tax_so,
                 saturation_var = saturation_in,             
                 coverage_var = coverage_so,
@@ -549,8 +530,7 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
 
   benef <- matrix(NA, 51,2)
   for (i in 1:2){
-  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * wage_var *
-                     ( lambda1s[i] + saturation_var * lambda2s[i] / coverage_var )
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * delta_earnings_var
   }
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
