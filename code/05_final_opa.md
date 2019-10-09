@@ -707,14 +707,14 @@ Where
 ```r
 # - inputs: 
 # - outputs: 
-NAME_f <- function(){
+chunk_new_earnings <- function(){
 ############################################################################### 
 ###############################################################################  
   
     delta_earnings <- function(t_var = 1, 
-                               lambda1k1_var = lambda1[1], 
-                               lambda1k2_var = lambda1[2], 
-                               lambda1k3_var = lambda1[3]) {
+                               lambda1k1_var = lambda1_new_so[1], 
+                               lambda1k2_var = lambda1_new_so[2], 
+                               lambda1k3_var = lambda1_new_so[3]) {
         1*(10 <= t_var & t_var < 15) * 
         lambda1k1_var + 1*(15 <= t_var & t_var < 20) * 
         lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
@@ -725,7 +725,7 @@ NAME_f <- function(){
     return(list("delta_earnings" = delta_earnings))
 }
 
-invisible( list2env(NAME_f(),.GlobalEnv) )
+invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 ```
 
 
@@ -952,9 +952,8 @@ costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_i
 unit_test(costs2_in_x,  25.05821)
 
 #HERE ARE NOOR's results LOOK HERE
-pv_benef_in_noor <- pv_benef(earnings_var = 0:50 * tax_so, 
-                        interest_r_var = interest_in, periods_var = periods_so)
-pv_benef_in_x_noor <- pv_benef(earnings_var = earnings_in_yes_ext * tax_so, 
+earnings_in_no_ext_new <- delta_earnings(t_var = 0:50, lambda1k1_var = lambda1_new_so[1], lambda1k2_var = lambda1_new_so[2], lambda1k3_var = lambda1_new_so[3])
+pv_benef_in_new <- pv_benef(earnings_var = earnings_in_no_ext_new * tax_so, 
                         interest_r_var = interest_in, periods_var = periods_so)
 ```
 
@@ -978,7 +977,7 @@ res_npv_yes_ext_ea <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = cost1_in)
 
 
 #KLPS2019
-res_npv_no_ext_klps <- NPV_pe(benefits_var = 0, costs_var = cost1_in)
+res_npv_no_ext_klps <- NPV_pe(benefits_var = pv_benef_in_new, costs_var = costs2_in)
 ```
 
 
@@ -990,7 +989,7 @@ res_npv_no_ext_klps <- NPV_pe(benefits_var = 0, costs_var = cost1_in)
 
 - **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 59.2921
 
-- **NPV without externalities in KLPS 2019:** -0.0848    
+- **NPV without externalities in KLPS 2019:** 47.6018    
 
 
 
