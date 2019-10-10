@@ -1,6 +1,6 @@
 ---
 title: "Net Present Value (NPV) for Deworming"
-date: "09 October, 2019"
+date: "10 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -70,9 +70,9 @@ call_params_f <- function(){
     inflation_so <-   0.02         #Kenyan inflation rate - World Bank Development Indicators
     coverage_so  <-   0.681333333  #(R) Fraction of treated primary school students within 6 km - from W@W - see note
     tax_so <-         0.16575      #ADD INFO!
-    #ex_rate_so <- 85               #Exchange Rate - Central Bank of Kenya
-    #unit_cost_local_so <- 43.66    #Deworm the World
-    #years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    ex_rate_so <- 85               #Exchange Rate - Central Bank of Kenya
+    unit_cost_local_so <- 43.66    #Deworm the World
+    years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
 
     # Add costs data
     #df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx", sheet = "DtW Costs")
@@ -89,6 +89,14 @@ call_params_f <- function(){
     lambda2_so <- c()              # Spillover treatment effect on earnings. FILL THIS IN
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
+    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct seconday schooling increase (from Joan)
+                        0.0239963665555466, 0.027301406306074, 0.0234125454594173,
+                       0.0279278879439199, 0.00647044449446303, 0.00835739437790601)                                     
+    delta_ed_so <- cbind(delta_ed_so, 1999:2007)
+    delta_ed_ext_so <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545585,  #Additional externality secondary schooling increase (from Joan)
+                           0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
+                           0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
+    delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)  
     #include_ext_so <- TRUE
 
     #############
@@ -96,6 +104,10 @@ call_params_f <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from intial period until individual join the labor force
+    teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
+    teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
+    n_students_so <- 45            #Average pupils per teacher	45
+    
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 }
 invisible( list2env(call_params_f(),.GlobalEnv) )
@@ -108,110 +120,4 @@ NPV = \underbrace{\tau \underbrace{\sum_{t=0}^{50}\Big(\frac{1}{1+r}\Big)^t\Delt
 \label{eq:1}
 \tag{1}
 \end{equation}
-  
 
-```r
-# add suffix _var to args 
-# - inputs: tax_rev_init_mo, top_tax_base_in  
-# - outputs: total_rev_pe 
-# Gamma is used to index gender.
-npv_mo_f <- function(tax_var = tax_so,
-                     interest_r_var = interest_in,
-                     delta_earnings_var = delta_earnings_in,
-                     blah = blah) {
-  index_t <- 0:periods_var # periods_var not yet defined as periods_so
-}
-```
-
-## Subcomponents
-
-### The real interest rate ($r$)
-
-\begin{equation}
-NPV = \tau\sum_{t=0}^{50}\Big(\frac{1}{1+\blue{r}}\Big)^t\Delta Y_{t} - K \sum_{t=0}^{50}\Big(\frac{1}{1+\blue{r}}\Big)^t \Delta \bar{E}_{\gamma t}(S1, S2) - (S_2Q(S_2) - S_1Q(S_1))
-\end{equation}
-
-The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.118) minus the inflation rate (0.02).
-
-
-```r
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in
-interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {
-############################################################################### 
-  interest_in = gov_bonds_var - inflation_var 
-############################################################################### 
-  return(list("interest_in" = interest_in))
-}
-invisible( list2env(interest_in_f(),.GlobalEnv) )
-```
-
-### Earnings gains ($\Delta Y_t$)
-
-\begin{equation}
-NPV = \tau\sum_{t=0}^{50}\Big(\frac{1}{1+r}\Big)^t\blue{\Delta Y_{t}} - K \sum_{t=0}^{50}\Big(\frac{1}{1+r}\Big)^t \Delta \bar{E}_{\gamma t}(S1, S2) - (S_2Q(S_2) - S_1Q(S_1))
-\end{equation}
-
-We start by ignoring spillovers ($\lambda_2$), and look only at direct effects.
-
-The change in earnings ($\Delta Y_t$) is given by a step function so that earnings change discontinuously every 5 years. This is because we estimate treatment effects on total earnings by round. KLPS-2 captures effects after 10 years, KLPS-3 effects after 15 years, and KLPS-4 effects after 20 years. This provides evidence on the time path of earnings up through 20 years. We will need to make assumptions about earnings gains from deworming after 20 years.
-
-#### Assumption 1 
-If we assume that the effect on earnings identified 20 years out persist through one's working life, then the change in earnings is given by:
-
-\begin{equation}
-\Delta Y_t = \mathbf{1}(10 < t \leq 15)\lambda_1^{KLPS2} + \mathbf{1}(15 < t \leq 20)\lambda_1^{KLPS3} + \mathbf{1}(t > 20)\lambda_1^{KLPS4}
-\end{equation}
-
-
-```r
-# - inputs: periods_so, lambda1_so
-# - outputs: 
-delta_earnings_p <- function(t_var = 1:periods_so, lambda1k1_var = lambda1_so[1], 
-                                                   lambda1k2_var = lambda1_so[2], 
-                                                   lambda1k3_var = lambda1_so[3]) {
-############################################################################### 
-  1*(10 <= t_var & t_var < 15) * lambda1k1_var + 
-  1*(15 <= t_var & t_var < 20) * lambda1k2_var + 
-  1*(20 <= t_var) * lambda1k3_var
-############################################################################### 
-  return(list("delta_earnings_p" = delta_earnings_p))
-}
-invisible(list2env(delta_earnings_p(),.GlobalEnv) )
-```
-
-#### Assumption 2
-Instead, if we assume that the effect of earnings persist for 5 years after KLPS-4 (matching the time period between previous rounds), then disappear, then the change in earnings is given by:
-
-\begin{equation}
-\Delta Y_t = \mathbf{1}(10 < t \leq 15)\lambda_1^{KLPS2} + \mathbf{1}(15 < t \leq 20)\lambda_1^{KLPS3} \nonumber + \mathbf{1}(20 < t \leq 25 )\lambda_1^{KLPS4} + \underbrace{\mathbf{1}(t > 25 ) \cdot 0}_{\substack{\text{Assume all benefits evaporate} \\ \text{before ``next'' KLPS round}}}
-\end{equation}
-
-
-```r
-# - inputs: periods_so, lambda1_so
-# - outputs: 
-delta_earnings <- function(t_var = 1:periods_so, lambda1k1_var = lambda1_so[1], 
-                                                 lambda1k2_var = lambda1_so[2], 
-                                                 lambda1k3_var = lambda1_so[3]) {
-############################################################################### 
-  1*(10 <= t_var & t_var < 15) * lambda1k1_var + 
-  1*(15 <= t_var & t_var < 20) * lambda1k2_var + 
-  1*(20 <= t_var & t_var < 25) * lambda1k3_var
-############################################################################### 
-###############################################################################             
-  return(list("delta_earnings" = delta_earnings))
-}
-invisible( list2env(delta_earnings(),.GlobalEnv) )
-```
-
-Note that both expressions assume no earnings gains for the first 10 years.
-
-| case | r | persistence | NPV | tax on NPV | IRR
-|------|---|-------------|-----|------------|----|
-| 1    |   |             | 0   |            |    |
-| 2    |   |             |     | 0          |    |
-| 3    |   |             |     |            |10% |
-| 4    |10%| 40 years    | \red{solve}   |            |    |
-| 5    |10%| 25 years    |     |            |    |
-| 6    |5% | 40 years    |     |            |    |

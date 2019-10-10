@@ -186,9 +186,9 @@ The real interest rate $r$ is obtained from the interest rate on goverment bonds
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
 interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {
-############################################################################### 
+  ############################################################################### 
   interest_in = gov_bonds_var - inflation_var 
-############################################################################### 
+  ############################################################################### 
   return(list("interest_in" = interest_in))
 }
 invisible( list2env(interest_in_f(),.GlobalEnv) )
