@@ -151,7 +151,7 @@ NOT SURE IF THIS FUNCTION IS CODED CORRECTLY
 npv_mo_f <- function(tax_var = tax_so,
                      periods_var = periods_so,
                      interest_r_var = interest_in,
-                     delta_earnings_var = delta_earnings_in,
+                     delta_earnings_var = delta_earnings_p_in,
                      delta_ed_male_var = delta_ed_so[,1],
                      delta_ed_female_var = delta_ed_so[,1],
                      cost_of_schooling_var = cost_per_student_in,
@@ -332,15 +332,30 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 ## NPV by cases
 
-## Tax on NPV by cases
+```{r npv by cases}
+
+#NOT RUNNING. won't add a scalar to another scalar: 1 + interest_in
+
+# base case: r=10%, effects persist
+npv_base_pe <- npv_mo_f()
+
+# robustness check: r=5%, effects persist
+npv_r_pe <- npv_mo_f(interest_r_var=0.05)
+
+# robustness check: r=10%, effects die
+npv_die_pe <- npv_mo_f(delta_earnings_var=delta_earnings_var = delta_earnings_in)
+  
+```
 
 ## Tax on NPV by cases
 
-| case | r | persistence | NPV | tax on NPV | IRR
-|------|---|-------------|-----|------------|----|
-| 1    |   |             | 0   |            |    |
-| 2    |   |             |     | 0          |    |
-| 3    |   |             |     |            |10% |
-| 4    |10%| 40 years    |     |            |    |
-| 5    |10%| 25 years    |     |            |    |
-| 6    |5% | 40 years    |     |            |    |
+## Tax on NPV by cases
+
+| case | r | persistence | NPV           | tax on NPV | IRR|
+|------|---|-------------|---------------|------------|----|
+| 1    |   |             | 0             |            |    |
+| 2    |   |             |               | 0          |    |
+| 3    |   |             |               |            |10% |
+| 4    |10%| 40 years    |`r npv_base_pe`|            |    |
+| 5    |10%| 25 years    |`r npv_r_pe`   |            |    |
+| 6    |5% | 40 years    |`r npv_die_pe` |            |    |

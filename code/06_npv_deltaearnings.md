@@ -1,6 +1,6 @@
 ---
 title: "Net Present Value (NPV) for Deworming"
-date: "11 October, 2019"
+date: "12 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -315,13 +315,14 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 ## NPV by cases
 
+
 ## Tax on NPV by cases
 
 ## Tax on NPV by cases
 
 | case | r | persistence | NPV | tax on NPV | IRR
 |------|---|-------------|-----|------------|----|
-| 1    |   |             | 0   |            |    |
+| 1    |0.0985  |             | 0   |            |    |
 | 2    |   |             |     | 0          |    |
 | 3    |   |             |     |            |10% |
 | 4    |10%| 40 years    |     |            |    |
