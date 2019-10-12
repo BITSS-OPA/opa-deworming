@@ -155,7 +155,7 @@ npv_mo_f <- function(tax_var = tax_so,
                      delta_ed_male_var = delta_ed_so[,1],
                      delta_ed_female_var = delta_ed_so[,1],
                      cost_of_schooling_var = cost_per_student_in,
-                     s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,) {
+                     s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in) {
   index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
 ############################################################################### 
@@ -192,6 +192,7 @@ interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflati
   return(list("interest_in" = interest_in))
 }
 invisible( list2env(interest_in_f(),.GlobalEnv) )
+interest_in <- interest_in_f()
 ```
 
 ### Earnings gains ($\Delta Y_t$)
@@ -221,13 +222,12 @@ delta_earnings_p_in_f <- function(t_var = 1:periods_so,
                              lambda1k2_var = lambda1_so[2], 
                              lambda1k3_var = lambda1_so[3]) {
 ############################################################################### 
-  1*(10 <= t_var & t_var < 15) * lambda1k1_var + 
-  1*(15 <= t_var & t_var < 20) * lambda1k2_var + 
-  1*(20 <= t_var) * lambda1k3_var
+  delta_earnings_p_in = 1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
 ############################################################################### 
-  return(list("delta_earnings_p" = delta_earnings_p))
+  return(list("delta_earnings_p_in" = delta_earnings_p_in))
 }
-invisible(list2env(delta_earnings_p_in(),.GlobalEnv) )
+invisible(list2env(delta_earnings_p_in_f(),.GlobalEnv) )
+delta_earnings_p_in <- delta_earnings_p_in_f()
 ``` 
 
 #### Assumption 2
@@ -245,13 +245,12 @@ delta_earnings_in_f <- function(t_var = 1:periods_so,
                                 lambda1k2_var = lambda1_so[2], 
                                 lambda1k3_var = lambda1_so[3]) {
 ############################################################################### 
-  1*(10 <= t_var & t_var < 15) * lambda1k1_var + 
-  1*(15 <= t_var & t_var < 20) * lambda1k2_var + 
-  1*(20 <= t_var & t_var < 25) * lambda1k3_var
+  delta_earnings_in = 1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var & t_var < 25) * lambda1k3_var
 ############################################################################### 
-  return(list("delta_earnings" = delta_earnings))
+  return(list("delta_earnings_in" = delta_earnings_in))
 }
 invisible( list2env(delta_earnings_in_f(),.GlobalEnv) )
+delta_earnings_in <- delta_earnings_in_f()
 ``` 
 
 Note that both expressions assume no earnings gains for the first 10 years.
