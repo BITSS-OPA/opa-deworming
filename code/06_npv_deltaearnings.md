@@ -1,6 +1,6 @@
 ---
 title: "Net Present Value (NPV) for Deworming"
-date: "12 October, 2019"
+date: "13 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -103,6 +103,7 @@ call_params_f <- function(){
     ##### Guess work   
     #############
     periods_so <- 50               #Total number of periods to forecast wages
+    index_t <- 0:periods_so
     time_to_jm_so <- 10            #Time from intial period until individual join the labor force
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
@@ -130,19 +131,17 @@ NOT SURE IF THIS FUNCTION IS CODED CORRECTLY
 # - outputs: total_rev_pe 
 # Gamma is used to index gender.
 npv_mo_f <- function(tax_var = tax_so,
-                     periods_var = periods_so,
-                     interest_r_var = interest_in,
-                     delta_earnings_var = delta_earnings_in,
+                     interest_r_var = interest_in[[1]],
+                     delta_earnings_var = delta_earnings_p_in,
                      delta_ed_male_var = delta_ed_so[,1],
                      delta_ed_female_var = delta_ed_so[,1],
                      cost_of_schooling_var = cost_per_student_in,
                      s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in) {
-  index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
 ############################################################################### 
   benef <- matrix(NA, 51,2)
   for (i in 1:2){
-    benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * delta_earnings_var
+    benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t*delta_earnings_var
   }
   
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) - apply( ( 1 / (1 + interest_r_var) )^index_t *
@@ -315,16 +314,15 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 ## NPV by cases
 
-
 ## Tax on NPV by cases
 
 ## Tax on NPV by cases
 
-| case | r | persistence | NPV | tax on NPV | IRR
-|------|---|-------------|-----|------------|----|
-| 1    |0.0985  |             | 0   |            |    |
-| 2    |   |             |     | 0          |    |
-| 3    |   |             |     |            |10% |
-| 4    |10%| 40 years    |     |            |    |
-| 5    |10%| 25 years    |     |            |    |
-| 6    |5% | 40 years    |     |            |    |
+| case | r | persistence | NPV           | tax on NPV | IRR|
+|------|---|-------------|---------------|------------|----|
+| 1    |   |             | 0             |            |    |
+| 2    |   |             |               | 0          |    |
+| 3    |   |             |               |            |10% |
+| 4    |10%| 40 years    |               |            |    |
+| 5    |10%| 25 years    |               |            |    |
+| 6    |5% | 40 years    |               |            |    |
