@@ -316,4 +316,19 @@ costs_f <- function(unit_cost_local_var = unit_cost_local_so, ex_rate_var = ex_r
 invisible( list2env(costs_f(),.GlobalEnv) )
 ```
 
-# Main results
+# Results
+
+```r
+npv_1 <- npv_mo_f()
+npv_2 <- npv_mo_f(delta_earnings_var = delta_earnings_in)
+npv_3 <- npv_mo_f(interest_r_var = 0.05)
+```
+
+|case| r   | persist  | NPV      | tax | IRR |
+|----|-----|----------|----------|----|----|
+| 1  | 10% | 40 years |**47.6017891** |
+| 2  | 10% | 25 years |34.546028 |
+| 3  | 5%  | 40 years |138.7832275 |
+| 4  |||
+| 5  |||
+| 6  |||

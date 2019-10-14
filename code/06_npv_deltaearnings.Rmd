@@ -329,4 +329,17 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 ```
 
 # Results
+```{r results}
+npv_1 <- npv_mo_f()
+npv_2 <- npv_mo_f(delta_earnings_var = delta_earnings_in)
+npv_3 <- npv_mo_f(interest_r_var = 0.05)
+```
 
+|case| r   | persist  | NPV          | tax | IRR |
+|----|-----|----------|--------------|-----|-----|
+| 1  | 10% | 40 years |**`r npv_1`** |
+| 2  | 10% | 25 years |**`r npv_2`** |
+| 3  | 5%  | 40 years |**`r npv_3`** |
+| 4  |||
+| 5  |||
+| 6  |||
