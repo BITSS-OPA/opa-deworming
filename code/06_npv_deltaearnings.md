@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "13 October, 2019"
+date: "14 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -49,8 +49,10 @@ call_params_f <- function(){
     #############
     ##### Data  
     #############
-    gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
-    inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
+   #gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
+    gov_bonds_so <- 0.09           # Updated on 10/14/19 - trading economics
+   #inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
+    inflation_so <-  0.04          #Kenyan inflation rate - World Bank Development Indicators (updated 10/14)
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
     wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
     profits_se_so <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
@@ -112,21 +114,15 @@ invisible( list2env(call_params_f(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-
-# Key policy estimates for policy makers  
-
-
-
 # Methodology
  
-The target parameter to reproduce corresponds to the NPV of deworming, including spillovers, and can be found in the file `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Calcs-Table 5`, cell `C51`. 
+The target parameter to reproduce corresponds to the NPV of deworming, including spillovers, and can be found in the file `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Calcs-Table 5`, cell `C51`. CHECK IF THIS IS CORRECT.
 
 ## Main Equation (the model)
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} w_{t}
-\left( \lambda_{1, \gamma} + \frac{p \lambda_{2, \gamma}}{R} \right) -
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta Y_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \label{eq:1}
@@ -140,8 +136,8 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 # - inputs: tax_rev_init_mo, top_tax_base_in  
 # - outputs: total_rev_pe 
 # Gamma is used to index gender.
-npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2, 
-                interest_r_var = interest_in,
+npv_mo_f <- function(interest_r_var,
+                n_male_var = 1/2, n_female_var = 1/2, 
                 delta_earnings_var = delta_earnings_p_in,
                 wage_var = wage_t_mo,
                 lambda1_male_var = lambda1_so[1],
@@ -151,14 +147,10 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
                 coverage_var = coverage_so,
                 cost_of_schooling_var = cost_per_student_in,
                 delta_ed_male_var = delta_ed_so[,1],
-                delta_ed_female_var = delta_ed_so[,1], 
-                #lambda2_male_var = lambda2_in[1],
-                #lambda2_female_var = lambda2_in[2],
+                delta_ed_female_var = delta_ed_so[,1],
                 s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
                 periods_var = periods_so) {
   ns <- c(n_male_var, n_female_var)
-  #lambda1s <- c(lambda1_male_var, lambda1_female_var)
-  #lambda2s <- c(lambda2_male_var, lambda2_female_var)
   index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
   delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
@@ -172,12 +164,81 @@ npv_mo_f <- function(n_male_var = 1/2, n_female_var = 1/2,
             apply( ( 1 / (1 + interest_r_var) )^index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
           ) - (s2_var * q2_var  - s1_var * q1_var)
-#  wser()
-  return(res1)   
+  
+  res2 <- sum( ns * (apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )
+          ) - (s2_var * q2_var  - s1_var * q1_var)
+  return(list("res1" = res1, "res2" = res2)) 
+  #return(res2)
 }
 ```
 
-Add this into text properly.
+## Sub components:
+
+### "$\gamma$"
+
+\begin{equation}
+NPV =  \sum_{\blue{\gamma}} N_{\blue{\gamma}} \left[
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta Y_t -
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}
+
+Gamma is simply an indicator for gender which takes on two values, corresponding for male and female.
+
+### "$\tau$"
+
+\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\blue{\tau} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta Y_t -
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}
+
+### "$r$"
+
+\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta Y_t -
+K \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}
+
+The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.09) minus the inflation rate (0.04).
+
+
+```r
+# - inputs: gov_bonds_so, inflation_so
+# - outputs: interest_in
+interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
+  interest_in = gov_bonds_var - inflation_var 
+  return(list("interest_in" = interest_in))
+}
+invisible( list2env(interest_in_f(),.GlobalEnv) )
+```
+
+The resulting value is a $r$ = 5%
+
+### "$\Delta Y_t$"
+
+\begin{equation}
+NPV =  \sum_{\gamma} N_{\gamma} \left[
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta Y_t} -
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
+\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\end{equation}
+
+$\Delta Y_t$ represents the treatment effect on earnings, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. 
+
+We estimate treatment effects on total earnings by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about earnings gains from deworming after 20 years.
+
+If we assume that the effect on earnings identified 20 years after the intervention persists through one's working life, we have 
+
+\begin{equation}
+\Delta Y_t = \mathbf{1}(10 < t \leq 15)\lambda_1^{KLPS2} + \mathbf{1}(15 < t \leq 20)\lambda_1^{KLPS3} + \mathbf{1}(t > 20)\lambda_1^{KLPS4}
+\text{ for } t \leq 50
+\end{equation}
 
 
 ```r
@@ -196,6 +257,13 @@ invisible(list2env(delta_earnings_p_in_f(),.GlobalEnv) )
 #delta_earnings_p_in <- delta_earnings_p_in_f()
 ```
 
+However, if we assume earnings gains persist for 5 years after KLPS4 (matching the time period between previous rounds), then disappear, we have
+
+\begin{equation}
+\Delta Y_t = \mathbf{1}(10 < t \leq 15)\lambda_1^{KLPS2} + \mathbf{1}(15 < t \leq 20)\lambda_1^{KLPS3} + \mathbf{1}(20 < t \leq 25)\lambda_1^{KLPS4}
+\text{ for } t \leq 50
+\end{equation}
+
 
 ```r
 # - inputs: periods_so, lambda1_so
@@ -212,32 +280,14 @@ delta_earnings_in_f <- function(t_var = 0:periods_so,
 invisible( list2env(delta_earnings_in_f(),.GlobalEnv) )
 ```
 
-## Sub components:
+Note that both expressions assume that there are no additional earnings gains for the treatment group for the first 10 years post-intervention. This model also disregards externality effects.
 
-### 1 - "$r$"  
-
-The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.118) minus the inflation rate (0.02).
-
-
-```r
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in
-interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
-  interest_in = gov_bonds_var - inflation_var 
-  return(list("interest_in" = interest_in))
-}
-invisible( list2env(interest_in_f(),.GlobalEnv) )
-```
-
-The resulting value is a $r$ = 9.85%
-
-### 5 - $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$ 
+### $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$ 
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[
-\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t}
-\left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) -
-\blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{ \Delta \overline{E}_{\gamma t}(S1,S2) }
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta Y_t -
+\blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta \overline{E}_{\gamma t}(S1,S2)}
 \right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
 \end{equation}
 
@@ -278,21 +328,20 @@ invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
 
 **Note:** need to understand better the date of each component (of the model, not only this section).
 
-### 6 - $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
+### $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
 
 \begin{equation}
 NPV =  \sum_{\gamma} N_{\gamma} \left[
-\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} w_{t}
-\left( \lambda_{1, \gamma}  + \frac{p \lambda_{2, \gamma}}{R} \right) -
+\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \Delta Y_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2)
 \right] - \blue{ \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) }
 \end{equation}
 
-#### 6.1 - $S_{1}Q(S_{1}) = 0$
+#### $S_{1}Q(S_{1}) = 0$
 There is no subsidy for deworming under the status quo.   
 
 
-#### 6.2 - $S_{2}$: complete subsidy to per capita costs of deworming.
+#### $S_{2}$: complete subsidy to per capita costs of deworming.
 
 With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
 
@@ -300,7 +349,7 @@ With complete subsidy, $S_2$ represents the total direct costs of deworming in U
 S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
 \end{equation}
 
-#### 6.3 - $Q_{2}$
+#### $Q_{2}$
 The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of 0.75.
 
 
@@ -316,19 +365,37 @@ costs_f <- function(unit_cost_local_var = unit_cost_local_so, ex_rate_var = ex_r
 invisible( list2env(costs_f(),.GlobalEnv) )
 ```
 
-# Results
+# Results and robustness
+
+## Disregarding externalities
+
 
 ```r
-npv_1 <- npv_mo_f()
-npv_2 <- npv_mo_f(delta_earnings_var = delta_earnings_in)
-npv_3 <- npv_mo_f(interest_r_var = 0.05)
+npv_1 <- npv_mo_f(interest_r_var=interest_in)$res2
+npv_2 <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)$res2
+npv_3 <- npv_mo_f(interest_r_var = 0.10)$res2
+
+tax_1 <- npv_mo_f(interest_r_var = interest_in)$res1
+tax_2 <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)$res1
+tax_3 <- npv_mo_f(interest_r_var = 0.10)$res1
+
+# ASK FERNANDO HOW TO CODE THIS PROPERLY
+
+#r_4 <- multiroot(npv_mo_f, 0.4, maxiter=100)
+#r_4 <- r_4$root
+#r_5 <- multiroot(npv_mo_f, 0.4, maxiter=100, delta_earnings_var = delta_earnings_in)
+#r_5 <- r_5$root
 ```
 
-|case| r   | persist  | NPV      | tax | IRR |
-|----|-----|----------|----------|----|----|
-| 1  | 10% | 40 years |**47.6017891** |
-| 2  | 10% | 25 years |34.546028 |
-| 3  | 5%  | 40 years |138.7832275 |
-| 4  |||
-| 5  |||
-| 6  |||
+|case| r                  | persist  | NPV (USD per ?)| NPV tax      | IRR |
+|----|--------------------|----------|----------------|--------------|-----|
+| 1  |5%| 40 years |**909.7259009**   |**138.7832275** |**X**|
+| 2  |5%| 25 years |**548.685924**   |**78.9408513** |**X**|
+| 3  | 10%                | 40 years |**336.6960077**   |**46.1588584** |**X**|
+| 4  |**54.26%**          | 40 years |0               |              |     |
+| 5  |**54.24%**          | 25 years |0               |              |     |
+| 6  |**26.65%**          | 40 years |                | 0            |     |
+| 7  |**26.28%**          | 25 years |                | 0            |     |
+| 8  |**X**               | **X**    |                |              |10%  |
+
+## Accounting for externalities
