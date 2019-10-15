@@ -165,11 +165,11 @@ npv_mo_f <- function(interest_r_var,
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
           ) - (s2_var * q2_var  - s1_var * q1_var)
   
-  res2 <- sum( ns * (apply(benef, 2, sum) -
-            apply( ( 1 / (1 + interest_r_var) )^index_t *
-                     delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)
-  return(list("res1" = res1, "res2" = res2)) 
+  # res2 <- sum( ns * (apply(benef, 2, sum) -
+  #           apply( ( 1 / (1 + interest_r_var) )^index_t *
+  #                    delta_ed_s * cost_of_schooling_var, 2, sum) )
+  #         ) - (s2_var * q2_var  - s1_var * q1_var)
+  return(res1) 
   #return(res2)
 }
 ```
@@ -379,15 +379,16 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 
 ```r
-npv_realint_persist <- npv_mo_f(interest_r_var=interest_in)$res2
-npv_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)$res2
-npv_int10_persist   <- npv_mo_f(interest_r_var = 0.10)$res2
-npv_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in)$res2
+# replace with tax_so == 1
+npv_realint_persist <- npv_mo_f(interest_r_var=interest_in, tax_var = 1)
+npv_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in, tax_var = 1)
+npv_int10_persist   <- npv_mo_f(interest_r_var = 0.10, tax_var = 1)
+npv_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in, tax_var = 1)
 
-tax_realint_persist <- npv_mo_f(interest_r_var = interest_in)$res1
-tax_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)$res1
-tax_int10_persist   <- npv_mo_f(interest_r_var = 0.10)$res1
-tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in)$res1
+tax_realint_persist <- npv_mo_f(interest_r_var = interest_in)
+tax_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)
+tax_int10_persist   <- npv_mo_f(interest_r_var = 0.10)
+tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in)
 
 # ASK FERNANDO HOW TO CODE THIS PROPERLY: AND DON'T HARDCODE IN THE TABLE
 
