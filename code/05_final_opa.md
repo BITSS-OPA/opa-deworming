@@ -868,7 +868,10 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 # f(g()) =
 # f
 # └──── g
-
+# 
+#       ##     ###    ####
+# 1     2       3     4
+#       ##     ###    ####
 # NPV_pe_f, CEA_pe_f, RCEA_pe_f
 # ├──── pv_benef_f
 # │      ├──── earnings1_f
@@ -890,7 +893,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 #        ├──── interest_f
 #        ├──── s2_f
 #        └──── cost_per_student_f
-
+#       ##     ###    ####
 
 #unit test function
 unit_test <- function(to_test_var, original_var){
@@ -908,7 +911,7 @@ unit_test <- function(to_test_var, original_var){
 
 
 # Write only functions here. And make all arguments explicit
-#--------------- Inputs for wage_t ---------------------------------------------
+####------------ Inputs for wage_t ---------------------------------------------
 # Make explicit non-function inputs:
 wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_so, wage_ww_var = wage_ww_so,
             profits_se_var = profits_se_so, hours_se_cond_var = hours_se_cond_so,  
@@ -916,7 +919,7 @@ wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_so, wage_ww_var = wage_ww_so,
             hours_se_var = hours_se_so, ex_rate_var = ex_rate_so)
 unit_test(wage_0_in, 0.1481084)
 
-#--------------- Inputs for earnings1_f -------------------------------------------
+###---------- Inputs for earnings1_f -------------------------------------------
 # Make explicit non-function inputs:
 wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_so,
             coef_exp1_var = coef_exp_so[1], coef_exp2_var = coef_exp_so[2])
@@ -930,11 +933,13 @@ saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_v
                                  q_zero_var = q_zero_so) )
 unit_test(wage_t_in, 4.572308)
 # ADD UNIT TEST FOR SATURATION AN LAMBDAS
-#--------------- Inputs for earnings2 -------------------------------------------
+
+###------------ Inputs for earnings2 -------------------------------------------
 lambda1_new_in <- lambda_r_f(lambda1_new_so, alpha_0_var = alpha_0_so,
                              alpha_r_var = alpha_r_so)
 #ADD UNIT TEST FOR LAMBDAS
-#--------------- Inputs for pv_benef_f -------------------------------------------
+
+##------------ Inputs for pv_benef_f -------------------------------------------
 # Make explicit non-function inputs:
 # earnings1
 earnings_in_no_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_r_in[1],
@@ -956,42 +961,48 @@ unit_test(earnings_in_no_ext, 7.978677)
 unit_test(earnings_in_yes_ext, 42.95683)
 unit_test(interest_in, 0.0985)
 
-#--------------- Inputs for costs1 ---------------------------------------------
-# Make explicit non-function inputs:
-#costs1_ratios_in_f
+
+###------------- Inputs for costs1_ratios_in_f----------------------------------
 costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_so,
                                   df_costs_cw_var = df_costs_cw_so,
                                   staff_time_var = staff_time_so)$cost_data
-
+# ADD UNIT TEST
 costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
                                     df_costs_cw_var = df_costs_cw_so)$counts_data
+# ADD UNIT TEST
 
+##-------------- Inputs for costs1_f--------------------------------------------
+# Make explicit non-function inputs:
 costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_in, costs_var =  costs1_costs_in)
-
 unit_test(unlist(costs1_country$ratios_data$costs_by_country),  6880801.84046596)
 
-#--------------- Inputs for costs2 ---------------------------------------------
+##-------------- Inputs for costs2_f--------------------------------------------
 # Make explicit non-function inputs:
 delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
                                       delta_ed_var = delta_ed_so,
                                       delta_ed_ext_var = delta_ed_ext_so)
 unit_test(delta_ed_final_in, 0.01134819)
+
 delta_ed_final_in_x <- delta_ed_final_f(include_ext_var = TRUE,
                                       delta_ed_var = delta_ed_so,
                                       delta_ed_ext_var = delta_ed_ext_so)
 unit_test(delta_ed_final_in_x,  0.05911765)
+
 interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
 unit_test(interest_in, 0.0985)
+
 cost_per_student_in <-  cost_per_student_f(teach_sal_var = teach_sal_so,
                                           teach_ben_var = teach_ben_so,
                                           n_students_var = n_students_so)
 unit_test(cost_per_student_in,  116.8549)
+
 s2_in <- s2_f(unit_cost_local_var = unit_cost_local_so,
               ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so)
 unit_test(s2_in, 1.237889)
 
-#--------------- Inputs for NPV ------------------------------------------------
+#--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
 # Make explicit non-function inputs:
+#benefits
 pv_benef_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_so,
                         interest_r_var = interest_in, periods_var = periods_so)
 unit_test(pv_benef_in, 11.02849)
@@ -1003,10 +1014,12 @@ unit_test(pv_benef_in_x, 59.37686)
 pv_benef_in_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_so,
                         interest_r_var = interest_in, periods_var = periods_so)
 # ADD UNIT TEST
+# costs1
 cost1_in <- costs1_f(country_w_var = costs1_country$ratios_data$country_w,
                      country_cost_var = costs1_country$ratios_data$per_cap)
 unit_test(cost1_in,  0.08480686)
 
+# costs2
 costs2_in <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
@@ -1017,6 +1030,7 @@ costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_i
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
 unit_test(costs2_in_x,  25.05821)
 ```
+
 
 
 
@@ -1047,7 +1061,139 @@ unit_test(cea_no_ext_ea, 130.042378933876)
 rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0),
          CEA_cash_var = 744)
 unit_test(rcea_no_ext_ea, 0.174788143728328)
+
+kable(mtcars[1:10, 1:6], caption = "Group Rows") %>% 
+  add_header_above(c(" ", "Group 1" = 2, "Group 2" = 2, "Group 3" = 2)) %>%
+  add_header_above(c(" ", "Group 4" = 4, "Group 5" = 2)) %>%
+  add_header_above(c(" ", "Group 6" = 6)) %>% 
+  kable_styling("striped", full_width = F) %>%
+  group_rows("Group 1", 4, 7) %>%   # same result with group 1=4
+  group_rows("Group 2", 8, 10)
 ```
+
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>Group Rows</caption>
+ <thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1"></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="6"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 6</div></th>
+</tr>
+<tr>
+<th style="border-bottom:hidden" colspan="1"></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 4</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 5</div></th>
+</tr>
+<tr>
+<th style="border-bottom:hidden" colspan="1"></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 1</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 2</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 3</div></th>
+</tr>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mpg </th>
+   <th style="text-align:right;"> cyl </th>
+   <th style="text-align:right;"> disp </th>
+   <th style="text-align:right;"> hp </th>
+   <th style="text-align:right;"> drat </th>
+   <th style="text-align:right;"> wt </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Mazda RX4 </td>
+   <td style="text-align:right;"> 21.0 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 160.0 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.90 </td>
+   <td style="text-align:right;"> 2.620 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Mazda RX4 Wag </td>
+   <td style="text-align:right;"> 21.0 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 160.0 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.90 </td>
+   <td style="text-align:right;"> 2.875 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Datsun 710 </td>
+   <td style="text-align:right;"> 22.8 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 108.0 </td>
+   <td style="text-align:right;"> 93 </td>
+   <td style="text-align:right;"> 3.85 </td>
+   <td style="text-align:right;"> 2.320 </td>
+  </tr>
+  <tr grouplength="4"><td colspan="7" style="border-bottom: 1px solid;"><strong>Group 1</strong></td></tr>
+<tr>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Hornet 4 Drive </td>
+   <td style="text-align:right;"> 21.4 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 258.0 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.08 </td>
+   <td style="text-align:right;"> 3.215 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Hornet Sportabout </td>
+   <td style="text-align:right;"> 18.7 </td>
+   <td style="text-align:right;"> 8 </td>
+   <td style="text-align:right;"> 360.0 </td>
+   <td style="text-align:right;"> 175 </td>
+   <td style="text-align:right;"> 3.15 </td>
+   <td style="text-align:right;"> 3.440 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Valiant </td>
+   <td style="text-align:right;"> 18.1 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 225.0 </td>
+   <td style="text-align:right;"> 105 </td>
+   <td style="text-align:right;"> 2.76 </td>
+   <td style="text-align:right;"> 3.460 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Duster 360 </td>
+   <td style="text-align:right;"> 14.3 </td>
+   <td style="text-align:right;"> 8 </td>
+   <td style="text-align:right;"> 360.0 </td>
+   <td style="text-align:right;"> 245 </td>
+   <td style="text-align:right;"> 3.21 </td>
+   <td style="text-align:right;"> 3.570 </td>
+  </tr>
+  <tr grouplength="3"><td colspan="7" style="border-bottom: 1px solid;"><strong>Group 2</strong></td></tr>
+<tr>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Merc 240D </td>
+   <td style="text-align:right;"> 24.4 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 146.7 </td>
+   <td style="text-align:right;"> 62 </td>
+   <td style="text-align:right;"> 3.69 </td>
+   <td style="text-align:right;"> 3.190 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Merc 230 </td>
+   <td style="text-align:right;"> 22.8 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 140.8 </td>
+   <td style="text-align:right;"> 95 </td>
+   <td style="text-align:right;"> 3.92 </td>
+   <td style="text-align:right;"> 3.150 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Merc 280 </td>
+   <td style="text-align:right;"> 19.2 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 167.6 </td>
+   <td style="text-align:right;"> 123 </td>
+   <td style="text-align:right;"> 3.92 </td>
+   <td style="text-align:right;"> 3.440 </td>
+  </tr>
+</tbody>
+</table>
 
 
 - **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** -0.6    
