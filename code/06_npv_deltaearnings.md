@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "14 October, 2019"
+date: "15 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -50,9 +50,9 @@ call_params_f <- function(){
     ##### Data  
     #############
    #gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
-    gov_bonds_so <- 0.09           # Updated on 10/14/19 - trading economics
+    gov_bonds_so <- 0.09           # Updated on 10/14/19 - trading economics (add links)
    #inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
-    inflation_so <-  0.04          #Kenyan inflation rate - World Bank Development Indicators (updated 10/14)
+    inflation_so <-  0.04          #Kenyan inflation rate - World Bank Development Indicators (updated 10/14) (add links)
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
     wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
     profits_se_so <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
@@ -233,6 +233,8 @@ $\Delta Y_t$ represents the treatment effect on earnings, so it implicitly takes
 
 We estimate treatment effects on total earnings by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about earnings gains from deworming after 20 years.
 
+#### Assumption: persistent earnings
+
 If we assume that the effect on earnings identified 20 years after the intervention persists through one's working life, we have 
 
 \begin{equation}
@@ -249,13 +251,17 @@ delta_earnings_p_in_f <- function(t_var = 0:periods_so,
                              lambda1k2_var = lambda1_so[2], 
                              lambda1k3_var = lambda1_so[3]) {
 ############################################################################### 
-  delta_earnings_p_in = 1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var) * lambda1k3_var
+delta_earnings_p_in = 1*(10 <= t_var & t_var < 15) * lambda1k1_var + 
+                      1*(15 <= t_var & t_var < 20) * lambda1k2_var + 
+                      1*(20 <= t_var) * lambda1k3_var
 ############################################################################### 
   return(list("delta_earnings_p_in" = delta_earnings_p_in))
 }
 invisible(list2env(delta_earnings_p_in_f(),.GlobalEnv) )
 #delta_earnings_p_in <- delta_earnings_p_in_f()
 ```
+
+#### Assumption: Non-persistent earnings.
 
 However, if we assume earnings gains persist for 5 years after KLPS4 (matching the time period between previous rounds), then disappear, we have
 
@@ -273,7 +279,9 @@ delta_earnings_in_f <- function(t_var = 0:periods_so,
                                 lambda1k2_var = lambda1_so[2], 
                                 lambda1k3_var = lambda1_so[3]) {
 ############################################################################### 
-  delta_earnings_in = 1*(10 <= t_var & t_var < 15) * lambda1k1_var + 1*(15 <= t_var & t_var < 20) * lambda1k2_var + 1*(20 <= t_var & t_var < 25) * lambda1k3_var
+delta_earnings_in = 1*(10 <= t_var & t_var < 15) * lambda1k1_var + 
+                    1*(15 <= t_var & t_var < 20) * lambda1k2_var + 
+                    1*(20 <= t_var & t_var < 25) * lambda1k3_var
 ############################################################################### 
   return(list("delta_earnings_in" = delta_earnings_in))
 }
@@ -371,15 +379,17 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 
 ```r
-npv_1 <- npv_mo_f(interest_r_var=interest_in)$res2
-npv_2 <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)$res2
-npv_3 <- npv_mo_f(interest_r_var = 0.10)$res2
+npv_realint_persist <- npv_mo_f(interest_r_var=interest_in)$res2
+npv_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)$res2
+npv_int10_persist   <- npv_mo_f(interest_r_var = 0.10)$res2
+npv_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in)$res2
 
-tax_1 <- npv_mo_f(interest_r_var = interest_in)$res1
-tax_2 <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)$res1
-tax_3 <- npv_mo_f(interest_r_var = 0.10)$res1
+tax_realint_persist <- npv_mo_f(interest_r_var = interest_in)$res1
+tax_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)$res1
+tax_int10_persist   <- npv_mo_f(interest_r_var = 0.10)$res1
+tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in)$res1
 
-# ASK FERNANDO HOW TO CODE THIS PROPERLY
+# ASK FERNANDO HOW TO CODE THIS PROPERLY: AND DON'T HARDCODE IN THE TABLE
 
 #r_4 <- multiroot(npv_mo_f, 0.4, maxiter=100)
 #r_4 <- r_4$root
@@ -387,15 +397,25 @@ tax_3 <- npv_mo_f(interest_r_var = 0.10)$res1
 #r_5 <- r_5$root
 ```
 
-|case| r                  | persist  | NPV (USD per ?)| NPV tax      | IRR |
-|----|--------------------|----------|----------------|--------------|-----|
-| 1  |5%| 40 years |**909.7259009**   |**138.7832275** |**X**|
-| 2  |5%| 25 years |**548.685924**   |**78.9408513** |**X**|
-| 3  | 10%                | 40 years |**336.6960077**   |**46.1588584** |**X**|
-| 4  |**54.26%**          | 40 years |0               |              |     |
-| 5  |**54.24%**          | 25 years |0               |              |     |
-| 6  |**26.65%**          | 40 years |                | 0            |     |
-| 7  |**26.28%**          | 25 years |                | 0            |     |
-| 8  |**X**               | **X**    |                |              |10%  |
-
-## Accounting for externalities
+|        |Real annualized interest rate (r)|Treatment timeframe | Net Present Value (2017 USD PPP)   | Net Present Value of tax revenue (2017 USD PPP)| IRR (annualized)| Avg earnings gains ($\lambda_1$) |
+|--------|--------------------------------:|-------------------:|-----------------------------------:|-----------------------------------------------:|----------------:|---------------------------------:|
+|PANEL A                                                                                                                                                                                                   
+|        |                                 |40 years            |0                                   |                                                |10%              |**X**                             |
+|        |                                 |40 years            |0                                   |                                                |5%               |**X**                             |
+|        |                                 |25 years            |0                                   |                                                |10%              |**X**                             |
+|        |                                 |25 years            |0                                   |                                                |5%               |**X**                             |
+|        |                                 |40 years            |                                    |0                                               |10%              |**X**                             |
+|        |                                 |40 years            |                                    |0                                               |5%               |**X**                             |
+|        |                                 |25 years            |                                    |0                                               |10%              |**X**                             |
+|        |                                 |25 years            |                                    |0                                               |5%               |**X**                             |
+|PANEL B                                                                                                                                                                                                   
+|        |                                 |40 years            |0                                   |                                                |**54.3%**        |83.67    |
+|        |                                 |40 years            |                                    | 0                                              |**26.7%**        |83.67    |
+|        |                                 |25 years            |0                                   |                                                |**54.2%**        |83.67    |
+|        |                                 |25 years            |                                    | 0                                              |**26.3%**        |83.67    |
+|PANEL C                                                                                                                                                                                           |
+|        | 10%                             |40 years            |**337**  |**46**              |                 |83.67    |
+|        |5%             |40 years            |**910**|**139**            |                 |83.67    |
+|        | 10%                             |25 years            |**261**      |**34**                  |                 |83.67    |
+|        |5%             |25 years            |**549**    |**79**                |                 |83.67    |
+Note:
