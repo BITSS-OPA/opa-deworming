@@ -148,7 +148,7 @@ K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma 
 # - inputs: tax_rev_init_mo, top_tax_base_in  
 # - outputs: total_rev_pe 
 # Gamma is used to index gender.
-npv_mo_f <- function(interest_r_var,
+npv_mo_f <- function(interest_r_var = interest_in,
                 n_male_var = 1/2, n_female_var = 1/2, 
                 delta_earnings_var = delta_earnings_p_in,
                 wage_var = wage_t_mo,
@@ -262,7 +262,6 @@ delta_earnings_p_in = 1*(10 <= t_var & t_var < 15) * lambda1k1_var +
   return(list("delta_earnings_p_in" = delta_earnings_p_in))
 }
 invisible(list2env(delta_earnings_p_in_f(),.GlobalEnv) )
-#delta_earnings_p_in <- delta_earnings_p_in_f()
 ``` 
 
 #### Assumption: Non-persistent earnings.
@@ -381,12 +380,95 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 ## Disregarding externalities
 
+```{r model_clambda_persist} 
+# add suffix _var to args 
+# - inputs: tax_rev_init_mo, top_tax_base_in  
+# - outputs: total_rev_pe 
+# Gamma is used to index gender.
+npv_clambda_p_mo_f <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                lambda1_var,
+                wage_var = wage_t_mo,
+                lambda1_male_var = lambda1_so[1],
+                lambda1_female_var = lambda1_so[2], 
+                tax_var = tax_so,
+                saturation_var = saturation_in,             
+                coverage_var = coverage_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so) {
+  ns <- c(n_male_var, n_female_var)
+  index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * (1*(10 <= index_t & index_t < 15) * lambda1_var + 1*(15 <= index_t & index_t < 20) * lambda1_var +1*(20 <= index_t) * lambda1_var)
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )
+          ) - (s2_var * q2_var  - s1_var * q1_var)
+  return(res1) 
+}
+```
+
+```{r model_clambda_die} 
+# add suffix _var to args 
+# - inputs: tax_rev_init_mo, top_tax_base_in  
+# - outputs: total_rev_pe 
+# Gamma is used to index gender.
+npv_clambda_d_mo_f <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                lambda1_var,
+                wage_var = wage_t_mo,
+                lambda1_male_var = lambda1_so[1],
+                lambda1_female_var = lambda1_so[2], 
+                tax_var = tax_so,
+                saturation_var = saturation_in,             
+                coverage_var = coverage_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so) {
+  ns <- c(n_male_var, n_female_var)
+  index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * (1*(10 <= index_t & index_t < 15) * lambda1_var + 1*(15 <= index_t & index_t < 20) * lambda1_var + 1*(20 <= index_t & index_t < 25) * lambda1_var)
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )
+          ) - (s2_var * q2_var  - s1_var * q1_var)
+  return(res1) 
+}
+```
+
 ```{r results}
 
 #########
 # PANEL A
 #########
 
+l1_social_persist_int10   <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 0.4, maxiter=100))$root
+l1_social_persist_realint <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1), 0.4, maxiter=100))$root
+l1_social_die_int10       <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 0.4, maxiter=100))$root
+l1_social_die_realint     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1), 0.4, maxiter=100))$root
+
+l1_tax_persist_int10   <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, interest_r_var = 0.10), 0.4, maxiter=100))$root
+l1_tax_persist_realint <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x), 0.4, maxiter=100))$root
+l1_tax_die_int10       <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, interest_r_var = 0.10), 0.4, maxiter=100))$root
+l1_tax_die_realint     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x), 0.4, maxiter=100))$root
 
 #########
 # PANEL B
@@ -402,45 +484,38 @@ irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_
 #########
 
 # Net Present Value (2017 USD PPP)
-npv_realint_persist <- npv_mo_f(interest_r_var=interest_in, tax_var = 1)
-npv_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in, tax_var = 1)
+npv_realint_persist <- npv_mo_f(tax_var = 1)
+npv_realint_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in, tax_var = 1)
 npv_int10_persist   <- npv_mo_f(interest_r_var = 0.10, tax_var = 1)
 npv_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in, tax_var = 1)
 
 # Net Present Value of tax revenue (2017 USD PPP)
-tax_realint_persist <- npv_mo_f(interest_r_var = interest_in)
-tax_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)
+tax_realint_persist <- npv_mo_f()
+tax_realint_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in)
 tax_int10_persist   <- npv_mo_f(interest_r_var = 0.10)
 tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in)
 
-# ASK FERNANDO HOW TO CODE THIS PROPERLY: AND DON'T HARDCODE IN THE TABLE
-
-#r_4 <- multiroot(npv_mo_f, 0.4, maxiter=100)
-#r_4 <- r_4$root
-#r_5 <- multiroot(npv_mo_f, 0.4, maxiter=100, delta_earnings_var = delta_earnings_in)
-#r_5 <- r_5$root
-
 ```
 
-|        |Real annualized interest rate (r)|Treatment timeframe | Net Present Value (2017 USD PPP)   | Net Present Value of tax revenue (2017 USD PPP)| IRR (annualized)| Avg earnings gains ($\lambda_1$) |
-|--------|--------------------------------:|-------------------:|-----------------------------------:|-----------------------------------------------:|----------------:|---------------------------------:|
-|PANEL A                                                                                                                                                                                                   
-|        |                                 |40 years            |0                                   |                                                |10%              |**X**                             |
-|        |                                 |40 years            |0                                   |                                                |5%               |**X**                             |
-|        |                                 |25 years            |0                                   |                                                |10%              |**X**                             |
-|        |                                 |25 years            |0                                   |                                                |5%               |**X**                             |
-|        |                                 |40 years            |                                    |0                                               |10%              |**X**                             |
-|        |                                 |40 years            |                                    |0                                               |5%               |**X**                             |
-|        |                                 |25 years            |                                    |0                                               |10%              |**X**                             |
-|        |                                 |25 years            |                                    |0                                               |5%               |**X**                             |
-|PANEL B                                                                                                                                                                                                   
-|        |                                 |40 years            |0                                   |                                                |**`r round(irr_social_persist,1)`**        |`r round(mean(lambda1_so), 2)`    |
-|        |                                 |40 years            |                                    | 0                                              |**26.7%**        |`r round(mean(lambda1_so), 2)`    |
-|        |                                 |25 years            |0                                   |                                                |**54.2%**        |`r round(mean(lambda1_so), 2)`    |
-|        |                                 |25 years            |                                    | 0                                              |**26.3%**        |`r round(mean(lambda1_so), 2)`    |
-|PANEL C                                                                                                                                                                                           |
-|        | 10%                             |40 years            |**`r round(npv_int10_persist,0)`**  |**`r round(tax_int10_persist,0)`**              |                 |`r round(mean(lambda1_so), 2)`    |
-|        |`r 100*interest_in`%             |40 years            |**`r round(npv_realint_persist,0)`**|**`r round(tax_realint_persist,0)`**            |                 |`r round(mean(lambda1_so), 2)`    |
-|        | 10%                             |25 years            |**`r round(npv_int10_die,0)`**      |**`r round(tax_int10_die,0)`**                  |                 |`r round(mean(lambda1_so), 2)`    |
-|        |`r 100*interest_in`%             |25 years            |**`r round(npv_realint_die,0)`**    |**`r round(tax_realint_die,0)`**                |                 |`r round(mean(lambda1_so), 2)`    |
+|Real annualized interest rate (r)|Treatment timeframe|Net Present Value (2017 USD PPP)    |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains                       |
+|--------------------------------:|------------------:|-----------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
+|                                                                                                                                                                                                  
+|                                 |40 years           |0                                   |                                                |10%                                     |**`r round(l1_social_persist_int10,2)`**  |
+|                                 |40 years           |0                                   |                                                |`r 100*interest_in`%                    |**`r round(l1_social_persist_realint,2)`**|
+|                                 |25 years           |0                                   |                                                |10%                                     |**`r round(l1_social_die_int10,2)`**      |
+|                                 |25 years           |0                                   |                                                |`r 100*interest_in`%                    |**`r round(l1_social_die_realint,2)`**    |
+|                                 |40 years           |                                    |0                                               |10%                                     |**`r round(l1_tax_persist_int10,2)`**     |
+|                                 |40 years           |                                    |0                                               |`r 100*interest_in`%                    |**`r round(l1_tax_persist_realint,2)`**   |
+|                                 |25 years           |                                    |0                                               |10%                                     |**`r round(l1_tax_die_int10,2)`**         |
+|                                 |25 years           |                                    |0                                               |`r 100*interest_in`%                    |**`r round(l1_tax_die_realint,2)`**       |
+|                                                                                                                                                                                                   
+|                                 |40 years           |0                                   |                                                |**`r 100*round(irr_social_persist,3)`%**|`r round(mean(lambda1_so), 2)`            |
+|                                 |40 years           |                                    | 0                                              |**`r 100*round(irr_tax_persist,3)`%**   |`r round(mean(lambda1_so), 2)`            |
+|                                 |25 years           |0                                   |                                                |**`r 100*round(irr_social_die,3)`%**    |`r round(mean(lambda1_so), 2)`            |
+|                                 |25 years           |                                    | 0                                              |**`r 100*round(irr_tax_die,3)`%**       |`r round(mean(lambda1_so), 2)`            |
+|
+| 10%                             |40 years           |**`r round(npv_int10_persist,0)`**  |**`r round(tax_int10_persist,0)`**              |                                        |`r round(mean(lambda1_so), 2)`            |
+|`r 100*interest_in`%             |40 years           |**`r round(npv_realint_persist,0)`**|**`r round(tax_realint_persist,0)`**            |                                        |`r round(mean(lambda1_so), 2)`            |
+| 10%                             |25 years           |**`r round(npv_int10_die,0)`**      |**`r round(tax_int10_die,0)`**                  |                                        |`r round(mean(lambda1_so), 2)`            |
+|`r 100*interest_in`%             |25 years           |**`r round(npv_realint_die,0)`**    |**`r round(tax_realint_die,0)`**                |                                        |`r round(mean(lambda1_so), 2)`            |
 Note:
