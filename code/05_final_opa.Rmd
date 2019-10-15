@@ -138,8 +138,8 @@ chunk_params <- function(){
                            0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
     delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)    
     include_ext_so <- TRUE
-    alpha_0_so <- 1 # 0.92
-    alpha_r_so <- 1 # 0.3
+    alpha_0_so <- 1 #0.77
+    alpha_r_so <- 1 #0.15
 
     #############
     ##### Guess work   
@@ -156,7 +156,6 @@ chunk_params <- function(){
     
 ###############################################################################
 ###############################################################################  
-
 }
 invisible( list2env(chunk_params(),.GlobalEnv) )
 
@@ -225,8 +224,6 @@ Also, we can compute the NPV as presented in Baird et al 2016
 NPV = B - C
 \end{equation}
 
-
-
 ```{r eq_1, echo=print_code}
 # - inputs: total per capita benefits, total per capita costs, fudging factor
 # - outputs: Cost-effectiveness ratio & ratio to cash CEA
@@ -234,21 +231,22 @@ chunk_policy_est <- function(){
 ###############################################################################
 ###############################################################################  
 
-    CEA_pe <- function(benefits_var = 1, fudging_var = 0,
-                       costs_var = 1) {
-      ( benefits_var * ( 1 + fudging_var ) ) / costs_var
+    CEA_pe_f <- function(benefits_var = 1, fudging_var = 0, costs_var = 1) {
+        ( benefits_var * ( 1 + fudging_var ) ) / costs_var
     }
-    RCEA_pe <- function(CEA_var = 1, CEA_cash_var = 1) CEA_var / CEA_cash_var
+    RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
+        CEA_var / CEA_cash_var
+    } 
 
-    NPV_pe <- function(benefits_var = 1, costs_var = 1){
+    NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
         benefits_var - costs_var
     }
 
 ###############################################################################
 ###############################################################################  
-    return(list("CEA_pe" = CEA_pe,
-                "RCEA_pe" = RCEA_pe,
-                "NPV_pe" = NPV_pe))
+    return(list("CEA_pe_f" = CEA_pe_f,
+                "RCEA_pe_f" = RCEA_pe_f,
+                "NPV_pe_f" = NPV_pe_f))
 }
 invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 ```
@@ -629,11 +627,11 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 ```{r earnings1}
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
-earnings1_f <- function(){
+chunk_earnings1 <- function(){
 ###############################################################################
 ###############################################################################  
 
-    earnings1 <- function(wage_var = wage_in,
+    earnings1_f <- function(wage_var = wage_in,
                           lambda1_var = lambda1_so,
                           lambda2_var = lambda2_so,
                           saturation_var = saturation, coverage_var) {  
@@ -643,10 +641,10 @@ earnings1_f <- function(){
 
 ###############################################################################
 ###############################################################################  
-    return(list("earnings1" = earnings1))
+    return(list("earnings1_f" = earnings1_f))
 }
 
-invisible( list2env(earnings1_f(),.GlobalEnv) )
+invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
 ###### "$w_{t}$"
@@ -688,7 +686,7 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 #
 #outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trayectory:
 #  value (wage_t_mo) and function (wage_t_mo_f).
-wages_f <- function(){
+chunk_wages <- function(){
 ################################################################################
 ################################################################################  
     #close to value from spreadsheet (Assumps&Panel A Calcs!B137 = 0.1481084),
@@ -737,7 +735,7 @@ wages_f <- function(){
                 "wage_t_mo_f" = wage_t_mo_f, "wage_t_mo" = wage_t_mo))
 }
 
-invisible( list2env(wages_f(),.GlobalEnv) )
+invisible( list2env(chunk_wages(),.GlobalEnv) )
 ```
 
 
@@ -763,7 +761,7 @@ chunk_new_earnings <- function(){
 ###############################################################################
 ###############################################################################  
 
-    delta_earnings_f <- function(t_var = 1,
+    earnings2_f <- function(t_var = 1,
                                lambda1k1_var = lambda1_new_so[1],
                                lambda1k2_var = lambda1_new_so[2],
                                lambda1k3_var = lambda1_new_so[3]) {
@@ -774,7 +772,7 @@ chunk_new_earnings <- function(){
 
 ###############################################################################
 ###############################################################################             
-    return(list("delta_earnings_f" = delta_earnings_f))
+    return(list("earnings2_f" = earnings2_f))
 }
 
 invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
@@ -881,19 +879,22 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 # Main results
 
 ```{r all-steps}
+# Function dependency is depicted as follows: 
+# f(g()) =
+# f
+# └──── g
 
-# NPV, CEA, RCEA
+# NPV_pe_f, CEA_pe_f, RCEA_pe_f
 # ├──── pv_benef_f
-# │      ├──── earnings1
-# │      |      ├──── wage_t
-# │      |      |      └──── wage_0
-# |      |      ├──── lambda1
-# │      |      |      └────lambda1_r
-# |      |      ├──── lambda2
-# │      |      └──── saturation
-# │      ├──── earnings2 RENAME
-# │      |      └──── delta_earnings_f
-# │      |             └────lambda_r_f
+# │      ├──── earnings1_f
+# │      |      ├──── wage_t_mo_f
+# │      |      |      └──── wage_0_mo_f
+# |      |      ├──── lambda1_in_f
+# │      |      |      └────lambda_r_f
+# |      |      ├──── lambda2_in_f
+# │      |      └──── saturation_in_f
+# │      ├──── earnings2_f
+# │      |      └────lambda_r_f 
 # │      └──── interest_f
 # └──── cost1_f
 # │      └──── costs1_ratios_in_f
@@ -906,13 +907,13 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 #        └──── cost_per_student_f
 
 
-#unit test
+#unit test function
 unit_test <- function(to_test_var, original_var){
     if (length(to_test_var) > 1) {
-        fails_test <- ( abs(sd(to_test_var) - original_var)>0.0001 )
+        fails_test <- ( abs(sd(to_test_var) - original_var) > 0.0001 )
         text_val <- sd(to_test_var)
     } else {
-        fails_test <- ( abs(to_test_var - original_var)>0.0001 )
+        fails_test <- ( abs(to_test_var - original_var) > 0.0001 )
         text_val <- to_test_var
     }
     if (fails_test) {
@@ -930,7 +931,7 @@ wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_so, wage_ww_var = wage_ww_so,
             hours_se_var = hours_se_so, ex_rate_var = ex_rate_so)
 unit_test(wage_0_in, 0.1481084)
 
-#--------------- Inputs for earnings1 -------------------------------------------
+#--------------- Inputs for earnings1_f -------------------------------------------
 # Make explicit non-function inputs:
 wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_so,
             coef_exp1_var = coef_exp_so[1], coef_exp2_var = coef_exp_so[2])
@@ -943,27 +944,27 @@ lambda2_in <- lambda2_in_f(lambda2_var = lambda2_so)
 saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so,
                                  q_zero_var = q_zero_so) )
 unit_test(wage_t_in, 4.572308)
-
+# ADD UNIT TEST FOR SATURATION AN LAMBDAS
 #--------------- Inputs for earnings2 -------------------------------------------
 lambda1_new_in <- lambda_r_f(lambda1_new_so, alpha_0_var = alpha_0_so,
                              alpha_r_var = alpha_r_so)
-
+#ADD UNIT TEST FOR LAMBDAS
 #--------------- Inputs for pv_benef_f -------------------------------------------
 # Make explicit non-function inputs:
-earnings_in_no_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
+# earnings1
+earnings_in_no_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_r_in[1],
             lambda2_var = 0, saturation_var = saturation_in,
             coverage_var = coverage_so)
-earnings_in_yes_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
+earnings_in_yes_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_r_in[1],
             lambda2_var = lambda2_in[1], saturation_var = saturation_in,
             coverage_var = coverage_so)
 
 # earnings2
-earnings_in_no_ext_new <- delta_earnings_f(t_var = 0:50,
+earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
                                          lambda1k1_var = lambda1_new_in[1],
                                          lambda1k2_var = lambda1_new_in[2],
                                          lambda1k3_var = lambda1_new_in[3])
 # ADD UNIT TEST
-
 interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
 
 unit_test(earnings_in_no_ext, 7.978677)
@@ -972,7 +973,7 @@ unit_test(interest_in, 0.0985)
 
 #--------------- Inputs for costs1 ---------------------------------------------
 # Make explicit non-function inputs:
-
+#costs1_ratios_in_f
 costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_so,
                                   df_costs_cw_var = df_costs_cw_so,
                                   staff_time_var = staff_time_so)$cost_data
@@ -1037,48 +1038,48 @@ unit_test(costs2_in_x,  25.05821)
 
 ```{r main-results}
 #no externality NPV
-res_npv_no_ext_pe <- NPV_pe(benefits_var = pv_benef_in, costs_var = costs2_in)
+res_npv_no_ext_pe <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = costs2_in)
 unit_test(res_npv_no_ext_pe, -0.6096942)
 #yes externality NPV
-res_npv_yes_ext_pe <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
+res_npv_yes_ext_pe <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
 unit_test(res_npv_yes_ext_pe, 34.31866)
 
 #no externality NPV using EAs costs
-res_npv_no_ext_ea <- NPV_pe(benefits_var = pv_benef_in, costs_var = cost1_in)
+res_npv_no_ext_ea <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in)
 unit_test(res_npv_no_ext_ea, 10.9436791201805)
 #yes externality NPV using EAs costs
-res_npv_yes_ext_ea <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = cost1_in)
+res_npv_yes_ext_ea <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = cost1_in)
 unit_test(res_npv_yes_ext_ea, 59.2920560586455)
 
 
 #KLPS2019
-res_npv_no_ext_klps <- NPV_pe(benefits_var = pv_benef_in_new, costs_var = costs2_in)
+res_npv_no_ext_klps <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = costs2_in)
 unit_test(res_npv_no_ext_klps, 47.6017891133612)
 
 #CEA for EA
-cea_no_ext_ea <- CEA_pe(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0)
+cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0)
 unit_test(cea_no_ext_ea, 130.042378933876)
 
-rcea_no_ext_ea <- RCEA_pe( CEA_var = CEA_pe(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0),
+rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0),
          CEA_cash_var = 744)
 unit_test(rcea_no_ext_ea, 0.174788143728328)
 
 ```
 
 
-- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** `r round(res_npv_no_ext_pe,4)`    
+- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** `r round(res_npv_no_ext_pe,1)`    
 
-- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(res_npv_yes_ext_pe,4)`
+- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(res_npv_yes_ext_pe,1)`
 
-- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** `r round(res_npv_no_ext_ea,4)`    
+- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** `r round(res_npv_no_ext_ea,1)`    
 
-- **NPV with externalities in EA 2019 ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(res_npv_yes_ext_ea,4)`
+- **NPV with externalities in EA 2019 ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(res_npv_yes_ext_ea,1)`
 
-- **NPV without externalities in KLPS 2019:** `r round(res_npv_no_ext_klps,4)`    
+- **NPV without externalities in KLPS 2019:** `r round(res_npv_no_ext_klps,1)`    
 
-- **CEA without externalities in EA:** `r round(cea_no_ext_ea,4)`    
+- **CEA without externalities in EA:** `r round(cea_no_ext_ea,1)`    
 
-- **RCEA without externalities in EA (relative to cash):** `r round(rcea_no_ext_ea,4)`    
+- **RCEA without externalities in EA (relative to cash):** `r round(rcea_no_ext_ea,1)`    
 
 
 # Montecarlo simulations  
@@ -1193,12 +1194,13 @@ for (i in 1:nsims) {
     saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_sim[i],
                                                 q_full_var = q_full_sim[i],
                                                 q_zero_var = q_zero_sim[i]) )
+    
     #--------------- Inputs for pv_benef_f -------------------------------------------
     # Make explicit non-function inputs:
-    earnings_in_no_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
+    earnings_in_no_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
                 lambda2_var = 0, saturation_var = saturation_in,
                 coverage_var = coverage_sim[i])
-    earnings_in_yes_ext <- earnings1(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
+    earnings_in_yes_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
                 lambda2_var = lambda2_in[1], saturation_var = saturation_in,
                 coverage_var = coverage_sim[i])
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_sim[i], inflation_var = inflation_sim[i]) )
@@ -1221,6 +1223,7 @@ for (i in 1:nsims) {
 
     costs1_country_sim <-  costs1_ratios_in_f(counts_var = costs1_counts_sim,
                                               costs_var =  costs1_costs_sim)
+    
     #--------------- Inputs for costs2 ---------------------------------------------
     # Make explicit non-function inputs:
     delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
@@ -1235,6 +1238,7 @@ for (i in 1:nsims) {
                                               n_students_var = n_students_sim[i])
     s2_in <- s2_f(unit_cost_local_var = unit_cost_local_sim[i],
                   ex_rate_var = ex_rate_sim[i], years_of_treat_var = years_of_treat_sim[i])
+    
     #--------------- Inputs for NPV ------------------------------------------------
     # Make explicit non-function inputs:
     pv_benef_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_sim[i],
@@ -1255,7 +1259,7 @@ for (i in 1:nsims) {
                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_sim[i])
 
     # HERE ARE NOOR's results LOOK HERE
-    earnings_in_no_ext_new <- delta_earnings_f(t_var = 0:50, lambda1k1_var = lambda1_new_sim[i,1],
+    earnings_in_no_ext_new <- earnings2_f(t_var = 0:50, lambda1k1_var = lambda1_new_sim[i,1],
                                              lambda1k2_var = lambda1_new_sim[i,2],
                                              lambda1k3_var = lambda1_new_sim[i,3])
     pv_benef_in_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_sim[i],
@@ -1265,23 +1269,26 @@ for (i in 1:nsims) {
     # Compute policy estimate
 
     #no externality NPV
-    res_npv_no_ext_sim[i] <- NPV_pe(benefits_var = pv_benef_in, costs_var = costs2_in)
+    res_npv_no_ext_sim[i] <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = costs2_in)
     #yes externality NPV
-    res_npv_yes_ext_sim[i] <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
+    res_npv_yes_ext_sim[i] <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
 
     #no externality NPV using EAs costs
-    res_npv_no_ext_ea_sim[i] <- NPV_pe(benefits_var = pv_benef_in, costs_var = cost1_in)
+    res_npv_no_ext_ea_sim[i] <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in)
     #yes externality NPV using EAs costs
-    res_npv_yes_ext_ea_sim[i] <- NPV_pe(benefits_var = pv_benef_in_x, costs_var = cost1_in)
+    res_npv_yes_ext_ea_sim[i] <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = cost1_in)
 
 
     #KLPS2019
-    res_npv_no_ext_klps_sim[i] <- NPV_pe(benefits_var = pv_benef_in_new, costs_var = costs2_in)
+    res_npv_no_ext_klps_sim[i] <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = costs2_in)
 
     #CEA for EA
-    cea_no_ext_ea_sim[i] <- CEA_pe(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0)
-    rcea_no_ext_ea_sim[i] <- RCEA_pe( CEA_var = CEA_pe(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0),
-             CEA_cash_var = 744)
+    cea_no_ext_ea_sim[i] <- CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in, 
+                                   fudging_var = 0)
+    rcea_no_ext_ea_sim[i] <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_in, 
+                                                       costs_var = cost1_in, 
+                                                       fudging_var = 0), 
+                                      CEA_cash_var = 744)
 }
 
 
@@ -1321,7 +1328,7 @@ for ( i in 1:length(policy_estimates) ) {
   }
 }
 
-npv_sim <- res_npv_yes_ext_sim     
+npv_sim <- cea_no_ext_ea_sim     
 
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
@@ -1335,7 +1342,7 @@ ggplot() +
   labs(y = NULL,
        x = "NPV" ,
        title = "Distribution of NPV of Fiscal Impacts of Deworming",
-       subtitle = paste0("N = ", nsims, " simulations. Take: ",
+       subtitle = paste0("N = ", nsims, " simulations. Takes ",
                          round(total_time, 1)," ",attributes(total_time)$unit )  )+
   annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
   annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
