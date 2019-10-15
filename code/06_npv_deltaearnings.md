@@ -164,13 +164,7 @@ npv_mo_f <- function(interest_r_var,
             apply( ( 1 / (1 + interest_r_var) )^index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
           ) - (s2_var * q2_var  - s1_var * q1_var)
-  
-  # res2 <- sum( ns * (apply(benef, 2, sum) -
-  #           apply( ( 1 / (1 + interest_r_var) )^index_t *
-  #                    delta_ed_s * cost_of_schooling_var, 2, sum) )
-  #         ) - (s2_var * q2_var  - s1_var * q1_var)
   return(res1) 
-  #return(res2)
 }
 ```
 
@@ -379,12 +373,31 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 
 ```r
-# replace with tax_so == 1
+#########
+# PANEL A
+#########
+
+
+#########
+# PANEL B
+#########
+
+irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1), 0.4, maxiter=100))$root
+irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_earnings_var = delta_earnings_in), 0.4, maxiter=100))$root
+irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x), 0.4, maxiter=100))$root
+irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_earnings_var = delta_earnings_in), 0.4, maxiter=100))$root
+
+#########
+# PANEL C
+#########
+
+# Net Present Value (2017 USD PPP)
 npv_realint_persist <- npv_mo_f(interest_r_var=interest_in, tax_var = 1)
 npv_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in, tax_var = 1)
 npv_int10_persist   <- npv_mo_f(interest_r_var = 0.10, tax_var = 1)
 npv_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in, tax_var = 1)
 
+# Net Present Value of tax revenue (2017 USD PPP)
 tax_realint_persist <- npv_mo_f(interest_r_var = interest_in)
 tax_realint_die     <- npv_mo_f(interest_r_var=interest_in, delta_earnings_var = delta_earnings_in)
 tax_int10_persist   <- npv_mo_f(interest_r_var = 0.10)
@@ -410,7 +423,7 @@ tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delt
 |        |                                 |25 years            |                                    |0                                               |10%              |**X**                             |
 |        |                                 |25 years            |                                    |0                                               |5%               |**X**                             |
 |PANEL B                                                                                                                                                                                                   
-|        |                                 |40 years            |0                                   |                                                |**54.3%**        |83.67    |
+|        |                                 |40 years            |0                                   |                                                |**0.5**        |83.67    |
 |        |                                 |40 years            |                                    | 0                                              |**26.7%**        |83.67    |
 |        |                                 |25 years            |0                                   |                                                |**54.2%**        |83.67    |
 |        |                                 |25 years            |                                    | 0                                              |**26.3%**        |83.67    |
