@@ -133,7 +133,7 @@ chunk_params <- function(){
 
     staff_time_so <- 0.3           #Added Deworming costs due to goverment staff time
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
-    
+
 ###############################################################################
 ###############################################################################  
 }
@@ -214,7 +214,7 @@ chunk_policy_est <- function(){
     }
     RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
         CEA_var / CEA_cash_var
-    } 
+    }
 
     NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
         benefits_var - costs_var
@@ -864,11 +864,11 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 
 ```r
-# Function dependency is depicted as follows: 
+# Function dependency is depicted as follows:
 # f(g()) =
 # f
 # └──── g
-# 
+#
 #       ##     ###    ####
 # 1     2       3     4
 #       ##     ###    ####
@@ -882,7 +882,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 # |      |      ├──── lambda2_in_f
 # │      |      └──── saturation_in_f
 # │      ├──── earnings2_f
-# │      |      └────lambda_r_f 
+# │      |      └────lambda_r_f
 # │      └──── interest_f
 # └──── cost1_f
 # │      └──── costs1_ratios_in_f
@@ -909,6 +909,7 @@ unit_test <- function(to_test_var, original_var){
     }
 }
 
+# wrap the whole thing in a function and prepare for sims.
 
 # Write only functions here. And make all arguments explicit
 ####------------ Inputs for wage_t ---------------------------------------------
@@ -924,9 +925,13 @@ unit_test(wage_0_in, 0.1481084)
 wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_so,
             coef_exp1_var = coef_exp_so[1], coef_exp2_var = coef_exp_so[2])
 
-lambda1_in <- lambda1_in_f(lambda1_var = lambda1_so)
-lambda1_r_in <- lambda_r_f(lambda1_var = lambda1_in, alpha_0_var = alpha_0_so,
-                           alpha_r_var = alpha_r_so)
+lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_so),
+                          alpha_0_var = alpha_0_so, alpha_r_var = alpha_r_so)
+
+lambda1_new_in <- lambda_r_f(lambda1_var = lambda1_new_so,
+                                   alpha_0_var = alpha_0_so,
+                                   alpha_r_var = alpha_r_so)
+
 lambda2_in <- lambda2_in_f(lambda2_var = lambda2_so)
 
 saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so,
@@ -935,8 +940,7 @@ unit_test(wage_t_in, 4.572308)
 # ADD UNIT TEST FOR SATURATION AN LAMBDAS
 
 ###------------ Inputs for earnings2 -------------------------------------------
-lambda1_new_in <- lambda_r_f(lambda1_new_so, alpha_0_var = alpha_0_so,
-                             alpha_r_var = alpha_r_so)
+
 #ADD UNIT TEST FOR LAMBDAS
 
 ##------------ Inputs for pv_benef_f -------------------------------------------
@@ -1054,6 +1058,10 @@ unit_test(res_npv_yes_ext_ea, 59.2920560586455)
 res_npv_no_ext_klps <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = costs2_in)
 unit_test(res_npv_no_ext_klps, 47.6017891133612)
 
+res_npv_no_ext_klps_eacosts <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = cost1_in)
+unit_test(res_npv_no_ext_klps_eacosts, 59.15516)
+
+
 #CEA for EA
 cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0)
 unit_test(cea_no_ext_ea, 130.042378933876)
@@ -1062,138 +1070,81 @@ rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_in, cost
          CEA_cash_var = 744)
 unit_test(rcea_no_ext_ea, 0.174788143728328)
 
-kable(mtcars[1:10, 1:6], caption = "Group Rows") %>% 
-  add_header_above(c(" ", "Group 1" = 2, "Group 2" = 2, "Group 3" = 2)) %>%
-  add_header_above(c(" ", "Group 4" = 4, "Group 5" = 2)) %>%
-  add_header_above(c(" ", "Group 6" = 6)) %>% 
+npv_table <- data.frame("no_ext" =  round( c(res_npv_no_ext_pe, NA,
+                                             res_npv_no_ext_ea), 1) ,
+                        "yes_ext" = round( c(NA, res_npv_yes_ext_pe, res_npv_yes_ext_ea), 1) ,
+                        "no_ext_" = round( c(res_npv_no_ext_klps, NA,
+                                             res_npv_no_ext_klps_eacosts), 1) ,
+                        row.names = c("no_ext", "yes_ext", "no_ext_"))
+
+kable(npv_table, caption = "Caption of the table") %>%
+  add_header_above(c(" ", "Baird = EA" = 2, "KLPS4" = 1)) %>%
+  add_header_above(c(" ", "Benefits" = 3)) %>%
   kable_styling("striped", full_width = F) %>%
-  group_rows("Group 1", 4, 7) %>%   # same result with group 1=4
-  group_rows("Group 2", 8, 10)
+  group_rows("Costs: Baird = KLPS4", 1, 2) %>%
+  group_rows("Costs: EA", 3, 3)   # same result with group 1=4
 ```
 
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>Group Rows</caption>
+<caption>Caption of the table</caption>
  <thead>
 <tr>
 <th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="6"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 6</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Benefits</div></th>
 </tr>
 <tr>
 <th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 4</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 5</div></th>
-</tr>
-<tr>
-<th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 1</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 2</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Group 3</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Baird = EA</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">KLPS4</div></th>
 </tr>
   <tr>
    <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> mpg </th>
-   <th style="text-align:right;"> cyl </th>
-   <th style="text-align:right;"> disp </th>
-   <th style="text-align:right;"> hp </th>
-   <th style="text-align:right;"> drat </th>
-   <th style="text-align:right;"> wt </th>
+   <th style="text-align:right;"> no_ext </th>
+   <th style="text-align:right;"> yes_ext </th>
+   <th style="text-align:right;"> no_ext_ </th>
   </tr>
  </thead>
 <tbody>
-  <tr>
-   <td style="text-align:left;"> Mazda RX4 </td>
-   <td style="text-align:right;"> 21.0 </td>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 160.0 </td>
-   <td style="text-align:right;"> 110 </td>
-   <td style="text-align:right;"> 3.90 </td>
-   <td style="text-align:right;"> 2.620 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Mazda RX4 Wag </td>
-   <td style="text-align:right;"> 21.0 </td>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 160.0 </td>
-   <td style="text-align:right;"> 110 </td>
-   <td style="text-align:right;"> 3.90 </td>
-   <td style="text-align:right;"> 2.875 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Datsun 710 </td>
-   <td style="text-align:right;"> 22.8 </td>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:right;"> 108.0 </td>
-   <td style="text-align:right;"> 93 </td>
-   <td style="text-align:right;"> 3.85 </td>
-   <td style="text-align:right;"> 2.320 </td>
-  </tr>
-  <tr grouplength="4"><td colspan="7" style="border-bottom: 1px solid;"><strong>Group 1</strong></td></tr>
+  <tr grouplength="2"><td colspan="4" style="border-bottom: 1px solid;"><strong>Costs: Baird = KLPS4</strong></td></tr>
 <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Hornet 4 Drive </td>
-   <td style="text-align:right;"> 21.4 </td>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 258.0 </td>
-   <td style="text-align:right;"> 110 </td>
-   <td style="text-align:right;"> 3.08 </td>
-   <td style="text-align:right;"> 3.215 </td>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext </td>
+   <td style="text-align:right;"> -0.6 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 47.6 </td>
   </tr>
   <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Hornet Sportabout </td>
-   <td style="text-align:right;"> 18.7 </td>
-   <td style="text-align:right;"> 8 </td>
-   <td style="text-align:right;"> 360.0 </td>
-   <td style="text-align:right;"> 175 </td>
-   <td style="text-align:right;"> 3.15 </td>
-   <td style="text-align:right;"> 3.440 </td>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> yes_ext </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 34.3 </td>
+   <td style="text-align:right;"> NA </td>
   </tr>
-  <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Valiant </td>
-   <td style="text-align:right;"> 18.1 </td>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 225.0 </td>
-   <td style="text-align:right;"> 105 </td>
-   <td style="text-align:right;"> 2.76 </td>
-   <td style="text-align:right;"> 3.460 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Duster 360 </td>
-   <td style="text-align:right;"> 14.3 </td>
-   <td style="text-align:right;"> 8 </td>
-   <td style="text-align:right;"> 360.0 </td>
-   <td style="text-align:right;"> 245 </td>
-   <td style="text-align:right;"> 3.21 </td>
-   <td style="text-align:right;"> 3.570 </td>
-  </tr>
-  <tr grouplength="3"><td colspan="7" style="border-bottom: 1px solid;"><strong>Group 2</strong></td></tr>
+  <tr grouplength="1"><td colspan="4" style="border-bottom: 1px solid;"><strong>Costs: EA</strong></td></tr>
 <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Merc 240D </td>
-   <td style="text-align:right;"> 24.4 </td>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:right;"> 146.7 </td>
-   <td style="text-align:right;"> 62 </td>
-   <td style="text-align:right;"> 3.69 </td>
-   <td style="text-align:right;"> 3.190 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Merc 230 </td>
-   <td style="text-align:right;"> 22.8 </td>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:right;"> 140.8 </td>
-   <td style="text-align:right;"> 95 </td>
-   <td style="text-align:right;"> 3.92 </td>
-   <td style="text-align:right;"> 3.150 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> Merc 280 </td>
-   <td style="text-align:right;"> 19.2 </td>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 167.6 </td>
-   <td style="text-align:right;"> 123 </td>
-   <td style="text-align:right;"> 3.92 </td>
-   <td style="text-align:right;"> 3.440 </td>
+   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext_ </td>
+   <td style="text-align:right;"> 10.9 </td>
+   <td style="text-align:right;"> 59.3 </td>
+   <td style="text-align:right;"> 59.2 </td>
   </tr>
 </tbody>
 </table>
+
+```r
+# collapse_rows_dt <- data.frame(C1 = c(rep("a", 10), rep("b", 5)),
+#                  C2 = c(rep("c", 7), rep("d", 3), rep("c", 2), rep("d", 3)),
+#                  C3 = 1:15,
+#                  C4 = sample(c(0,1), 15, replace = TRUE))
+# kable(collapse_rows_dt, align = "c") %>%
+#   kable_styling(full_width = F) %>%
+#   column_spec(1, bold = T) %>%
+#   collapse_rows(columns = 1:2, valign = "top")
+
+# kable(mtcars[1:3, 1:3], caption = "Caption of the table") %>%
+#   add_header_above(c(" ", "Group 1" = 2, "Group 2" = 2, "---" = 1)) %>%
+#   add_header_above(c(" ", "Baird = EA" = 2, "KLPS4" = 1)) %>%
+#   add_header_above(c(" ", "Benefits" = 3)) %>%
+#   kable_styling("striped", full_width = F) %>%
+#   group_rows("Group 1", 1, 3)
+```
 
 
 - **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** -0.6    
@@ -1218,7 +1169,7 @@ kable(mtcars[1:10, 1:6], caption = "Group Rows") %>%
 # Remove everything except the chunk functions
 #rm(list = ls()[!(ls() %in% ls(pattern = "call_params_f()"))])
 #invisible( list2env(call_params_f(), .GlobalEnv) )
-# add chunk functions
+# add chunk functions0
 
 # Draws
 set.seed(142857)
@@ -1323,15 +1274,21 @@ for (i in 1:nsims) {
     saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_sim[i],
                                                 q_full_var = q_full_sim[i],
                                                 q_zero_var = q_zero_sim[i]) )
-    
+
     #--------------- Inputs for pv_benef_f -------------------------------------------
     # Make explicit non-function inputs:
+    #earnings 1
     earnings_in_no_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
                 lambda2_var = 0, saturation_var = saturation_in,
                 coverage_var = coverage_sim[i])
     earnings_in_yes_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
                 lambda2_var = lambda2_in[1], saturation_var = saturation_in,
                 coverage_var = coverage_sim[i])
+   #earnings 2
+    earnings_in_no_ext_new <- earnings2_f(t_var = 0:50, lambda1k1_var = lambda1_new_sim[i,1],
+                                             lambda1k2_var = lambda1_new_sim[i,2],
+                                             lambda1k3_var = lambda1_new_sim[i,3])  
+
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_sim[i], inflation_var = inflation_sim[i]) )
 
     #--------------- Inputs for costs1 ---------------------------------------------
@@ -1352,7 +1309,7 @@ for (i in 1:nsims) {
 
     costs1_country_sim <-  costs1_ratios_in_f(counts_var = costs1_counts_sim,
                                               costs_var =  costs1_costs_sim)
-    
+
     #--------------- Inputs for costs2 ---------------------------------------------
     # Make explicit non-function inputs:
     delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
@@ -1367,13 +1324,16 @@ for (i in 1:nsims) {
                                               n_students_var = n_students_sim[i])
     s2_in <- s2_f(unit_cost_local_var = unit_cost_local_sim[i],
                   ex_rate_var = ex_rate_sim[i], years_of_treat_var = years_of_treat_sim[i])
-    
+
     #--------------- Inputs for NPV ------------------------------------------------
     # Make explicit non-function inputs:
     pv_benef_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_sim[i],
                             interest_r_var = interest_in, periods_var = periods_so)
 
     pv_benef_in_x <- pv_benef_f(earnings_var = earnings_in_yes_ext * tax_sim[i],
+                            interest_r_var = interest_in, periods_var = periods_so)
+
+    pv_benef_in_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_sim[i],
                             interest_r_var = interest_in, periods_var = periods_so)
 
     cost1_in <- costs1_f(country_w_var = costs1_country_sim$ratios_data$country_w,
@@ -1386,13 +1346,6 @@ for (i in 1:nsims) {
     costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in_x,
                interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_sim[i])
-
-    # HERE ARE NOOR's results LOOK HERE
-    earnings_in_no_ext_new <- earnings2_f(t_var = 0:50, lambda1k1_var = lambda1_new_sim[i,1],
-                                             lambda1k2_var = lambda1_new_sim[i,2],
-                                             lambda1k3_var = lambda1_new_sim[i,3])
-    pv_benef_in_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_sim[i],
-                            interest_r_var = interest_in, periods_var = periods_so)
 
     # Compute policy estimate
 
@@ -1410,11 +1363,11 @@ for (i in 1:nsims) {
     res_npv_no_ext_klps_sim[i] <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = costs2_in)
 
     #CEA for EA
-    cea_no_ext_ea_sim[i] <- CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in, 
+    cea_no_ext_ea_sim[i] <- CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in,
                                    fudging_var = 0)
-    rcea_no_ext_ea_sim[i] <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_in, 
-                                                       costs_var = cost1_in, 
-                                                       fudging_var = 0), 
+    rcea_no_ext_ea_sim[i] <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_in,
+                                                       costs_var = cost1_in,
+                                                       fudging_var = 0),
                                       CEA_cash_var = 744)
 }
 
