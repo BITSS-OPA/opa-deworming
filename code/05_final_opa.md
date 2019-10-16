@@ -1019,29 +1019,47 @@ unit_test(s2_in, 1.237889)
 
 #--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
 # Make explicit non-function inputs:
-#benefits
-pv_benef_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_so,
+#Benefits:
+#Baird w/tax and no externalities (no ext)
+pv_benef_tax_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_so,
                         interest_r_var = interest_in, periods_var = periods_so)
-unit_test(pv_benef_in, 11.02849)
-
-pv_benef_in_x <- pv_benef_f(earnings_var = earnings_in_yes_ext * tax_so,
+unit_test(pv_benef_tax_nx_in, 11.02849)
+#Baird w/t and ext
+pv_benef_tax_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext * tax_so,
                         interest_r_var = interest_in, periods_var = periods_so)
-unit_test(pv_benef_in_x, 59.37686)
+unit_test(pv_benef_tax_yx_in, 59.37686)
+#Baird all and no ext
+pv_benef_all_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext,
+                        interest_r_var = interest_in, periods_var = periods_so)
+unit_test(pv_benef_all_nx_in, 66.5368686659935)
+#Baird all and ext
+pv_benef_all_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext,
+                        interest_r_var = interest_in, periods_var = periods_so)
+unit_test(pv_benef_all_yx_in, 358.231450496853)
 
-pv_benef_in_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_so,
+#KLPS4 w/t and no ext
+pv_benef_tax_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_so,
                         interest_r_var = interest_in, periods_var = periods_so)
 # ADD UNIT TEST
-# costs1
+# KLPS4 all and no ext
+pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
+                        interest_r_var = interest_in, periods_var = periods_so)
+# ADD UNIT TEST
+
+#Costs
+
+# costs1: EA costs no externalities
 cost1_in <- costs1_f(country_w_var = costs1_country$ratios_data$country_w,
                      country_cost_var = costs1_country$ratios_data$per_cap)
 unit_test(cost1_in,  0.08480686)
 
-# costs2
+# costs2: Baird no externalities
 costs2_in <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in,
            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
 unit_test(costs2_in, 11.63818)
 
+# Baird yes externalities
 costs2_in_x <- cost2_f(periods_var = periods_so, delta_ed_var = delta_ed_final_in_x,
            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_so)
@@ -1052,57 +1070,68 @@ unit_test(costs2_in_x,  25.05821)
 
 
 ```r
-#no externality NPV, Baird (taxes)
-res_npv_no_ext_pe <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = costs2_in)
-unit_test(res_npv_no_ext_pe, -0.6096942)
-#yes externality NPV, Baird (taxes)
-res_npv_yes_ext_pe <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
-unit_test(res_npv_yes_ext_pe, 34.31866)
+#Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
+baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
+unit_test(baird1, -0.6096942)
+#Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
+baird2 <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
+unit_test(baird2, 34.31866)
+
+# Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
+baird3 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
+unit_test(baird3, 54.8986884881819)
+# Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
+baird4 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
+unit_test(baird4, 333.17324538204)
+
+#KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
+klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
+unit_test(klps4_1, 47.6017891133612)
+#KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
+klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
+unit_test(klps4_2, 345.767366073607)
 
 
-#no externality NPV, Baird (taxes)
-res_npv_no_ext_pe1 <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = costs2_in)
-unit_test(res_npv_no_ext_pe1, -0.6096942)
-#yes externality NPV, Baird (taxes)
-res_npv_yes_ext_pe1 <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
-unit_test(res_npv_yes_ext_pe1, 34.31866)
+# res_npv_no_ext_klps_eacosts <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = cost1_in)
+# unit_test(res_npv_no_ext_klps_eacosts, 59.15516)
 
+# EA1: no externality NPV using EAs costs
+ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
+unit_test(ea1, 66.4520618047856)
+# EA2: yes externality NPV using EAs costs
+ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
+unit_test(ea2, 358.146643635645)
+# EA3: benef= KLPS all and no ext; Costs=EA
+ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
+unit_test(ea3, 357.320739390211)
 
-
-#no externality NPV using EAs costs
-res_npv_no_ext_ea <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in)
-unit_test(res_npv_no_ext_ea, 10.9436791201805)
-#yes externality NPV using EAs costs
-res_npv_yes_ext_ea <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = cost1_in)
-unit_test(res_npv_yes_ext_ea, 59.2920560586455)
-
-
-#KLPS2019
-res_npv_no_ext_klps <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = costs2_in)
-unit_test(res_npv_no_ext_klps, 47.6017891133612)
-
-res_npv_no_ext_klps_eacosts <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = cost1_in)
-unit_test(res_npv_no_ext_klps_eacosts, 59.15516)
 
 
 #CEA for EA
-cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0)
-unit_test(cea_no_ext_ea, 130.042378933876)
+cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0)
+unit_test(cea_no_ext_ea, 784.569405332587)
 
-rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in, fudging_var = 0),
+rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0),
          CEA_cash_var = 744)
-unit_test(rcea_no_ext_ea, 0.174788143728328)
+unit_test(rcea_no_ext_ea, 1.05452877060832)
 
-npv_table <- data.frame("no_ext" =  round( c(res_npv_no_ext_pe, NA,
-                                             res_npv_no_ext_ea), 1) ,
-                        "yes_ext" = round( c(NA, res_npv_yes_ext_pe, res_npv_yes_ext_ea), 1) ,
-                        "no_ext_" = round( c(res_npv_no_ext_klps, NA,
-                                             res_npv_no_ext_klps_eacosts), 1) ,
+npv_table <- data.frame("no_ext" =  round( c(baird1, NA,
+                                             NA), 1) ,
+                        "yes_ext" = round( c(NA, baird2, NA), 1) ,
+                        "no_ext_" = round( c(baird3, NA,
+                                             ea1), 1) ,
+                        "yes_ext_" = round( c(NA, baird4,
+                                             ea2), 1) ,
+                        "no_ext " = round( c(NA, klps4_1,
+                                             NA), 1) ,
+                        ".no_ext " = round( c(NA, klps4_2,
+                                             ea3), 1) ,
                         row.names = c("no_ext", "yes_ext", "no_ext_"))
 
 kable(npv_table, caption = "Caption of the table") %>%
-  add_header_above(c(" ", "Baird = EA" = 2, "KLPS4" = 1)) %>%
-  add_header_above(c(" ", "Benefits" = 3)) %>%
+  add_header_above(c(" ", "tax" = 2, "all" = 2, "tax" = 1, "all" = 1)) %>%
+  add_header_above(c(" ", "Baird = EA" = 4, "KLPS4" = 2)) %>%
+  add_header_above(c(" ", "Benefits" = 6)) %>%
   kable_styling("striped", full_width = F) %>%
   group_rows("Costs: Baird = KLPS4", 1, 2) %>%
   group_rows("Costs: EA", 3, 3)   # same result with group 1=4
@@ -1113,76 +1142,79 @@ kable(npv_table, caption = "Caption of the table") %>%
  <thead>
 <tr>
 <th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Benefits</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="6"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Benefits</div></th>
 </tr>
 <tr>
 <th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Baird = EA</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">KLPS4</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Baird = EA</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">KLPS4</div></th>
+</tr>
+<tr>
+<th style="border-bottom:hidden" colspan="1"></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">tax</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">all</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">tax</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">all</div></th>
 </tr>
   <tr>
    <th style="text-align:left;">   </th>
    <th style="text-align:right;"> no_ext </th>
    <th style="text-align:right;"> yes_ext </th>
    <th style="text-align:right;"> no_ext_ </th>
+   <th style="text-align:right;"> yes_ext_ </th>
+   <th style="text-align:right;"> no_ext. </th>
+   <th style="text-align:right;"> .no_ext. </th>
   </tr>
  </thead>
 <tbody>
-  <tr grouplength="2"><td colspan="4" style="border-bottom: 1px solid;"><strong>Costs: Baird = KLPS4</strong></td></tr>
+  <tr grouplength="2"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: Baird = KLPS4</strong></td></tr>
 <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext </td>
    <td style="text-align:right;"> -0.6 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 47.6 </td>
+   <td style="text-align:right;"> 54.9 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
   </tr>
   <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> yes_ext </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> 34.3 </td>
    <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 333.2 </td>
+   <td style="text-align:right;"> 47.6 </td>
+   <td style="text-align:right;"> 345.8 </td>
   </tr>
-  <tr grouplength="1"><td colspan="4" style="border-bottom: 1px solid;"><strong>Costs: EA</strong></td></tr>
+  <tr grouplength="1"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: EA</strong></td></tr>
 <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext_ </td>
-   <td style="text-align:right;"> 10.9 </td>
-   <td style="text-align:right;"> 59.3 </td>
-   <td style="text-align:right;"> 59.2 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 66.5 </td>
+   <td style="text-align:right;"> 358.1 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 357.3 </td>
   </tr>
 </tbody>
 </table>
 
-```r
-# collapse_rows_dt <- data.frame(C1 = c(rep("a", 10), rep("b", 5)),
-#                  C2 = c(rep("c", 7), rep("d", 3), rep("c", 2), rep("d", 3)),
-#                  C3 = 1:15,
-#                  C4 = sample(c(0,1), 15, replace = TRUE))
-# kable(collapse_rows_dt, align = "c") %>%
-#   kable_styling(full_width = F) %>%
-#   column_spec(1, bold = T) %>%
-#   collapse_rows(columns = 1:2, valign = "top")
 
-# kable(mtcars[1:3, 1:3], caption = "Caption of the table") %>%
-#   add_header_above(c(" ", "Group 1" = 2, "Group 2" = 2, "---" = 1)) %>%
-#   add_header_above(c(" ", "Baird = EA" = 2, "KLPS4" = 1)) %>%
-#   add_header_above(c(" ", "Benefits" = 3)) %>%
-#   kable_styling("striped", full_width = F) %>%
-#   group_rows("Group 1", 1, 3)
-```
+## Results for overall welfare (not only taxes)
 
+- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** 54.9    
 
-- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** -0.6    
+- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = 10.2$ ):** 333.2
 
-- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = 10.2$ ):** 34.3
+- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 66.5    
 
-- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 10.9    
+- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 358.1
 
-- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 59.3
+- **NPV without externalities in KLPS 2019:** 345.8    
 
-- **NPV without externalities in KLPS 2019:** 47.6    
+- **CEA without externalities in EA:** 784.6    
 
-- **CEA without externalities in EA:** 130    
-
-- **RCEA without externalities in EA (relative to cash):** 0.2    
+- **RCEA without externalities in EA (relative to cash):** 1.1    
 
 
 # Montecarlo simulations  
@@ -1451,8 +1483,6 @@ ggplot() +
   annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
 ```
-
-![](05_final_opa_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
 
 # Sensitivity Analysis  
 
