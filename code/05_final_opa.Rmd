@@ -878,17 +878,18 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 # Main results
 
-baird no ex  = NPV(benef = tax * baird_no_ex, costs = baird_no_ex)  
-baird yes ex = NPV(benef = tax * baird_yes_ex, costs = baird_yes_ex)
 
-ea0 no ex  = NPV(benef = baird_no_ex, costs = baird_no_ex)  
-ea0 yes ex = NPV(benef = baird_yes_ex, costs = baird_yes_ex)
-
-klps4 no ex  = NPV(benef = tax * klps4_no_ex, costs = baird_no_ex)  
-klps4 yes ex = NA  
-
-ea tax no ex  = NPV(benef = tax * baird_no_ex,  costs = ea)  
-ea tax yes ex = NPV(benef = tax * baird_yes_ex, costs = ea)
+| Benfits                                   | Costs        | Name    |
+|-------------------------------------------|--------------|---------|
+| Baird w/tax and no externalities (no ext) | Baird no ext | Baird 1 |
+| Baird w/t and ext                         | Baird ext    | Baird 2 |
+| Baird all and no ext                      | Baird no ext | Baird 3 |
+| Baird all and ext                         | Baird ext    | Baird 4 |
+| KLPS4 w/t and no ext                      | Baird no ext | KLPS4_1 |
+| KLPS4 all and no ext                      | Baird no ext | KLPS4_2 |
+| Baird all and no ext                      | EA           | EA 1    |
+| Baird all and ext                         | EA           | EA 2    |
+| KLPS all and no ext                       | EA           | EA 3    |  
 
 
 
@@ -1033,18 +1034,35 @@ unit_test(s2_in, 1.237889)
 
 #--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
 # Make explicit non-function inputs:
-#benefits
-pv_benef_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_so,
+#Benefits:
+#Baird w/tax and no externalities (no ext)
+pv_benef_tax_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_so,
                         interest_r_var = interest_in, periods_var = periods_so)
-unit_test(pv_benef_in, 11.02849)
-
-pv_benef_in_x <- pv_benef_f(earnings_var = earnings_in_yes_ext * tax_so,
+unit_test(pv_benef_tax_nx_in, 11.02849)
+#Baird w/t and ext
+pv_benef_tax_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext * tax_so,
                         interest_r_var = interest_in, periods_var = periods_so)
-unit_test(pv_benef_in_x, 59.37686)
+unit_test(pv_benef_tax_yx_in, 59.37686)
+#Baird all and no ext
+pv_benef_all_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext,
+                        interest_r_var = interest_in, periods_var = periods_so)
+unit_test(pv_benef_all_nx_in, 66.5368686659935)
+#Baird all and ext
+pv_benef_all_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext,
+                        interest_r_var = interest_in, periods_var = periods_so)
+unit_test(pv_benef_all_yx_in, 358.231450496853)
 
-pv_benef_in_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_so,
+#KLPS4 w/t and no ext
+pv_benef_tax_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_so,
                         interest_r_var = interest_in, periods_var = periods_so)
 # ADD UNIT TEST
+# KLPS4 all and no ext
+pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
+                        interest_r_var = interest_in, periods_var = periods_so)
+# ADD UNIT TEST
+
+#Costs
+
 # costs1
 cost1_in <- costs1_f(country_w_var = costs1_country$ratios_data$country_w,
                      country_cost_var = costs1_country$ratios_data$per_cap)

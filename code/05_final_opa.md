@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "15 October, 2019"
+date: "16 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -863,6 +863,21 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 # Main results
 
 
+| Benfits                                   | Costs        | Name    |
+|-------------------------------------------|--------------|---------|
+| Baird w/tax and no externalities (no ext) | Baird no ext | Baird 1 |
+| Baird w/t and ext                         | Baird ext    | Baird 2 |
+| Baird all and no ext                      | Baird no ext | Baird 3 |
+| Baird all and ext                         | Baird ext    | Baird 4 |
+| KLPS4 w/t and no ext                      | Baird no ext | KLPS4_1 |
+| KLPS4 all and no ext                      | Baird no ext | KLPS4_2 |
+| Baird all and no ext                      | EA           | EA 1    |
+| Baird all and ext                         | EA           | EA 2    |
+| KLPS all and no ext                       | EA           | EA 3    |  
+
+
+
+
 ```r
 # Function dependency is depicted as follows:
 # f(g()) =
@@ -928,10 +943,6 @@ wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_s
 lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_so),
                           alpha_0_var = alpha_0_so, alpha_r_var = alpha_r_so)
 
-lambda1_new_in <- lambda_r_f(lambda1_var = lambda1_new_so,
-                                   alpha_0_var = alpha_0_so,
-                                   alpha_r_var = alpha_r_so)
-
 lambda2_in <- lambda2_in_f(lambda2_var = lambda2_so)
 
 saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so,
@@ -939,8 +950,10 @@ saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_v
 unit_test(wage_t_in, 4.572308)
 # ADD UNIT TEST FOR SATURATION AN LAMBDAS
 
-###------------ Inputs for earnings2 -------------------------------------------
-
+###------------ Inputs for earnings2_f------------------------------------------
+lambda1_new_in <- lambda_r_f(lambda1_var = lambda1_new_so,
+                                   alpha_0_var = alpha_0_so,
+                                   alpha_r_var = alpha_r_so)
 #ADD UNIT TEST FOR LAMBDAS
 
 ##------------ Inputs for pv_benef_f -------------------------------------------
@@ -1039,12 +1052,22 @@ unit_test(costs2_in_x,  25.05821)
 
 
 ```r
-#no externality NPV
+#no externality NPV, Baird (taxes)
 res_npv_no_ext_pe <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = costs2_in)
 unit_test(res_npv_no_ext_pe, -0.6096942)
-#yes externality NPV
+#yes externality NPV, Baird (taxes)
 res_npv_yes_ext_pe <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
 unit_test(res_npv_yes_ext_pe, 34.31866)
+
+
+#no externality NPV, Baird (taxes)
+res_npv_no_ext_pe1 <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = costs2_in)
+unit_test(res_npv_no_ext_pe1, -0.6096942)
+#yes externality NPV, Baird (taxes)
+res_npv_yes_ext_pe1 <- NPV_pe_f(benefits_var = pv_benef_in_x, costs_var = costs2_in_x)
+unit_test(res_npv_yes_ext_pe1, 34.31866)
+
+
 
 #no externality NPV using EAs costs
 res_npv_no_ext_ea <- NPV_pe_f(benefits_var = pv_benef_in, costs_var = cost1_in)
