@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "16 October, 2019"
+date: "17 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -132,6 +132,7 @@ chunk_params <- function(){
     n_students_so <- 45            #Average pupils per teacher	45
 
     staff_time_so <- 0.3           #Added Deworming costs due to goverment staff time
+    run_sim_so <- FALSE
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 
 ###############################################################################
@@ -987,11 +988,28 @@ costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_so,
 costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
                                     df_costs_cw_var = df_costs_cw_so)$counts_data
 # ADD UNIT TEST
+run_sim <- run_sim_so
+# The following section only runs when running the simulations
+if (run_sim ==  TRUE) {
+    costs1_counts_sim <- costs1_counts_in %>%
+      mutate("total" = rnorm(n = 1, mean = total, sd = 0.1 * total))
+    costs1_costs_sim <- costs1_costs_in %>% group_by(Country) %>%
+      mutate("costs_by_country" = rnorm(n = 1, mean = costs_by_country, 
+                                        sd = 0.1 * costs_by_country))
+  } else { 
+    costs1_counts_sim <- NA
+    costs1_costs_sim <- NA
+}
 
 ##-------------- Inputs for costs1_f--------------------------------------------
 # Make explicit non-function inputs:
 costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_in, costs_var =  costs1_costs_in)
 unit_test(unlist(costs1_country$ratios_data$costs_by_country),  6880801.84046596)
+
+if (run_sim == TRUE) {
+  costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_sim, 
+                                        costs_var =  costs1_costs_sim)
+}
 
 ##-------------- Inputs for costs2_f--------------------------------------------
 # Make explicit non-function inputs:
@@ -1228,7 +1246,7 @@ kable(npv_table, caption = "Caption of the table") %>%
 
 # Draws
 set.seed(142857)
-nsims <- 1e2
+nsims <- 20
 include_ext_mo <- TRUE
 start_time <- Sys.time()
 
@@ -1280,7 +1298,6 @@ coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
 teach_sal_sim <-    rnorm(nsims, teach_sal_so, 0.1 * teach_sal_so)
 teach_ben_sim <-    rnorm(nsims, teach_ben_so, 0.1 * teach_ben_so)
 n_students_sim <-   rnorm(nsims, n_students_so, 0.1 * n_students_so)
-staff_time_sim <- rnorm(nsims, staff_time_so, 0.1 * staff_time_so)      
 
 delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean =
                                                                   x * 1,
@@ -1291,6 +1308,25 @@ delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x)  rnorm(nsims, mean =
                                                                             x * 1,
                                                                           sd = 1 * sd(delta_ed_ext_so[,1])))
 colnames(delta_ed_ext_sim) <- 1999:2007
+
+#######
+#######
+costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
+                                        df_costs_cw_var = df_costs_cw_so)$counts_data
+costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x,  sd = 0.1 * x) ) 
+
+staff_time_sim <- rnorm(nsims, staff_time_so, 0.1 * staff_time_so)      
+
+costs1_costs_in <- lapply(staff_time_sim, function(x) costs1_costs_f(df_costs_var = df_costs_so,
+                                  df_costs_cw_var = df_costs_cw_so,
+                                  staff_time_var = x)$cost_data)
+
+costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
+    aux1 <- x$costs_by_country
+    rnorm(length(aux1), mean = aux1,  sd = 0.1 * aux1) 
+  } ) 
+)
+
 
 ######
 res_npv_no_ext_sim      <- rep(NA, nsims)
@@ -1347,7 +1383,7 @@ for (i in 1:nsims) {
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_sim[i], inflation_var = inflation_sim[i]) )
 
     #--------------- Inputs for costs1 ---------------------------------------------
-    # Make explicit non-function inputs:
+    # Make explicit non-function inputs: HERE I NEED TO DRAW FROM costs1_counts_sim,  costs1_costs_sim
     costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_so,
                                       df_costs_cw_var = df_costs_cw_so,
                                       staff_time_var = staff_time_sim[i])$cost_data
@@ -1358,12 +1394,12 @@ for (i in 1:nsims) {
 
     costs1_counts_sim <- costs1_counts_in %>%
       mutate("total" = rnorm(n = 1, mean = total, sd = 0.1 * total))
-
+#HERE
     costs1_costs_sim <- costs1_costs_in %>% group_by(Country) %>%
       mutate("costs_by_country" = rnorm(n = 1, mean = costs_by_country, sd = 0.1 * costs_by_country))
 
-    costs1_country_sim <-  costs1_ratios_in_f(counts_var = costs1_counts_sim,
-                                              costs_var =  costs1_costs_sim)
+    costs1_country_sim <-  costs1_ratios_in_f(counts_var = costs1_counts_sim[i,],
+                                              costs_var =  costs1_costs_sim[i,])
 
     #--------------- Inputs for costs2 ---------------------------------------------
     # Make explicit non-function inputs:
@@ -1381,6 +1417,63 @@ for (i in 1:nsims) {
                   ex_rate_var = ex_rate_sim[i], years_of_treat_var = years_of_treat_sim[i])
 
     #--------------- Inputs for NPV ------------------------------------------------
+    #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
+    baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
+    unit_test(baird1, -0.6096942)
+    #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
+    baird2 <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
+    unit_test(baird2, 34.31866)
+    
+    # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
+    baird3 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
+    unit_test(baird3, 54.8986884881819)
+    # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
+    baird4 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
+    unit_test(baird4, 333.17324538204)
+    
+    #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
+    klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
+    unit_test(klps4_1, 47.6017891133612)
+    #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
+    klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
+    unit_test(klps4_2, 345.767366073607)
+    
+    
+    # res_npv_no_ext_klps_eacosts <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = cost1_in)
+    # unit_test(res_npv_no_ext_klps_eacosts, 59.15516)
+    
+    # EA1: no externality NPV using EAs costs
+    ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
+    unit_test(ea1, 66.4520618047856)
+    # EA2: yes externality NPV using EAs costs
+    ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
+    unit_test(ea2, 358.146643635645)
+    # EA3: benef= KLPS all and no ext; Costs=EA
+    ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
+    unit_test(ea3, 357.320739390211)
+    
+    
+    
+    #CEA for EA
+    cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0)
+    unit_test(cea_no_ext_ea, 784.569405332587)
+    
+    rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0),
+             CEA_cash_var = 744)
+    unit_test(rcea_no_ext_ea, 1.05452877060832)
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     # Make explicit non-function inputs:
     pv_benef_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_sim[i],
                             interest_r_var = interest_in, periods_var = periods_so)
