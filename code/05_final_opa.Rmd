@@ -944,92 +944,122 @@ unit_test <- function(to_test_var, original_var, main_run_var = TRUE){
 
 # wrap the whole thing in a function and prepare for sims.
 
-one_run <- function(wage_ag_var = wage_ag_so, main_run_var = FALSE) {
 
-}
-# Write only functions here. And make all arguments explicit
+one_run <-
+  function(main_run_var1 = main_run_so,
+           run_sim_var = run_sim_so, 
+           wage_ag_var1 = wage_ag_so,
+           wage_ww_var1 = wage_ww_so,
+           profits_se_var1 = profits_se_so,
+           hours_se_cond_var1 = hours_se_cond_so,
+           hours_ag_var1 = hours_ag_so,
+           hours_ww_var1 = hours_ww_so,
+           hours_se_var1 = hours_se_so,
+           ex_rate_var1 = ex_rate_so, 
+           growth_rate_var1 = growth_rate_so,
+           coef_exp_var1 = coef_exp_so[1], coef_exp2_var1 = coef_exp_so[2], 
+           lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_so),
+           alpha_0_var1 = alpha_0_so, 
+           alpha_r_var1 = alpha_r_so, 
+           lambda2_var1 = lambda2_so, 
+           coverage_var1 = coverage_so, 
+           q_full_var1 = q_full_so,
+           q_zero_var1 = q_zero_so, 
+           lambda1_new_var1 = lambda1_new_so, 
+           gov_bonds_var1 = gov_bonds_so, 
+           inflation_var1 = inflation_so, 
+           df_costs_var1 = df_costs_so,
+           df_costs_cw_var1 = df_costs_cw_so,
+           staff_time_var1 = staff_time_so,
+           df_counts_var1 = df_counts_so) {
 ####------------ Inputs for wage_t ---------------------------------------------
-# Make explicit non-function inputs:
-wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_so, wage_ww_var = wage_ww_so,
-            profits_se_var = profits_se_so, hours_se_cond_var = hours_se_cond_so,  
-            hours_ag_var = hours_ag_so, hours_ww_var = hours_ww_so,
-            hours_se_var = hours_se_so, ex_rate_var = ex_rate_so)
-unit_test(wage_0_in, 0.1461084, main_run_var = FALSE)
-
+    wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_var1, wage_ww_var = wage_ww_var1,
+            profits_se_var = profits_se_var1, hours_se_cond_var = hours_se_cond_var1,  
+            hours_ag_var = hours_ag_var1, hours_ww_var = hours_ww_var1,
+            hours_se_var = hours_se_var1, ex_rate_var = ex_rate_var1)
+    unit_test(wage_0_in, 0.1481084, main_run_var = main_run_var1)
 ###---------- Inputs for earnings1_f -------------------------------------------
-# Make explicit non-function inputs:
-wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_so,
-            coef_exp1_var = coef_exp_so[1], coef_exp2_var = coef_exp_so[2])
-
-lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_so),
-                          alpha_0_var = alpha_0_so, alpha_r_var = alpha_r_so)
-
-lambda2_in <- lambda2_in_f(lambda2_var = lambda2_so)
-
-saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so,
-                                 q_zero_var = q_zero_so) )
-unit_test(wage_t_in, 4.572308)
-# ADD UNIT TEST FOR SATURATION AN LAMBDAS
+    wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_var1,
+                coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp_var1)
+    
+    lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
+                              alpha_0_var = alpha_0_var1, alpha_r_var = alpha_r_var1)
+    
+    lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
+    
+    saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_var1, 
+                                                q_full_var = q_full_var1,
+                                     q_zero_var = q_zero_var1) )
+    unit_test(wage_t_in, 4.572308)
+    # ADD UNIT TEST FOR SATURATION AN LAMBDAS    
 
 ###------------ Inputs for earnings2_f------------------------------------------
-lambda1_new_in <- lambda_r_f(lambda1_var = lambda1_new_so,
-                                   alpha_0_var = alpha_0_so,
-                                   alpha_r_var = alpha_r_so)
-#ADD UNIT TEST FOR LAMBDAS
+    lambda1_new_in <- lambda_r_f(lambda1_var = lambda1_new_var1,
+                                       alpha_0_var = alpha_0_var1,
+                                       alpha_r_var = alpha_r_var1)
+    #ADD UNIT TEST FOR LAMBDAS    
 
 ##------------ Inputs for pv_benef_f -------------------------------------------
-# Make explicit non-function inputs:
-# earnings1
-earnings_in_no_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_r_in[1],
-            lambda2_var = 0, saturation_var = saturation_in,
-            coverage_var = coverage_so)
-earnings_in_yes_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_r_in[1],
-            lambda2_var = lambda2_in[1], saturation_var = saturation_in,
-            coverage_var = coverage_so)
-
-# earnings2
-earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
-                                         lambda1k1_var = lambda1_new_in[1],
-                                         lambda1k2_var = lambda1_new_in[2],
-                                         lambda1k3_var = lambda1_new_in[3])
-# ADD UNIT TEST
-interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
-
-unit_test(earnings_in_no_ext, 7.978677)
-unit_test(earnings_in_yes_ext, 42.95683)
-unit_test(interest_in, 0.0985)
-
-
+    # earnings1
+    earnings_in_no_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
+                lambda2_var = 0, saturation_var = saturation_in,
+                coverage_var = coverage_var1)
+    earnings_in_yes_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
+                lambda2_var = lambda2_in[1], saturation_var = saturation_in,
+                coverage_var = coverage_var1)
+    
+    # earnings2
+    earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
+                                             lambda1k1_var = lambda1_new_in[1],
+                                             lambda1k2_var = lambda1_new_in[2],
+                                             lambda1k3_var = lambda1_new_in[3])
+    # ADD UNIT TEST
+    interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1, 
+                                          inflation_var = inflation_var1) )
+    unit_test(earnings_in_no_ext, 7.978677)
+    unit_test(earnings_in_yes_ext, 42.95683)
+    unit_test(interest_in, 0.0985)
+    
 ###------------- Inputs for costs1_ratios_in_f----------------------------------
-costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_so,
-                                  df_costs_cw_var = df_costs_cw_so,
-                                  staff_time_var = staff_time_so)$cost_data
-# ADD UNIT TEST
-costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
-                                    df_costs_cw_var = df_costs_cw_so)$counts_data
-# ADD UNIT TEST
-run_sim <- run_sim_so
-# The following section only runs when running the simulations
-if (run_sim ==  TRUE) {
-    costs1_counts_sim <- costs1_counts_in %>%
-      mutate("total" = rnorm(n = 1, mean = total, sd = 0.1 * total))
-    costs1_costs_sim <- costs1_costs_in %>% group_by(Country) %>%
-      mutate("costs_by_country" = rnorm(n = 1, mean = costs_by_country,
-                                        sd = 0.1 * costs_by_country))
-  } else {
-    costs1_counts_sim <- NA
-    costs1_costs_sim <- NA
-}
+    costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var1,
+                                        df_costs_cw_var = df_costs_cw_var1)$counts_data
+    costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_var1,
+                                      df_costs_cw_var = df_costs_cw_var1,
+                                      staff_time_var = staff_time_var1)$cost_data
+    # ADD UNIT TEST
+
+    # The following section only runs when running the simulations (later add: a skip to load the data only once)
+    if (run_sim_var ==  TRUE) {
+        costs1_counts_sim <- costs1_counts_in %>%
+          mutate("total" = rnorm(n = 1, mean = total, sd = 0.1 * total))
+        costs1_costs_sim <- costs1_costs_in %>% group_by(Country) %>%
+          mutate("costs_by_country" = rnorm(n = 1, mean = costs_by_country,
+                                            sd = 0.1 * costs_by_country))
+      } else {
+        costs1_counts_sim <- NA
+        costs1_costs_sim <- NA
+    }
 
 ##-------------- Inputs for costs1_f--------------------------------------------
-# Make explicit non-function inputs:
-costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_in, costs_var =  costs1_costs_in)
-unit_test(unlist(costs1_country$ratios_data$costs_by_country),  6880801.84046596)
+    if (run_sim_var == TRUE) {
+        costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_sim, costs_var =  costs1_costs_sim)
+    } else {
+        costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_in, costs_var =  costs1_costs_in)
+        unit_test(unlist(costs1_country$ratios_data$costs_by_country),  6880801.84046596)
+    }
 
-if (run_sim == TRUE) {
-  costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_sim,
-                                        costs_var =  costs1_costs_sim)
+    return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in, 
+          "lambda2_in" = lambda2_in, "saturation_in" = saturation_in, 
+          "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
+          "earnings_in_yes_ext" = earnings_in_yes_ext, "earnings_in_no_ext_new" = earnings_in_no_ext_new, 
+          "interest_in" = interest_in, "costs1_counts_in" = costs1_counts_in, 
+          "costs1_costs_in" = costs1_costs_in, "costs1_counts_sim" = costs1_counts_sim, 
+          "costs1_costs_sim" = costs1_costs_sim, "costs1_country" = costs1_country 
+          ) )
 }
+
+one_run()
+
 
 ##-------------- Inputs for costs2_f--------------------------------------------
 # Make explicit non-function inputs:
@@ -1043,7 +1073,8 @@ delta_ed_final_in_x <- delta_ed_final_f(include_ext_var = TRUE,
                                       delta_ed_ext_var = delta_ed_ext_so)
 unit_test(delta_ed_final_in_x,  0.05911765)
 
-interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, inflation_var = inflation_so) )
+interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so, 
+                                      inflation_var = inflation_so) )
 unit_test(interest_in, 0.0985)
 
 cost_per_student_in <-  cost_per_student_f(teach_sal_var = teach_sal_so,
