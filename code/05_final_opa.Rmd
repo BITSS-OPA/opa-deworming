@@ -1417,9 +1417,6 @@ for (i in 1:nsims) {
 
 total_time <- Sys.time() - start_time
 
-################
-###### Results/Viz
-################
 
 policy_estimates <- c("baird1_sim",          
 "baird2_sim"         , 
@@ -1433,6 +1430,21 @@ policy_estimates <- c("baird1_sim",
 "cea_no_ext_ea_sim"  , 
 "rcea_no_ext_ea_sim" ) 
 
+policy_estimates_text <- c(
+  "Fiscal effects, 2016(W@W) B & C, no ext", 
+  "Fiscal effects, 2016(W@W) B & C, yes ext",  
+  "Total effects, 2016(W@W) B & C, no ext",  
+  "Total effects, 2016(W@W) B & C, yes ext",  
+  "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext",   
+  "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
+  "Total effects, 2016(W@W) B & EA C, no ext",  
+  "Total effects, 2016(W@W) B & EA C, ext",  
+  "Total effects, 2019(KLPS4) B & EA C, no ext", 
+  "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
+  "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
+
+
+#Unit test the simulations for nsims = 100, 1000, 10000
 all_res_100_sims <- c(
   4.95381197913229,
   28.2316035367295,
@@ -1484,6 +1496,10 @@ for ( i in 1:length(policy_estimates) ) {
     }
 }
 
+################
+###### Results/Viz
+################
+
 npv_sim <- get(policy_estimates[3])     
 
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
@@ -1497,13 +1513,13 @@ ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
-       title = "Distribution of NPV of Fiscal Impacts of Deworming",
+       title = paste0("Distribution of NPV of ", policy_estimates_text[3]
+                      ),
        subtitle = paste0("N = ", nsims, " simulations. Takes ",
                          round(total_time, 1)," ",attributes(total_time)$unit )  )+
   annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
   annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-
 ```
 
 # Sensitivity Analysis  
