@@ -143,175 +143,67 @@ ui <- fluidPage(
 
 server <- function(input, output) {
     sim.data1 <- function(nsims = 1e4,
-                          gov_bonds_vari,
-                          #Data
-                          gov_bonds_sd,
-                          inflation_vari,
-                          inflation_sd,
-                          wage_ag_vari,
-                          wage_ag_sd,
-                          wage_ww_vari,
-                          wage_ww_sd,
-                          profits_se_vari,
-                          profits_se_sd,
-                          hours_se_cond_vari,
-                          hours_se_cond_sd,
-                          hours_ag_vari,
-                          hours_ag_sd,
-                          hours_ww_vari,
-                          hours_ww_sd,
-                          hours_se_vari,
-                          hours_se_sd,
-                          ex_rate_vari,
-                          ex_rate_sd,
-                          growth_rate_vari,
-                          growth_rate_sd,
-                          coverage_vari,
-                          coverage_sd,
-                          full_saturation_vari,
-                          full_saturation_sd,
-                          saturation_vari,
-                          saturation_sd,
-                          tax_vari,
-                          tax_sd,
-                          unit_cost_local_vari,
-                          unit_cost_local_sd,
-                          years_of_treat_vari,
-                          years_of_treat_sd,
-                          lambda1_vari,
-                          #Research
-                          lambda1_sd,
-                          lambda2_vari,
-                          lambda2_sd,
-                          q_full_vari,
-                          q_full_sd,
-                          q_zero_vari,
-                          q_zero_sd,
-                          delta_ed_par1,
-                          delta_ed_sd1,
-                          delta_ed_par2,
-                          delta_ed_sd2,
-                          coef_exp_vari,
-                          #Guesswork
-                          coef_exp_sd,
-                          teach_sal_vari,
-                          teach_sal_sd,
-                          teach_ben_vari,
-                          teach_ben_sd,
-                          n_students_vari,
-                          n_students_sd
-                          
-                          
-                          
-                          
-                          
-                          function(main_run_var2,
-                                   run_sim_var2,
-                                   wage_ag_var2,
-                                   wage_ag_var2_sd,
-                                   wage_ww_var2,
-                                   wage_ww_var2_sd,
-                                   profits_se_var2,
-                                   profits_se_var2_sd,
-                                   hours_se_cond_var2,
-                                   hours_se_cond_var2_sd,
-                                   hours_ag_var2,
-                                   hours_ag_var2_sd,
-                                   hours_ww_var2,
-                                   hours_ww_var2_sd,
-                                   hours_se_var2,
-                                   hours_se_var2_sd,
-                                   ex_rate_var2,
-                                   ex_rate_var2_sd,
-                                   growth_rate_var2,
-                                   growth_rate_var2_sd,
-                                   coef_exp_var1 = coef_exp_so[1], coef_exp2_var1 = coef_exp_so[2],
-                                   lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_so),
-                                   alpha_0_var1 = alpha_0_so,
-                                   alpha_r_var1 = alpha_r_so,
-                                   lambda2_var1 = lambda2_so,
-                                   coverage_var1 = coverage_so,
-                                   q_full_var1 = q_full_so,
-                                   q_zero_var1 = q_zero_so,
-                                   lambda1_new_var1 = lambda1_new_so,
-                                   gov_bonds_var1 = gov_bonds_so,
-                                   inflation_var1 = inflation_so,
-                                   df_costs_var1 = df_costs_so,
-                                   df_costs_cw_var1 = df_costs_cw_so,
-                                   staff_time_var1 = staff_time_so,
-                                   df_counts_var1 = df_counts_so,
-                                   delta_ed_var1 = delta_ed_so,
-                                   delta_ed_ext_var1 = delta_ed_ext_so,
-                                   teach_sal_var1 = teach_sal_so,
-                                   teach_ben_var1 = teach_ben_so,
-                                   n_students_var1 = n_students_so,
-                                   unit_cost_local_var1 = unit_cost_local_so,
-                                   years_of_treat_var1 = years_of_treat_so,
-                                   tax_var1 = tax_so,
-                                   periods_var1 = periods_so) 
-                          
-                          
-                          
-                          nsims = as.numeric(input$param1), 
-                          gov_bonds_vari = as.numeric(input$param2), 
-                          gov_bonds_sd = as.numeric(input$param2_1),
-                          inflation_vari = as.numeric(input$param3),
-                          inflation_sd = as.numeric(input$param3_1),
-                          wage_ag_vari = as.numeric(input$param4),
-                          wage_ag_sd = as.numeric(input$param4_1),
-                          wage_ww_vari = as.numeric(input$param5),
-                          wage_ww_sd = as.numeric(input$param5_1),
-                          profits_se_vari = as.numeric(input$param6), 
-                          profits_se_sd = as.numeric(input$param6_1), 
-                          hours_se_cond_vari = as.numeric(input$param7), 
-                          hours_se_cond_sd = as.numeric(input$param7_1), 
-                          hours_ag_vari = as.numeric(input$param8), 
-                          hours_ag_sd = as.numeric(input$param8_1), 
-                          hours_ww_vari = as.numeric(input$param9),
-                          hours_ww_sd = as.numeric(input$param9_1),
-                          hours_se_vari = as.numeric(input$param10),
-                          hours_se_sd = as.numeric(input$param10_1),
-                          ex_rate_vari = as.numeric(input$param11),
-                          ex_rate_sd = as.numeric(input$param11_1),
-                          growth_rate_vari = as.numeric(input$param12),
-                          growth_rate_sd = as.numeric(input$param12_1),
-                          coverage_vari = as.numeric(input$param13),
-                          coverage_sd = as.numeric(input$param13_1),
-                          saturation_vari = as.numeric(input$param14),
-                          saturation_sd = as.numeric(input$param14_1),
-                          tax_vari = as.numeric(input$param15), 
-                          tax_sd = as.numeric(input$param15_1), 
-                          unit_cost_local_vari = as.numeric(input$param16), 
-                          unit_cost_local_sd = as.numeric(input$param16_1), 
-                          years_of_treat_vari = as.numeric(input$param17),
-                          years_of_treat_sd = as.numeric(input$param17_1),
-                          lambda1_vari = c(as.numeric(input$param18_1), as.numeric(input$param18_2)),
-                          lambda1_sd = c(as.numeric(input$param18_1_1), as.numeric(input$param18_2_1)),
-                          lambda2_vari = as.numeric(input$param19), 
-                          lambda2_sd = as.numeric(input$param19_1), 
-                          q_full_vari = as.numeric(input$param20), 
-                          q_full_sd = as.numeric(input$param20_1), 
-                          q_zero_vari = as.numeric(input$param28), 
-                          q_zero_sd = as.numeric(input$param28_1), 
-                          coef_exp_vari = c(as.numeric(input$param21_1), as.numeric(input$param21_2)), 
-                          coef_exp_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)), 
-                          teach_sal_vari = as.numeric(input$param22),
-                          teach_sal_sd = as.numeric(input$param22_1),
-                          teach_ben_vari = as.numeric(input$param23),
-                          teach_ben_sd = as.numeric(input$param23_1),
-                          n_students_vari = as.numeric(input$param24), 
-                          n_students_sd = as.numeric(input$param24_1), 
-                          include_ext_vari = input$checkbox1, 
-                          full_saturation_vari = as.numeric(input$param25),
-                          full_saturation_sd = as.numeric(input$param25_1),
-                          delta_ed_par1 = as.numeric(input$param26),
-                          delta_ed_sd1 = as.numeric(input$param26_1),
-                          delta_ed_par2 = as.numeric(input$param27),
-                          delta_ed_sd2 = as.numeric(input$param27_1) 
-                          
-                          
-                          ) {
-            
+                          main_run_var2,
+                          run_sim_var2,
+                          wage_ag_var2,
+                          wage_ag_var2_sd,
+                          wage_ww_var2,
+                          wage_ww_var2_sd,
+                          profits_se_var2,
+                          profits_se_var2_sd,
+                          hours_se_cond_var2,
+                          hours_se_cond_var2_sd,
+                          hours_ag_var2,
+                          hours_ag_var2_sd,
+                          hours_ww_var2,
+                          hours_ww_var2_sd,
+                          hours_se_var2,
+                          hours_se_var2_sd,
+                          ex_rate_var2,
+                          ex_rate_var2_sd,
+                          growth_rate_var2,
+                          growth_rate_var2_sd,
+                          coef_exp_var2,         # sd for coef_exp is hard coded
+                          lambda1_va2,
+                          lambda1_var2_sd,
+                          alpha_0_var2,
+                          alpha_0_var2_sd,
+                          alpha_r_var2,
+                          alpha_r_var2_sd,
+                          lambda2_var2,
+                          lambda2_var2_sd,
+                          coverage_var2,
+                          coverage_var2_sd,
+                          q_full_var2,
+                          q_full_var2_sd,
+                          q_zero_var2,
+                          q_zero_var2_sd,
+                          lambda1_new_var2,
+                          lambda1_new_var2_sd,
+                          gov_bonds_var2,
+                          gov_bonds_var2_sd,
+                          inflation_var2,
+                          inflation_var2_sd,
+                          df_costs_var2,
+                          df_costs_cw_var2,
+                          staff_time_var2,
+                          staff_time_var2_sd,
+                          df_counts_var2,
+                          delta_ed_var2,
+                          delta_ed_ext_var2,
+                          teach_sal_var2,
+                          teach_sal_var2_sd,
+                          teach_ben_var2,
+                          teach_ben_var2_sd,
+                          n_students_var2,
+                          n_students_var2_sd,
+                          unit_cost_local_var2,
+                          unit_cost_local_var2_sd,
+                          years_of_treat_var2,
+                          years_of_treat_var2_sd,
+                          tax_var2,
+                          tax_var2_sd,
+                          periods_var2) {
             set.seed(142857)
             nsims <- 1e2
             include_ext_mo <- TRUE
@@ -321,72 +213,72 @@ server <- function(input, output) {
             ################
             #Defaoult dist: normal, default sd: 0.1* mean
             ## Data
-            gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_so, sd = 0.1 * gov_bonds_so)
-            inflation_sim <-        rnorm(nsims, inflation_so, 0.1 * inflation_so)
+            gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
+            inflation_sim <-        rnorm(nsims, inflation_var2, inflation_var2_sd)
             
-            wage_ag_sim <-          rnorm(nsims, wage_ag_so, 0.1 * wage_ag_so)
-            wage_ww_sim <-          rnorm(nsims, wage_ww_so, 0.1 * wage_ww_so)
-            profits_se_sim <-       rnorm(nsims, profits_se_so, 0.1 * profits_se_so)
-            hours_se_cond_sim <-    rnorm(nsims, hours_se_cond_so, 0.1 * hours_se_cond_so)
-            hours_ag_sim <-         rnorm(nsims, hours_ag_so, 0.1 * hours_ag_so)
-            hours_ww_sim <-         rnorm(nsims, hours_ww_so, 0.1 * hours_ww_so)
-            hours_se_sim <-         rnorm(nsims, hours_se_so, 0.1 * hours_se_so)
-            coverage_sim <-         rnorm(nsims, coverage_so, 0.1 * coverage_so)
-            growth_rate_sim <-      rnorm(nsims, growth_rate_so, 0.1 * growth_rate_so)
+            wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
+            wage_ww_sim <-          rnorm(nsims, wage_ww_var2, wage_ww_var2_sd)
+            profits_se_sim <-       rnorm(nsims, profits_se_var2, profits_se_var2_sd)
+            hours_se_cond_sim <-    rnorm(nsims, hours_se_cond_var2, hours_se_cond_var2_sd)
+            hours_ag_sim <-         rnorm(nsims, hours_ag_var2, hours_ag_var2_sd)
+            hours_ww_sim <-         rnorm(nsims, hours_ww_var2, hours_ww_var2_sd)
+            hours_se_sim <-         rnorm(nsims, hours_se_var2, hours_se_var2_sd)
+            coverage_sim <-         rnorm(nsims, coverage_var2, coverage_var2_sd)
+            growth_rate_sim <-      rnorm(nsims, growth_rate_var2, growth_rate_var2_sd)
             
-            ex_rate_sim <-          rnorm(nsims, ex_rate_so, 0.1 * ex_rate_so)
-            tax_sim <-              rnorm(nsims, tax_so, 0.1 * tax_so)
+            ex_rate_sim <-          rnorm(nsims, ex_rate_var2, ex_rate_var2_sd)
+            tax_sim <-              rnorm(nsims, tax_var2, tax_var2_sd)
             
-            unit_cost_local_sim <-  rnorm(nsims, unit_cost_local_so, 0.1 * unit_cost_local_so)
-            years_of_treat_sim <-   rnorm(nsims, years_of_treat_so, 0.1 * years_of_treat_so)
+            unit_cost_local_sim <-  rnorm(nsims, unit_cost_local_var2, unit_cost_local_var2_sd)
+            years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, years_of_treat_var2_sd)
             
             ## Research
-            aux1 <- 0.1 * c(lambda1_so[1], 0.01)
+            aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
             # Each list is a pair mean, sd.
-            aux2 <- lapply(1:2,function(x) c(lambda1_so[x], aux1[x] ) )
+            aux2 <- lapply(1:2,function(x) c(lambda1_var2[x], aux1[x] ) )
             lambda1_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
-            lambda2_sim <-          rnorm(nsims, lambda2_so,  0.1 * lambda2_so)
+            lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)
             # New lambdas here
-            aux3 <- lapply(1:3,function(x) c(lambda1_new_so[x], lambda1_new_sd_so[x] ) )
+            aux3 <- lapply(1:3,function(x) c(lambda1_new_var2[x], lambda1_new_sd_var2[x] ) )
             lambda1_new_sim <- sapply(aux3, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
             
-            q_full_sim <-           rnorm(nsims, q_full_so, 0.1 * q_full_so)
-            q_zero_sim <-           rnorm(nsims, q_zero_so, 0.1 * q_zero_so)
+            q_full_sim <-           rnorm(nsims, q_full_var2, q_full_var2_sd)
+            q_zero_sim <-           rnorm(nsims, q_zero_var2, q_zero_var2_sd)
             
             # Prevalence here TO DO: draw from a beta instead of "truncated" normal
-            alpha_0_sim <- rnorm(nsims, alpha_0_so, 0.1 * alpha_0_so)
+            alpha_0_sim <- rnorm(nsims, alpha_0_var2, alpha_0_var2_sd)
             alpha_0_sim <- ifelse(alpha_0_sim > 1, yes = 1, ifelse(alpha_0_sim < 0, 0, alpha_0_sim) )
-            alpha_r_sim <- rnorm(nsims, alpha_r_so, 0.1 * alpha_r_so)
+            alpha_r_sim <- rnorm(nsims, alpha_r_var2, alpha_r_var2_sd)
             alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
             
             ## Guess work
             periods_val <- 50           #Total number of periods to forecast wages
             time_to_jm_val <- 10        #Time from intial period until individual join the labor force
-            aux2 <- lapply(1:2, function(x) c(coef_exp_so[x],c(0.001 , 0.001)[x]) )
+            aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(0.001 , 0.001)[x]) )
             coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
-            teach_sal_sim <-    rnorm(nsims, teach_sal_so, 0.1 * teach_sal_so)
-            teach_ben_sim <-    rnorm(nsims, teach_ben_so, 0.1 * teach_ben_so)
-            n_students_sim <-   rnorm(nsims, n_students_so, 0.1 * n_students_so)
+            teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
+            teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
+            n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
             
-            delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean =
+            delta_ed_sim <- sapply(delta_ed_var2[,1], function(x) rnorm(nsims, mean =
                                                                           x * 1,
-                                                                      sd = 1 * sd(delta_ed_so[,1]) ) )
+                                                                      sd = 1 * sd(delta_ed_var2[,1]) ) )
             colnames(delta_ed_sim) <- 1999:2007
             
-            delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x)  rnorm(nsims, mean =
+            delta_ed_ext_sim <- sapply(delta_ed_ext_var2[,1], function(x)  rnorm(nsims, mean =
                                                                                    x * 1,
-                                                                               sd = 1 * sd(delta_ed_ext_so[,1])))
+                                                                               sd = 1 * sd(delta_ed_ext_var2[,1])))
             colnames(delta_ed_ext_sim) <- 1999:2007
             
             #######
-            costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
-                                                df_costs_cw_var = df_costs_cw_so)$counts_data
+            costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var2,
+                                                df_costs_cw_var = df_costs_cw_var2)$counts_data
             costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x,  sd = 0.1 * x) )
             
-            staff_time_sim <- rnorm(nsims, staff_time_so, 0.1 * staff_time_so)      
+            staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
             
-            costs1_costs_in <- lapply(staff_time_sim, function(x) costs1_costs_f(df_costs_var = df_costs_so,
-                                                                                 df_costs_cw_var = df_costs_cw_so,
+            costs1_costs_in <- lapply(staff_time_sim, function(x) costs1_costs_f(df_costs_var = df_costs_var2,
+                                                                                 df_costs_cw_var = df_costs_cw_var2,
                                                                                  staff_time_var = x)$cost_data)
             
             costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
@@ -497,7 +389,7 @@ server <- function(input, output) {
         }
         
     
-        
+        #UPDATE VALUES BELOW
         reactive.data1 <- reactive( {
             sim.data1(nsims = as.numeric(input$param1), 
                       gov_bonds_vari = as.numeric(input$param2), 
