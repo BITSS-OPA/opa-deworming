@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "17 October, 2019"
+date: "19 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -792,7 +792,7 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from r
 ```r
 # - inputs:
 # - outputs:
-lambdas_in_f <- function(){
+chunk_lambdas<- function(){
 ###############################################################################
 ###############################################################################    
 
@@ -816,7 +816,7 @@ lambdas_in_f <- function(){
                 "lambda1_in_f" = lambda1_in_f,
                 "lambda2_in_f" = lambda2_in_f ) )
 }
-invisible( list2env(lambdas_in_f(),.GlobalEnv) )
+invisible( list2env(chunk_lambdas(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 lambda1_in <- lambda1_in_f()
@@ -1295,12 +1295,14 @@ kable(npv_table, caption = "Caption of the table") %>%
 #invisible( list2env(call_params_f(), .GlobalEnv) )
 # add chunk functions0
 
-# Draws
+
 set.seed(142857)
 nsims <- 1e2
 include_ext_mo <- TRUE
 start_time <- Sys.time()
-
+################
+###### Draws
+################
 #Defaoult dist: normal, default sd: 0.1* mean
 ## Data
 gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_so, sd = 0.1 * gov_bonds_so)
@@ -1361,9 +1363,8 @@ delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x)  rnorm(nsims, mean =
 colnames(delta_ed_ext_sim) <- 1999:2007
 
 #######
-#######
 costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
-                                        df_costs_cw_var = df_costs_cw_so)$counts_data
+                                    df_costs_cw_var = df_costs_cw_so)$counts_data
 costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x,  sd = 0.1 * x) )
 
 staff_time_sim <- rnorm(nsims, staff_time_so, 0.1 * staff_time_so)      
@@ -1379,8 +1380,10 @@ costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
 )
 
 
-######
-######Write new names of PEs
+################
+###### Runs
+################
+
 baird1_sim           <- rep(NA, nsims)
 baird2_sim           <- rep(NA, nsims)
 baird3_sim           <- rep(NA, nsims)
@@ -1392,9 +1395,6 @@ ea2_sim              <- rep(NA, nsims)
 ea3_sim              <- rep(NA, nsims)
 cea_no_ext_ea_sim    <- rep(NA, nsims)
 rcea_no_ext_ea_sim   <- rep(NA, nsims)
-
-
-#replace "_so" by "sim[i]"
 
 
 for (i in 1:nsims) {
@@ -1436,7 +1436,6 @@ for (i in 1:nsims) {
            tax_var1 = tax_sim[i],
            periods_var1 = periods_so),.GlobalEnv) )
 
-  # add a "_sims[i]"
     #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
     baird1_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
     #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
@@ -1465,6 +1464,7 @@ for (i in 1:nsims) {
 
 total_time <- Sys.time() - start_time
 
+
 policy_estimates <- c("baird1_sim",          
 "baird2_sim"         , 
 "baird3_sim"         , 
@@ -1477,6 +1477,21 @@ policy_estimates <- c("baird1_sim",
 "cea_no_ext_ea_sim"  , 
 "rcea_no_ext_ea_sim" ) 
 
+policy_estimates_text <- c(
+  "Fiscal effects, 2016(W@W) B & C, no ext", 
+  "Fiscal effects, 2016(W@W) B & C, yes ext",  
+  "Total effects, 2016(W@W) B & C, no ext",  
+  "Total effects, 2016(W@W) B & C, yes ext",  
+  "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext",   
+  "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
+  "Total effects, 2016(W@W) B & EA C, no ext",  
+  "Total effects, 2016(W@W) B & EA C, ext",  
+  "Total effects, 2019(KLPS4) B & EA C, no ext", 
+  "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
+  "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
+
+
+#Unit test the simulations for nsims = 100, 1000, 10000
 all_res_100_sims <- c(
   4.95381197913229,
   28.2316035367295,
@@ -1528,6 +1543,10 @@ for ( i in 1:length(policy_estimates) ) {
     }
 }
 
+################
+###### Results/Viz
+################
+
 npv_sim <- get(policy_estimates[3])     
 
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
@@ -1541,7 +1560,8 @@ ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
-       title = "Distribution of NPV of Fiscal Impacts of Deworming",
+       title = paste0("Distribution of NPV of ", policy_estimates_text[3]
+                      ),
        subtitle = paste0("N = ", nsims, " simulations. Takes ",
                          round(total_time, 1)," ",attributes(total_time)$unit )  )+
   annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+

@@ -808,7 +808,7 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from r
 ```{r lambdas}
 # - inputs:
 # - outputs:
-lambdas_in_f <- function(){
+chunk_lambdas<- function(){
 ###############################################################################
 ###############################################################################    
 
@@ -832,7 +832,7 @@ lambdas_in_f <- function(){
                 "lambda1_in_f" = lambda1_in_f,
                 "lambda2_in_f" = lambda2_in_f ) )
 }
-invisible( list2env(lambdas_in_f(),.GlobalEnv) )
+invisible( list2env(chunk_lambdas(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 lambda1_in <- lambda1_in_f()
@@ -1317,7 +1317,7 @@ colnames(delta_ed_ext_sim) <- 1999:2007
 
 #######
 costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
-                                        df_costs_cw_var = df_costs_cw_so)$counts_data
+                                    df_costs_cw_var = df_costs_cw_so)$counts_data
 costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x,  sd = 0.1 * x) )
 
 staff_time_sim <- rnorm(nsims, staff_time_so, 0.1 * staff_time_so)      
