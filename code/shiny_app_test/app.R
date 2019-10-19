@@ -1056,6 +1056,10 @@ ui <- fluidPage(
                              min = growth_rate_so / 2, max = 2 * growth_rate_so, value = growth_rate_so),
                  sliderInput("param12_1", label = "SD = ",
                              min = 0.000001* growth_rate_so, max = 1 * growth_rate_so, value = 0.1 * growth_rate_so), 
+                 sliderInput("param13", label = "Coverage (R) = ", 
+                             min = coverage_so / 2, max = 2 * coverage_so, value = coverage_so),
+                 sliderInput("param13_1", label = "SD = ", 
+                             min = 0.000001* coverage_so, max = 1 * coverage_so, value = 0.1 * coverage_so), 
                  sliderInput("param15", label = "Tax rate = ",
                              min = tax_so / 2, max = 2 * tax_so, value = tax_so, step = 0.001),
                  sliderInput("param15_1", label = "SD = ",
@@ -1086,7 +1090,7 @@ ui <- fluidPage(
                              min = q_zero_so / 2, max = 2 * q_zero_so, value = q_zero_so), 
                  sliderInput("param28_1", label = "SD = ",
                              min = 0.00000001* q_zero_so, max = 1 * q_zero_so, value = 0.1 * q_zero_so), 
-                 checkboxInput("checkbox1", label = "Use additional education with externalities", value = TRUE),
+#                 checkboxInput("checkbox1", label = "Use additional education with externalities", value = TRUE),
                  sliderInput("param26", label = "x * Delta E = ",
                              min = 0.0000001, max = 4, value = 1), 
                  sliderInput("param26_1", label = "SD = ",
@@ -1103,9 +1107,7 @@ ui <- fluidPage(
                  numericInput("param29_3_1", label = h3("sd = "), value = lambda1_new_sd_so[3]),
                  br("Guesswork"),
                  numericInput("param21_1", label = h3("Coef Xp = "), value = coef_exp_so[1]),
-                 numericInput("param21_1_1", label = h3("SD = "), value = 0.001),
                  numericInput("param21_2", label = h3("Coef Xp^2 = "), value = coef_exp_so[2]),
-                 numericInput("param21_2_1", label = h3("SD = "), value = 0.001),
                  sliderInput("param22", label = "Teacher salary = ",
                              min = teach_sal_so / 2, max = 2 * teach_sal_so, value = teach_sal_so),
                  sliderInput("param22_1", label = "SD = ",
@@ -1173,7 +1175,7 @@ server <- function(input, output) {
                           growth_rate_var2,
                           growth_rate_var2_sd,
                           coef_exp_var2,         # sd for coef_exp is hard coded
-                          lambda1_va2,
+                          lambda1_var2,
                           lambda1_var2_sd,
                           alpha_0_var2,
                           alpha_0_var2_sd,
@@ -1199,7 +1201,9 @@ server <- function(input, output) {
                           staff_time_var2_sd,
                           df_counts_var2,
                           delta_ed_var2,
+                          delta_ed_var2_sd,
                           delta_ed_ext_var2,
+                          delta_ed_ext_var2_sd,
                           teach_sal_var2,
                           teach_sal_var2_sd,
                           teach_ben_var2,
@@ -1248,7 +1252,7 @@ server <- function(input, output) {
             lambda1_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
             lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)
             # New lambdas here
-            aux3 <- lapply(1:3,function(x) c(lambda1_new_var2[x], lambda1_new_sd_var2[x] ) )
+            aux3 <- lapply(1:3,function(x) c(lambda1_new_var2[x], lambda1_new_var2_sd[x] ) )
             lambda1_new_sim <- sapply(aux3, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
             
             q_full_sim <-           rnorm(nsims, q_full_var2, q_full_var2_sd)
@@ -1263,31 +1267,37 @@ server <- function(input, output) {
             ## Guess work
             periods_val <- 50           #Total number of periods to forecast wages
             time_to_jm_val <- 10        #Time from intial period until individual join the labor force
-            aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(0.001 , 0.001)[x]) )
+            aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(coef_exp_var2 , 0.001)[x]) )
             coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
             teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
             teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
             n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
             
-            delta_ed_sim <- sapply(delta_ed_var2[,1], function(x) rnorm(nsims, mean =
-                                                                          x * 1,
-                                                                      sd = 1 * sd(delta_ed_var2[,1]) ) )
+            
+            
+            
+            delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean = 
+                                                                          x * delta_ed_var2, 
+                                                                      sd = delta_ed_var2_sd * sd(delta_ed_so[,1]) ) )
             colnames(delta_ed_sim) <- 1999:2007
             
-            delta_ed_ext_sim <- sapply(delta_ed_ext_var2[,1], function(x)  rnorm(nsims, mean =
-                                                                                   x * 1,
-                                                                               sd = 1 * sd(delta_ed_ext_var2[,1])))
+            delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x)  rnorm(nsims, mean = 
+                                                                                   x * delta_ed_ext_var2, 
+                                                                               sd = delta_ed_ext_var2_sd * sd(delta_ed_ext_so[,1])))
+            
             colnames(delta_ed_ext_sim) <- 1999:2007
             
+            
+            
             #######
-            costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var2,
-                                                df_costs_cw_var = df_costs_cw_var2)$counts_data
+            costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
+                                                df_costs_cw_var = df_costs_cw_so)$counts_data
             costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x,  sd = 0.1 * x) )
             
             staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
             
-            costs1_costs_in <- lapply(staff_time_sim, function(x) costs1_costs_f(df_costs_var = df_costs_var2,
-                                                                                 df_costs_cw_var = df_costs_cw_var2,
+            costs1_costs_in <- lapply(staff_time_sim, function(x) costs1_costs_f(df_costs_var = df_costs_so,
+                                                                                 df_costs_cw_var = df_costs_cw_so,
                                                                                  staff_time_var = x)$cost_data)
             
             costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
@@ -1382,10 +1392,10 @@ server <- function(input, output) {
             total_time <- Sys.time() - start_time
             
             return( list(
-                "baird1_sim "        = baird1_sim,         
-                "baird2_sim "        = baird2_sim,         
-                "baird3_sim "        = baird3_sim,         
-                "baird4_sim "        = baird4_sim,         
+                "baird1_sim"        = baird1_sim,         
+                "baird2_sim"        = baird2_sim,         
+                "baird3_sim"        = baird3_sim,         
+                "baird4_sim"        = baird4_sim,         
                 "klps4_1_sim"        = klps4_1_sim,        
                 "klps4_2_sim"        = klps4_2_sim,        
                 "ea1_sim"            = ea1_sim,            
@@ -1422,7 +1432,9 @@ server <- function(input, output) {
                       ex_rate_var2 = as.numeric(input$param11),                                            
                       ex_rate_var2_sd = as.numeric(input$param11_1),                                       
                       growth_rate_var2 = as.numeric(input$param12),                                        
-                      growth_rate_var2_sd = as.numeric(input$param12_1),                                   
+                      growth_rate_var2_sd = as.numeric(input$param12_1),  
+                      coverage_var2 = as.numeric(input$param13), 
+                      coverage_var2_sd = as.numeric(input$param13_1),
                       tax_var2 = as.numeric(input$param15),                                                 
                       tax_var2_sd = as.numeric(input$param15_1),                                            
                       unit_cost_local_var2 = as.numeric(input$param16),                                           
@@ -1436,17 +1448,17 @@ server <- function(input, output) {
                       q_full_var2 = as.numeric(input$param20),                                              
                       q_full_var2_sd = as.numeric(input$param20_1),                                           
                       coef_exp_var2 = c(as.numeric(input$param21_1), as.numeric(input$param21_2)),                      
-                      coef_exp_var2_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)),                       
+#                      coef_exp_var2_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)),                       
                       teach_sal_var2 = as.numeric(input$param22),                                             
                       teach_sal_var2_sd = as.numeric(input$param22_1),                                        
                       teach_ben_var2 = as.numeric(input$param23),                                             
                       teach_ben_var2_sd = as.numeric(input$param23_1),                                        
                       n_students_var2 = as.numeric(input$param24),                                            
                       n_students_var2_sd = as.numeric(input$param24_1),                                       
-                      delta_ed_par1 = as.numeric(input$param26),                                              
-                      delta_ed_sd1 = as.numeric(input$param26_1),                                             
-                      delta_ed_par2 = as.numeric(input$param27),                                              
-                      delta_ed_sd2 = as.numeric(input$param27_1),                                               
+                      delta_ed_var2 = as.numeric(input$param26),                                              
+                      delta_ed_var2_sd = as.numeric(input$param26_1),                                             
+                      delta_ed_ext_var2 = as.numeric(input$param27),                                              
+                      delta_ed_ext_var2_sd = as.numeric(input$param27_1),                                               
                       q_zero_var2 = as.numeric(input$param28),                                                
                       q_zero_var2_sd = as.numeric(input$param28_1), 
                       lambda1_new_var2 = c(as.numeric(input$param29_1), as.numeric(input$param29_2), as.numeric(input$param29_3)),                   
@@ -1456,12 +1468,12 @@ server <- function(input, output) {
                       alpha_0_var2_sd = as.numeric(input$param30_1), 
                       alpha_r_var2 = as.numeric(input$param31),    
                       alpha_r_var2_sd = as.numeric(input$param31_1),                                                                         
-                      costs_var2 = as.numeric(input$param32),                                                                              
-                      costs_var2_sd = as.numeric(input$param32_1),                                                                           
+#                      costs_var2 = as.numeric(input$param32),                                                                              
+#                      costs_var2_sd = as.numeric(input$param32_1),                                                                           
                       staff_time_var2 = as.numeric(input$param33), 
                       staff_time_var2_sd = as.numeric(input$param33_1),                                                                      
-                      counts_var2 = as.numeric(input$param34),                                                                             
-                      counts_var2_sd = as.numeric(input$param34_1), 
+#                      counts_var2 = as.numeric(input$param34),                                                                             
+#                      counts_var2_sd = as.numeric(input$param34_1), 
             )
         } 
         )
@@ -1499,7 +1511,7 @@ server <- function(input, output) {
         ################
         output$plot1 <- renderPlot({      
                 npv_sim_all <- reactive.data1() # FORMAT THE OUTPUT AS A DF
-                npv_sim <- npv_sim[[ policy_estimates[3] ]]    
+                npv_sim <- npv_sim_all[[ policy_estimates[3] ]]    
                 
                 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
                 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
