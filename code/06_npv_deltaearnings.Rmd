@@ -417,38 +417,38 @@ npv_clambda_d_mo_f <- function(interest_r_var = interest_in,
 # PANEL A
 #########
 
-l1_social_persist_int10   <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 0.8, maxiter=100))$root
-l1_social_persist_realint <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1), 0.4, maxiter=100))$root
-l1_social_die_int10       <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 0.8, maxiter=100))$root
-l1_social_die_realint     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1), 0.4, maxiter=100))$root
+l1_social_persist_int10 <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=100))$root
+l1_social_persist_int05 <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=100))$root
+l1_social_die_int10     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=100))$root
+l1_social_die_int05     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=100))$root
 
-l1_tax_persist_int10   <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, interest_r_var = 0.10), 0.8, maxiter=100))$root
-l1_tax_persist_realint <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x), 0.4, maxiter=100))$root
-l1_tax_die_int10       <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, interest_r_var = 0.10), 0.8, maxiter=100))$root
-l1_tax_die_realint     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x), 0.4, maxiter=100))$root
+l1_tax_persist_int10 <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, interest_r_var = 0.10), 1, maxiter=100))$root
+l1_tax_persist_int05 <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, interest_r_var = 0.05), 1, maxiter=100))$root
+l1_tax_die_int10     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, interest_r_var = 0.10), 1, maxiter=100))$root
+l1_tax_die_int05     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, interest_r_var = 0.05), 1, maxiter=100))$root
 
 #########
 # PANEL B
 #########
 
-irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1), 0.4, maxiter=100))$root
-irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_earnings_var = delta_earnings_in), 0.4, maxiter=100))$root
-irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x), 0.4, maxiter=100))$root
-irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_earnings_var = delta_earnings_in), 0.4, maxiter=100))$root
+irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1), .4, maxiter=100))$root
+irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_earnings_var = delta_earnings_in), .4, maxiter=100))$root
+irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x), .4, maxiter=100))$root
+irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_earnings_var = delta_earnings_in), .4, maxiter=100))$root
 
 #########
 # PANEL C
 #########
 
 # Net Present Value (2017 USD PPP)
-npv_realint_persist <- npv_mo_f(tax_var = 1)
-npv_realint_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in, tax_var = 1)
+npv_int05_persist <- npv_mo_f(tax_var = 1)
+npv_int05_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in, tax_var = 1)
 npv_int10_persist   <- npv_mo_f(interest_r_var = 0.10, tax_var = 1)
 npv_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in, tax_var = 1)
 
 # Net Present Value of tax revenue (2017 USD PPP)
-tax_realint_persist <- npv_mo_f()
-tax_realint_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in)
+tax_int05_persist <- npv_mo_f()
+tax_int05_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in)
 tax_int10_persist   <- npv_mo_f(interest_r_var = 0.10)
 tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in)
 
@@ -458,13 +458,13 @@ tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delt
 |--------------------------------:|------------------:|-----------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 |                                                                                                                                                                                                  
 |                                 |50 years           |0                                   |                                                |10%                                     |**`r round(l1_social_persist_int10,2)`**  |
-|                                 |50 years           |0                                   |                                                |`r 100*interest_in`%                    |**`r round(l1_social_persist_realint,2)`**|
+|                                 |50 years           |0                                   |                                                |`r 100*interest_in`%                    |**`r round(l1_social_persist_int05,2)`**|
 |                                 |25 years           |0                                   |                                                |10%                                     |**`r round(l1_social_die_int10,2)`**      |
-|                                 |25 years           |0                                   |                                                |`r 100*interest_in`%                    |**`r round(l1_social_die_realint,2)`**    |
+|                                 |25 years           |0                                   |                                                |`r 100*interest_in`%                    |**`r round(l1_social_die_int05,2)`**    |
 |                                 |50 years           |                                    |0                                               |10%                                     |**`r round(l1_tax_persist_int10,2)`**     |
-|                                 |50 years           |                                    |0                                               |`r 100*interest_in`%                    |**`r round(l1_tax_persist_realint,2)`**   |
+|                                 |50 years           |                                    |0                                               |`r 100*interest_in`%                    |**`r round(l1_tax_persist_int05,2)`**   |
 |                                 |25 years           |                                    |0                                               |10%                                     |**`r round(l1_tax_die_int10,2)`**         |
-|                                 |25 years           |                                    |0                                               |`r 100*interest_in`%                    |**`r round(l1_tax_die_realint,2)`**       |
+|                                 |25 years           |                                    |0                                               |`r 100*interest_in`%                    |**`r round(l1_tax_die_int05,2)`**       |
 |                                                                                                                                                                                                   
 |                                 |50 years           |0                                   |                                                |**`r 100*round(irr_social_persist,3)`%**|*                                         |
 |                                 |50 years           |                                    | 0                                              |**`r 100*round(irr_tax_persist,3)`%**   |*                                         |
@@ -472,9 +472,9 @@ tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delt
 |                                 |25 years           |                                    | 0                                              |**`r 100*round(irr_tax_die,3)`%**       |*                                         |
 |
 | 10%                             |50 years           |**`r round(npv_int10_persist,0)`**  |**`r round(tax_int10_persist,0)`**              |                                        |*                                         |
-|`r 100*interest_in`%             |50 years           |**`r round(npv_realint_persist,0)`**|**`r round(tax_realint_persist,0)`**            |                                        |*                                         |
+|`r 100*interest_in`%             |50 years           |**`r round(npv_int05_persist,0)`**|**`r round(tax_int05_persist,0)`**            |                                        |*                                         |
 | 10%                             |25 years           |**`r round(npv_int10_die,0)`**      |**`r round(tax_int10_die,0)`**                  |                                        |*                                         |
-|`r 100*interest_in`%             |25 years           |**`r round(npv_realint_die,0)`**    |**`r round(tax_realint_die,0)`**                |                                        |*                                         |
+|`r 100*interest_in`%             |25 years           |**`r round(npv_int05_die,0)`**    |**`r round(tax_int05_die,0)`**                |                                        |*                                         |
 **Notes.** The Net Present Value takes three factors into account: (tax on) earnings gains (a result of additional schooling), the cost of additional schooling, and the cost of deworming medication. The earnings gains and cost of additional schooling are discounted by the interest rate. We consider two interest rates: 10% and 5% to look at effects over a range of values. This range corresponds to the second-quartile range of real interest rates (calculated as government bond rates minus inflation rates) from 1998 to 2018. We assume that earnings start 10 years after deworming treatment and change discontinuously every 5 years, corresponding to each round of data collection. We assume that earnings gains persist for 25 years (5 years after the last period of data collection) and die out, or for 40 years, in which case we assume that gains identified 20 years post treatment persist through one's working life. The earnings are assumed to be taxed at `r 100*round(tax_so, 2)`% based on data from FILL IN. The cost of schooling each child for an additional year ($`r round(cost_per_student_in,2)`) is calculated by dividing the sum of teacher salary (`r teach_sal_so`) and teacher benefits (`r teach_ben_so`) by the number of average number of students per teacher (`r n_students_so`). The cost of deworming ($`r round(s2_in*q2_in,2)`) denotes the per-child cost of administering this intervention. Finally, this analysis assumes no externality effects.
 
 Panel A gives the minimum average earnings gains required to achieve a postive NPV under different assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each treatment timeframe given the observed earnings gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed earnings gains.

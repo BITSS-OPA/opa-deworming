@@ -410,38 +410,38 @@ npv_clambda_d_mo_f <- function(interest_r_var = interest_in,
 # PANEL A
 #########
 
-l1_social_persist_int10   <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 0.8, maxiter=100))$root
-l1_social_persist_realint <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1), 0.4, maxiter=100))$root
-l1_social_die_int10       <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 0.8, maxiter=100))$root
-l1_social_die_realint     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1), 0.4, maxiter=100))$root
+l1_social_persist_int10 <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=100))$root
+l1_social_persist_int05 <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=100))$root
+l1_social_die_int10     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=100))$root
+l1_social_die_int05     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=100))$root
 
-l1_tax_persist_int10   <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, interest_r_var = 0.10), 0.8, maxiter=100))$root
-l1_tax_persist_realint <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x), 0.4, maxiter=100))$root
-l1_tax_die_int10       <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, interest_r_var = 0.10), 0.8, maxiter=100))$root
-l1_tax_die_realint     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x), 0.4, maxiter=100))$root
+l1_tax_persist_int10 <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, interest_r_var = 0.10), 1, maxiter=100))$root
+l1_tax_persist_int05 <- (multiroot(function(x) npv_clambda_p_mo_f(lambda1_var = x, interest_r_var = 0.05), 1, maxiter=100))$root
+l1_tax_die_int10     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, interest_r_var = 0.10), 1, maxiter=100))$root
+l1_tax_die_int05     <- (multiroot(function(x) npv_clambda_d_mo_f(lambda1_var = x, interest_r_var = 0.05), 1, maxiter=100))$root
 
 #########
 # PANEL B
 #########
 
-irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1), 0.4, maxiter=100))$root
-irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_earnings_var = delta_earnings_in), 0.4, maxiter=100))$root
-irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x), 0.4, maxiter=100))$root
-irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_earnings_var = delta_earnings_in), 0.4, maxiter=100))$root
+irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1), .4, maxiter=100))$root
+irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_earnings_var = delta_earnings_in), .4, maxiter=100))$root
+irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x), .4, maxiter=100))$root
+irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_earnings_var = delta_earnings_in), .4, maxiter=100))$root
 
 #########
 # PANEL C
 #########
 
 # Net Present Value (2017 USD PPP)
-npv_realint_persist <- npv_mo_f(tax_var = 1)
-npv_realint_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in, tax_var = 1)
+npv_int05_persist <- npv_mo_f(tax_var = 1)
+npv_int05_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in, tax_var = 1)
 npv_int10_persist   <- npv_mo_f(interest_r_var = 0.10, tax_var = 1)
 npv_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in, tax_var = 1)
 
 # Net Present Value of tax revenue (2017 USD PPP)
-tax_realint_persist <- npv_mo_f()
-tax_realint_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in)
+tax_int05_persist <- npv_mo_f()
+tax_int05_die     <- npv_mo_f(delta_earnings_var = delta_earnings_in)
 tax_int10_persist   <- npv_mo_f(interest_r_var = 0.10)
 tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_earnings_in)
 ```
