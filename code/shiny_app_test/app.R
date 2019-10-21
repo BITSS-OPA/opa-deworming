@@ -1012,6 +1012,9 @@ ui <- fluidPage(
                  numericInput("param1", label = h3("N Sims = "), value = 1e4),
                  br("Data"), 
                  withMathJax(),
+                 selectInput("policy_est", "Policy Estimate:", 
+                             choices=policy_estimates_text),
+                 hr(),
                  sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
                              min = 0.001, max = 0.2, value = gov_bonds_so), 
                  sliderInput("param2_1", label = "SD = ",
@@ -1511,7 +1514,9 @@ server <- function(input, output) {
         ################
         output$plot1 <- renderPlot({      
                 npv_sim_all <- reactive.data1() # FORMAT THE OUTPUT AS A DF
-                npv_sim <- npv_sim_all[[ policy_estimates[3] ]]    
+                
+                position <- which( policy_estimates_text == input$policy_est)
+                npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
                 
                 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
                 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
