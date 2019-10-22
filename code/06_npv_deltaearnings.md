@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "21 October, 2019"
+date: "22 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -47,7 +47,6 @@ call_params_f <- function(){
     ex_rate_ppp_so <- 25.024       #Exchange rate (2007 Kenyan shillings to 2007 USD at PPP) - World Bank
     cpi_2007_so <- 207.342
     cpi_2017_so <- 245.120
-    coverage_so  <- 0.681333333    # (R) Fraction of treated primary school students within 6 km - from W@W - see note
     tax_so <- 0.16575              #ADD INFO!
     unit_cost_local_so <- 43.66    #Deworm the World
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
@@ -122,7 +121,7 @@ npv_mo_f <- function(interest_r_var = interest_in,
                 delta_ed_male_var = delta_ed_so[,1],
                 delta_ed_female_var = delta_ed_so[,1],
                 s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
-                periods_var = periods_so) {
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
   ns <- c(n_male_var, n_female_var)
   index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
@@ -136,7 +135,7 @@ npv_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)*2.4
+          ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
   return(res1) 
 }
 ```
@@ -325,7 +324,7 @@ The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kr
 costs_f <- function(unit_cost_local_var = unit_cost_local_so, ex_rate_ppp_var = ex_rate_ppp_so,
                     years_of_treat_var = years_of_treat_so, q_full_var = q_full_so,
                     cpi_2017_var = cpi_2017_so, cpi_2007_var = cpi_2007_so){
-    s2_in <- ( unit_cost_local_var / ex_rate_ppp_var )*(cpi_2017_var/cpi_2007_var) * years_of_treat_var
+    s2_in <- ( unit_cost_local_var / ex_rate_ppp_var )*years_of_treat_var
     q2_in <- q_full_var
     return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
 } 
@@ -350,7 +349,7 @@ npv_clambda_p_mo_f <- function(interest_r_var = interest_in,
                 delta_ed_male_var = delta_ed_so[,1],
                 delta_ed_female_var = delta_ed_so[,1],
                 s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
-                periods_var = periods_so) {
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
   ns <- c(n_male_var, n_female_var)
   index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
@@ -364,7 +363,7 @@ npv_clambda_p_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)*2.4
+          ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
   return(res1) 
 }
 ```
@@ -385,7 +384,7 @@ npv_clambda_d_mo_f <- function(interest_r_var = interest_in,
                 delta_ed_male_var = delta_ed_so[,1],
                 delta_ed_female_var = delta_ed_so[,1],
                 s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
-                periods_var = periods_so) {
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
   ns <- c(n_male_var, n_female_var)
   index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
@@ -399,7 +398,7 @@ npv_clambda_d_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)*2.4
+          ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
   return(res1) 
 }
 ```
@@ -447,30 +446,64 @@ tax_int10_die       <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delt
 ```
 
 |Real annualized interest rate (r)|Treatment effect timeframe|Net Present Value (2017 USD PPP)    |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
-|--------------------------------:|------------------:|-----------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
+|--------------------------------:|------------------:|------------------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 |                                                                                                                                                                                                  
-|                                 |50 years           |0                                   |                                                |10%                                     |**2.27**  |
-|                                 |50 years           |0                                   |                                                |5%                    |**0.86**|
-|                                 |25 years           |0                                   |                                                |10%                                     |**2.93**      |
-|                                 |25 years           |0                                   |                                                |5%                    |**1.43**    |
-|                                 |50 years           |                                    |0                                               |10%                                     |**13.72**     |
-|                                 |50 years           |                                    |0                                               |5%                    |**5.19**   |
-|                                 |25 years           |                                    |0                                               |10%                                     |**17.67**         |
-|                                 |25 years           |                                    |0                                               |5%                    |**8.64**       |
+|                                 |50 years           |0                                          |                                                |10%                                     |**1.95**  |
+|                                 |50 years           |0                                          |                                                |5%                    |**0.74**  |
+|                                 |25 years           |0                                          |                                                |10%                                     |**2.51**      |
+|                                 |25 years           |0                                          |                                                |5%                    |**1.23**      |
+|                                 |50 years           |                                           |0                                               |10%                                     |**11.76**     |
+|                                 |50 years           |                                           |0                                               |5%                    |**4.46**     |
+|                                 |25 years           |                                           |0                                               |10%                                     |**15.15**         |
+|                                 |25 years           |                                           |0                                               |5%                    |**7.43**         |
 |                                                                                                                                                                                                   
-|                                 |50 years           |0                                   |                                                |**41.5%**|*                                         |
-|                                 |50 years           |                                    | 0                                              |**23.3%**   |*                                         |
-|                                 |25 years           |0                                   |                                                |**41.5%**    |*                                         |
-|                                 |25 years           |                                    | 0                                              |**22.9%**       |*                                         |
+|                                 |50 years           |0                                          |                                                |**43.4%**|*                                         |
+|                                 |50 years           |                                           | 0                                              |**24.7%**   |*                                         |
+|                                 |25 years           |0                                          |                                                |**43.4%**    |*                                         |
+|                                 |25 years           |                                           | 0                                              |**24.4%**       |*                                         |
 |
-| 10%                             |50 years           |**339**  |**48**              |                                        |*                                         |
-|5%             |50 years           |**915**|**144**            |                                        |*                                         |
-| 10%                             |25 years           |**263**      |**36**                  |                                        |*                                         |
-|5%             |25 years           |**553**    |**84**                |                                        |*                                         |
-**Notes.** The Net Present Value takes three factors into account: (tax on) earnings gains (a result of additional schooling), the cost of additional schooling, and the cost of deworming medication. The earnings gains and cost of additional schooling are discounted by the interest rate. We consider two interest rates: 10% and 5% to look at effects over a range of values. This range corresponds to the second-quartile range of real interest rates (calculated as government bond rates minus inflation rates) from 1998 to 2018. We assume that earnings start 10 years after deworming treatment and change discontinuously every 5 years, corresponding to each round of data collection. We assume that earnings gains persist for 25 years (5 years after the last period of data collection) and die out, or for 40 years, in which case we assume that gains identified 20 years post treatment persist through one's working life. The earnings are assumed to be taxed at 17% based on data from FILL IN. The cost of schooling each child for an additional year ($5.52) is calculated by dividing the sum of teacher salary (5041) and teacher benefits (217.47) by the number of average number of students per teacher (45). The cost of deworming ($3.73) denotes the per-child cost of administering this intervention. Finally, this analysis assumes no externality effects.
+| 10%                             |50 years           |**340**         |**50**              |                                        |*                                         |
+|5%             |50 years           |**916**         |**145**              |                                        |*                                         |
+| 10%                             |25 years           |**265**             |**37**                  |                                        |*                                         |
+|5%             |25 years           |**555**             |**85**                  |                                        |*                                         |
+**Notes.** The Net Present Value takes three factors into account: (tax on) earnings gains (a result of additional schooling), the cost of additional schooling, and the cost of deworming medication.
+
+The earnings gains observed 10, 15, and 20 years from the intervention are estimated to be 87, 83, 81 dollars per person per year respectively. They are discounted by the real interest rate, where we consider two: 5% and 10% to look at effects over a range of values. These values (calculated as goverment bonds minus inflation) correspond with the second quartile and median interest rates between 1998 and 2018. The tax on earnings is assumed to be 16.6%.
+
+The cost of additional schooling is given by the product of the cost of schooling each child and the additional years of schooling
+
+All three values are given in PPP units (where the PPP exchange rate from KSH to USD is 25.02), and the costs and benefits of schooling are adjusted for inflation. The cost of deworming medication is not adjusted for inflation since the cost is negligible and has, in fact, decreased over time. [SOURCE?]
+
+
+We assume that earnings start 10 years after deworming treatment and change discontinuously every 5 years, corresponding to each round of data collection. We assume that earnings gains persist for 25 years (5 years after the last period of data collection) and die out, or for 40 years, in which case we assume that gains identified 20 years post treatment persist through one's working life. The earnings are assumed to be taxed at 17% based on data from FILL IN. The cost of schooling each child for an additional year ($5.52) is calculated by dividing the sum of teacher salary (5041) and teacher benefits (217.47) by the number of average number of students per teacher (45). The cost of deworming ($3.15) denotes the per-child cost of administering this intervention. Finally, this analysis assumes no externality effects.
 
 Panel A gives the minimum average earnings gains required to achieve a postive NPV under different assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each treatment timeframe given the observed earnings gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed earnings gains.
 
 \* The average observed earnings gains is 83.67.
 
+
+    <!-- cpi_2007_so <- 207.342 -->
+    <!-- cpi_2017_so <- 245.120 -->
+    <!-- unit_cost_local_so <- 43.66    #Deworm the World -->
+    <!-- years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A -->
+
+    <!-- ############# -->
+    <!-- ##### Research -->
+    <!-- #############     -->
+    <!-- lambda1_so <- c(87, 83, 81) -->
+    <!-- q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007) -->
+    <!-- q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007) -->
+    <!-- delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct seconday schooling increase (from Joan) -->
+    <!--                   0.0239963665555466,  0.027301406306074,   0.0234125454594173, -->
+    <!--                   0.0279278879439199,  0.00647044449446303, 0.00835739437790601)                                      -->
+    <!-- delta_ed_so <- cbind(delta_ed_so, 1999:2007) -->
+
+    <!-- ############# -->
+    <!-- ##### Guess work    -->
+    <!-- ############# -->
+    <!-- periods_so <- 50               #Total number of periods to forecast wages -->
+    <!-- time_to_jm_so <- 10            #Time from intial period until individual join the labor force -->
+    <!-- teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials -->
+    <!-- teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47 -->
+    <!-- n_students_so <- 45            #Average pupils per teacher	45 -->
 
