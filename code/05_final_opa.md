@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "19 October, 2019"
+date: "22 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -140,7 +140,8 @@ chunk_params <- function(){
 ###############################################################################  
 }
 invisible( list2env(chunk_params(),.GlobalEnv) )
-
+    nsims <- 1e2
+    set.seed(142857)
 #############
 ##### Notes:
 #############
@@ -1296,8 +1297,6 @@ kable(npv_table, caption = "Caption of the table") %>%
 # add chunk functions0
 
 
-set.seed(142857)
-nsims <- 1e2
 include_ext_mo <- TRUE
 start_time <- Sys.time()
 ################
@@ -1547,7 +1546,9 @@ for ( i in 1:length(policy_estimates) ) {
 ###### Results/Viz
 ################
 
-npv_sim <- get(policy_estimates[3])     
+
+possition <- 9
+npv_sim <- get(policy_estimates[9])     
 
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
@@ -1560,7 +1561,7 @@ ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
-       title = paste0("Distribution of NPV of ", policy_estimates_text[3]
+       title = paste0("Distribution of NPV of ", policy_estimates_text[9]
                       ),
        subtitle = paste0("N = ", nsims, " simulations. Takes ",
                          round(total_time, 1)," ",attributes(total_time)$unit )  )+
