@@ -99,7 +99,7 @@ chunk_params <- function(){
     df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Treatment #s")
 
-    #############
+    ############# 318.08 327.68
     ##### Research
     #############    
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women CONFIRM
@@ -134,14 +134,14 @@ chunk_params <- function(){
     staff_time_so <- 0.3           #Added Deworming costs due to goverment staff time
     run_sim_so <- FALSE
     main_run_so <- TRUE
+    rescale_so <- TRUE
+    nsims_so <- 1e2
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 
 ###############################################################################
 ###############################################################################  
 }
 invisible( list2env(chunk_params(),.GlobalEnv) )
-    nsims <- 1e2
-    set.seed(142857)
 #############
 ##### Notes:
 #############
@@ -1296,12 +1296,13 @@ kable(npv_table, caption = "Caption of the table") %>%
 #invisible( list2env(call_params_f(), .GlobalEnv) )
 # add chunk functions0
 
-
+nsims <- nsims_so
 include_ext_mo <- TRUE
 start_time <- Sys.time()
 ################
 ###### Draws
 ################
+set.seed(142857)
 #Defaoult dist: normal, default sd: 0.1* mean
 ## Data
 gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_so, sd = 0.1 * gov_bonds_so)
@@ -1553,11 +1554,11 @@ npv_sim <- get(policy_estimates[9])
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
-ggplot() +
+plot1 <- ggplot() +
   geom_density(aes(x = npv_sim,
                    alpha = 1/2), kernel = "gau") +
   geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-  coord_cartesian(xlim = 1.2 * c(min(c(-1, npv_sim) ),max(npv_sim))) +
+  coord_cartesian(xlim = c(-10, 100)) +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "NPV" ,
@@ -1568,6 +1569,17 @@ ggplot() +
   annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
   annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
   theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+if (rescale_so == TRUE) {
+    plot1 <- plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim)))   
+}
+```
+
+```
+## Coordinate system already present. Adding new coordinate system, which will replace the existing one.
+```
+
+```r
+print(plot1)
 ```
 
 ![](05_final_opa_files/figure-html/unnamed-chunk-1-1.png)<!-- -->

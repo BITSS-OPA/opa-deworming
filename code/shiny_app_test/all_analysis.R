@@ -70,15 +70,13 @@ chunk_params <- function(){
   staff_time_so <- 0.3           #Added Deworming costs due to goverment staff time
   run_sim_so <- FALSE
   main_run_so <- FALSE
+
   return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
   
   ###############################################################################
   ###############################################################################  
 }
 invisible( list2env(chunk_params(),.GlobalEnv) )
-nsims <- 1e2
-set.seed(142857)
-
 chunk_policy_est <- function(){
   ###############################################################################
   ###############################################################################  

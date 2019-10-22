@@ -73,6 +73,8 @@ shinyServer(function(input, output) {
     ################
     ###### Draws
     ################
+    set.seed(142857)
+    
     #Defaoult dist: normal, default sd: 0.1* mean
     ## Data
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
@@ -341,11 +343,11 @@ shinyServer(function(input, output) {
     npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
     npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
     
-    ggplot() +
+    plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
                        alpha = 1/2), kernel = "gau") +
       geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-      coord_cartesian(xlim = 1.2 * c(min(c(-1, npv_sim) ),max(npv_sim))) +
+      coord_cartesian(xlim = c(-10, 100)) +
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
            x = "NPV" ,
@@ -356,6 +358,10 @@ shinyServer(function(input, output) {
       annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
       annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-  }, height = 800, width = 800 )
+    if (input$rescale == TRUE) {
+      plot1 <- plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim)))   
+      }
+    print(plot1)  
+    }, height = 800, width = 800 )
 
 })

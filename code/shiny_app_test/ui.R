@@ -17,7 +17,7 @@ knitr::opts_knit$set(root.dir = here())
 
 
 nsims <- 1e2
-set.seed(142857)
+
 source("all_analysis.R")
 
 
@@ -26,6 +26,7 @@ source("all_analysis.R")
 shinyUI( fluidPage(
   sidebarPanel(id = "tPanel",style = "overflow-y:scroll; max-width: 400px; max-height: 800px; position:relative;",
                numericInput("param1", label = h3("N Sims = "), value = 1e2),
+               checkboxInput("rescale", label = "Click if want to rescale x-axis", value = FALSE),
                br("Data"), 
                withMathJax(),
                selectInput("policy_est", "Policy Estimate:", 
