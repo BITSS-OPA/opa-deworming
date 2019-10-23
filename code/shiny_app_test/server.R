@@ -45,7 +45,7 @@ shinyServer(function(input, output) {
                         gov_bonds_var2_sd,
                         inflation_var2,
                         inflation_var2_sd,
-                        df_costs_var2,
+                        df_costs_var2,     #REVIEW THIS
                         df_costs_cw_var2,
                         staff_time_var2,
                         staff_time_var2_sd,
@@ -143,7 +143,7 @@ shinyServer(function(input, output) {
     #######
     costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
                                         df_costs_cw_var = df_costs_cw_so)$counts_data
-    costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x,  sd = 0.1 * x) )
+    costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x * some_var,  sd = some_var_sd * x) )
     
     staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
     
@@ -153,7 +153,7 @@ shinyServer(function(input, output) {
     
     costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
       aux1 <- x$costs_by_country
-      rnorm(length(aux1), mean = aux1,  sd = 0.1 * aux1)
+      rnorm(length(aux1), mean = some_var * aux1,  sd = some_var_sd * aux1)
     } )
     )
     
@@ -212,7 +212,7 @@ shinyServer(function(input, output) {
                 unit_cost_local_var1 = unit_cost_local_sim[i],
                 years_of_treat_var1 = years_of_treat_sim[i],
                 tax_var1 = tax_sim[i],
-                periods_var1 = periods_so),.GlobalEnv) )
+                periods_var1 = periods_so),.GlobalEnv) ) # add costs here
       
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
       baird1_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
@@ -319,8 +319,8 @@ shinyServer(function(input, output) {
               alpha_0_var2_sd = as.numeric(input$param30_1), 
               alpha_r_var2 = as.numeric(input$param31),    
               alpha_r_var2_sd = as.numeric(input$param31_1),                                                                         
-              #                      costs_var2 = as.numeric(input$param32),                                                                              
-              #                      costs_var2_sd = as.numeric(input$param32_1),                                                                           
+                                    costs_var2 = as.numeric(input$param32),                                                                              
+                                    costs_var2_sd = as.numeric(input$param32_1),                                                                           
               staff_time_var2 = as.numeric(input$param33), 
               staff_time_var2_sd = as.numeric(input$param33_1),                                                                      
               #                      counts_var2 = as.numeric(input$param34),                                                                             
@@ -347,7 +347,7 @@ shinyServer(function(input, output) {
       geom_density(aes(x = npv_sim,
                        alpha = 1/2), kernel = "gau") +
       geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-      coord_cartesian(xlim = c(-10, 100)) +
+      coord_cartesian(xlim = c(-10, 400)) +
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
            x = "NPV" ,
