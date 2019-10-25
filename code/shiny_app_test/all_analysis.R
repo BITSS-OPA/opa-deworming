@@ -21,8 +21,6 @@ chunk_params <- function(){
   unit_cost_local_so <- 43.66    #Deworm the World
   years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
   
-  costs_so <- 1
-  counts_so <- 1
 
   # costs data FIX WD LATER
   df_costs_so <- read_excel("data_temp/DtW Cost per Child Data.xlsx",
@@ -68,6 +66,11 @@ chunk_params <- function(){
   n_students_so <- 45            #Average pupils per teacher	45
   
   staff_time_so <- 0.3           #Added Deworming costs due to goverment staff time
+  costs_par_so <- 1
+  costs_par_sd_so <- 0.1
+  counts_par_so <- 1
+  counts_par_sd_so <- 0.1
+  
   run_sim_so <- FALSE
   main_run_so <- FALSE
 

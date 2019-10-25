@@ -45,11 +45,12 @@ shinyServer(function(input, output) {
                         gov_bonds_var2_sd,
                         inflation_var2,
                         inflation_var2_sd,
-                        df_costs_var2,     #REVIEW THIS
-                        df_costs_cw_var2,
+                        costs_par_var2, 
+                        costs_par_var2_sd, 
                         staff_time_var2,
                         staff_time_var2_sd,
-                        df_counts_var2,
+                        counts_par_var2,
+                        counts_par_var2_sd,
                         delta_ed_var2,
                         delta_ed_var2_sd,
                         delta_ed_ext_var2,
@@ -66,7 +67,10 @@ shinyServer(function(input, output) {
                         years_of_treat_var2_sd,
                         tax_var2,
                         tax_var2_sd,
-                        periods_var2) {
+                        periods_var2, 
+                        df_costs_var2 = df_costs_so, 
+                        df_counts_var2 = df_counts_so, 
+                        df_costs_cw_var2 = df_costs_cw_so) {
     #nsims <- 1e2
     include_ext_mo <- TRUE
     start_time <- Sys.time()
@@ -123,44 +127,46 @@ shinyServer(function(input, output) {
     teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
     teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
     n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
-    
-    
-    
-    
+
     delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean = 
                                                                 x * delta_ed_var2, 
                                                               sd = delta_ed_var2_sd * sd(delta_ed_so[,1]) ) )
     colnames(delta_ed_sim) <- 1999:2007
     
-    delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x)  rnorm(nsims, mean = 
-                                                                         x * delta_ed_ext_var2, 
-                                                                       sd = delta_ed_ext_var2_sd * sd(delta_ed_ext_so[,1])))
+    delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], 
+                               function(x)  rnorm(nsims,
+                                                  mean = x * delta_ed_ext_var2,
+                                                  sd = delta_ed_ext_var2_sd * sd(delta_ed_ext_so[, 1])))
     
     colnames(delta_ed_ext_sim) <- 1999:2007
     
     
     
-    #######
-    costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
-                                        df_costs_cw_var = df_costs_cw_so)$counts_data
-    costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x * some_var,  sd = some_var_sd * x) )
+    #######    
+    #######    
+    #browser()
+    costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var2,
+                                        df_costs_cw_var = df_costs_cw_var2)$counts_data
+    costs1_counts_sim <- sapply(costs1_counts_in$total, 
+                                function(x)  rnorm(nsims, mean = x * counts_par_var2,  
+                                                   sd = counts_par_var2_sd * x) )
     
     staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
-    
-    costs1_costs_in <- lapply(staff_time_sim, function(x) costs1_costs_f(df_costs_var = df_costs_so,
-                                                                         df_costs_cw_var = df_costs_cw_so,
-                                                                         staff_time_var = x)$cost_data)
+
+    costs1_costs_in <- lapply(staff_time_sim, 
+                              function(x) costs1_costs_f(df_costs_var = df_costs_var2,
+                                                         df_costs_cw_var = df_costs_cw_var2,
+                                                         staff_time_var = x)$cost_data)
     
     costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
       aux1 <- x$costs_by_country
-      rnorm(length(aux1), mean = some_var * aux1,  sd = some_var_sd * aux1)
+      rnorm(length(aux1), mean = costs_par_var2 * aux1,  sd = costs_par_var2_sd * aux1)
     } )
     )
     
-    
+    browser()
     ################
-    ###### Runs
-    ################
+    ###### Runs    ################
     
     baird1_sim           <- rep(NA, nsims)
     baird2_sim           <- rep(NA, nsims)
@@ -176,7 +182,7 @@ shinyServer(function(input, output) {
     
     
     for (i in 1:nsims) {
-      
+   # one_run, for the most part, does not include standard deviations   
       invisible( list2env(
         one_run(main_run_var1 = FALSE,
                 run_sim_var = TRUE,
@@ -200,10 +206,7 @@ shinyServer(function(input, output) {
                 lambda1_new_var1 = lambda1_new_sim[i,],
                 gov_bonds_var1 = gov_bonds_sim[i],
                 inflation_var1 = inflation_sim[i],
-                df_costs_var1 = df_costs_so,
-                df_costs_cw_var1 = df_costs_cw_so,
-                staff_time_var1 = staff_time_so,
-                df_counts_var1 = df_counts_so,
+                staff_time_var1 = staff_time_sim[i],
                 delta_ed_var1 = cbind(delta_ed_sim[i,], 1999:2007),
                 delta_ed_ext_var1 = cbind(delta_ed_ext_sim[i,], 1999:2007),
                 teach_sal_var1 = teach_sal_sim[i],
@@ -212,7 +215,10 @@ shinyServer(function(input, output) {
                 unit_cost_local_var1 = unit_cost_local_sim[i],
                 years_of_treat_var1 = years_of_treat_sim[i],
                 tax_var1 = tax_sim[i],
-                periods_var1 = periods_so),.GlobalEnv) ) # add costs here
+                periods_var1 = periods_so,
+                df_costs_var1 = df_costs_var2,
+                df_costs_cw_var1 = df_costs_cw_var2,
+                df_counts_var1 = df_counts_var2),.GlobalEnv) ) # add costs here
       
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
       baird1_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
@@ -312,19 +318,20 @@ shinyServer(function(input, output) {
               delta_ed_ext_var2_sd = as.numeric(input$param27_1),                                               
               q_zero_var2 = as.numeric(input$param28),                                                
               q_zero_var2_sd = as.numeric(input$param28_1), 
-              lambda1_new_var2 = c(as.numeric(input$param29_1), as.numeric(input$param29_2), as.numeric(input$param29_3)),                   
-              lambda1_new_var2_sd = c(as.numeric(input$param29_1_1), as.numeric(input$param29_2_1), as.numeric(input$param29_3_1)),               
-              
+              lambda1_new_var2 = c(as.numeric(input$param29_1), as.numeric(input$param29_2), 
+                                   as.numeric(input$param29_3)),                   
+              lambda1_new_var2_sd = c(as.numeric(input$param29_1_1), as.numeric(input$param29_2_1), 
+                                      as.numeric(input$param29_3_1)),             
               alpha_0_var2 = as.numeric(input$param30),    
               alpha_0_var2_sd = as.numeric(input$param30_1), 
               alpha_r_var2 = as.numeric(input$param31),    
               alpha_r_var2_sd = as.numeric(input$param31_1),                                                                         
-                                    costs_var2 = as.numeric(input$param32),                                                                              
-                                    costs_var2_sd = as.numeric(input$param32_1),                                                                           
+              counts_par_var2 = as.numeric(input$param32), 
+              counts_par_var2_sd = as.numeric(input$param32_1),
               staff_time_var2 = as.numeric(input$param33), 
-              staff_time_var2_sd = as.numeric(input$param33_1),                                                                      
-              #                      counts_var2 = as.numeric(input$param34),                                                                             
-              #                      counts_var2_sd = as.numeric(input$param34_1), 
+              staff_time_var2_sd = as.numeric(input$param33_1), 
+              costs_par_var2 = as.numeric(input$param34), 
+              costs_par_var2_sd = as.numeric(input$param34_1), 
     )
   } 
   )
