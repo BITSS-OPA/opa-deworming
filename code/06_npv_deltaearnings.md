@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "23 October, 2019"
+date: "25 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -50,6 +50,7 @@ options(tinytex.verbose = TRUE)
     inflation_so <- 0.04                   # Kenyan inflation rate - World Bank Development Indicators (updated 10/14) (add links)
     tax_so       <- 0.16575                # ADD INFO!
     unit_cost_so <- 0.42                   # Unit cost of deworming (in 2018 USD) - from Evidence Action
+  # unit_cost_local_so <- 43.66            #Deworm the World
     
   # Research
     lambda1_2017usdppp_so <- c(87, 83, 81) # Average treatment effect on earnings in each KLPS round (5 year period), already adjusted for PPP (and inflation?) - W@W
@@ -67,11 +68,16 @@ options(tinytex.verbose = TRUE)
     years_of_treat_so <- 2.41       # Additional Years of Treatment - Table 1, Panel A
     
     ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
+    ex_rate_2009        <- 77.352
     ex_rate_2007        <- 67.318   # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2018_ppp_so <- 50.245   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
-    ex_rate_2007_ppp_so <- 23.514   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
+  # ex_rate_2018_ppp_so <- 50.245   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
+  # ex_rate_2007_ppp_so <- 23.514   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
+    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from World Bank, but no link - not sure why values differ)
+    ex_rate_2009_ppp_so <- 31.317
+    ex_rate_2007_ppp_so <- 25.024   # KLPS4_E+_globals.do (originally from World Bank, but no link - not sure why values differ)
     
     cpi_2007_so <- 207.342          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    cpi_2009_so <- 214.537
     cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     
@@ -94,14 +100,14 @@ options(tinytex.verbose = TRUE)
   # Adjust for currency: convert all costs to USD PPP **NOTE: 1 international dollar = 1 USD (https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE-US)***
       
     unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
-    teach_sal_ppp_so <- teach_sal_so*ex_rate_2007/ex_rate_2007_ppp_so
-    teach_ben_ppp_so <- teach_ben_so*ex_rate_2007/ex_rate_2007_ppp_so
+    teach_sal_ppp_so <- teach_sal_so*ex_rate_2009/ex_rate_2009_ppp_so
+    teach_ben_ppp_so <- teach_ben_so*ex_rate_2009/ex_rate_2009_ppp_so
     
   # Adjust for inflation: convert all costs to 2017 USD
     
     unit_cost_2017usdppp_so <- unit_cost_ppp_so*cpi_2017_so/cpi_2018_so
-    teach_sal_2017usdppp_so <- teach_sal_ppp_so*cpi_2017_so/cpi_2007_so
-    teach_ben_2017usdppp_so <- teach_ben_ppp_so*cpi_2017_so/cpi_2007_so      
+    teach_sal_2017usdppp_so <- teach_sal_ppp_so*cpi_2009_so/cpi_2009_so
+    teach_ben_2017usdppp_so <- teach_ben_ppp_so*cpi_2009_so/cpi_2009_so      
 
 #############
 ##### Notes:
@@ -286,7 +292,7 @@ $K$ represents the cost per student. This is calculated as the salary of the tea
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 \end{equation}
 
-Teacher salary is estimated by the average salary of teachers in Kenya ($1.7061\times 10^{4}). Likewise, teacher benefits are estimated by the average benefits of teachers in Kenya ($736). Each of these have been adjusted for inflation. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per school is (45).
+Teacher salary is estimated by the average salary of teachers in Kenya ($1.2451\times 10^{4}). Likewise, teacher benefits are estimated by the average benefits of teachers in Kenya ($537). Each of these have been adjusted for inflation. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per school is (45).
 
 **NOTE** I confirmed average teacher salary and average number of students based on a google search, but am unable to find info on teacher benefits.
 
@@ -469,28 +475,28 @@ tax_int10_die     <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_
 |Real annualized interest rate (r)|Treatment effect timeframe|Net Present Value (2017 USD PPP)    |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|------------------:|------------------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 |                                                                                                                                                                                                  
-|                                 |50 years           |0                                          |                                                |10%                                     |**9.53**  |
-|                                 |50 years           |0                                          |                                                |5%                    |**4.41**  |
-|                                 |25 years           |0                                          |                                                |10%                                     |**12.28**      |
-|                                 |25 years           |0                                          |                                                |5%                    |**7.35**      |
-|                                 |50 years           |                                           |0                                               |10%                                     |**57.49**     |
-|                                 |50 years           |                                           |0                                               |5%                    |**26.6**     |
-|                                 |25 years           |                                           |0                                               |10%                                     |**74.07**         |
-|                                 |25 years           |                                           |0                                               |5%                    |**44.33**         |
+|                                 |50 years           |0                                          |                                                |10%                                     |**7.19**  |
+|                                 |50 years           |0                                          |                                                |5%                    |**3.31**  |
+|                                 |25 years           |0                                          |                                                |10%                                     |**9.27**      |
+|                                 |25 years           |0                                          |                                                |5%                    |**5.51**      |
+|                                 |50 years           |                                           |0                                               |10%                                     |**43.39**     |
+|                                 |50 years           |                                           |0                                               |5%                    |**19.95**     |
+|                                 |25 years           |                                           |0                                               |10%                                     |**55.9**         |
+|                                 |25 years           |                                           |0                                               |5%                    |**33.24**         |
 |                                                                                                                                                                                                   
-|                                 |50 years           |0                                          |                                                |**34.3%**|*                                         |
-|                                 |50 years           |                                           | 0                                              |**13.1%**   |*                                         |
-|                                 |25 years           |0                                          |                                                |**34.1%**    |*                                         |
-|                                 |25 years           |                                           | 0                                              |**11.4%**       |*                                         |
+|                                 |50 years           |0                                          |                                                |**37.7%**|*                                         |
+|                                 |50 years           |                                           | 0                                              |**15.6%**   |*                                         |
+|                                 |25 years           |0                                          |                                                |**37.6%**    |*                                         |
+|                                 |25 years           |                                           | 0                                              |**14.4%**       |*                                         |
 |
-| 10%                             |50 years           |**309**         |**18**              |                                        |*                                         |
-|5%             |50 years           |**875**         |**104**              |                                        |*                                         |
-| 10%                             |25 years           |**233**             |**6**                  |                                        |*                                         |
-|5%             |25 years           |**514**             |**44**                  |                                        |*                                         |**Notes.** The Net Present Value takes three factors into account: (tax on) earnings gains (a result of additional schooling), the cost of additional schooling, and the cost of deworming medication.
+| 10%                             |50 years           |**318**         |**28**              |                                        |*                                         |
+|5%             |50 years           |**887**         |**116**              |                                        |*                                         |
+| 10%                             |25 years           |**243**             |**15**                  |                                        |*                                         |
+|5%             |25 years           |**526**             |**56**                  |                                        |*                                         |**Notes.** The Net Present Value takes three factors into account: (tax on) earnings gains (a result of additional schooling), the cost of additional schooling, and the cost of deworming medication.
 
 The earnings gains observed 10, 15, and 20 years from the intervention are estimated to be 87, 83, 81 dollars per person per year respectively. We assume there are no earnings gains in the first 10 years after receiving deworming medication, and earnings gains persist through the end of one's working life (50 years after receiving treatment) or die out after the last observed five-year period (25 years after receiving treatment). The annual tax on earnings is assumed to be 16.6%.
 
-The cost of additional schooling is given by the product of the cost of schooling each child and the additional years of schooling. The cost of schooling each child for an additional year ($395.5) is calculated by dividing the sum of annual teacher salary ($1.706133\times 10^{4}) and teacher benefits ($736) by the number of average number of students per teacher (45). And on average, treated individuals had 0.02 additional years of schooling.
+The cost of additional schooling is given by the product of the cost of schooling each child and the additional years of schooling. The cost of schooling each child for an additional year ($288.63) is calculated by dividing the sum of annual teacher salary ($1.245111\times 10^{4}) and teacher benefits ($537) by the number of average number of students per teacher (45). And on average, treated individuals had 0.02 additional years of schooling.
 
 Both earnings gains and the cost of additional schooling are discounted by the real interest rate, where we consider two: 5% and 10% to look at effects over a range of values. These values (calculated as goverment bonds minus inflation) correspond with the second quartile and median interest rates between 1998 and 2018. 
 

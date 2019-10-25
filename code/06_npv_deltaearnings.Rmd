@@ -62,6 +62,7 @@ print_code <- TRUE
     inflation_so <- 0.04                   # Kenyan inflation rate - World Bank Development Indicators (updated 10/14) (add links)
     tax_so       <- 0.16575                # ADD INFO!
     unit_cost_so <- 0.42                   # Unit cost of deworming (in 2018 USD) - from Evidence Action
+  # unit_cost_local_so <- 43.66            #Deworm the World
     
   # Research
     lambda1_2017usdppp_so <- c(87, 83, 81) # Average treatment effect on earnings in each KLPS round (5 year period), already adjusted for PPP (and inflation?) - W@W
@@ -79,11 +80,16 @@ print_code <- TRUE
     years_of_treat_so <- 2.41       # Additional Years of Treatment - Table 1, Panel A
     
     ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
+    ex_rate_2009        <- 77.352
     ex_rate_2007        <- 67.318   # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2018_ppp_so <- 50.245   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
-    ex_rate_2007_ppp_so <- 23.514   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
+  # ex_rate_2018_ppp_so <- 50.245   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
+  # ex_rate_2007_ppp_so <- 23.514   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
+    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from World Bank, but no link - not sure why values differ)
+    ex_rate_2009_ppp_so <- 31.317
+    ex_rate_2007_ppp_so <- 25.024   # KLPS4_E+_globals.do (originally from World Bank, but no link - not sure why values differ)
     
     cpi_2007_so <- 207.342          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    cpi_2009_so <- 214.537
     cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     
@@ -106,14 +112,14 @@ print_code <- TRUE
   # Adjust for currency: convert all costs to USD PPP **NOTE: 1 international dollar = 1 USD (https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE-US)***
       
     unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
-    teach_sal_ppp_so <- teach_sal_so*ex_rate_2007/ex_rate_2007_ppp_so
-    teach_ben_ppp_so <- teach_ben_so*ex_rate_2007/ex_rate_2007_ppp_so
+    teach_sal_ppp_so <- teach_sal_so*ex_rate_2009/ex_rate_2009_ppp_so
+    teach_ben_ppp_so <- teach_ben_so*ex_rate_2009/ex_rate_2009_ppp_so
     
   # Adjust for inflation: convert all costs to 2017 USD
     
     unit_cost_2017usdppp_so <- unit_cost_ppp_so*cpi_2017_so/cpi_2018_so
-    teach_sal_2017usdppp_so <- teach_sal_ppp_so*cpi_2017_so/cpi_2007_so
-    teach_ben_2017usdppp_so <- teach_ben_ppp_so*cpi_2017_so/cpi_2007_so      
+    teach_sal_2017usdppp_so <- teach_sal_ppp_so*cpi_2009_so/cpi_2009_so
+    teach_ben_2017usdppp_so <- teach_ben_ppp_so*cpi_2009_so/cpi_2009_so      
 
 #############
 ##### Notes:
