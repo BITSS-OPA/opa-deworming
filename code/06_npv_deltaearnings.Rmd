@@ -66,7 +66,9 @@ print_code <- TRUE
   # unit_cost_local_so <- 43.66            #Deworm the World
     
   # Research
-    lambda1_2017usdppp_so <- c(87, 83, 85) # Average treatment effect on earnings in each KLPS round (5 year period), already adjusted for PPP (and inflation?) - W@W
+    lambda1_2017usdppp_so <- c(86.54642,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
+                               82.99311,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w 
+                               85.44088)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
     
   # Guess work   
     periods_so    <- 50                    #Total number of periods to forecast wages
@@ -529,7 +531,7 @@ CITE SITES AND WORLD BACK ETC. ADD BIBLIOGRAPHY TO THE BOTTOM OF THE NOTE. PROPE
 
 The earnings gains in panel A and the internal rates of return in panel B are caculated using the `multiroot` function which solves for $n$ roots of $n$ (nonlinear) equations. An input to this function `start` is a scalar containing an initial guess for the unknown value.
 
-The values in panel A are robust to all `start` values trued thus far (between 0 and 4). The values in panel B are robust to `start` values between 0 and .5; with a `start` value of .6, the internal rates of return for the tax NPV become UNSTABLE, and for a `start` value of .8 the internal rates of return for the social NPV also become hugely negative. **NOTE** update this.
+The values in panel A are robust to all `start` values trued thus far (between 0 and 4). The values in panel B are robust to `start` values between 0 and .5; with a `start` value of .6, the internal rates of return for the tax NPV become UNSTABLE , and for a `start` value of .8 the internal rates of return for the social NPV also become hugely negative. **NOTE** update this.
 
 
 

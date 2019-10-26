@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "25 October, 2019"
+date: "26 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -54,7 +54,9 @@ options(tinytex.verbose = TRUE)
   # unit_cost_local_so <- 43.66            #Deworm the World
     
   # Research
-    lambda1_2017usdppp_so <- c(87, 83, 85) # Average treatment effect on earnings in each KLPS round (5 year period), already adjusted for PPP (and inflation?) - W@W
+    lambda1_2017usdppp_so <- c(86.54642,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
+                               82.99311,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w 
+                               85.44088)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
     
   # Guess work   
     periods_so    <- 50                    #Total number of periods to forecast wages
@@ -487,30 +489,32 @@ tax_int10_die     <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_
 |                                 |25 years           |                                           |0                                               |5%                    |**31.08**         |
 |                                                                                                                                                                                                   
 |                                 |50 years           |0                                          |                                                |**38.5%**|*                                         |
-|                                 |50 years           |                                           | 0                                              |**16.4%**   |*                                         |
+|                                 |50 years           |                                           | 0                                              |**16.3%**   |*                                         |
 |                                 |25 years           |0                                          |                                                |**38.4%**    |*                                         |
-|                                 |25 years           |                                           | 0                                              |**15.2%**       |*                                         |
+|                                 |25 years           |                                           | 0                                              |**15.1%**       |*                                         |
 |
 | 10%                             |50 years           |**326**         |**31**              |                                        |*                                         |
-|5%             |50 years           |**914**         |**123**              |                                        |*                                         |
+|5%             |50 years           |**916**         |**123**              |                                        |*                                         |
 | 10%                             |25 years           |**247**             |**18**                  |                                        |*                                         |
 |5%             |25 years           |**535**             |**60**                  |                                        |*                                         |
 
-**Notes.** The Net Present Value takes three factors into account: (tax on) earnings gains (a result of additional schooling), the cost of additional schooling, and the cost of deworming medication.
+**Notes.** Panel A gives the minimum average earnings gains required to achieve a postive NPV under different assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each assumption of the treatment effect timeframe given the observed earnings gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed earnings gains.
 
-The treatment effect on earnings observed 10, 15, and 20 years from the intervention (in each round of data collection) were, on average, 87, 83, 85 dollars per person per year respectively. We assume there are no earnings gains in the first 10 years after receiving deworming medication, and earnings gains persist through the end of one's working life (50 years after receiving treatment) or die out after the last observed five-year period (25 years after receiving treatment). The annual tax on earnings is assumed to be 16.6% based on **[FILL IN]**.
+The Net Present Value takes three factors into account: the cost of deworming medication the cost of additional schooling, and labor market gains.
+
+The treatment effect on earnings observed 10, 15, and 20 years from the intervention (in each round of data collection) were, on average, 86.54642, 82.99311, 85.44088 dollars per person per year respectively. We assume there are no earnings gains in the first 10 years after receiving deworming medication, and earnings gains persist through the end of one's working life (50 years after receiving treatment) or die out after the last observed five-year period (25 years after receiving treatment). The annual tax on earnings is assumed to be 16.6% based on **[FILL IN]**.
 
 The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school a a result of deworming. The cost of schooling each child for an additional year ($267.88) is calculated by dividing an estimate of annual teacher salary ($12055) by the number of average number of students per teacher (45). The estimates of teachers salaries are based on the upper tier of teacher salaries reported by two Kenyan news sources: [Tuko](https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html) and [Standard Media](https://standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries). The estimated average number of students per teacher is based on **[FILL IN]**. We use a series of estimated effects of the additional increase in secondary schooling from 1999 to 2007 obtained from Baird et. al. according to which, summed over this nine year period, students attended school for an additional 0.15 years on average. This series does not take externality effects into account.
 
-Both earnings gains and the cost of additional schooling are discounted by the real interest rate, where we consider two: 5% and 10% to look at effects over a range of values. These values (calculated as goverment bonds minus inflation) correspond with the second quartile and median interest rates between 1998 and 2018. 
+Both earnings gains and the cost of additional schooling are discounted by the real interest rate, where we consider two: 5% and 10% to look at effects over a range of values. These values correspond with the second quartile and median interest rates between 1998 and 2018. 
 
-The average cost of deworming per person ($2) is given by the product of the annual cost of deworming per person ($0.83) and number of years over which the treatment was administered on average (2.41). The annual cost of deworming per person was obtained from a 2018 estimate by Evidence Action.
+The average cost of deworming per person ($2.00) is given by the product of the annual cost of deworming per person ($0.83) and number of years over which the treatment was administered on average (2.41). The annual cost of deworming per child in Kenya was obtained from a 2018 estimate by Evidence Action.
 
 All monetary values have been adjusted for inflation based on inflation rates reported by the World Bank and converted to 2017 USD PPP based on PPP exchange rates reported by the Bureau of Labor Statistics.
 
-Panel A gives the minimum average earnings gains required to achieve a postive NPV under different assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each assumption of the treatment effect timeframe given the observed earnings gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed earnings gains.
+\* The observed earnings gains were XYZ in KLPS4 KLPS.
 
-\* The average observed earnings gains is 85.
+CITE SITES AND WORLD BACK ETC. ADD BIBLIOGRAPHY TO THE BOTTOM OF THE NOTE. PROPERLY, SWITCH THE ORDER OF PARAGRAPHS TO MATCH OPENING SENTENSE
 
 ## Additional notes for replication
 
@@ -518,7 +522,7 @@ Panel A gives the minimum average earnings gains required to achieve a postive N
 
 The earnings gains in panel A and the internal rates of return in panel B are caculated using the `multiroot` function which solves for $n$ roots of $n$ (nonlinear) equations. An input to this function `start` is a scalar containing an initial guess for the unknown value.
 
-The values in panel A are robust to all `start` values trued thus far (between 0 and 4). The values in panel B are robust to `start` values between 0 and .5; with a `start` value of .6, the internal rates of return for the tax NPV become hugely negative, and for a `start` value of .8 the internal rates of return for the social NPV also become hugely negative. **NOTE** update this.
+The values in panel A are robust to all `start` values trued thus far (between 0 and 4). The values in panel B are robust to `start` values between 0 and .5; with a `start` value of .6, the internal rates of return for the tax NPV become UNSTABLE , and for a `start` value of .8 the internal rates of return for the social NPV also become hugely negative. **NOTE** update this.
 
 
 
