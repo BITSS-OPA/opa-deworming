@@ -85,17 +85,15 @@ print_code <- TRUE
     years_of_treat_so <- 2.41       # Additional Years of Treatment - Table 1, Panel A
     
     ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2009        <- 77.352
+    ex_rate_2009        <- 77.352   # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2007        <- 67.318   # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-  # ex_rate_2018_ppp_so <- 50.245   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
-  # ex_rate_2007_ppp_so <- 23.514   # PPP exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE
-    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from World Bank, but no link - not sure why values differ)
-    ex_rate_2017_ppp_so <- 49.773
-    ex_rate_2009_ppp_so <- 31.317
-    ex_rate_2007_ppp_so <- 25.024   # KLPS4_E+_globals.do (originally from World Bank, but no link - not sure why values differ)
+    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
+    ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
+    ex_rate_2009_ppp_so <- 31.317   # KLPS4_E+_globals.do (originally from the World Bank)
+    ex_rate_2007_ppp_so <- 25.024   # KLPS4_E+_globals.do (originally from the World Bank)
     
     cpi_2007_so <- 207.342          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
-    cpi_2009_so <- 214.537
+    cpi_2009_so <- 214.537          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     
@@ -507,23 +505,31 @@ tax_int10_die     <- npv_mo_f(interest_r_var = 0.10, delta_earnings_var = delta_
 | 10%                             |25 years           |**`r round(npv_int10_die,0)`**             |**`r round(tax_int10_die,0)`**                  |                                        |*                                         |
 |`r 100*interest_in`%             |25 years           |**`r round(npv_int05_die,0)`**             |**`r round(tax_int05_die,0)`**                  |                                        |*                                         |
 
-**Notes.** Panel A gives the minimum average earnings gains required to achieve a postive NPV under different assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each assumption of the treatment effect timeframe given the observed earnings gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed earnings gains.
+**Notes.** Panel A gives the minimum average earnings gains required to achieve a postive Net Present Value under varying assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each assumption of the treatment effect timeframe given the observed earnings gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed earnings gains.
 
-The Net Present Value takes three factors into account: the cost of deworming medication the cost of additional schooling, and labor market gains.
+The Net Present Value accounts for three factors: the cost of deworming medication, the cost of additional schooling, and labor market gains.
 
-The treatment effect on earnings observed 10, 15, and 20 years from the intervention (in each round of data collection) were, on average, `r lambda1_2017usdppp_so` dollars per person per year respectively. We assume there are no earnings gains in the first `r time_to_jm_so` years after receiving deworming medication, and earnings gains persist through the end of one's working life (`r periods_so` years after receiving treatment) or die out after the last observed five-year period (25 years after receiving treatment). The annual tax on earnings is assumed to be `r 100*round(tax_so,3)`% based on **[FILL IN]**.
+The average cost of deworming per child ($`r format(round(unit_cost_2017usdppp_so*years_of_treat_so,2), nsmall = 2)`) is given by the product of the annual cost of deworming per child ($`r round(unit_cost_2017usdppp_so,2)`) and number of years over which the treatment was administered on average (`r years_of_treat_so`). The annual cost of deworming per child in Kenya was obtained from a 2018 estimate by Evidence Action.
 
-The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school a a result of deworming. The cost of schooling each child for an additional year ($`r round(cost_per_student_in, 2)`) is calculated by dividing an estimate of annual teacher salary ($`r format(round(teach_sal_2017usdppp_so,0), scientific=FALSE)`) by the number of average number of students per teacher (`r n_students_so`). The estimates of teachers salaries are based on the upper tier of teacher salaries reported by two Kenyan news sources: [Tuko](https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html) and [Standard Media](https://standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries). The estimated average number of students per teacher is based on **[FILL IN]**. We use a series of estimated effects of the additional increase in secondary schooling from 1999 to 2007 obtained from Baird et. al. according to which, summed over this nine year period, students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average. This series does not take externality effects into account.
+The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school a a result of deworming. The cost of schooling each child for an additional year ($`r round(cost_per_student_in, 2)`) is calculated by dividing an estimate of annual teacher salary ($`r format(round(teach_sal_2017usdppp_so,0), scientific=FALSE)`) by the number of average number of students per teacher (`r n_students_so`). The estimates of annual teacher salaries are based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor. The estimated average number of students per teacher is based on **[FILL IN]**. We use a series of estimated effects of the additional increase in secondary schooling from 1999 to 2007 obtained from Baird et. al. according to which, summed over this nine year period, students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average. This series does not take externality effects into account.
 
 Both earnings gains and the cost of additional schooling are discounted by the real interest rate, where we consider two: 5% and 10% to look at effects over a range of values. These values correspond with the second quartile and median interest rates between 1998 and 2018. 
 
-The average cost of deworming per person ($`r round(unit_cost_2017usdppp_so*years_of_treat_so,2)`.00) is given by the product of the annual cost of deworming per person ($`r round(unit_cost_2017usdppp_so,2)`) and number of years over which the treatment was administered on average (`r years_of_treat_so`). The annual cost of deworming per child in Kenya was obtained from a 2018 estimate by Evidence Action.
-
 All monetary values have been adjusted for inflation based on inflation rates reported by the World Bank and converted to 2017 USD PPP based on PPP exchange rates reported by the Bureau of Labor Statistics.
 
-\* The observed earnings gains were XYZ in KLPS4 KLPS.
+The treatment effect on earnings observed 10, 15, and 20 years from the intervention (in each round of data collection) were, on average, `r round(lambda1_2017usdppp_so,0)` dollars per person per year respectively. We assume there are no earnings gains in the first `r time_to_jm_so` years after receiving deworming medication, and earnings gains persist through the end of one's working life (`r periods_so` years after receiving treatment) or die out after the last observed five-year period (25 years after receiving treatment). The annual tax on earnings is assumed to be `r 100*round(tax_so,3)`% based on **[FILL IN]**.
 
-CITE SITES AND WORLD BACK ETC. ADD BIBLIOGRAPHY TO THE BOTTOM OF THE NOTE. PROPERLY, SWITCH THE ORDER OF PARAGRAPHS TO MATCH OPENING SENTENSE
+**Sources**
+
+1. Sarah Baird & Joan Hamory Hicks & Michael Kremer & Edward Miguel, 2016. "Worms at Work: Long-run Impacts of a Child Health Investment," The Quarterly Journal of Economics, vol 131(4), pages 1637-1680.
+
+2. Nyanchama, Venic. “Secondary School Teachers Salary in Kenya.” Tuko.co.ke - Kenya News., Tuko, 15 Oct. 2018, www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html.
+
+3. Oduor, Augustine. “Windfall for Teachers as TSC Releases New Salaries.” The Standard, standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries.
+
+4. World Bank
+
+5. Bureau of Labor Statistics
 
 ## Additional notes for replication
 
