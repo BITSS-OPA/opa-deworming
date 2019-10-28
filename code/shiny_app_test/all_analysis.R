@@ -455,6 +455,8 @@ one_run <-
            df_costs_cw_var1 = df_costs_cw_so,
            staff_time_var1 = staff_time_so,
            df_counts_var1 = df_counts_so,
+           counts_sim_var1 = NULL,
+           costs_sim_var1 = NULL,
            delta_ed_var1 = delta_ed_so,
            delta_ed_ext_var1 = delta_ed_ext_so,
            teach_sal_var1 = teach_sal_so,
@@ -464,8 +466,7 @@ one_run <-
            years_of_treat_var1 = years_of_treat_so,
            tax_var1 = tax_so,
            periods_var1 = periods_so) {
-    
-    
+
     ####------------ Inputs for wage_t ---------------------------------------------
     wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_var1, wage_ww_var = wage_ww_var1,
                              profits_se_var = profits_se_var1, hours_se_cond_var = hours_se_cond_var1,  
@@ -523,26 +524,15 @@ one_run <-
     # ADD UNIT TEST
     # The following section only runs when running the simulations (later add: a skip to load the data only once)
     if (run_sim_var ==  TRUE) {
-      costs1_counts_sim <- costs1_counts_in %>%
-        mutate("total" = rnorm(n = 1, mean = total, sd = 0.1 * total))
-      costs1_costs_sim <- costs1_costs_in %>% group_by(Country) %>%
-        mutate("costs_by_country" = rnorm(n = 1, mean = costs_by_country,
-                                          sd = 0.1 * costs_by_country))
-    } else {
-      costs1_counts_sim <- NA
-      costs1_costs_sim <- NA
+        costs1_counts_in$total <- counts_sim_var1
+        costs1_costs_in$costs_by_country <- costs_sim_var1
     }
-    
     ##-------------- Inputs for costs1_f--------------------------------------------
-    if (run_sim_var == TRUE) {
-      costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_sim,
-                                            costs_var =  costs1_costs_sim)
-    } else {
       costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_in,
                                             costs_var =  costs1_costs_in)
-      unit_test(unlist(costs1_country$ratios_data$costs_by_country),  6880801.84046596, main_run_var = main_run_var1)
-    }
-    
+      unit_test(unlist(costs1_country$ratios_data$costs_by_country),  
+                6880801.84046596, main_run_var = main_run_var1)
+
     ##-------------- Inputs for costs2_f--------------------------------------------
     # Make explicit non-function inputs:
     delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
@@ -619,8 +609,7 @@ one_run <-
                   "earnings_in_yes_ext" = earnings_in_yes_ext,
                   "earnings_in_no_ext_new" = earnings_in_no_ext_new,
                   "interest_in" = interest_in, "costs1_counts_in" = costs1_counts_in,
-                  "costs1_costs_in" = costs1_costs_in, "costs1_counts_sim" = costs1_counts_sim,
-                  "costs1_costs_sim" = costs1_costs_sim, "costs1_country" = costs1_country,
+                  "costs1_costs_in" = costs1_costs_in, "costs1_country" = costs1_country,
                   "delta_ed_final_in" = delta_ed_final_in, "delta_ed_final_in_x" = delta_ed_final_in_x,
                   "cost_per_student_in" = cost_per_student_in, "s2_in" = s2_in,  
                   "pv_benef_tax_nx_in"= pv_benef_tax_nx_in, "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,

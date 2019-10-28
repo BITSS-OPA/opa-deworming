@@ -139,12 +139,8 @@ shinyServer(function(input, output) {
                                                   sd = delta_ed_ext_var2_sd * sd(delta_ed_ext_so[, 1])))
     
     colnames(delta_ed_ext_sim) <- 1999:2007
-    
-    
-    
     #######    
     #######    
-    #browser()
     costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var2,
                                         df_costs_cw_var = df_costs_cw_var2)$counts_data
     costs1_counts_sim <- sapply(costs1_counts_in$total, 
@@ -163,8 +159,7 @@ shinyServer(function(input, output) {
       rnorm(length(aux1), mean = costs_par_var2 * aux1,  sd = costs_par_var2_sd * aux1)
     } )
     )
-    
-    browser()
+
     ################
     ###### Runs    ################
     
@@ -184,7 +179,7 @@ shinyServer(function(input, output) {
     for (i in 1:nsims) {
    # one_run, for the most part, does not include standard deviations   
       invisible( list2env(
-        one_run(main_run_var1 = FALSE,
+        one_run(main_run_var1 = FALSE,              # HERE I NEED TO PLUG costs1_costs_sim
                 run_sim_var = TRUE,
                 wage_ag_var1 = wage_ag_sim[i],
                 wage_ww_var1 = wage_ww_sim[i],
@@ -218,8 +213,9 @@ shinyServer(function(input, output) {
                 periods_var1 = periods_so,
                 df_costs_var1 = df_costs_var2,
                 df_costs_cw_var1 = df_costs_cw_var2,
-                df_counts_var1 = df_counts_var2),.GlobalEnv) ) # add costs here
-      
+                df_counts_var1 = df_counts_var2, 
+                counts_sim_var1 = costs1_counts_sim[i,], 
+                costs_sim_var1 = costs1_costs_sim[i,]),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
       baird1_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
       #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext

@@ -149,7 +149,7 @@ shinyUI( fluidPage(
                sliderInput("param31_1", label = "SD = ",
                            min = 0.0000001* alpha_r_so, max = 1 * alpha_r_so, value = 0.1 * alpha_r_so) ,
                sliderInput("param32", label = "Counts adjustment = ",
-                           min = counts_par_so / 2, max = 2 * counts_par_so, value = 1.5),
+                           min = counts_par_so / 2, max = 2 * counts_par_so, value = 1),
                sliderInput("param32_1", label = "SD = ",
                            min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so) ,
                sliderInput("param33", label = "Additional costs due to staff time = ",
@@ -157,7 +157,7 @@ shinyUI( fluidPage(
                sliderInput("param33_1", label = "SD = ",
                            min = 0.0000001* staff_time_so, max = 1 * staff_time_so, value = 0.1 * staff_time_so) ,
                sliderInput("param34", label = "Costs adjustments = ",
-                           min = costs_par_so / 2, max = 2 * costs_par_so, value = costs_par_so),
+                           min = costs_par_so / 2, max = 20000 * costs_par_so, value = costs_par_so),
                sliderInput("param34_1", label = "SD = ",
                            min = 0.0000001* costs_par_sd_so, max = 10 * costs_par_sd_so, value = costs_par_sd_so)
   ),
