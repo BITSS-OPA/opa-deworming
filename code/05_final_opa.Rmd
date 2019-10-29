@@ -948,7 +948,7 @@ unit_test <- function(to_test_var, original_var, main_run_var = TRUE){
 
 # wrap the whole thing in a function and prepare for sims.
 
-
+#UPDATE HERE
 one_run <-
   function(main_run_var1 = main_run_so,
            run_sim_var = run_sim_so,
@@ -1036,6 +1036,7 @@ one_run <-
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
 ###------------- Inputs for costs1_ratios_in_f----------------------------------
+#UPDATE HERE
     costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var1,
                                         df_costs_cw_var = df_costs_cw_var1)$counts_data
     costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_var1,
@@ -1114,7 +1115,7 @@ one_run <-
     # ADD UNIT TEST
     # KLPS4 all and no ext
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
-                            interest_r_var = interest_in, periods_var = periods_var1)
+                                   interest_r_var = interest_in, periods_var = periods_var1)
     # ADD UNIT TEST
 
     #Costs
@@ -1318,6 +1319,7 @@ delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x)  rnorm(nsims, mean =
 colnames(delta_ed_ext_sim) <- 1999:2007
 
 #######
+#UPDATE HERE
 costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
                                     df_costs_cw_var = df_costs_cw_so)$counts_data
 costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x,  sd = 0.1 * x) )

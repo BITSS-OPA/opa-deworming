@@ -78,7 +78,7 @@ shinyServer(function(input, output) {
     ###### Draws
     ################
     set.seed(142857)
-    
+    draw_vals <- function(all_the_sos){}
     #Defaoult dist: normal, default sd: 0.1* mean
     ## Data
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
@@ -155,13 +155,14 @@ shinyServer(function(input, output) {
                                                          staff_time_var = x)$cost_data)
     
     costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
-      aux1 <- x$costs_by_country
-      rnorm(length(aux1), mean = costs_par_var2 * aux1,  sd = costs_par_var2_sd * aux1)
+        aux1 <- x$costs_by_country
+        rnorm(length(aux1), mean = costs_par_var2 * aux1,  sd = costs_par_var2_sd * aux1)
     } )
     )
 
     ################
-    ###### Runs    ################
+    ###### Runs    
+    ################
     
     baird1_sim           <- rep(NA, nsims)
     baird2_sim           <- rep(NA, nsims)
