@@ -1505,8 +1505,8 @@ sim.data1 <- function(nsims = 1e2,
 
 
 
-  reactive.data1 <- reactive( {
-    sim.data1(nsims = nsims_so,                        
+  
+  one_mc <-   sim.data1(nsims = nsims_so,                        
               gov_bonds_var2          = gov_bonds_so             ,                                    
               gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
               inflation_var2          = inflation_so             ,                                    
@@ -1537,47 +1537,48 @@ sim.data1 <- function(nsims = 1e2,
               unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,                                       
               years_of_treat_var2     = years_of_treat_so        ,                                    
               years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
-              lambda1_var2            = c(as.numeric(input$param18_1), as.numeric(input$param18_2)),                                          
-              lambda1_var2_sd         = c(as.numeric(input$param18_1_1), as.numeric(input$param18_2_1)),                                          
-              lambda2_var2            = as.numeric(input$param19),                                             
-              lambda2_var2_sd         = as.numeric(input$param19_1),                                        
-              q_full_var2             = as.numeric(input$param20),                                              
-              q_full_var2_sd          = as.numeric(input$param20_1),                                           
-              coef_exp_var2           = c(as.numeric(input$param21_1), as.numeric(input$param21_2)),                      
+              lambda1_var2            = lambda1_so,                                          
+              lambda1_var2_sd         = rep(lambda1_so[1], 2)  * 0.1,                                          
+              lambda2_var2            = lambda2_so        ,                         
+              lambda2_var2_sd         = lambda2_so * 0.1  ,                      
+              q_full_var2             = q_full_so         ,                          
+              q_full_var2_sd          = q_full_so * 0.1   ,                         
+              coef_exp_var2           = coef_exp_so,                      
               #                      coef_exp_var2_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)),                       
-              teach_sal_var2          = as.numeric(input$param22),                                             
-              teach_sal_var2_sd       = as.numeric(input$param22_1),                                        
-              teach_ben_var2          = as.numeric(input$param23),                                             
-              teach_ben_var2_sd       = as.numeric(input$param23_1),                                        
-              n_students_var2         = as.numeric(input$param24),                                            
-              n_students_var2_sd      = as.numeric(input$param24_1),                                       
-              delta_ed_var2           = as.numeric(input$param26),                                              
-              delta_ed_var2_sd        = as.numeric(input$param26_1),                                             
-              delta_ed_ext_var2       = as.numeric(input$param27),                                              
-              delta_ed_ext_var2_sd    = as.numeric(input$param27_1),                                               
-              q_zero_var2             = as.numeric(input$param28),                                                
-              q_zero_var2_sd          = as.numeric(input$param28_1), 
-              lambda1_new_var2        = c(as.numeric(input$param29_1), as.numeric(input$param29_2), 
-                                   as.numeric(input$param29_3)),                   
-              lambda1_new_var2_sd    = c(as.numeric(input$param29_1_1), as.numeric(input$param29_2_1), 
-                                      as.numeric(input$param29_3_1)),             
-              alpha_0_var2           = as.numeric(input$param30),    
-              alpha_0_var2_sd        = as.numeric(input$param30_1), 
-              alpha_r_var2           = as.numeric(input$param31),    
-              alpha_r_var2_sd        = as.numeric(input$param31_1),                                                                         
-              counts_par_var2        = as.numeric(input$param32), 
-              counts_par_var2_sd     = as.numeric(input$param32_1),
-              staff_time_var2        = as.numeric(input$param33), 
-              staff_time_var2_sd     = as.numeric(input$param33_1), 
-              costs_par_var2         = as.numeric(input$param34), 
-              costs_par_var2_sd      = as.numeric(input$param34_1), 
-    )
-  } 
-  )
-  
+              teach_sal_var2          = teach_sal_so         ,                                          
+              teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
+              teach_ben_var2          = teach_ben_so         ,                                          
+              teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
+              n_students_var2         = n_students_so        ,                                         
+              n_students_var2_sd      = n_students_so * 0.1     ,                                      
+              delta_ed_var2           = delta_ed_so          ,                                           
+              delta_ed_var2_sd        = delta_ed_so * 0.1       ,                                            
+              delta_ed_ext_var2       = delta_ed_ext_so      ,                                           
+              delta_ed_ext_var2_sd    = delta_ed_ext_so * 0.1   ,                                              
+              q_zero_var2             = q_zero_so            ,                                             
+              q_zero_var2_sd          = q_zero_so * 0.1         ,
+              lambda1_new_var2        = lambda1_new_so,                   
+              lambda1_new_var2_sd     = lambda1_new_sd_so,             
+              alpha_0_var2            = alpha_0_so       ,  
+              alpha_0_var2_sd         = alpha_0_so * 0.1    , 
+              alpha_r_var2            = alpha_r_so       ,  
+              alpha_r_var2_sd         = alpha_r_so * 0.1    ,                                                                         
+              counts_par_var2         = counts_par_so    ,
+              counts_par_var2_sd      = counts_par_so * 0.1 ,
+              staff_time_var2         = staff_time_so    ,
+              staff_time_var2_sd      = staff_time_so * 0.1 , 
+              costs_par_var2          = costs_par_so     ,
+              costs_par_var2_sd       = costs_par_so * 0.1)
 
 
-
+#AQUI VOY
+   npv_sim_all <- reactive.data1() # FORMAT THE OUTPUT AS A DF
+    
+    total_time <- npv_sim_all$total_time
+    position <- which( policy_estimates_text == input$policy_est)
+    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 policy_estimates <- c("baird1_sim",          
 "baird2_sim"         , 
