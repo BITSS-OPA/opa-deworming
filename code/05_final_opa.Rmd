@@ -993,7 +993,6 @@ one_run <-
            years_of_treat_var1 = years_of_treat_so,
            tax_var1 = tax_so,
            periods_var1 = periods_so) {
-
     ####------------ Inputs for wage_t ---------------------------------------------
     wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_var1, wage_ww_var = wage_ww_var1,
                              profits_se_var = profits_se_var1, hours_se_cond_var = hours_se_cond_var1,  
@@ -1354,10 +1353,9 @@ sim.data1 <- function(nsims = 1e2,
     alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
     
     ## Guess work
-    browser()
     periods_val <- 50           #Total number of periods to forecast wages
     time_to_jm_val <- 10        #Time from intial period until individual join the labor force
-    aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(coef_exp_var2 , 0.001)[x]) )
+    aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(0.001 , 0.001)[x]) )
     coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
     teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
     teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
@@ -1372,7 +1370,7 @@ sim.data1 <- function(nsims = 1e2,
                                function(x)  rnorm(nsims,
                                                   mean = x * delta_ed_ext_var2,
                                                   sd = delta_ed_ext_var2_sd * sd(delta_ed_ext_so[, 1])))
-    
+    browser()
     colnames(delta_ed_ext_sim) <- 1999:2007
     #######    
     #######    
