@@ -18,7 +18,7 @@ knitr::opts_knit$set(root.dir = here())
 
 nsims <- 1e2
 
-source("all_analysis.R")
+source("test.R")
 
 
 
@@ -149,7 +149,7 @@ shinyUI( fluidPage(
                sliderInput("param31_1", label = "SD = ",
                            min = 0.0000001* alpha_r_so, max = 1 * alpha_r_so, value = 0.1 * alpha_r_so) ,
                sliderInput("param32", label = "Counts adjustment = ",
-                           min = counts_par_so / 2, max = 2 * counts_par_so, value = 1),
+                           min = counts_par_so / 2, max = 2 * counts_par_so, value = counts_par_so),
                sliderInput("param32_1", label = "SD = ",
                            min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so) ,
                sliderInput("param33", label = "Additional costs due to staff time = ",
