@@ -51,6 +51,8 @@ chunk_params <- function(){
                        0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
                        0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
   delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)    
+  delta_ed_par_so <- 1
+  delta_ed_ext_par_so <- 1
   include_ext_so <- TRUE
   alpha_0_so <- 1 #0.77
   alpha_r_so <- 1 #0.15
