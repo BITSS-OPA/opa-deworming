@@ -139,6 +139,8 @@ chunk_params <- function(){
                            0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
                            0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
     delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)    
+    delta_ed_par_so <- 1
+    delta_ed_ext_par_so <- 1
     include_ext_so <- TRUE
     alpha_0_so <- 1 #0.77
     alpha_r_so <- 1 #0.15
@@ -163,7 +165,10 @@ chunk_params <- function(){
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
   
-    nsims_so <- 1e2
+    nsims_so <- 1e3
+    # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim", 
+    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
+    policy_estimate_so <- "ea3_sim"
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 
 ###############################################################################
@@ -1370,7 +1375,11 @@ sim.data1 <- function(nsims = 1e2,
                                function(x)  rnorm(nsims,
                                                   mean = x * delta_ed_ext_var2,
                                                   sd = delta_ed_ext_var2_sd * sd(delta_ed_ext_so[, 1])))
-    browser()
+    # OLD (WORKING)
+    #delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x) rnorm(nsims, 
+    #                                                                   mean = x * 1,
+    #                                                                   sd = 1 * sd(delta_ed_ext_so[,1])))
+    
     colnames(delta_ed_ext_sim) <- 1999:2007
     #######    
     #######    
@@ -1494,85 +1503,72 @@ sim.data1 <- function(nsims = 1e2,
     ) )
 }
 
+nsims_val <- nsims_so
+npv_sim_all <-   sim.data1(nsims = nsims_val,                        
+            gov_bonds_var2          = gov_bonds_so             ,                                    
+            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
+            inflation_var2          = inflation_so             ,                                    
+            inflation_var2_sd       = inflation_so * 0.1          ,                                 
+            wage_ag_var2            = wage_ag_so               ,                                      
+            wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
+            wage_ww_var2            = wage_ww_so               ,                                      
+            wage_ww_var2_sd         = wage_ww_so * 0.1            ,                                   
+            profits_se_var2         = profits_se_so            ,                                   
+            profits_se_var2_sd      = profits_se_so * 0.1         ,                                
+            hours_se_cond_var2      = hours_se_cond_so         ,                                
+            hours_se_cond_var2_sd   = hours_se_cond_so * 0.1      ,                             
+            hours_ag_var2           = hours_ag_so              ,                                     
+            hours_ag_var2_sd        = hours_ag_so * 0.1           ,                                  
+            hours_ww_var2           = hours_ww_so              ,                                     
+            hours_ww_var2_sd        = hours_ww_so * 0.1           ,                                  
+            hours_se_var2           = hours_se_so              ,                                     
+            hours_se_var2_sd        = hours_se_so * 0.1           ,                                  
+            ex_rate_var2            = ex_rate_so               ,                                      
+            ex_rate_var2_sd         = ex_rate_so * 0.1            ,                                   
+            growth_rate_var2        = growth_rate_so           ,                                  
+            growth_rate_var2_sd     = growth_rate_so * 0.1        , 
+            coverage_var2           = coverage_so              , 
+            coverage_var2_sd        = coverage_so * 0.1           ,  
+            tax_var2                = tax_so                   ,                                             
+            tax_var2_sd             = tax_so * 0.1                ,                                        
+            unit_cost_local_var2    = unit_cost_local_so       ,                                     
+            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,                                       
+            years_of_treat_var2     = years_of_treat_so        ,                                    
+            years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
+            lambda1_var2            = lambda1_so,                                          
+            lambda1_var2_sd         = rep(lambda1_so[1], 2)  * 0.1,                                          
+            lambda2_var2            = lambda2_so        ,                         
+            lambda2_var2_sd         = lambda2_so * 0.1  ,                      
+            q_full_var2             = q_full_so         ,                          
+            q_full_var2_sd          = q_full_so * 0.1   ,                         
+            coef_exp_var2           = coef_exp_so,                      
+            #                      coef_exp_var2_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)),                       
+            teach_sal_var2          = teach_sal_so         ,                                          
+            teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
+            teach_ben_var2          = teach_ben_so         ,                                          
+            teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
+            n_students_var2         = n_students_so        ,                                         
+            n_students_var2_sd      = n_students_so * 0.1     ,                                      
+            delta_ed_var2           = delta_ed_par_so          ,                                           
+            delta_ed_var2_sd        = delta_ed_par_so * 0.1       ,                                            
+            delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
+            delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
+            q_zero_var2             = q_zero_so            ,                                             
+            q_zero_var2_sd          = q_zero_so * 0.1         ,
+            lambda1_new_var2        = lambda1_new_so,                   
+            lambda1_new_var2_sd     = lambda1_new_sd_so,             
+            alpha_0_var2            = alpha_0_so       ,  
+            alpha_0_var2_sd         = alpha_0_so * 0.1    , 
+            alpha_r_var2            = alpha_r_so       ,  
+            alpha_r_var2_sd         = alpha_r_so * 0.1    ,                                                                         
+            counts_par_var2         = counts_par_so    ,
+            counts_par_var2_sd      = counts_par_so * 0.1 ,
+            staff_time_var2         = staff_time_so    ,
+            staff_time_var2_sd      = staff_time_so * 0.1 , 
+            costs_par_var2          = costs_par_so     ,
+            costs_par_var2_sd       = costs_par_so * 0.1)
 
-
-
-  
-  npv_sim_all <-   sim.data1(nsims = nsims_so,                        
-              gov_bonds_var2          = gov_bonds_so             ,                                    
-              gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
-              inflation_var2          = inflation_so             ,                                    
-              inflation_var2_sd       = inflation_so * 0.1          ,                                 
-              wage_ag_var2            = wage_ag_so               ,                                      
-              wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
-              wage_ww_var2            = wage_ww_so               ,                                      
-              wage_ww_var2_sd         = wage_ww_so * 0.1            ,                                   
-              profits_se_var2         = profits_se_so            ,                                   
-              profits_se_var2_sd      = profits_se_so * 0.1         ,                                
-              hours_se_cond_var2      = hours_se_cond_so         ,                                
-              hours_se_cond_var2_sd   = hours_se_cond_so * 0.1      ,                             
-              hours_ag_var2           = hours_ag_so              ,                                     
-              hours_ag_var2_sd        = hours_ag_so * 0.1           ,                                  
-              hours_ww_var2           = hours_ww_so              ,                                     
-              hours_ww_var2_sd        = hours_ww_so * 0.1           ,                                  
-              hours_se_var2           = hours_se_so              ,                                     
-              hours_se_var2_sd        = hours_se_so * 0.1           ,                                  
-              ex_rate_var2            = ex_rate_so               ,                                      
-              ex_rate_var2_sd         = ex_rate_so * 0.1            ,                                   
-              growth_rate_var2        = growth_rate_so           ,                                  
-              growth_rate_var2_sd     = growth_rate_so * 0.1        , 
-              coverage_var2           = coverage_so              , 
-              coverage_var2_sd        = coverage_so * 0.1           ,  
-              tax_var2                = tax_so                   ,                                             
-              tax_var2_sd             = tax_so * 0.1                ,                                        
-              unit_cost_local_var2    = unit_cost_local_so       ,                                     
-              unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,                                       
-              years_of_treat_var2     = years_of_treat_so        ,                                    
-              years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
-              lambda1_var2            = lambda1_so,                                          
-              lambda1_var2_sd         = rep(lambda1_so[1], 2)  * 0.1,                                          
-              lambda2_var2            = lambda2_so        ,                         
-              lambda2_var2_sd         = lambda2_so * 0.1  ,                      
-              q_full_var2             = q_full_so         ,                          
-              q_full_var2_sd          = q_full_so * 0.1   ,                         
-              coef_exp_var2           = coef_exp_so,                      
-              #                      coef_exp_var2_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)),                       
-              teach_sal_var2          = teach_sal_so         ,                                          
-              teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
-              teach_ben_var2          = teach_ben_so         ,                                          
-              teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
-              n_students_var2         = n_students_so        ,                                         
-              n_students_var2_sd      = n_students_so * 0.1     ,                                      
-              delta_ed_var2           = delta_ed_so          ,                                           
-              delta_ed_var2_sd        = delta_ed_so * 0.1       ,                                            
-              delta_ed_ext_var2       = delta_ed_ext_so      ,                                           
-              delta_ed_ext_var2_sd    = delta_ed_ext_so * 0.1   ,                                              
-              q_zero_var2             = q_zero_so            ,                                             
-              q_zero_var2_sd          = q_zero_so * 0.1         ,
-              lambda1_new_var2        = lambda1_new_so,                   
-              lambda1_new_var2_sd     = lambda1_new_sd_so,             
-              alpha_0_var2            = alpha_0_so       ,  
-              alpha_0_var2_sd         = alpha_0_so * 0.1    , 
-              alpha_r_var2            = alpha_r_so       ,  
-              alpha_r_var2_sd         = alpha_r_so * 0.1    ,                                                                         
-              counts_par_var2         = counts_par_so    ,
-              counts_par_var2_sd      = counts_par_so * 0.1 ,
-              staff_time_var2         = staff_time_so    ,
-              staff_time_var2_sd      = staff_time_so * 0.1 , 
-              costs_par_var2          = costs_par_so     ,
-              costs_par_var2_sd       = costs_par_so * 0.1)
-
-``` 
-
-#AQUI VOY
-   #npv_sim_all <- reactive.data1() # FORMAT THE OUTPUT AS A DF
-    
-    total_time <- npv_sim_all$total_time
-    position <- which( policy_estimates_text == input$policy_est)
-    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-
+ 
 policy_estimates <- c("baird1_sim",          
 "baird2_sim"         , 
 "baird3_sim"         , 
@@ -1598,6 +1594,11 @@ policy_estimates_text <- c(
   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
 
+total_time <- npv_sim_all$total_time
+position <- which( policy_estimates == policy_estimate_so )
+npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 #Unit test the simulations for nsims = 100, 1000, 10000
 all_res_100_sims <- c(
@@ -1640,14 +1641,16 @@ all_res_10000_sims <- c(
   0.45078061934101
 )
 
-for ( i in 1:length(policy_estimates) ) {
-    to_test <- get(policy_estimates[i])
-    if (nsims == 1e4){
-        unit_test(to_test, all_res_10000_sims[i], main_run_var = TRUE)
-    } else if (nsims == 1e3){
-        unit_test(to_test, all_res_1000_sims[i], main_run_var = TRUE)
-    } else if(nsims == 1e2){
-        unit_test(to_test, all_res_100_sims[i], main_run_var = TRUE)
+k <- 0
+for ( i in policy_estimates ) {
+    k <- k + 1
+    to_test <- npv_sim_all[[i]]
+    if (nsims_val == 1e4){
+        unit_test(to_test, all_res_10000_sims[k], main_run_var = TRUE)
+    } else if (nsims_val == 1e3){
+        unit_test(to_test, all_res_1000_sims[k], main_run_var = TRUE)
+    } else if(nsims_val == 1e2){
+        unit_test(to_test, all_res_100_sims[k], main_run_var = TRUE)
     }
 }
 
@@ -1655,32 +1658,31 @@ for ( i in 1:length(policy_estimates) ) {
 ###### Results/Viz
 ################
 
-
-possition <- 9
-npv_sim <- get(policy_estimates[9])     
+nsims <- nsims_val
 
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
-plot1 <- ggplot() +
-  geom_density(aes(x = npv_sim,
-                   alpha = 1/2), kernel = "gau") +
-  geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-  coord_cartesian(xlim = c(-10, 100)) +
-  guides(alpha = "none", colour="none") +
-  labs(y = NULL,
-       x = "NPV" ,
-       title = paste0("Distribution of NPV of ", policy_estimates_text[9]
-                      ),
-       subtitle = paste0("N = ", nsims, " simulations. Takes ",
-                         round(total_time, 1)," ",attributes(total_time)$unit )  )+
-  annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
-  annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
-  theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-if (rescale_so == TRUE) {
-    plot1 <- plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim)))   
-}
-
+rescale <- rescale_so
+   
+    plot1 <- ggplot() +
+      geom_density(aes(x = npv_sim,
+                       alpha = 1/2), kernel = "gau") +
+      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
+      coord_cartesian(xlim = c(-10, 400)) +
+      guides(alpha = "none", colour="none") +
+      labs(y = NULL,
+           x = "NPV" ,
+           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
+           ),
+           subtitle = paste0("N = ", nsims, " simulations. Takes ",
+                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
+      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+    if (rescale == TRUE) {
+      plot1 <- plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim)))   
+    }
 
 print(plot1)
 ```

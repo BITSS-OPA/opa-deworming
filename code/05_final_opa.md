@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "22 October, 2019"
+date: "29 October, 2019"
 output:
   html_document:
     code_folding: hide
@@ -68,7 +68,7 @@ pdf_document:
 chunk_params <- function(){
 ###############################################################################
 ###############################################################################  
-
+    
     #############
     ##### Data  
     #############
@@ -117,6 +117,8 @@ chunk_params <- function(){
                            0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
                            0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
     delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)    
+    delta_ed_par_so <- 1
+    delta_ed_ext_par_so <- 1
     include_ext_so <- TRUE
     alpha_0_so <- 1 #0.77
     alpha_r_so <- 1 #0.15
@@ -135,7 +137,16 @@ chunk_params <- function(){
     run_sim_so <- FALSE
     main_run_so <- TRUE
     rescale_so <- TRUE
-    nsims_so <- 1e2
+    
+    costs_par_so <- 1
+    costs_par_sd_so <- 0.1
+    counts_par_so <- 1
+    counts_par_sd_so <- 0.1
+  
+    nsims_so <- 1e3
+    # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim", 
+    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
+    policy_estimate_so <- "ea3_sim"
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 
 ###############################################################################
@@ -959,6 +970,8 @@ one_run <-
            df_costs_cw_var1 = df_costs_cw_so,
            staff_time_var1 = staff_time_so,
            df_counts_var1 = df_counts_so,
+           counts_sim_var1 = NULL,
+           costs_sim_var1 = NULL,
            delta_ed_var1 = delta_ed_so,
            delta_ed_ext_var1 = delta_ed_ext_so,
            teach_sal_var1 = teach_sal_so,
@@ -968,57 +981,55 @@ one_run <-
            years_of_treat_var1 = years_of_treat_so,
            tax_var1 = tax_so,
            periods_var1 = periods_so) {
-
-
-####------------ Inputs for wage_t ---------------------------------------------
+    ####------------ Inputs for wage_t ---------------------------------------------
     wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_var1, wage_ww_var = wage_ww_var1,
-            profits_se_var = profits_se_var1, hours_se_cond_var = hours_se_cond_var1,  
-            hours_ag_var = hours_ag_var1, hours_ww_var = hours_ww_var1,
-            hours_se_var = hours_se_var1, ex_rate_var = ex_rate_var1)
+                             profits_se_var = profits_se_var1, hours_se_cond_var = hours_se_cond_var1,  
+                             hours_ag_var = hours_ag_var1, hours_ww_var = hours_ww_var1,
+                             hours_se_var = hours_se_var1, ex_rate_var = ex_rate_var1)
     unit_test(wage_0_in, 0.1481084, main_run_var = main_run_var1)
-###---------- Inputs for earnings1_f -------------------------------------------
+    ###---------- Inputs for earnings1_f -------------------------------------------
     wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_var1,
-                coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp_var1)
-
+                             coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp_var1)
+    
     lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
-                              alpha_0_var = alpha_0_var1, alpha_r_var = alpha_r_var1)
-
+                             alpha_0_var = alpha_0_var1, alpha_r_var = alpha_r_var1)
+    
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
-
+    
     saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_var1,
                                                 q_full_var = q_full_var1,
-                                     q_zero_var = q_zero_var1) )
+                                                q_zero_var = q_zero_var1) )
     unit_test(wage_t_in, 4.572308, main_run_var = main_run_var1)
     # ADD UNIT TEST FOR SATURATION AN LAMBDAS    
-
-###------------ Inputs for earnings2_f------------------------------------------
+    
+    ###------------ Inputs for earnings2_f------------------------------------------
     lambda1_new_in <- lambda_r_f(lambda1_var = lambda1_new_var1,
-                                       alpha_0_var = alpha_0_var1,
-                                       alpha_r_var = alpha_r_var1)
+                                 alpha_0_var = alpha_0_var1,
+                                 alpha_r_var = alpha_r_var1)
     #ADD UNIT TEST FOR LAMBDAS    
-
-##------------ Inputs for pv_benef_f -------------------------------------------
+    
+    ##------------ Inputs for pv_benef_f -------------------------------------------
     # earnings1
     earnings_in_no_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
-                lambda2_var = 0, saturation_var = saturation_in,
-                coverage_var = coverage_var1)
+                                      lambda2_var = 0, saturation_var = saturation_in,
+                                      coverage_var = coverage_var1)
     earnings_in_yes_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
-                lambda2_var = lambda2_in[1], saturation_var = saturation_in,
-                coverage_var = coverage_var1)
-
+                                       lambda2_var = lambda2_in[1], saturation_var = saturation_in,
+                                       coverage_var = coverage_var1)
+    
     # earnings2
     earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
-                                             lambda1k1_var = lambda1_new_in[1],
-                                             lambda1k2_var = lambda1_new_in[2],
-                                             lambda1k3_var = lambda1_new_in[3])
+                                          lambda1k1_var = lambda1_new_in[1],
+                                          lambda1k2_var = lambda1_new_in[2],
+                                          lambda1k3_var = lambda1_new_in[3])
     # ADD UNIT TEST
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1,
                                           inflation_var = inflation_var1) )
     unit_test(earnings_in_no_ext, 7.978677, main_run_var = main_run_var1)
     unit_test(earnings_in_yes_ext, 42.95683, main_run_var = main_run_var1)
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
-
-###------------- Inputs for costs1_ratios_in_f----------------------------------
+    
+    ###------------- Inputs for costs1_ratios_in_f----------------------------------
     costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var1,
                                         df_costs_cw_var = df_costs_cw_var1)$counts_data
     costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_var1,
@@ -1027,47 +1038,36 @@ one_run <-
     # ADD UNIT TEST
     # The following section only runs when running the simulations (later add: a skip to load the data only once)
     if (run_sim_var ==  TRUE) {
-        costs1_counts_sim <- costs1_counts_in %>%
-          mutate("total" = rnorm(n = 1, mean = total, sd = 0.1 * total))
-        costs1_costs_sim <- costs1_costs_in %>% group_by(Country) %>%
-          mutate("costs_by_country" = rnorm(n = 1, mean = costs_by_country,
-                                            sd = 0.1 * costs_by_country))
-      } else {
-        costs1_counts_sim <- NA
-        costs1_costs_sim <- NA
+        costs1_counts_in$total <- counts_sim_var1
+        costs1_costs_in$costs_by_country <- costs_sim_var1
     }
+    ##-------------- Inputs for costs1_f--------------------------------------------
+      costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_in,
+                                            costs_var =  costs1_costs_in)
+      unit_test(unlist(costs1_country$ratios_data$costs_by_country),  
+                6880801.84046596, main_run_var = main_run_var1)
 
-##-------------- Inputs for costs1_f--------------------------------------------
-    if (run_sim_var == TRUE) {
-        costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_sim,
-                                              costs_var =  costs1_costs_sim)
-    } else {
-        costs1_country <-  costs1_ratios_in_f(counts_var = costs1_counts_in,
-                                              costs_var =  costs1_costs_in)
-        unit_test(unlist(costs1_country$ratios_data$costs_by_country),  6880801.84046596, main_run_var = main_run_var1)
-    }
-
-##-------------- Inputs for costs2_f--------------------------------------------
-# Make explicit non-function inputs:
+    ##-------------- Inputs for costs2_f--------------------------------------------
+    # Make explicit non-function inputs:
     delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
                                           delta_ed_var = delta_ed_var1,
                                           delta_ed_ext_var = delta_ed_ext_var1)
     unit_test(delta_ed_final_in, 0.01134819, main_run_var = main_run_var1)
-
+    
     delta_ed_final_in_x <- delta_ed_final_f(include_ext_var = TRUE,
                                             delta_ed_var = delta_ed_var1,
                                             delta_ed_ext_var = delta_ed_ext_var1)
     unit_test(delta_ed_final_in_x,  0.05911765, main_run_var = main_run_var1)
-
+    
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1,
                                           inflation_var = inflation_var1) )
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
-
+    
     cost_per_student_in <-  cost_per_student_f(teach_sal_var = teach_sal_var1,
-                                              teach_ben_var = teach_ben_var1,
-                                              n_students_var = n_students_var1)
+                                               teach_ben_var = teach_ben_var1,
+                                               n_students_var = n_students_var1)
     unit_test(cost_per_student_in,  116.8549, main_run_var = main_run_var1)
-
+    
     s2_in <- s2_f(unit_cost_local_var = unit_cost_local_var1,
                   ex_rate_var = ex_rate_var1, years_of_treat_var = years_of_treat_var1)
     unit_test(s2_in, 1.237889, main_run_var = main_run_var1)
@@ -1076,30 +1076,30 @@ one_run <-
     #Benefits:
     #Baird w/tax and no externalities (no ext)
     pv_benef_tax_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_var1,
-                            interest_r_var = interest_in, periods_var = periods_var1)
+                                     interest_r_var = interest_in, periods_var = periods_var1)
     unit_test(pv_benef_tax_nx_in, 11.02849, main_run_var = main_run_var1)
     #Baird w/t and ext
     pv_benef_tax_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext * tax_var1,
-                            interest_r_var = interest_in, periods_var = periods_var1)
+                                     interest_r_var = interest_in, periods_var = periods_var1)
     unit_test(pv_benef_tax_yx_in, 59.37686, main_run_var = main_run_var1)
     #Baird all and no
     pv_benef_all_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext,
-                            interest_r_var = interest_in, periods_var = periods_var1)
+                                     interest_r_var = interest_in, periods_var = periods_var1)
     unit_test(pv_benef_all_nx_in, 66.5368686659935, main_run_var = main_run_var1)
     #Baird all and ext
     pv_benef_all_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext,
-                            interest_r_var = interest_in, periods_var = periods_var1)
+                                     interest_r_var = interest_in, periods_var = periods_var1)
     unit_test(pv_benef_all_yx_in, 358.231450496853, main_run_var = main_run_var1)
-
+    
     #KLPS4 w/t and no ext
     pv_benef_tax_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_var1,
-                            interest_r_var = interest_in, periods_var = periods_var1)
+                                   interest_r_var = interest_in, periods_var = periods_var1)
     # ADD UNIT TEST
     # KLPS4 all and no ext
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
-                            interest_r_var = interest_in, periods_var = periods_var1)
+                                   interest_r_var = interest_in, periods_var = periods_var1)
     # ADD UNIT TEST
-
+    
     #Costs
     # costs1: EA costs no externalities
     cost1_in <- costs1_f(country_w_var = costs1_country$ratios_data$country_w,
@@ -1107,33 +1107,31 @@ one_run <-
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
     # costs2: Baird no externalities
     costs2_in <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
-               interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
-               s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
+                         interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
+                         s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
     unit_test(costs2_in, 11.63818, main_run_var = main_run_var1)
-
+    
     # Baird yes externalities
     costs2_in_x <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in_x,
-               interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
-               s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
+                           interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
+                           s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
     unit_test(costs2_in_x,  25.05821, main_run_var = main_run_var1)
-
+    
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
-          "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
-          "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
-          "earnings_in_yes_ext" = earnings_in_yes_ext,
-          "earnings_in_no_ext_new" = earnings_in_no_ext_new,
-          "interest_in" = interest_in, "costs1_counts_in" = costs1_counts_in,
-          "costs1_costs_in" = costs1_costs_in, "costs1_counts_sim" = costs1_counts_sim,
-          "costs1_costs_sim" = costs1_costs_sim, "costs1_country" = costs1_country,
-          "delta_ed_final_in" = delta_ed_final_in, "delta_ed_final_in_x" = delta_ed_final_in_x,
-          "cost_per_student_in" = cost_per_student_in, "s2_in" = s2_in,  
-          "pv_benef_tax_nx_in"= pv_benef_tax_nx_in, "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
-          "pv_benef_all_nx_in" = pv_benef_all_nx_in,
-          "pv_benef_all_yx_in" =  pv_benef_all_yx_in, "pv_benef_tax_new" = pv_benef_tax_new,
-          "pv_benef_all_new" = pv_benef_all_new, "cost1_in" = cost1_in,
-          "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x) )
-}
-
+                  "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
+                  "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
+                  "earnings_in_yes_ext" = earnings_in_yes_ext,
+                  "earnings_in_no_ext_new" = earnings_in_no_ext_new,
+                  "interest_in" = interest_in, "costs1_counts_in" = costs1_counts_in,
+                  "costs1_costs_in" = costs1_costs_in, "costs1_country" = costs1_country,
+                  "delta_ed_final_in" = delta_ed_final_in, "delta_ed_final_in_x" = delta_ed_final_in_x,
+                  "cost_per_student_in" = cost_per_student_in, "s2_in" = s2_in,  
+                  "pv_benef_tax_nx_in"= pv_benef_tax_nx_in, "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
+                  "pv_benef_all_nx_in" = pv_benef_all_nx_in,
+                  "pv_benef_all_yx_in" =  pv_benef_all_yx_in, "pv_benef_tax_new" = pv_benef_tax_new,
+                  "pv_benef_all_new" = pv_benef_all_new, "cost1_in" = cost1_in,
+                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x) )
+  }
 
 invisible( list2env(one_run(),.GlobalEnv) )
 ```
@@ -1291,180 +1289,332 @@ kable(npv_table, caption = "Caption of the table") %>%
 
 
 ```r
-# Remove everything except the chunk functions
-#rm(list = ls()[!(ls() %in% ls(pattern = "call_params_f()"))])
-#invisible( list2env(call_params_f(), .GlobalEnv) )
-# add chunk functions0
+sim.data1 <- function(nsims = 1e2,
+                      main_run_var2,
+                      run_sim_var2,
+                      wage_ag_var2,
+                      wage_ag_var2_sd,
+                      wage_ww_var2,
+                      wage_ww_var2_sd,
+                      profits_se_var2,
+                      profits_se_var2_sd,
+                      hours_se_cond_var2,
+                      hours_se_cond_var2_sd,
+                      hours_ag_var2,
+                      hours_ag_var2_sd,
+                      hours_ww_var2,
+                      hours_ww_var2_sd,
+                      hours_se_var2,
+                      hours_se_var2_sd,
+                      ex_rate_var2,
+                      ex_rate_var2_sd,
+                      growth_rate_var2,
+                      growth_rate_var2_sd,
+                      coef_exp_var2,         # sd for coef_exp is hard coded
+                      lambda1_var2,
+                      lambda1_var2_sd,
+                      alpha_0_var2,
+                      alpha_0_var2_sd,
+                      alpha_r_var2,
+                      alpha_r_var2_sd,
+                      lambda2_var2,
+                      lambda2_var2_sd,
+                      coverage_var2,
+                      coverage_var2_sd,
+                      q_full_var2,
+                      q_full_var2_sd,
+                      q_zero_var2,
+                      q_zero_var2_sd,
+                      lambda1_new_var2,
+                      lambda1_new_var2_sd,
+                      gov_bonds_var2,
+                      gov_bonds_var2_sd,
+                      inflation_var2,
+                      inflation_var2_sd,
+                      costs_par_var2, 
+                      costs_par_var2_sd, 
+                      staff_time_var2,
+                      staff_time_var2_sd,
+                      counts_par_var2,
+                      counts_par_var2_sd,
+                      delta_ed_var2,
+                      delta_ed_var2_sd,
+                      delta_ed_ext_var2,
+                      delta_ed_ext_var2_sd,
+                      teach_sal_var2,
+                      teach_sal_var2_sd,
+                      teach_ben_var2,
+                      teach_ben_var2_sd,
+                      n_students_var2,
+                      n_students_var2_sd,
+                      unit_cost_local_var2,
+                      unit_cost_local_var2_sd,
+                      years_of_treat_var2,
+                      years_of_treat_var2_sd,
+                      tax_var2,
+                      tax_var2_sd,
+                      periods_var2, 
+                      df_costs_var2 = df_costs_so, 
+                      df_counts_var2 = df_counts_so, 
+                      df_costs_cw_var2 = df_costs_cw_so) {
+    start_time <- Sys.time()
+    ################
+    ###### Draws
+    ################
+    set.seed(142857)
+    #draw_vals <- function(all_the_sos){}
+    #Defaoult dist: normal, default sd: 0.1* mean
+    ## Data
+    gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
+    inflation_sim <-        rnorm(nsims, inflation_var2, inflation_var2_sd)
+    
+    wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
+    wage_ww_sim <-          rnorm(nsims, wage_ww_var2, wage_ww_var2_sd)
+    profits_se_sim <-       rnorm(nsims, profits_se_var2, profits_se_var2_sd)
+    hours_se_cond_sim <-    rnorm(nsims, hours_se_cond_var2, hours_se_cond_var2_sd)
+    hours_ag_sim <-         rnorm(nsims, hours_ag_var2, hours_ag_var2_sd)
+    hours_ww_sim <-         rnorm(nsims, hours_ww_var2, hours_ww_var2_sd)
+    hours_se_sim <-         rnorm(nsims, hours_se_var2, hours_se_var2_sd)
+    coverage_sim <-         rnorm(nsims, coverage_var2, coverage_var2_sd)
+    growth_rate_sim <-      rnorm(nsims, growth_rate_var2, growth_rate_var2_sd)
+    
+    ex_rate_sim <-          rnorm(nsims, ex_rate_var2, ex_rate_var2_sd)
+    tax_sim <-              rnorm(nsims, tax_var2, tax_var2_sd)
+    
+    unit_cost_local_sim <-  rnorm(nsims, unit_cost_local_var2, unit_cost_local_var2_sd)
+    years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, years_of_treat_var2_sd)
+    
+    ## Research
+    aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
+    # Each list is a pair mean, sd.
+    aux2 <- lapply(1:2,function(x) c(lambda1_var2[x], aux1[x] ) )
+    lambda1_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
+    lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)
+    # New lambdas here
+    aux3 <- lapply(1:3,function(x) c(lambda1_new_var2[x], lambda1_new_var2_sd[x] ) )
+    lambda1_new_sim <- sapply(aux3, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
+    
+    q_full_sim <-           rnorm(nsims, q_full_var2, q_full_var2_sd)
+    q_zero_sim <-           rnorm(nsims, q_zero_var2, q_zero_var2_sd)
+    
+    # Prevalence here TO DO: draw from a beta instead of "truncated" normal
+    alpha_0_sim <- rnorm(nsims, alpha_0_var2, alpha_0_var2_sd)
+    alpha_0_sim <- ifelse(alpha_0_sim > 1, yes = 1, ifelse(alpha_0_sim < 0, 0, alpha_0_sim) )
+    alpha_r_sim <- rnorm(nsims, alpha_r_var2, alpha_r_var2_sd)
+    alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
+    
+    ## Guess work
+    periods_val <- 50           #Total number of periods to forecast wages
+    time_to_jm_val <- 10        #Time from intial period until individual join the labor force
+    aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(0.001 , 0.001)[x]) )
+    coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
+    teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
+    teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
+    n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
+    
+    delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean = 
+                                                                x * delta_ed_var2, 
+                                                              sd = delta_ed_var2_sd * sd(delta_ed_so[,1]) ) )
+    colnames(delta_ed_sim) <- 1999:2007
+    
+    delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], 
+                               function(x)  rnorm(nsims,
+                                                  mean = x * delta_ed_ext_var2,
+                                                  sd = delta_ed_ext_var2_sd * sd(delta_ed_ext_so[, 1])))
+    # OLD (WORKING)
+    #delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x) rnorm(nsims, 
+    #                                                                   mean = x * 1,
+    #                                                                   sd = 1 * sd(delta_ed_ext_so[,1])))
+    
+    colnames(delta_ed_ext_sim) <- 1999:2007
+    #######    
+    #######    
+    costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var2,
+                                        df_costs_cw_var = df_costs_cw_var2)$counts_data
+    costs1_counts_sim <- sapply(costs1_counts_in$total, 
+                                function(x)  rnorm(nsims, mean = x * counts_par_var2,  
+                                                   sd = counts_par_var2_sd * x) )
+    
+    staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
+    
+    costs1_costs_in <- lapply(staff_time_sim, 
+                              function(x) costs1_costs_f(df_costs_var = df_costs_var2,
+                                                         df_costs_cw_var = df_costs_cw_var2,
+                                                         staff_time_var = x)$cost_data)
+    
+    costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
+        aux1 <- x$costs_by_country
+        rnorm(length(aux1), mean = costs_par_var2 * aux1,  sd = costs_par_var2_sd * aux1)
+    } )
+    )
+    
+    ################
+    ###### Runs    
+    ################
+    
+    baird1_sim           <- rep(NA, nsims)
+    baird2_sim           <- rep(NA, nsims)
+    baird3_sim           <- rep(NA, nsims)
+    baird4_sim           <- rep(NA, nsims)
+    klps4_1_sim          <- rep(NA, nsims)
+    klps4_2_sim          <- rep(NA, nsims)
+    ea1_sim              <- rep(NA, nsims)
+    ea2_sim              <- rep(NA, nsims)
+    ea3_sim              <- rep(NA, nsims)
+    cea_no_ext_ea_sim    <- rep(NA, nsims)
+    rcea_no_ext_ea_sim   <- rep(NA, nsims)
+    
+    
+    for (i in 1:nsims) {
+    # one_run, for the most part, does not include standard deviations   
+      invisible( list2env(
+        one_run(main_run_var1 = FALSE,              # HERE I NEED TO PLUG costs1_costs_sim
+                run_sim_var = TRUE,
+                wage_ag_var1 = wage_ag_sim[i],
+                wage_ww_var1 = wage_ww_sim[i],
+                profits_se_var1 = profits_se_sim[i],
+                hours_se_cond_var1 = hours_se_cond_sim[i],
+                hours_ag_var1 = hours_ag_sim[i],
+                hours_ww_var1 = hours_ww_sim[i],
+                hours_se_var1 = hours_se_sim[i],
+                ex_rate_var1 = ex_rate_sim[i],
+                growth_rate_var1 = growth_rate_sim[i],
+                coef_exp_var1 = coef_exp_sim[i, 1], coef_exp2_var1 = coef_exp_sim[i,2],
+                lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_sim[i,]),
+                alpha_0_var1 = alpha_0_sim[i],
+                alpha_r_var1 = alpha_r_sim[i],
+                lambda2_var1 = lambda2_sim[i],
+                coverage_var1 = coverage_sim[i],
+                q_full_var1 = q_full_sim[i],
+                q_zero_var1 = q_zero_sim[i],
+                lambda1_new_var1 = lambda1_new_sim[i,],
+                gov_bonds_var1 = gov_bonds_sim[i],
+                inflation_var1 = inflation_sim[i],
+                staff_time_var1 = staff_time_sim[i],
+                delta_ed_var1 = cbind(delta_ed_sim[i,], 1999:2007),
+                delta_ed_ext_var1 = cbind(delta_ed_ext_sim[i,], 1999:2007),
+                teach_sal_var1 = teach_sal_sim[i],
+                teach_ben_var1 = teach_ben_sim[i],
+                n_students_var1 = n_students_sim[i],
+                unit_cost_local_var1 = unit_cost_local_sim[i],
+                years_of_treat_var1 = years_of_treat_sim[i],
+                tax_var1 = tax_sim[i],
+                periods_var1 = periods_so,
+                df_costs_var1 = df_costs_var2,
+                df_costs_cw_var1 = df_costs_cw_var2,
+                df_counts_var1 = df_counts_var2, 
+                counts_sim_var1 = costs1_counts_sim[i,], 
+                costs_sim_var1 = costs1_costs_sim[i,]),.GlobalEnv) ) # add costs here
+      #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
+      baird1_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
+      #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
+      baird2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
+      # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
+      baird3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
+      # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
+      baird4_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
+      #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
+      klps4_1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
+      #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
+      klps4_2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
+      # EA1: no externality NPV using EAs costs
+      ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
+      # EA2: yes externality NPV using EAs costs
+      ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
+      # EA3: benef= KLPS all and no ext; Costs=EA
+      ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
+      #CEA for EA
+      cea_no_ext_ea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, 
+                                        costs_var = cost1_in, fudging_var = 0)
+      rcea_no_ext_ea_sim[i]  <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in,
+                                                              costs_var = cost1_in, fudging_var = 0),
+                                           CEA_cash_var = 744 )
+    }
+    
+    total_time <- Sys.time() - start_time
+    
+    return( list(
+      "baird1_sim"        = baird1_sim,         
+      "baird2_sim"        = baird2_sim,         
+      "baird3_sim"        = baird3_sim,         
+      "baird4_sim"        = baird4_sim,         
+      "klps4_1_sim"        = klps4_1_sim,        
+      "klps4_2_sim"        = klps4_2_sim,        
+      "ea1_sim"            = ea1_sim,            
+      "ea2_sim"            = ea2_sim,            
+      "ea3_sim"            = ea3_sim,            
+      "cea_no_ext_ea_sim"  = cea_no_ext_ea_sim,  
+      "rcea_no_ext_ea_sim" = rcea_no_ext_ea_sim,
+      "total_time"         = total_time 
+    ) )
+}
 
-nsims <- nsims_so
-include_ext_mo <- TRUE
-start_time <- Sys.time()
-################
-###### Draws
-################
-set.seed(142857)
-#Defaoult dist: normal, default sd: 0.1* mean
-## Data
-gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_so, sd = 0.1 * gov_bonds_so)
-inflation_sim <-        rnorm(nsims, inflation_so, 0.1 * inflation_so)
+nsims_val <- nsims_so
+npv_sim_all <-   sim.data1(nsims = nsims_val,                        
+            gov_bonds_var2          = gov_bonds_so             ,                                    
+            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
+            inflation_var2          = inflation_so             ,                                    
+            inflation_var2_sd       = inflation_so * 0.1          ,                                 
+            wage_ag_var2            = wage_ag_so               ,                                      
+            wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
+            wage_ww_var2            = wage_ww_so               ,                                      
+            wage_ww_var2_sd         = wage_ww_so * 0.1            ,                                   
+            profits_se_var2         = profits_se_so            ,                                   
+            profits_se_var2_sd      = profits_se_so * 0.1         ,                                
+            hours_se_cond_var2      = hours_se_cond_so         ,                                
+            hours_se_cond_var2_sd   = hours_se_cond_so * 0.1      ,                             
+            hours_ag_var2           = hours_ag_so              ,                                     
+            hours_ag_var2_sd        = hours_ag_so * 0.1           ,                                  
+            hours_ww_var2           = hours_ww_so              ,                                     
+            hours_ww_var2_sd        = hours_ww_so * 0.1           ,                                  
+            hours_se_var2           = hours_se_so              ,                                     
+            hours_se_var2_sd        = hours_se_so * 0.1           ,                                  
+            ex_rate_var2            = ex_rate_so               ,                                      
+            ex_rate_var2_sd         = ex_rate_so * 0.1            ,                                   
+            growth_rate_var2        = growth_rate_so           ,                                  
+            growth_rate_var2_sd     = growth_rate_so * 0.1        , 
+            coverage_var2           = coverage_so              , 
+            coverage_var2_sd        = coverage_so * 0.1           ,  
+            tax_var2                = tax_so                   ,                                             
+            tax_var2_sd             = tax_so * 0.1                ,                                        
+            unit_cost_local_var2    = unit_cost_local_so       ,                                     
+            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,                                       
+            years_of_treat_var2     = years_of_treat_so        ,                                    
+            years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
+            lambda1_var2            = lambda1_so,                                          
+            lambda1_var2_sd         = rep(lambda1_so[1], 2)  * 0.1,                                          
+            lambda2_var2            = lambda2_so        ,                         
+            lambda2_var2_sd         = lambda2_so * 0.1  ,                      
+            q_full_var2             = q_full_so         ,                          
+            q_full_var2_sd          = q_full_so * 0.1   ,                         
+            coef_exp_var2           = coef_exp_so,                      
+            #                      coef_exp_var2_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)),                       
+            teach_sal_var2          = teach_sal_so         ,                                          
+            teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
+            teach_ben_var2          = teach_ben_so         ,                                          
+            teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
+            n_students_var2         = n_students_so        ,                                         
+            n_students_var2_sd      = n_students_so * 0.1     ,                                      
+            delta_ed_var2           = delta_ed_par_so          ,                                           
+            delta_ed_var2_sd        = delta_ed_par_so * 0.1       ,                                            
+            delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
+            delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
+            q_zero_var2             = q_zero_so            ,                                             
+            q_zero_var2_sd          = q_zero_so * 0.1         ,
+            lambda1_new_var2        = lambda1_new_so,                   
+            lambda1_new_var2_sd     = lambda1_new_sd_so,             
+            alpha_0_var2            = alpha_0_so       ,  
+            alpha_0_var2_sd         = alpha_0_so * 0.1    , 
+            alpha_r_var2            = alpha_r_so       ,  
+            alpha_r_var2_sd         = alpha_r_so * 0.1    ,                                                                         
+            counts_par_var2         = counts_par_so    ,
+            counts_par_var2_sd      = counts_par_so * 0.1 ,
+            staff_time_var2         = staff_time_so    ,
+            staff_time_var2_sd      = staff_time_so * 0.1 , 
+            costs_par_var2          = costs_par_so     ,
+            costs_par_var2_sd       = costs_par_so * 0.1)
 
-wage_ag_sim <-          rnorm(nsims, wage_ag_so, 0.1 * wage_ag_so)
-wage_ww_sim <-          rnorm(nsims, wage_ww_so, 0.1 * wage_ww_so)
-profits_se_sim <-       rnorm(nsims, profits_se_so, 0.1 * profits_se_so)
-hours_se_cond_sim <-    rnorm(nsims, hours_se_cond_so, 0.1 * hours_se_cond_so)
-hours_ag_sim <-         rnorm(nsims, hours_ag_so, 0.1 * hours_ag_so)
-hours_ww_sim <-         rnorm(nsims, hours_ww_so, 0.1 * hours_ww_so)
-hours_se_sim <-         rnorm(nsims, hours_se_so, 0.1 * hours_se_so)
-coverage_sim <-         rnorm(nsims, coverage_so, 0.1 * coverage_so)
-growth_rate_sim <-      rnorm(nsims, growth_rate_so, 0.1 * growth_rate_so)
-
-ex_rate_sim <-          rnorm(nsims, ex_rate_so, 0.1 * ex_rate_so)
-tax_sim <-              rnorm(nsims, tax_so, 0.1 * tax_so)
-
-unit_cost_local_sim <-  rnorm(nsims, unit_cost_local_so, 0.1 * unit_cost_local_so)
-years_of_treat_sim <-   rnorm(nsims, years_of_treat_so, 0.1 * years_of_treat_so)
-
-## Research
-aux1 <- 0.1 * c(lambda1_so[1], 0.01)
-# Each list is a pair mean, sd.
-aux2 <- lapply(1:2,function(x) c(lambda1_so[x], aux1[x] ) )
-lambda1_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
-lambda2_sim <-          rnorm(nsims, lambda2_so,  0.1 * lambda2_so)
-# New lambdas here
-aux3 <- lapply(1:3,function(x) c(lambda1_new_so[x], lambda1_new_sd_so[x] ) )
-lambda1_new_sim <- sapply(aux3, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
-
-q_full_sim <-           rnorm(nsims, q_full_so, 0.1 * q_full_so)
-q_zero_sim <-           rnorm(nsims, q_zero_so, 0.1 * q_zero_so)
-
-# Prevalence here TO DO: draw from a beta instead of "truncated" normal
-alpha_0_sim <- rnorm(nsims, alpha_0_so, 0.1 * alpha_0_so)
-alpha_0_sim <- ifelse(alpha_0_sim > 1, yes = 1, ifelse(alpha_0_sim < 0, 0, alpha_0_sim) )
-alpha_r_sim <- rnorm(nsims, alpha_r_so, 0.1 * alpha_r_so)
-alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
-
-## Guess work
-periods_val <- 50           #Total number of periods to forecast wages
-time_to_jm_val <- 10        #Time from intial period until individual join the labor force
-aux2 <- lapply(1:2, function(x) c(coef_exp_so[x],c(0.001 , 0.001)[x]) )
-coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
-teach_sal_sim <-    rnorm(nsims, teach_sal_so, 0.1 * teach_sal_so)
-teach_ben_sim <-    rnorm(nsims, teach_ben_so, 0.1 * teach_ben_so)
-n_students_sim <-   rnorm(nsims, n_students_so, 0.1 * n_students_so)
-
-delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean =
-                                                                  x * 1,
-                                                                  sd = 1 * sd(delta_ed_so[,1]) ) )
-colnames(delta_ed_sim) <- 1999:2007
-
-delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x)  rnorm(nsims, mean =
-                                                                            x * 1,
-                                                                          sd = 1 * sd(delta_ed_ext_so[,1])))
-colnames(delta_ed_ext_sim) <- 1999:2007
-
-#######
-costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_so,
-                                    df_costs_cw_var = df_costs_cw_so)$counts_data
-costs1_counts_sim <- sapply(costs1_counts_in$total, function(x)  rnorm(nsims, mean = x,  sd = 0.1 * x) )
-
-staff_time_sim <- rnorm(nsims, staff_time_so, 0.1 * staff_time_so)      
-
-costs1_costs_in <- lapply(staff_time_sim, function(x) costs1_costs_f(df_costs_var = df_costs_so,
-                                  df_costs_cw_var = df_costs_cw_so,
-                                  staff_time_var = x)$cost_data)
-
-costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
-    aux1 <- x$costs_by_country
-    rnorm(length(aux1), mean = aux1,  sd = 0.1 * aux1)
-  } )
-)
-
-
-################
-###### Runs
-################
-
-baird1_sim           <- rep(NA, nsims)
-baird2_sim           <- rep(NA, nsims)
-baird3_sim           <- rep(NA, nsims)
-baird4_sim           <- rep(NA, nsims)
-klps4_1_sim          <- rep(NA, nsims)
-klps4_2_sim          <- rep(NA, nsims)
-ea1_sim              <- rep(NA, nsims)
-ea2_sim              <- rep(NA, nsims)
-ea3_sim              <- rep(NA, nsims)
-cea_no_ext_ea_sim    <- rep(NA, nsims)
-rcea_no_ext_ea_sim   <- rep(NA, nsims)
-
-
-for (i in 1:nsims) {
-
-  invisible( list2env(
-   one_run(main_run_var1 = FALSE,
-           run_sim_var = TRUE,
-           wage_ag_var1 = wage_ag_sim[i],
-           wage_ww_var1 = wage_ww_sim[i],
-           profits_se_var1 = profits_se_sim[i],
-           hours_se_cond_var1 = hours_se_cond_sim[i],
-           hours_ag_var1 = hours_ag_sim[i],
-           hours_ww_var1 = hours_ww_sim[i],
-           hours_se_var1 = hours_se_sim[i],
-           ex_rate_var1 = ex_rate_sim[i],
-           growth_rate_var1 = growth_rate_sim[i],
-           coef_exp_var1 = coef_exp_sim[i, 1], coef_exp2_var1 = coef_exp_sim[i,2],
-           lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_sim[i,]),
-           alpha_0_var1 = alpha_0_sim[i],
-           alpha_r_var1 = alpha_r_sim[i],
-           lambda2_var1 = lambda2_sim[i],
-           coverage_var1 = coverage_sim[i],
-           q_full_var1 = q_full_sim[i],
-           q_zero_var1 = q_zero_sim[i],
-           lambda1_new_var1 = lambda1_new_sim[i,],
-           gov_bonds_var1 = gov_bonds_sim[i],
-           inflation_var1 = inflation_sim[i],
-           df_costs_var1 = df_costs_so,
-           df_costs_cw_var1 = df_costs_cw_so,
-           staff_time_var1 = staff_time_so,
-           df_counts_var1 = df_counts_so,
-           delta_ed_var1 = cbind(delta_ed_sim[i,], 1999:2007),
-           delta_ed_ext_var1 = cbind(delta_ed_ext_sim[i,], 1999:2007),
-           teach_sal_var1 = teach_sal_sim[i],
-           teach_ben_var1 = teach_ben_sim[i],
-           n_students_var1 = n_students_sim[i],
-           unit_cost_local_var1 = unit_cost_local_sim[i],
-           years_of_treat_var1 = years_of_treat_sim[i],
-           tax_var1 = tax_sim[i],
-           periods_var1 = periods_so),.GlobalEnv) )
-
-    #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
-    baird1_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
-    #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
-    baird2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
-    # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
-    baird3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
-    # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
-    baird4_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
-    #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
-    klps4_1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
-    #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
-    klps4_2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
-    # EA1: no externality NPV using EAs costs
-    ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
-    # EA2: yes externality NPV using EAs costs
-    ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
-    # EA3: benef= KLPS all and no ext; Costs=EA
-    ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
-    #CEA for EA
-    cea_no_ext_ea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, 
-                                      costs_var = cost1_in, fudging_var = 0)
-    rcea_no_ext_ea_sim[i]  <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in,
-                                                            costs_var = cost1_in, fudging_var = 0),
-                                         CEA_cash_var = 744 )
-  }
-
-total_time <- Sys.time() - start_time
-
-
+ 
 policy_estimates <- c("baird1_sim",          
 "baird2_sim"         , 
 "baird3_sim"         , 
@@ -1490,6 +1640,11 @@ policy_estimates_text <- c(
   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
 
+total_time <- npv_sim_all$total_time
+position <- which( policy_estimates == policy_estimate_so )
+npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 #Unit test the simulations for nsims = 100, 1000, 10000
 all_res_100_sims <- c(
@@ -1532,46 +1687,64 @@ all_res_10000_sims <- c(
   0.45078061934101
 )
 
-for ( i in 1:length(policy_estimates) ) {
-    to_test <- get(policy_estimates[i])
-    if (nsims == 1e4){
-        unit_test(to_test, all_res_10000_sims[i], main_run_var = TRUE)
-    } else if (nsims == 1e3){
-        unit_test(to_test, all_res_1000_sims[i], main_run_var = TRUE)
-    } else if(nsims == 1e2){
-        unit_test(to_test, all_res_100_sims[i], main_run_var = TRUE)
+k <- 0
+for ( i in policy_estimates ) {
+    k <- k + 1
+    to_test <- npv_sim_all[[i]]
+    if (nsims_val == 1e4){
+        unit_test(to_test, all_res_10000_sims[k], main_run_var = TRUE)
+    } else if (nsims_val == 1e3){
+        unit_test(to_test, all_res_1000_sims[k], main_run_var = TRUE)
+    } else if(nsims_val == 1e2){
+        unit_test(to_test, all_res_100_sims[k], main_run_var = TRUE)
     }
 }
+```
 
+```
+## [1] "Output has change at to_test  to  4.50382860428961"
+## [1] "Output has change at to_test  to  23.3740627788413"
+## [1] "Output has change at to_test  to  25.9188306190681"
+## [1] "Output has change at to_test  to  138.039079392079"
+## [1] "Output has change at to_test  to  55.3261160035625"
+## [1] "Output has change at to_test  to  328.471933661182"
+## [1] "Output has change at to_test  to  26.2274500881501"
+## [1] "Output has change at to_test  to  138.957841494552"
+## [1] "Output has change at to_test  to  328.606968391771"
+## [1] "Output has change at to_test  to  325.622058008962"
+## [1] "Output has change at to_test  to  0.437664056463658"
+```
+
+```r
 ################
 ###### Results/Viz
 ################
 
-
-possition <- 9
-npv_sim <- get(policy_estimates[9])     
+nsims <- nsims_val
 
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
-plot1 <- ggplot() +
-  geom_density(aes(x = npv_sim,
-                   alpha = 1/2), kernel = "gau") +
-  geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-  coord_cartesian(xlim = c(-10, 100)) +
-  guides(alpha = "none", colour="none") +
-  labs(y = NULL,
-       x = "NPV" ,
-       title = paste0("Distribution of NPV of ", policy_estimates_text[9]
-                      ),
-       subtitle = paste0("N = ", nsims, " simulations. Takes ",
-                         round(total_time, 1)," ",attributes(total_time)$unit )  )+
-  annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
-  annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
-  theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-if (rescale_so == TRUE) {
-    plot1 <- plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim)))   
-}
+rescale <- rescale_so
+   
+    plot1 <- ggplot() +
+      geom_density(aes(x = npv_sim,
+                       alpha = 1/2), kernel = "gau") +
+      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
+      coord_cartesian(xlim = c(-10, 400)) +
+      guides(alpha = "none", colour="none") +
+      labs(y = NULL,
+           x = "NPV" ,
+           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
+           ),
+           subtitle = paste0("N = ", nsims, " simulations. Takes ",
+                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
+      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+    if (rescale == TRUE) {
+      plot1 <- plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim)))   
+    }
 ```
 
 ```
