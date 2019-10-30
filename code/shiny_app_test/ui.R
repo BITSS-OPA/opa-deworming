@@ -18,7 +18,7 @@ knitr::opts_knit$set(root.dir = here())
 
 nsims <- 1e2
 
-source("test.R")
+source("all_analysis.R")
 
 
 

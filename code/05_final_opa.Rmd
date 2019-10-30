@@ -1240,7 +1240,7 @@ kable(npv_table, caption = "Caption of the table") %>%
 
 # Montecarlo simulations  
 
-```{r, eval=TRUE}  
+```{r mc-setup, eval=TRUE}  
 sim.data1 <- function(nsims = 1e2,
                       main_run_var2,
                       run_sim_var2,
