@@ -6,12 +6,37 @@ shinyServer( function(input, output, session) {
   
   output$data_in <- renderUI({
     output <- tagList()
-    output [[1]] <- sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
+    output[[1]] <- sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
                                 min = 0.001, max = 0.2, value = gov_bonds_so)
+ 
+  
+  withMathJax(
+    if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
+      lapply( 1, function(x) output[[x]] )
+    } else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext") {
+      lapply( 1, function(x) output[[x]] )
+    }
+  ) 
+  
   })
-  
-  
-  
   reactive.data1 <- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    

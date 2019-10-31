@@ -35,8 +35,7 @@ shinyUI( fluidPage(
                fluidRow(id = "tPanel",style = "overflow-y:scroll; max-width: 400px; max-height: 800px; position:relative;",
                tabsetPanel(
                   tabPanel("Data", 
-               sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
-                           min = 0.001, max = 0.2, value = gov_bonds_so),
+                           uiOutput("data_in"),
                sliderInput("param2_1", label = "SD = ",
                            min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so),
                sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
