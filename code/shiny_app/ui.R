@@ -24,14 +24,17 @@ source("all_analysis.R")
 
 
 shinyUI( fluidPage(
-  sidebarPanel(id = "tPanel",style = "overflow-y:scroll; max-width: 400px; max-height: 800px; position:relative;",
-               numericInput("param1", label = h3("N Sims = "), value = 1e2),
+  sidebarPanel(
+               fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 300px; position:relative;",
+                 numericInput("param1", label = h3("N Sims = "), value = 1e2),
                checkboxInput("rescale", label = "Click if want to rescale x-axis", value = FALSE),
-               br("Data"),
                withMathJax(),
                selectInput("policy_est", "Policy Estimate:",
-                           choices=policy_estimates_text, selected = "Total effects, 2019(KLPS4) B & EA C, no ext"),
-               hr(),
+                           choices=policy_estimates_text, selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
+               ),
+               fluidRow(id = "tPanel",style = "overflow-y:scroll; max-width: 400px; max-height: 800px; position:relative;",
+               tabsetPanel(
+                  tabPanel("Data", 
                sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
                            min = 0.001, max = 0.2, value = gov_bonds_so),
                sliderInput("param2_1", label = "SD = ",
@@ -55,7 +58,9 @@ shinyUI( fluidPage(
                sliderInput("param7", label = "Hours se (>0) = ",
                            min = hours_se_cond_so / 2, max = 2 * hours_se_cond_so, value = hours_se_cond_so),
                sliderInput("param7_1", label = "SD = ",
-                           min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so),
+                           min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so)
+               ),
+                  tabPanel("Research",
                sliderInput("param8", label = "H_ag = ",
                            min = hours_ag_so / 2, max = 2 * hours_ag_so, value = hours_ag_so),
                sliderInput("param8_1", label = "SD = ",
@@ -85,7 +90,9 @@ shinyUI( fluidPage(
                sliderInput("param15_1", label = "SD = ",
                            min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so),
                sliderInput("param16", label = "Costs ot T (local $) = ",
-                           min = unit_cost_local_so / 2, max = 2 * unit_cost_local_so, value = unit_cost_local_so),
+                           min = unit_cost_local_so / 2, max = 2 * unit_cost_local_so,
+                           value = unit_cost_local_so, pre = "$", animate = 
+                             animationOptions(interval = 3000, loop = TRUE)),
                sliderInput("param16_1", label = "SD = ",
                            min = 0.000001* unit_cost_local_so, max = 1 * unit_cost_local_so, value = 0.1 * unit_cost_local_so),
                sliderInput("param17", label = "Years of T = ",
@@ -118,7 +125,8 @@ shinyUI( fluidPage(
                sliderInput("param27", label = "x * Delta E (ext)  = ",
                            min = 0.0000001, max = 4, value = delta_ed_ext_par_so),
                sliderInput("param27_1", label = "SD = ",
-                           min = 0.0000001, max = 4, value = delta_ed_ext_par_so * 0.1),
+                           min = 0.0000001, max = 4, value = delta_ed_ext_par_so * 0.1) ),
+                  tabPanel("GW",
                numericInput("param29_1", label = h3("Lambda 1_1_new = "), value = lambda1_new_so[1]),
                numericInput("param29_1_1", label = h3("sd = "), value = lambda1_new_sd_so[1]),
                numericInput("param29_2", label = h3("Lambda 1_2_new = "), value = lambda1_new_so[2]),
@@ -160,6 +168,9 @@ shinyUI( fluidPage(
                            min = costs_par_so / 2, max = 20000 * costs_par_so, value = costs_par_so),
                sliderInput("param34_1", label = "SD = ",
                            min = 0.0000001* costs_par_sd_so, max = 10 * costs_par_sd_so, value = costs_par_sd_so)
+                )
+               )
+               )
   ),
   mainPanel(
     plotOutput("plot1")

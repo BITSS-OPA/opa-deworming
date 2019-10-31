@@ -1545,7 +1545,11 @@ sim.data1 <- function(nsims = 1e2,
       "total_time"         = total_time
     ) )
 }
+```
 
+
+
+```r
 npv_sim_all <-   sim.data1(nsims = nsims_so,                        
             gov_bonds_var2          = gov_bonds_so             ,                                    
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
@@ -1578,7 +1582,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             years_of_treat_var2     = years_of_treat_so        ,                                    
             years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
             lambda1_var2            = lambda1_so,                                          
-            lambda1_var2_sd         = rep(lambda1_so[1], 2)  * 0.1,                                          
+            lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
             lambda2_var2            = lambda2_so        ,                         
             lambda2_var2_sd         = lambda2_so * 0.1  ,                      
             q_full_var2             = q_full_so         ,                          
@@ -1729,7 +1733,7 @@ rescale <- rescale_so
 print(plot1)
 ```
 
-![](05_final_opa_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
+![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
 ```r
 #knitr::purl("code/05_final_opa.Rmd", "code/shiny_app_test/all_analysis.R")

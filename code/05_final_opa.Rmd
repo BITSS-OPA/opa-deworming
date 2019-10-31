@@ -121,7 +121,18 @@ chunk_params <- function(){
     df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Treatment #s")
 
-    ############# 318.08 327.68
+    # Prevalence data: 
+    # original study
+    # Any infection on original study
+    #alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
+    df_alpha_so <- read_excel("data/prevalence_data.xlsx",
+                           sheet = "Sheet1")
+    #alphas_df <- 1 # a table with country, year and infection rates
+    
+    # new geographies
+    
+    
+    ############# 
     ##### Research
     #############    
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women CONFIRM
@@ -142,8 +153,8 @@ chunk_params <- function(){
     delta_ed_par_so <- 1
     delta_ed_ext_par_so <- 1
     include_ext_so <- TRUE
-    alpha_0_so <- 1 #0.77
-    alpha_r_so <- 1 #0.15
+    alpha_0_so <- 0.77 #0.77
+    alpha_r_so <- 0.15 #0.15
 
     #############
     ##### Guess work   
@@ -811,7 +822,14 @@ Where:
  - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
  - $\lambda_{2}^{eff}$: ?. **[discuss with Ted/Michael]**
 
-**WARNING: the next paragraph has a bunch of hard coded numbers that need to be reviewed and coded up**   
+**TO DO: add a section that discusses where are the $\alpha's$ comming from**   
+```{r alphas, eval=FALSE, purl=FALSE}
+alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
+df_alpha_so <- read_excel("data/prevalence_data.xlsx",
+                           sheet = "Sheet1")
+```
+
+
 
 In the original evaluation, $\alpha = `r alpha_0_so`$, hence $\lambda_{1}^{eff} = 1.75/0.92 = 1.94$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
@@ -1537,7 +1555,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             years_of_treat_var2     = years_of_treat_so        ,                                    
             years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
             lambda1_var2            = lambda1_so,                                          
-            lambda1_var2_sd         = rep(lambda1_so[1], 2)  * 0.1,                                          
+            lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
             lambda2_var2            = lambda2_so        ,                         
             lambda2_var2_sd         = lambda2_so * 0.1  ,                      
             q_full_var2             = q_full_so         ,                          
@@ -1686,7 +1704,7 @@ rescale <- rescale_so
     }
 
 print(plot1)
-#knitr::purl("code/05_final_opa.Rmd", "code/shiny_app_test/all_analysis.R")
+#knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 ```
 
 # Sensitivity Analysis  

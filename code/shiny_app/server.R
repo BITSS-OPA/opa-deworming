@@ -2,6 +2,12 @@
 library(shiny)
 
 shinyServer( function(input, output) {
+  #Dynamic UI
+  
+  
+  
+  
+  
   reactive.data1 <- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    
@@ -101,7 +107,7 @@ shinyServer( function(input, output) {
       annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
     if (input$rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim))) )
+      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
       }
     print(plot1)  
     }, height = 800, width = 800 )

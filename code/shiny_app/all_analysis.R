@@ -61,7 +61,15 @@ chunk_params <- function(){
     df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Treatment #s")
 
-    ############# 318.08 327.68
+    # Prevalence data: 
+    # original study
+    #alpha_0_so <- 0.77 #add source
+    #alphas_df <- 1 # a table with country, year and infection rates
+    
+    # new geographies
+    
+    
+    ############# 
     ##### Research
     #############    
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women CONFIRM
@@ -82,8 +90,8 @@ chunk_params <- function(){
     delta_ed_par_so <- 1
     delta_ed_ext_par_so <- 1
     include_ext_so <- TRUE
-    alpha_0_so <- 1 #0.77
-    alpha_r_so <- 1 #0.15
+    alpha_0_so <- 0.77 #0.77
+    alpha_r_so <- 0.15 #0.15
 
     #############
     ##### Guess work   
@@ -800,7 +808,7 @@ invisible( list2env(one_run(),.GlobalEnv) )
 
 
 
-## ---- eval=TRUE----------------------------------------------------------
+## ----mc-setup, eval=TRUE-------------------------------------------------
 sim.data1 <- function(nsims = 1e2,
                       main_run_var2,
                       run_sim_var2,
