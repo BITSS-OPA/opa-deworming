@@ -36,10 +36,6 @@ shinyUI( fluidPage(
                tabsetPanel(
                   tabPanel("Data", 
                            uiOutput("data_in"),
-               sliderInput("param2_1", label = "SD = ",
-                           min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so),
-               sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
-                           min = 0.001, max = 0.2, value = inflation_so),
                sliderInput("param3_1", label = "SD = ",
                            min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so),
                sliderInput("param4", label = "Agri Wages (\\( w_{ag} \\))",
