@@ -885,6 +885,7 @@ sim.data1 <- function(nsims = 1e2,
     #draw_vals <- function(all_the_sos){}
     #Defaoult dist: normal, default sd: 0.1* mean
     ## Data
+    
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
     inflation_sim <-        rnorm(nsims, inflation_var2, inflation_var2_sd)
 
@@ -932,6 +933,7 @@ sim.data1 <- function(nsims = 1e2,
     teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
     n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
 
+    
     delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean =
                                                                 x * delta_ed_var2,
                                                               sd = delta_ed_var2_sd * sd(delta_ed_so[,1]) ) )
