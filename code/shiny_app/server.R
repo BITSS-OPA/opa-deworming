@@ -4,7 +4,11 @@ library(shiny)
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
-  
+  output$data_in <- renderUI({
+    output <- tagList()
+    output [[1]] <- sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
+                                min = 0.001, max = 0.2, value = gov_bonds_so)
+  })
   
   
   
