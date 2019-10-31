@@ -21,7 +21,7 @@ nsims <- 1e2
 source("all_analysis.R")
 
 
-
+ 
 
 shinyUI( fluidPage(
   sidebarPanel(
