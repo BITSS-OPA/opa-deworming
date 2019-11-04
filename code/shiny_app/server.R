@@ -2,8 +2,7 @@
 library(shiny)
 
 shinyServer( function(input, output, session) {
-  #Dynamic UI
-  
+
   output$data_in <- renderUI({
     output <- tagList()
     output[[1]] <- sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
@@ -13,7 +12,63 @@ shinyServer( function(input, output, session) {
     #HERE IS THE BUG
     output [[3]] <- sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
                                 min = 0.001, max = 0.2, value = inflation_so)
-    n_output <- 3 
+    output [[4]] <- sliderInput("param3_1", label = "SD = ",
+                                min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so)
+    output [[5]] <- sliderInput("param4", label = "Agri Wages (\\( w_{ag} \\))",
+                                min = wage_ag_so / 2, max = 2 * wage_ag_so, value = wage_ag_so)
+    output [[6]] <- sliderInput("param4_1", label = "SD = ",
+                                min = 0.0000001* wage_ag_so, max = 1 * wage_ag_so, value = 0.1 * wage_ag_so)
+    output [[7]] <- sliderInput("param5", label = "Work-non ag-Wages  (\\( w_{ww} \\))",
+                                min = wage_ww_so / 2, max = 2 * wage_ww_so, value = wage_ww_so)
+    output [[8]] <- sliderInput("param5_1", label = "SD = ",
+                                min = 0.0000001* wage_ww_so, max = 1 * wage_ww_so, value = 0.1 * wage_ww_so)
+    output [[9]] <- sliderInput("param6", label = "Profits se = ",
+                                min = profits_se_so / 2, max = 2 * profits_se_so, value = profits_se_so)
+    output [[10]] <- sliderInput("param6_1", label = "SD = ",
+                                 min = 0.000001* profits_se_so, max = 1 * profits_se_so, value = 0.1 * profits_se_so)
+    output [[11]] <- sliderInput("param7", label = "Hours se (>0) = ",
+                                 min = hours_se_cond_so / 2, max = 2 * hours_se_cond_so, value = hours_se_cond_so)
+    output [[12]] <- sliderInput("param7_1", label = "SD = ",
+                                 min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so)
+    output [[13]] <- sliderInput("param8", label = "H_ag = ",
+                                 min = hours_ag_so / 2, max = 2 * hours_ag_so, value = hours_ag_so)
+    output [[14]] <- sliderInput("param8_1", label = "SD = ",
+                                 min = 0.000001* hours_ag_so, max = 1 * hours_ag_so, value = 0.1 * hours_ag_so)
+    output [[15]] <- sliderInput("param9", label = "H_ww = ",
+                                 min = hours_ww_so / 2, max = 2 * hours_ww_so, value = hours_ww_so)
+    output [[16]] <- sliderInput("param9_1", label = "SD = ",
+                                 min = 0.000001* hours_ww_so, max = 1 * hours_ww_so, value = 0.1 * hours_ww_so)
+    output [[17]] <- sliderInput("param10", label = "H_se = ",
+                                 min = hours_se_so / 2, max = 2 * hours_se_so, value = hours_se_so)
+    output [[18]] <- sliderInput("param10_1", label = "SD = ",
+                                 min = 0.000001* hours_se_so, max = 1 * hours_se_so, value = 0.1 * hours_se_so)
+    output [[19]] <- sliderInput("param11", label = "Exchange rate = ",
+                                 min = ex_rate_so / 2, max = 2 * ex_rate_so, value = ex_rate_so)
+    output [[20]] <- sliderInput("param11_1", label = "SD = ",
+                                 min = 0.000001* ex_rate_so, max = 1 * ex_rate_so, value = 0.1 * ex_rate_so)
+    output [[21]] <- sliderInput("param12", label = "growth = ",
+                                 min = growth_rate_so / 2, max = 2 * growth_rate_so, value = growth_rate_so)
+    output [[22]] <- sliderInput("param12_1", label = "SD = ",
+                                 min = 0.000001* growth_rate_so, max = 1 * growth_rate_so, value = 0.1 * growth_rate_so)
+    output [[23]] <- sliderInput("param13", label = "Coverage (R) = ",
+                                 min = coverage_so / 2, max = 2 * coverage_so, value = coverage_so)
+    output [[24]] <- sliderInput("param13_1", label = "SD = ",
+                                 min = 0.000001* coverage_so, max = 1 * coverage_so, value = 0.1 * coverage_so)
+    output [[25]] <- sliderInput("param15", label = "Tax rate = ",
+                                 min = tax_so / 2, max = 2 * tax_so, value = tax_so, step = 0.001)
+    output [[26]] <- sliderInput("param15_1", label = "SD = ",
+                                 min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so)
+    output [[27]] <- sliderInput("param16", label = "Costs ot T (local $) = ",
+                                 min = unit_cost_local_so / 2, max = 2 * unit_cost_local_so,
+                                 value = unit_cost_local_so, pre = "$", animate =
+                                   animationOptions(interval = 3000, loop = TRUE))
+    output [[28]] <- sliderInput("param16_1", label = "SD = ",
+                                 min = 0.000001* unit_cost_local_so, max = 1 * unit_cost_local_so, value = 0.1 * unit_cost_local_so)
+    output [[29]] <- sliderInput("param17", label = "Years of T = ",
+                                 min = years_of_treat_so / 2, max = 2 * years_of_treat_so, value = years_of_treat_so)
+    output [[30]] <- sliderInput("param17_1", label = "SD = ",
+                                 min = 0.000001* years_of_treat_so, max = 1 * years_of_treat_so, value = 0.1 * years_of_treat_so)
+    n_output <- 30 
   withMathJax(
     if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
       lapply( 1:n_output, function(x) output[[x]] )
@@ -41,7 +96,9 @@ shinyServer( function(input, output, session) {
   ) 
   
   })
-  
+ 
+#Dynamic UI
+observeEvent(input$run, {  
   reactive.data1 <- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    
@@ -145,5 +202,5 @@ shinyServer( function(input, output, session) {
       }
     print(plot1)  
     }, height = 800, width = 800 )
-
+}) 
 })
