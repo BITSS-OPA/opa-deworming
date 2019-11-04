@@ -387,6 +387,18 @@ invisible( list2env(costs_f(),.GlobalEnv) )
 
 # Results
 
+Panel A (for both earnings and consumption) gives the minimum average gains required to achieve a postive Net Present Value under varying assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each assumption of the treatment effect timeframe given the observed gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed gains.
+
+The Net Present Value accounts for three factors: the cost of deworming medication, the cost of additional schooling, and labor market / consumption gains.
+
+The average cost of deworming per child ($2.00) is given by the product of the annual cost of deworming per child ($0.83) and number of years over which the treatment was administered on average (2.41). The annual cost of deworming per child in Kenya was obtained from a 2018 estimate by Evidence Action.
+
+The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school a a result of deworming. The cost of schooling each child for an additional year ($267.88) is calculated by dividing an estimate of annual teacher salary ($12055) by the number of average number of students per teacher (45). The estimates of annual teacher salaries are based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor. The estimated average number of students per teacher is based on **[FILL IN]**. We use a series of estimated effects of the additional increase in secondary schooling from 1999 to 2007 obtained from Baird et. al. according to which, summed over this nine year period, students attended school for an additional 0.15 years on average. This series does not take externality effects into account.
+
+All monetary values have been adjusted for inflation based on inflation rates reported by the World Bank and converted to 2017 USD PPP based on PPP exchange rates reported by the Bureau of Labor Statistics. They are also discounted by the real interest rate, where we consider two: 5% and 10% to look at effects over a range of values. These values correspond with the second quartile and median interest rates between 1998 and 2018. 
+
+**Sources** 1) Sarah Baird & Joan Hamory Hicks & Michael Kremer & Edward Miguel, 2016. "Worms at Work: Long-run Impacts of a Child Health Investment," The Quarterly Journal of Economics, vol 131(4), pages 1637-1680. 2) Nyanchama, Venic. “Secondary School Teachers Salary in Kenya.” Tuko.co.ke - Kenya News., Tuko, 15 Oct. 2018, www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html. 3) Oduor, Augustine. “Windfall for Teachers as TSC Releases New Salaries.” The Standard, standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries. 4) World Bank. 5) Bureau of Labor Statistics
+
 
 ```r
 npv_cwelfare_p_mo_f <- function(interest_r_var = interest_in,
@@ -417,10 +429,7 @@ npv_cwelfare_p_mo_f <- function(interest_r_var = interest_in,
 ############################################################################### 
   return(res1) 
 }
-```
 
-
-```r
 npv_cwelfare_d_mo_f <- function(interest_r_var = interest_in,
                 n_male_var = 1/2, n_female_var = 1/2, 
                 delta_welfare_var,
@@ -452,6 +461,8 @@ npv_cwelfare_d_mo_f <- function(interest_r_var = interest_in,
 ```
 
 ## Earnings
+
+The treatment effect on earnings observed 10, 15, and 20 years from the intervention (in each round of data collection) were, on average, 87, 83, 85 dollars per person per year respectively. We assume there are no earnings gains in the first 10 years after receiving deworming medication, and earnings gains persist through the end of one's working life (50 years after receiving treatment) or die out after the last observed five-year period (25 years after receiving treatment). The annual tax on earnings is assumed to be 16.6% based on **[FILL IN]**.
 
 
 ```r
@@ -495,48 +506,6 @@ tax_int10_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, interest_
 tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = 0.10)
 ```
 
-|Real annualized interest rate (r)|Treatment effect timeframe|Net Present Value (2017 USD PPP)    |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
-|--------------------------------:|------------------:|------------------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
-| Panel A                                                                                                                                                                                             
-|                                 |50 years           |0                                          |                                                |10%                                     |**6.74**  |
-|                                 |50 years           |0                                          |                                                |5%                    |**3.09**  |
-|                                 |25 years           |0                                          |                                                |10%                                     |**8.68**      |
-|                                 |25 years           |0                                          |                                                |5%                    |**5.15**      |
-|                                 |50 years           |                                           |0                                               |10%                                     |**40.65**     |
-|                                 |50 years           |                                           |0                                               |5%                    |**18.66**     |
-|                                 |25 years           |                                           |0                                               |10%                                     |**52.37**         |
-|                                 |25 years           |                                           |0                                               |5%                    |**31.08**         |
-| Panel B                                                                                                                                                               
-|                                 |50 years           |0                                          |                                                |**38.5%**|*                                         |
-|                                 |50 years           |                                           | 0                                              |**16.3%**   |*                                         |
-|                                 |25 years           |0                                          |                                                |**38.4%**    |*                                         |
-|                                 |25 years           |                                           | 0                                              |**15.1%**       |*                                         |
-| Panel C
-| 10%                             |50 years           |**326**         |**31**              |                                        |*                                         |
-|5%             |50 years           |**916**         |**123**              |                                        |*                                         |
-| 10%                             |25 years           |**247**             |**18**                  |                                        |*                                         |
-|5%             |25 years           |**535**             |**60**                  |                                        |*                                         |
-
- <font size="1">
- 
- **Notes.** Panel A gives the minimum average earnings gains required to achieve a postive Net Present Value under varying assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each assumption of the treatment effect timeframe given the observed earnings gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed earnings gains.
-
-The Net Present Value accounts for three factors: the cost of deworming medication, the cost of additional schooling, and labor market gains.
-
-The average cost of deworming per child ($2.00) is given by the product of the annual cost of deworming per child ($0.83) and number of years over which the treatment was administered on average (2.41). The annual cost of deworming per child in Kenya was obtained from a 2018 estimate by Evidence Action.
-
-The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school a a result of deworming. The cost of schooling each child for an additional year ($267.88) is calculated by dividing an estimate of annual teacher salary ($12055) by the number of average number of students per teacher (45). The estimates of annual teacher salaries are based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor. The estimated average number of students per teacher is based on **[FILL IN]**. We use a series of estimated effects of the additional increase in secondary schooling from 1999 to 2007 obtained from Baird et. al. according to which, summed over this nine year period, students attended school for an additional 0.15 years on average. This series does not take externality effects into account.
-
-Both earnings gains and the cost of additional schooling are discounted by the real interest rate, where we consider two: 5% and 10% to look at effects over a range of values. These values correspond with the second quartile and median interest rates between 1998 and 2018. 
-
-All monetary values have been adjusted for inflation based on inflation rates reported by the World Bank and converted to 2017 USD PPP based on PPP exchange rates reported by the Bureau of Labor Statistics.
-
-The treatment effect on earnings observed 10, 15, and 20 years from the intervention (in each round of data collection) were, on average, 87, 83, 85 dollars per person per year respectively. We assume there are no earnings gains in the first 10 years after receiving deworming medication, and earnings gains persist through the end of one's working life (50 years after receiving treatment) or die out after the last observed five-year period (25 years after receiving treatment). The annual tax on earnings is assumed to be 16.6% based on **[FILL IN]**.
-
-**Sources** 1. Sarah Baird & Joan Hamory Hicks & Michael Kremer & Edward Miguel, 2016. "Worms at Work: Long-run Impacts of a Child Health Investment," The Quarterly Journal of Economics, vol 131(4), pages 1637-1680. 2. Nyanchama, Venic. “Secondary School Teachers Salary in Kenya.” Tuko.co.ke - Kenya News., Tuko, 15 Oct. 2018, www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html. 3. Oduor, Augustine. “Windfall for Teachers as TSC Releases New Salaries.” The Standard, standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries. 4. World Bank 5. Bureau of Labor Statistics
-
-</font>
-
 ### Treatment effect timeframe: 25 years
 
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
@@ -570,6 +539,8 @@ The treatment effect on earnings observed 10, 15, and 20 years from the interven
 |5%             |**916**|**123**              |                                        |*                                         |
 
 ## Consumption
+
+The treatment effect on consumption observed 15 and 20 years from the intervention (in each round of data collection) were, on average, 1011 and 201 dollars per person per year respectively. We assume there are no consumption gains in the first 10 years after receiving deworming medication, and consumption gains persist through the end of one's working life (50 years after receiving treatment) or die out after the last observed five-year period (25 years after receiving treatment). The annual tax on consumption is assumed to be 16.6% based on **[FILL IN]**.
 
 
 ```r
@@ -613,28 +584,6 @@ tax_int10_persist <- npv_mo_f(delta_welfare_var = delta_consumption_p_in, intere
 tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.10)
 ```
 
-|Real annualized interest rate (r)|Treatment effect timeframe|Net Present Value (2017 USD PPP)    |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg consumption gains (2017 USD PPP)        |
-|--------------------------------:|------------------:|------------------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
-|Panel A                                                                                                                                                                                                
-|                                 |50 years           |0                                          |                                                |10%                                     |**6.74**  |
-|                                 |50 years           |0                                          |                                                |5%                    |**3.09**  |
-|                                 |25 years           |0                                          |                                                |10%                                     |**8.68**      |
-|                                 |25 years           |0                                          |                                                |5%                    |**5.15**      |
-|                                 |50 years           |                                           |0                                               |10%                                     |**40.65**     |
-|                                 |50 years           |                                           |0                                               |5%                    |**18.66**     |
-|                                 |25 years           |                                           |0                                               |10%                                     |**52.37**         |
-|                                 |25 years           |                                           |0                                               |5%                    |**31.08**         |
-|Panel B                                                                                                                                                                                  
-|                                 |50 years           |0                                          |                                                |**45.4%**|*                                         |
-|                                 |50 years           |                                           | 0                                              |**27.4%**   |*                                         |
-|                                 |25 years           |0                                          |                                                |**45.3%**    |*                                         |
-|                                 |25 years           |                                           | 0                                              |**27.2%**       |*                                         |
-|Panel C
-| 10%                             |50 years           |**1293**         |**191**              |                                        |*                                         |
-|5%             |50 years           |**3417**         |**538**              |                                        |*                                         |
-| 10%                             |25 years           |**1106**             |**160**                  |                                        |*                                         |
-|5%             |25 years           |**2521**             |**389**                  |                                        |*                                         |
-
 ### Treatment effect timeframe: 25 years
 
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
@@ -670,7 +619,7 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   intere
 
 ## Additional notes for replication
 
-### The `multiroot` function for earnings table
+### The `multiroot` function
 
 The earnings gains in panel A and the internal rates of return in panel B are caculated using the `multiroot` function which solves for $n$ roots of $n$ (nonlinear) equations. An input to this function `start` is a scalar containing an initial guess for the unknown value.
 
