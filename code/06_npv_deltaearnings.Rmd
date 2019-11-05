@@ -151,7 +151,7 @@ The total Net Present Value is given by the sum of long-term net benefits of dew
 NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 \right]}_{\text{long-term NPV (labor market gains)}} + 
-\underbrace{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y}_{\text{short-term NPV (direct health effects)}}
+\underbrace{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]}_{\text{short-term NPV (direct health effects)}}
 \label{eq:1}
 \tag{1}
 \end{equation}
@@ -197,7 +197,7 @@ components of the model are discussed below.
 NPV =  \left[
 \blue{\tau} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
 \end{equation}
 
 The annual tax rate $\tau$ is estimated to be `r 100*round(tax_so,3)`%. It is calcuated as the product of "government expenditures" and "percent non-donor financed" according to `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Assumps&Panel A Calcs`.
@@ -209,7 +209,7 @@ The annual tax rate $\tau$ is estimated to be `r 100*round(tax_so,3)`%. It is ca
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
 \end{equation}
 
 The real interest rate $r$ is obtained from the interest rate on goverment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
@@ -234,7 +234,7 @@ The resulting value is a $r$ = `r paste(round(100*interest_in,2), "%", sep="")`
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta W_t} -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
 \end{equation}
 
 $\Delta W_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
@@ -325,7 +325,7 @@ delta_consumption_p_in = delta_welfare_p_in_f(welfarek1_var = consump_2017usdppp
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 \blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta \overline{E}_t(S1,S2)}
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
 \end{equation}
 
 $K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
@@ -366,7 +366,7 @@ invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
 NPV =  \left[
 \tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \blue{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y}
+\right] + \blue{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]}
 \end{equation}
 
 ### $w$
@@ -398,7 +398,7 @@ costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
                     years_of_treat_var = years_of_treat_so, 
                     q_full_var = q_full_so){
 ############################################################################### 
-    s2_in <- (unit_cost_var)*years_of_treat_var
+    s2_in <- (unit_cost_var)
     q2_in <- q_full_var
 ############################################################################### 
     return(list("s2_in" = s2_in, "q2_in" = q2_in)) 

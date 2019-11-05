@@ -138,7 +138,7 @@ The total Net Present Value is given by the sum of long-term net benefits of dew
 NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 \right]}_{\text{long-term NPV (labor market gains)}} + 
-\underbrace{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y}_{\text{short-term NPV (direct health effects)}}
+\underbrace{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]}_{\text{short-term NPV (direct health effects)}}
 \label{eq:1}
 \tag{1}
 \end{equation}
@@ -185,7 +185,7 @@ components of the model are discussed below.
 NPV =  \left[
 \blue{\tau} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
 \end{equation}
 
 The annual tax rate $\tau$ is estimated to be 16.6%. It is calcuated as the product of "government expenditures" and "percent non-donor financed" according to `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Assumps&Panel A Calcs`.
@@ -197,7 +197,7 @@ The annual tax rate $\tau$ is estimated to be 16.6%. It is calcuated as the prod
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
 \end{equation}
 
 The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.09) minus the inflation rate (0.04).
@@ -223,7 +223,7 @@ The resulting value is a $r$ = 5%
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta W_t} -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
 \end{equation}
 
 $\Delta W_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
@@ -316,7 +316,7 @@ delta_consumption_p_in = delta_welfare_p_in_f(welfarek1_var = consump_2017usdppp
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 \blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta \overline{E}_t(S1,S2)}
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
 \end{equation}
 
 $K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
@@ -357,7 +357,7 @@ invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
 NPV =  \left[
 \tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \blue{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y}
+\right] + \blue{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]}
 \end{equation}
 
 ### $w$
@@ -390,7 +390,7 @@ costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
                     years_of_treat_var = years_of_treat_so, 
                     q_full_var = q_full_so){
 ############################################################################### 
-    s2_in <- (unit_cost_var)*years_of_treat_var
+    s2_in <- (unit_cost_var)
     q2_in <- q_full_var
 ############################################################################### 
     return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
@@ -524,32 +524,32 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                               |                                                |10%                                     |**8.68**      |
-|                                 |0                               |                                                |5%                    |**5.15**      |
-|                                 |                                |0                                               |10%                                     |**52.37**         |
-|                                 |                                |0                                               |5%                    |**31.08**         |
+|                                 |0                               |                                                |10%                                     |**8.02**      |
+|                                 |0                               |                                                |5%                    |**4.84**      |
+|                                 |                                |0                                               |10%                                     |**48.41**         |
+|                                 |                                |0                                               |5%                    |**29.18**         |
 | Panel B                                                                                                                                                               
-|                                 |0                               |                                                |**38.4%**    |*                                         |
-|                                 |                                | 0                                              |**15.1%**       |*                                         |
+|                                 |0                               |                                                |**41.5%**    |*                                         |
+|                                 |                                | 0                                              |**16.3%**       |*                                         |
 | Panel C
-| 10%                             |**247**  |**18**                  |                                        |*                                         |
-|5%             |**535**  |**60**                  |                                        |*                                         |
+| 10%                             |**249**  |**20**                  |                                        |*                                         |
+|5%             |**537**  |**62**                  |                                        |*                                         |
 
 ### Treatment effect timeframe: 50 years
 
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                                 |                                                |10%                                     |**6.74**  |
-|                                 |0                                 |                                                |5%                    |**3.09**  |
-|                                 |                                  |0                                               |10%                                     |**40.65**     |
-|                                 |                                  |0                                               |5%                    |**18.66**     |
+|                                 |0                                 |                                                |10%                                     |**6.23**  |
+|                                 |0                                 |                                                |5%                    |**2.9**  |
+|                                 |                                  |0                                               |10%                                     |**37.58**     |
+|                                 |                                  |0                                               |5%                    |**17.51**     |
 | Panel B                                                                                                                                                               
-|                                 |0                                 |                                                |**38.5%**|*                                         |
-|                                 |                                  | 0                                              |**16.3%**   |*                                         |
+|                                 |0                                 |                                                |**41.6%**|*                                         |
+|                                 |                                  | 0                                              |**17.4%**   |*                                         |
 | Panel C
-| 10%                             |**326**|**31**              |                                        |*                                         |
-|5%             |**916**|**123**              |                                        |*                                         |
+| 10%                             |**329**|**33**              |                                        |*                                         |
+|5%             |**918**|**125**              |                                        |*                                         |
 
 ## Consumption
 
@@ -602,32 +602,32 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   intere
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                               |                                                |10%                                     |**8.68**      |
-|                                 |0                               |                                                |5%                    |**5.15**      |
-|                                 |                                |0                                               |10%                                     |**52.37**         |
-|                                 |                                |0                                               |5%                    |**31.08**         |
+|                                 |0                               |                                                |10%                                     |**8.02**      |
+|                                 |0                               |                                                |5%                    |**4.84**      |
+|                                 |                                |0                                               |10%                                     |**48.41**         |
+|                                 |                                |0                                               |5%                    |**29.18**         |
 | Panel B                                                                                                                                                               
-|                                 |0                               |                                                |**45.3%**    |*                                         |
-|                                 |                                | 0                                              |**27.2%**       |*                                         |
+|                                 |0                               |                                                |**47.9%**    |*                                         |
+|                                 |                                | 0                                              |**28.6%**       |*                                         |
 | Panel C
-| 10%                             |**1106**  |**160**                  |                                        |*                                         |
-|5%             |**2521**  |**389**                  |                                        |*                                         |
+| 10%                             |**1108**  |**162**                  |                                        |*                                         |
+|5%             |**2523**  |**391**                  |                                        |*                                         |
 
 ### Treatment effect timeframe: 50 years
 
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                                 |                                                |10%                                     |**6.74**  |
-|                                 |0                                 |                                                |5%                    |**3.09**  |
-|                                 |                                  |0                                               |10%                                     |**40.65**     |
-|                                 |                                  |0                                               |5%                    |**18.66**     |
+|                                 |0                                 |                                                |10%                                     |**6.23**  |
+|                                 |0                                 |                                                |5%                    |**2.9**  |
+|                                 |                                  |0                                               |10%                                     |**37.58**     |
+|                                 |                                  |0                                               |5%                    |**17.51**     |
 | Panel B                                                                                                                                                               
-|                                 |0                                 |                                                |**45.4%**|*                                         |
-|                                 |                                  | 0                                              |**27.4%**   |*                                         |
+|                                 |0                                 |                                                |**48%**|*                                         |
+|                                 |                                  | 0                                              |**28.8%**   |*                                         |
 | Panel C
-| 10%                             |**1293**|**191**              |                                        |*                                         |
-|5%             |**3417**|**538**              |                                        |*                                         |
+| 10%                             |**1295**|**193**              |                                        |*                                         |
+|5%             |**3419**|**540**              |                                        |*                                         |
 
 
 ## Additional notes for replication
