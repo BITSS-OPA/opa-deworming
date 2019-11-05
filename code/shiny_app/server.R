@@ -13,7 +13,32 @@ shinyServer( function(input, output, session) {
     #HERE IS THE BUG
     output [[3]] <- sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
                                 min = 0.001, max = 0.2, value = inflation_so)
-    n_output <- 3 
+    output [[4]] <- sliderInput("param3_1", label = "SD = ",
+                                min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so)
+    output [[5]] <- sliderInput("param4", label = "Agri Wages (\\( w_{ag} \\))",
+                                min = wage_ag_so / 2, max = 2 * wage_ag_so, value = wage_ag_so)
+    output [[6]] <- sliderInput("param4_1", label = "SD = ",
+                                min = 0.0000001* wage_ag_so, max = 1 * wage_ag_so, value = 0.1 * wage_ag_so)
+    output [[7]] <- sliderInput("param5", label = "Work-non ag-Wages  (\\( w_{ww} \\))",
+                                min = wage_ww_so / 2, max = 2 * wage_ww_so, value = wage_ww_so)
+    output [[8]] <- sliderInput("param5_1", label = "SD = ",
+                                min = 0.0000001* wage_ww_so, max = 1 * wage_ww_so, value = 0.1 * wage_ww_so)
+    output [[9]] <- sliderInput("param6", label = "Profits se = ",
+                                min = profits_se_so / 2, max = 2 * profits_se_so, value = profits_se_so)
+    output [[10]] <- sliderInput("param6_1", label = "SD = ",
+                                 min = 0.000001* profits_se_so, max = 1 * profits_se_so, value = 0.1 * profits_se_so)
+    output [[11]] <- sliderInput("param7", label = "Hours se (>0) = ",
+                                 min = hours_se_cond_so / 2, max = 2 * hours_se_cond_so, value = hours_se_cond_so)
+    output [[12]] <- sliderInput("param7_1", label = "SD = ",
+                                 min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so)
+    
+    output [[13]] <- sliderInput("param8", label = "H_ag = ",
+                                 min = hours_ag_so / 2, max = 2 * hours_ag_so, value = hours_ag_so)
+    output [[14]] <- sliderInput("param8_1", label = "SD = ",
+                                 min = 0.000001* hours_ag_so, max = 1 * hours_ag_so, value = 0.1 * hours_ag_so) 
+    output [[15]] <- sliderInput("param9", label = "H_ww = ",
+                                 min = hours_ww_so / 2, max = 2 * hours_ww_so, value = hours_ww_so)    
+    n_output <- 13
   withMathJax(
     if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
       lapply( 1:n_output, function(x) output[[x]] )
@@ -111,14 +136,17 @@ shinyServer( function(input, output, session) {
       )
     } 
   )
-  
+  observeEvent(input$run, {
   ################
   ###### Results/Viz
   ################
   # THINK ABOUT WRAPPING THE OUTPUT IN ONE COMMOMN FUNCTION ACROSS DD AND APP
-  output$plot1 <- renderPlot({      
+  
+    output$plot1 <- renderPlot({      
     npv_sim_all <- reactive.data1()
+  
     
+      
     total_time <- npv_sim_all$total_time
     position <- which( policy_estimates_text == input$policy_est)
     npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
@@ -145,5 +173,5 @@ shinyServer( function(input, output, session) {
       }
     print(plot1)  
     }, height = 800, width = 800 )
-
+  })
 })

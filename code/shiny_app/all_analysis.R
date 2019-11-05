@@ -888,11 +888,12 @@ sim.data1 <- function(nsims = 1e2,
     
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
     inflation_sim <-        rnorm(nsims, inflation_var2, inflation_var2_sd)
-browser()
+#browser()
     wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
     wage_ww_sim <-          rnorm(nsims, wage_ww_var2, wage_ww_var2_sd)
     profits_se_sim <-       rnorm(nsims, profits_se_var2, profits_se_var2_sd)
     hours_se_cond_sim <-    rnorm(nsims, hours_se_cond_var2, hours_se_cond_var2_sd)
+#browser()
     hours_ag_sim <-         rnorm(nsims, hours_ag_var2, hours_ag_var2_sd)
     hours_ww_sim <-         rnorm(nsims, hours_ww_var2, hours_ww_var2_sd)
     hours_se_sim <-         rnorm(nsims, hours_se_var2, hours_se_var2_sd)
@@ -1072,3 +1073,28 @@ browser()
 }
 
 
+
+policy_estimates <- c("baird1_sim",          
+                      "baird2_sim"         ,
+                      "baird3_sim"         ,
+                      "baird4_sim"         ,
+                      "klps4_1_sim"        ,
+                      "klps4_2_sim"        ,
+                      "ea1_sim"            ,
+                      "ea2_sim"            ,
+                      "ea3_sim"            ,
+                      "cea_no_ext_ea_sim"  ,
+                      "rcea_no_ext_ea_sim" )
+
+policy_estimates_text <- c(
+  "Fiscal effects, 2016(W@W) B & C, no ext",
+  "Fiscal effects, 2016(W@W) B & C, yes ext",  
+  "Total effects, 2016(W@W) B & C, no ext",  
+  "Total effects, 2016(W@W) B & C, yes ext",  
+  "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext",   
+  "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
+  "Total effects, 2016(W@W) B & EA C, no ext",  
+  "Total effects, 2016(W@W) B & EA C, ext",  
+  "Total effects, 2019(KLPS4) B & EA C, no ext",
+  "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
+  "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
