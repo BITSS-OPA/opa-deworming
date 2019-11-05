@@ -31,16 +31,13 @@ shinyUI( fluidPage(
                actionButton("run", label = "Run Simulation"),
                withMathJax(),
                selectInput("policy_est", "Policy Estimate:",
-                           choices=policy_estimates_text, selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
+                           choices=policy_estimates_text, selected = "Fiscal effects, 2016(W@W) B & C, yes ext")
                ),
                fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 800px; position:relative;",
                tabsetPanel(
                   tabPanel("Data", 
-                           uiOutput("data_in") ,
-                           sliderInput("param8", label = "H_ag = ",
-                                       min = hours_ag_so / 2, max = 2 * hours_ag_so, value = hours_ag_so),
-                           sliderInput("param8_1", label = "SD = ",
-                                       min = 0.000001* hours_ag_so, max = 1 * hours_ag_so, value = 0.1 * hours_ag_so) ),
+                           uiOutput("data_in") 
+                           ),
                # sliderInput("param3_1", label = "SD = ",
                #             min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so),
                # sliderInput("param4", label = "Agri Wages (\\( w_{ag} \\))",
@@ -61,40 +58,9 @@ shinyUI( fluidPage(
                #             min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so)
                # ),
                   tabPanel("Research",
-               sliderInput("param9", label = "H_ww = ",
-                           min = hours_ww_so / 2, max = 2 * hours_ww_so, value = hours_ww_so),
-               sliderInput("param9_1", label = "SD = ",
-                           min = 0.000001* hours_ww_so, max = 1 * hours_ww_so, value = 0.1 * hours_ww_so),
-               sliderInput("param10", label = "H_se = ",
-                           min = hours_se_so / 2, max = 2 * hours_se_so, value = hours_se_so),
-               sliderInput("param10_1", label = "SD = ",
-                           min = 0.000001* hours_se_so, max = 1 * hours_se_so, value = 0.1 * hours_se_so),
-               sliderInput("param11", label = "Exchange rate = ",
-                           min = ex_rate_so / 2, max = 2 * ex_rate_so, value = ex_rate_so),
-               sliderInput("param11_1", label = "SD = ",
-                           min = 0.000001* ex_rate_so, max = 1 * ex_rate_so, value = 0.1 * ex_rate_so),
-               sliderInput("param12", label = "growth = ",
-                           min = growth_rate_so / 2, max = 2 * growth_rate_so, value = growth_rate_so),
-               sliderInput("param12_1", label = "SD = ",
-                           min = 0.000001* growth_rate_so, max = 1 * growth_rate_so, value = 0.1 * growth_rate_so),
-               sliderInput("param13", label = "Coverage (R) = ",
-                           min = coverage_so / 2, max = 2 * coverage_so, value = coverage_so),
-               sliderInput("param13_1", label = "SD = ",
-                           min = 0.000001* coverage_so, max = 1 * coverage_so, value = 0.1 * coverage_so),
-               sliderInput("param15", label = "Tax rate = ",
-                           min = tax_so / 2, max = 2 * tax_so, value = tax_so, step = 0.001),
-               sliderInput("param15_1", label = "SD = ",
-                           min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so),
-               sliderInput("param16", label = "Costs ot T (local $) = ",
-                           min = unit_cost_local_so / 2, max = 2 * unit_cost_local_so,
-                           value = unit_cost_local_so, pre = "$", animate = 
-                             animationOptions(interval = 3000, loop = TRUE)),
-               sliderInput("param16_1", label = "SD = ",
-                           min = 0.000001* unit_cost_local_so, max = 1 * unit_cost_local_so, value = 0.1 * unit_cost_local_so),
-               sliderInput("param17", label = "Years of T = ",
-                           min = years_of_treat_so / 2, max = 2 * years_of_treat_so, value = years_of_treat_so),
-               sliderInput("param17_1", label = "SD = ",
-                           min = 0.000001* years_of_treat_so, max = 1 * years_of_treat_so, value = 0.1 * years_of_treat_so),
+               
+                           
+               
 
                br("Research"),
                numericInput("param18_1", label = h3("Lambda 1_m = "), value = lambda1_so[1]),
