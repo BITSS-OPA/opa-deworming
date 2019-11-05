@@ -72,6 +72,7 @@ print_code <- TRUE
     consump_2017usdppp_so <- c(0,          # avg treatment effect from klps2 not collected (treat as if zero)
                                1010.9890,  # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w 
                                201.0693)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
+    wtp_so <- 50*12                        # willingness to pay for deworming medication (2018 KSH)- Health-WTP_2018-01-19.pdf
     
   # Guess work   
     periods_so    <- 50                    #Total number of periods to forecast wages
@@ -120,11 +121,13 @@ print_code <- TRUE
       
     unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
     teach_sal_ppp_so <- teach_sal_so/ex_rate_2017_ppp_so
+    wtp_so           <- wtp_so/ex_rate_2018_ppp_so
     
   # Adjust for inflation: convert all costs to 2017 USD
     
     unit_cost_2017usdppp_so <- unit_cost_ppp_so*cpi_2017_so/cpi_2018_so
     teach_sal_2017usdppp_so <- teach_sal_ppp_so*cpi_2017_so/cpi_2017_so # redundant, but for the sake of consistency
+    wtp_2017usdppp_so       <- wtp_so*cpi_2017_so/cpi_2018_so
 
 #############
 ##### Notes:
@@ -141,11 +144,14 @@ The target parameter to reproduce corresponds to the NPV of deworming, and can b
 
 # The model
 
+
+The total Net Present Value is given by the sum of long-term net benefits of deworming, given by labor market gains, and short-term net benefits of deworming, given by direct health effects.
+
 \begin{equation}
-NPV =  \left[
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
+NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\right]}_{\text{long-term NPV (labor market gains)}} + 
+\underbrace{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y}_{\text{short-term NPV (direct health effects)}}
 \label{eq:1}
 \tag{1}
 \end{equation}
@@ -183,7 +189,7 @@ npv_mo_f <- function(interest_r_var = interest_in,
 }
 ```
 
-The components of the model are discussed below.
+components of the model are discussed below.
 
 ## $\tau$
 
@@ -191,7 +197,7 @@ The components of the model are discussed below.
 NPV =  \left[
 \blue{\tau} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
 \end{equation}
 
 The annual tax rate $\tau$ is estimated to be `r 100*round(tax_so,3)`%. It is calcuated as the product of "government expenditures" and "percent non-donor financed" according to `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Assumps&Panel A Calcs`.
@@ -203,7 +209,7 @@ The annual tax rate $\tau$ is estimated to be `r 100*round(tax_so,3)`%. It is ca
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
 \end{equation}
 
 The real interest rate $r$ is obtained from the interest rate on goverment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
@@ -228,7 +234,7 @@ The resulting value is a $r$ = `r paste(round(100*interest_in,2), "%", sep="")`
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta W_t} -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
 \end{equation}
 
 $\Delta W_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
@@ -319,7 +325,7 @@ delta_consumption_p_in = delta_welfare_p_in_f(welfarek1_var = consump_2017usdppp
 NPV =  \left[
 \tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 \blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta \overline{E}_t(S1,S2)}
-\right] - \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y
 \end{equation}
 
 $K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
@@ -354,14 +360,18 @@ invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
 
 **NOTE** need to understand better the date of each component (of the model, not only this section).
 
-## $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
+## Short term NPV: direct health effects
 
 \begin{equation}
 NPV =  \left[
 \tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] - \blue{ \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) }
+\right] + \blue{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]*y}
 \end{equation}
+
+### $w$
+
+The willingness to pay for deworming medication for one's self or one's child $w$ was estimated by Miguel, Lo, and Smith in 2018. A survey that randomized the order of conditions, severity, price, and first asking about the child or the adult revealed a downward sloping demand curve. The vast majority of respondents (>80\%) are willing to pay KSH 50 per month, or KSH 600 per year. Adjusting for PPP dollars (and inflation), we get a willingness to pay of $`r format(round(wtp_2017usdppp_so,2), nsmall = 2)` per year, which we use as a conservative estimate for $w$. 
 
 ### $S_{1}Q(S_{1}) = 0$
 There is no subsidy for deworming under the status quo.   
@@ -377,6 +387,9 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 
 ### $Q_{2}$
 The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of `r q_full_so`.
+
+### $y$
+The average number of years over which the treatment is administered $y$ is `r years_of_treat_so`.
 
 ```{r costs}
 # - inputs: 
