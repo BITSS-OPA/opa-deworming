@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "05 November, 2019"
+date: "06 November, 2019"
 output:
   html_document:
     code_folding: hide
@@ -129,16 +129,17 @@ options(tinytex.verbose = TRUE)
  
 The target parameter to reproduce corresponds to the NPV of deworming, and can be found in the file `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Calcs-Table 5`, cell `C51`. CHECK IF THIS IS CORRECT.
 
+** NOTE: THOUGH THE MODEL IN THE TEXT SHOWS THAT COSTS HAVE BEEN DISCOUNTED OVER TIME, THIS IS NOT YET REFLECTED IN THE FUNCTIONS IN THE CODE! **
+
 # The model
 
-
-The total Net Present Value is given by the sum of long-term net benefits of deworming, given by labor market gains, and short-term net benefits of deworming, given by direct health effects.
+Since we expect the predominant benefits of deworming to surface in the longrun, viz-a-vis net labor market gains, the total Net Present Value is given by the difference between net long-term gains and the cost of deworming.
 
 \begin{equation}
 NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right]}_{\text{long-term NPV (labor market gains)}} + 
-\underbrace{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]}_{\text{short-term NPV (direct health effects)}}
+\right]}_{\text{net labor market gains}} - 
+\underbrace{\left[\sum_{t=0}^{2} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{cost of deworming medication}}
 \label{eq:1}
 \tag{1}
 \end{equation}
@@ -159,46 +160,40 @@ npv_mo_f <- function(interest_r_var = interest_in,
                 s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
                 periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
   ns <- c(n_male_var, n_female_var)
-  index_t <- 0:periods_var
+  l_index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
   delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
 ############################################################################### 
   benef <- matrix(NA, 51,2)
   for (i in 1:2){
-  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * delta_welfare_var
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * delta_welfare_var
   }
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
-            apply( ( 1 / (1 + interest_r_var) )^index_t *
-                     delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
+          apply( ( 1 / (1 + interest_r_var) )^l_index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
+          (s2_var * q2_var  - s1_var * q1_var)
 ############################################################################### 
   return(res1) 
 }
 ```
 
-components of the model are discussed below.
+Net long-term gains are given by the difference between long term benefits (labor market gains) and long term costs (education). The compenents of each term of the model: long term benefits, long term costs, and short term costs are discussed below.
 
-## $\tau$
+## Long-term benefits: labor market gains
+
+Labor market gains are given by the tax on the discounted sum of welfare gains from deworming.
 
 \begin{equation}
-NPV =  \left[
-\blue{\tau} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
-K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t
 \end{equation}
+
+### Tax ($\tau$)
 
 The annual tax rate $\tau$ is estimated to be 16.6%. It is calcuated as the product of "government expenditures" and "percent non-donor financed" according to `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Assumps&Panel A Calcs`.
 **NOTE** I don't understand how this is calculated.
 
-## $r$
-
-\begin{equation}
-NPV =  \left[
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta W_t -
-K \sum_{t=0}^{50} \left( \frac{1}{1 + \blue{r}}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
-\end{equation}
+### Discount factor ($r$)
 
 The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.09) minus the inflation rate (0.04).
 
@@ -217,20 +212,13 @@ invisible( list2env(interest_in_f(),.GlobalEnv) )
 
 The resulting value is a $r$ = 5%
 
-## $\Delta W_t$
-
-\begin{equation}
-NPV =  \left[
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta W_t} -
-K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
-\end{equation}
+### Welfare gains ($\Delta W_t$)
 
 $\Delta W_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
 We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years
 
-### Treatment effect timeframe
+#### Treatment effect timeframe
 
 If we assume welfare gains persist for 5 years after KLPS4 (matching the time period between previous rounds), then disappear, we have
 
@@ -282,7 +270,7 @@ delta_welfare_p_in <- 1*(10 <= t_var & t_var < 15) * welfarek1_var +
 
 Note that both expressions assume that there are no additional earnings gains for the treatment group for the first 10 years post-intervention. This model also disregards externality effects. **Note: Change this when added willness to pay to model**
 
-### Measures of welfare
+#### Measures of welfare
 
 We consider two measures of welfare: earnings and consumption. Using earnings gains to measure welfare, we substitute each $\alpha$ term with the average treatment effect on earnings in each round of data collection: 87, 83, 85 dollars per person per year.
 
@@ -310,14 +298,15 @@ delta_consumption_p_in = delta_welfare_p_in_f(welfarek1_var = consump_2017usdppp
                                               welfarek3_var = consump_2017usdppp_so[3])
 ```
 
-## $K$ and $\Delta \overline{E}_t(S1,S2)$ 
+## Long-term costs: education
+
+We account for the cost of education since deworming medication increases school attendance and may put pressure on schooling institutions. Education costs are given by the discounted sum of the additional cost of education per child as a result of deworming. 
 
 \begin{equation}
-NPV =  \left[
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
-\blue{K} \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \blue{\Delta \overline{E}_t(S1,S2)}
-\right] + \Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 \end{equation}
+
+### Cost per student ($K$)
 
 $K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
 
@@ -328,6 +317,8 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 Teacher salary is estimated by the average salary of teachers in Kenya ($1.2055\times 10^{4}). Each of these have been adjusted for inflation. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per school is (45).
 
 **NOTE** I confirmed average teacher salary and average number of students based on a google search, but am unable to find info on teacher benefits.
+
+### Additional years of education ($\Delta \overline{E}_t(S1,S2)$)
 
 For $\Delta \overline{E}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
 
@@ -351,18 +342,7 @@ invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
 
 **NOTE** need to understand better the date of each component (of the model, not only this section).
 
-## Short term NPV: direct health effects
-
-\begin{equation}
-NPV =  \left[
-\tau \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} \Delta W_t -
-K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right] + \blue{\Bigg[w - \big[ S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\Bigg]}
-\end{equation}
-
-### $w$
-
-The willingness to pay for deworming medication for one's self or one's child $w$ was estimated by Miguel, Lo, and Smith in 2018. A survey that randomized the order of conditions, severity, price, and first asking about the child or the adult revealed a downward sloping demand curve. The vast majority of respondents (>80\%) are willing to pay KSH 50 per month, or KSH 600 per year. Adjusting for PPP dollars (and inflation), we get a willingness to pay of $11.70 per year, which we use as a conservative estimate for $w$. 
+## Short-term costs: deworming medication
 
 ### $S_{1}Q(S_{1}) = 0$
 There is no subsidy for deworming under the status quo.   
@@ -390,7 +370,7 @@ costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
                     years_of_treat_var = years_of_treat_so, 
                     q_full_var = q_full_so){
 ############################################################################### 
-    s2_in <- (unit_cost_var)
+    s2_in <- (unit_cost_var)*years_of_treat_var
     q2_in <- q_full_var
 ############################################################################### 
     return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
@@ -398,7 +378,7 @@ costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
 invisible( list2env(costs_f(),.GlobalEnv) )
 ```
 
-# Results
+# Main results
 
 Panel A (for both earnings and consumption) gives the minimum average gains required to achieve a postive Net Present Value under varying assumptions of the treatment timeframe and the internal rate of return. Panel B gives the social and government internal rates of return for each assumption of the treatment effect timeframe given the observed gains. Panel C gives the social and government Net Present Values for each interest rate and each treatment timeframe given the observed gains.
 
@@ -426,17 +406,17 @@ npv_cwelfare_p_mo_f <- function(interest_r_var = interest_in,
                 s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
                 periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
   ns <- c(n_male_var, n_female_var)
-  index_t <- 0:periods_var
+  l_index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
   delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
 ############################################################################### 
   benef <- matrix(NA, 51,2)
   for (i in 1:2){
-  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * (1*(10 <= index_t & index_t < 15) * delta_welfare_var + 1*(15 <= index_t & index_t < 20) * delta_welfare_var +1*(20 <= index_t) * delta_welfare_var)
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * (1*(10 <= l_index_t & l_index_t < 15) * delta_welfare_var + 1*(15 <= l_index_t & l_index_t < 20) * delta_welfare_var +1*(20 <= l_index_t) * delta_welfare_var)
   }
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
-            apply( ( 1 / (1 + interest_r_var) )^index_t *
+            apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
           ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
 ############################################################################### 
@@ -455,17 +435,17 @@ npv_cwelfare_d_mo_f <- function(interest_r_var = interest_in,
                 s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
                 periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
   ns <- c(n_male_var, n_female_var)
-  index_t <- 0:periods_var
+  l_index_t <- 0:periods_var
   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
   delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
 ############################################################################### 
   benef <- matrix(NA, 51,2)
   for (i in 1:2){
-  benef[,i] <- ( 1 / (1 + interest_r_var) )^index_t * (1*(10 <= index_t & index_t < 15) * delta_welfare_var + 1*(15 <= index_t & index_t < 20) * delta_welfare_var + 1*(20 <= index_t & index_t < 25) * delta_welfare_var)
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * (1*(10 <= l_index_t & l_index_t < 15) * delta_welfare_var + 1*(15 <= l_index_t & l_index_t < 20) * delta_welfare_var + 1*(20 <= l_index_t & l_index_t < 25) * delta_welfare_var)
   }
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
-            apply( ( 1 / (1 + interest_r_var) )^index_t *
+            apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
           ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
 ############################################################################### 
@@ -483,24 +463,24 @@ The treatment effect on earnings observed 10, 15, and 20 years from the interven
 # PANEL A
 #########
 
-l1_social_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=100))$root
-l1_social_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=100))$root
-l1_social_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=100))$root
-l1_social_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=100))$root
+l1_social_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_social_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+l1_social_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_social_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
 
-l1_tax_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=100))$root
-l1_tax_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=100))$root
-l1_tax_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=100))$root
-l1_tax_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=100))$root
+l1_tax_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=10000000, positive = T))$root
+l1_tax_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=10000000, positive = T))$root
+l1_tax_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=10000000, positive = T))$root
+l1_tax_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=10000000, positive = T))$root
 
 #########
 # PANEL B
 #########
 
-irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_p_in), .1, maxiter=100))$root
-irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_in), .1, maxiter=100))$root
-irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_p_in), .1, maxiter=100))$root
-irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_in), .1, maxiter=100))$root
+irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_p_in), .1, maxiter=1000000, positive = T))$root
+irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_in), .1, maxiter=10000000, positive = T))$root
+irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_p_in), .1, maxiter=1000000, positive = T))$root
+irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_in), .1, maxiter=1000000, positive = T))$root
 
 #########
 # PANEL C
@@ -524,10 +504,10 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                               |                                                |10%                                     |**8.02**      |
-|                                 |0                               |                                                |5%                    |**4.84**      |
-|                                 |                                |0                                               |10%                                     |**48.41**         |
-|                                 |                                |0                                               |5%                    |**29.18**         |
+|                                 |0                               |                                                |10%                                     |**8.68**      |
+|                                 |0                               |                                                |5%                    |**5.15**      |
+|                                 |                                |0                                               |10%                                     |**52.37**         |
+|                                 |                                |0                                               |5%                    |**31.08**         |
 | Panel B                                                                                                                                                               
 |                                 |0                               |                                                |**41.5%**    |*                                         |
 |                                 |                                | 0                                              |**16.3%**       |*                                         |
@@ -540,10 +520,10 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                                 |                                                |10%                                     |**6.23**  |
-|                                 |0                                 |                                                |5%                    |**2.9**  |
-|                                 |                                  |0                                               |10%                                     |**37.58**     |
-|                                 |                                  |0                                               |5%                    |**17.51**     |
+|                                 |0                                 |                                                |10%                                     |**6.74**  |
+|                                 |0                                 |                                                |5%                    |**3.09**  |
+|                                 |                                  |0                                               |10%                                     |**40.65**     |
+|                                 |                                  |0                                               |5%                    |**18.66**     |
 | Panel B                                                                                                                                                               
 |                                 |0                                 |                                                |**41.6%**|*                                         |
 |                                 |                                  | 0                                              |**17.4%**   |*                                         |
@@ -561,24 +541,24 @@ The treatment effect on consumption observed 15 and 20 years from the interventi
 # PANEL A
 #########
 
-l1_social_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=100))$root
-l1_social_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=100))$root
-l1_social_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=100))$root
-l1_social_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=100))$root
+l1_social_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_social_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+l1_social_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_social_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
 
-l1_tax_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=100))$root
-l1_tax_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=100))$root
-l1_tax_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=100))$root
-l1_tax_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=100))$root
+l1_tax_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_tax_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+l1_tax_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_tax_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
 
 #########
 # PANEL B
 #########
 
-irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_consumption_p_in), .1, maxiter=100))$root
-irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_consumption_in), .1, maxiter=100))$root
-irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_consumption_p_in), .1, maxiter=100))$root
-irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_consumption_in), .1, maxiter=100))$root
+irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_consumption_p_in), .1, maxiter=1000000, positive = T))$root
+irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_consumption_in), .1, maxiter=1000000, positive = T))$root
+irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_consumption_p_in), .1, maxiter=1000000, positive = T))$root
+irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_consumption_in), .1, maxiter=1000000, positive = T))$root
 
 #########
 # PANEL C
@@ -602,10 +582,10 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   intere
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                               |                                                |10%                                     |**8.02**      |
-|                                 |0                               |                                                |5%                    |**4.84**      |
-|                                 |                                |0                                               |10%                                     |**48.41**         |
-|                                 |                                |0                                               |5%                    |**29.18**         |
+|                                 |0                               |                                                |10%                                     |**8.68**      |
+|                                 |0                               |                                                |5%                    |**5.15**      |
+|                                 |                                |0                                               |10%                                     |**52.37**         |
+|                                 |                                |0                                               |5%                    |**31.08**         |
 | Panel B                                                                                                                                                               
 |                                 |0                               |                                                |**47.9%**    |*                                         |
 |                                 |                                | 0                                              |**28.6%**       |*                                         |
@@ -618,10 +598,10 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   intere
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                                 |                                                |10%                                     |**6.23**  |
-|                                 |0                                 |                                                |5%                    |**2.9**  |
-|                                 |                                  |0                                               |10%                                     |**37.58**     |
-|                                 |                                  |0                                               |5%                    |**17.51**     |
+|                                 |0                                 |                                                |10%                                     |**6.74**  |
+|                                 |0                                 |                                                |5%                    |**3.09**  |
+|                                 |                                  |0                                               |10%                                     |**40.65**     |
+|                                 |                                  |0                                               |5%                    |**18.66**     |
 | Panel B                                                                                                                                                               
 |                                 |0                                 |                                                |**48%**|*                                         |
 |                                 |                                  | 0                                              |**28.8%**   |*                                         |
@@ -638,16 +618,270 @@ The earnings gains in panel A and the internal rates of return in panel B are ca
 
 The values in panel A are robust to all `start` values trued thus far (between 0 and 4). The values in panel B are robust to `start` values between 0 and .5; with a `start` value of .6, the internal rates of return for the tax NPV become UNSTABLE , and for a `start` value of .8 the internal rates of return for the social NPV also become hugely negative. **NOTE** update this.
 
+# Robustness
+
+We modify the NPV equation to account for willingness to pay for deworming medication. Given this less conservative measure of NPV, the total Net Present Value is can be interpreted as the sum of long-term net benefits of deworming, given by labor market gains, and short-term net benefits of deworming, given by direct health effects.
+
+\begin{equation}
+NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
+K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
+\right]}_{\text{long-term NPV (labor market gains)}} + 
+\underbrace{\left[\sum_{t=0}^{2} \left( \frac{1}{1 + r}\right)^{t}w_t - \sum_{t=0}^{2} \left( \frac{1}{1 + r}\right)^{t}\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{short-term NPV (direct health effects)}}
+\end{equation}
 
 
+```r
+# add suffix _var to args 
+# - inputs: tax_rev_init_mo, top_tax_base_in  
+# - outputs: total_rev_pe 
+npv_wtp_mo_f <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                delta_welfare_var,
+                tax_var = tax_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                wtp_var = wtp_2017usdppp_so,
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+  ns <- c(n_male_var, n_female_var)
+  l_index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+############################################################################### 
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * delta_welfare_var
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+          apply( ( 1 / (1 + interest_r_var) )^l_index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )) + 
+          (wtp_var-(s2_var * q2_var  - s1_var * q1_var))
+############################################################################### 
+  return(res1) 
+}
+```
+
+## Willingness to pay ($w_t$)
+
+The willingness to pay for deworming medication for one's self or one's child $w$ was estimated by Miguel, Lo, and Smith in 2018. A survey that randomized the order of conditions, severity, price, and first asking about the child or the adult revealed a downward sloping demand curve. The vast majority of respondents (>80\%) are willing to pay KSH 50 per month, or KSH 600 per year. Adjusting for PPP dollars (and inflation), we get a willingness to pay of $11.70 per year, which we use as a conservative estimate for $w$.
 
 
+# Additional results
 
 
+```r
+npv_cwelfarewtp_p_mo_f <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                delta_welfare_var,
+                lambda1_male_var = lambda1_2017usdppp_so[1],
+                lambda1_female_var = lambda1_2017usdppp_so[2], 
+                tax_var = tax_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                wtp_var = wtp_2017usdppp_so,
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+  ns <- c(n_male_var, n_female_var)
+  l_index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+############################################################################### 
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * (1*(10 <= l_index_t & l_index_t < 15) * delta_welfare_var + 1*(15 <= l_index_t & l_index_t < 20) * delta_welfare_var +1*(20 <= l_index_t) * delta_welfare_var)
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^l_index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )
+          ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
+############################################################################### 
+  return(res1) 
+}
+
+npv_cwelfarewtp_d_mo_f <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                delta_welfare_var,
+                lambda1_male_var = lambda1_2017usdppp_so[1],
+                lambda1_female_var = lambda1_2017usdppp_so[2], 
+                tax_var = tax_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                wtp_var = wtp_2017usdppp_so,
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+  ns <- c(n_male_var, n_female_var)
+  l_index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+############################################################################### 
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * (1*(10 <= l_index_t & l_index_t < 15) * delta_welfare_var + 1*(15 <= l_index_t & l_index_t < 20) * delta_welfare_var + 1*(20 <= l_index_t & l_index_t < 25) * delta_welfare_var)
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^l_index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )) +
+                     (wtp_var-(s2_var * q2_var  - s1_var * q1_var))
+############################################################################### 
+  return(res1) 
+}
+```
+
+## Earnings
 
 
+```r
+#########
+# PANEL A
+#########
+
+l1_social_persist_int10 <- (multiroot(function(x) npv_cwelfarewtp_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_social_persist_int05 <- (multiroot(function(x) npv_cwelfarewtp_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+l1_social_die_int10     <- (multiroot(function(x) npv_cwelfarewtp_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_social_die_int05     <- (multiroot(function(x) npv_cwelfarewtp_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+
+l1_tax_persist_int10 <- (multiroot(function(x) npv_cwelfarewtp_p_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_tax_persist_int05 <- (multiroot(function(x) npv_cwelfarewtp_p_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+l1_tax_die_int10     <- (multiroot(function(x) npv_cwelfarewtp_d_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_tax_die_int05     <- (multiroot(function(x) npv_cwelfarewtp_d_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+
+#########
+# PANEL B
+#########
+
+# irr_social_persist <- (multiroot(function(x) npv_wtp_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_p_in), -2, maxiter=1000000, positive = T))$root
+# irr_social_die     <- (multiroot(function(x) npv_wtp_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_in), -2, maxiter=1000000, positive = T))$root
+# irr_tax_persist    <- (multiroot(function(x) npv_wtp_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_p_in), -2, maxiter=1000000, positive = T))$root
+# irr_tax_die        <- (multiroot(function(x) npv_wtp_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_in), -2, maxiter=1000000, positive = T))$root
+
+#########
+# PANEL C
+#########
+
+# Net Present Value (2017 USD PPP)
+npv_int05_persist <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_p_in, tax_var = 1)
+npv_int05_die     <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_in, tax_var = 1)
+npv_int10_persist <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = 0.10, tax_var = 1)
+npv_int10_die     <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = 0.10, tax_var = 1)
+
+# Net Present Value of tax revenue (2017 USD PPP)
+tax_int05_persist <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = .05)
+tax_int05_die     <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = .05)
+tax_int10_persist <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = 0.10)
+tax_int10_die     <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = 0.10)
+```
+
+### Treatment effect timeframe: 25 years
+
+|Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
+|--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
+| Panel A                                                                                                                                                                                             
+|                                 |0                               |                                                |10%                                     |**4.4**      |
+|                                 |0                               |                                                |5%                    |**3.09**      |
+|                                 |                                |0                                               |10%                                     |**26.53**         |
+|                                 |                                |0                                               |5%                    |**18.63**         |
+| Panel B                                                                                                                                                               
+|                                 |0                               |                                                |**47.9**     |*                                         |
+|                                 |                                | 0                                              |**28.6**        |*                                         |
+| Panel C
+| 10%                             |**261**  |**31**                  |                                        |*                                         |
+|5%             |**549**  |**74**                  |                                        |*                                         |
+
+### Treatment effect timeframe: 50 years
+
+|Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
+|--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
+| Panel A                                                                                                                                                                                             
+|                                 |0                                 |                                                |10%                                     |**6.74**  |
+|                                 |0                                 |                                                |5%                    |**3.09**  |
+|                                 |                                  |0                                               |10%                                     |**40.65**     |
+|                                 |                                  |0                                               |5%                    |**18.66**     |
+| Panel B                                                                                                                                                               
+|                                 |0                                 |                                                |**48%**|*                                         |
+|                                 |                                  | 0                                              |**28.8%**   |*                                         |
+| Panel C
+| 10%                             |**340**|**45**              |                                        |*                                         |
+|5%             |**930**|**137**              |                                        |*                                         |
+
+## Consumption
 
 
+```r
+#########
+# PANEL A
+#########
 
+l1_social_persist_int10 <- (multiroot(function(x) npv_cwelfarewtp_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_social_persist_int05 <- (multiroot(function(x) npv_cwelfarewtp_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+l1_social_die_int10     <- (multiroot(function(x) npv_cwelfarewtp_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_social_die_int05     <- (multiroot(function(x) npv_cwelfarewtp_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
 
+l1_tax_persist_int10 <- (multiroot(function(x) npv_cwelfarewtp_p_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_tax_persist_int05 <- (multiroot(function(x) npv_cwelfarewtp_p_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+l1_tax_die_int10     <- (multiroot(function(x) npv_cwelfarewtp_d_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+l1_tax_die_int05     <- (multiroot(function(x) npv_cwelfarewtp_d_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+
+#########
+# PANEL B
+#########
+
+# irr_social_persist <- (multiroot(function(x) npv_wtp_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_consumption_p_in), .001, maxiter=1000000, positive = T))$root
+# irr_social_die     <- (multiroot(function(x) npv_wtp_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_consumption_in), .001, maxiter=1000000, positive = T))$root
+# irr_tax_persist    <- (multiroot(function(x) npv_wtp_mo_f(interest_r_var = x, delta_welfare_var = delta_consumption_p_in), .001, maxiter=1000000, positive = T))$root
+# irr_tax_die        <- (multiroot(function(x) npv_wtp_mo_f(interest_r_var = x, delta_welfare_var = delta_consumption_in), .001, maxiter=1000000, positive = T))$root
+
+#########
+# PANEL C
+#########
+
+# Net Present Value (2017 USD PPP)
+npv_int05_persist <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_p_in, interest_r_var = 0.05, tax_var = 1)
+npv_int05_die     <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.05, tax_var = 1)
+npv_int10_persist <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_p_in, interest_r_var = 0.10, tax_var = 1)
+npv_int10_die     <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.10, tax_var = 1)
+
+# Net Present Value of tax revenue (2017 USD PPP)
+tax_int05_persist <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_p_in, interest_r_var = 0.05)
+tax_int05_die     <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.05)
+tax_int10_persist <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_p_in, interest_r_var = 0.10)
+tax_int10_die     <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.10)
+```
+
+### Treatment effect timeframe: 25 years
+
+|Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
+|--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
+| Panel A                                                                                                                                                                                             
+|                                 |0                               |                                                |10%                                     |**4.4**      |
+|                                 |0                               |                                                |5%                    |**3.09**      |
+|                                 |                                |0                                               |10%                                     |**26.53**         |
+|                                 |                                |0                                               |5%                    |**18.63**         |
+| Panel B                                                                                                                                                               
+|                                 |0                               |                                                |**47.9%**    |*                                         |
+|                                 |                                | 0                                              |**28.6%**       |*                                         |
+| Panel C
+| 10%                             |**1120**  |**174**                  |                                        |*                                         |
+|5%             |**2535**  |**403**                  |                                        |*                                         |
+
+### Treatment effect timeframe: 50 years
+
+|Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
+|--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
+| Panel A                                                                                                                                                                                             
+|                                 |0                                 |                                                |10%                                     |**6.74**  |
+|                                 |0                                 |                                                |5%                    |**3.09**  |
+|                                 |                                  |0                                               |10%                                     |**40.65**     |
+|                                 |                                  |0                                               |5%                    |**18.66**     |
+| Panel B                                                                                                                                                               
+|                                 |0                                 |                                                |**48%**|*                                         |
+|                                 |                                  | 0                                              |**28.8%**   |*                                         |
+| Panel C
+| 10%                             |**1307**|**205**              |                                        |*                                         |
+|5%             |**3431**|**551**              |                                        |*                                         |
 
