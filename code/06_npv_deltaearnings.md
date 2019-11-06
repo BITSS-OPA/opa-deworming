@@ -193,9 +193,9 @@ Labor market gains are given by the tax on the discounted sum of welfare gains f
 The annual tax rate $\tau$ is estimated to be 16.6%. It is calcuated as the product of "government expenditures" and "percent non-donor financed" according to `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Assumps&Panel A Calcs`.
 **NOTE** I don't understand how this is calculated.
 
-### Discount factor ($r$)
+### Discount rate ($r$)
 
-The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.09) minus the inflation rate (0.04).
+The discount rate $r$ is set to the real interest rate [**rationale?**], which is obtained from the interest rate on goverment bonds (0.09) minus the inflation rate (0.04).
 
 
 ```r
@@ -358,9 +358,6 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 
 ### $Q_{2}$
 The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of 0.75.
-
-### $y$
-The average number of years over which the treatment is administered $y$ is 2.41.
 
 
 ```r
