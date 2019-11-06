@@ -207,7 +207,7 @@ shinyServer( function(input, output, session) {
     n_output2 <- 20
     withMathJax(
       if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        lapply( 1:14, function(x) output2[[x]] )
       } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
         lapply( 1:n_output2, function(x) output2[[x]] )
       } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
@@ -300,12 +300,10 @@ shinyServer( function(input, output, session) {
     
   })  
   
-  
   outputOptions(output, "gw_in", suspendWhenHidden = FALSE)
   outputOptions(output, "research_in", suspendWhenHidden = FALSE)
   
   observeEvent(input$run, {
-    
 
   ################
   ###### Results/Viz
