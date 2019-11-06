@@ -184,7 +184,7 @@ npv_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
           apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
-          (s2_var * q2_var  - s1_var * q1_var)
+          sum( ( 1 / (1 + interest_r_var) )^(1:2) * rep((s2_var * q2_var  - s1_var * q1_var), 2) )
 ############################################################################### 
   return(res1) 
 }
