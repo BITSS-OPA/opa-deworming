@@ -81,7 +81,6 @@ shinyServer( function(input, output, session) {
                                min = 0.001, max = 0.2, value = gov_bonds_so)
     output [[2]] <- sliderInput("param2_1", label = "SD = ",
                                 min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so)
-    #HERE IS THE BUG
     output [[3]] <- sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
                                 min = 0.001, max = 0.2, value = inflation_so)
     output [[4]] <- sliderInput("param3_1", label = "SD = ",
@@ -140,32 +139,44 @@ shinyServer( function(input, output, session) {
                                  min = years_of_treat_so / 2, max = 2 * years_of_treat_so, value = years_of_treat_so)
     output [[30]] <- sliderInput("param17_1", label = "SD = ",
                                  min = 0.000001* years_of_treat_so, max = 1 * years_of_treat_so, value = 0.1 * years_of_treat_so, step = 0.0001)
+    output[[31]] <- sliderInput("param34", label = "Costs adjustments = ",
+                                 min = costs_par_so / 2, max = 20000 * costs_par_so, value = costs_par_so)
+    output[[32]] <- sliderInput("param34_1", label = "SD = ",
+                                 min = 0.0000001* costs_par_sd_so, max = 10 * costs_par_sd_so, value = costs_par_sd_so)
+    # output[[33]] <- sliderInput("param32", label = "Counts adjustment = ",
+    #                              min = counts_par_so / 2, max = 2 * counts_par_so, value = counts_par_so)
+    # output[[34]] <- sliderInput("param32_1", label = "SD = ",
+    #                              min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so) 
     
-    n_output <- 30
-    
+    n_output <- 32
+    exclude <- c(n_output + 1)
     withMathJax(
       if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        #exclude <- c(31,32,33,34)
+        observeEvent(input$policy_est,{ 
+          sapply(c("param32", "param32_1"), function(x) hide(id = x) ) 
+          } )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       } else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output, function(x) output[[x]] )
+        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
       }
     ) 
     
@@ -203,31 +214,43 @@ shinyServer( function(input, output, session) {
     output2[[18]] <- numericInput("param29_2_1", label = h3("sd = "), value = lambda1_new_sd_so[2])
     output2[[19]] <- numericInput("param29_3", label = h3("Lambda 1_3_new = "), value = lambda1_new_so[3])
     output2[[20]] <- numericInput("param29_3_1", label = h3("sd = "), value = lambda1_new_sd_so[3])
+    output2[[21]] <- sliderInput("param30", label = "Prevalence in original study = ",
+                                min = 0, max = 1, value = alpha_0_so)
+    output2[[22]] <- sliderInput("param30_1", label = "SD = ",
+                                 min = 0.0000001* alpha_r_so, max = 1 * alpha_0_so, value = 0.1 * alpha_0_so) 
     
-    n_output2 <- 20
+    n_output2 <- 22
+    no_exclude <- c(n_output2 + 1)
     withMathJax(
       if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
-        lapply( 1:14, function(x) output2[[x]] )
+        exclude <- c(5, 6, 15, 16, 17, 18, 19, 20)    # lambda2, edx, lambda_new
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        exclude <- c(15, 16, 17, 18, 19,20)                      # lambda_new
+        lapply( (1:n_output2), function(x) output2[[x]] )
+        #browser()
+        #hide(output2[[15]])
       } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        exclude <- c(5, 6, 15, 16, 17, 18, 19, 20)
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        exclude <- no_exclude
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        exclude <- c(1, 2, 3, 4, 5, 6)               # almbda1, lambda2, edx
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       } else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output2, function(x) output2[[x]] )
+        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
       }
     )
     
@@ -249,28 +272,17 @@ shinyServer( function(input, output, session) {
                 min = n_students_so / 2, max = 2 * n_students_so, value = n_students_so)
     output3[[8]] <- sliderInput("param24_1", label = "SD = ",
                 min = 0.0000001* n_students_so, max = 1 * n_students_so, value = 0.1 * n_students_so)
-    output3[[9]] <- sliderInput("param30", label = "Prevalence in original study = ",
-                min = 0, max = 1, value = alpha_0_so)
-    output3[[10]] <- sliderInput("param30_1", label = "SD = ",
-                min = 0.0000001* alpha_r_so, max = 1 * alpha_0_so, value = 0.1 * alpha_0_so) 
-    output3[[11]] <- sliderInput("param31", label = "Prevalence in new region = ",
+    output3[[9]] <- sliderInput("param31", label = "Prevalence in new region = ",
                 min = 0 / 2, max = 1, value = alpha_r_so)
-   output3[[12]] <-  sliderInput("param31_1", label = "SD = ",
+   output3[[10]] <-  sliderInput("param31_1", label = "SD = ",
                 min = 0.0000001* alpha_r_so, max = 1 * alpha_r_so, value = 0.1 * alpha_r_so) 
-    output3[[13]] <- sliderInput("param32", label = "Counts adjustment = ",
-                min = counts_par_so / 2, max = 2 * counts_par_so, value = counts_par_so)
-    output3[[14]] <- sliderInput("param32_1", label = "SD = ",
-                min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so) 
-    output3[[15]] <- sliderInput("param33", label = "Additional costs due to staff time = ",
+    output3[[11]] <- sliderInput("param33", label = "Additional costs due to staff time = ",
                 min = staff_time_so / 2, max = 2 * staff_time_so, value = staff_time_so)
-    output3[[16]] <- sliderInput("param33_1", label = "SD = ",
+    output3[[12]] <- sliderInput("param33_1", label = "SD = ",
                 min = 0.0000001* staff_time_so, max = 1 * staff_time_so, value = 0.1 * staff_time_so) 
-    output3[[17]] <- sliderInput("param34", label = "Costs adjustments = ",
-                min = costs_par_so / 2, max = 20000 * costs_par_so, value = costs_par_so)
-    output3[[18]] <- sliderInput("param34_1", label = "SD = ",
-                min = 0.0000001* costs_par_sd_so, max = 10 * costs_par_sd_so, value = costs_par_sd_so)
     
-    n_output3 <- 18
+    
+    n_output3 <- 12
     
     withMathJax(
       if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
@@ -299,6 +311,11 @@ shinyServer( function(input, output, session) {
     )
     
   })  
+  # 
+  # observeEvent(input$policy_est, {
+  # toggleElement(id = "param32", selector = NULL, condition = (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") )
+  # })
+  # 
   
   outputOptions(output, "gw_in", suspendWhenHidden = FALSE)
   outputOptions(output, "research_in", suspendWhenHidden = FALSE)
