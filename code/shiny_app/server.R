@@ -510,9 +510,24 @@ shinyServer( function(input, output, session) {
 
     output$eqns <- renderUI({
     
-      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") { 
+      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext" ) { 
         withMathJax(
-          helpText('You do not see me initially: $$e^{i \\pi} + 1 = 0$$') )
+          helpText('$$
+          \\begin{equation}
+          NPV =  \\underbrace{
+          \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t -
+                  K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
+                  \\right]
+                        }_{\\text{net labor market gains}} - 
+                  \\underbrace{
+                  \\left[\\sum_{t=0}^{2} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                  \\right]
+                  }_{\\text{cost of deworming medication}}
+        \\label{eq:1}
+        \\tag{1}
+        \\end{equation}
+        $$') 
+          )
       } else if (input$policy_est ==  "Fiscal effects, 2016(W@W) B & C, yes ext"){
         withMathJax(helpText("$$\\pi2$$"))
       } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext"){
@@ -536,16 +551,10 @@ shinyServer( function(input, output, session) {
       }
       
     })
-    
-
-    
-    
       
     output$plot1 <- renderPlot({      
     npv_sim_all <- reactive.data1()
-  
-    
-      
+
     total_time <- npv_sim_all$total_time
     position <- which( policy_estimates_text == input$policy_est)
     npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    

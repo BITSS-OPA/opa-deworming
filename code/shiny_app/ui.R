@@ -175,7 +175,7 @@ shinyUI( fluidPage(
     fluidRow(id = "output_id1", style = "max-width: 800px; max-height: 800px; position:relative;",
         plotOutput("plot1"),
     ),
-    fluidRow(id = "output_id2", style = "max-width: 800px; max-height: 300px; position:absolute;top: 780px;",
+    fluidRow(id = "output_id2", style = "max-width: 800px; max-height: 300px; position:absolute;top: 800px;",
      
              uiOutput('eqns', container = div)
         
