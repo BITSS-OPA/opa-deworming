@@ -340,6 +340,7 @@ chunk_cost1_inp <- function(){
         mutate(Country = tolower(Country))
 
       # values for last year with cost information
+
       df_costs_last <- df_costs_var %>%
         group_by(Country) %>%
         summarise("last_year" = max(Year)) %>%
@@ -774,6 +775,7 @@ chunk_new_earnings <- function(){
 }
 
 invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
+
 ```
 
 

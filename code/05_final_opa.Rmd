@@ -1,5 +1,5 @@
 ---
-title: "A Unifying Open Policy Analysis for Deworming"
+title: "Net Present Value (NPV) for Deworming"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -95,20 +95,12 @@ chunk_params <- function(){
     ##### Data  
     #############
     gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
-    inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
-    wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
-    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
-    profits_se_so <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
-    hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
-    hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
-    hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
-    hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
+    inflation_so <-   0.02         #Kenyan inflation rate - World Bank Development Indicators
+    coverage_so  <-   0.681333333  #(R) Fraction of treated primary school students within 6 km - from W@W - see note
     ex_rate_so <- 85               #Exchange Rate - Central Bank of Kenya
-    growth_rate_so <- 1.52/100     #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
-    coverage_so  <- 0.681333333    # (R) Fraction of treated primary school students within 6 km - from W@W - see note
-    tax_so <- 0.16575              #ADD INFO!
     unit_cost_local_so <- 43.66    #Deworm the World
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    tax_so <-         0.16575      #ADD INFO!
 
     # costs data
     df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
@@ -161,7 +153,6 @@ chunk_params <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from intial period until individual join the labor force
-    coef_exp_so <- c(0, 0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     n_students_so <- 45            #Average pupils per teacher	45
@@ -186,6 +177,7 @@ chunk_params <- function(){
 ###############################################################################  
 }
 invisible( list2env(chunk_params(),.GlobalEnv) )
+
 #############
 ##### Notes:
 #############
@@ -362,7 +354,6 @@ GW original analysis weights each country to take into account the number of tre
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
-
     costs1_costs_f <- function(df_costs_var = df_costs_so,
                                df_costs_cw_var = df_costs_cw_so,
                                staff_time_var = staff_time_so){
@@ -371,7 +362,6 @@ chunk_cost1_inp <- function(){
         right_join(df_costs_var, by = "Country/State") %>%
         select(-Country.y) %>% rename(Country = Country.x) %>%
         mutate(Country = tolower(Country))
-
       # values for last year with cost information
       df_costs_last <- df_costs_var %>%
         group_by(Country) %>%
@@ -410,7 +400,7 @@ chunk_cost1_inp <- function(){
       c_counts <- df_counts_last %>%
         group_by(Country, Year) %>%
         summarise("total" = sum(`# dewormed`))
-
+        
       return( list("counts_data" = c_counts) )
     }
 
@@ -807,6 +797,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 ```
 
 
+
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
 $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a simple mean:
@@ -1167,7 +1158,6 @@ one_run <-
   }
 
 invisible( list2env(one_run(),.GlobalEnv) )
-
 ```
 
 
@@ -1240,6 +1230,7 @@ kable(npv_table, caption = "Caption of the table") %>%
 
 
 ## Results for overall welfare (not only taxes)
+
 
 - **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** `r round(baird3,1)`    
 
