@@ -74,259 +74,473 @@ shinyServer( function(input, output, session) {
     } 
   )
   
+
+  
+  list_master <- c(
+    "param2",                                             #Data
+    "param2_1",
+    "param3",
+    "param3_1",
+    "param4",
+    "param4_1",
+    "param5",
+    "param5_1",
+    "param6",
+    "param6_1",
+    "param7",
+    "param7_1",
+    "param8",
+    "param8_1",
+    "param9",
+    "param9_1",
+    "param10",
+    "param10_1",
+    "param11",
+    "param11_1",
+    "param12",
+    "param12_1",
+    "param13",
+    "param13_1",
+    "param15",
+    "param15_1",
+    "param16",
+    "param16_1",
+    "param17",
+    "param17_1",
+    "param18_1",                                          #Research
+    "param18_1_1",
+    "param18_2",
+    "param18_2_1",
+    "param20",
+    "param20_1",
+    "param28",
+    "param28_1",
+    "param26",
+    "param26_1",
+    "param30",
+    "param30_1",
+    "param21_1",                                          #Guesswork
+    "param21_2",
+    "param22",
+    "param22_1",
+    "param23",
+    "param23_1",
+    "param24",
+    "param24_1",
+    "param31",
+    "param31_1",
+    "param32",
+    "param32_1",
+    "param34",
+    "param34_1",
+    "param19",
+    "param19_1",
+    "param27",
+    "param27_1",
+    "param29_1",
+    "param29_1_1",
+    "param29_2",
+    "param29_2_1",
+    "param29_3",
+    "param29_3_1",
+    "param33",
+    "param33_1"
+  )
+  
+
+  observeEvent(input$policy_est,{ 
+    if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
+      list_hide <- c("param32",
+                       "param32_1",
+                       "param34",
+                       "param34_1", 
+                       "param19",
+                       "param19_1",
+                       "param27",
+                       "param27_1",
+                       "param29_1",
+                       "param29_1_1",
+                       "param29_2",
+                       "param29_2_1",
+                       "param29_3",
+                       "param29_3_1", 
+                       "param33",
+                       "param33_1")
+        list_show <- list_master[ - which(list_master %in% list_hide)]
+        
+    } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
+        list_hide <- c("param32",
+                       "param32_1",
+                       "param34",
+                       "param34_1", 
+                       "param29_1",
+                       "param29_1_1",
+                       "param29_2",
+                       "param29_2_1",
+                       "param29_3",
+                       "param29_3_1", 
+                       "param33",
+                       "param33_1")
+        list_show <- list_master[ - which(list_master %in% list_hide)]
+          
+    } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
+      list_hide <- c("param32",
+                     "param32_1",
+                     "param34",
+                     "param34_1", 
+                     "param19",
+                     "param19_1",
+                     "param27",
+                     "param27_1",
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1", 
+                     "param33",
+                     "param33_1", 
+                     "param15", 
+                     "param15_1")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      
+    } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
+      list_hide <- c("param32",
+                     "param32_1",
+                     "param34",
+                     "param34_1", 
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1", 
+                     "param33",
+                     "param33_1")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      
+      #AQUI VOY 
+    } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
+      list_hide <- c("param32",
+                     "param32_1",
+                     "param34",
+                     "param34_1", 
+                     "param19",
+                     "param19_1",
+                     "param27",
+                     "param27_1",     
+                     "param4",
+                     "param4_1",
+                     "param5",
+                     "param5_1",
+                     "param6",
+                     "param6_1",
+                     "param7",
+                     "param7_1",
+                     "param8",
+                     "param8_1",
+                     "param9",
+                     "param9_1",
+                     "param10",
+                     "param10_1",
+                     "param12",
+                     "param12_1",
+                     "param13",
+                     "param13_1", 
+                     "param18_1",                                         
+                     "param18_1_1",
+                     "param18_2",
+                     "param18_2_1",
+                     "param33",
+                     "param33_1" 
+                     )
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      
+    } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
+      list_hide <- c("param32",
+                     "param32_1",
+                     "param34",
+                     "param34_1", 
+                     "param19",
+                     "param19_1",
+                     "param27",
+                     "param27_1",     
+                     "param4",
+                     "param4_1",
+                     "param5",
+                     "param5_1",
+                     "param6",
+                     "param6_1",
+                     "param7",
+                     "param7_1",
+                     "param8",
+                     "param8_1",
+                     "param9",
+                     "param9_1",
+                     "param10",
+                     "param10_1",
+                     "param12",
+                     "param12_1",
+                     "param13",
+                     "param13_1", 
+                     "param18_1",                                         
+                     "param18_1_1",
+                     "param18_2",
+                     "param18_2_1",
+                     "param33",
+                     "param33_1", 
+                     "param15", 
+                     "param15_1")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+
+    } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
+      list_hide <- c("param17",
+                     "param17_1",
+                     "param19",
+                     "param19_1",
+                     "param22",
+                     "param22_1",
+                     "param23",
+                     "param23_1",
+                     "param24",
+                     "param24_1",
+                     "param26",
+                     "param26_1",
+                     "param27",
+                     "param27_1",
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1",  
+                     "param16", 
+                     "param16_1")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      #Aqui voy      
+    } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
+      list_hide <- c("param17",
+                     "param17_1",
+                     "param22",
+                     "param22_1",
+                     "param23",
+                     "param23_1",
+                     "param24",
+                     "param24_1",
+                     "param26",
+                     "param26_1",
+                     "param27",
+                     "param27_1",
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1",  
+                     "param16", 
+                     "param16_1")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      
+    } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
+      list_hide <- c("param17",
+                     "param17_1",
+                     "param19",
+                     "param19_1",
+                     "param22",
+                     "param22_1",
+                     "param23",
+                     "param23_1",
+                     "param24",
+                     "param24_1",
+                     "param26",
+                     "param26_1",
+                     "param27",
+                     "param27_1",
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1",  
+                     "param16", 
+                     "param16_1",
+                     "param4",
+                     "param4_1",
+                     "param5",
+                     "param5_1",
+                     "param6",
+                     "param6_1",
+                     "param7",
+                     "param7_1",
+                     "param8",
+                     "param8_1",
+                     "param9",
+                     "param9_1",
+                     "param10",
+                     "param10_1",
+                     "param12",
+                     "param12_1",
+                     "param13",
+                     "param13_1", 
+                     "param18_1",                                         
+                     "param18_1_1",
+                     "param18_2",
+                     "param18_2_1",
+                     "param33",
+                     "param33_1", 
+                     "param15", 
+                     "param15_1")
     
-  output$data_in <- renderUI({
-    output <- tagList()
-    output[[1]] <- sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
-                               min = 0.001, max = 0.2, value = gov_bonds_so)
-    output [[2]] <- sliderInput("param2_1", label = "SD = ",
-                                min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so)
-    output [[3]] <- sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
-                                min = 0.001, max = 0.2, value = inflation_so)
-    output [[4]] <- sliderInput("param3_1", label = "SD = ",
-                                min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so)
-    output [[5]] <- sliderInput("param4", label = "Agri Wages (\\( w_{ag} \\))",
-                                min = wage_ag_so / 2, max = 2 * wage_ag_so, value = wage_ag_so)
-    output [[6]] <- sliderInput("param4_1", label = "SD = ",
-                                min = 0.0000001* wage_ag_so, max = 1 * wage_ag_so, value = 0.1 * wage_ag_so)
-    output [[7]] <- sliderInput("param5", label = "Work-non ag-Wages  (\\( w_{ww} \\))",
-                                min = wage_ww_so / 2, max = 2 * wage_ww_so, value = wage_ww_so)
-    output [[8]] <- sliderInput("param5_1", label = "SD = ",
-                                min = 0.0000001* wage_ww_so, max = 1 * wage_ww_so, value = 0.1 * wage_ww_so)
-    output [[9]] <- sliderInput("param6", label = "Profits se = ",
-                                min = profits_se_so / 2, max = 2 * profits_se_so, value = profits_se_so)
-    output [[10]] <- sliderInput("param6_1", label = "SD = ",
-                                 min = 0.000001* profits_se_so, max = 1 * profits_se_so, value = 0.1 * profits_se_so)
-    output [[11]] <- sliderInput("param7", label = "Hours se (>0) = ",
-                                 min = hours_se_cond_so / 2, max = 2 * hours_se_cond_so, value = hours_se_cond_so)
-    output [[12]] <- sliderInput("param7_1", label = "SD = ",
-                                 min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so)
-    output [[13]] <- sliderInput("param8", label = "H_ag = ",
-                                 min = hours_ag_so / 2, max = 2 * hours_ag_so, value = hours_ag_so)
-    output [[14]] <- sliderInput("param8_1", label = "SD = ",
-                                 min = 0.000001* hours_ag_so, max = 1 * hours_ag_so, value = 0.1 * hours_ag_so, round = -4, step = 0.001) 
-    output [[15]] <- sliderInput("param9", label = "H_ww = ",
-                                 min = hours_ww_so / 2, max = 2 * hours_ww_so, value = hours_ww_so)    
-    output [[16]] <- sliderInput("param9_1", label = "SD = ",
-                                 min = 0.000001* hours_ww_so, max = 1 * hours_ww_so, value = 0.1 * hours_ww_so, step = 0.001)
-    output [[17]] <- sliderInput("param10", label = "H_se = ",
-                                 min = hours_se_so / 2, max = 2 * hours_se_so, value = hours_se_so)
-    output [[18]] <- sliderInput("param10_1", label = "SD = ",
-                                 min = 0.000001* hours_se_so, max = 1 * hours_se_so, value = 0.1 * hours_se_so, step = 0.001)
-    output [[19]] <- sliderInput("param11", label = "Exchange rate = ",
-                                 min = ex_rate_so / 2, max = 2 * ex_rate_so, value = ex_rate_so)
-    output [[20]] <- sliderInput("param11_1", label = "SD = ",
-                                 min = 0.000001* ex_rate_so, max = 1 * ex_rate_so, value = 0.1 * ex_rate_so, step = 0.001)
-    output [[21]] <- sliderInput("param12", label = "growth = ",
-                                 min = growth_rate_so / 2, max = 2 * growth_rate_so, value = growth_rate_so)
-    output [[22]] <- sliderInput("param12_1", label = "SD = ",
-                                 min = 0.000001* growth_rate_so, max = 1 * growth_rate_so, value = 0.1 * growth_rate_so, step = 0.00001)
-    output [[23]] <- sliderInput("param13", label = "Coverage (R) = ",
-                                 min = coverage_so / 2, max = 2 * coverage_so, value = coverage_so, step = 0.000001)
-    output [[24]] <- sliderInput("param13_1", label = "SD = ",
-                                 min = 0.000001* coverage_so, max = 1 * coverage_so, value = 0.1 * coverage_so, step = 0.000001)
-    output [[25]] <- sliderInput("param15", label = "Tax rate = ",
-                                 min = tax_so / 2, max = 2 * tax_so, value = tax_so, step = 0.00001)
-    output [[26]] <- sliderInput("param15_1", label = "SD = ",
-                                 min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so, step = 0.000001)
-    output [[27]] <- sliderInput("param16", label = "Costs ot T (local $) = ", step = 0.0001,
-                                 min = unit_cost_local_so / 2, max = 2 * unit_cost_local_so,
-                                 value = unit_cost_local_so, pre = "$", animate =
-                                   animationOptions(interval = 3000, loop = TRUE))
-    output [[28]] <- sliderInput("param16_1", label = "SD = ",
-                                 min = 0.000001* unit_cost_local_so, max = 1 * unit_cost_local_so, value = 0.1 * unit_cost_local_so, step = 0.0001)
-    output [[29]] <- sliderInput("param17", label = "Years of T = ",
-                                 min = years_of_treat_so / 2, max = 2 * years_of_treat_so, value = years_of_treat_so)
-    output [[30]] <- sliderInput("param17_1", label = "SD = ",
-                                 min = 0.000001* years_of_treat_so, max = 1 * years_of_treat_so, value = 0.1 * years_of_treat_so, step = 0.0001)
-    output[[31]] <- sliderInput("param34", label = "Costs adjustments = ",
-                                 min = costs_par_so / 2, max = 20000 * costs_par_so, value = costs_par_so)
-    output[[32]] <- sliderInput("param34_1", label = "SD = ",
-                                 min = 0.0000001* costs_par_sd_so, max = 10 * costs_par_sd_so, value = costs_par_sd_so)
-    # output[[33]] <- sliderInput("param32", label = "Counts adjustment = ",
-    #                              min = counts_par_so / 2, max = 2 * counts_par_so, value = counts_par_so)
-    # output[[34]] <- sliderInput("param32_1", label = "SD = ",
-    #                              min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so) 
-    
-    n_output <- 32
-    exclude <- c(n_output + 1)
-    withMathJax(
-      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
-        #exclude <- c(31,32,33,34)
-        observeEvent(input$policy_est,{ 
-          sapply(c("param32", "param32_1"), function(x) hide(id = x) ) 
-          } )
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      } else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( (1:n_output)[-exclude], function(x) output[[x]] )
-      }
-    ) 
-    
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      
+    } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
+      list_hide <- c("param17",
+                     "param17_1",
+                     "param19",
+                     "param19_1",
+                     "param22",
+                     "param22_1",
+                     "param23",
+                     "param23_1",
+                     "param24",
+                     "param24_1",
+                     "param26",
+                     "param26_1",
+                     "param27",
+                     "param27_1",
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1",  
+                     "param16", 
+                     "param16_1",
+                     "param4",
+                     "param4_1",
+                     "param5",
+                     "param5_1",
+                     "param6",
+                     "param6_1",
+                     "param7",
+                     "param7_1",
+                     "param8",
+                     "param8_1",
+                     "param9",
+                     "param9_1",
+                     "param10",
+                     "param10_1",
+                     "param12",
+                     "param12_1",
+                     "param13",
+                     "param13_1", 
+                     "param18_1",                                         
+                     "param18_1_1",
+                     "param18_2",
+                     "param18_2_1",
+                     "param33",
+                     "param33_1", 
+                     "param15", 
+                     "param15_1")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      
+    } else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext") {
+      list_hide <- c("param17",
+                     "param17_1",
+                     "param19",
+                     "param19_1",
+                     "param22",
+                     "param22_1",
+                     "param23",
+                     "param23_1",
+                     "param24",
+                     "param24_1",
+                     "param26",
+                     "param26_1",
+                     "param27",
+                     "param27_1",
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1",  
+                     "param16", 
+                     "param16_1",
+                     "param4",
+                     "param4_1",
+                     "param5",
+                     "param5_1",
+                     "param6",
+                     "param6_1",
+                     "param7",
+                     "param7_1",
+                     "param8",
+                     "param8_1",
+                     "param9",
+                     "param9_1",
+                     "param10",
+                     "param10_1",
+                     "param12",
+                     "param12_1",
+                     "param13",
+                     "param13_1", 
+                     "param18_1",                                         
+                     "param18_1_1",
+                     "param18_2",
+                     "param18_2_1",
+                     "param33",
+                     "param33_1", 
+                     "param15", 
+                     "param15_1")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+    }
+    sapply(list_hide, 
+           function(x) hideElement(id = x) ) 
+    sapply(list_show, 
+           function(x) showElement(id = x) ) 
   })
-  
-  output$research_in <- renderUI({
-    output2 <- tagList()
-    output2[[1]] <- numericInput("param18_1", label = h3("Lambda 1_m = "), value = lambda1_so[1])
-    output2[[2]] <- numericInput("param18_1_1", label = h3("sd = "), value = 0.17)
-    output2[[3]] <- numericInput("param18_2", label = h3("Lambda 1_f = "), value = lambda1_so[2])
-    output2[[4]] <- numericInput("param18_2_1", label = h3("sd = "), value = 0.17)
-    output2[[5]] <- sliderInput("param19", label = "Lambda 2 = ",
-                                min = 0, max = 2 * lambda2_so, value = lambda2_so * 1)
-    output2[[6]] <- sliderInput("param19_1", label = "SD = ",
-                                min = 0.0000001* lambda2_so, max = 1 * lambda2_so, value = 0.1 * lambda2_so, step = 1e-5)
-    output2[[7]] <- sliderInput("param20", label = "Take-up = ",
-                                min = q_full_so / 2, max = 2 * q_full_so, value = q_full_so)
-    output2[[8]] <- sliderInput("param20_1", label = "SD = ",
-                                min = 0.00000001* q_full_so, max = 1 * q_full_so, value = 0.1 * q_full_so, step = 1e-5)
-    output2[[9]] <- sliderInput("param28", label = "Take-up with no subsidy = ",
-                                min = q_zero_so / 2, max = 2 * q_zero_so, value = q_zero_so)
-    output2[[10]] <- sliderInput("param28_1", label = "SD = ",
-                                 min = 0.00000001* q_zero_so, max = 1 * q_zero_so, value = 0.1 * q_zero_so)
-    output2[[11]] <- sliderInput("param26", label = "x * Delta E = ",
-                                 min = 0.0000001, max = 4, value = delta_ed_par_so)
-    output2[[12]] <- sliderInput("param26_1", label = "SD = ",
-                                 min = 0.0000001, max = 4, value = delta_ed_par_so * 0.1)
-    output2[[13]] <- sliderInput("param27", label = "x * Delta E (ext)  = ",
-                                 min = 0.0000001, max = 4, value = delta_ed_ext_par_so)
-    output2[[14]] <- sliderInput("param27_1", label = "SD = ",
-                                 min = 0.0000001, max = 4, value = delta_ed_ext_par_so * 0.1)
-    output2[[15]] <- numericInput("param29_1", label = h3("Lambda 1_1_new = "), value = lambda1_new_so[1])
-    output2[[16]] <- numericInput("param29_1_1", label = h3("sd = "), value = lambda1_new_sd_so[1])
-    output2[[17]] <- numericInput("param29_2", label = h3("Lambda 1_2_new = "), value = lambda1_new_so[2])
-    output2[[18]] <- numericInput("param29_2_1", label = h3("sd = "), value = lambda1_new_sd_so[2])
-    output2[[19]] <- numericInput("param29_3", label = h3("Lambda 1_3_new = "), value = lambda1_new_so[3])
-    output2[[20]] <- numericInput("param29_3_1", label = h3("sd = "), value = lambda1_new_sd_so[3])
-    output2[[21]] <- sliderInput("param30", label = "Prevalence in original study = ",
-                                min = 0, max = 1, value = alpha_0_so)
-    output2[[22]] <- sliderInput("param30_1", label = "SD = ",
-                                 min = 0.0000001* alpha_r_so, max = 1 * alpha_0_so, value = 0.1 * alpha_0_so) 
-    
-    n_output2 <- 22
-    no_exclude <- c(n_output2 + 1)
-    withMathJax(
-      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
-        exclude <- c(5, 6, 15, 16, 17, 18, 19, 20)    # lambda2, edx, lambda_new
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
-        exclude <- c(15, 16, 17, 18, 19,20)                      # lambda_new
-        lapply( (1:n_output2), function(x) output2[[x]] )
-        #browser()
-        #hide(output2[[15]])
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
-        exclude <- c(5, 6, 15, 16, 17, 18, 19, 20)
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
-        exclude <- no_exclude
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        exclude <- c(1, 2, 3, 4, 5, 6)               # almbda1, lambda2, edx
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      } else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( (1:n_output2)[-exclude], function(x) output2[[x]] )
-      }
-    )
-    
-  })  
-  
-  output$gw_in <- renderUI({
-    output3 <- tagList()
-    output3[[1]] <- numericInput("param21_1", label = h3("Coef Xp = "), value = coef_exp_so[1])
-    output3[[2]] <- numericInput("param21_2", label = h3("Coef Xp^2 = "), value = coef_exp_so[2])
-    output3[[3]] <- sliderInput("param22", label = "Teacher salary = ",
-                min = teach_sal_so / 2, max = 2 * teach_sal_so, value = teach_sal_so)
-    output3[[4]] <- sliderInput("param22_1", label = "SD = ",
-                min = 0.00000001* teach_sal_so, max = 1 * teach_sal_so, value = 0.1 * teach_sal_so)
-    output3[[5]] <- sliderInput("param23", label = "Teacher benefits = ",
-                min = teach_ben_so / 2, max = 2 * teach_ben_so, value = teach_ben_so)
-    output3[[6]] <- sliderInput("param23_1", label = "SD = ",
-                min = 0.0000001* teach_ben_so, max = 1 * teach_ben_so, value = 0.1 * teach_ben_so)
-    output3[[7]] <- sliderInput("param24", label = "Student per teach = ",
-                min = n_students_so / 2, max = 2 * n_students_so, value = n_students_so)
-    output3[[8]] <- sliderInput("param24_1", label = "SD = ",
-                min = 0.0000001* n_students_so, max = 1 * n_students_so, value = 0.1 * n_students_so)
-    output3[[9]] <- sliderInput("param31", label = "Prevalence in new region = ",
-                min = 0 / 2, max = 1, value = alpha_r_so)
-   output3[[10]] <-  sliderInput("param31_1", label = "SD = ",
-                min = 0.0000001* alpha_r_so, max = 1 * alpha_r_so, value = 0.1 * alpha_r_so) 
-    output3[[11]] <- sliderInput("param33", label = "Additional costs due to staff time = ",
-                min = staff_time_so / 2, max = 2 * staff_time_so, value = staff_time_so)
-    output3[[12]] <- sliderInput("param33_1", label = "SD = ",
-                min = 0.0000001* staff_time_so, max = 1 * staff_time_so, value = 0.1 * staff_time_so) 
-    
-    
-    n_output3 <- 12
-    
-    withMathJax(
-      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      } else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext") {
-        lapply( 1:n_output3, function(x) output3[[x]] )
-      }
-    )
-    
-  })  
-  # 
-  # observeEvent(input$policy_est, {
-  # toggleElement(id = "param32", selector = NULL, condition = (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") )
-  # })
-  # 
-  
-  outputOptions(output, "gw_in", suspendWhenHidden = FALSE)
-  outputOptions(output, "research_in", suspendWhenHidden = FALSE)
-  
+
   observeEvent(input$run, {
 
   ################
   ###### Results/Viz
   ################
   # THINK ABOUT WRAPPING THE OUTPUT IN ONE COMMOMN FUNCTION ACROSS DD AND APP
-  
+
+    output$eqns <- renderUI({
+    
+      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") { 
+        withMathJax(
+          helpText('You do not see me initially: $$e^{i \\pi} + 1 = 0$$') )
+      } else if (input$policy_est ==  "Fiscal effects, 2016(W@W) B & C, yes ext"){
+        withMathJax(helpText("$$\\pi2$$"))
+      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext"){
+        withMathJax(helpText("$$\\pi3$$"))
+      } else if (input$policy_est ==  "Total effects, 2016(W@W) B & C, yes ext"){
+        withMathJax(helpText("$$\\pi4$$"))
+      } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
+        withMathJax(helpText("$$\\pi5$$"))
+      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
+        withMathJax(helpText("$$\\pi6$$"))
+      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext"){
+        withMathJax(helpText("$$\\pi7$$"))
+      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext"){
+        withMathJax(helpText("$$\\pi8$$"))
+      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext"){
+        withMathJax(helpText("$$\\pi9$$"))
+      }else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext"){
+        withMathJax(helpText("$$\\pi10$$"))
+      }else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext"){
+        withMathJax(helpText("$$\\pi11$$"))
+      }
+      
+    })
+    
+
+    
+    
+      
     output$plot1 <- renderPlot({      
     npv_sim_all <- reactive.data1()
   
