@@ -1,6 +1,6 @@
 ---
-title: "Net Present Value (NPV) for Deworming"
-date: "07 November, 2019"
+title: "A Unifying Open Policy Analysis for Deworming"
+date: "08 November, 2019"
 output:
   html_document:
     code_folding: hide
@@ -21,8 +21,6 @@ pdf_document:
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
-
-
 
 
 

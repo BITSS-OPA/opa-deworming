@@ -1,5 +1,5 @@
 ---
-title: "Net Present Value (NPV) for Deworming"
+title: "A Unifying Open Policy Analysis for Deworming"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -21,8 +21,6 @@ pdf_document:
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
-
-
 
 
 ```{r setup, include=FALSE, purl=TRUE}
