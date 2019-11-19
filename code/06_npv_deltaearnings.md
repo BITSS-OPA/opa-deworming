@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
-date: "06 November, 2019"
+date: "19 November, 2019"
 output:
   html_document:
     code_folding: hide
@@ -37,12 +37,12 @@ options(tinytex.verbose = TRUE)
 ```r
 # TO-DO:
 # add source links to bonds and inflation
-# update deworming cost - DONE
 # get rid of gamma in the function
-# explain K better (and others?) in documentation - DONE
-# put all costs in PPP units - DONE
 # edit methodology section
 # get rid of .02. take sum of vector instead of mean and refer to Baird et. al.
+# change code of equations to match new setup
+# insert figures
+# format table
 
 # TIME-VARIANT INPUTS (may need to be updated)
 
@@ -131,17 +131,16 @@ The target parameter to reproduce corresponds to the NPV of deworming, and can b
 
 # The model
 
-Since we expect the predominant benefits of deworming to surface in the longrun, viz-a-vis net labor market gains, the total Net Present Value is given by the difference between net long-term gains and the cost of deworming.
+The net present value takes into account the short-term cost of deworming, the medium-term cost of schooling since deworming increases education, putting pressure on schooling instutions, and the labor market gains, which are realized in the long-term. The compenents of each term of the model are discussed below. Note that this model disregards short term health gains, which are considered in the robustness section.
 
 \begin{equation}
-NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
-K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right]}_{\text{net labor market gains}} - 
-\underbrace{\left[\sum_{t=0}^{1} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{cost of deworming medication}}
+NPV =
+-\underbrace{\left[\sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{t,2}Q(S_{t,2}) - S_{t,1}Q(S_{t,1}) \big]\right]}_{\text{cost of deworming medication}}
+- \underbrace{\left[K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)\right]}_{\text{cost of schooling}}
++ \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t \right]}_{\text{labor market gains}}
 \label{eq:1}
 \tag{1}
 \end{equation}
-
 
 
 ```r
@@ -170,30 +169,16 @@ npv_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
           apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
-          sum( ( 1 / (1 + interest_r_var) )^(0:1) * rep((s2_var * q2_var  - s1_var * q1_var), 2) )
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
 ```
 
-Net long-term gains are given by the difference between long term benefits (labor market gains) and long term costs (education). The compenents of each term of the model: long term benefits, long term costs, and short term costs are discussed below.
 
-## Long-term benefits: labor market gains
+### Discount factor (r)
 
-Labor market gains are given by the tax on the discounted sum of welfare gains from deworming.
-
-\begin{equation}
-\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t
-\end{equation}
-
-### Tax ($\tau$)
-
-The annual tax rate $\tau$ is estimated to be 16.6%. It is calcuated as the product of "government expenditures" and "percent non-donor financed" according to `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Assumps&Panel A Calcs`.
-**NOTE** I don't understand how this is calculated.
-
-### Discount rate ($r$)
-
-The discount rate $r$ is set to the real interest rate [**rationale?**], which is obtained from the interest rate on goverment bonds (0.09) minus the inflation rate (0.04).
+Each term in the model is discounted by $r$, which is set to the real interest rate [**rationale?**], obtained from the interest rate on goverment bonds (0.09) minus the inflation rate (0.04).
 
 
 ```r
@@ -208,7 +193,109 @@ interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflati
 invisible( list2env(interest_in_f(),.GlobalEnv) )
 ```
 
-The resulting value is a $r$ = 5%
+The resulting value is $r$ = 5%.
+
+## Cost of deworming medication
+
+The costs of deworming medication is obtained by the sum of discounted costs of deworming over the treatment period. The average treatment period in this study was 2.41 years, which we round to 2.4. So starting year zero, we have
+
+\begin{equation}
+\sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+\end{equation}
+
+Since the analysis is discrete, and we can not sum over a non-integer, we find
+\begin{equation}
+\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + .4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+\end{equation}
+
+### Current subsidy for deworming ($S_{1}Q(S_{1})$)
+Since there is no subsidy for deworming under the status quo, we have $S_{1}Q(S_{1}) =0$.
+
+
+### Complete subsidy for dewormng ($S_2Q(S_2)$)
+
+With complete subsidy, $S_2$ represents the total direct costs of deworming each child in USD. Most recent (2018) data from Evidence Action reveals this cost to be $0.42. Adjusting for purchasing power and inflation, we get a per capita cost of $0.83.
+
+The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of 0.75.
+
+
+```r
+# - inputs: 
+# - outputs: 
+costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
+                    years_of_treat_var = years_of_treat_so, 
+                    q_full_var = q_full_so){
+############################################################################### 
+    s2_in <- c(rep(unit_cost_var,2), .4*unit_cost_var)
+    q2_in <- q_full_var
+############################################################################### 
+    return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
+} 
+invisible( list2env(costs_f(),.GlobalEnv) )
+```
+
+**So we get an average cost of deworming each child over the entire treatment period, $1.44.**
+
+## Cost of schooling
+
+We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
+
+The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school as a result of deworming. Assuming pressure is added to educational institutions for a maximum of nine years, starting at year zero, we have
+
+\begin{equation}
+K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
+\end{equation}
+
+### Cost per student ($K$)
+
+$K$ represents the cost of schooling each child for an additional year ($267.88). It is calculated by dividing an estimate of annual teacher salary by the number of average number of students per teacher.
+
+\begin{equation}
+K = \frac{\text{teacher salary}}{\text{number students}}
+\end{equation}
+
+Annual teacher salary ($12055) is based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is 45, based on **[FILL IN]**.
+
+### Additional years of education ($\Delta \overline{E}_t(S1,S2)$)
+
+For $\Delta \overline{E}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
+
+This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
+
+
+```r
+# - inputs: coverage_so, q_full_so, q_zero_so 
+# - outputs: saturation_in 
+ed_costs_in_f <- function(teach_sal_var = teach_sal_2017usdppp_so, 
+                          n_students_var = n_students_so,
+                          delta_ed_var = delta_ed_so[,1]){
+ ###############################################################################    
+    cost_per_student_in <- (teach_sal_var)/ n_students_var
+    delta_ed_in <- delta_ed_var
+############################################################################### 
+    return(list("cost_per_student_in" = cost_per_student_in, "delta_ed_in" = delta_ed_in)) 
+} 
+invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
+```
+
+Over this nine year period, students attended school for an additional 0.15 years on average.
+
+**Then we get an average cost of additional schooling per child over the nine-year period, $32.40.**
+
+## Labor market gains
+
+Labor market gains are given by the tax on the discounted sum of welfare gains from deworming.
+
+\begin{equation}
+\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t
+\end{equation}
+
+### Tax ($\tau$)
+
+The annual tax rate $\tau$ is estimated to be 16.6%. It is calcuated as the product of "government expenditures" and "percent non-donor financed" according to `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Assumps&Panel A Calcs`.
+**NOTE** I don't understand how this is calculated.
+
+To find the social gains, we set $\tau$ equal to 1.
 
 ### Welfare gains ($\Delta W_t$)
 
@@ -266,7 +353,7 @@ delta_welfare_p_in <- 1*(10 <= t_var & t_var < 15) * welfarek1_var +
 }
 ```
 
-Note that both expressions assume that there are no additional earnings gains for the treatment group for the first 10 years post-intervention. This model also disregards externality effects. **Note: Change this when added willness to pay to model**
+Note that both expressions assume that there are no additional earnings gains for the treatment group for the first 10 years post-intervention. This model also disregards externality effects.
 
 #### Measures of welfare
 
@@ -294,82 +381,6 @@ delta_consumption_in = delta_welfare_in_f(welfarek1_var = consump_2017usdppp_so[
 delta_consumption_p_in = delta_welfare_p_in_f(welfarek1_var = consump_2017usdppp_so[1],
                                               welfarek2_var = consump_2017usdppp_so[2],
                                               welfarek3_var = consump_2017usdppp_so[3])
-```
-
-## Long-term costs: education
-
-We account for the cost of education since deworming medication increases school attendance and may put pressure on schooling institutions. Education costs are given by the discounted sum of the additional cost of education per child as a result of deworming. 
-
-\begin{equation}
-K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\end{equation}
-
-### Cost per student ($K$)
-
-$K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
-
-\begin{equation}
-K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
-\end{equation}
-
-Teacher salary is estimated by the average salary of teachers in Kenya ($1.2055\times 10^{4}). Each of these have been adjusted for inflation. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per school is (45).
-
-**NOTE** I confirmed average teacher salary and average number of students based on a google search, but am unable to find info on teacher benefits.
-
-### Additional years of education ($\Delta \overline{E}_t(S1,S2)$)
-
-For $\Delta \overline{E}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
-
-This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
-
-
-```r
-# - inputs: coverage_so, q_full_so, q_zero_so 
-# - outputs: saturation_in 
-ed_costs_in_f <- function(teach_sal_var = teach_sal_2017usdppp_so, 
-                          n_students_var = n_students_so,
-                          delta_ed_var = delta_ed_so[,1]){
- ###############################################################################    
-    cost_per_student_in <- (teach_sal_var)/ n_students_var
-    delta_ed_in <- delta_ed_var
-############################################################################### 
-    return(list("cost_per_student_in" = cost_per_student_in, "delta_ed_in" = delta_ed_in)) 
-} 
-invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
-```
-
-**NOTE** need to understand better the date of each component (of the model, not only this section).
-
-## Short-term costs: deworming medication
-
-The costs of deworming medication is obtained by the sum of discounted costs of deworming over the treatment period. The average treatment period in this study was 2.41 years, which we round to 2 years since the analysis is discrete.
-
-\begin{equation}
-\sum_{t=0}^{1} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
-\end{equation}
-
-### Current subsidy for deworming ($S_{1}Q(S_{1})$)
-Since there is no subsidy for deworming under the status quo, we have $S_{1}Q(S_{1}) =0$.
-
-
-### Complete subsidy for dewormng ($S_2Q(S_2)$)
-
-With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of 0.75.
-
-
-```r
-# - inputs: 
-# - outputs: 
-costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
-                    years_of_treat_var = years_of_treat_so, 
-                    q_full_var = q_full_so){
-############################################################################### 
-    s2_in <- (unit_cost_var)
-    q2_in <- q_full_var
-############################################################################### 
-    return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
-} 
-invisible( list2env(costs_f(),.GlobalEnv) )
 ```
 
 # Main results
@@ -412,7 +423,7 @@ npv_cwelfare_p_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
-    sum( ( 1 / (1 + interest_r_var) )^(0:1) * rep((s2_var * q2_var  - s1_var * q1_var), 2) )
+    sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -441,7 +452,7 @@ npv_cwelfare_d_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - sum( ( 1 / (1 + interest_r_var) )^(0:1) * rep((s2_var * q2_var  - s1_var * q1_var), 2) )
+          ) - sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -498,13 +509,13 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                               |                                                |10%                                     |**7.93**      |
-|                                 |0                               |                                                |5%                    |**4.79**      |
-|                                 |                                |0                                               |10%                                     |**47.83**         |
-|                                 |                                |0                                               |5%                    |**28.92**         |
+|                                 |0                               |                                                |10%                                     |**7.99**      |
+|                                 |0                               |                                                |5%                    |**4.83**      |
+|                                 |                                |0                                               |10%                                     |**48.21**         |
+|                                 |                                |0                                               |5%                    |**29.12**         |
 | Panel B                                                                                                                                                               
-|                                 |0                               |                                                |**42.3%**    |*                                         |
-|                                 |                                | 0                                              |**16.5%**       |*                                         |
+|                                 |0                               |                                                |**42.1%**    |*                                         |
+|                                 |                                | 0                                              |**16.4%**       |*                                         |
 | Panel C
 | 10%                             |**249**  |**20**                  |                                        |*                                         |
 |5%             |**537**  |**62**                  |                                        |*                                         |
@@ -514,13 +525,13 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                                 |                                                |10%                                     |**6.15**  |
-|                                 |0                                 |                                                |5%                    |**2.88**  |
-|                                 |                                  |0                                               |10%                                     |**37.13**     |
-|                                 |                                  |0                                               |5%                    |**17.36**     |
+|                                 |0                                 |                                                |10%                                     |**6.2**  |
+|                                 |0                                 |                                                |5%                    |**2.9**  |
+|                                 |                                  |0                                               |10%                                     |**37.42**     |
+|                                 |                                  |0                                               |5%                    |**17.48**     |
 | Panel B                                                                                                                                                               
-|                                 |0                                 |                                                |**42.4%**|*                                         |
-|                                 |                                  | 0                                              |**17.6%**   |*                                         |
+|                                 |0                                 |                                                |**42.1%**|*                                         |
+|                                 |                                  | 0                                              |**17.5%**   |*                                         |
 | Panel C
 | 10%                             |**329**|**33**              |                                        |*                                         |
 |5%             |**918**|**125**              |                                        |*                                         |
@@ -576,13 +587,13 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   intere
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                               |                                                |10%                                     |**7.93**      |
-|                                 |0                               |                                                |5%                    |**4.79**      |
-|                                 |                                |0                                               |10%                                     |**47.83**         |
-|                                 |                                |0                                               |5%                    |**28.92**         |
+|                                 |0                               |                                                |10%                                     |**7.99**      |
+|                                 |0                               |                                                |5%                    |**4.83**      |
+|                                 |                                |0                                               |10%                                     |**48.21**         |
+|                                 |                                |0                                               |5%                    |**29.12**         |
 | Panel B                                                                                                                                                               
-|                                 |0                               |                                                |**48.6%**    |*                                         |
-|                                 |                                | 0                                              |**28.9%**       |*                                         |
+|                                 |0                               |                                                |**48.4%**    |*                                         |
+|                                 |                                | 0                                              |**28.8%**       |*                                         |
 | Panel C
 | 10%                             |**1108**  |**162**                  |                                        |*                                         |
 |5%             |**2523**  |**391**                  |                                        |*                                         |
@@ -592,13 +603,13 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   intere
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                                 |                                                |10%                                     |**6.15**  |
-|                                 |0                                 |                                                |5%                    |**2.88**  |
-|                                 |                                  |0                                               |10%                                     |**37.13**     |
-|                                 |                                  |0                                               |5%                    |**17.36**     |
+|                                 |0                                 |                                                |10%                                     |**6.2**  |
+|                                 |0                                 |                                                |5%                    |**2.9**  |
+|                                 |                                  |0                                               |10%                                     |**37.42**     |
+|                                 |                                  |0                                               |5%                    |**17.48**     |
 | Panel B                                                                                                                                                               
-|                                 |0                                 |                                                |**48.7%**|*                                         |
-|                                 |                                  | 0                                              |**29.1%**   |*                                         |
+|                                 |0                                 |                                                |**48.5%**|*                                         |
+|                                 |                                  | 0                                              |**29%**   |*                                         |
 | Panel C
 | 10%                             |**1295**|**193**              |                                        |*                                         |
 |5%             |**3419**|**540**              |                                        |*                                         |
@@ -617,10 +628,13 @@ The values in panel A are robust to all `start` values trued thus far (between 0
 We modify the NPV equation to account for willingness to pay for deworming medication. Given this less conservative measure of NPV, the total Net Present Value is can be interpreted as the sum of long-term net benefits of deworming, given by labor market gains, and short-term net benefits of deworming, given by direct health effects.
 
 \begin{equation}
-NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
-K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
-\right]}_{\text{long-term NPV (labor market gains)}} + 
-\underbrace{\left[\sum_{t=0}^{1} \left( \frac{1}{1 + r}\right)^{t}w_t - \sum_{t=0}^{1} \left( \frac{1}{1 + r}\right)^{t}\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{short-term NPV (direct health effects)}}
+NPV =
+-\underbrace{\left[\sum_{t=0}^{1} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{cost of deworming medication}}
++ \underbrace{\left[\sum_{t=0}^{1} \left( \frac{1}{1 + r}\right)^{t}w_t \right]}_{\text{direct health effects}}
+- \underbrace{\left[K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)\right]}_{\text{cost of schooling}}
++ \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t \right]}_{\text{labor market gains}}
+\label{eq:2}
+\tag{2}
 \end{equation}
 
 
@@ -651,7 +665,7 @@ npv_wtp_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
           apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )) + 
-          sum(( 1 / (1 + interest_r_var) )^(0:1) * rep((wtp_var-(s2_var * q2_var  - s1_var * q1_var)), 2))
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -691,7 +705,7 @@ npv_cwelfarewtp_p_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) ) ) + 
-          sum(( 1 / (1 + interest_r_var) )^(0:1) * rep((wtp_var-(s2_var * q2_var  - s1_var * q1_var)), 2))
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -721,7 +735,7 @@ npv_cwelfarewtp_d_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )) + 
-          sum(( 1 / (1 + interest_r_var) )^(0:1) * rep((wtp_var-(s2_var * q2_var  - s1_var * q1_var)), 2))
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -776,32 +790,32 @@ tax_int10_die     <- npv_wtp_mo_f(delta_welfare_var = delta_earnings_in, interes
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                               |                                                |10%                                     |**1**      |
-|                                 |0                               |                                                |5%                    |**1.38**      |
-|                                 |                                |0                                               |10%                                     |**6.05**         |
-|                                 |                                |0                                               |5%                    |**8.32**         |
+|                                 |0                               |                                                |10%                                     |**7.13**      |
+|                                 |0                               |                                                |5%                    |**4.4**      |
+|                                 |                                |0                                               |10%                                     |**43**         |
+|                                 |                                |0                                               |5%                    |**26.53**         |
 | Panel B                                                                                                                                                               
-|                                 |0                               |                                                |**48.6**     |*                                         |
-|                                 |                                | 0                                              |**28.9**        |*                                         |
+|                                 |0                               |                                                |**48.4**     |*                                         |
+|                                 |                                | 0                                              |**28.8**        |*                                         |
 | Panel C
-| 10%                             |**272**  |**42**                  |                                        |*                                         |
-|5%             |**560**  |**85**                  |                                        |*                                         |
+| 10%                             |**252**  |**23**                  |                                        |*                                         |
+|5%             |**540**  |**65**                  |                                        |*                                         |
 
 ### Treatment effect timeframe: 50 years
 
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                                 |                                                |10%                                     |**0.78**  |
-|                                 |0                                 |                                                |5%                    |**0.83**  |
-|                                 |                                  |0                                               |10%                                     |**4.7**     |
-|                                 |                                  |0                                               |5%                    |**4.99**     |
+|                                 |0                                 |                                                |10%                                     |**5.53**  |
+|                                 |0                                 |                                                |5%                    |**2.64**  |
+|                                 |                                  |0                                               |10%                                     |**33.38**     |
+|                                 |                                  |0                                               |5%                    |**15.92**     |
 | Panel B                                                                                                                                                               
-|                                 |0                                 |                                                |**48.7%**|*                                         |
-|                                 |                                  | 0                                              |**29.1%**   |*                                         |
+|                                 |0                                 |                                                |**48.5%**|*                                         |
+|                                 |                                  | 0                                              |**29%**   |*                                         |
 | Panel C
-| 10%                             |**351**|**56**              |                                        |*                                         |
-|5%             |**941**|**148**              |                                        |*                                         |
+| 10%                             |**331**|**36**              |                                        |*                                         |
+|5%             |**921**|**128**              |                                        |*                                         |
 
 ## Consumption
 
@@ -852,30 +866,30 @@ tax_int10_die     <- npv_wtp_mo_f(delta_welfare_var = delta_consumption_in,   in
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)|Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|-------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                               |                                                |10%                                     |**1**      |
-|                                 |0                               |                                                |5%                    |**1.38**      |
-|                                 |                                |0                                               |10%                                     |**6.05**         |
-|                                 |                                |0                                               |5%                    |**8.32**         |
+|                                 |0                               |                                                |10%                                     |**7.13**      |
+|                                 |0                               |                                                |5%                    |**4.4**      |
+|                                 |                                |0                                               |10%                                     |**43**         |
+|                                 |                                |0                                               |5%                    |**26.53**         |
 | Panel B                                                                                                                                                               
-|                                 |0                               |                                                |**48.6%**    |*                                         |
-|                                 |                                | 0                                              |**28.9%**       |*                                         |
+|                                 |0                               |                                                |**48.4%**    |*                                         |
+|                                 |                                | 0                                              |**28.8%**       |*                                         |
 | Panel C
-| 10%                             |**1131**  |**185**                  |                                        |*                                         |
-|5%             |**2546**  |**414**                  |                                        |*                                         |
+| 10%                             |**1111**  |**165**                  |                                        |*                                         |
+|5%             |**2526**  |**394**                  |                                        |*                                         |
 
 ### Treatment effect timeframe: 50 years
 
 |Real annualized interest rate (r)|Net Present Value (2017 USD PPP)  |Net Present Value of tax revenue (2017 USD PPP) |IRR (annualized)                        | Avg earnings gains (2017 USD PPP)        |
 |--------------------------------:|---------------------------------:|-----------------------------------------------:|---------------------------------------:|-----------------------------------------:|
 | Panel A                                                                                                                                                                                             
-|                                 |0                                 |                                                |10%                                     |**0.78**  |
-|                                 |0                                 |                                                |5%                    |**0.83**  |
-|                                 |                                  |0                                               |10%                                     |**4.7**     |
-|                                 |                                  |0                                               |5%                    |**4.99**     |
+|                                 |0                                 |                                                |10%                                     |**5.53**  |
+|                                 |0                                 |                                                |5%                    |**2.64**  |
+|                                 |                                  |0                                               |10%                                     |**33.38**     |
+|                                 |                                  |0                                               |5%                    |**15.92**     |
 | Panel B                                                                                                                                                               
-|                                 |0                                 |                                                |**48.7%**|*                                         |
-|                                 |                                  | 0                                              |**29.1%**   |*                                         |
+|                                 |0                                 |                                                |**48.5%**|*                                         |
+|                                 |                                  | 0                                              |**29%**   |*                                         |
 | Panel C
-| 10%                             |**1318**|**216**              |                                        |*                                         |
-|5%             |**3442**|**563**              |                                        |*                                         |
+| 10%                             |**1298**|**196**              |                                        |*                                         |
+|5%             |**3422**|**543**              |                                        |*                                         |
 
