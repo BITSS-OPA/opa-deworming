@@ -1,6 +1,7 @@
 ---
 title: "Dynamic Document for Fiscal Impacts of Deworming"
 date: "19 November, 2019"
+
 output:
   html_document:
     code_folding: hide
@@ -170,6 +171,7 @@ npv_mo_f <- function(interest_r_var = interest_in,
           apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
           sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
+
 ############################################################################### 
   return(res1) 
 }
@@ -517,8 +519,8 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_
 |                                 |0                               |                                                |**42.1%**    |*                                         |
 |                                 |                                | 0                                              |**16.4%**       |*                                         |
 | Panel C
-| 10%                             |**249**  |**20**                  |                                        |*                                         |
-|5%             |**537**  |**62**                  |                                        |*                                         |
+| 10%                             |**248**  |**19**                  |                                        |*                                         |
+|5%             |**536**  |**61**                  |                                        |*                                         |
 
 ### Treatment effect timeframe: 50 years
 
@@ -533,8 +535,8 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_
 |                                 |0                                 |                                                |**42.1%**|*                                         |
 |                                 |                                  | 0                                              |**17.5%**   |*                                         |
 | Panel C
-| 10%                             |**329**|**33**              |                                        |*                                         |
-|5%             |**918**|**125**              |                                        |*                                         |
+| 10%                             |**327**|**32**              |                                        |*                                         |
+|5%             |**917**|**124**              |                                        |*                                         |
 
 ## Consumption
 
@@ -595,8 +597,8 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   intere
 |                                 |0                               |                                                |**48.4%**    |*                                         |
 |                                 |                                | 0                                              |**28.8%**       |*                                         |
 | Panel C
-| 10%                             |**1108**  |**162**                  |                                        |*                                         |
-|5%             |**2523**  |**391**                  |                                        |*                                         |
+| 10%                             |**1107**  |**161**                  |                                        |*                                         |
+|5%             |**2522**  |**390**                  |                                        |*                                         |
 
 ### Treatment effect timeframe: 50 years
 
@@ -611,8 +613,8 @@ tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   intere
 |                                 |0                                 |                                                |**48.5%**|*                                         |
 |                                 |                                  | 0                                              |**29%**   |*                                         |
 | Panel C
-| 10%                             |**1295**|**193**              |                                        |*                                         |
-|5%             |**3419**|**540**              |                                        |*                                         |
+| 10%                             |**1294**|**192**              |                                        |*                                         |
+|5%             |**3418**|**538**              |                                        |*                                         |
 
 
 ## Additional notes for replication

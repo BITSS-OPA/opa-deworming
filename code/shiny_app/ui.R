@@ -10,7 +10,7 @@ library(haven)
 library(here)
 library(kableExtra)
 library(readxl)
-
+library(shinyjs)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
@@ -172,11 +172,11 @@ shinyUI( fluidPage(
                )
                ),
   mainPanel(
-    fluidRow(id = "output_id1", style = "max-width: 800px; max-height: 800px; position:relative;",
+    fluidRow(id = "output_id1", style = "max-width: 800px; max-height: 1000px; position:relative;",
         plotOutput("plot1"),
     ),
-    fluidRow(id = "output_id2", style = "max-width: 800px; max-height: 300px; position:absolute;top: 780px;",
-     
+    fluidRow(id = "output_id2", style = "max-width: 800px; max-height: 300px; position:absolute;top: 1000px;",
+             checkboxInput("show_eq", label = "Show equations", value = FALSE),
              uiOutput('eqns', container = div)
         
     )

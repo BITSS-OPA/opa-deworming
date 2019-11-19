@@ -76,79 +76,80 @@ shinyServer( function(input, output, session) {
   
 
   
-  list_master <- c(
-    "param2",                                             #Data
-    "param2_1",
-    "param3",
-    "param3_1",
-    "param4",
-    "param4_1",
-    "param5",
-    "param5_1",
-    "param6",
-    "param6_1",
-    "param7",
-    "param7_1",
-    "param8",
-    "param8_1",
-    "param9",
-    "param9_1",
-    "param10",
-    "param10_1",
-    "param11",
-    "param11_1",
-    "param12",
-    "param12_1",
-    "param13",
-    "param13_1",
-    "param15",
-    "param15_1",
-    "param16",
-    "param16_1",
-    "param17",
-    "param17_1",
-    "param18_1",                                          #Research
-    "param18_1_1",
-    "param18_2",
-    "param18_2_1",
-    "param20",
-    "param20_1",
-    "param28",
-    "param28_1",
-    "param26",
-    "param26_1",
-    "param30",
-    "param30_1",
-    "param21_1",                                          #Guesswork
-    "param21_2",
-    "param22",
-    "param22_1",
-    "param23",
-    "param23_1",
-    "param24",
-    "param24_1",
-    "param31",
-    "param31_1",
-    "param32",
-    "param32_1",
-    "param34",
-    "param34_1",
-    "param19",
-    "param19_1",
-    "param27",
-    "param27_1",
-    "param29_1",
-    "param29_1_1",
-    "param29_2",
-    "param29_2_1",
-    "param29_3",
-    "param29_3_1",
-    "param33",
-    "param33_1"
-  )
+ 
   
-
+ # Show/hide components of each model 
   observeEvent(input$policy_est,{ 
+    list_master <- c(
+      "param2",                                             #Data
+      "param2_1",
+      "param3",
+      "param3_1",
+      "param4",
+      "param4_1",
+      "param5",
+      "param5_1",
+      "param6",
+      "param6_1",
+      "param7",
+      "param7_1",
+      "param8",
+      "param8_1",
+      "param9",
+      "param9_1",
+      "param10",
+      "param10_1",
+      "param11",
+      "param11_1",
+      "param12",
+      "param12_1",
+      "param13",
+      "param13_1",
+      "param15",
+      "param15_1",
+      "param16",
+      "param16_1",
+      "param17",
+      "param17_1",
+      "param18_1",                                          #Research
+      "param18_1_1",
+      "param18_2",
+      "param18_2_1",
+      "param20",
+      "param20_1",
+      "param28",
+      "param28_1",
+      "param26",
+      "param26_1",
+      "param30",
+      "param30_1",
+      "param21_1",                                          #Guesswork
+      "param21_2",
+      "param22",
+      "param22_1",
+      "param23",
+      "param23_1",
+      "param24",
+      "param24_1",
+      "param31",
+      "param31_1",
+      "param32",
+      "param32_1",
+      "param34",
+      "param34_1",
+      "param19",
+      "param19_1",
+      "param27",
+      "param27_1",
+      "param29_1",
+      "param29_1_1",
+      "param29_2",
+      "param29_2_1",
+      "param29_3",
+      "param29_3_1",
+      "param33",
+      "param33_1"
+    )
     if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
       list_hide <- c("param32",
                        "param32_1",
@@ -346,6 +347,8 @@ shinyServer( function(input, output, session) {
                      "param17_1",
                      "param19",
                      "param19_1",
+                     "param21_1",
+                     "param21_2",
                      "param22",
                      "param22_1",
                      "param23",
@@ -398,6 +401,8 @@ shinyServer( function(input, output, session) {
                      "param17_1",
                      "param19",
                      "param19_1",
+                     "param21_1",
+                     "param21_2",
                      "param22",
                      "param22_1",
                      "param23",
@@ -449,8 +454,10 @@ shinyServer( function(input, output, session) {
                      "param17_1",
                      "param19",
                      "param19_1",
-                     "param22",
+                     "param21",
+                     "param21_1",
                      "param22_1",
+                     "param22_2",
                      "param23",
                      "param23_1",
                      "param24",
@@ -501,51 +508,64 @@ shinyServer( function(input, output, session) {
            function(x) showElement(id = x) ) 
   })
 
-  observeEvent(input$run, {
+  
 
+  hideElement("show_eq")
+  observeEvent(input$run, {
   ################
   ###### Results/Viz
   ################
   # THINK ABOUT WRAPPING THE OUTPUT IN ONE COMMOMN FUNCTION ACROSS DD AND APP
 
     output$eqns <- renderUI({
-    
-      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") { 
-        withMathJax(
-          helpText('You do not see me initially: $$e^{i \\pi} + 1 = 0$$') )
-      } else if (input$policy_est ==  "Fiscal effects, 2016(W@W) B & C, yes ext"){
-        withMathJax(helpText("$$\\pi2$$"))
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext"){
-        withMathJax(helpText("$$\\pi3$$"))
-      } else if (input$policy_est ==  "Total effects, 2016(W@W) B & C, yes ext"){
-        withMathJax(helpText("$$\\pi4$$"))
-      } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
-        withMathJax(helpText("$$\\pi5$$"))
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
-        withMathJax(helpText("$$\\pi6$$"))
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext"){
-        withMathJax(helpText("$$\\pi7$$"))
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext"){
-        withMathJax(helpText("$$\\pi8$$"))
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext"){
-        withMathJax(helpText("$$\\pi9$$"))
-      }else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext"){
-        withMathJax(helpText("$$\\pi10$$"))
-      }else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext"){
-        withMathJax(helpText("$$\\pi11$$"))
-      }
-      
+      if (input$run == TRUE) {showElement("show_eq")}
+      if (input$show_eq == TRUE) {
+          if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext" ) { 
+            withMathJax(
+              helpText('$$
+              \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
+                      \\right]
+                            }_{\\text{net labor market gains}} - 
+                      \\underbrace{
+                      \\left[\\sum_{t=0}^{2} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+            \\label{eq:1}
+            \\tag{1}
+            \\end{equation}
+            $$') 
+              )
+            
+          } else if (input$policy_est ==  "Fiscal effects, 2016(W@W) B & C, yes ext"){
+            withMathJax(helpText("$$\\pi2$$"))
+          } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext"){
+            withMathJax(helpText("$$\\pi3$$"))
+          } else if (input$policy_est ==  "Total effects, 2016(W@W) B & C, yes ext"){
+            withMathJax(helpText("$$\\pi4$$"))
+          } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
+            withMathJax(helpText("$$\\pi5$$"))
+          } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
+            withMathJax(helpText("$$\\pi6$$"))
+          } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext"){
+            withMathJax(helpText("$$\\pi7$$"))
+          } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext"){
+            withMathJax(helpText("$$\\pi8$$"))
+          } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext"){
+            withMathJax(helpText("$$\\pi9$$"))
+          }else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext"){
+            withMathJax(helpText("$$\\pi10$$"))
+          }else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext"){
+            withMathJax(helpText("$$\\pi11$$"))
+          }
+      } 
     })
-    
-
-    
-    
       
     output$plot1 <- renderPlot({      
     npv_sim_all <- reactive.data1()
-  
-    
-      
+
     total_time <- npv_sim_all$total_time
     position <- which( policy_estimates_text == input$policy_est)
     npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
@@ -571,6 +591,6 @@ shinyServer( function(input, output, session) {
       plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
       }
     print(plot1)  
-    }, height = 800, width = 800 )
+    }, height = 1000, width = 800 )
   })
 })
