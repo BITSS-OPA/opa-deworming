@@ -1,70 +1,32 @@
----
-title: "A Unifying Open Policy Analysis for Deworming"
-date: "30 October, 2019"
-output:
-  html_document:
-    code_folding: hide
-    code_download: true
-    collapsed: yes
-    keep_md: yes
-    number_sections: yes
-    smooth_scroll: no
-    toc: yes
-    toc_depth: 3
-    toc_float: yes
-  pdf_document: default
-  word_document: default
-editor_options:
-  chunk_output_type: console
-pdf_document:
-  extra_dependencies: ["xcolor"]
----
-\def\blue{\color{blue}}
-\def\red{\color{red}}
+## ----setup, include=FALSE, purl=TRUE-------------------------------------
+# Loading required libraries
+list.of.packages <- c("tidyverse", "haven", "here", "kableExtra", "readxl")
+
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages, repos= "http://cran.cnr.berkeley.edu/")
+
+lapply(list.of.packages, library, character.only = TRUE)
+
+knitr::opts_knit$set(root.dir = here())
+knitr::opts_chunk$set(echo = TRUE)
+
+print_code <- TRUE
+
+setwd(here())
+colorize = function(x, color){
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}(%s)", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<font color='%s'>%s</font>", color, x)
+  } else x
+}
 
 
 
 
 
 
-
-
-
-```r
-################
-#####  Notes:
-################
-### Source ---------->  Input ---------->  Model ---------->  Policy Estimates (output)
-###  (_so)              (_in)              (_mo)                (_pe)
-### values            functions          functions              values
-###                   & values           & values             
-# - call_sources_f- tax_elasticity_in_f  - tax_revenue_mo_f     - ten_year_revenue_pe
-# - policy_f      - est_billionares_in_f - total_rev_mo_f       - ten_year_top_tax_pe
-#                                        - ten_years_mo_f       - total_rev_pe
-### arguments in functions should used "_var" and functions should "_f"
-
-
-# DESCRIBE FUNCTIONS STRUCTURE
-# - inputs: list
-# - outputs: list
-#### function:  
-#sample_function_f <- function(){
-##########################################
-##########################################  
-#
-# here goes the content
-#
-##########################################
-##########################################  
-#    return( )                                  # A list with all (most?) the elements
-#}                                              # generated inside the function
-#invisible( list2env(sample_function_f(),.GlobalEnv) )
-#
-```
-
-
-
-```r
+## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE----
 chunk_params <- function(){
 ###############################################################################
 ###############################################################################  
@@ -99,7 +61,15 @@ chunk_params <- function(){
     df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Treatment #s")
 
-    ############# 318.08 327.68
+    # Prevalence data: 
+    # original study
+    #alpha_0_so <- 0.77 #add source
+    #alphas_df <- 1 # a table with country, year and infection rates
+    
+    # new geographies
+    
+    
+    ############# 
     ##### Research
     #############    
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women CONFIRM
@@ -120,8 +90,8 @@ chunk_params <- function(){
     delta_ed_par_so <- 1
     delta_ed_ext_par_so <- 1
     include_ext_so <- TRUE
-    alpha_0_so <- 1 #0.77
-    alpha_r_so <- 1 #0.15
+    alpha_0_so <- 0.77 #0.77
+    alpha_r_so <- 0.15 #0.15
 
     #############
     ##### Guess work   
@@ -167,56 +137,12 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 # on growth_rate_so: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
 # on coef_exp_so: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, female dummy, indicators for attained primary/secondary/beyond, and province dummies. Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle adjustment beyond KLPS-3 (likely a conservative assumption).
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
-```
-
-
-
-# Key policy estimates for policy makers  
-
-The key policy estimate consists of a cost effectiveness analysis that compares the present
-value of benefits and costs. The benefits quantified here are the effects on wages an the
-costs are those of delivering the deworming treatment.  
 
 
 
 
 
-The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population.
-
-
-# Methodology
-
-This analaysis contains elements from GiveWell's cost effectiveness analaysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
-
-## Main Equation (the model)
-
-The key result for policy makers is defined as the cost effectivness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
-
-\begin{equation}
-CEA_{deworming} = \frac{B (1 + \blue{F_{0}})}{C}
-\label{eq:1}
-\tag{1}
-\end{equation}
-
- - $C$ is the costs per person dewormed (`F2, 4,B23` --> [`F1, 2, H16`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=H16)).     
- - $B$ is the benefits per person dewormed (`F2, 4,B22`).
- - $\blue{F_{0}}$ is a factor to account for leverage/fudging [not reviewed in this excercise] ([`F2, 6, D259`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1611790402&range=D259))
-
-
-Also this quantity could be expressed in relative terms to the benchmark of cash transfers (cell [`Results!B9`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1034883018&range=B9)):
-
-\begin{equation}
-RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
-\end{equation}
-
-
-Also, we can compute the NPV as presented in Baird et al 2016  
-\begin{equation}
-NPV = B - C
-\end{equation}
-
-
-```r
+## ----eq_1, echo=print_code-----------------------------------------------
 # - inputs: total per capita benefits, total per capita costs, fudging factor
 # - outputs: Cost-effectiveness ratio & ratio to cash CEA
 chunk_policy_est <- function(){
@@ -241,37 +167,9 @@ chunk_policy_est <- function(){
                 "NPV_pe_f" = NPV_pe_f))
 }
 invisible( list2env(chunk_policy_est(),.GlobalEnv) )
-```
-
-## Sub-components:
-
-We begin by describing the underlying analysis behind the costs. Through this excercise we use the following notation the letters $F, P, Q$ denote components
-in percentages, monetary units (US dollars and local currency) and quantities respectively. Each new element will be tracked using a sub-index, and supra-indecis will be
-used to track groups, like geographies, time, and other catergories. For example $Q^{i}_{2}$ represents the second quantity described in this analysis (total adjusted number childred dewormed per year) in location $i$. At the end of each description we will show in parenthesis the original location of the parameter in GiveWell's spreadsheets (using the notation `file, sheet number, cell`[^1]). When a parameter in an equation does not depend on any subsequent component, it is highlighted in bold.
-
-### Costs ("$C$")
-
-\begin{equation}
-C = \sum_{i \in Countries } \omega_{i} c_{i}
-\label{eq:2}
-\tag{2}
-\end{equation}
-
-GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance.These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such the cost of drugs donated by WHO.
-
-Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
-
-The final cost is a weighted average of the unit cost across countries.
-
-- $\omega_{i}$: Weight for the weighted average ([`F1, 2, C:G8`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=C8:G8)).  
-- $c_{i}$: Total cost per child, per year in country $i$ (`F1, 2, C:G16`).  
-
-Build $c_i$ as a function of three stakeholders: DtW, other donors, goverment.  
-Each stakeholders spends on: line items.    
-Incorporate currency.
 
 
-```r
+## ----eq_2, echo=print_code-----------------------------------------------
 # - inputs: nothing
 # - outputs: function that computs the weighted sum of country costs
 chunk_cost1 <- function(){
@@ -289,41 +187,9 @@ chunk_cost1 <- function(){
 
 
 invisible( list2env(chunk_cost1(),.GlobalEnv) )
-```
 
 
-
-\begin{equation}
-\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
-c_{i} = \frac{C_{i}}{N_{i}} \\
-\label{eq:3}
-\tag{3}
-\end{equation}
-
-
-\begin{equation}
-C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
-C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
-\label{eq:4}
-\tag{4}
-\end{equation}
-
-
-
-
-All costs are in USD.
-
-GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
-
-
-- $N_{i}$: Number of treated children in country $i$.  
-- $Ex_{i}$: Exchange rate from country $i$ to USD.  
-- $k$: Costs distribute across $k$ payers.   
-- $l$: Each payers costs come from $l$ items.   
-
-
-
-```r
+## ----eq_3, echo=print_code, eval=TRUE------------------------------------
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 chunk_cost1_inp <- function(){
@@ -340,7 +206,6 @@ chunk_cost1_inp <- function(){
         mutate(Country = tolower(Country))
 
       # values for last year with cost information
-
       df_costs_last <- df_costs_var %>%
         group_by(Country) %>%
         summarise("last_year" = max(Year)) %>%
@@ -403,20 +268,9 @@ chunk_cost1_inp <- function(){
                 "costs1_ratios_in_f" = costs1_ratios_in_f) )
 }
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
-```
-
-#### Data required to compute costs.
-
-$N_{i}, C_{i,k,l}, \delta_{g}$
-
-#### Alternative calculation for costs
-
-\begin{equation}
-C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{\gamma t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
-\end{equation}
 
 
-```r
+## ----cost2---------------------------------------------------------------
 # - inputs:
 # - outputs:
 chunk_cost2 <- function(){
@@ -440,23 +294,11 @@ chunk_cost2 <- function(){
 invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:  
-```
 
 
-##### $K$ and $\Delta \overline{E}_{\gamma t}(S1,S2)$
-
-$K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
-
-\begin{equation}
-K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
-\end{equation}
-
-For $\Delta \overline{E}_{\gamma t}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
-
-This series does not take into account the externality effects. To incorporate it we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
 
 
-```r
+## ----ed-costs------------------------------------------------------------
 # - inputs:
 # - outputs:
 chunk_edcosts <- function(){
@@ -489,29 +331,9 @@ invisible( list2env(chunk_edcosts(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 cost_per_student_in <- cost_per_student_f()
 delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
-```
-
-**Note:** need to understand better the date of each component (of the model, not only this section).
-
-##### 6 - $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
-
-###### 6.1 - $S_{1}Q(S_{1}) = 0$
-There is no subsidy for deworming under the status quo.   
 
 
-###### 6.2 - $S_{2}$: complete subsidy to per capita costs of deworming.
-
-With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
-
-\begin{equation}
-S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
-\end{equation}
-
-###### 6.3 - $Q_{2}$
-The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of 0.75.
-
-
-```r
+## ----unit_costs2---------------------------------------------------------
 # - inputs:
 # - outputs:
 chunk_unit_costs2 <- function(){
@@ -529,37 +351,11 @@ chunk_unit_costs2 <- function(){
 }
 invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
-```
 
 
 
 
-### Benefits ("$B$")  
-
-Bair et al. (2016) compute benefits like this:
-
-\begin{equation}
-B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
-\label{eq:5}
-\tag{5}
-\end{equation}
-
-**Note:** The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
-
-
-
-Where:   
-
- - $r$: is the discount rate  
- - $w_t$: are the earnings in period $t$.   
- - $\lambda_{1}$: is the direct effects of deworming on earnings.  
- - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
- - $p$: saturation, measures the fraction of the population that is effectively usign the treatment.  
- - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
-
-
-
-```r
+## ----benefits------------------------------------------------------------
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 chunk_benefits <- function(){
@@ -578,14 +374,9 @@ chunk_benefits <- function(){
     return(list("pv_benef_f" = pv_benef_f))
 }
 invisible( list2env(chunk_benefits(),.GlobalEnv) )
-```
-
-#### "$r$"  
-
-The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.118) minus the inflation rate (0.02).
 
 
-```r
+## ----interest-rate-------------------------------------------------------
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
 chunk_interest <- function(){
@@ -604,24 +395,9 @@ chunk_interest <- function(){
 
 invisible( list2env(chunk_interest(),.GlobalEnv) )
 interest <- as.numeric( interest_f() )
-```
 
 
-The resulting value is a $r$ = 9.85%
-
-
-#### Earnings
-Where $E_t$ represents earnings in period $t$. That can be computed in two ways.
-
-
-##### numer one
-
-\begin{equation}
-E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
-\end{equation}
-
-
-```r
+## ----earnings1-----------------------------------------------------------
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
 chunk_earnings1 <- function(){
@@ -642,41 +418,9 @@ chunk_earnings1 <- function(){
 }
 
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
-```
-
-###### "$w_{t}$"
-
-The wages/earnings are determined by:  
-
-\begin{equation}
-w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50
-\end{equation}
-
-individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0$ for $t<10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
-
-###### "$w_0$"
-
-\begin{equation}
-w_t =  \text{#weeks} \times \blue{w_0} (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
-\end{equation}
-
-\begin{equation}
-w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
-\end{equation}
-
-The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.
-
-The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and its defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows:
-
-\begin{equation}
-w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
-\end{equation}
-
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of workin age in the sample (hence capturing the relative inportance of the self employed sector in the economy)
 
 
-
-```r
+## ----wage_t--------------------------------------------------------------
 #inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
@@ -734,26 +478,9 @@ chunk_wages <- function(){
 }
 
 invisible( list2env(chunk_wages(),.GlobalEnv) )
-```
 
 
-##### Number two
-
-\begin{equation}
-E_t = \Delta Y_t = I(10 \leq t < 15) \lambda_{1}^{k1} + I(15 \leq t < 20) \lambda_{1}^{k2} + I(20 \leq t < 25) \lambda_{1}^{k3}  
-\end{equation}
-
-Where     
-
- - $I(10 \leq t < 15)$ represents ...  
- - $\lambda_{1}^{k1}$ represents ...  
-
-
-
-
-
-
-```r
+## ----delta-earnings, eval=TRUE-------------------------------------------
 # - inputs:
 # - outputs:
 chunk_new_earnings <- function(){
@@ -776,34 +503,9 @@ chunk_new_earnings <- function(){
 
 invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 
-```
 
 
-#### "$\lambda_{1}$"  and  "$\lambda_{2}$"
-
-$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a simple mean:
-
-\begin{equation}
-\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female} \\
-\lambda_{1,\gamma} = \alpha \lambda^{eff}_{1,\gamma} + (1 -  \alpha) \times 0
-\end{equation}
-
-Where:      
-
- - $\alpha$: represents the incidence of the condition.  
- - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
- - $\lambda_{2}^{eff}$: ?. **[discuss with Ted/Michael]**
-
-**WARNING: the next paragraph has a bunch of hard coded numbers that need to be reviewed and coded up**   
-
-In the original evaluation, $\alpha = 1$, hence $\lambda_{1}^{eff} = 1.75/0.92 = 1.94$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
-
-Its components come from the W\@W paper.
-
-$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
-
-
-```r
+## ----lambdas-------------------------------------------------------------
 # - inputs:
 # - outputs:
 chunk_lambdas<- function(){
@@ -836,24 +538,9 @@ invisible( list2env(chunk_lambdas(),.GlobalEnv) )
 lambda1_in <- lambda1_in_f()
 lambda1_r_in <- lambda_r_f()
 lambda2_in <- lambda2_in_f()
-```
 
 
-#### $R$ and $p$
-
-
-The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was appplied to approximatedly two thirds of the population, $R$ is set to: $R  = 0.68$.  
-
-The saturation of the intervention, $p$, measures the fraction of the population that is effectively usign the treatment and is defined as:  
-
-\begin{equation}
-p = R \times Q(full)  + (1 - R) \times Q(0)
-\end{equation}
-
-For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assinged the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = 0.75$.
-
-
-```r
+## ----coverage-and-saturation---------------------------------------------
 # - inputs: coverage_so, q_full_so, q_zero_so
 # - outputs: saturation_in
 chunk_coverage <- function(){
@@ -873,28 +560,10 @@ chunk_coverage <- function(){
 invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-```
-
-
-# Main results
-
-
-| Benfits                                   | Costs        | Name    |
-|-------------------------------------------|--------------|---------|
-| Baird w/tax and no externalities (no ext) | Baird no ext | Baird 1 |
-| Baird w/t and ext                         | Baird ext    | Baird 2 |
-| Baird all and no ext                      | Baird no ext | Baird 3 |
-| Baird all and ext                         | Baird ext    | Baird 4 |
-| KLPS4 w/t and no ext                      | Baird no ext | KLPS4_1 |
-| KLPS4 all and no ext                      | Baird no ext | KLPS4_2 |
-| Baird all and no ext                      | EA           | EA 1    |
-| Baird all and ext                         | EA           | EA 2    |
-| KLPS all and no ext                       | EA           | EA 3    |  
 
 
 
-
-```r
+## ----all-steps-----------------------------------------------------------
 # Function dependency is depicted as follows:
 # f(g()) =
 # f
@@ -1134,161 +803,12 @@ one_run <-
   }
 
 invisible( list2env(one_run(),.GlobalEnv) )
-```
 
 
 
 
-```r
-#Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
-baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
-unit_test(baird1, -0.6096942)
-#Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
-baird2 <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
-unit_test(baird2, 34.31866)
 
-# Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
-baird3 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
-unit_test(baird3, 54.8986884881819)
-# Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
-baird4 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
-unit_test(baird4, 333.17324538204)
-
-#KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
-klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
-unit_test(klps4_1, 47.6017891133612)
-#KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
-klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
-unit_test(klps4_2, 345.767366073607)
-
-
-# res_npv_no_ext_klps_eacosts <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = cost1_in)
-# unit_test(res_npv_no_ext_klps_eacosts, 59.15516)
-
-# EA1: no externality NPV using EAs costs
-ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
-unit_test(ea1, 66.4520618047856)
-# EA2: yes externality NPV using EAs costs
-ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
-unit_test(ea2, 358.146643635645)
-# EA3: benef= KLPS all and no ext; Costs=EA
-ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
-unit_test(ea3, 357.320739390211)
-
-#CEA for EA
-cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0)
-unit_test(cea_no_ext_ea, 784.569405332587)
-
-rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0),
-         CEA_cash_var = 744)
-unit_test(rcea_no_ext_ea, 1.05452877060832)
-
-npv_table <- data.frame("no_ext" =  round( c(baird1, NA,
-                                             NA), 1) ,
-                        "yes_ext" = round( c(NA, baird2, NA), 1) ,
-                        "no_ext_" = round( c(baird3, NA,
-                                             ea1), 1) ,
-                        "yes_ext_" = round( c(NA, baird4,
-                                             ea2), 1) ,
-                        "no_ext " = round( c(NA, klps4_1,
-                                             NA), 1) ,
-                        ".no_ext " = round( c(NA, klps4_2,
-                                             ea3), 1) ,
-                        row.names = c("no_ext", "yes_ext", "no_ext_"))
-
-kable(npv_table, caption = "Caption of the table") %>%
-  add_header_above(c(" ", "tax" = 2, "all" = 2, "tax" = 1, "all" = 1)) %>%
-  add_header_above(c(" ", "Baird = EA" = 4, "KLPS4" = 2)) %>%
-  add_header_above(c(" ", "Benefits" = 6)) %>%
-  kable_styling("striped", full_width = F) %>%
-  group_rows("Costs: Baird = KLPS4", 1, 2) %>%
-  group_rows("Costs: EA", 3, 3)   # same result with group 1=4
-```
-
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>Caption of the table</caption>
- <thead>
-<tr>
-<th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="6"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Benefits</div></th>
-</tr>
-<tr>
-<th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Baird = EA</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">KLPS4</div></th>
-</tr>
-<tr>
-<th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">tax</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">all</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">tax</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">all</div></th>
-</tr>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> no_ext </th>
-   <th style="text-align:right;"> yes_ext </th>
-   <th style="text-align:right;"> no_ext_ </th>
-   <th style="text-align:right;"> yes_ext_ </th>
-   <th style="text-align:right;"> no_ext. </th>
-   <th style="text-align:right;"> .no_ext. </th>
-  </tr>
- </thead>
-<tbody>
-  <tr grouplength="2"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: Baird = KLPS4</strong></td></tr>
-<tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext </td>
-   <td style="text-align:right;"> -0.6 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 54.9 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
-  </tr>
-  <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> yes_ext </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 34.3 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 333.2 </td>
-   <td style="text-align:right;"> 47.6 </td>
-   <td style="text-align:right;"> 345.8 </td>
-  </tr>
-  <tr grouplength="1"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: EA</strong></td></tr>
-<tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext_ </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 66.5 </td>
-   <td style="text-align:right;"> 358.1 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 357.3 </td>
-  </tr>
-</tbody>
-</table>
-
-
-## Results for overall welfare (not only taxes)
-
-- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** 54.9    
-
-- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = 10.2$ ):** 333.2
-
-- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 66.5    
-
-- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 358.1
-
-- **NPV without externalities in KLPS 2019:** 345.8    
-
-- **CEA without externalities in EA:** 784.6    
-
-- **RCEA without externalities in EA (relative to cash):** 1.1    
-
-
-# Montecarlo simulations  
-
-
-```r
+## ----mc-setup, eval=TRUE-------------------------------------------------
 sim.data1 <- function(nsims = 1e2,
                       main_run_var2,
                       run_sim_var2,
@@ -1365,13 +885,15 @@ sim.data1 <- function(nsims = 1e2,
     #draw_vals <- function(all_the_sos){}
     #Defaoult dist: normal, default sd: 0.1* mean
     ## Data
+    
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
     inflation_sim <-        rnorm(nsims, inflation_var2, inflation_var2_sd)
-
+#browser()
     wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
     wage_ww_sim <-          rnorm(nsims, wage_ww_var2, wage_ww_var2_sd)
     profits_se_sim <-       rnorm(nsims, profits_se_var2, profits_se_var2_sd)
     hours_se_cond_sim <-    rnorm(nsims, hours_se_cond_var2, hours_se_cond_var2_sd)
+#browser()
     hours_ag_sim <-         rnorm(nsims, hours_ag_var2, hours_ag_var2_sd)
     hours_ww_sim <-         rnorm(nsims, hours_ww_var2, hours_ww_var2_sd)
     hours_se_sim <-         rnorm(nsims, hours_se_var2, hours_se_var2_sd)
@@ -1412,6 +934,7 @@ sim.data1 <- function(nsims = 1e2,
     teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
     n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
 
+    
     delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean =
                                                                 x * delta_ed_var2,
                                                               sd = delta_ed_var2_sd * sd(delta_ed_so[,1]) ) )
@@ -1463,6 +986,7 @@ sim.data1 <- function(nsims = 1e2,
     ea3_sim              <- rep(NA, nsims)
     cea_no_ext_ea_sim    <- rep(NA, nsims)
     rcea_no_ext_ea_sim   <- rep(NA, nsims)
+
 
     for (i in 1:nsims) {
     # one_run, for the most part, does not include standard deviations   
@@ -1547,87 +1071,20 @@ sim.data1 <- function(nsims = 1e2,
       "total_time"         = total_time
     ) )
 }
-```
 
-
-
-```r
-npv_sim_all <-   sim.data1(nsims = nsims_so,                        
-            gov_bonds_var2          = gov_bonds_so             ,                                    
-            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
-            inflation_var2          = inflation_so             ,                                    
-            inflation_var2_sd       = inflation_so * 0.1          ,                                 
-            wage_ag_var2            = wage_ag_so               ,                                      
-            wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
-            wage_ww_var2            = wage_ww_so               ,                                      
-            wage_ww_var2_sd         = wage_ww_so * 0.1            ,                                   
-            profits_se_var2         = profits_se_so            ,                                   
-            profits_se_var2_sd      = profits_se_so * 0.1         ,                                
-            hours_se_cond_var2      = hours_se_cond_so         ,                                
-            hours_se_cond_var2_sd   = hours_se_cond_so * 0.1      ,                             
-            hours_ag_var2           = hours_ag_so              ,                                     
-            hours_ag_var2_sd        = hours_ag_so * 0.1           ,                                  
-            hours_ww_var2           = hours_ww_so              ,                                     
-            hours_ww_var2_sd        = hours_ww_so * 0.1           ,                                  
-            hours_se_var2           = hours_se_so              ,                                     
-            hours_se_var2_sd        = hours_se_so * 0.1           ,                                  
-            ex_rate_var2            = ex_rate_so               ,                                      
-            ex_rate_var2_sd         = ex_rate_so * 0.1            ,                                   
-            growth_rate_var2        = growth_rate_so           ,                                  
-            growth_rate_var2_sd     = growth_rate_so * 0.1        ,
-            coverage_var2           = coverage_so              ,
-            coverage_var2_sd        = coverage_so * 0.1           ,  
-            tax_var2                = tax_so                   ,                                             
-            tax_var2_sd             = tax_so * 0.1                ,                                        
-            unit_cost_local_var2    = unit_cost_local_so       ,                                     
-            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,                                       
-            years_of_treat_var2     = years_of_treat_so        ,                                    
-            years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
-            lambda1_var2            = lambda1_so,                                          
-            lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
-            lambda2_var2            = lambda2_so        ,                         
-            lambda2_var2_sd         = lambda2_so * 0.1  ,                      
-            q_full_var2             = q_full_so         ,                          
-            q_full_var2_sd          = q_full_so * 0.1   ,                         
-            coef_exp_var2           = coef_exp_so,                      
-            #                      coef_exp_var2_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)),                       
-            teach_sal_var2          = teach_sal_so         ,                                          
-            teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
-            teach_ben_var2          = teach_ben_so         ,                                          
-            teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
-            n_students_var2         = n_students_so        ,                                         
-            n_students_var2_sd      = n_students_so * 0.1     ,                                      
-            delta_ed_var2           = delta_ed_par_so          ,                                           
-            delta_ed_var2_sd        = delta_ed_par_so * 0.1       ,                                            
-            delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
-            delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
-            q_zero_var2             = q_zero_so            ,                                             
-            q_zero_var2_sd          = q_zero_so * 0.1         ,
-            lambda1_new_var2        = lambda1_new_so,                   
-            lambda1_new_var2_sd     = lambda1_new_sd_so,             
-            alpha_0_var2            = alpha_0_so       ,  
-            alpha_0_var2_sd         = alpha_0_so * 0.1    ,
-            alpha_r_var2            = alpha_r_so       ,  
-            alpha_r_var2_sd         = alpha_r_so * 0.1    ,                                                                         
-            staff_time_var2         = staff_time_so    ,
-            staff_time_var2_sd      = staff_time_so * 0.1,
-            counts_par_var2         = counts_par_so    ,
-            counts_par_var2_sd      = counts_par_sd_so ,
-            costs_par_var2          = costs_par_so     ,
-            costs_par_var2_sd       = costs_par_sd_so)
 
 
 policy_estimates <- c("baird1_sim",          
-"baird2_sim"         ,
-"baird3_sim"         ,
-"baird4_sim"         ,
-"klps4_1_sim"        ,
-"klps4_2_sim"        ,
-"ea1_sim"            ,
-"ea2_sim"            ,
-"ea3_sim"            ,
-"cea_no_ext_ea_sim"  ,
-"rcea_no_ext_ea_sim" )
+                      "baird2_sim"         ,
+                      "baird3_sim"         ,
+                      "baird4_sim"         ,
+                      "klps4_1_sim"        ,
+                      "klps4_2_sim"        ,
+                      "ea1_sim"            ,
+                      "ea2_sim"            ,
+                      "ea3_sim"            ,
+                      "cea_no_ext_ea_sim"  ,
+                      "rcea_no_ext_ea_sim" )
 
 policy_estimates_text <- c(
   "Fiscal effects, 2016(W@W) B & C, no ext",
@@ -1641,115 +1098,3 @@ policy_estimates_text <- c(
   "Total effects, 2019(KLPS4) B & EA C, no ext",
   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
-
-total_time <- npv_sim_all$total_time
-position <- which( policy_estimates == policy_estimate_so )
-npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-
-#Unit test the simulations for nsims = 100, 1000, 10000
-all_res_100_sims <- c(
-  4.36316094954722,
-  23.2129229802102,
-  26.0374491586364,
-  140.04952241052,
-  55.6356384691426,
-  323.847303050562,
-  26.4428542800085,
-  141.17922793913,
-  323.94495187629,
-  329.968011932834,
-  0.443505392382842
-)
-all_res_1000_sims <- c(
-  5.32356462047516,
-  27.6432480518217,
-  26.163996006382,
-  139.12854915303,
-  55.296769054413,
-  328.384415939951,
-  26.2272821730184,
-  138.95772521348,
-  328.60765919238,
-  323.313130629793,
-  0.434560659448646
-)
-all_res_10000_sims <- c(
-4.48502904005645,
-23.7639919630348,
-26.1966872755888,
-140.753259914499,
-56.0899202446023,
-333.729000769758,
-26.5531644269483,
-141.80292767189,
-333.852743072266,
-331.992604782129,
-0.446226619330819
-)
-
-k <- 0
-for ( i in policy_estimates ) {
-    k <- k + 1
-    to_test <- npv_sim_all[[i]]
-    if (nsims_so == 1e4){
-        unit_test(to_test, all_res_10000_sims[k], main_run_var = TRUE)
-    } else if (nsims_so == 1e3){
-        unit_test(to_test, all_res_1000_sims[k], main_run_var = TRUE)
-    } else if(nsims_so == 1e2){
-        unit_test(to_test, all_res_100_sims[k], main_run_var = TRUE)
-    }
-}
-
-################
-###### Results/Viz
-################
-
-nsims <- nsims_so
-
-npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-
-rescale <- rescale_so
-
-    plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-      coord_cartesian(xlim = c(-10, 400)) +
-      guides(alpha = "none", colour="none") +
-      labs(y = NULL,
-           x = "NPV" ,
-           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
-           ),
-           subtitle = paste0("N = ", nsims, " simulations. Takes ",
-                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-    if (rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim))) )
-    }
-
-print(plot1)
-```
-
-![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
-
-```r
-#knitr::purl("code/05_final_opa.Rmd", "code/shiny_app_test/all_analysis.R")
-```
-
-# Sensitivity Analysis  
-
-
-[^1]: `F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]` Original [here](https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857), editable version [here](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=509033857)
-`F2 = 2019 GiveWell Cost-effectiveness Analysis — Version 3`  
-`F3 = 2018 Worm Intensity Workbook — Version 1` Sheets are named the first time and numbered thereafter.
-
-
-[^2]: to account for several high-level activities Deworm the World does not include in its cost per treatment analyses, as they are not directly related to any particular program
-
-
-[^3]: https://docs.google.com/document/d/1BkQLyLYQmy9O7FISge78PnWy9urMo0k31RwI5tOhJE4/edit
