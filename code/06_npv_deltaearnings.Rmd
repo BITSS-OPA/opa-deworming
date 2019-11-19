@@ -142,8 +142,6 @@ print_code <- TRUE
  
 The target parameter to reproduce corresponds to the NPV of deworming, and can be found in the file `Baird-etal-QJE-2016_fiscal-impact-calculations-UPDATED-KLPS-3_2018-01-04.xlsx`, sheet, `Calcs-Table 5`, cell `C51`. CHECK IF THIS IS CORRECT.
 
-** NOTE: THOUGH THE MODEL IN THE TEXT SHOWS THAT COSTS HAVE BEEN DISCOUNTED OVER TIME, THIS IS NOT YET REFLECTED IN THE FUNCTIONS IN THE CODE! **
-
 # The model
 
 Since we expect the predominant benefits of deworming to surface in the longrun, viz-a-vis net labor market gains, the total Net Present Value is given by the difference between net long-term gains and the cost of deworming.
@@ -152,7 +150,7 @@ Since we expect the predominant benefits of deworming to surface in the longrun,
 NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 \right]}_{\text{net labor market gains}} - 
-\underbrace{\left[\sum_{t=0}^{`r round(years_of_treat_so,0)`} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{cost of deworming medication}}
+\underbrace{\left[\sum_{t=0}^{`r round(years_of_treat_so,0)-1`} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{cost of deworming medication}}
 \label{eq:1}
 \tag{1}
 \end{equation}
@@ -184,7 +182,7 @@ npv_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
           apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
-          sum( ( 1 / (1 + interest_r_var) )^(1:2) * rep((s2_var * q2_var  - s1_var * q1_var), 2) )
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -353,20 +351,19 @@ invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
 
 ## Short-term costs: deworming medication
 
-### $S_{1}Q(S_{1}) = 0$
-There is no subsidy for deworming under the status quo.   
-
-
-### $S_{2}$: complete subsidy to per capita costs of deworming.
-
-With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
+The costs of deworming medication is obtained by the sum of discounted costs of deworming over the treatment period. The average treatment period in this study was `r years_of_treat_so` years, which we round to `r round(years_of_treat_so,0)` years since the analysis is discrete.
 
 \begin{equation}
-S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
+\sum_{t=0}^{`r round(years_of_treat_so,0)-1`} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
 \end{equation}
 
-### $Q_{2}$
-The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of `r q_full_so`.
+### Current subsidy for deworming ($S_{1}Q(S_{1})$)
+Since there is no subsidy for deworming under the status quo, we have $S_{1}Q(S_{1}) =0$.
+
+
+### Complete subsidy for dewormng ($S_2Q(S_2)$)
+
+With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of `r q_full_so`.
 
 ```{r costs}
 # - inputs: 
@@ -375,7 +372,7 @@ costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
                     years_of_treat_var = years_of_treat_so, 
                     q_full_var = q_full_so){
 ############################################################################### 
-    s2_in <- (unit_cost_var)*years_of_treat_var
+    s2_in <- c(rep(unit_cost_var,2), .4*unit_cost_var)
     q2_in <- q_full_var
 ############################################################################### 
     return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
@@ -424,8 +421,8 @@ npv_cwelfare_p_mo_f <- function(interest_r_var = interest_in,
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^l_index_t *
-                     delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
+    sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -454,7 +451,7 @@ npv_cwelfare_d_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
+          ) - sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -635,7 +632,7 @@ We modify the NPV equation to account for willingness to pay for deworming medic
 NPV =  \underbrace{\left[\tau \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta W_t -
 K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 \right]}_{\text{long-term NPV (labor market gains)}} + 
-\underbrace{\left[\sum_{t=0}^{`r round(years_of_treat_so,0)`} \left( \frac{1}{1 + r}\right)^{t}w_t - \sum_{t=0}^{`r round(years_of_treat_so,0)`} \left( \frac{1}{1 + r}\right)^{t}\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{short-term NPV (direct health effects)}}
+\underbrace{\left[\sum_{t=0}^{`r round(years_of_treat_so,0)-1`} \left( \frac{1}{1 + r}\right)^{t}w_t - \sum_{t=0}^{`r round(years_of_treat_so,0)-1`} \left( \frac{1}{1 + r}\right)^{t}\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]\right]}_{\text{short-term NPV (direct health effects)}}
 \end{equation}
 
 ```{r wtp_model} 
@@ -665,7 +662,7 @@ npv_wtp_mo_f <- function(interest_r_var = interest_in,
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
           apply( ( 1 / (1 + interest_r_var) )^l_index_t *
                      delta_ed_s * cost_of_schooling_var, 2, sum) )) + 
-          (wtp_var-(s2_var * q2_var  - s1_var * q1_var))
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -704,8 +701,8 @@ npv_cwelfarewtp_p_mo_f <- function(interest_r_var = interest_in,
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^l_index_t *
-                     delta_ed_s * cost_of_schooling_var, 2, sum) )
-          ) - (s2_var * q2_var  - s1_var * q1_var)*years_of_treat_var
+                     delta_ed_s * cost_of_schooling_var, 2, sum) ) ) + 
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
@@ -734,8 +731,8 @@ npv_cwelfarewtp_d_mo_f <- function(interest_r_var = interest_in,
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
             apply( ( 1 / (1 + interest_r_var) )^l_index_t *
-                     delta_ed_s * cost_of_schooling_var, 2, sum) )) +
-                     (wtp_var-(s2_var * q2_var  - s1_var * q1_var))
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )) + 
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
 ############################################################################### 
   return(res1) 
 }
