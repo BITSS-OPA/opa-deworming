@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "08 November, 2019"
+date: "19 November, 2019"
 output:
   html_document:
     code_folding: hide
@@ -170,12 +170,32 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 ```
 
 
+# Introduction  
+Presents and compares different approaches to quantify the costs and benefits of deworming.   
+
+# Approach 1: Baird et al  
+
+- Describe.
+
+- Distinguish between total, fiscal. With and without externalities. 
+
+# Approach 2: KLPS4. 
+
+- Also distinguish between total and fiscal results. 
+
+# Approach 3: Evidence action
+
+- Key elements: 
+
+# Results  
 
 # Key policy estimates for policy makers  
 
 The key policy estimate consists of a cost effectiveness analysis that compares the present
 value of benefits and costs. The benefits quantified here are the effects on wages an the
 costs are those of delivering the deworming treatment.  
+
+
 
 
 
