@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "19 November, 2019"
+date: "25 November, 2019"
 output:
   html_document:
     code_folding: hide
@@ -171,7 +171,24 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 # Introduction  
+
 Presents and compares different approaches to quantify the costs and benefits of deworming.   
+
+# Common structure: 
+
+- CBA.  
+
+- PV of benefits 
+
+- PV of costs
+
+- Key differences:   
+  - On benefits:   
+    - Baird build wage profiles, klps4 has more data, EA has prevalence. Baird and KLPS4 present taxes and all. EA presents only all. EA accounts for prevalence, the others don't.  
+    
+  - On costs: 
+    - Baird and KLPS4 account for costs in ed, EA does not.   
+  
 
 # Approach 1: Baird et al  
 
@@ -183,13 +200,21 @@ Presents and compares different approaches to quantify the costs and benefits of
 
 - Also distinguish between total and fiscal results. 
 
+- Talk about total effects on earnings. Why not more externalities. New earnings profile. Describe diff between earnings and wages. 
+
 # Approach 3: Evidence action
 
 - Key elements: 
+  - No costs on ed. 
+  - Country specific costs. 
+  - Prevalence.
+  - Benefits from either Baird or KLPS4. 
+  - Different format of output (CEA, and RCEA)
 
 # Results  
 
-# Key policy estimates for policy makers  
+
+# OLDKey policy estimates for policy makers  
 
 The key policy estimate consists of a cost effectiveness analysis that compares the present
 value of benefits and costs. The benefits quantified here are the effects on wages an the

@@ -195,9 +195,12 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 # Introduction  
 
-Presents and compares different approaches to quantify the costs and benefits of deworming.   
+Presents and compares different approaches to quantify the costs and benefits of deworming. Mentioned the GW analysis.
 
-# Common structure: 
+This document summarizes the different ways of calculating the welafare effects of deworming.
+
+
+# Common structure 
 
 - CBA.  
 
@@ -211,7 +214,6 @@ Presents and compares different approaches to quantify the costs and benefits of
     
   - On costs: 
     - Baird and KLPS4 account for costs in ed, EA does not.   
-  
 
 # Approach 1: Baird et al  
 
@@ -234,9 +236,11 @@ Presents and compares different approaches to quantify the costs and benefits of
   - Benefits from either Baird or KLPS4. 
   - Different format of output (CEA, and RCEA)
 
+
 # Results  
 
-# Key policy estimates for policy makers  
+
+# OLDKey policy estimates for policy makers  
 
 The key policy estimate consists of a cost effectiveness analysis that compares the present
 value of benefits and costs. The benefits quantified here are the effects on wages an the
