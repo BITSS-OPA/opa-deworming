@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "25 November, 2019"
+date: "26 November, 2019"
 output:
   html_document:
     code_folding: hide
@@ -18,6 +18,8 @@ editor_options:
   chunk_output_type: console
 pdf_document:
   extra_dependencies: ["xcolor"]
+bibliography: bibliography.bib  
+link-citations: true 
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
@@ -172,14 +174,18 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 # Introduction  
 
-Presents and compares different approaches to quantify the costs and benefits of deworming.   
+Presents and compares different approaches to quantify the costs and benefits of deworming. Mentioned the GW analysis.
 
-# Common structure: 
+Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findinds presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions. 
 
-- CBA.  
+The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches: the original CBA produde by @baird2016worms, an updated version of such analysis by a symilar research team [@klps4], and a third approach that borrows some component of the previous two and a some specific components requested by the NGO Evidence Action (EA)[^1]. 
 
+We first describe the common elements across all three aproaches, and then describe each approach in detail.
+
+# Common structure 
+
+- CBA.
 - PV of benefits 
-
 - PV of costs
 
 - Key differences:   
@@ -188,9 +194,8 @@ Presents and compares different approaches to quantify the costs and benefits of
     
   - On costs: 
     - Baird and KLPS4 account for costs in ed, EA does not.   
-  
 
-# Approach 1: Baird et al  
+# Approach 1: @baird2016worms
 
 - Describe.
 
@@ -211,8 +216,10 @@ Presents and compares different approaches to quantify the costs and benefits of
   - Benefits from either Baird or KLPS4. 
   - Different format of output (CEA, and RCEA)
 
+
 # Results  
 
+# Main policy estimate {#policy-estimate}
 
 # OLDKey policy estimates for policy makers  
 
@@ -229,7 +236,7 @@ costs are those of delivering the deworming treatment.
 The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population.
 
 
-# Methodology
+# Methodology {#methods}
 
 This analaysis contains elements from GiveWell's cost effectiveness analaysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
 
@@ -1797,7 +1804,14 @@ print(plot1)
 # Sensitivity Analysis  
 
 
-[^1]: `F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]` Original [here](https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857), editable version [here](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=509033857)
+
+# References
+
+
+[^1]: EAs version of the analysis follows a similar structure than the cost effectiveness analysis performed by the charity evaluator GiveWell [@givewell].
+
+
+[^5]:`F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]` Original [here](https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857), editable version [here](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=509033857)
 `F2 = 2019 GiveWell Cost-effectiveness Analysis — Version 3`  
 `F3 = 2018 Worm Intensity Workbook — Version 1` Sheets are named the first time and numbered thereafter.
 
