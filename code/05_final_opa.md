@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "26 November, 2019"
+date: "27 November, 2019"
 output:
   html_document:
     code_folding: hide
@@ -80,7 +80,7 @@ chunk_params <- function(){
     hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
     hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
     hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
-    ex_rate_so <- 85               #Exchange Rate - Central Bank of Kenya
+    ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
     growth_rate_so <- 1.52/100     #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
     coverage_so  <- 0.681333333    # (R) Fraction of treated primary school students within 6 km - from W@W - see note
     tax_so <- 0.16575              #ADD INFO!
@@ -133,7 +133,7 @@ chunk_params <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from intial period until individual join the labor force
-    coef_exp_so <- c(0, 0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     n_students_so <- 45            #Average pupils per teacher	45
@@ -176,38 +176,54 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 Presents and compares different approaches to quantify the costs and benefits of deworming. Mentioned the GW analysis.
 
-Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findinds presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions. 
+Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions. 
 
-The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches: the original CBA produde by @baird2016worms, an updated version of such analysis by a symilar research team [@klps4], and a third approach that borrows some component of the previous two and a some specific components requested by the NGO Evidence Action (EA)[^1]. 
+The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:   
+  1 - the original CBA produced by @baird2016worms,   
+  2 - an updated version of such analysis by a symilar research team [@klps4], and   
+  3 - a third approach that borrows some component of the previous two and a some specific components requested by the NGO Evidence Action (EA)[^1]. 
+
+# Methodology  
 
 We first describe the common elements across all three aproaches, and then describe each approach in detail.
 
-# Common structure 
+## Common structure 
 
-- CBA.
-- PV of benefits 
-- PV of costs
+The starting point is a comparison of a stream of benefits and costs over the lifetime of the recepients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). 
 
-- Key differences:   
-  - On benefits:   
-    - Baird build wage profiles, klps4 has more data, EA has prevalence. Baird and KLPS4 present taxes and all. EA presents only all. EA accounts for prevalence, the others don't.  
-    
-  - On costs: 
-    - Baird and KLPS4 account for costs in ed, EA does not.   
+\begin{equation}
+NPV = \sum_{t = 0}^{T}\frac{1}{(1 + r)^t}\left( B_{t} - C_{t} \right)
+\label{eq:1}
+\tag{1}
+\end{equation}
 
-# Approach 1: @baird2016worms
+At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probalby an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implemening deworming policies, and indirect costs associated with the benefits of deworming.
+
+The main differences across the three aproaches regarding benfits have to do how to predict the earnings profiles over a lifecycle, and wheather or not to account for different prevalence rates. Approach 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjust for possible differences in prevalence rates of worm infections. 
+
+The main differences in costs have to do with weather indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not includes indirect costs and use unit costs of multiple countries. 
+
+
+## Approach 1: @baird2016worms
 
 - Describe.
 
 - Distinguish between total, fiscal. With and without externalities. 
 
-# Approach 2: KLPS4. 
+## Approach 2: @klps4 
+
+```r
+# 142.43 - 10.71 - 1.07                      = 130.65
+# 142.43 * 0.16575 -10.71 - 1.07             = 11.82777
+# 766.81 - 10.71 - 13.42 - 1.07              = 741.61
+# 766.81 * 0.16575 - 10.71 - 13.42 - 1.07    = 101.8988
+```
 
 - Also distinguish between total and fiscal results. 
 
 - Talk about total effects on earnings. Why not more externalities. New earnings profile. Describe diff between earnings and wages. 
 
-# Approach 3: Evidence action
+## Approach 3: Evidence Action
 
 - Key elements: 
   - No costs on ed. 
@@ -246,8 +262,6 @@ The key result for policy makers is defined as the cost effectivness ratio (cell
 
 \begin{equation}
 CEA_{deworming} = \frac{B (1 + \blue{F_{0}})}{C}
-\label{eq:1}
-\tag{1}
 \end{equation}
 
  - $C$ is the costs per person dewormed (`F2, 4,B23` --> [`F1, 2, H16`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=H16)).     
@@ -262,10 +276,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 \end{equation}
 
 
-Also, we can compute the NPV as presented in Baird et al 2016  
-\begin{equation}
-NPV = B - C
-\end{equation}
+
 
 
 ```r
@@ -755,7 +766,7 @@ chunk_wages <- function(){
                        coef_exp2_var) {
         experience_aux <- 0:periods_so - time_to_jm_so
         res1 <- 52 * wage_0_var *( ( 1 + growth_rate_var )^experience_aux ) *
-          ( 1 + coef_exp1_var * experience_aux + coef_exp2_var * experience_aux^2 ) *
+          ( 1 + coef_exp1_var * experience_aux + coef_exp2_var * (experience_aux^2) ) *
           ifelse(0:periods_so >= time_to_jm_so, 1, 0)
         return(res1)
     }
@@ -1012,7 +1023,8 @@ one_run <-
            hours_se_var1 = hours_se_so,
            ex_rate_var1 = ex_rate_so,
            growth_rate_var1 = growth_rate_so,
-           coef_exp_var1 = coef_exp_so[1], coef_exp2_var1 = coef_exp_so[2],
+           coef_exp_var1 = coef_exp_so[1], 
+           coef_exp2_var1 = coef_exp_so[2],
            lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_so),
            alpha_0_var1 = alpha_0_so,
            alpha_r_var1 = alpha_r_so,
@@ -1046,9 +1058,9 @@ one_run <-
     unit_test(wage_0_in, 0.1481084, main_run_var = main_run_var1)
     ###---------- Inputs for earnings1_f -------------------------------------------
     wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_var1,
-                             coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp_var1)
+                             coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp2_var1)
 
-    lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
+        lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
                              alpha_0_var = alpha_0_var1, alpha_r_var = alpha_r_var1)
 
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
@@ -1193,6 +1205,20 @@ one_run <-
 invisible( list2env(one_run(),.GlobalEnv) )
 ```
 
+```
+## [1] "Output has change at wage_0_in  to  0.170124466664436"
+## [1] "Output has change at wage_t_in  to  17.8464946727946"
+## [1] "Output has change at earnings_in_no_ext  to  31.1421332040266"
+## [1] "Output has change at earnings_in_yes_ext  to  167.667817450905"
+## [1] "Output has change at s2_in  to  1.4219"
+## [1] "Output has change at pv_benef_tax_nx_in  to  23.6070893378784"
+## [1] "Output has change at pv_benef_tax_yx_in  to  127.0994867217"
+## [1] "Output has change at pv_benef_all_nx_in  to  142.42587835824"
+## [1] "Output has change at pv_benef_all_yx_in  to  766.814399527604"
+## [1] "Output has change at costs2_in  to  11.776188118988"
+## [1] "Output has change at costs2_in_x  to  25.1962130559894"
+```
+
 
 
 
@@ -1200,34 +1226,86 @@ invisible( list2env(one_run(),.GlobalEnv) )
 #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
 baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
 unit_test(baird1, -0.6096942)
+```
+
+```
+## [1] "Output has change at baird1  to  11.8309012188904"
+```
+
+```r
 #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
 baird2 <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
 unit_test(baird2, 34.31866)
+```
 
+```
+## [1] "Output has change at baird2  to  101.903273665711"
+```
+
+```r
 # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
 baird3 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
 unit_test(baird3, 54.8986884881819)
+```
+
+```
+## [1] "Output has change at baird3  to  130.649690239252"
+```
+
+```r
 # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
 baird4 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
 unit_test(baird4, 333.17324538204)
+```
 
+```
+## [1] "Output has change at baird4  to  741.618186471615"
+```
+
+```r
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
 klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
 unit_test(klps4_1, 47.6017891133612)
+```
+
+```
+## [1] "Output has change at klps4_1  to  47.4637811721847"
+```
+
+```r
 #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
 klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
 unit_test(klps4_2, 345.767366073607)
+```
 
+```
+## [1] "Output has change at klps4_2  to  345.629358132431"
+```
 
+```r
 # res_npv_no_ext_klps_eacosts <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = cost1_in)
 # unit_test(res_npv_no_ext_klps_eacosts, 59.15516)
 
 # EA1: no externality NPV using EAs costs
 ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
 unit_test(ea1, 66.4520618047856)
+```
+
+```
+## [1] "Output has change at ea1  to  142.341071497033"
+```
+
+```r
 # EA2: yes externality NPV using EAs costs
 ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
 unit_test(ea2, 358.146643635645)
+```
+
+```
+## [1] "Output has change at ea2  to  766.729592666396"
+```
+
+```r
 # EA3: benef= KLPS all and no ext; Costs=EA
 ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
 unit_test(ea3, 357.320739390211)
@@ -1235,11 +1313,23 @@ unit_test(ea3, 357.320739390211)
 #CEA for EA
 cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0)
 unit_test(cea_no_ext_ea, 784.569405332587)
+```
 
+```
+## [1] "Output has change at cea_no_ext_ea  to  1679.41457011498"
+```
+
+```r
 rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0),
          CEA_cash_var = 744)
 unit_test(rcea_no_ext_ea, 1.05452877060832)
+```
 
+```
+## [1] "Output has change at rcea_no_ext_ea  to  2.257277648004"
+```
+
+```r
 npv_table <- data.frame("no_ext" =  round( c(baird1, NA,
                                              NA), 1) ,
                         "yes_ext" = round( c(NA, baird2, NA), 1) ,
@@ -1295,9 +1385,9 @@ kable(npv_table, caption = "Caption of the table") %>%
   <tr grouplength="2"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: Baird = KLPS4</strong></td></tr>
 <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext </td>
-   <td style="text-align:right;"> -0.6 </td>
+   <td style="text-align:right;"> 11.8 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 54.9 </td>
+   <td style="text-align:right;"> 130.6 </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> NA </td>
@@ -1305,19 +1395,19 @@ kable(npv_table, caption = "Caption of the table") %>%
   <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> yes_ext </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 34.3 </td>
+   <td style="text-align:right;"> 101.9 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 333.2 </td>
-   <td style="text-align:right;"> 47.6 </td>
-   <td style="text-align:right;"> 345.8 </td>
+   <td style="text-align:right;"> 741.6 </td>
+   <td style="text-align:right;"> 47.5 </td>
+   <td style="text-align:right;"> 345.6 </td>
   </tr>
   <tr grouplength="1"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: EA</strong></td></tr>
 <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext_ </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 66.5 </td>
-   <td style="text-align:right;"> 358.1 </td>
+   <td style="text-align:right;"> 142.3 </td>
+   <td style="text-align:right;"> 766.7 </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> 357.3 </td>
   </tr>
@@ -1328,19 +1418,19 @@ kable(npv_table, caption = "Caption of the table") %>%
 ## Results for overall welfare (not only taxes)
 
 
-- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** 54.9    
+- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** 130.6    
 
-- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = 10.2$ ):** 333.2
+- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = 10.2$ ):** 741.6
 
-- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 66.5    
+- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 142.3    
 
-- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 358.1
+- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 766.7
 
-- **NPV without externalities in KLPS 2019:** 345.8    
+- **NPV without externalities in KLPS 2019:** 345.6    
 
-- **CEA without externalities in EA:** 784.6    
+- **CEA without externalities in EA:** 1679.4    
 
-- **RCEA without externalities in EA (relative to cash):** 1.1    
+- **RCEA without externalities in EA (relative to cash):** 2.3    
 
 
 # Montecarlo simulations  
@@ -1761,7 +1851,22 @@ for ( i in policy_estimates ) {
         unit_test(to_test, all_res_100_sims[k], main_run_var = TRUE)
     }
 }
+```
 
+```
+## [1] "Output has change at to_test  to  8.7094550833253"
+## [1] "Output has change at to_test  to  49.2632644048296"
+## [1] "Output has change at to_test  to  49.4694221681446"
+## [1] "Output has change at to_test  to  277.265576489817"
+## [1] "Output has change at to_test  to  55.6363514982347"
+## [1] "Output has change at to_test  to  323.84779623706"
+## [1] "Output has change at to_test  to  49.8999424003478"
+## [1] "Output has change at to_test  to  278.489912293979"
+## [1] "Output has change at to_test  to  679.520544084327"
+## [1] "Output has change at to_test  to  0.913334064629472"
+```
+
+```r
 ################
 ###### Results/Viz
 ################
