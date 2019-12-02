@@ -1,2 +1,2 @@
  - `Earnings_20191003.pdf` email from Michelle on Ot 4, 2019  
- 
+ - File `research_params.csv` created on Dec 02, 2019. Rows  1 - 4 added manually.
