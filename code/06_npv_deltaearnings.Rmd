@@ -275,7 +275,6 @@ For $\Delta \overline{E}(S1,S2)$ we use a series of estimated effects the additi
 This series does not take into account the externality effects. To incorporate the we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
 
 ```{r ed-costs}
-
 # - inputs: coverage_so, q_full_so, q_zero_so 
 # - outputs: saturation_in 
 ed_costs_in_f <- function(teach_sal_var = teach_sal_2017usdppp_so, 
