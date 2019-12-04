@@ -80,7 +80,7 @@ chunk_params <- function(){
     hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
     hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
     hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
-    ex_rate_so <- 85               #Exchange Rate - Central Bank of Kenya 74 , 85
+    ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
 
     ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
@@ -144,7 +144,7 @@ chunk_params <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from intial period until individual join the labor force
-    coef_exp_so <- c(0, -0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     
@@ -1053,6 +1053,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 \end{equation}
 
 
+
 # Main results
 
 
@@ -1119,6 +1120,7 @@ unit_test <- function(to_test_var, original_var, main_run_var = TRUE){
       }
 }
 
+#TODO: update values of unit test within one_run
 # one run of all the steps to get one policy estimate
 one_run <-
   function(main_run_var1 = main_run_so,
@@ -1332,6 +1334,17 @@ invisible( list2env(one_run(),.GlobalEnv) )
 ```
 
 ```
+## [1] "Output has change at wage_0_in  to  0.170124466664436"
+## [1] "Output has change at wage_t_in  to  17.8464946727946"
+## [1] "Output has change at earnings_in_no_ext  to  31.1421332040266"
+## [1] "Output has change at earnings_in_yes_ext  to  167.667817450905"
+## [1] "Output has change at s2_in  to  1.4219"
+## [1] "Output has change at pv_benef_tax_nx_in  to  23.6070893378784"
+## [1] "Output has change at pv_benef_tax_yx_in  to  127.0994867217"
+## [1] "Output has change at pv_benef_all_nx_in  to  142.42587835824"
+## [1] "Output has change at pv_benef_all_yx_in  to  766.814399527604"
+## [1] "Output has change at costs2_in  to  11.776188118988"
+## [1] "Output has change at costs2_in_x  to  25.1962130559894"
 ## [1] "Output has change at costs_k  to  32.2996145651321"
 ```
 
@@ -1339,20 +1352,47 @@ invisible( list2env(one_run(),.GlobalEnv) )
 
 
 ```r
+#TODO: update unit test values
 #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
 baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
 unit_test(baird1, -0.6096942)
+```
+
+```
+## [1] "Output has change at baird1  to  11.8309012188904"
+```
+
+```r
 #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
 baird2 <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
 unit_test(baird2, 34.31866)
+```
 
+```
+## [1] "Output has change at baird2  to  101.903273665711"
+```
+
+```r
 # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
 baird3 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
 unit_test(baird3, 54.8986884881819)
+```
+
+```
+## [1] "Output has change at baird3  to  130.649690239252"
+```
+
+```r
 # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
 baird4 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
 unit_test(baird4, 333.17324538204)
+```
 
+```
+## [1] "Output has change at baird4  to  741.618186471615"
+```
+
+```r
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
 klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_k)
 unit_test(klps4_1, 47.6017891133612)
@@ -1379,9 +1419,23 @@ unit_test(klps4_2, 345.767366073607)
 # EA1: no externality NPV using EAs costs
 ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
 unit_test(ea1, 66.4520618047856)
+```
+
+```
+## [1] "Output has change at ea1  to  142.341071497033"
+```
+
+```r
 # EA2: yes externality NPV using EAs costs
 ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
 unit_test(ea2, 358.146643635645)
+```
+
+```
+## [1] "Output has change at ea2  to  766.729592666396"
+```
+
+```r
 # EA3: benef= KLPS all and no ext; Costs=EA
 ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
 unit_test(ea3, 357.320739390211)
@@ -1395,11 +1449,23 @@ unit_test(ea3, 357.320739390211)
 #CEA for EA
 cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0)
 unit_test(cea_no_ext_ea, 784.569405332587)
+```
 
+```
+## [1] "Output has change at cea_no_ext_ea  to  1679.41457011498"
+```
+
+```r
 rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0),
          CEA_cash_var = 744)
 unit_test(rcea_no_ext_ea, 1.05452877060832)
+```
 
+```
+## [1] "Output has change at rcea_no_ext_ea  to  2.257277648004"
+```
+
+```r
 npv_table <- data.frame("no_ext" =  round( c(baird1, NA,
                                              NA), 1) ,
                         "yes_ext" = round( c(NA, baird2, NA), 1) ,
@@ -1455,9 +1521,9 @@ kable(npv_table, caption = "Caption of the table") %>%
   <tr grouplength="2"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: Baird = KLPS4</strong></td></tr>
 <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext </td>
-   <td style="text-align:right;"> -0.6 </td>
+   <td style="text-align:right;"> 11.8 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 54.9 </td>
+   <td style="text-align:right;"> 130.6 </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> 125.2 </td>
    <td style="text-align:right;"> 917.9 </td>
@@ -1465,9 +1531,9 @@ kable(npv_table, caption = "Caption of the table") %>%
   <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> yes_ext </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 34.3 </td>
+   <td style="text-align:right;"> 101.9 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 333.2 </td>
+   <td style="text-align:right;"> 741.6 </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> NA </td>
   </tr>
@@ -1476,8 +1542,8 @@ kable(npv_table, caption = "Caption of the table") %>%
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext_ </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 66.5 </td>
-   <td style="text-align:right;"> 358.1 </td>
+   <td style="text-align:right;"> 142.3 </td>
+   <td style="text-align:right;"> 766.7 </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> 950.2 </td>
   </tr>
@@ -1488,19 +1554,21 @@ kable(npv_table, caption = "Caption of the table") %>%
 ## Results for overall welfare (not only taxes)
 
 
-- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** 54.9    
+- **NPV without externalities in @baird2016worms ($\lambda_2 = 0$):** 130.6    
 
-- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = 10.2$ ):** 333.2
+- **NPV with externalities in @baird2016worms ($\lambda_2 = 10.2$ ):** 741.6  
 
-- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 66.5    
+- **NPV without externalities in @klps4:** 917.9   
 
-- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 358.1
+- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 142.3    
 
-- **NPV without externalities in KLPS 2019:** 917.9    
+- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 766.7
 
-- **CEA without externalities in EA:** 784.6    
+- **NPV without ext and benef from @klps4 in EA 2019 ($\lambda_2 = 10.2$ ):** 950.2
 
-- **RCEA without externalities in EA (relative to cash):** 1.1    
+- **CEA format:** 1679.4    
+
+- **RCEA format (relative to cash):** 2.3    
 
 
 # Montecarlo simulations  
@@ -1924,17 +1992,17 @@ for ( i in policy_estimates ) {
 ```
 
 ```
-## [1] "Output has change at to_test  to  4.68235592486536"
-## [1] "Output has change at to_test  to  24.1563487336608"
-## [1] "Output has change at to_test  to  25.9940455962224"
-## [1] "Output has change at to_test  to  137.989350156544"
-## [1] "Output has change at to_test  to  175.678897480227"
-## [1] "Output has change at to_test  to  1022.37431380683"
-## [1] "Output has change at to_test  to  26.2463874125214"
-## [1] "Output has change at to_test  to  138.790931405869"
+## [1] "Output has change at to_test  to  8.7094550833253"
+## [1] "Output has change at to_test  to  49.2632644048296"
+## [1] "Output has change at to_test  to  49.4694221681446"
+## [1] "Output has change at to_test  to  277.265576489817"
+## [1] "Output has change at to_test  to  175.678254409271"
+## [1] "Output has change at to_test  to  1022.37359604602"
+## [1] "Output has change at to_test  to  49.8999424003478"
+## [1] "Output has change at to_test  to  278.489912293979"
 ## [1] "Output has change at to_test  to  1022.26900808398"
-## [1] "Output has change at to_test  to  340.458180868442"
-## [1] "Output has change at to_test  to  0.457605081812422"
+## [1] "Output has change at to_test  to  679.520544084327"
+## [1] "Output has change at to_test  to  0.913334064629472"
 ```
 
 ```r

@@ -102,7 +102,7 @@ chunk_params <- function(){
     hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
     hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
     hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
-    ex_rate_so <- 85               #Exchange Rate - Central Bank of Kenya 74 , 85
+    ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
 
     ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
@@ -166,7 +166,7 @@ chunk_params <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from intial period until individual join the labor force
-    coef_exp_so <- c(0, -0)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     
@@ -1064,6 +1064,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 \end{equation}
 
 
+
 # Main results
 
 
@@ -1129,6 +1130,7 @@ unit_test <- function(to_test_var, original_var, main_run_var = TRUE){
       }
 }
 
+#TODO: update values of unit test within one_run
 # one run of all the steps to get one policy estimate
 one_run <-
   function(main_run_var1 = main_run_so,
@@ -1345,6 +1347,7 @@ invisible( list2env(one_run(),.GlobalEnv) )
 
 
 ```{r main-results, purl=FALSE}
+#TODO: update unit test values
 #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
 baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
 unit_test(baird1, -0.6096942)
@@ -1380,7 +1383,8 @@ unit_test(ea2, 358.146643635645)
 ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
 unit_test(ea3, 357.320739390211)
 
-#CEA for EA
+#CEA for EA 
+#TODO: update CEA values. 
 cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0)
 unit_test(cea_no_ext_ea, 784.569405332587)
 
@@ -1414,19 +1418,21 @@ kable(npv_table, caption = "Caption of the table") %>%
 ## Results for overall welfare (not only taxes)
 
 
-- **NPV without externalities in Baird et al, 2016 ($\lambda_2 = 0$):** `r round(baird3,1)`    
+- **NPV without externalities in @baird2016worms ($\lambda_2 = 0$):** `r round(baird3,1)`    
 
-- **NPV with externalities in Baird et al, 2016 ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(baird4,1)`
+- **NPV with externalities in @baird2016worms ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(baird4,1)`  
+
+- **NPV without externalities in @klps4:** `r round(klps4_2,1)`   
 
 - **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** `r round(ea1,1)`    
 
 - **NPV with externalities in EA 2019 ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(ea2,1)`
 
-- **NPV without externalities in KLPS 2019:** `r round(klps4_2,1)`    
+- **NPV without ext and benef from @klps4 in EA 2019 ($\lambda_2 = `r round(lambda2_so,2)`$ ):** `r round(ea3,1)`
 
-- **CEA without externalities in EA:** `r round(cea_no_ext_ea,1)`    
+- **CEA format:** `r round(cea_no_ext_ea,1)`    
 
-- **RCEA without externalities in EA (relative to cash):** `r round(rcea_no_ext_ea,1)`    
+- **RCEA format (relative to cash):** `r round(rcea_no_ext_ea,1)`    
 
 
 # Montecarlo simulations  
