@@ -18,8 +18,8 @@ knitr::opts_knit$set(root.dir = here())
 
 nsims <- 1e2
 
+# Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
 source("all_analysis.R")
-
 
 
 
@@ -27,12 +27,12 @@ shinyUI( fluidPage(
   sidebarPanel(
                fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 300px; position:relative;",
                  numericInput("param1", label = h3("N Sims = "), value = 1e2),
-               checkboxInput("rescale", label = "Click if want to rescale x-axis", value = FALSE),
+               checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
                actionButton("run", label = "Run Simulation"),
                withMathJax(),
                useShinyjs(),
                selectInput("policy_est", "Policy Estimate:",
-                           choices=policy_estimates_text, selected = "Fiscal effects, 2016(W@W) B & C, yes ext")
+                           choices=policy_estimates_text, selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
                ),
                fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 800px; position:relative;",
                tabsetPanel(
