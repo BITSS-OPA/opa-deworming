@@ -229,7 +229,7 @@ With complete subsidy, $S_2$ represents the total direct costs of deworming each
 
 The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kremer 2007) and takes the value of `r q_full_so`.
 
-```{r costs}
+```{r costs} 
 # - inputs: 
 # - outputs: 
 costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,

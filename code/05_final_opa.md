@@ -136,7 +136,7 @@ chunk_params <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from intial period until individual join the labor force
-    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413)
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     n_students_so <- 45            #Average pupils per teacher	45
@@ -158,34 +158,33 @@ chunk_params <- function(){
     
     
     # TEMP
-    wtp_so <- 50*12                        # willingness to pay for deworming medication (2018 KSH)- Health-WTP_2018-01-19.pdf
 
     ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2009        <- 77.352   # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2007        <- 67.318   # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
     ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
-    ex_rate_2009_ppp_so <- 31.317   # KLPS4_E+_globals.do (originally from the World Bank)
-    ex_rate_2007_ppp_so <- 25.024   # KLPS4_E+_globals.do (originally from the World Bank)
+
     
-    
-    cpi_2007_so <- 207.342          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
-    cpi_2009_so <- 214.537          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     
     unit_cost_so <- 0.42                   # Unit cost of deworming (in 2018 USD) - from Evidence Action
     unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
-    teach_sal_ppp_so <- teach_sal_so/ex_rate_2017_ppp_so
-    wtp_so           <- wtp_so/ex_rate_2018_ppp_so
+
     
+    teach_sal_new_so  <- 50000                 #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - news sources
+                                              # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
+                                              # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
+    teach_sal_new_so <- 12*teach_sal_new_so 
+    teach_sal_ppp_so <- teach_sal_new_so/ex_rate_2017_ppp_so
   # Adjust for inflation: convert all costs to 2017 USD
     
     unit_cost_2017usdppp_so <- unit_cost_ppp_so*cpi_2017_so/cpi_2018_so
     teach_sal_2017usdppp_so <- teach_sal_ppp_so*cpi_2017_so/cpi_2017_so # redundant, but for the sake of consistency
-    wtp_2017usdppp_so       <- wtp_so*cpi_2017_so/cpi_2018_so
 
-        
+    unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
+    teach_sal_ppp_so <- teach_sal_new_so/ex_rate_2017_ppp_so
+
+    # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 ###############################################################################
 ###############################################################################    
@@ -727,7 +726,7 @@ Since the analysis is discrete, and we can not sum over a non-integer, we find
 Since there is no subsidy for deworming under the status quo, we have $S_{1}Q(S_{1}) =0$.
 
 
-##### Complete subsidy for dewormng ($S_2Q(S_2)$)
+##### Complete subsidy for deworming ($S_2Q(S_2)$)
 
 With complete subsidy, $S_2$ represents the total direct costs of deworming each child in USD. Most recent (2018) data from Evidence Action reveals this cost to be $0.42. Adjusting for purchasing power and inflation, we get a per capita cost of $0.83.
 
@@ -737,19 +736,32 @@ The take-up with full subsidy ($Q_2$) comes from a previous study (Miguel and Kr
 ```r
 # - inputs: 
 # - outputs: 
-costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
-                    years_of_treat_var = years_of_treat_so, 
-                    q_full_var = q_full_so){
-############################################################################### 
-    s2_in <- c(rep(unit_cost_var,2), .4*unit_cost_var)
-    q2_in <- q_full_var
-############################################################################### 
-    return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
-} 
-invisible( list2env(costs_f(),.GlobalEnv) )
+q2_in <- q_full_so
+# - inputs:
+# - outputs:
+chunk_unit_costs2_new <- function(){
+###############################################################################
+###############################################################################  
+
+    s2_f_new <- function(unit_cost_local_var = unit_cost_local_so,
+                     ex_rate_var = ex_rate_so,
+                     interest_var = interest) {
+      unit_cost <- ( unit_cost_local_var / ex_rate_var )
+      sum(( unit_cost * (1 + interest_var)^(-(0:2)) ) * c(1,1,0.4))
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("s2_f_new" = s2_f_new) )
+}
+invisible( list2env(chunk_unit_costs2_new(),.GlobalEnv) )
+##### Execute values of the functions above when needed for the text:
+
+s2_in <- s2_f_new(interest_var = 0.05, unit_cost_local_var = 0.8296927, ex_rate_var = 1)
+s2_new <- s2_in
 ```
 
-**So we get an average cost of deworming each child over the entire treatment period, $1.40.**
+**So we get an average cost of deworming each child over the entire treatment period, $1.44.**
 
 #### Cost of schooling
 
@@ -763,13 +775,13 @@ K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 
 ##### Cost per student ($K$)
 
-$K$ represents the cost of schooling each child for an additional year ($2.25). It is calculated by dividing an estimate of annual teacher salary by the number of average number of students per teacher.
+$K$ represents the cost of schooling each child for an additional year ($267.88). It is calculated by dividing an estimate of annual teacher salary by the number of average number of students per teacher.
 
 \begin{equation}
 K = \frac{\text{teacher salary}}{\text{number students}}
 \end{equation}
 
-Annual teacher salary ($101) is based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is 45, based on **[FILL IN]**.
+Annual teacher salary ($12055) is based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is 45, based on **[FILL IN]**.
 
 ##### Additional years of education ($\Delta \overline{E}_t(S1,S2)$)
 
@@ -781,21 +793,76 @@ This series does not take into account the externality effects. To incorporate t
 ```r
 # - inputs: coverage_so, q_full_so, q_zero_so 
 # - outputs: saturation_in 
-ed_costs_in_f <- function(teach_sal_var = teach_sal_2017usdppp_so, 
-                          n_students_var = n_students_so,
-                          delta_ed_var = delta_ed_so[,1]){
- ###############################################################################    
-    cost_per_student_in <- (teach_sal_var)/ n_students_var
-    delta_ed_in <- delta_ed_var
-############################################################################### 
-    return(list("cost_per_student_in" = cost_per_student_in, "delta_ed_in" = delta_ed_in)) 
-} 
-invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
+# ed_costs_in_f <- function(teach_sal_var = teach_sal_2017usdppp_so, 
+#                           n_students_var = n_students_so,
+#                           delta_ed_var = delta_ed_so[,1]){
+#  ###############################################################################    
+#     cost_per_student_in <- (teach_sal_var)/ n_students_var
+#     delta_ed_in <- delta_ed_var
+# ############################################################################### 
+#     return(list("cost_per_student_in" = cost_per_student_in, "delta_ed_in" = delta_ed_in)) 
+# } 
+# invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
+
+delta_ed_in <- delta_ed_so[,1]
+cost_per_student_in <- cost_per_student_f(teach_sal_var = (50000*12/49.77), teach_ben_var = 0, n_students_var = 45)
 ```
 
 Over this nine year period, students attended school for an additional 0.15 years on average.
 
-**Then we get an average cost of additional schooling per child over the nine-year period, $0.23.**
+**Then we get an average cost of additional schooling per child over the nine-year period, $32.40.**
+
+
+
+
+```r
+# add suffix _var to args 
+# - inputs: tax_rev_init_mo, top_tax_base_in  
+# - outputs: total_rev_pe 
+# npv_mo_f <- function(interest_r_var = interest_in,
+#                 n_male_var = 1/2, n_female_var = 1/2, 
+#                 delta_welfare_var,
+#                 tax_var = tax_so,
+#                 cost_of_schooling_var = cost_per_student_in,
+#                 delta_ed_male_var = delta_ed_so[,1],
+#                 delta_ed_female_var = delta_ed_so[,1],
+#                 s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+#                 periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+#   ns <- c(n_male_var, n_female_var)
+#   l_index_t <- 0:periods_var
+#   delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+#   delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+# ############################################################################### 
+#   benef <- matrix(NA, 51,2)
+#   for (i in 1:2){
+#   benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * delta_welfare_var
+#   }
+# 
+#   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+#           apply( ( 1 / (1 + interest_r_var) )^l_index_t *
+#                      delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
+#            (s2_var * q2_var  - s1_var * q1_var)
+# ############################################################################### 
+#   return(res1) 
+# }
+
+interest_in <- interest
+
+
+# # Net Present Value (2017 USD PPP)
+# npv_int05_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, tax_var = 1)
+# npv_int05_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, tax_var = 1)
+# npv_int10_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = 0.10, tax_var = 1)
+# npv_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = 0.10, tax_var = 1)
+# 
+# # Net Present Value of tax revenue (2017 USD PPP)
+# tax_int05_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = .05)
+# tax_int05_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = .05)
+# tax_int10_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = 0.10)
+# tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = 0.10)
+# 
+# npv_mo_f(delta_welfare_var = delta_earnings_p_in, tax_var = 1, interest_r_var = 0.05) 
+```
 
 
 
@@ -1368,8 +1435,9 @@ one_run <-
     cost_per_student_in <-  cost_per_student_f(teach_sal_var = teach_sal_var1,
                                                teach_ben_var = teach_ben_var1,
                                                n_students_var = n_students_var1)
-    unit_test(cost_per_student_in,  116.8549, main_run_var = main_run_var1)
 
+    unit_test(cost_per_student_in,  116.8549, main_run_var = main_run_var1)
+ 
     s2_in <- s2_f(unit_cost_local_var = unit_cost_local_var1,
                   ex_rate_var = ex_rate_var1, years_of_treat_var = years_of_treat_var1)
     unit_test(s2_in, 1.237889, main_run_var = main_run_var1)
@@ -1395,11 +1463,11 @@ one_run <-
 
     #KLPS4 w/t and no ext
     pv_benef_tax_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_var1,
-                                   interest_r_var = interest_in, periods_var = periods_var1)
+                                   interest_r_var = 0.05, periods_var = periods_var1)
     # ADD UNIT TEST
     # KLPS4 all and no ext
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
-                                   interest_r_var = interest_in, periods_var = periods_var1)
+                                   interest_r_var = 0.05, periods_var = periods_var1)
     # ADD UNIT TEST
 
     #Costs
@@ -1419,6 +1487,12 @@ one_run <-
                            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
     unit_test(costs2_in_x,  25.05821, main_run_var = main_run_var1)
 
+    # costs2: KLPS4
+    costs_k <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
+                         interest_r_var = 0.05, cost_of_schooling_var = 267,
+                         s1_var = 0, q1_var = 0, s2_var = s2_new, q2_var = q_full_var1)
+    unit_test(costs_k, 11.63818, main_run_var = main_run_var1)
+    
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
                   "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
@@ -1432,7 +1506,7 @@ one_run <-
                   "pv_benef_all_nx_in" = pv_benef_all_nx_in,
                   "pv_benef_all_yx_in" =  pv_benef_all_yx_in, "pv_benef_tax_new" = pv_benef_tax_new,
                   "pv_benef_all_new" = pv_benef_all_new, "cost1_in" = cost1_in,
-                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x) )
+                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x, "costs_k" = costs_k) )
   }
 
 invisible( list2env(one_run(),.GlobalEnv) )
@@ -1450,6 +1524,7 @@ invisible( list2env(one_run(),.GlobalEnv) )
 ## [1] "Output has change at pv_benef_all_yx_in  to  766.814399527604"
 ## [1] "Output has change at costs2_in  to  11.776188118988"
 ## [1] "Output has change at costs2_in_x  to  25.1962130559894"
+## [1] "Output has change at costs_k  to  32.196059674958"
 ```
 
 
@@ -1497,22 +1572,22 @@ unit_test(baird4, 333.17324538204)
 
 ```r
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
-klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
+klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_k)
 unit_test(klps4_1, 47.6017891133612)
 ```
 
 ```
-## [1] "Output has change at klps4_1  to  48.5255968930359"
+## [1] "Output has change at klps4_1  to  125.305668466511"
 ```
 
 ```r
 #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
-klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
+klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_k)
 unit_test(klps4_2, 345.767366073607)
 ```
 
 ```
-## [1] "Output has change at klps4_2  to  352.035486161699"
+## [1] "Output has change at klps4_2  to  918.040610861811"
 ```
 
 ```r
@@ -1545,7 +1620,7 @@ unit_test(ea3, 357.320739390211)
 ```
 
 ```
-## [1] "Output has change at ea3  to  363.726867419479"
+## [1] "Output has change at ea3  to  950.151863675561"
 ```
 
 ```r
@@ -1576,9 +1651,9 @@ npv_table <- data.frame("no_ext" =  round( c(baird1, NA,
                                              ea1), 1) ,
                         "yes_ext_" = round( c(NA, baird4,
                                              ea2), 1) ,
-                        "no_ext " = round( c(NA, klps4_1,
+                        "no_ext " = round( c(klps4_1, NA,
                                              NA), 1) ,
-                        ".no_ext " = round( c(NA, klps4_2,
+                        ".no_ext " = round( c(klps4_2, NA,
                                              ea3), 1) ,
                         row.names = c("no_ext", "yes_ext", "no_ext_"))
 
@@ -1628,8 +1703,8 @@ kable(npv_table, caption = "Caption of the table") %>%
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> 130.6 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 125.3 </td>
+   <td style="text-align:right;"> 918.0 </td>
   </tr>
   <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> yes_ext </td>
@@ -1637,8 +1712,8 @@ kable(npv_table, caption = "Caption of the table") %>%
    <td style="text-align:right;"> 101.9 </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> 741.6 </td>
-   <td style="text-align:right;"> 48.5 </td>
-   <td style="text-align:right;"> 352.0 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
   </tr>
   <tr grouplength="1"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: EA</strong></td></tr>
 <tr>
@@ -1648,7 +1723,7 @@ kable(npv_table, caption = "Caption of the table") %>%
    <td style="text-align:right;"> 142.3 </td>
    <td style="text-align:right;"> 766.7 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 363.7 </td>
+   <td style="text-align:right;"> 950.2 </td>
   </tr>
 </tbody>
 </table>
@@ -1665,7 +1740,7 @@ kable(npv_table, caption = "Caption of the table") %>%
 
 - **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 766.7
 
-- **NPV without externalities in KLPS 2019:** 352    
+- **NPV without externalities in KLPS 2019:** 918    
 
 - **CEA without externalities in EA:** 1679.4    
 
@@ -2097,11 +2172,11 @@ for ( i in policy_estimates ) {
 ## [1] "Output has change at to_test  to  49.2632644048296"
 ## [1] "Output has change at to_test  to  49.4694221681446"
 ## [1] "Output has change at to_test  to  277.265576489817"
-## [1] "Output has change at to_test  to  55.7425369283627"
-## [1] "Output has change at to_test  to  324.219866814588"
+## [1] "Output has change at to_test  to  175.678254409271"
+## [1] "Output has change at to_test  to  1022.37359604602"
 ## [1] "Output has change at to_test  to  49.8999424003478"
 ## [1] "Output has change at to_test  to  278.489912293979"
-## [1] "Output has change at to_test  to  324.321319927701"
+## [1] "Output has change at to_test  to  1022.26900808398"
 ## [1] "Output has change at to_test  to  679.520544084327"
 ## [1] "Output has change at to_test  to  0.913334064629472"
 ```
