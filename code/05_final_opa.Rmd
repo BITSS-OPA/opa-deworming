@@ -846,12 +846,8 @@ Costs can vary by geography due to factors of scale, treatment strategies, age o
 
 The final cost is a weighted average of the unit cost across countries.
 
-- $\omega_{i}$: Weight for the weighted average ([`F1, 2, C:G8`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=C8:G8)).  
-- $c_{i}$: Total cost per child, per year in country $i$ (`F1, 2, C:G16`).  
-
-Build $c_i$ as a function of three stakeholders: DtW, other donors, goverment.  
-Each stakeholders spends on: line items.    
-Incorporate currency.
+- $\omega_{i}$: Weight for the weighted average.  
+- $c_{i}$: Total cost per child, per year in country $i$.  
 
 ```{r eq_2, echo=print_code}
 # - inputs: nothing
@@ -1107,7 +1103,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 # │      └──── costs1_ratios_in_f
 # |             ├──── costs1_costs_f
 # │             └──── costs1_counts_f
-# └──── cost2_f = 11.63818
+# └──── cost2_f = 11.776188118988
 #        ├──── delta_ed_final_f
 #        ├──── interest_f
 #        ├──── s2_f
@@ -1176,7 +1172,7 @@ one_run <-
                              profits_se_var = profits_se_var1, hours_se_cond_var = hours_se_cond_var1,  
                              hours_ag_var = hours_ag_var1, hours_ww_var = hours_ww_var1,
                              hours_se_var = hours_se_var1, ex_rate_var = ex_rate_var1)
-    unit_test(wage_0_in, 0.1481084, main_run_var = main_run_var1)
+    unit_test(wage_0_in, 0.170124466664436, main_run_var = main_run_var1)
     ###---------- Inputs for earnings1_f -------------------------------------------
     wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_var1,
                              coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp2_var1)
@@ -1189,7 +1185,7 @@ one_run <-
     saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_var1,
                                                 q_full_var = q_full_var1,
                                                 q_zero_var = q_zero_var1) )
-    unit_test(wage_t_in, 4.572308, main_run_var = main_run_var1)
+    unit_test(wage_t_in, 17.8464946727946, main_run_var = main_run_var1)
     # ADD UNIT TEST FOR SATURATION AN LAMBDAS    
 
     ###------------ Inputs for earnings2_f------------------------------------------
@@ -1215,8 +1211,8 @@ one_run <-
     # ADD UNIT TEST
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1,
                                           inflation_var = inflation_var1) )
-    unit_test(earnings_in_no_ext, 7.978677, main_run_var = main_run_var1)
-    unit_test(earnings_in_yes_ext, 42.95683, main_run_var = main_run_var1)
+    unit_test(earnings_in_no_ext, 31.1421332040266, main_run_var = main_run_var1)
+    unit_test(earnings_in_yes_ext, 167.667817450905, main_run_var = main_run_var1)
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
     ###------------- Inputs for costs1_ratios_in_f----------------------------------
@@ -1268,26 +1264,26 @@ one_run <-
     
     s2_in <- s2_f(unit_cost_local_var = unit_cost_local_var1,
                   ex_rate_var = ex_rate_var1, years_of_treat_var = years_of_treat_var1)
-    unit_test(s2_in, 1.237889, main_run_var = main_run_var1)
+    unit_test(s2_in, 1.4219, main_run_var = main_run_var1)
     #--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
     # Make explicit non-function inputs:
     #Benefits:
     #Baird w/tax and no externalities (no ext)
     pv_benef_tax_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_var1,
                                      interest_r_var = interest_in, periods_var = periods_var1)
-    unit_test(pv_benef_tax_nx_in, 11.02849, main_run_var = main_run_var1)
+    unit_test(pv_benef_tax_nx_in, 23.6070893378784, main_run_var = main_run_var1)
     #Baird w/t and ext
     pv_benef_tax_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext * tax_var1,
                                      interest_r_var = interest_in, periods_var = periods_var1)
-    unit_test(pv_benef_tax_yx_in, 59.37686, main_run_var = main_run_var1)
+    unit_test(pv_benef_tax_yx_in, 127.0994867217, main_run_var = main_run_var1)
     #Baird all and no
     pv_benef_all_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext,
                                      interest_r_var = interest_in, periods_var = periods_var1)
-    unit_test(pv_benef_all_nx_in, 66.5368686659935, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_nx_in, 142.42587835824, main_run_var = main_run_var1)
     #Baird all and ext
     pv_benef_all_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext,
                                      interest_r_var = interest_in, periods_var = periods_var1)
-    unit_test(pv_benef_all_yx_in, 358.231450496853, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_yx_in, 766.814399527604, main_run_var = main_run_var1)
 
     #KLPS4 w/t and no ext
     pv_benef_tax_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_var1,
@@ -1305,17 +1301,24 @@ one_run <-
     cost1_in <- costs1_f(country_w_var = costs1_country$ratios_data$country_w,
                          country_cost_var = costs1_country$ratios_data$per_cap)
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
+
+    s2_ea_in <- s2_f_new(interest_var = interest_in_new, 
+                      unit_cost_local_var = cost1_in, ex_rate_var = 1)
+    costs2_ea_in <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
+                         interest_r_var = interest_in_new, cost_of_schooling_var = 0,
+                         s1_var = 0, q1_var = 0, s2_var = s2_ea_in, q2_var = q_full_var1)
+    
     # costs2: Baird no externalities
     costs2_in <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
                          interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
                          s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
-    unit_test(costs2_in, 11.63818, main_run_var = main_run_var1)
+    unit_test(costs2_in, 11.776188118988, main_run_var = main_run_var1)
 
     # Baird yes externalities
     costs2_in_x <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in_x,
                            interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
                            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
-    unit_test(costs2_in_x,  25.05821, main_run_var = main_run_var1)
+    unit_test(costs2_in_x,  25.1962130559894, main_run_var = main_run_var1)
 
 
     # costs2: KLPS4
@@ -1323,7 +1326,7 @@ one_run <-
                          interest_r_var = interest_in_new, 
                        cost_of_schooling_var = cost_per_student_in_new,
                          s1_var = 0, q1_var = 0, s2_var = s2_new, q2_var = q_full_var1)
-    unit_test(costs_k, 11.63818, main_run_var = main_run_var1)
+    unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
     
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
@@ -1337,7 +1340,7 @@ one_run <-
                   "pv_benef_tax_nx_in"= pv_benef_tax_nx_in, "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
                   "pv_benef_all_nx_in" = pv_benef_all_nx_in,
                   "pv_benef_all_yx_in" =  pv_benef_all_yx_in, "pv_benef_tax_new" = pv_benef_tax_new,
-                  "pv_benef_all_new" = pv_benef_all_new, "cost1_in" = cost1_in,
+                  "pv_benef_all_new" = pv_benef_all_new, "costs2_ea_in" = costs2_ea_in,
                   "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x, "costs_k" = costs_k) )
   }
 
@@ -1350,47 +1353,47 @@ invisible( list2env(one_run(),.GlobalEnv) )
 #TODO: update unit test values
 #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
 baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
-unit_test(baird1, -0.6096942)
+unit_test(baird1, 11.8309012188904)
 #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
 baird2 <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
-unit_test(baird2, 34.31866)
+unit_test(baird2, 101.903273665711)
 
 # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
 baird3 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
-unit_test(baird3, 54.8986884881819)
+unit_test(baird3, 130.649690239252)
 # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
 baird4 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
-unit_test(baird4, 333.17324538204)
+unit_test(baird4, 741.618186471615)
 
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
 klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_k)
-unit_test(klps4_1, 47.6017891133612)
+unit_test(klps4_1, 125.202113576337)
 #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
 klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_k)
-unit_test(klps4_2, 345.767366073607)
+unit_test(klps4_2, 917.937055971637)
 
 
 # res_npv_no_ext_klps_eacosts <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = cost1_in)
 # unit_test(res_npv_no_ext_klps_eacosts, 59.15516)
 
 # EA1: no externality NPV using EAs costs
-ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
-unit_test(ea1, 66.4520618047856)
+ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_ea_in)
+unit_test(ea1, 142.278620185973)
 # EA2: yes externality NPV using EAs costs
-ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
-unit_test(ea2, 358.146643635645)
+ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_ea_in)
+unit_test(ea2, 766.667141355337)
 # EA3: benef= KLPS all and no ext; Costs=EA
-ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
-unit_test(ea3, 357.320739390211)
+ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in)
+unit_test(ea3, 950.089412364501)
 
 #CEA for EA 
 #TODO: update CEA values. 
-cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0)
-unit_test(cea_no_ext_ea, 784.569405332587)
+cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in, fudging_var = 0)
+unit_test(cea_no_ext_ea, 6452.86204429499)
 
-rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in, fudging_var = 0),
+rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in, fudging_var = 0),
          CEA_cash_var = 744)
-unit_test(rcea_no_ext_ea, 1.05452877060832)
+unit_test(rcea_no_ext_ea, 8.6732016724395)
 
 npv_table <- data.frame("no_ext" =  round( c(baird1, NA,
                                              NA), 1) ,
@@ -1667,16 +1670,16 @@ sim.data1 <- function(nsims = 1e2,
       #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
       klps4_2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
       # EA1: no externality NPV using EAs costs
-      ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = cost1_in)
+      ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_ea_in)
       # EA2: yes externality NPV using EAs costs
-      ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = cost1_in)
+      ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=EA
-      ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = cost1_in)
+      ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in)
       #CEA for EA
       cea_no_ext_ea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in,
-                                        costs_var = cost1_in, fudging_var = 0)
+                                        costs_var = costs2_ea_in, fudging_var = 0)
       rcea_no_ext_ea_sim[i]  <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in,
-                                                              costs_var = cost1_in, fudging_var = 0),
+                                                              costs_var = costs2_ea_in, fudging_var = 0),
                                            CEA_cash_var = 744 )
     }
 
