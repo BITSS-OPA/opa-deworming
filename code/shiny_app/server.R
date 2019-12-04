@@ -591,6 +591,6 @@ shinyServer( function(input, output, session) {
       plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
       }
     print(plot1)  
-    }, height = 1000, width = 800 )
+    }, height = 700, width = 600 )
   })
 })

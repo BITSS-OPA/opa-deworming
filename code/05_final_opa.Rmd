@@ -744,6 +744,32 @@ This expression assumes that there are no additional earnings gains for the trea
 Using earnings gains to measure welfare, we substitute each $\alpha$ term with the average treatment effect on earnings in each round of data collection: `r round(lambda1_new_so,0)` dollars per person per year.
 
 
+```{r delta-earnings, eval=TRUE}
+# - inputs:
+# - outputs:
+chunk_new_earnings <- function(){
+###############################################################################
+###############################################################################  
+
+    earnings2_f <- function(t_var = 1,
+                               lambda1k1_var = lambda1_new_so[1],
+                               lambda1k2_var = lambda1_new_so[2],
+                               lambda1k3_var = lambda1_new_so[3]) {
+        1*(10 <= t_var & t_var < 15) * lambda1k1_var +
+        1*(15 <= t_var & t_var < 20) * lambda1k2_var +
+        1*(20 <= t_var) * lambda1k3_var
+    }
+
+###############################################################################
+###############################################################################             
+    return(list("earnings2_f" = earnings2_f))
+}
+
+invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
+
+```
+
+
 ### Costs 
 
 The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.
@@ -986,34 +1012,9 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 
 $N_{i}, C_{i,k,l}, \delta_{g}$
 
-  
 
-```{r delta-earnings, eval=TRUE}
-# - inputs:
-# - outputs:
-chunk_new_earnings <- function(){
-###############################################################################
-###############################################################################  
-
-    earnings2_f <- function(t_var = 1,
-                               lambda1k1_var = lambda1_new_so[1],
-                               lambda1k2_var = lambda1_new_so[2],
-                               lambda1k3_var = lambda1_new_so[3]) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var +
-        1*(15 <= t_var & t_var < 20) * lambda1k2_var +
-        1*(20 <= t_var) * lambda1k3_var
-    }
-
-###############################################################################
-###############################################################################             
-    return(list("earnings2_f" = earnings2_f))
-}
-
-invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
-
-```
-
-
+### Benefits   
+From either @baird2016worms or @klps4. Only difference is that results now take into account prevalence. 
 
 #### "$\lambda_{1}^{eff}$"  
 
@@ -1040,8 +1041,6 @@ df_alpha_so <- read_excel("data/prevalence_data.xlsx",
 
 In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.77 = 2.72$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
-### Benefits   
-From either @baird2016worms or @klps4
 
 ### Different format of policy estimate {#policy-estimate}
 
@@ -1537,8 +1536,8 @@ sim.data1 <- function(nsims = 1e2,
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
     inflation_sim <-        rnorm(nsims, inflation_var2, inflation_var2_sd)
     
-    gov_bonds_new_sim <-    rnorm(n = nsims, mean = gov_bonds_new_var2, sd = gov_bonds_new_var2_sd)  #rev
-    inflation_new_sim <-    rnorm(nsims, inflation_new_var2, inflation_new_var2_sd)                  #rev
+    gov_bonds_new_sim <-    rnorm(n = nsims, mean = gov_bonds_new_var2, sd = gov_bonds_new_var2_sd) 
+    inflation_new_sim <-    rnorm(nsims, inflation_new_var2, inflation_new_var2_sd)                  
 
     wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
     wage_ww_sim <-          rnorm(nsims, wage_ww_var2, wage_ww_var2_sd)
@@ -1766,10 +1765,10 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
             inflation_var2          = inflation_so             ,                                    
             inflation_var2_sd       = inflation_so * 0.1          ,                                 
-            gov_bonds_new_var2      = gov_bonds_new_so      ,
-            gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,
-            inflation_new_var2      = inflation_new_so      ,
-            inflation_new_var2_sd   = inflation_new_so * 0.1,
+            gov_bonds_new_var2      = gov_bonds_new_so      ,          #add to app
+            gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          #add to app
+            inflation_new_var2      = inflation_new_so      ,          #add to app
+            inflation_new_var2_sd   = inflation_new_so * 0.1,          #add to app 
             wage_ag_var2            = wage_ag_so               ,                                      
             wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
             wage_ww_var2            = wage_ww_so               ,                                      
@@ -1808,10 +1807,10 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
             teach_ben_var2          = teach_ben_so         ,                                          
             teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
-            teach_sal_new_var2      = teach_sal_new_so         ,                                          
-            teach_sal_new_var2_sd   = teach_sal_new_so * 0.1      ,                                       
-            teach_ben_new_var2      = teach_ben_new_so         ,                                          
-            teach_ben_new_var2_sd   = 0.000001      , 
+            teach_sal_new_var2      = teach_sal_new_so         ,          #add to app                                
+            teach_sal_new_var2_sd   = teach_sal_new_so * 0.1      ,       #add to app                                
+            teach_ben_new_var2      = teach_ben_new_so         ,          #add to app                               
+            teach_ben_new_var2_sd   = 0.000001      ,                     #add to app
             n_students_var2         = n_students_so        ,                                         
             n_students_var2_sd      = n_students_so * 0.1     ,                                      
             delta_ed_var2           = delta_ed_par_so          ,                                           
@@ -1821,7 +1820,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             q_zero_var2             = q_zero_so            ,                                             
             q_zero_var2_sd          = q_zero_so * 0.1         ,
             lambda1_new_var2        = lambda1_new_so,                   
-            lambda1_new_var2_sd     = lambda1_new_sd_so ,             
+            lambda1_new_var2_sd     = lambda1_new_sd_so,             
             alpha_0_var2            = alpha_0_so       ,  
             alpha_0_var2_sd         = alpha_0_so * 0.1    ,
             alpha_r_var2            = alpha_r_so       ,  
