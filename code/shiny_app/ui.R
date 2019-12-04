@@ -26,15 +26,16 @@ source("all_analysis.R")
 shinyUI( fluidPage(
   sidebarPanel(
                fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 300px; position:relative;",
-                 numericInput("param1", label = h3("N Sims = "), value = 1e2),
-               checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
-               actionButton("run", label = "Run Simulation"),
-               withMathJax(),
-               useShinyjs(),
-               selectInput("policy_est", "Policy Estimate:",
-                           choices=policy_estimates_text, selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
+                        actionButton("run", label = "Run Simulation"),
+                        checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
+                        numericInput("param1", label = h4("Number of simulations"), value = 1e2),
+                        withMathJax(),
+                        useShinyjs(),
+                        selectInput("policy_est", "Policy Estimate:",
+                                     choices=policy_estimates_text, 
+                                    selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
                ),
-               fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 800px; position:relative;",
+               fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                tabsetPanel(
                   tabPanel("Data",
                            sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
