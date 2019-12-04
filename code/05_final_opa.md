@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "03 December, 2019"
+date: "04 December, 2019"
 output:
   html_document:
     code_folding: hide
@@ -1857,43 +1857,45 @@ npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 #Unit test the simulations for nsims = 100, 1000, 10000
 all_res_100_sims <- c(
-  4.36316094954722,
-  23.2129229802102,
-  26.0374491586364,
-  140.04952241052,
-  55.6356384691426,
-  323.847303050562,
-  26.4428542800085,
-  141.17922793913,
-  323.94495187629,
-  329.968011932834,
-  0.443505392382842
+  8.7094550833253,
+  49.2632644048296,
+  49.4694221681446,
+  277.265576489817,
+  175.678254409271,
+  1022.37359604602,
+  49.9034982533997,
+  278.49341938017,
+  1022.26807845879,
+  413.199179925478,
+  0.555375241835319
 )
+
 all_res_1000_sims <- c(
-  5.32356462047516,
-  27.6432480518217,
-  26.163996006382,
-  139.12854915303,
-  55.296769054413,
-  328.384415939951,
-  26.2272821730184,
-  138.95772521348,
-  328.60765919238,
-  323.313130629793,
-  0.434560659448646
+  8.94904200012673,
+  47.7557079511762,
+  52.2490551593106,
+  277.810659510651,
+  176.29084181961,
+  1051.32849483112,
+  52.6663916192209,
+  279.015364618585,
+  1051.32339750587,
+  407.842773941034,
+  0.548175771426122
 )
+
 all_res_10000_sims <- c(
-4.48502904005645,
-23.7639919630348,
-26.1966872755888,
-140.753259914499,
-56.0899202446023,
-333.729000769758,
-26.5531644269483,
-141.80292767189,
-333.852743072266,
-331.992604782129,
-0.446226619330819
+  8.79105935822713,
+  47.6994033603414,
+  52.2778377879947,
+  279.54416693675,
+  181.921984084524,
+  1085.22816114431,
+  52.7479120047233,
+  280.883186390767,
+  1085.20816160347,
+  406.388379235971,
+  0.546220939833294
 )
 
 k <- 0
@@ -1908,23 +1910,7 @@ for ( i in policy_estimates ) {
         unit_test(to_test, all_res_100_sims[k], main_run_var = TRUE)
     }
 }
-```
 
-```
-## [1] "Output has change at to_test  to  8.7094550833253"
-## [1] "Output has change at to_test  to  49.2632644048296"
-## [1] "Output has change at to_test  to  49.4694221681446"
-## [1] "Output has change at to_test  to  277.265576489817"
-## [1] "Output has change at to_test  to  175.678254409271"
-## [1] "Output has change at to_test  to  1022.37359604602"
-## [1] "Output has change at to_test  to  49.9034982533997"
-## [1] "Output has change at to_test  to  278.49341938017"
-## [1] "Output has change at to_test  to  1022.26807845879"
-## [1] "Output has change at to_test  to  413.199179925478"
-## [1] "Output has change at to_test  to  0.555375241835319"
-```
-
-```r
 ################
 ###### Results/Viz
 ################
@@ -1938,7 +1924,7 @@ rescale <- rescale_so
 
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
-                       alpha = 1/2), kernel = "gau") +
+                       alpha = 1/2, ..scaled..), kernel = "gau") +
       geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
       coord_cartesian(xlim = c(-10, 400)) +
       guides(alpha = "none", colour="none") +
@@ -1948,11 +1934,16 @@ rescale <- rescale_so
            ),
            subtitle = paste0("N = ", nsims, " simulations. Takes ",
                              round(total_time, 1)," ",attributes(total_time)$unit )  )+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 4)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 4)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
     if (rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max(npv_sim))) )
+      plot1 <- suppressMessages( 
+        plot1 + 
+          coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), 
+                                          max(npv_sim)) 
+                          ) 
+        )
     }
 
 print(plot1)

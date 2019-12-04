@@ -220,7 +220,7 @@ shinyServer( function(input, output, session) {
                      "param33_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-      #AQUI VOY 
+
     } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
       list_hide <- c("param32",
                      "param32_1",
@@ -574,7 +574,7 @@ shinyServer( function(input, output, session) {
     
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
-                       alpha = 1/2), kernel = "gau") +
+                       alpha = 1/2, ..scaled..), kernel = "gau") +
       geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
       coord_cartesian(xlim = c(-10, 400)) +
       guides(alpha = "none", colour="none") +
@@ -584,8 +584,8 @@ shinyServer( function(input, output, session) {
            ),
            subtitle = paste0("N = ", input$param1, " simulations. Takes ",
                              round(total_time, 1)," ",attributes(total_time)$unit )  )+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.012, label = npv_for_text, size = 6)+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.004, label = npv_for_text2, size = 6)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
     if (input$rescale == TRUE) {
       plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
