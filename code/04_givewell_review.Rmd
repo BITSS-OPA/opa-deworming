@@ -117,14 +117,6 @@ invisible( list2env(call_sources_f(),.GlobalEnv) )
 ```
 
 
-
-# Key policy estimates for policy makers  
-
-```{r final-output, echo=print_code}
-```
-
-
-
 # Methodology
 The analysis so far, consists in claryfying what equations underlie the cost-effectivenss analysis performed by GivewWell. We work off [this](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274) spreadsheet (an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  
 
@@ -679,17 +671,6 @@ Q^{r}_{11} = \frac{Q_{12} Q^{r}_{13}}{\sum_{r}Q^{r}_{13}}
 # - inputs: tax_rev_init_mo, top_tax_base_in
 # - outputs: total_rev_pe
 ```
-
-
-# Montecarlo simulations  
-```{r}
-# Draws
-# Compute inputs
-# Compute model
-# Run sims
-```
-
-# Sensitivity Analysis  
 
 
 [^1]: `F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]` Original [here](https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857), editable version [here](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=509033857)
