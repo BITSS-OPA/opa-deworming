@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "24 January, 2020"
+date: "29 January, 2020"
 output:
   html_document:
     code_folding: hide
@@ -700,11 +700,12 @@ Including externalities, they obtain total NPV of benefits of 766.81, with 102.9
 
 ## Approach 2: @klps4 
 
-- Update distount rate  
+
 
 
 ```r
-interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
+#interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
+interest_in_new <- interest
 ```
 
 
@@ -800,7 +801,7 @@ s2_new <- s2_in
 q2_in <- q_full_so
 ```
 
-**So we get an average cost of deworming each child over the entire treatment period, $1.44.**
+**So we get an average cost of deworming each child over the entire treatment period, $1.40.**
 
 #### Cost of schooling
 
@@ -828,7 +829,7 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
 
 Over this nine year period, students attended school for an additional 0.15 years on average.
 
-**Then we get an average cost of additional schooling per child over the nine-year period, $32.40.**
+**Then we get an average cost of additional schooling per child over the nine-year period, $26.97.**
 
 
 

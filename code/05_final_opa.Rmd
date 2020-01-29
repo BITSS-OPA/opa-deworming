@@ -715,10 +715,11 @@ Including externalities, they obtain total NPV of benefits of `r df_research_so$
 
 ## Approach 2: @klps4 
 
-- Update distount rate  
+
 
 ```{r new-interest} 
-interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
+#interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
+interest_in_new <- interest
 ```
 
 

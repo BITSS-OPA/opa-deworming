@@ -35,6 +35,9 @@ chunk_params <- function(){
     #############
     gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
     inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
+    gov_bonds_new_so <- 0.09 
+    inflation_new_so <- 0.04 
+    
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
     wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
     profits_se_so <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
@@ -109,13 +112,13 @@ chunk_params <- function(){
     coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
-    
-    teach_sal_new_so  <- 50000                #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - news sources
+    teach_sal_new_so <- (50000*12/49.77)
+    teach_ben_new_so <- 0 
+                                              #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - 
+                                              #news sources * 12 / ex_rate_2017_ppp_so
                                               # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
                                               # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
-    teach_sal_new_so <- 12 * teach_sal_new_so 
-    teach_sal_ppp_so <- teach_sal_new_so / ex_rate_2017_ppp_so
-    teach_sal_2017usdppp_so <- teach_sal_ppp_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
+    teach_sal_2017usdppp_so <- teach_sal_new_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
 
     n_students_so <- 45            #Average pupils per teacher	45
     staff_time_so <- 0.3           #Added Deworming costs due to goverment staff time
@@ -459,7 +462,33 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 
 
 ## ----new-interest--------------------------------------------------------
-interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
+#interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
+interest_in_new <- interest
+
+
+## ----delta-earnings, eval=TRUE-------------------------------------------
+# - inputs:
+# - outputs:
+chunk_new_earnings <- function(){
+###############################################################################
+###############################################################################  
+
+    earnings2_f <- function(t_var = 1,
+                               lambda1k1_var = lambda1_new_so[1],
+                               lambda1k2_var = lambda1_new_so[2],
+                               lambda1k3_var = lambda1_new_so[3]) {
+        1*(10 <= t_var & t_var < 15) * lambda1k1_var +
+        1*(15 <= t_var & t_var < 20) * lambda1k2_var +
+        1*(20 <= t_var) * lambda1k3_var
+    }
+
+###############################################################################
+###############################################################################             
+    return(list("earnings2_f" = earnings2_f))
+}
+
+invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
+
 
 
 ## ----unit_costs2_new-----------------------------------------------------
@@ -596,31 +625,6 @@ chunk_cost1_inp <- function(){
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 
 
-## ----delta-earnings, eval=TRUE-------------------------------------------
-# - inputs:
-# - outputs:
-chunk_new_earnings <- function(){
-###############################################################################
-###############################################################################  
-
-    earnings2_f <- function(t_var = 1,
-                               lambda1k1_var = lambda1_new_so[1],
-                               lambda1k2_var = lambda1_new_so[2],
-                               lambda1k3_var = lambda1_new_so[3]) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var +
-        1*(15 <= t_var & t_var < 20) * lambda1k2_var +
-        1*(20 <= t_var) * lambda1k3_var
-    }
-
-###############################################################################
-###############################################################################             
-    return(list("earnings2_f" = earnings2_f))
-}
-
-invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
-
-
-
 
 
 ## ----all-steps-----------------------------------------------------------
@@ -690,28 +694,33 @@ one_run <-
            lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_so),
            alpha_0_var1 = alpha_0_so,
            alpha_r_var1 = alpha_r_so,
-           lambda2_var1 = lambda2_so,
-           coverage_var1 = coverage_so,
-           q_full_var1 = q_full_so,
-           q_zero_var1 = q_zero_so,
-           lambda1_new_var1 = lambda1_new_so,
-           gov_bonds_var1 = gov_bonds_so,
-           inflation_var1 = inflation_so,
-           df_costs_var1 = df_costs_so,
-           df_costs_cw_var1 = df_costs_cw_so,
-           staff_time_var1 = staff_time_so,
-           df_counts_var1 = df_counts_so,
-           counts_sim_var1 = NULL,
-           costs_sim_var1 = NULL,
-           delta_ed_var1 = delta_ed_so,
-           delta_ed_ext_var1 = delta_ed_ext_so,
-           teach_sal_var1 = teach_sal_so,
-           teach_ben_var1 = teach_ben_so,
-           n_students_var1 = n_students_so,
-           unit_cost_local_var1 = unit_cost_local_so,
-           years_of_treat_var1 = years_of_treat_so,
-           tax_var1 = tax_so,
-           periods_var1 = periods_so) {
+           lambda2_var1 = lambda2_so,                                        
+           coverage_var1 = coverage_so,                                        
+           q_full_var1 = q_full_so,                                        
+           q_zero_var1 = q_zero_so,                                        
+           lambda1_new_var1 = lambda1_new_so,                                        
+           gov_bonds_var1 = gov_bonds_so,                                        
+           inflation_var1 = inflation_so,                                        
+           gov_bonds_new_var1 = gov_bonds_new_so,                                                     
+           inflation_new_var1 = inflation_new_so,                                       
+           df_costs_var1 = df_costs_so,                                        
+           df_costs_cw_var1 = df_costs_cw_so,                                        
+           staff_time_var1 = staff_time_so,                                        
+           df_counts_var1 = df_counts_so,                                        
+           counts_sim_var1 = NULL,                                        
+           costs_sim_var1 = NULL,                                        
+           delta_ed_var1 = delta_ed_so,                                        
+           delta_ed_ext_var1 = delta_ed_ext_so,                                        
+           teach_sal_var1 = teach_sal_so,                                        
+           teach_ben_var1 = teach_ben_so,                                        
+           n_students_var1 = n_students_so,                                        
+           teach_sal_new_var1 = teach_sal_new_so,                                            
+           teach_ben_new_var1 = teach_ben_new_so,                              
+           unit_cost_local_var1 = unit_cost_local_so,     
+           unit_cost_local_new_var1 = 0.8296927,             #  CALL SO          
+           years_of_treat_var1 = years_of_treat_so,                                        
+           tax_var1 = tax_so,                                        
+           periods_var1 = periods_so) {                                        
     ####------------ Inputs for wage_t ---------------------------------------------
     wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_var1, wage_ww_var = wage_ww_var1,
                              profits_se_var = profits_se_var1, hours_se_cond_var = hours_se_cond_var1,  
@@ -722,7 +731,7 @@ one_run <-
     wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_var1,
                              coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp2_var1)
 
-        lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
+    lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
                              alpha_0_var = alpha_0_var1, alpha_r_var = alpha_r_var1)
 
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
@@ -794,7 +803,8 @@ one_run <-
                                           inflation_var = inflation_var1) )
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
     
-    interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
+    interest_in_new <- as.numeric(interest_f(gov_bonds_var = gov_bonds_new_var1, 
+                                             inflation_var = inflation_new_var1))
 
     cost_per_student_in <-  cost_per_student_f(teach_sal_var = teach_sal_var1,
                                                teach_ben_var = teach_ben_var1,
@@ -803,9 +813,9 @@ one_run <-
  
     
     #TODO: remove hardcoded numbers
-    cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77), 
-                                          teach_ben_var = 0, 
-                                          n_students_var = 45)
+    cost_per_student_in_new <- cost_per_student_f(teach_sal_var = teach_sal_new_var1, 
+                                          teach_ben_var = teach_ben_new_var1, 
+                                          n_students_var = n_students_var1)
     
     s2_in <- s2_f(unit_cost_local_var = unit_cost_local_var1,
                   ex_rate_var = ex_rate_var1, years_of_treat_var = years_of_treat_var1)
@@ -839,7 +849,7 @@ one_run <-
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
                                    interest_r_var = interest_in_new, 
                                    periods_var = periods_var1)
-    # ADD UNIT TEST
+    unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
 
     #Costs
     # costs1: EA costs no externalities
@@ -865,12 +875,12 @@ one_run <-
                            s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
     unit_test(costs2_in_x,  25.1962130559894, main_run_var = main_run_var1)
 
-
+    s2_new_in <- s2_f_new(interest_var = interest_in_new, unit_cost_local_var = unit_cost_local_new_var1, ex_rate_var = 1)
     # costs2: KLPS4
     costs_k <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
                          interest_r_var = interest_in_new, 
                        cost_of_schooling_var = cost_per_student_in_new,
-                         s1_var = 0, q1_var = 0, s2_var = s2_new, q2_var = q_full_var1)
+                         s1_var = 0, q1_var = 0, s2_var = s2_new_in, q2_var = q_full_var1)
     unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
     
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
@@ -937,6 +947,10 @@ sim.data1 <- function(nsims = 1e2,
                       gov_bonds_var2_sd,
                       inflation_var2,
                       inflation_var2_sd,
+                      gov_bonds_new_var2,                                                              
+                      gov_bonds_new_var2_sd,                                                          
+                      inflation_new_var2,                          
+                      inflation_new_var2_sd,                      
                       costs_par_var2,
                       costs_par_var2_sd,
                       staff_time_var2,
@@ -951,6 +965,10 @@ sim.data1 <- function(nsims = 1e2,
                       teach_sal_var2_sd,
                       teach_ben_var2,
                       teach_ben_var2_sd,
+                      teach_sal_new_var2,
+                      teach_sal_new_var2_sd,
+                      teach_ben_new_var2,
+                      teach_ben_new_var2_sd,
                       n_students_var2,
                       n_students_var2_sd,
                       unit_cost_local_var2,
@@ -973,6 +991,9 @@ sim.data1 <- function(nsims = 1e2,
     ## Data
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
     inflation_sim <-        rnorm(nsims, inflation_var2, inflation_var2_sd)
+    
+    gov_bonds_new_sim <-    rnorm(n = nsims, mean = gov_bonds_new_var2, sd = gov_bonds_new_var2_sd) 
+    inflation_new_sim <-    rnorm(nsims, inflation_new_var2, inflation_new_var2_sd)                  
 
     wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
     wage_ww_sim <-          rnorm(nsims, wage_ww_var2, wage_ww_var2_sd)
@@ -985,9 +1006,11 @@ sim.data1 <- function(nsims = 1e2,
     growth_rate_sim <-      rnorm(nsims, growth_rate_var2, growth_rate_var2_sd)
 
     ex_rate_sim <-          rnorm(nsims, ex_rate_var2, ex_rate_var2_sd)
+    # ex_rate_new_sim
     tax_sim <-              rnorm(nsims, tax_var2, tax_var2_sd)
-
+    
     unit_cost_local_sim <-  rnorm(nsims, unit_cost_local_var2, unit_cost_local_var2_sd)
+    # unit_cost_local_new_sim
     years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, years_of_treat_var2_sd)
 
     ## Research
@@ -1006,9 +1029,9 @@ sim.data1 <- function(nsims = 1e2,
     # Prevalence here TO DO: draw from a beta instead of "truncated" normal
     alpha_0_sim <- rnorm(nsims, alpha_0_var2, alpha_0_var2_sd)
     alpha_0_sim <- ifelse(alpha_0_sim > 1, yes = 1, ifelse(alpha_0_sim < 0, 0, alpha_0_sim) )
+    
     alpha_r_sim <- rnorm(nsims, alpha_r_var2, alpha_r_var2_sd)
     alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
-
     ## Guess work
     periods_val <- 50           #Total number of periods to forecast wages
     time_to_jm_val <- 10        #Time from intial period until individual join the labor force
@@ -1016,6 +1039,10 @@ sim.data1 <- function(nsims = 1e2,
     coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
     teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
     teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
+    
+    teach_sal_new_sim <-    rnorm(nsims, teach_sal_new_var2, teach_sal_new_var2_sd)
+    teach_ben_new_sim <-    rnorm(nsims, teach_ben_new_var2, teach_ben_new_var2_sd)
+    
     n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
 
     delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean =
@@ -1073,6 +1100,7 @@ sim.data1 <- function(nsims = 1e2,
 
     for (i in 1:nsims) {
     # one_run, for the most part, does not include standard deviations   
+     # change to j?       
       invisible( list2env(
         one_run(main_run_var1 = FALSE,              # HERE I NEED TO PLUG costs1_costs_sim
                 run_sim_var = TRUE,
@@ -1096,11 +1124,15 @@ sim.data1 <- function(nsims = 1e2,
                 lambda1_new_var1 = lambda1_new_sim[i,],
                 gov_bonds_var1 = gov_bonds_sim[i],
                 inflation_var1 = inflation_sim[i],
+                gov_bonds_new_var1 = gov_bonds_new_sim[i],
+                inflation_new_var1 = inflation_new_sim[i],
                 staff_time_var1 = staff_time_sim[i],
                 delta_ed_var1 = cbind(delta_ed_sim[i,], 1999:2007),
                 delta_ed_ext_var1 = cbind(delta_ed_ext_sim[i,], 1999:2007),
                 teach_sal_var1 = teach_sal_sim[i],
                 teach_ben_var1 = teach_ben_sim[i],
+                teach_sal_new_var1 = teach_sal_new_sim[i],
+                teach_ben_new_var1 = teach_ben_new_sim[i],
                 n_students_var1 = n_students_sim[i],
                 unit_cost_local_var1 = unit_cost_local_sim[i],
                 years_of_treat_var1 = years_of_treat_sim[i],
@@ -1154,8 +1186,6 @@ sim.data1 <- function(nsims = 1e2,
       "total_time"         = total_time
     ) )
 }
-
-
 
 policy_estimates <- c("baird1_sim",          
 "baird2_sim"         ,

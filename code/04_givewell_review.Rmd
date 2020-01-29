@@ -666,11 +666,6 @@ Q^{r}_{11} = \frac{Q_{12} Q^{r}_{13}}{\sum_{r}Q^{r}_{13}}
 ```
 
 
-# Main results
-```{r main-results}
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
-```
 
 
 [^1]: `F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]` Original [here](https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857), editable version [here](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=509033857)
