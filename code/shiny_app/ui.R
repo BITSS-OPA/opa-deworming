@@ -36,7 +36,7 @@ shinyUI(
                                       withMathJax(),
                                       useShinyjs(),
                                       selectInput("policy_est", "Policy Estimate:",
-                                                   choices=policy_estimates_text, 
+                                                   choices = policy_estimates_text, 
                                                   selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
                              ),
                              fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
