@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "29 January, 2020"
+date: "24 February, 2020"
 output:
   html_document:
     code_folding: hide
@@ -1945,7 +1945,7 @@ for ( i in policy_estimates ) {
         unit_test(to_test, all_res_10000_sims[k], main_run_var = TRUE)
     } else if (nsims_so == 1e3){
         unit_test(to_test, all_res_1000_sims[k], main_run_var = TRUE)
-    } else if(nsims_so == 1e2){
+    } else if (nsims_so == 1e2){
         unit_test(to_test, all_res_100_sims[k], main_run_var = TRUE)
     }
 }
