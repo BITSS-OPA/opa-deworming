@@ -168,7 +168,7 @@ chunk_params <- function(){
     ##### Guess work   
     #############
     periods_so <- 50               #Total number of periods to forecast wages
-    time_to_jm_so <- 10            #Time from intial period until individual join the labor force
+    time_to_jm_so <- 10            #Time from initial period until individual join the labor force
     coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
@@ -246,7 +246,7 @@ This analaysis contains elements from GiveWell's cost effectiveness analaysis (s
 
 # Methodology  
 
-We first describe the common elements across all three aproaches, and then describe each approach in detail.
+We first describe the common elements across all three approaches, and then describe each approach in detail.
 
 ## Common structure 
 
@@ -316,11 +316,11 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ```
 
 
-At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probalby an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implemening deworming policies, and indirect costs associated with the benefits of deworming.
+At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probably an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implementing deworming policies, and indirect costs associated with the benefits of deworming.
 
-The main differences across the three aproaches regarding benfits have to do how to predict the earnings profiles over a lifecycle, and wheather or not to account for different prevalence rates. Approach 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjust for possible differences in prevalence rates of worm infections. 
+The main differences across the three approaches regarding benefits have to do with how to predict the earnings profiles over a lifecycle, and whether or not to account for different prevalence rates. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections. 
 
-The main differences in costs have to do with weather indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not includes indirect costs and use unit costs of multiple countries. 
+The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries. 
 
 
 
@@ -549,7 +549,7 @@ The saturation of the intervention, $p$, measures the fraction of the population
 p = R \times Q(full)  + (1 - R) \times Q(0)
 \end{equation}
 
-For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assinged the value of `r q_zero_so`. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = `r q_full_so`$.
+For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assigned the value of `r q_zero_so`. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = `r q_full_so`$.
 
 ```{r coverage-and-saturation}
 # - inputs: coverage_so, q_full_so, q_zero_so
