@@ -1,6 +1,10 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
+<<<<<<< HEAD
 date: "28 February, 2020"
+=======
+date: "27 February, 2020"
+>>>>>>> 44b4936b632137b133cb2ccbec5068d9b457ff0f
 output:
   html_document:
     code_folding: hide
@@ -266,8 +270,8 @@ invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 
 \begin{equation}
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
-\label{eq:5}
-\tag{5}
+\label{eq:2}
+\tag{2}
 \end{equation}
 
 
@@ -341,6 +345,8 @@ The resulting value is a $r$ = 9.85%
 
 \begin{equation}
 E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
+\label{eq:3}
+\tag{3}
 \end{equation}
 
 Where:   
@@ -383,6 +389,8 @@ The wages/earnings are determined by:
 
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50
+\label{eq:4}
+\tag{4}
 \end{equation}
 
 individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0$ for $t<10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
@@ -391,6 +399,8 @@ individuals in the data are assumed to enter the labor force 10 years after the 
 
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+\label{eq:5}
+\tag{5}
 \end{equation}
 
 \begin{equation}
@@ -403,6 +413,8 @@ The wage in agriculture comes from research (Suri, 2011), the working wage comes
 
 \begin{equation}
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
+\label{eq:6}
+\tag{6}
 \end{equation}
 
 Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of workin age in the sample (hence capturing the relative inportance of the self employed sector in the economy)
@@ -474,7 +486,9 @@ invisible( list2env(chunk_wages(),.GlobalEnv) )
 $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a simple mean:
 
 \begin{equation}
-\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female} \\
+\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}\\
+\label{eq:7}
+\tag{7}
 \end{equation}
 
 Its components come from the W\@W paper.
@@ -527,6 +541,8 @@ The saturation of the intervention, $p$, measures the fraction of the population
 
 \begin{equation}
 p = R \times Q(full)  + (1 - R) \times Q(0)
+\label{eq:8}
+\tag{8}
 \end{equation}
 
 For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assigned the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = 0.75$.
@@ -561,6 +577,8 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 \begin{equation}
 C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\label{eq:9}
+\tag{9}
 \end{equation}
 
 
@@ -597,6 +615,8 @@ $K$ represents the cost per student. This is calculated as the salary of the tea
 
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
+\label{eq:10}
+\tag{10}
 \end{equation}
 
 For $\Delta \overline{E}_{t}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
@@ -649,6 +669,8 @@ With complete subsidy, $S_2$ represents the total direct costs of deworming in U
 
 \begin{equation}
 S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
+\label{eq:11}
+\tag{11}
 \end{equation}
 
 ##### $Q_{2}$  
@@ -720,6 +742,8 @@ We estimate treatment effects on total welfare by round. KLPS2 captures effects 
 \begin{equation}
 E_t = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t > 20)\alpha^{KLPS4}
 \text{ for } t \leq 50
+\label{eq:12}
+\tag{12}
 \end{equation}
 
 
@@ -761,11 +785,15 @@ The costs have a  similar structure as @baird2016worms. Two differences: unit co
 New way to compute unit costs of deworming treatment: 
 \begin{equation}
 \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+\label{eq:13}
+\tag{13}
 \end{equation}
 
 Since the analysis is discrete, and we can not sum over a non-integer, we find
 \begin{equation}
 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + .4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+\label{eq:14}
+\tag{14}
 \end{equation}
 
 
@@ -808,6 +836,8 @@ The cost of additional schooling is given by the product of the annual cost of s
 
 \begin{equation}
 K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
+\label{eq:15}
+\tag{15}
 \end{equation}
 
 The cost per student ($K$) is updated wtih new information on annual teacher salary (including benefits)[^9], $12055 (also adjusted for PPP), and same number of average number of students per teacher (45).
@@ -849,8 +879,8 @@ Over this nine year period, students attended school for an additional 0.15 year
 
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
-\label{eq:2}
-\tag{2}
+\label{eq:16}
+\tag{16}
 \end{equation}
 
 GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance.These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such the cost of drugs donated by WHO.
@@ -888,16 +918,15 @@ invisible( list2env(chunk_cost1(),.GlobalEnv) )
 \begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
 c_{i} = \frac{C_{i}}{N_{i}} \\
-\label{eq:3}
-\tag{3}
+\label{eq:17}
+\tag{17}
 \end{equation}
 
 
 \begin{equation}
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
-\label{eq:4}
-\tag{4}
+
 \end{equation}
 
 
@@ -1006,6 +1035,8 @@ From either @baird2016worms or @klps4. Only difference is that results now take 
 
 \begin{equation}
 \lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0
+\label{eq:18}
+\tag{18}
 \end{equation}
 
 
@@ -1035,6 +1066,8 @@ The key result for policy makers is defined as the cost effectivness ratio (cell
 
 \begin{equation}
 CEA_{deworming} = \frac{B (1 + F_{0})}{C}
+\label{eq:19}
+\tag{19}
 \end{equation}
 
  - $C$ is the costs per person dewormed (`F2, 4,B23` --> [`F1, 2, H16`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=H16)).     
@@ -1046,6 +1079,8 @@ Also this quantity could be expressed in relative terms to the benchmark of cash
 
 \begin{equation}
 RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
+\label{eq:20}
+\tag{20}
 \end{equation}
 
 
