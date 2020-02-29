@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "24 February, 2020"
+date: "28 February, 2020"
 output:
   html_document:
     code_folding: hide
@@ -129,7 +129,7 @@ chunk_params <- function(){
     lambda1_new_sd_so <- c(43, 83, 172)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
-    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct seconday schooling increase (from Joan)
+    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
                         0.0239963665555466, 0.027301406306074, 0.0234125454594173,
                        0.0279278879439199, 0.00647044449446303, 0.00835739437790601)                                     
     delta_ed_so <- cbind(delta_ed_so, 1999:2007)
@@ -146,7 +146,7 @@ chunk_params <- function(){
     ##### Guess work   
     #############
     periods_so <- 50               #Total number of periods to forecast wages
-    time_to_jm_so <- 10            #Time from intial period until individual join the labor force
+    time_to_jm_so <- 10            #Time from initial period until individual join the labor force
     coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
@@ -223,7 +223,7 @@ This analaysis contains elements from GiveWell's cost effectiveness analaysis (s
 
 # Methodology  
 
-We first describe the common elements across all three aproaches, and then describe each approach in detail.
+We first describe the common elements across all three approaches, and then describe each approach in detail.
 
 ## Common structure 
 
@@ -295,11 +295,11 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ```
 
 
-At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probalby an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implemening deworming policies, and indirect costs associated with the benefits of deworming.
+At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probably an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implementing deworming policies, and indirect costs associated with the benefits of deworming.
 
-The main differences across the three aproaches regarding benfits have to do how to predict the earnings profiles over a lifecycle, and wheather or not to account for different prevalence rates. Approach 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjust for possible differences in prevalence rates of worm infections. 
+The main differences across the three approaches regarding benefits have to do with how to predict the earnings profiles over a lifecycle, and whether or not to account for different prevalence rates. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections. 
 
-The main differences in costs have to do with weather indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not includes indirect costs and use unit costs of multiple countries. 
+The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries. 
 
 
 
@@ -352,7 +352,7 @@ Where:
  - $w_t$: are the earnings in period $t$.   
  - $\lambda_{1}$: is the direct effects of deworming on earnings.  
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
- - $p$: saturation, measures the fraction of the population that is effectively usign the treatment.  
+ - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
 
 
@@ -408,7 +408,7 @@ The wage in agriculture comes from research (Suri, 2011), the working wage comes
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
 \end{equation}
 
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of workin age in the sample (hence capturing the relative inportance of the self employed sector in the economy)
+Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
 
 
@@ -474,7 +474,7 @@ invisible( list2env(chunk_wages(),.GlobalEnv) )
 
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
-$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a simple mean:
+$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men and women. This two parameters are combined with a simple mean:
 
 \begin{equation}
 \lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female} \\
@@ -482,7 +482,7 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 
 Its components come from the W\@W paper.
 
-$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
+$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times.
 
 
 ```r
@@ -524,15 +524,15 @@ lambda2_in <- lambda2_in_f()
 #### $R$ and $p$
 
 
-The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was appplied to approximatedly two thirds of the population, $R$ is set to: $R  = 0.68$.  
+The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was applied to approximately two thirds of the population, $R$ is set to: $R  = 0.68$.  
 
-The saturation of the intervention, $p$, measures the fraction of the population that is effectively usign the treatment and is defined as:  
+The saturation of the intervention, $p$, measures the fraction of the population that is effectively using the treatment and is defined as:  
 
 \begin{equation}
 p = R \times Q(full)  + (1 - R) \times Q(0)
 \end{equation}
 
-For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assinged the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = 0.75$.
+For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assigned the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = 0.75$.
 
 
 ```r
@@ -679,9 +679,9 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 ```
 
 
-Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for goverment (table 5, column 3, and rows 9, 10 respectively). 
+Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively). 
 
-Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for goverment (table 5, column 3, and rows 12, 13 respectively). 
+Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for government (table 5, column 3, and rows 12, 13 respectively). 
 
 
 
@@ -714,7 +714,7 @@ interest_in_new <- interest
 
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
-We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years
+We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years.
 
 @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. 
 
