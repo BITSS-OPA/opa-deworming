@@ -47,8 +47,6 @@ colorize = function(x, color){
     sprintf("<font color='%s'>%s</font>", color, x)
   } else x
 }
-
-
 ```
 
 
@@ -67,7 +65,7 @@ colorize = function(x, color){
 ### arguments in functions should used "_var" and functions should "_f"
 
 
-# DESCRIBE FUNCTIONS STRUCTURE
+# DESCRIBE CHUNK STRUCTURE
 # - inputs: list
 # - outputs: list
 #### function:  
@@ -87,6 +85,8 @@ colorize = function(x, color){
 
 
 ```{r sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE}
+# - inputs: none
+# - outputs: all sources coming from data, research and guesswork 
 chunk_params <- function(){
 ###############################################################################
 ###############################################################################  
@@ -100,14 +100,16 @@ chunk_params <- function(){
     
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
     wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
-    profits_se_so <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
+    profits_se_so <- 1766          #Control group monthly self-employed profits - 
+                                   #Table 4, Panel A FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
     hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
     hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
     hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
     hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
     ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
 
-    ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
+    ex_rate_2018        <- 101.30  # Exchange rate (KES per international $) 
+                                    # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
     ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
     cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
@@ -135,7 +137,8 @@ chunk_params <- function(){
     # Prevalence data: 
     # original study
     # Any infection on original study
-    #alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
+    #alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, 
+    # "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
     df_alpha_so <- read_excel("data/prevalence_data.xlsx",
                            sheet = "Sheet1")
     
@@ -169,15 +172,16 @@ chunk_params <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from initial period until individual join the labor force
-    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	
+                                                    #- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     teach_sal_new_so <- (50000*12/49.77)
     teach_ben_new_so <- 0 
-                                              #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - 
-                                              #news sources * 12 / ex_rate_2017_ppp_so
-                                              # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
-                                              # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
+                                  #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - 
+                                  #news sources * 12 / ex_rate_2017_ppp_so
+                                  # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
+                                  # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
     teach_sal_2017usdppp_so <- teach_sal_new_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
 
     n_students_so <- 45            #Average pupils per teacher	45
@@ -204,31 +208,27 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 #############
 ##### Notes:
 #############
-### Source ---->  Input ----> Model ----> Policy Estimates (output)
-###  (_so)        (_in)       (_mo)        (_pe)
-### values      functions   functions      values
-###             & values    & values
-### arguments in functions should used "_var" and functions should "_f"
-
-#invisible( list2env(chunk_name(),.GlobalEnv) )
-
-# on growth_rate_so: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
-# on coef_exp_so: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, female dummy, indicators for attained primary/secondary/beyond, and province dummies. Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle adjustment beyond KLPS-3 (likely a conservative assumption).
+# on growth_rate_so: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation 
+# on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should 
+# be updated to be 2002-2014, I think.
+# 
+# on coef_exp_so: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, 
+# female dummy, indicators for attained primary/secondary/beyond, and province dummies. 
+# Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle 
+# adjustment beyond KLPS-3 (likely a conservative assumption).
+# 
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
-
 ```
 
 
 # Introduction  
 
-Presents and compares different approaches to quantify the costs and benefits of deworming. Mentioned the GW analysis.
-
 Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions. 
 
-The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:   
-  1 - the original CBA produced by @baird2016worms,   
-  2 - an updated version of such analysis by a symilar research team [@klps4], and   
-  3 - a third approach that borrows some component of the previous two and a some specific components requested by the NGO Evidence Action (EA)[^1]. 
+The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:    
+   1 - the original CBA produced by @baird2016worms,   
+   2 - an updated version of such analysis by a symilar research team [@klps4], and   
+   3 - a third approach that borrows some component of the previous two and a some specific components requested by the NGO Evidence Action (EA)[^1]. 
 
 
 <!--
@@ -238,8 +238,6 @@ value of benefits and costs. The benefits quantified here are the effects on wag
 costs are those of delivering the deworming treatment.  
 
 The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population.
-
-
 
 This analaysis contains elements from GiveWell's cost effectiveness analaysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
 -->
@@ -266,18 +264,15 @@ NPV = B - C
 chunk_policy_est <- function(){
 ###############################################################################
 ###############################################################################  
-
+    NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
+        benefits_var - costs_var
+    }
     CEA_pe_f <- function(benefits_var = 1, fudging_var = 0, costs_var = 1) {
         ( benefits_var * ( 1 + fudging_var ) ) / costs_var
     }
     RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
         CEA_var / CEA_cash_var
     }
-
-    NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
-        benefits_var - costs_var
-    }
-
 ###############################################################################
 ###############################################################################  
     return(list("CEA_pe_f" = CEA_pe_f,
@@ -324,8 +319,7 @@ The main differences in costs have to do with whether indirect costs are include
 
 
 
-
-#### "$r$"  
+### "$r$"  
 
 The real interest rate $r$ is obtained from the interest rate on goverment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
 
