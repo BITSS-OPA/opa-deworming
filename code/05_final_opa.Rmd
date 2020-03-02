@@ -1145,7 +1145,7 @@ one_run <-
            growth_rate_var1 = growth_rate_so,
            coef_exp_var1 = coef_exp_so[1], 
            coef_exp2_var1 = coef_exp_so[2],
-           lambda1_var1 = lambda1_in_f(lambda1_var = coef_exp_so),
+           lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_so),
            alpha_0_var1 = alpha_0_so,
            alpha_r_var1 = alpha_r_so,
            lambda2_var1 = lambda2_so,                                        
