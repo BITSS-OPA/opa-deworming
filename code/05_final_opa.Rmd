@@ -154,7 +154,7 @@ chunk_params <- function(){
     lambda1_new_sd_so <- c(43, 83, 172)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
-    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct seconday schooling increase (from Joan)
+    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
                         0.0239963665555466, 0.027301406306074, 0.0234125454594173,
                        0.0279278879439199, 0.00647044449446303, 0.00835739437790601)                                     
     delta_ed_so <- cbind(delta_ed_so, 1999:2007)
@@ -390,7 +390,7 @@ Where:
  - $w_t$: are the earnings in period $t$.   
  - $\lambda_{1}$: is the direct effects of deworming on earnings.  
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
- - $p$: saturation, measures the fraction of the population that is effectively usign the treatment.  
+ - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
 
 
@@ -451,7 +451,7 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 \tag{6}
 \end{equation}
 
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of workin age in the sample (hence capturing the relative inportance of the self employed sector in the economy)
+Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
 
 ```{r wage_t}
@@ -460,7 +460,7 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
 #  growth rate (growth_rate_so), mincer coef (coef_exp_so[1], coef_exp_so[2])
 #
-#outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trayectory:
+#outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trajectory:
 #  value (wage_t_mo) and function (wage_t_mo_f).
 chunk_wages <- function(){
 ################################################################################
@@ -516,7 +516,7 @@ invisible( list2env(chunk_wages(),.GlobalEnv) )
 
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
-$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a simple mean:
+$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men and women. This two parameters are combined with a simple mean:
 
 \begin{equation}
 \lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}\\
@@ -526,7 +526,7 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 
 Its components come from the W\@W paper.
 
-$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
+$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times.
 
 ```{r lambdas}
 # - inputs:
@@ -567,9 +567,9 @@ lambda2_in <- lambda2_in_f()
 #### $R$ and $p$
 
 
-The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was appplied to approximatedly two thirds of the population, $R$ is set to: $R  = `r round(coverage_so, 2)`$.  
+The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was applied to approximately two thirds of the population, $R$ is set to: $R  = `r round(coverage_so, 2)`$.  
 
-The saturation of the intervention, $p$, measures the fraction of the population that is effectively usign the treatment and is defined as:  
+The saturation of the intervention, $p$, measures the fraction of the population that is effectively using the treatment and is defined as:  
 
 \begin{equation}
 p = R \times Q(full)  + (1 - R) \times Q(0)
@@ -729,9 +729,9 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 ```
 
 
-Without externalities, they obtain total NPV of benefits of `r df_research_so$param[1]`, with `r df_research_so$param[2]` in tax revenue for goverment (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and rows `r paste0(df_research_so$table_row[1], ", ", df_research_so$table_row[2])` respectively). 
+Without externalities, they obtain total NPV of benefits of `r df_research_so$param[1]`, with `r df_research_so$param[2]` in tax revenue for government (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and rows `r paste0(df_research_so$table_row[1], ", ", df_research_so$table_row[2])` respectively). 
 
-Including externalities, they obtain total NPV of benefits of `r df_research_so$param[3]`, with `r df_research_so$param[4]` in tax revenue for goverment (table `r df_research_so$tablenum[3]`, column `r df_research_so$table_col[3]`, and rows `r paste0(df_research_so$table_row[3], ", ", df_research_so$table_row[4])` respectively). 
+Including externalities, they obtain total NPV of benefits of `r df_research_so$param[3]`, with `r df_research_so$param[4]` in tax revenue for government (table `r df_research_so$tablenum[3]`, column `r df_research_so$table_col[3]`, and rows `r paste0(df_research_so$table_row[3], ", ", df_research_so$table_row[4])` respectively). 
 
 
 ```{r, eval=FALSE}
@@ -762,7 +762,7 @@ interest_in_new <- interest
 
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
-We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years
+We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years.
 
 @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. 
 
@@ -912,7 +912,7 @@ C = \sum_{i \in Countries } \omega_{i} c_{i}
 \tag{16}
 \end{equation}
 
-GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance.These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such the cost of drugs donated by WHO.
+GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance. These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO.
 
 Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
 
@@ -1088,7 +1088,7 @@ In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.7
 
 ### Different format of policy estimate {#policy-estimate}
 
-The key result for policy makers is defined as the cost effectivness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
+The key result for policy makers is defined as the cost effectiveness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
 
 \begin{equation}
 CEA_{deworming} = \frac{B (1 + F_{0})}{C}
@@ -1626,7 +1626,7 @@ sim.data1 <- function(nsims = 1e2,
     alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
     ## Guess work
     periods_val <- 50           #Total number of periods to forecast wages
-    time_to_jm_val <- 10        #Time from intial period until individual join the labor force
+    time_to_jm_val <- 10        #Time from initial period until individual join the labor force
     aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(0.001 , 0.001)[x]) )
     coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
     teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
