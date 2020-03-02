@@ -264,6 +264,7 @@ NPV = B - C
 chunk_policy_est <- function(){
 ###############################################################################
 ###############################################################################  
+
     NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
         benefits_var - costs_var
     }
@@ -273,6 +274,7 @@ chunk_policy_est <- function(){
     RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
         CEA_var / CEA_cash_var
     }
+    
 ###############################################################################
 ###############################################################################  
     return(list("CEA_pe_f" = CEA_pe_f,
@@ -285,11 +287,11 @@ invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 
 \begin{equation}
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
-\label{eq:2}
-\tag{2}
+\label{eq:`r 1+1`}
+\tag{`r 1+1`}
 \end{equation}
 
-```{r benefits}
+```{r benefits, echo=print_code}
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 chunk_benefits <- function(){
@@ -323,14 +325,15 @@ The main differences in costs have to do with whether indirect costs are include
 
 The real interest rate $r$ is obtained from the interest rate on goverment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
 
-```{r interest-rate}
+```{r interest-rate, echo=print_code}
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
 chunk_interest <- function(){
 ###############################################################################
 ###############################################################################  
 
-    interest_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
+    interest_f <- function(gov_bonds_var = gov_bonds_so , 
+                           inflation_var = inflation_so) {  
         interest_in = gov_bonds_var - inflation_var
         return(list("interest_in" = interest_in))
     }
@@ -345,6 +348,23 @@ interest <- as.numeric( interest_f() )
 ```
 
 The resulting value is a $r$ = `r paste(round(100 * interest,2), "%", sep="")`
+
+<!-- Add fold/unfold for tables -->
+
+```{r sum_tables1, purl=FALSE, echo=print_code}
+table_1 <- matrix("", nrow = , ncol = 3)
+table_1[1,1] <- paste0("$\\pi=" , inflation_so, "$")
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
+
+table_2 <- matrix("NA", nrow = 1, ncol = 2)
+table_2[1,1] <- "$r=g-\\pi$"
+table_2[1,2] <- "$(1)$" 
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+
+
+
+
 
 ## Approach 1: @baird2016worms
 

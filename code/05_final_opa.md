@@ -1,10 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-<<<<<<< HEAD
-date: "28 February, 2020"
-=======
-date: "27 February, 2020"
->>>>>>> 44b4936b632137b133cb2ccbec5068d9b457ff0f
+date: "01 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -249,6 +245,7 @@ NPV = B - C
 chunk_policy_est <- function(){
 ###############################################################################
 ###############################################################################  
+
     NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
         benefits_var - costs_var
     }
@@ -258,6 +255,7 @@ chunk_policy_est <- function(){
     RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
         CEA_var / CEA_cash_var
     }
+    
 ###############################################################################
 ###############################################################################  
     return(list("CEA_pe_f" = CEA_pe_f,
@@ -317,7 +315,8 @@ chunk_interest <- function(){
 ###############################################################################
 ###############################################################################  
 
-    interest_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
+    interest_f <- function(gov_bonds_var = gov_bonds_so , 
+                           inflation_var = inflation_so) {  
         interest_in = gov_bonds_var - inflation_var
         return(list("interest_in" = interest_in))
     }
@@ -332,6 +331,59 @@ interest <- as.numeric( interest_f() )
 ```
 
 The resulting value is a $r$ = 9.85%
+
+<!-- Add fold/unfold for tables -->
+
+
+```r
+table_1 <- matrix("", nrow = , ncol = 3)
+table_1[1,1] <- paste0("$\\pi=" , inflation_so, "$")
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
+```
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+```r
+table_2 <- matrix("NA", nrow = 1, ncol = 2)
+table_2[1,1] <- "$r=g-\\pi$"
+table_2[1,2] <- "$(1)$" 
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+
+<table>
+<caption>Model: summary of equations</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Equation </th>
+   <th style="text-align:left;"> # </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $r=g-\pi$ </td>
+   <td style="text-align:left;"> $(1)$ </td>
+  </tr>
+</tbody>
+</table>
+
+
+
+
 
 ## Approach 1: @baird2016worms
 
