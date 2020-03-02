@@ -351,6 +351,8 @@ The resulting value is a $r$ = `r paste(round(100 * interest,2), "%", sep="")`
 
 <!-- Add fold/unfold for tables -->
 
+
+
 ```{r sum_tables1, purl=FALSE, echo=print_code}
 table_1 <- matrix("", nrow = , ncol = 3)
 table_1[1,1] <- paste0("$\\pi=" , inflation_so, "$")
