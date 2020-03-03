@@ -200,11 +200,9 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 Presents and compares different approaches to quantify the costs and benefits of deworming. Mentioned the GW analysis.
 
-
-```r
-# question: what is the purpose of this sentence?
-```
-
+<!--
+question: what is the purpose of this sentence?
+-->
 
 Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions. 
 
