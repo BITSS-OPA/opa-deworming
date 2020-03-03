@@ -1,5 +1,6 @@
 ---
-title: "A Unifying Open Policy Analysis for Deworming"
+pdf_document:
+  extra_dependencies: ["xcolor"]
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -16,8 +17,7 @@ output:
   word_document: default
 editor_options:
   chunk_output_type: console
-pdf_document:
-  extra_dependencies: ["xcolor"]
+title: "A Unifying Open Policy Analysis for Deworming"
 bibliography: bibliography.bib  
 link-citations: true 
 ---
@@ -223,12 +223,19 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 # Introduction  
 
+Presents and compares different approaches to quantify the costs and benefits of deworming. Mentioned the GW analysis.
+
+<!--
+question: what is the purpose of this sentence?
+-->
+
 Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions. 
 
-The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:    
-   1 - the original CBA produced by @baird2016worms,   
-   2 - an updated version of such analysis by a symilar research team [@klps4], and   
-   3 - a third approach that borrows some component of the previous two and a some specific components requested by the NGO Evidence Action (EA)[^1]. 
+The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:   
+  1 - the original CBA produced by @baird2016worms,   
+  2 - an updated version of such analysis by a symilar research team [@klps4], and   
+  3 - a third approach that borrows some components of the previous two and some specific components requested by the NGO, Evidence Action (EA)[^1]. 
+
 
 
 <!--

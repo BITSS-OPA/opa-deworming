@@ -58,8 +58,17 @@ print_code <- TRUE
 #invisible( list2env(call_params_f(),.GlobalEnv) )
 ```
 
+# Introduction
+Summary of the issue and introduction to the policy analysis being conducted. 
 
-# Key policy estimates for policy makers  
+The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of "x" policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in "github". The main output, presented in the results section of this report, can also be explored interactively for different assumptions.
+
+## Source Information for data + analytical methods
+
+## Key policy estimates for policy makers  
+```{r}
+#my thoughts: should we forefront the conclusions before the methodology?
+```
 
 ```{r final-output}
 ```
@@ -186,6 +195,8 @@ kable(results_table, caption = "Table Caption") %>%
 ```
 
 # Sensitivity Analysis  
+
+# Conclusions
 
 # References
 
