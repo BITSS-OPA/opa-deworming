@@ -1,7 +1,6 @@
 ---
-pdf_document:
-  extra_dependencies: ["xcolor"]
-date: "03 March, 2020"
+title: "A Unifying Open Policy Analysis for Deworming"
+date: "02 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -44,7 +43,7 @@ link-citations: true
 ### arguments in functions should used "_var" and functions should "_f"
 
 
-# DESCRIBE FUNCTIONS STRUCTURE
+# DESCRIBE CHUNK STRUCTURE
 # - inputs: list
 # - outputs: list
 #### function:  
@@ -65,6 +64,8 @@ link-citations: true
 
 
 ```r
+# - inputs: none
+# - outputs: all sources coming from data, research and guesswork 
 chunk_params <- function(){
 ###############################################################################
 ###############################################################################  
@@ -78,14 +79,16 @@ chunk_params <- function(){
     
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
     wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
-    profits_se_so <- 1766          #Control group monthly self-employed profits - Table 4, Panel A  FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
+    profits_se_so <- 1766          #Control group monthly self-employed profits - 
+                                   #Table 4, Panel A FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
     hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
     hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
     hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
     hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
     ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
 
-    ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
+    ex_rate_2018        <- 101.30  # Exchange rate (KES per international $) 
+                                    # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
     ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
     cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
@@ -113,7 +116,8 @@ chunk_params <- function(){
     # Prevalence data: 
     # original study
     # Any infection on original study
-    #alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
+    #alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, 
+    # "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
     df_alpha_so <- read_excel("data/prevalence_data.xlsx",
                            sheet = "Sheet1")
     
@@ -129,7 +133,7 @@ chunk_params <- function(){
     lambda1_new_sd_so <- c(43, 83, 172)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
-    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct seconday schooling increase (from Joan)
+    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
                         0.0239963665555466, 0.027301406306074, 0.0234125454594173,
                        0.0279278879439199, 0.00647044449446303, 0.00835739437790601)                                     
     delta_ed_so <- cbind(delta_ed_so, 1999:2007)
@@ -146,16 +150,17 @@ chunk_params <- function(){
     ##### Guess work   
     #############
     periods_so <- 50               #Total number of periods to forecast wages
-    time_to_jm_so <- 10            #Time from intial period until individual join the labor force
-    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	- see notes(0.1019575, -0.0010413), (0,0)
+    time_to_jm_so <- 10            #Time from initial period until individual join the labor force
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	
+                                                    #- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     teach_sal_new_so <- (50000*12/49.77)
     teach_ben_new_so <- 0 
-                                              #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - 
-                                              #news sources * 12 / ex_rate_2017_ppp_so
-                                              # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
-                                              # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
+                                  #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - 
+                                  #news sources * 12 / ex_rate_2017_ppp_so
+                                  # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
+                                  # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
     teach_sal_2017usdppp_so <- teach_sal_new_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
 
     n_students_so <- 45            #Average pupils per teacher	45
@@ -182,16 +187,15 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 #############
 ##### Notes:
 #############
-### Source ---->  Input ----> Model ----> Policy Estimates (output)
-###  (_so)        (_in)       (_mo)        (_pe)
-### values      functions   functions      values
-###             & values    & values
-### arguments in functions should used "_var" and functions should "_f"
-
-#invisible( list2env(chunk_name(),.GlobalEnv) )
-
-# on growth_rate_so: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should be updated to be 2002-2014, I think.
-# on coef_exp_so: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, female dummy, indicators for attained primary/secondary/beyond, and province dummies. Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle adjustment beyond KLPS-3 (likely a conservative assumption).
+# on growth_rate_so: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation 
+# on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should 
+# be updated to be 2002-2014, I think.
+# 
+# on coef_exp_so: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, 
+# female dummy, indicators for attained primary/secondary/beyond, and province dummies. 
+# Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle 
+# adjustment beyond KLPS-3 (likely a conservative assumption).
+# 
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
@@ -212,6 +216,7 @@ The Cost Benefit Analysis (CBA) of deworming is computed using three different a
   3 - a third approach that borrows some components of the previous two and some specific components requested by the NGO, Evidence Action (EA)[^1]. 
 
 
+
 <!--
 OLD TEXT: 
 The key policy estimate consists of a cost effectiveness analysis that compares the present
@@ -220,14 +225,12 @@ costs are those of delivering the deworming treatment.
 
 The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population.
 
-
-
 This analaysis contains elements from GiveWell's cost effectiveness analaysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
 -->
 
 # Methodology  
 
-We first describe the common elements across all three aproaches, and then describe each approach in detail.
+We first describe the common elements across all three approaches, and then describe each approach in detail.
 
 ## Common structure 
 
@@ -249,17 +252,16 @@ chunk_policy_est <- function(){
 ###############################################################################
 ###############################################################################  
 
+    NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
+        benefits_var - costs_var
+    }
     CEA_pe_f <- function(benefits_var = 1, fudging_var = 0, costs_var = 1) {
         ( benefits_var * ( 1 + fudging_var ) ) / costs_var
     }
     RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
         CEA_var / CEA_cash_var
     }
-
-    NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
-        benefits_var - costs_var
-    }
-
+    
 ###############################################################################
 ###############################################################################  
     return(list("CEA_pe_f" = CEA_pe_f,
@@ -272,8 +274,8 @@ invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 
 \begin{equation}
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
-\label{eq:5}
-\tag{5}
+\label{eq:2}
+\tag{2}
 \end{equation}
 
 
@@ -299,16 +301,15 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ```
 
 
-At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probalby an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implemening deworming policies, and indirect costs associated with the benefits of deworming.
+At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probably an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implementing deworming policies, and indirect costs associated with the benefits of deworming.
 
-The main differences across the three aproaches regarding benfits have to do how to predict the earnings profiles over a lifecycle, and wheather or not to account for different prevalence rates. Approach 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjust for possible differences in prevalence rates of worm infections. 
+The main differences across the three approaches regarding benefits have to do with how to predict the earnings profiles over a lifecycle, and whether or not to account for different prevalence rates. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections. 
 
-The main differences in costs have to do with weather indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not includes indirect costs and use unit costs of multiple countries. 
-
-
+The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries. 
 
 
-#### "$r$"  
+
+### "$r$"  
 
 The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.118) minus the inflation rate (0.02).
 
@@ -320,7 +321,8 @@ chunk_interest <- function(){
 ###############################################################################
 ###############################################################################  
 
-    interest_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
+    interest_f <- function(gov_bonds_var = gov_bonds_so , 
+                           inflation_var = inflation_so) {  
         interest_in = gov_bonds_var - inflation_var
         return(list("interest_in" = interest_in))
     }
@@ -336,6 +338,59 @@ interest <- as.numeric( interest_f() )
 
 The resulting value is a $r$ = 9.85%
 
+<!-- Add fold/unfold for tables -->
+
+
+```r
+table_1 <- matrix("", nrow = , ncol = 3)
+table_1[1,1] <- paste0("$\\pi=" , inflation_so, "$")
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
+```
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+```r
+table_2 <- matrix("NA", nrow = 1, ncol = 2)
+table_2[1,1] <- "$r=g-\\pi$"
+table_2[1,2] <- "$(1)$" 
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+
+<table>
+<caption>Model: summary of equations</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Equation </th>
+   <th style="text-align:left;"> # </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $r=g-\pi$ </td>
+   <td style="text-align:left;"> $(1)$ </td>
+  </tr>
+</tbody>
+</table>
+
+
+
+
+
 ## Approach 1: @baird2016worms
 
 - Distinguish between total, fiscal. With and without externalities. 
@@ -348,6 +403,8 @@ The resulting value is a $r$ = 9.85%
 
 \begin{equation}
 E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
+\label{eq:3}
+\tag{3}
 \end{equation}
 
 Where:   
@@ -356,7 +413,7 @@ Where:
  - $w_t$: are the earnings in period $t$.   
  - $\lambda_{1}$: is the direct effects of deworming on earnings.  
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
- - $p$: saturation, measures the fraction of the population that is effectively usign the treatment.  
+ - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
 
 
@@ -390,6 +447,8 @@ The wages/earnings are determined by:
 
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50
+\label{eq:4}
+\tag{4}
 \end{equation}
 
 individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0$ for $t<10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
@@ -398,6 +457,8 @@ individuals in the data are assumed to enter the labor force 10 years after the 
 
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+\label{eq:5}
+\tag{5}
 \end{equation}
 
 \begin{equation}
@@ -410,9 +471,11 @@ The wage in agriculture comes from research (Suri, 2011), the working wage comes
 
 \begin{equation}
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
+\label{eq:6}
+\tag{6}
 \end{equation}
 
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of workin age in the sample (hence capturing the relative inportance of the self employed sector in the economy)
+Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
 
 
@@ -422,7 +485,7 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
 #  growth rate (growth_rate_so), mincer coef (coef_exp_so[1], coef_exp_so[2])
 #
-#outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trayectory:
+#outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trajectory:
 #  value (wage_t_mo) and function (wage_t_mo_f).
 chunk_wages <- function(){
 ################################################################################
@@ -478,15 +541,17 @@ invisible( list2env(chunk_wages(),.GlobalEnv) )
 
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
-$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men a women. This two parameter are combined with a simple mean:
+$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men and women. This two parameters are combined with a simple mean:
 
 \begin{equation}
-\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female} \\
+\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}\\
+\label{eq:7}
+\tag{7}
 \end{equation}
 
 Its components come from the W\@W paper.
 
-$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter in not estimated by gender, so we repeat its value two times.
+$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times.
 
 
 ```r
@@ -528,15 +593,17 @@ lambda2_in <- lambda2_in_f()
 #### $R$ and $p$
 
 
-The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was appplied to approximatedly two thirds of the population, $R$ is set to: $R  = 0.68$.  
+The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was applied to approximately two thirds of the population, $R$ is set to: $R  = 0.68$.  
 
-The saturation of the intervention, $p$, measures the fraction of the population that is effectively usign the treatment and is defined as:  
+The saturation of the intervention, $p$, measures the fraction of the population that is effectively using the treatment and is defined as:  
 
 \begin{equation}
 p = R \times Q(full)  + (1 - R) \times Q(0)
+\label{eq:8}
+\tag{8}
 \end{equation}
 
-For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assinged the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = 0.75$.
+For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assigned the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = 0.75$.
 
 
 ```r
@@ -568,6 +635,8 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 \begin{equation}
 C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+\label{eq:9}
+\tag{9}
 \end{equation}
 
 
@@ -604,6 +673,8 @@ $K$ represents the cost per student. This is calculated as the salary of the tea
 
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
+\label{eq:10}
+\tag{10}
 \end{equation}
 
 For $\Delta \overline{E}_{t}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
@@ -656,6 +727,8 @@ With complete subsidy, $S_2$ represents the total direct costs of deworming in U
 
 \begin{equation}
 S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
+\label{eq:11}
+\tag{11}
 \end{equation}
 
 ##### $Q_{2}$  
@@ -683,9 +756,9 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 ```
 
 
-Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for goverment (table 5, column 3, and rows 9, 10 respectively). 
+Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively). 
 
-Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for goverment (table 5, column 3, and rows 12, 13 respectively). 
+Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for government (table 5, column 3, and rows 12, 13 respectively). 
 
 
 
@@ -718,7 +791,7 @@ interest_in_new <- interest
 
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
-We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years
+We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years.
 
 @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. 
 
@@ -727,6 +800,8 @@ We estimate treatment effects on total welfare by round. KLPS2 captures effects 
 \begin{equation}
 E_t = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t > 20)\alpha^{KLPS4}
 \text{ for } t \leq 50
+\label{eq:12}
+\tag{12}
 \end{equation}
 
 
@@ -768,11 +843,15 @@ The costs have a  similar structure as @baird2016worms. Two differences: unit co
 New way to compute unit costs of deworming treatment: 
 \begin{equation}
 \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+\label{eq:13}
+\tag{13}
 \end{equation}
 
 Since the analysis is discrete, and we can not sum over a non-integer, we find
 \begin{equation}
 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + .4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+\label{eq:14}
+\tag{14}
 \end{equation}
 
 
@@ -815,6 +894,8 @@ The cost of additional schooling is given by the product of the annual cost of s
 
 \begin{equation}
 K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
+\label{eq:15}
+\tag{15}
 \end{equation}
 
 The cost per student ($K$) is updated wtih new information on annual teacher salary (including benefits)[^9], $12055 (also adjusted for PPP), and same number of average number of students per teacher (45).
@@ -856,11 +937,11 @@ Over this nine year period, students attended school for an additional 0.15 year
 
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
-\label{eq:2}
-\tag{2}
+\label{eq:16}
+\tag{16}
 \end{equation}
 
-GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance.These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such the cost of drugs donated by WHO.
+GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance. These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO.
 
 Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
 
@@ -895,16 +976,15 @@ invisible( list2env(chunk_cost1(),.GlobalEnv) )
 \begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
 c_{i} = \frac{C_{i}}{N_{i}} \\
-\label{eq:3}
-\tag{3}
+\label{eq:17}
+\tag{17}
 \end{equation}
 
 
 \begin{equation}
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
-\label{eq:4}
-\tag{4}
+
 \end{equation}
 
 
@@ -1013,6 +1093,8 @@ From either @baird2016worms or @klps4. Only difference is that results now take 
 
 \begin{equation}
 \lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0
+\label{eq:18}
+\tag{18}
 \end{equation}
 
 
@@ -1038,10 +1120,12 @@ In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.7
 
 ### Different format of policy estimate {#policy-estimate}
 
-The key result for policy makers is defined as the cost effectivness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
+The key result for policy makers is defined as the cost effectiveness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
 
 \begin{equation}
 CEA_{deworming} = \frac{B (1 + F_{0})}{C}
+\label{eq:19}
+\tag{19}
 \end{equation}
 
  - $C$ is the costs per person dewormed (`F2, 4,B23` --> [`F1, 2, H16`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=H16)).     
@@ -1053,6 +1137,8 @@ Also this quantity could be expressed in relative terms to the benchmark of cash
 
 \begin{equation}
 RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
+\label{eq:20}
+\tag{20}
 \end{equation}
 
 
@@ -1637,7 +1723,7 @@ sim.data1 <- function(nsims = 1e2,
     alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
     ## Guess work
     periods_val <- 50           #Total number of periods to forecast wages
-    time_to_jm_val <- 10        #Time from intial period until individual join the labor force
+    time_to_jm_val <- 10        #Time from initial period until individual join the labor force
     aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(0.001 , 0.001)[x]) )
     coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
     teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
