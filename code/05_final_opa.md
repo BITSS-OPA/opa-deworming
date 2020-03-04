@@ -203,18 +203,13 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 # Introduction  
 
-Presents and compares different approaches to quantify the costs and benefits of deworming. Mentioned the GW analysis.
+Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](add link). 
 
-<!--
-question: what is the purpose of this sentence?
--->
-
-Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions. 
 
 The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:   
-  1 - the original CBA produced by @baird2016worms,   
-  2 - an updated version of such analysis by a symilar research team [@klps4], and   
-  3 - a third approach that borrows some components of the previous two and some specific components requested by the NGO, Evidence Action (EA)[^1]. 
+  1. the original CBA produced by @baird2016worms,   
+  2. an updated version of such analysis by a symilar research team [@klps4], and   
+  3. a third approach that borrows some components of the previous two and some specific components requested by the NGO, Evidence Action (EA)[^1]. 
 
 
 
@@ -239,7 +234,9 @@ The starting point is a comparison of a stream of benefits and costs over the li
 
 
 \begin{equation}
-NPV = B - C
+NPV = B - C \\
+CEA = \frac{B \times F_0}{C} \\ 
+RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 
 \label{eq:1}
 \tag{1}
@@ -377,9 +374,8 @@ The resulting value is a $r$ = 9.85%
   </tr>
 </tbody>
 </table>
+
 </details>
-
-
 
 
 ## Approach 1: @baird2016worms
@@ -456,7 +452,8 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 \end{equation}
 
 \begin{equation}
-w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
+w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+\\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
 \end{equation}
 
 The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.
