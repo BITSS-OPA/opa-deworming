@@ -1,7 +1,7 @@
 ---
-title: "A Unifying Open Policy Analysis for Deworming"
-date: "03 March, 2020"
-
+pdf_document:
+  extra_dependencies: ["xcolor"]
+date: "04 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -345,12 +345,6 @@ The resulting value is a $r$ = 9.85%
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```r
-table_1 <- matrix("", nrow = , ncol = 3)
-table_1[1,1] <- paste0("$\\pi=" , inflation_so, "$")
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
-```
-
 <table>
  <thead>
   <tr>
@@ -367,13 +361,6 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
   </tr>
 </tbody>
 </table>
-
-```r
-table_2 <- matrix("NA", nrow = 1, ncol = 2)
-table_2[1,1] <- "$r=g-\\pi$"
-table_2[1,2] <- "$(1)$" 
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
-```
 
 <table>
 <caption>Model: summary of equations</caption>
