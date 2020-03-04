@@ -431,6 +431,24 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 \tag{`r equationIndex`}
 \end{equation}
 
+
+<details><summary>Click Here to View Analysis Table</summary>
+
+```{r sum_tables3, purl=FALSE, echo=FALSE, eval=FALSE}
+#AQUI VOY
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
+
+table_2 <- rbind(table_2, 
+                 c("$r=g-\\pi$", 
+                   paste0("$(", equationIndex, ")$") )
+    )
+
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+
+</details>
+
+
 Where:   
 
  - $r$: is the discount rate  
