@@ -1,6 +1,6 @@
 ---
 title: "Template"
-date: "16 April, 2019"
+date: "03 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -46,12 +46,24 @@ editor_options:
 #invisible( list2env(call_params_f(),.GlobalEnv) )
 ```
 
+# Introduction
+Summary of the issue and introduction to the policy analysis being conducted. 
 
-# Key policy estimates for policy makers  
+The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of "x" policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in "github". The main output, presented in the results section of this report, can also be explored interactively for different assumptions.
+
+## Source Information for data + analytical methods
+
+## Key policy estimates for policy makers  
+
+```r
+#my thoughts: should we forefront the conclusions before the methodology?
+```
 
 
 
 # Methodology
+
+Present explanation of how the analysis is to be performed, what factors are looked at, etc.
 
 ## Main Equation (the model)
 
@@ -63,26 +75,139 @@ y = f(x)
 
 
 ```r
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
-```
+# - inputs: 
+# - outputs: 
+chunk_test <- function(){
+############################################################################### 
+###############################################################################  
+  
+    somefunction_f <- function(something_var = something_default) {
+        something_var
+    }
+    
+############################################################################### 
+###############################################################################  
+    return(list("somefunction_f" = delta_earnings))    # Try to return only functions
+}
+invisible( list2env(chunk_test(),.GlobalEnv) )
 
+##### Execute values of the functions above when needed for the text:
+somefunction_in <- somefunction_f()
+```
 
 ## Sub components:
 
-### 1 - Component 1 ("$r$")
+### Component 1 ("$r$")
+
+This is the formula used to calculate component 1[^1]
+
+\begin{equation}
+r = X \times \lambda_1  + (1 - X) \times \lambda_2
+\label{eq:2}
+\tag{2}
+\end{equation}
 
 
 ```r
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
+# - inputs: factors of r
+# - outputs: r value
+chunk_r <- function(){
+###############################################################################
+###############################################################################  
+
+    r_function_f <- function(r_input1_var = input1 , r_input2_var = input2) {  
+        r_value = r_input1_var - r_input2_var
+        return(list("r_value" = r_value))
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("r_function_f" = r_function_f))
+}
+
+invisible( list2env(chunk_r(),.GlobalEnv) )
+r_parameter <- as.numeric( r_function_f() )
+```
+
+### Component 2 ("$q$")
+
+This is the formula used to calculate component 2[^2]
+
+\begin{equation}
+q =  \text{input} \times \alpha_0 (1 + g)^{X}(1 + \hat{\beta_1} X + \hat{\beta_2} X^2)
+\label{eq:3}
+\tag{3}
+\end{equation}
+
+
+```r
+# - inputs: factors of q
+# - outputs: q value
+chunk_q <- function(){
+###############################################################################
+###############################################################################  
+
+    q_function_f <- function(q_input1_var = input1 , q_input2_var = input2) {  
+        r_value = (q_input1_var * q_input2_var)^2
+        return(list("q_value" = q_value))
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("q_function_f" = q_function_f))
+}
+
+invisible( list2env(chunk_q(),.GlobalEnv) )
+r_parameter <- as.numeric( q_function_f() )
 ```
 # Main results
 
 ```r
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
+# - perform the calculations to achieve final results
+
+results_table <- data.frame("results1" =   c("results", NA,
+                                             NA) ,
+                        "results2" =  c(NA, "results", NA),
+                        "results3" = c("results", NA,
+                                             "results"),
+                        
+                        row.names = c("situation1", "situation2", "situation3"))
+
+kable(results_table, caption = "Table Caption") %>%
+  kable_styling("striped", full_width = F)
 ```
+
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>Table Caption</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:left;"> results1 </th>
+   <th style="text-align:left;"> results2 </th>
+   <th style="text-align:left;"> results3 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> situation1 </td>
+   <td style="text-align:left;"> results </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> results </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> situation2 </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> results </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> situation3 </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> results </td>
+  </tr>
+</tbody>
+</table>
 
 
 # Montecarlo simulations  
@@ -95,3 +220,13 @@ y = f(x)
 ```
 
 # Sensitivity Analysis  
+
+# Conclusions
+
+# References
+
+
+[^1]: Notes of referenced section
+
+
+[^2]: Notes on referenced section
