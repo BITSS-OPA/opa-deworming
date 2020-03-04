@@ -336,7 +336,7 @@ interest <- as.numeric( interest_f() )
 The resulting value is a $r$ = 9.85%
 
 <!-- Add fold/unfold for tables -->
-
+<details><summary>Click Here to View Analysis Table</summary>
 
 ```r
 table_1 <- matrix("", nrow = , ncol = 3)
@@ -383,7 +383,7 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
   </tr>
 </tbody>
 </table>
-
+</details>
 
 
 
