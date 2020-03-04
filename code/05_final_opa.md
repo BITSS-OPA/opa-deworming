@@ -1,6 +1,6 @@
 ---
 title: "A Unifying Open Policy Analysis for Deworming"
-date: "01 March, 2020"
+date: "03 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -230,8 +230,10 @@ We first describe the common elements across all three approaches, and then desc
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recepients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). 
 
+
 \begin{equation}
 NPV = B - C
+
 \label{eq:1}
 \tag{1}
 \end{equation}
@@ -268,6 +270,7 @@ invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 
 \begin{equation}
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
+
 \label{eq:2}
 \tag{2}
 \end{equation}
@@ -397,6 +400,7 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 \begin{equation}
 E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
+
 \label{eq:3}
 \tag{3}
 \end{equation}
@@ -441,6 +445,7 @@ The wages/earnings are determined by:
 
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50
+
 \label{eq:4}
 \tag{4}
 \end{equation}
@@ -451,6 +456,7 @@ individuals in the data are assumed to enter the labor force 10 years after the 
 
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+
 \label{eq:5}
 \tag{5}
 \end{equation}
@@ -465,6 +471,7 @@ The wage in agriculture comes from research (Suri, 2011), the working wage comes
 
 \begin{equation}
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
+
 \label{eq:6}
 \tag{6}
 \end{equation}
@@ -539,6 +546,7 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 
 \begin{equation}
 \lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}\\
+
 \label{eq:7}
 \tag{7}
 \end{equation}
@@ -593,6 +601,7 @@ The saturation of the intervention, $p$, measures the fraction of the population
 
 \begin{equation}
 p = R \times Q(full)  + (1 - R) \times Q(0)
+
 \label{eq:8}
 \tag{8}
 \end{equation}
@@ -629,6 +638,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 \begin{equation}
 C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+
 \label{eq:9}
 \tag{9}
 \end{equation}
@@ -667,6 +677,7 @@ $K$ represents the cost per student. This is calculated as the salary of the tea
 
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
+
 \label{eq:10}
 \tag{10}
 \end{equation}
@@ -721,6 +732,7 @@ With complete subsidy, $S_2$ represents the total direct costs of deworming in U
 
 \begin{equation}
 S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
+
 \label{eq:11}
 \tag{11}
 \end{equation}
@@ -794,6 +806,7 @@ We estimate treatment effects on total welfare by round. KLPS2 captures effects 
 \begin{equation}
 E_t = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t > 20)\alpha^{KLPS4}
 \text{ for } t \leq 50
+
 \label{eq:12}
 \tag{12}
 \end{equation}
@@ -837,6 +850,7 @@ The costs have a  similar structure as @baird2016worms. Two differences: unit co
 New way to compute unit costs of deworming treatment: 
 \begin{equation}
 \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+
 \label{eq:13}
 \tag{13}
 \end{equation}
@@ -844,6 +858,7 @@ New way to compute unit costs of deworming treatment:
 Since the analysis is discrete, and we can not sum over a non-integer, we find
 \begin{equation}
 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + .4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+
 \label{eq:14}
 \tag{14}
 \end{equation}
@@ -888,6 +903,7 @@ The cost of additional schooling is given by the product of the annual cost of s
 
 \begin{equation}
 K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
+
 \label{eq:15}
 \tag{15}
 \end{equation}
@@ -931,6 +947,7 @@ Over this nine year period, students attended school for an additional 0.15 year
 
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
+
 \label{eq:16}
 \tag{16}
 \end{equation}
@@ -970,6 +987,7 @@ invisible( list2env(chunk_cost1(),.GlobalEnv) )
 \begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
 c_{i} = \frac{C_{i}}{N_{i}} \\
+
 \label{eq:17}
 \tag{17}
 \end{equation}
@@ -1087,6 +1105,7 @@ From either @baird2016worms or @klps4. Only difference is that results now take 
 
 \begin{equation}
 \lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0
+
 \label{eq:18}
 \tag{18}
 \end{equation}
@@ -1118,6 +1137,7 @@ The key result for policy makers is defined as the cost effectivness ratio (cell
 
 \begin{equation}
 CEA_{deworming} = \frac{B (1 + F_{0})}{C}
+
 \label{eq:19}
 \tag{19}
 \end{equation}
@@ -1131,6 +1151,7 @@ Also this quantity could be expressed in relative terms to the benchmark of cash
 
 \begin{equation}
 RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
+
 \label{eq:20}
 \tag{20}
 \end{equation}
