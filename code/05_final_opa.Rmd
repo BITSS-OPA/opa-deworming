@@ -724,6 +724,55 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:  
 ```
 
+#### Increase in deworming costs 
+
+Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the govemerment provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
+
+\begin{equation}
+DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
+
+##### Status quo 
+This analysis assumes that there is no subsidy for deworming under the status quo ($S_{1}Q(S_{1}) = 0$).    
+
+##### $S_{2}$: complete subsidy to per capita costs of deworming.  
+With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
+
+\begin{equation}
+S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
+
+##### $Q_{2}$  
+The take-up with full subsidy ($Q_2$) comes from a previous study [@kremer2007illusion] and takes the value of `r q_full_so`.
+
+```{r unit_costs2}
+# - inputs:
+# - outputs:
+chunk_unit_costs2 <- function(){
+###############################################################################
+###############################################################################  
+
+    s2_f <- function(unit_cost_local_var = unit_cost_local_so,
+                     ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so) {
+      ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("s2_f" = s2_f) )
+}
+invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
+##### Execute values of the functions above when needed for the text:
+
+
+```
+
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
 
@@ -776,55 +825,6 @@ cost_per_student_in <- cost_per_student_f()
 delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 ```
 
-#### Increase in deworming costs 
-
-Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the govemerment provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
-
-\begin{equation}
-DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-
-##### Status quo 
-This analysis assumes that there is no subsidy for deworming under the status quo ($S_{1}Q(S_{1}) = 0$).    
-
-##### $S_{2}$: complete subsidy to per capita costs of deworming.  
-With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
-
-\begin{equation}
-S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-
-##### $Q_{2}$  
-The take-up with full subsidy ($Q_2$) comes from a previous study [@kremer2007illusion] and takes the value of `r q_full_so`.
-
-```{r unit_costs2}
-# - inputs:
-# - outputs:
-chunk_unit_costs2 <- function(){
-###############################################################################
-###############################################################################  
-
-    s2_f <- function(unit_cost_local_var = unit_cost_local_so,
-                     ex_rate_var = ex_rate_so, years_of_treat_var = years_of_treat_so) {
-      ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
-    }
-
-###############################################################################
-###############################################################################  
-    return(list("s2_f" = s2_f) )
-}
-invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
-##### Execute values of the functions above when needed for the text:
-
-
-```
-
 
 Without externalities, they obtain total NPV of benefits of `r df_research_so$param[1]`, with `r df_research_so$param[2]` in tax revenue for government (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and rows `r paste0(df_research_so$table_row[1], ", ", df_research_so$table_row[2])` respectively). 
 
@@ -841,19 +841,22 @@ Including externalities, they obtain total NPV of benefits of `r df_research_so$
 # (766.81 * 0.16575 - 10.71 - 13.42 = 102.9688) - 1.07    = 101.8988
 ```
 
-
 -----------------
 
 ## Approach 2: @klps4 
+
+In this second approach, benefits follow the same principle as in approach 1 (increased in lifetime earninings), but now there is more data on the actual effects on the labor market outcomes. Instead of proyecting a trend of earnings into the future, this analysis use the data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  
+
+The interest rate here is updated to current values of return on (Kenyan) goverment bonds and inflation. 
 
 ```{r new-interest} 
 #interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
 interest_in_new <- interest
 ```
 
-
 ### Gains in earnings ($E_t$)
 
+AQUI VOY
 
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
@@ -909,7 +912,7 @@ The costs have a  similar structure as @baird2016worms. Two differences: unit co
 
 New way to compute unit costs of deworming treatment: 
 \begin{equation}
-\sum_{t=0}^{`r round(years_of_treat_so,1)-1`} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+DC = \sum_{t=0}^{`r round(years_of_treat_so,1)-1`} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
@@ -917,14 +920,15 @@ New way to compute unit costs of deworming treatment:
 
 Since the analysis is discrete, and we can not sum over a non-integer, we find
 \begin{equation}
-\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + .4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
+DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \\
+.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
 
 
-With complete subsidy, $S_2$ represents the total direct costs of deworming each child in USD. Most recent (2018) data from Evidence Action reveals this cost to be $`r unit_cost_so`. Adjusting for purchasing power and inflation, we get a per capita cost of $`r round(unit_cost_2017usdppp_so,2)`.
+With complete subsidy, $S_2$ represents the total direct costs of deworming each child in USD. Most recent (2018) data from Evidence Action reveals this cost to be $`r unit_cost_so`$. Adjusting for purchasing power and inflation, we get a per capita cost of $`r round(unit_cost_2017usdppp_so,2)`$.
 
 ```{r unit_costs2_new}
 # - inputs:
@@ -952,7 +956,7 @@ s2_new <- s2_in
 q2_in <- q_full_so
 ```
 
-**So we get an average cost of deworming each child over the entire treatment period, $`r format(round(s2_in * q2_in,2), nsmall = 2)`.**
+Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $`r format(round(s2_in * q2_in,2), nsmall = 2)`.
 
 #### Cost of schooling
 
