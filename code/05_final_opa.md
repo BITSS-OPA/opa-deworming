@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "08 March, 2020"
+date: "09 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -316,12 +316,7 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
