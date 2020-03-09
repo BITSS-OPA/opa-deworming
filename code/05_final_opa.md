@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "04 March, 2020"
+date: "08 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -458,6 +458,8 @@ The resulting value is a $r$ = 9.85%
 
 ## Approach 1: @baird2016worms
 
+AQUI VOY
+
 - Distinguish between total, fiscal. With and without externalities. 
 
 ###  Gains in earnings  ("$E_t$")  
@@ -472,6 +474,14 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 \label{eq:4}
 \tag{4}
 \end{equation}
+
+
+<details><summary>Click Here to View Analysis Table</summary>
+
+
+
+</details>
+
 
 Where:   
 
