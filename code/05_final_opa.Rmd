@@ -254,6 +254,7 @@ We first describe the common elements across all three approaches, and then desc
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recepients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers. 
 
+<details><summary>Equations</summary>
 
 \begin{equation}
 NPV = B - C \\
@@ -264,6 +265,7 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 \tag{`r equationIndex`}
 \end{equation}
 
+</details>
 
 
 ```{r eq_1, echo=print_code}
@@ -294,6 +296,7 @@ table_1 <- matrix("", nrow = 1, ncol = 3)
 table_2 <- matrix("", nrow = 1, ncol = 2)
 ```
 
+<details><summary>Equations</summary>
 
 \begin{equation}
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
@@ -301,6 +304,7 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
+</details>
 
 ```{r benefits, echo=print_code}
 # - inputs: nothing
@@ -324,7 +328,7 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ```
 
 
-<details><summary>Click Here to View Analysis Table</summary>
+<details><summary>Summary of equations and sources</summary>
 
 ```{r sum_tables1, purl=FALSE, echo=FALSE}
 table_2 <- rbind(table_2, 
@@ -432,7 +436,6 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 \tag{`r equationIndex`}
 \end{equation}
 
-
 Where:   
 
  - $w_t$: are the earnings in period $t$.   
@@ -502,7 +505,7 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 \tag{`r equationIndex`}
 \end{equation}
 
-individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0$ for $t<10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
+Individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0, Xp = 0$ for $t<10$, and $Xp = t - 10$ for $t\geq 10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
 
 #### "$w_0$"
 
@@ -518,7 +521,8 @@ w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
 \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
 \end{equation}
 
-The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.
+The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.  
+
 
 The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and its defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows:
 
@@ -529,7 +533,7 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 \tag{`r equationIndex`}
 \end{equation}
 
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data (ww paper).  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
+Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
 
 ```{r wage_t}
@@ -603,9 +607,7 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 \tag{`r equationIndex`}
 \end{equation}
 
-Its components come from the W\@W paper.
-
-$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times.
+$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:`r equationIndex`} come from @baird2016worms.
 
 ```{r lambdas}
 # - inputs:
@@ -646,7 +648,7 @@ lambda2_in <- lambda2_in_f()
 #### $R$ and $p$
 
 
-The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group (last paragraph of page 9(1645) of paper). As the treatment was applied to approximately two thirds of the population, $R$ is set to: $R  = `r round(coverage_so, 2)`$.  
+The coverage, $R$, is defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group^[6]. As the treatment was applied to approximately two thirds of the population, $R$ is set to: $R  = `r round(coverage_so, 2)`$.  
 
 The saturation of the intervention, $p$, measures the fraction of the population that is effectively using the treatment and is defined as:  
 
@@ -686,6 +688,8 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
   
 
 ### Costs
+
+The costs are a combinantion of 
 
 \begin{equation}
 C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
@@ -2094,3 +2098,6 @@ print(plot1)
 
 
 [^3]: https://docs.google.com/document/d/1BkQLyLYQmy9O7FISge78PnWy9urMo0k31RwI5tOhJE4/edit
+
+
+[^6]: last paragraph of page 9(1645) of @baird2016worms
