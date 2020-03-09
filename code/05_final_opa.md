@@ -307,6 +307,7 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 <details><summary>Click Here to View Analysis Table</summary>
 
 <table>
+<caption>Sources: summary of inputs</caption>
  <thead>
   <tr>
    <th style="text-align:left;"> Data </th>
@@ -399,6 +400,7 @@ The resulting value is a $r$ = 9.85%
 <details><summary>Click Here to View Analysis Table</summary>
 
 <table>
+<caption>Sources: summary of inputs</caption>
  <thead>
   <tr>
    <th style="text-align:left;"> Data </th>
@@ -453,9 +455,9 @@ The resulting value is a $r$ = 9.85%
 
 ## Approach 1: @baird2016worms
 
-AQUI VOY
+In this first approach, the effect on earnings are predicted by extrapolating the 
+effects on hours worked by individuals in the original treatment group, ten years after the intervention. Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. As with the original analysis of @baird2016worms, the effects are calculated in two scenarios: with and without externalities. 
 
-- Distinguish between total, fiscal. With and without externalities. 
 
 ###  Gains in earnings  ("$E_t$")  
 
@@ -471,16 +473,8 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 \end{equation}
 
 
-<details><summary>Click Here to View Analysis Table</summary>
-
-
-
-</details>
-
-
 Where:   
 
- - $r$: is the discount rate  
  - $w_t$: are the earnings in period $t$.   
  - $\lambda_{1}$: is the direct effects of deworming on earnings.  
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
@@ -511,6 +505,73 @@ chunk_earnings1 <- function(){
 
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
+
+
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+<table>
+<caption>Model: summary of equations</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Equation </th>
+   <th style="text-align:left;"> # </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NPV = B - C$ </td>
+   <td style="text-align:left;"> $(1)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
+   <td style="text-align:left;"> $(2)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $r=g-\pi$ </td>
+   <td style="text-align:left;"> $(3)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NEW=EQUATION$ </td>
+   <td style="text-align:left;"> $(4)$ </td>
+  </tr>
+</tbody>
+</table>
+
+</details>
+
+
 
 #### "$w_{t}$"
 

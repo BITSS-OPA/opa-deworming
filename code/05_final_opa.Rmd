@@ -337,7 +337,8 @@ table_2 <- rbind(table_2,
                    "$(2)$" )
     )
 
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
 knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
 ```
 
@@ -399,13 +400,13 @@ table_1 <- rbind(table_1,
                  c( paste0("$g=" , gov_bonds_so, "$"),  "", "" )
     )
 
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
 
 table_2 <- rbind(table_2, 
                  c("$r=g-\\pi$", 
                    paste0("$(", equationIndex, ")$") )
     )
 
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
 knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
 ```
 
@@ -414,9 +415,9 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 ## Approach 1: @baird2016worms
 
-AQUI VOY
+In this first approach, the effect on earnings are predicted by extrapolating the 
+effects on hours worked by individuals in the original treatment group, ten years after the intervention. Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. As with the original analysis of @baird2016worms, the effects are calculated in two scenarios: with and without externalities. 
 
-- Distinguish between total, fiscal. With and without externalities. 
 
 ###  Gains in earnings  ("$E_t$")  
 
@@ -432,26 +433,8 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 \end{equation}
 
 
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables3, purl=FALSE, echo=FALSE, eval=FALSE}
-#AQUI VOY
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"))
-
-table_2 <- rbind(table_2, 
-                 c("$r=g-\\pi$", 
-                   paste0("$(", equationIndex, ")$") )
-    )
-
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
-```
-
-</details>
-
-
 Where:   
 
- - $r$: is the discount rate  
  - $w_t$: are the earnings in period $t$.   
  - $\lambda_{1}$: is the direct effects of deworming on earnings.  
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
@@ -481,6 +464,32 @@ chunk_earnings1 <- function(){
 
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
+
+
+<details><summary>Click Here to View Analysis Table</summary>
+
+```{r sum_tables3, purl=FALSE, echo=FALSE, eval=TRUE}
+table_1 <- rbind(table_1, 
+                 c( paste0("$NEW SOURCE=" , NA, "$"),  "", "" )
+    )
+table_1[1,2] <- paste0("$ANOTHER SOURCE=" , NA, "$")
+
+
+
+
+
+table_2 <- rbind(table_2, 
+                 c("$NEW=EQUATION$", 
+                   paste0("$(", equationIndex, ")$") )
+    )
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+
+</details>
+
+
 
 #### "$w_{t}$"
 
