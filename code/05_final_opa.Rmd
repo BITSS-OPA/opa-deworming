@@ -689,10 +689,10 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ### Costs
 
-The costs are a combinantion of 
+The costs are a combinantion of direct costs on mass deworming (relative to the status quo), and indirect costs on the education system due to the additional time treated individuals spend in school. 
 
 \begin{equation}
-C =  K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2) + \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)
+C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
@@ -727,7 +727,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
 
-$K$ represents the cost per student. This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
+The additional cost on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
 
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
@@ -736,7 +736,8 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 \tag{`r equationIndex`}
 \end{equation}
 
-For $\Delta \overline{E}_{t}(S1,S2)$ we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from [need to define the source "from Joan" in `Assumps&Panel A Calcs!A93`].
+Second, the cost per student is multiplied by the estimated increase in school attendance ($\Delta \overline{E}_{t}(S1,S2)$).
+For this we use a series of estimated effects the additional direct increase in secondary schooling from 1999 to 2007 obtained from an additional analysis related to @baird2016worms^[7].
 
 This series does not take into account the externality effects. To incorporate it we need another series (same source) that estimates the additional secondary schooling increase due to the externality and add it to the original series.
 
@@ -775,10 +776,19 @@ cost_per_student_in <- cost_per_student_f()
 delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 ```
 
-#### $\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right)$
+#### Increase in deworming costs 
 
-##### $S_{1}Q(S_{1}) = 0$
-There is no subsidy for deworming under the status quo.    
+Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the govemerment provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
+
+\begin{equation}
+DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
+
+##### Status quo 
+This analysis assumes that there is no subsidy for deworming under the status quo ($S_{1}Q(S_{1}) = 0$).    
 
 ##### $S_{2}$: complete subsidy to per capita costs of deworming.  
 With complete subsidy, $S_2$ represents the total direct costs of deworming in USD. Calculated as follows
@@ -835,8 +845,6 @@ Including externalities, they obtain total NPV of benefits of `r df_research_so$
 -----------------
 
 ## Approach 2: @klps4 
-
-
 
 ```{r new-interest} 
 #interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
@@ -2101,3 +2109,5 @@ print(plot1)
 
 
 [^6]: last paragraph of page 9(1645) of @baird2016worms
+
+[^7]: series avalable in file `~/opa-deworming/docs/materials/original_materials/Baird-etal-QJE-2016_fiscal-impact-calculations.xlsx` worksheet`Assumps&Panel A Calcs!A93`
