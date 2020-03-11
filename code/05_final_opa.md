@@ -1821,6 +1821,119 @@ q2_in <- q_full_so
 
 Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $1.40.
 
+<details><summary>View Summary Table</summary>
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+<table>
+<caption>Model: summary of equations</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Equation </th>
+   <th style="text-align:left;"> # </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NPV = B - C$ </td>
+   <td style="text-align:left;"> $(1)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
+   <td style="text-align:left;"> $(2)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $r=g-\pi$ </td>
+   <td style="text-align:left;"> $(3)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $(4)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
+   <td style="text-align:left;"> $(5)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
+   <td style="text-align:left;"> $(6)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
+   <td style="text-align:left;"> $(7)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
+   <td style="text-align:left;"> $(8)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
+   <td style="text-align:left;"> $(9)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
+   <td style="text-align:left;"> $(10)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
+   <td style="text-align:left;"> $(11)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
+   <td style="text-align:left;"> $(12)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
+   <td style="text-align:left;"> $(13)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
+\text{ for } t \leq 50$ </td>
+   <td style="text-align:left;"> $(14)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(15)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
+.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(16)$ </td>
+  </tr>
+</tbody>
+</table>
+</details>
+
 #### Cost of schooling
 
 We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
@@ -1855,7 +1968,122 @@ Over this nine year period, students attended school for an additional 0.15 year
 
 
 
+<details><summary>View Summary Table</summary>
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
 
+<table>
+<caption>Model: summary of equations</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Equation </th>
+   <th style="text-align:left;"> # </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NPV = B - C$ </td>
+   <td style="text-align:left;"> $(1)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
+   <td style="text-align:left;"> $(2)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $r=g-\pi$ </td>
+   <td style="text-align:left;"> $(3)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $(4)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
+   <td style="text-align:left;"> $(5)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
+   <td style="text-align:left;"> $(6)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
+   <td style="text-align:left;"> $(7)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
+   <td style="text-align:left;"> $(8)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
+   <td style="text-align:left;"> $(9)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
+   <td style="text-align:left;"> $(10)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
+   <td style="text-align:left;"> $(11)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
+   <td style="text-align:left;"> $(12)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
+   <td style="text-align:left;"> $(13)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
+\text{ for } t \leq 50$ </td>
+   <td style="text-align:left;"> $(14)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(15)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
+.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(16)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
+   <td style="text-align:left;"> $(17)$ </td>
+  </tr>
+</tbody>
+</table>
+</details>
 
 -------------------
 
@@ -2019,6 +2247,134 @@ chunk_cost1_inp <- function(){
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```
 
+<details><summary>View Summary Table</summary>
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+<table>
+<caption>Model: summary of equations</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Equation </th>
+   <th style="text-align:left;"> # </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NPV = B - C$ </td>
+   <td style="text-align:left;"> $(1)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
+   <td style="text-align:left;"> $(2)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $r=g-\pi$ </td>
+   <td style="text-align:left;"> $(3)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $(4)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
+   <td style="text-align:left;"> $(5)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
+   <td style="text-align:left;"> $(6)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
+   <td style="text-align:left;"> $(7)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
+   <td style="text-align:left;"> $(8)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
+   <td style="text-align:left;"> $(9)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
+   <td style="text-align:left;"> $(10)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
+   <td style="text-align:left;"> $(11)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
+   <td style="text-align:left;"> $(12)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
+   <td style="text-align:left;"> $(13)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
+\text{ for } t \leq 50$ </td>
+   <td style="text-align:left;"> $(14)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(15)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
+.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(16)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
+   <td style="text-align:left;"> $(17)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C = \sum_{i \in Countries } \omega_{i} c_{i}$ </td>
+   <td style="text-align:left;"> $(18)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
+c_{i} = \frac{C_{i}}{N_{i}} \
+C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
+C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
+   <td style="text-align:left;"> $(19)$ </td>
+  </tr>
+</tbody>
+</table>
+</details>
+
 #### Data required to compute costs.
 
 $N_{i}, C_{i,k,l}, \delta_{g}$
@@ -2056,6 +2412,137 @@ df_alpha_so <- read_excel("data/prevalence_data.xlsx",
 
 In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.77 = 2.72$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
+<details><summary>View Summary Table</summary>
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+<table>
+<caption>Model: summary of equations</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Equation </th>
+   <th style="text-align:left;"> # </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NPV = B - C$ </td>
+   <td style="text-align:left;"> $(1)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
+   <td style="text-align:left;"> $(2)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $r=g-\pi$ </td>
+   <td style="text-align:left;"> $(3)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $(4)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
+   <td style="text-align:left;"> $(5)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
+   <td style="text-align:left;"> $(6)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
+   <td style="text-align:left;"> $(7)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
+   <td style="text-align:left;"> $(8)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
+   <td style="text-align:left;"> $(9)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
+   <td style="text-align:left;"> $(10)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
+   <td style="text-align:left;"> $(11)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
+   <td style="text-align:left;"> $(12)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
+   <td style="text-align:left;"> $(13)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
+\text{ for } t \leq 50$ </td>
+   <td style="text-align:left;"> $(14)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(15)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
+.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(16)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
+   <td style="text-align:left;"> $(17)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C = \sum_{i \in Countries } \omega_{i} c_{i}$ </td>
+   <td style="text-align:left;"> $(18)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
+c_{i} = \frac{C_{i}}{N_{i}} \
+C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
+C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
+   <td style="text-align:left;"> $(19)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0$ </td>
+   <td style="text-align:left;"> $(20)$ </td>
+  </tr>
+</tbody>
+</table>
+</details>
 
 ### Different format of policy estimate {#policy-estimate}
 
@@ -2082,7 +2569,145 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 \tag{22}
 \end{equation}
 
+<details><summary>View Summary Table</summary>
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
 
+<table>
+<caption>Model: summary of equations</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Equation </th>
+   <th style="text-align:left;"> # </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $NPV = B - C$ </td>
+   <td style="text-align:left;"> $(1)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
+   <td style="text-align:left;"> $(2)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $r=g-\pi$ </td>
+   <td style="text-align:left;"> $(3)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $(4)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
+   <td style="text-align:left;"> $(5)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
+   <td style="text-align:left;"> $(6)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
+   <td style="text-align:left;"> $(7)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
+   <td style="text-align:left;"> $(8)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
+   <td style="text-align:left;"> $(9)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
+   <td style="text-align:left;"> $(10)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
+   <td style="text-align:left;"> $(11)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
+   <td style="text-align:left;"> $(12)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
+   <td style="text-align:left;"> $(13)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
+\text{ for } t \leq 50$ </td>
+   <td style="text-align:left;"> $(14)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(15)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
+.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
+   <td style="text-align:left;"> $(16)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
+   <td style="text-align:left;"> $(17)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $C = \sum_{i \in Countries } \omega_{i} c_{i}$ </td>
+   <td style="text-align:left;"> $(18)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
+c_{i} = \frac{C_{i}}{N_{i}} \
+C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
+C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
+   <td style="text-align:left;"> $(19)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0$ </td>
+   <td style="text-align:left;"> $(20)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $CEA_{deworming} = \frac{B (1 + F_{0})}{C}$ </td>
+   <td style="text-align:left;"> $(21)$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $RCEA = \frac{CEA_{deworming}}{CEA_{cash}}$ </td>
+   <td style="text-align:left;"> $(22)$ </td>
+  </tr>
+</tbody>
+</table>
+</details>
 
 # Main results
 

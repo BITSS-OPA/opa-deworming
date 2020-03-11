@@ -1090,6 +1090,26 @@ q2_in <- q_full_so
 
 Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $`r format(round(s2_in * q2_in,2), nsmall = 2)`.
 
+<details><summary>View Summary Table</summary>
+```{r sum_tables13, purl=FALSE, echo=FALSE, eval=TRUE}
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2, 
+                 c("$DC = \\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]$", 
+                   paste0("$(", sum_table_index, ")$") )
+    )
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2, 
+                 c("$DC = \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big] + \\left( \\frac{1}{1 + r}\\right)\\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big] + \\
+.4\\left( \\frac{1}{1 + r}\\right)^2 \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]$", 
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+</details>
+
 #### Cost of schooling
 
 We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
@@ -1125,7 +1145,19 @@ Over this nine year period, students attended school for an additional `r round(
 
 
 
+<details><summary>View Summary Table</summary>
+```{r sum_tables14, purl=FALSE, echo=FALSE, eval=TRUE}
 
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2, 
+                 c("$K \\sum_{t=0}^{8} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2)$", 
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+</details>
 
 -------------------
 
@@ -1287,6 +1319,28 @@ chunk_cost1_inp <- function(){
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```
 
+<details><summary>View Summary Table</summary>
+```{r sum_tables15, purl=FALSE, echo=FALSE, eval=TRUE}
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2, 
+                 c("$C = \\sum_{i \\in Countries } \\omega_{i} c_{i}$", 
+                   paste0("$(", sum_table_index, ")$") )
+    )
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2, 
+                 c("$\\omega_{i} = \\frac{N_{i}}{\\sum_{j}N_{j}} \\
+c_{i} = \\frac{C_{i}}{N_{i}} \\
+C_{i} = (1 + \\delta_{g})\\sum_{k \\in payers}C_{i,k} \\
+C_{i,k} = \\sum_{l \\in items}\\sum_{m \\in regions}C_{i,k,l,m}$", 
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+</details>
+
 #### Data required to compute costs.
 
 $N_{i}, C_{i,k,l}, \delta_{g}$
@@ -1323,6 +1377,19 @@ df_alpha_so <- read_excel("data/prevalence_data.xlsx",
 
 In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.77 = 2.72$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
+<details><summary>View Summary Table</summary>
+```{r sum_tables16, purl=FALSE, echo=FALSE, eval=TRUE}
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2, 
+                 c("$\\lambda_{1} = \\alpha \\lambda^{eff}_{1} + (1 -  \\alpha) \\times 0$", 
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+</details>
 
 ### Different format of policy estimate {#policy-estimate}
 
@@ -1349,7 +1416,24 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 \tag{`r equationIndex`}
 \end{equation}
 
+<details><summary>View Summary Table</summary>
+```{r sum_tables17, purl=FALSE, echo=FALSE, eval=TRUE}
 
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2, 
+                 c("$CEA_{deworming} = \\frac{B (1 + F_{0})}{C}$", 
+                   paste0("$(", sum_table_index, ")$") )
+    )
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2, 
+                 c("$RCEA = \\frac{CEA_{deworming}}{CEA_{cash}}$", 
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+</details>
 
 # Main results
 
