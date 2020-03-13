@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "12 March, 2020"
+date: "13 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -467,7 +467,8 @@ effects on hours worked by individuals in the original treatment group, ten year
 
 ###  Gains in earnings  ("$E_t$")  
 
-The indirect effect of deworming is multiplied by the fraction of the population effectively using the treatment, then divided by the fraction of neighboring schools that are in the treatment group. This value is value is combined with the direct deworming effect on earnings, then multiplied by the earnings in period t. This yields the effect on earnings in period t.
+The indirect effect of deworming is multiplied by the fraction of the population effectively using the treatment, then divided by the fraction of neighboring schools that are in the treatment group. This value is value is combined with the direct deworming effect on earnings, then multiplied by the earnings in period t. This yields the effect on earnings in period t.  
+
 <details><summary>Equations</summary>
 
 @baird2016worms compute effect on earnings like this[^6]:
@@ -584,6 +585,9 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 
 #### "$w_{t}$"
 
+Earnings in period t are determined by multiplying the number of weeks worked up to time t by the weekly starting wage, which is adjusted to account for per capita GDP growth and a concave life cycle path for wages (wages typically increase with more years of work, then decline later in a life cycle). This all operates under the assumption that individuals in the data enter the labor force 10 years after the present day.
+
+<details><summary>Equations</summary>
 The wages/earnings are determined by:  
 
 \begin{equation}
@@ -594,6 +598,7 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 \end{equation}
 
 Individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0, Xp = 0$ for $t<10$, and $Xp = t - 10$ for $t\geq 10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
+</details>
 
 #### "$w_0$"
 
