@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "09 March, 2020"
+date: "12 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -274,6 +274,8 @@ invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 table_1 <- matrix("", nrow = 1, ncol = 3)
 table_2 <- matrix("", nrow = 1, ncol = 2)
 ```
+
+Benefits are equal to the discounted sum of earnings over time period t up to t=50.
 
 <details><summary>Equations</summary>
 
@@ -942,6 +944,8 @@ interest_in_new <- interest
 ```
 
 ### Gains in earnings ($E_t$)
+
+AQUI VOY
 
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
