@@ -275,7 +275,7 @@ table_1 <- matrix("", nrow = 1, ncol = 3)
 table_2 <- matrix("", nrow = 1, ncol = 2)
 ```
 
-Benefits are equal to the discounted sum of earnings over time period t up to t=50.
+Benefits are equal to the discounted sum of earnings over time period t up to t=50. The benefits are characterized by the real interest rate r.
 
 <details><summary>Equations</summary>
 
@@ -467,6 +467,9 @@ effects on hours worked by individuals in the original treatment group, ten year
 
 ###  Gains in earnings  ("$E_t$")  
 
+The indirect effect of deworming is multiplied by the fraction of the population effectively using the treatment, then divided by the fraction of neighboring schools that are in the treatment group. This value is value is combined with the direct deworming effect on earnings, then multiplied by the earnings in period t. This yields the effect on earnings in period t.
+<details><summary>Equations</summary>
+
 @baird2016worms compute effect on earnings like this[^6]:
 
 [^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
@@ -485,7 +488,8 @@ Where:
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
  - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
-
+ 
+</details>
 
 
 ```r
