@@ -58,13 +58,24 @@ print_code <- TRUE
 #invisible( list2env(call_params_f(),.GlobalEnv) )
 ```
 
+# Introduction
+Summary of the issue and introduction to the policy analysis being conducted. 
 
-# Key policy estimates for policy makers  
+The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of "x" policy. This document describes all the analytical steps required to reproduce the analysis, and displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in "github". The main output, presented in the results section of this report, can also be explored interactively for different assumptions.
+
+## Source Information for data + analytical methods
+
+## Key policy estimates for policy makers  
+```{r}
+#my thoughts: should we forefront the conclusions before the methodology?
+```
 
 ```{r final-output}
 ```
 
 # Methodology
+
+Present explanation of how the analysis is to be performed, what factors are looked at, etc.
 
 ## Main Equation (the model)
 
@@ -81,8 +92,8 @@ chunk_test <- function(){
 ############################################################################### 
 ###############################################################################  
   
-    somefunction_f <- function(somethinig_var = somethinig_default) {
-        somethinig_var
+    somefunction_f <- function(something_var = something_default) {
+        something_var
     }
     
 ############################################################################### 
@@ -97,16 +108,81 @@ somefunction_in <- somefunction_f()
 
 ## Sub components:
 
-### 1 - Component 1 ("$r$")
+### Component 1 ("$r$")
 
-```{r comp1,  echo=print_code}
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
+This is the formula used to calculate component 1[^1]
+
+\begin{equation}
+r = X \times \lambda_1  + (1 - X) \times \lambda_2
+\label{eq:2}
+\tag{2}
+\end{equation}
+
+```{r comp1,  echo=print_code, eval=FALSE}
+# - inputs: factors of r
+# - outputs: r value
+chunk_r <- function(){
+###############################################################################
+###############################################################################  
+
+    r_function_f <- function(r_input1_var = input1 , r_input2_var = input2) {  
+        r_value = r_input1_var - r_input2_var
+        return(list("r_value" = r_value))
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("r_function_f" = r_function_f))
+}
+
+invisible( list2env(chunk_r(),.GlobalEnv) )
+r_parameter <- as.numeric( r_function_f() )
+```
+
+### Component 2 ("$q$")
+
+This is the formula used to calculate component 2[^2]
+
+\begin{equation}
+q =  \text{input} \times \alpha_0 (1 + g)^{X}(1 + \hat{\beta_1} X + \hat{\beta_2} X^2)
+\label{eq:3}
+\tag{3}
+\end{equation}
+
+```{r comp2,  echo=print_code, eval=FALSE}
+# - inputs: factors of q
+# - outputs: q value
+chunk_q <- function(){
+###############################################################################
+###############################################################################  
+
+    q_function_f <- function(q_input1_var = input1 , q_input2_var = input2) {  
+        r_value = (q_input1_var * q_input2_var)^2
+        return(list("q_value" = q_value))
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("q_function_f" = q_function_f))
+}
+
+invisible( list2env(chunk_q(),.GlobalEnv) )
+r_parameter <- as.numeric( q_function_f() )
 ```
 # Main results
 ```{r main-results,  echo=print_code}
-# - inputs: tax_rev_init_mo, top_tax_base_in
-# - outputs: total_rev_pe
+# - perform the calculations to achieve final results
+
+results_table <- data.frame("results1" =   c("results", NA,
+                                             NA) ,
+                        "results2" =  c(NA, "results", NA),
+                        "results3" = c("results", NA,
+                                             "results"),
+                        
+                        row.names = c("situation1", "situation2", "situation3"))
+
+kable(results_table, caption = "Table Caption") %>%
+  kable_styling("striped", full_width = F)
 ```
 
 
@@ -119,3 +195,13 @@ somefunction_in <- somefunction_f()
 ```
 
 # Sensitivity Analysis  
+
+# Conclusions
+
+# References
+
+
+[^1]: Notes of referenced section
+
+
+[^2]: Notes on referenced section
