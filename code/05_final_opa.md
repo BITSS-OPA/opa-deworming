@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "09 March, 2020"
+date: "13 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -509,8 +509,21 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
-
+<!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
+
+
+```r
+# Data = c(paste0("$w_t=" , NA, "$"), 
+#          paste0("$p=" , NA, "$"),  paste0("$R=" , NA, "$") )
+# Research = c(paste0("$\\lambda_1=" , NA, "$"))
+# Guesswork = c(paste0("$\\lambda_2=" , NA, "$"))
+# table_3 = data.frame(Data, Research, Guesswork)
+# # output as a table
+# # stargazer(table_3, summary = FALSE,
+# #           dep.var.labels.include = F, out = "Table2c2.txt",
+# #           ci=TRUE, ci.level=0.95)
+```
 
 <table>
 <caption>Sources: summary of inputs</caption>
@@ -523,19 +536,14 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $E_t=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $w_t=NA$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
   </tr>
 </tbody>
 </table>
@@ -589,6 +597,39 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 
 Individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0, Xp = 0$ for $t<10$, and $Xp = t - 10$ for $t\geq 10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $w_t=NA$ </td>
+   <td style="text-align:left;"> $X_p=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_0=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $g=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+</details>
+
 #### "$w_0$"
 
 \begin{equation}
@@ -616,6 +657,39 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 \end{equation}
 
 Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
+
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\alpha_l=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+</details>
 
 
 
@@ -728,6 +802,37 @@ lambda1_r_in <- lambda_r_f()
 lambda2_in <- lambda2_in_f()
 ```
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_{1, male}=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_{1, female}=NA$ </td>
+  </tr>
+</tbody>
+</table>
+</details>
 
 #### $R$ and $p$
 
@@ -768,7 +873,32 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 ```
 
-  
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $R=0.68$ </td>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+</details> 
   
 
 ### Costs
@@ -781,6 +911,38 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
 \label{eq:10}
 \tag{10}
 \end{equation}
+
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $C=NA$ </td>
+   <td style="text-align:left;"> $S_2=NA$ </td>
+   <td style="text-align:left;"> $Q=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $S_1=NA$ </td>
+   <td style="text-align:left;"> $K=NA$ </td>
+   <td style="text-align:left;"> $r=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $r=NA$ </td>
+   <td style="text-align:left;"> $t=NA$ </td>
+   <td style="text-align:left;"> $\Delta \bar{E}_t=NA$ </td>
+  </tr>
+</tbody>
+</table>
+</details> 
 
 
 ```r
@@ -856,6 +1018,38 @@ chunk_unit_costs2 <- function(){
 invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 ```
+
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $DC=NA$ </td>
+   <td style="text-align:left;"> $S_2=NA$ </td>
+   <td style="text-align:left;"> $Q=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $S_1=NA$ </td>
+   <td style="text-align:left;"> $KSH=NA$ </td>
+   <td style="text-align:left;"> $ex=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+</details> 
 
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
@@ -943,6 +1137,8 @@ interest_in_new <- interest
 
 ### Gains in earnings ($E_t$)
 
+AQUI VOY
+
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
 We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years.
@@ -990,6 +1186,32 @@ chunk_new_earnings <- function(){
 invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 ```
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $E_t=NA$ </td>
+   <td style="text-align:left;"> $t=NA$ </td>
+   <td style="text-align:left;"> $\alpha^{KLPS2}=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\alpha^{KLPS3}=NA$ </td>
+   <td style="text-align:left;"> $\alpha^{KLPS4}=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+</details> 
 
 ### Costs 
 
@@ -1044,6 +1266,34 @@ q2_in <- q_full_so
 
 Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $1.40.
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $DC=NA$ </td>
+   <td style="text-align:left;"> $r=NA$ </td>
+   <td style="text-align:left;"> $S_2=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q=NA$ </td>
+   <td style="text-align:left;"> $S_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+</details> 
+
+
 #### Cost of schooling
 
 We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
@@ -1075,7 +1325,32 @@ Over this nine year period, students attended school for an additional 0.15 year
 
 **Then we get an average cost of additional schooling per child over the nine-year period, $26.97.**
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
 
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $K=NA$ </td>
+   <td style="text-align:left;"> $r=NA$ </td>
+   <td style="text-align:left;"> $t=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\Delta \bar{E}_t=NA$ </td>
+   <td style="text-align:left;"> $S_1=NA$ </td>
+   <td style="text-align:left;"> $S_2=NA$ </td>
+  </tr>
+</tbody>
+</table>
+</details> 
 
 
 
@@ -1242,6 +1517,33 @@ chunk_cost1_inp <- function(){
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $N_i=NA$ </td>
+   <td style="text-align:left;"> $Ex_i=NA$ </td>
+   <td style="text-align:left;"> $k=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+</details> 
+
 #### Data required to compute costs.
 
 $N_{i}, C_{i,k,l}, \delta_{g}$
@@ -1279,6 +1581,28 @@ df_alpha_so <- read_excel("data/prevalence_data.xlsx",
 
 In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.77 = 2.72$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\alpha=NA$ </td>
+   <td style="text-align:left;"> $\lambda_{1}^{eff}=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+</details> 
+
 
 ### Different format of policy estimate {#policy-estimate}
 
@@ -1305,7 +1629,27 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 \tag{22}
 \end{equation}
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
 
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $C=NA$ </td>
+   <td style="text-align:left;"> $B=NA$ </td>
+   <td style="text-align:left;"> $F_0=NA$ </td>
+  </tr>
+</tbody>
+</table>
+</details> 
 
 # Main results
 
