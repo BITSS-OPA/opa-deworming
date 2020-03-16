@@ -1,10 +1,5 @@
 
 library(shiny)
-
-
-
-
-
 library(tidyverse)
 library(haven)
 library(here)
@@ -22,7 +17,7 @@ nsims <- 1e2
 source("all_analysis.R")
 
 
-
+#fluidPage is something must have
 shinyUI( 
     fluidPage(
         navbarPage("My Application",

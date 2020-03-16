@@ -19,7 +19,7 @@ editor_options:
   chunk_output_type: console
 title: "A Unifying Open Policy Analysis for Deworming"
 bibliography: bibliography.bib  
-link-citations: true 
+link-citations: true
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
@@ -66,7 +66,7 @@ link-citations: true
 
 ```r
 # - inputs: none
-# - outputs: all sources coming from data, research and guesswork 
+# - outputs: all sources coming from data, research and guesswork
 chunk_params <- function(){
 ###############################################################################
 ###############################################################################  
@@ -75,12 +75,12 @@ chunk_params <- function(){
     #############
     gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
     inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
-    gov_bonds_new_so <- 0.09 
-    inflation_new_so <- 0.04 
-    
+    gov_bonds_new_so <- 0.09
+    inflation_new_so <- 0.04
+
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
     wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
-    profits_se_so <- 1766          #Control group monthly self-employed profits - 
+    profits_se_so <- 1766          #Control group monthly self-employed profits -
                                    #Table 4, Panel A FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
     hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
     hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
@@ -88,7 +88,7 @@ chunk_params <- function(){
     hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
     ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
 
-    ex_rate_2018        <- 101.30  # Exchange rate (KES per international $) 
+    ex_rate_2018        <- 101.30  # Exchange rate (KES per international $)
                                     # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
     ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
@@ -99,7 +99,7 @@ chunk_params <- function(){
     coverage_so  <- 0.681333333    # (R) Fraction of treated primary school students within 6 km - from W@W - see note
     tax_so <- 0.16575              #ADD INFO!
     unit_cost_local_so <- 43.66    #Deworm the World
-    
+
     unit_cost_so <- 0.42           # Unit cost of deworming (in 2018 USD) - from Evidence Action
     unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
     unit_cost_2017usdppp_so <- unit_cost_ppp_so*cpi_2017_so/cpi_2018_so
@@ -114,22 +114,22 @@ chunk_params <- function(){
     # data on number of treated children
     df_counts_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Treatment #s")
-    # Prevalence data: 
+    # Prevalence data:
     # original study
     # Any infection on original study
-    #alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, 
+    #alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55,
     # "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
     df_alpha_so <- read_excel("data/prevalence_data.xlsx",
                            sheet = "Sheet1")
-    
-    ############# 
+
+    #############
     ##### Research
-    ############# 
+    #############
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women CONFIRM
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
     lambda1_new_so <- c(86.54642,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
-                               82.99311,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w 
+                               82.99311,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
                                85.44088)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
     lambda1_new_sd_so <- c(43, 83, 172)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
@@ -152,13 +152,13 @@ chunk_params <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from initial period until individual join the labor force
-    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)	
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)
                                                     #- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
     teach_sal_new_so <- (50000*12/49.77)
-    teach_ben_new_so <- 0 
-                                  #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - 
+    teach_ben_new_so <- 0
+                                  #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
                                   #news sources * 12 / ex_rate_2017_ppp_so
                                   # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
                                   # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
@@ -177,7 +177,7 @@ chunk_params <- function(){
     # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim",
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
     policy_estimate_so <- "ea3_sim"
-    
+
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 ###############################################################################
@@ -188,33 +188,33 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 #############
 ##### Notes:
 #############
-# on growth_rate_so: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation 
-# on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should 
+# on growth_rate_so: (http://data.worldbank.org/indicator/NY.GDP.PCAP.KD/), see calculation
+# on "Kenya GDP per capita" tab. In W@W this equals 1.52%. ISSUE: This growth number should
 # be updated to be 2002-2014, I think.
-# 
-# on coef_exp_so: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2, 
-# female dummy, indicators for attained primary/secondary/beyond, and province dummies. 
-# Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle 
+#
+# on coef_exp_so: 1998/1999 Kenyan labor force survey; regression of earnings on age, age^2,
+# female dummy, indicators for attained primary/secondary/beyond, and province dummies.
+# Estimate used in W@W: (0.1019575, -0.0010413). ISSUE: For now assume no further life cycle
 # adjustment beyond KLPS-3 (likely a conservative assumption).
-# 
+#
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
 
 # Introduction  
 
-Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](add link). 
+Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](add link).
 
 
 The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:   
   1. the original CBA produced by @baird2016worms,   
   2. an updated version of such analysis by a symilar research team [@klps4], and   
-  3. a third approach that borrows some components of the previous two and some specific components requested by the NGO, Evidence Action (EA)[^1]. 
+  3. a third approach that borrows some components of the previous two and some specific components requested by the NGO, Evidence Action (EA)[^1].
 
 
 
 <!--
-OLD TEXT: 
+OLD TEXT:
 The key policy estimate consists of a cost effectiveness analysis that compares the present
 value of benefits and costs. The benefits quantified here are the effects on wages an the
 costs are those of delivering the deworming treatment.  
@@ -228,15 +228,15 @@ This analaysis contains elements from GiveWell's cost effectiveness analaysis (s
 
 We first describe the common elements across all three approaches, and then describe each approach in detail.
 
-## Common structure 
+## Common structure
 
-The starting point is a comparison of a stream of benefits and costs over the lifetime of the recepients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers. 
+The starting point is a comparison of a stream of benefits and costs over the lifetime of the recepients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
 <details><summary>Equations</summary>
 
 \begin{equation}
 NPV = B - C \\
-CEA = \frac{B \times F_0}{C} \\ 
+CEA = \frac{B \times F_0}{C} \\
 RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 
 \label{eq:1}
@@ -263,7 +263,7 @@ chunk_policy_est <- function(){
     RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
         CEA_var / CEA_cash_var
     }
-    
+
 ###############################################################################
 ###############################################################################  
     return(list("CEA_pe_f" = CEA_pe_f,
@@ -359,9 +359,9 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probably an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implementing deworming policies, and indirect costs associated with the benefits of deworming.
 
-The main differences across the three approaches regarding benefits have to do with how to predict the earnings profiles over a lifecycle, and whether or not to account for different prevalence rates. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections. 
+The main differences across the three approaches regarding benefits have to do with how to predict the earnings profiles over a lifecycle, and whether or not to account for different prevalence rates. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections.
 
-The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries. 
+The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries.
 
 
 
@@ -377,7 +377,7 @@ chunk_interest <- function(){
 ###############################################################################
 ###############################################################################  
 
-    interest_f <- function(gov_bonds_var = gov_bonds_so , 
+    interest_f <- function(gov_bonds_var = gov_bonds_so ,
                            inflation_var = inflation_so) {  
         interest_in = gov_bonds_var - inflation_var
         return(list("interest_in" = interest_in))
@@ -461,8 +461,8 @@ The resulting value is a $r$ = 9.85%
 
 ## Approach 1: @baird2016worms
 
-In this first approach, the effect on earnings are predicted by extrapolating the 
-effects on hours worked by individuals in the original treatment group, ten years after the intervention. Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. As with the original analysis of @baird2016worms, the effects are calculated in two scenarios: with and without externalities. 
+In this first approach, the effect on earnings are predicted by extrapolating the
+effects on hours worked by individuals in the original treatment group, ten years after the intervention. Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. As with the original analysis of @baird2016worms, the effects are calculated in two scenarios: with and without externalities.
 
 
 ###  Gains in earnings  ("$E_t$")  
@@ -489,7 +489,7 @@ Where:
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
  - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
- 
+
 </details>
 
 
@@ -516,8 +516,21 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
 
-<details><summary>View Summary Table</summary>
+
+```r
+# Data = c(paste0("$w_t=" , NA, "$"),
+#          paste0("$p=" , NA, "$"),  paste0("$R=" , NA, "$") )
+# Research = c(paste0("$\\lambda_1=" , NA, "$"))
+# Guesswork = c(paste0("$\\lambda_2=" , NA, "$"))
+# table_3 = data.frame(Data, Research, Guesswork)
+# # output as a table
+# # stargazer(table_3, summary = FALSE,
+# #           dep.var.labels.include = F, out = "Table2c2.txt",
+# #           ci=TRUE, ci.level=0.95)
+```
 
 <table>
 <caption>Sources: summary of inputs</caption>
@@ -530,19 +543,14 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $E_t=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $w_t=NA$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
   </tr>
 </tbody>
 </table>
@@ -666,6 +674,39 @@ Individuals in the data are assumed to enter the labor force 10 years after the 
 </table>
 </details>
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $w_t=NA$ </td>
+   <td style="text-align:left;"> $X_p=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_0=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $g=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
+</details>
+
 #### "$w_0$"
 
 \begin{equation}
@@ -676,7 +717,7 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 \end{equation}
 
 \begin{equation}
-w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
 \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
 \end{equation}
 
@@ -694,7 +735,9 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 
 Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages is ($E[h_{se}|h_{se}>0]$) is different from the one is to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
-<details><summary>View Summary Table</summary>
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
 <table>
 <caption>Sources: summary of inputs</caption>
  <thead>
@@ -706,68 +749,25 @@ Where both parameters (Monthly self-employed profits and self-employed hours for
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\alpha_l=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
 </tbody>
 </table>
 
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-</tbody>
-</table>
 </details>
+
 
 
 ```r
@@ -906,7 +906,7 @@ $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from r
    <td style="text-align:left;"> $(5)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
                      \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
    <td style="text-align:left;"> $(6)$ </td>
   </tr>
@@ -958,6 +958,37 @@ lambda1_r_in <- lambda_r_f()
 lambda2_in <- lambda2_in_f()
 ```
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_{1, male}=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_{1, female}=NA$ </td>
+  </tr>
+</tbody>
+</table>
+</details>
 
 #### $R$ and $p$
 
@@ -1004,61 +1035,6 @@ For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row
 </tbody>
 </table>
 
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-</tbody>
-</table>
-</details>
-
-
 ```r
 # - inputs: coverage_so, q_full_so, q_zero_so
 # - outputs: saturation_in
@@ -1080,20 +1056,10 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 ```
-  
 
-### Costs
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
 
-The costs are a combinantion of direct costs on mass deworming (relative to the status quo), and indirect costs on the education system due to the additional time treated individuals spend in school. 
-
-\begin{equation}
-C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)
-
-\label{eq:10}
-\tag{10}
-\end{equation}
-
-<details><summary>View Summary Table</summary>
 <table>
 <caption>Sources: summary of inputs</caption>
  <thead>
@@ -1105,76 +1071,58 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $R=0.68$ </td>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
   </tr>
 </tbody>
 </table>
+</details>
+
+
+### Costs
+
+The costs are a combinantion of direct costs on mass deworming (relative to the status quo), and indirect costs on the education system due to the additional time treated individuals spend in school.
+
+\begin{equation}
+C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)
+
+\label{eq:10}
+\tag{10}
+\end{equation}
+
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
 
 <table>
-<caption>Model: summary of equations</caption>
+<caption>Sources: summary of inputs</caption>
  <thead>
   <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
   </tr>
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $C=NA$ </td>
+   <td style="text-align:left;"> $S_2=NA$ </td>
+   <td style="text-align:left;"> $Q=NA$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
+   <td style="text-align:left;"> $S_1=NA$ </td>
+   <td style="text-align:left;"> $K=NA$ </td>
+   <td style="text-align:left;"> $r=NA$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
+   <td style="text-align:left;"> $r=NA$ </td>
+   <td style="text-align:left;"> $t=NA$ </td>
+   <td style="text-align:left;"> $\Delta \bar{E}_t=NA$ </td>
   </tr>
 </tbody>
 </table>
@@ -1207,7 +1155,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:  
 ```
 
-#### Increase in deworming costs 
+#### Increase in deworming costs
 
 Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the govemerment provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
 
@@ -1281,7 +1229,7 @@ DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
    <td style="text-align:left;"> $(5)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
                      \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
    <td style="text-align:left;"> $(6)$ </td>
   </tr>
@@ -1309,7 +1257,7 @@ DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
 </table>
 </details>
 
-##### Status quo 
+##### Status quo
 This analysis assumes that there is no subsidy for deworming under the status quo ($S_{1}Q(S_{1}) = 0$).    
 
 ##### $S_{2}$: complete subsidy to per capita costs of deworming.  
@@ -1385,7 +1333,7 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
    <td style="text-align:left;"> $(5)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
                      \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
    <td style="text-align:left;"> $(6)$ </td>
   </tr>
@@ -1441,6 +1389,38 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 ```
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $DC=NA$ </td>
+   <td style="text-align:left;"> $S_2=NA$ </td>
+   <td style="text-align:left;"> $Q=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $S_1=NA$ </td>
+   <td style="text-align:left;"> $KSH=NA$ </td>
+   <td style="text-align:left;"> $ex=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+</details>
+
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
 
@@ -1495,15 +1475,15 @@ delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 ```
 
 
-Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively). 
+Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
 
-Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for government (table 5, column 3, and rows 12, 13 respectively). 
+Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for government (table 5, column 3, and rows 12, 13 respectively).
 
 
 
 ```r
-# Numbers are reproduces, the only difference is that  Baird et al, presents them in a different way. 
-# Equivalence below: 
+# Numbers are reproduces, the only difference is that  Baird et al, presents them in a different way.
+# Equivalence below:
 # Baird et al 2016                                          Here
 # 142.43 - 10.71 - 1.07                                   = 130.65
 # (142.43 * 0.16575 - 10.71 = 12.89777) - 1.07            = 11.82777
@@ -1574,7 +1554,7 @@ Including externalities, they obtain total NPV of benefits of 766.81, with 102.9
    <td style="text-align:left;"> $(5)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
                      \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
    <td style="text-align:left;"> $(6)$ </td>
   </tr>
@@ -1612,11 +1592,11 @@ Including externalities, they obtain total NPV of benefits of 766.81, with 102.9
 
 -----------------
 
-## Approach 2: @klps4 
+## Approach 2: @klps4
 
 In this second approach, benefits follow the same principle as in approach 1 (increased in lifetime earninings), but now there is more data on the actual effects on the labor market outcomes. Instead of proyecting a trend of earnings into the future, this analysis use the data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  
 
-The interest rate here is updated to current values of return on (Kenyan) goverment bonds and inflation. 
+The interest rate here is updated to current values of return on (Kenyan) goverment bonds and inflation.
 
 
 ```r
@@ -1632,7 +1612,7 @@ $E_t$ represents the treatment effect on welfare, so it implicitly takes into co
 
 We estimate treatment effects on total welfare by round. KLPS2 captures effects after 10 years; KLPS3 captures the effects after 15 years; and KLPS4 after 20 years. We will need to make assumptions about welfare gains from deworming after 20 years.
 
-@klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. 
+@klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8].
 
 [^8]: In another specification the authors assume that effects disappear after 25 years. Here we select the more persistent specification.
 
@@ -1675,7 +1655,9 @@ chunk_new_earnings <- function(){
 invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 ```
 
-<details><summary>View Summary Table</summary>
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
 <table>
 <caption>Sources: summary of inputs</caption>
  <thead>
@@ -1687,103 +1669,24 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;"> $E_t=NA$ </td>
+   <td style="text-align:left;"> $t=NA$ </td>
+   <td style="text-align:left;"> $\alpha^{KLPS2}=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\alpha^{KLPS3}=NA$ </td>
+   <td style="text-align:left;"> $\alpha^{KLPS4}=NA$ </td>
    <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
-   <td style="text-align:left;"> $(11)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
-   <td style="text-align:left;"> $(12)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(13)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
-\text{ for } t \leq 50$ </td>
-   <td style="text-align:left;"> $(14)$ </td>
   </tr>
 </tbody>
 </table>
 </details>
 
-### Costs 
+### Costs
 
 The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.
 
-New way to compute unit costs of deworming treatment: 
+New way to compute unit costs of deworming treatment:
 \begin{equation}
 DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
 
@@ -1832,7 +1735,9 @@ q2_in <- q_full_so
 
 Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $1.40.
 
-<details><summary>View Summary Table</summary>
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
 <table>
 <caption>Sources: summary of inputs</caption>
  <thead>
@@ -1844,106 +1749,19 @@ Adding all indirect cost, the average cost of deworming each child over the enti
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;"> $DC=NA$ </td>
+   <td style="text-align:left;"> $r=NA$ </td>
+   <td style="text-align:left;"> $S_2=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q=NA$ </td>
+   <td style="text-align:left;"> $S_1=NA$ </td>
    <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
-   <td style="text-align:left;"> $(11)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
-   <td style="text-align:left;"> $(12)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(13)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
-\text{ for } t \leq 50$ </td>
-   <td style="text-align:left;"> $(14)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(15)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
-.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(16)$ </td>
   </tr>
 </tbody>
 </table>
 </details>
+
 
 #### Cost of schooling
 
@@ -1960,15 +1778,15 @@ K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 
 The cost per student ($K$) is updated wtih new information on annual teacher salary (including benefits)[^9], $12055 (also adjusted for PPP), and same number of average number of students per teacher (45).
 
-Hence, the cost of schooling each child for an additional year is now $267.9 (USD). 
+Hence, the cost of schooling each child for an additional year is now $267.9 (USD).
 
 [^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor [FIND SOURCES]. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is 45, based on **[FILL IN]**.
 
 
 ```r
 delta_ed_in <- delta_ed_so[,1]
-cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77), 
-                                          teach_ben_var = 0, 
+cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
+                                          teach_ben_var = 0,
                                           n_students_var = 45)
 ```
 
@@ -1976,7 +1794,32 @@ Over this nine year period, students attended school for an additional 0.15 year
 
 **Then we get an average cost of additional schooling per child over the nine-year period, $26.97.**
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
 
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $K=NA$ </td>
+   <td style="text-align:left;"> $r=NA$ </td>
+   <td style="text-align:left;"> $t=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\Delta \bar{E}_t=NA$ </td>
+   <td style="text-align:left;"> $S_1=NA$ </td>
+   <td style="text-align:left;"> $S_2=NA$ </td>
+  </tr>
+</tbody>
+</table>
+</details>
 
 
 <details><summary>View Summary Table</summary>
@@ -2042,7 +1885,7 @@ Over this nine year period, students attended school for an additional 0.15 year
    <td style="text-align:left;"> $(5)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
                      \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
    <td style="text-align:left;"> $(6)$ </td>
   </tr>
@@ -2103,8 +1946,8 @@ Over this nine year period, students attended school for an additional 0.15 year
 
 ## Approach 3: Evidence Action
 
-- Key elements: 
-  - No costs on ed. 
+- Key elements:
+  - No costs on ed.
   - Country specific costs.   
 
 
@@ -2231,7 +2074,7 @@ chunk_cost1_inp <- function(){
       c_counts <- df_counts_last %>%
         group_by(Country, Year) %>%
         summarise("total" = sum(`# dewormed`))
-        
+
       return( list("counts_data" = c_counts) )
     }
 
@@ -2321,7 +2164,7 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
    <td style="text-align:left;"> $(5)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
+   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
                      \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
    <td style="text-align:left;"> $(6)$ </td>
   </tr>
@@ -2386,13 +2229,40 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 </table>
 </details>
 
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+<table>
+<caption>Sources: summary of inputs</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $N_i=NA$ </td>
+   <td style="text-align:left;"> $Ex_i=NA$ </td>
+   <td style="text-align:left;"> $k=NA$ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+</details>
+
 #### Data required to compute costs.
 
 $N_{i}, C_{i,k,l}, \delta_{g}$
 
 
 ### Benefits   
-From either @baird2016worms or @klps4. Only difference is that results now take into account prevalence. 
+From either @baird2016worms or @klps4. Only difference is that results now take into account prevalence.
 
 #### "$\lambda_{1}^{eff}$"  
 
@@ -2423,7 +2293,9 @@ df_alpha_so <- read_excel("data/prevalence_data.xlsx",
 
 In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.77 = 2.72$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
-<details><summary>View Summary Table</summary>
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
 <table>
 <caption>Sources: summary of inputs</caption>
  <thead>
@@ -2435,125 +2307,14 @@ In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.7
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
+   <td style="text-align:left;"> $\alpha=NA$ </td>
+   <td style="text-align:left;"> $\lambda_{1}^{eff}=NA$ </td>
    <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
-   <td style="text-align:left;"> $(11)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
-   <td style="text-align:left;"> $(12)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(13)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
-\text{ for } t \leq 50$ </td>
-   <td style="text-align:left;"> $(14)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(15)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
-.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(16)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
-   <td style="text-align:left;"> $(17)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C = \sum_{i \in Countries } \omega_{i} c_{i}$ </td>
-   <td style="text-align:left;"> $(18)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} = \frac{C_{i}}{N_{i}} \
-C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
-C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
-   <td style="text-align:left;"> $(19)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0$ </td>
-   <td style="text-align:left;"> $(20)$ </td>
   </tr>
 </tbody>
 </table>
 </details>
+
 
 ### Different format of policy estimate {#policy-estimate}
 
@@ -2580,7 +2341,9 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 \tag{22}
 \end{equation}
 
-<details><summary>View Summary Table</summary>
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
 <table>
 <caption>Sources: summary of inputs</caption>
  <thead>
@@ -2592,129 +2355,9 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;"> $ANOTHER SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NEW SOURCE=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l} 
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})$ </td>
-   <td style="text-align:left;"> $(11)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment}$ </td>
-   <td style="text-align:left;"> $(12)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(13)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \text{&lt;} t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \text{&lt;} t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \text{&gt;} 20)\alpha^{KLPS4}
-\text{ for } t \leq 50$ </td>
-   <td style="text-align:left;"> $(14)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(15)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
-.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(16)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
-   <td style="text-align:left;"> $(17)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C = \sum_{i \in Countries } \omega_{i} c_{i}$ </td>
-   <td style="text-align:left;"> $(18)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} = \frac{C_{i}}{N_{i}} \
-C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
-C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
-   <td style="text-align:left;"> $(19)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0$ </td>
-   <td style="text-align:left;"> $(20)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $CEA_{deworming} = \frac{B (1 + F_{0})}{C}$ </td>
-   <td style="text-align:left;"> $(21)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $RCEA = \frac{CEA_{deworming}}{CEA_{cash}}$ </td>
-   <td style="text-align:left;"> $(22)$ </td>
+   <td style="text-align:left;"> $C=NA$ </td>
+   <td style="text-align:left;"> $B=NA$ </td>
+   <td style="text-align:left;"> $F_0=NA$ </td>
   </tr>
 </tbody>
 </table>
@@ -2800,7 +2443,7 @@ one_run <-
            hours_se_var1 = hours_se_so,
            ex_rate_var1 = ex_rate_so,
            growth_rate_var1 = growth_rate_so,
-           coef_exp_var1 = coef_exp_so[1], 
+           coef_exp_var1 = coef_exp_so[1],
            coef_exp2_var1 = coef_exp_so[2],
            lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_so),
            alpha_0_var1 = alpha_0_so,
@@ -2913,21 +2556,21 @@ one_run <-
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1,
                                           inflation_var = inflation_var1) )
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
-    
-    interest_in_new <- as.numeric(interest_f(gov_bonds_var = gov_bonds_new_var1, 
+
+    interest_in_new <- as.numeric(interest_f(gov_bonds_var = gov_bonds_new_var1,
                                              inflation_var = inflation_new_var1))
 
     cost_per_student_in <-  cost_per_student_f(teach_sal_var = teach_sal_var1,
                                                teach_ben_var = teach_ben_var1,
                                                n_students_var = n_students_var1)
     unit_test(cost_per_student_in,  116.8549, main_run_var = main_run_var1)
- 
-    
+
+
     #TODO: remove hardcoded numbers
-    cost_per_student_in_new <- cost_per_student_f(teach_sal_var = teach_sal_new_var1, 
-                                          teach_ben_var = teach_ben_new_var1, 
+    cost_per_student_in_new <- cost_per_student_f(teach_sal_var = teach_sal_new_var1,
+                                          teach_ben_var = teach_ben_new_var1,
                                           n_students_var = n_students_var1)
-    
+
     s2_in <- s2_f(unit_cost_local_var = unit_cost_local_var1,
                   ex_rate_var = ex_rate_var1, years_of_treat_var = years_of_treat_var1)
     unit_test(s2_in, 1.4219, main_run_var = main_run_var1)
@@ -2953,12 +2596,12 @@ one_run <-
 
     #KLPS4 w/t and no ext
     pv_benef_tax_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_var1,
-                                   interest_r_var = interest_in_new, 
+                                   interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
     # ADD UNIT TEST
     # KLPS4 all and no ext
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
-                                   interest_r_var = interest_in_new, 
+                                   interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
     unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
 
@@ -2968,12 +2611,12 @@ one_run <-
                          country_cost_var = costs1_country$ratios_data$per_cap)
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
 
-    s2_ea_in <- s2_f_new(interest_var = interest_in_new, 
+    s2_ea_in <- s2_f_new(interest_var = interest_in_new,
                       unit_cost_local_var = cost1_in, ex_rate_var = 1)
     costs2_ea_in <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
                          interest_r_var = interest_in_new, cost_of_schooling_var = 0,
                          s1_var = 0, q1_var = 0, s2_var = s2_ea_in, q2_var = q_full_var1)
-    
+
     # costs2: Baird no externalities
     costs2_in <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
                          interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
@@ -2989,11 +2632,11 @@ one_run <-
     s2_new_in <- s2_f_new(interest_var = interest_in_new, unit_cost_local_var = unit_cost_local_new_var1, ex_rate_var = 1)
     # costs2: KLPS4
     costs_k <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
-                         interest_r_var = interest_in_new, 
+                         interest_r_var = interest_in_new,
                        cost_of_schooling_var = cost_per_student_in_new,
                          s1_var = 0, q1_var = 0, s2_var = s2_new_in, q2_var = q_full_var1)
     unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
-    
+
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
                   "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
@@ -3053,8 +2696,8 @@ unit_test(ea2, 766.667141355337)
 ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in)
 unit_test(ea3, 950.089412364501)
 
-#CEA for EA 
-#TODO: update CEA values. 
+#CEA for EA
+#TODO: update CEA values.
 cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in, fudging_var = 0)
 unit_test(cea_no_ext_ea, 6452.86204429499)
 
@@ -3257,8 +2900,8 @@ sim.data1 <- function(nsims = 1e2,
     ## Data
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2, sd = gov_bonds_var2_sd)
     inflation_sim <-        rnorm(nsims, inflation_var2, inflation_var2_sd)
-    
-    gov_bonds_new_sim <-    rnorm(n = nsims, mean = gov_bonds_new_var2, sd = gov_bonds_new_var2_sd) 
+
+    gov_bonds_new_sim <-    rnorm(n = nsims, mean = gov_bonds_new_var2, sd = gov_bonds_new_var2_sd)
     inflation_new_sim <-    rnorm(nsims, inflation_new_var2, inflation_new_var2_sd)                  
 
     wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
@@ -3274,7 +2917,7 @@ sim.data1 <- function(nsims = 1e2,
     ex_rate_sim <-          rnorm(nsims, ex_rate_var2, ex_rate_var2_sd)
     # ex_rate_new_sim
     tax_sim <-              rnorm(nsims, tax_var2, tax_var2_sd)
-    
+
     unit_cost_local_sim <-  rnorm(nsims, unit_cost_local_var2, unit_cost_local_var2_sd)
     # unit_cost_local_new_sim
     years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, years_of_treat_var2_sd)
@@ -3295,7 +2938,7 @@ sim.data1 <- function(nsims = 1e2,
     # Prevalence here TO DO: draw from a beta instead of "truncated" normal
     alpha_0_sim <- rnorm(nsims, alpha_0_var2, alpha_0_var2_sd)
     alpha_0_sim <- ifelse(alpha_0_sim > 1, yes = 1, ifelse(alpha_0_sim < 0, 0, alpha_0_sim) )
-    
+
     alpha_r_sim <- rnorm(nsims, alpha_r_var2, alpha_r_var2_sd)
     alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
     ## Guess work
@@ -3305,10 +2948,10 @@ sim.data1 <- function(nsims = 1e2,
     coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
     teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
     teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
-    
+
     teach_sal_new_sim <-    rnorm(nsims, teach_sal_new_var2, teach_sal_new_var2_sd)
     teach_ben_new_sim <-    rnorm(nsims, teach_ben_new_var2, teach_ben_new_var2_sd)
-    
+
     n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
 
     delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean =
@@ -3489,7 +3132,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             gov_bonds_new_var2      = gov_bonds_new_so      ,          #add to app
             gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          #add to app
             inflation_new_var2      = inflation_new_so      ,          #add to app
-            inflation_new_var2_sd   = inflation_new_so * 0.1,          #add to app 
+            inflation_new_var2_sd   = inflation_new_so * 0.1,          #add to app
             wage_ag_var2            = wage_ag_so               ,                                      
             wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
             wage_ww_var2            = wage_ww_so               ,                                      
@@ -3644,11 +3287,11 @@ rescale <- rescale_so
       annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 4)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
     if (rescale == TRUE) {
-      plot1 <- suppressMessages( 
-        plot1 + 
-          coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), 
-                                          max(npv_sim)) 
-                          ) 
+      plot1 <- suppressMessages(
+        plot1 +
+          coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ),
+                                          max(npv_sim))
+                          )
         )
     }
 
