@@ -556,7 +556,7 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables4, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables5, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_4 <- matrix("", nrow = 1, ncol = 3)
 
@@ -606,7 +606,7 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages ($E[h_{se}|h_{se}>0]$) is different from the one used to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
 <details><summary>View Summary Table</summary>
-```{r sum_tables5, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables6, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -620,11 +620,13 @@ table_2 <- rbind(table_2,
                  c("$w_{se} = \\frac{\\text{Monthly self-employed profits}}{4.5 \\times E[h_{se}|h_{se} \\text{>} 0]}$",
                    paste0("$(", sum_table_index, ")$") )
     )
+```
+
 
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables5, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables7, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_5 <- matrix("", nrow = 1, ncol = 3)
 
@@ -722,7 +724,7 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:`r equationIndex`} come from @baird2016worms.
 
 <details><summary>View Summary Table</summary>
-```{r sum_tables6, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables8, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -773,7 +775,7 @@ lambda2_in <- lambda2_in_f()
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables6, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables9, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_6 <- matrix("", nrow = 1, ncol = 3)
 
@@ -809,7 +811,7 @@ p = R \times Q(full)  + (1 - R) \times Q(0)
 For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assigned the value of `r q_zero_so`. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = `r q_full_so`$.
 
 <details><summary>View Summary Table</summary>
-```{r sum_tables7, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables10, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -848,7 +850,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables7, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables11, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_7 <- matrix("", nrow = 1, ncol = 3)
 
@@ -878,7 +880,7 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables8, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables12, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_8 <- matrix("", nrow = 1, ncol = 3)
 
@@ -935,7 +937,7 @@ DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
 \end{equation}
 
 <details><summary>View Summary Table</summary>
-```{r sum_tables9, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables13, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -962,7 +964,7 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 \end{equation}
 
 <details><summary>View Summary Table</summary>
-```{r sum_tables10, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables14, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1003,7 +1005,7 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables9, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables15, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_9 <- matrix("", nrow = 1, ncol = 3)
 
@@ -1091,7 +1093,7 @@ Including externalities, they obtain total NPV of benefits of `r df_research_so$
 ```
 
 <details><summary>View Summary Table</summary>
-```{r sum_tables11, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables16, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1171,7 +1173,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables10, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables17, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_10 <- matrix("", nrow = 1, ncol = 3)
 
@@ -1242,7 +1244,7 @@ Adding all indirect cost, the average cost of deworming each child over the enti
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables11, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables18, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_11 <- matrix("", nrow = 1, ncol = 3)
 
@@ -1294,7 +1296,7 @@ Over this nine year period, students attended school for an additional `r round(
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables12, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables19, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_12 <- matrix("", nrow = 1, ncol = 3)
 
@@ -1312,7 +1314,7 @@ knitr::kable(table_12, col.names = c("Data", "Research", "Guesswork"), caption =
 
 
 <details><summary>View Summary Table</summary>
-```{r sum_tables14, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1488,7 +1490,7 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables13, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables21, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_13 <- matrix("", nrow = 1, ncol = 3)
 
@@ -1543,7 +1545,7 @@ In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.7
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables14, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables22, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_14 <- matrix("", nrow = 1, ncol = 3)
 
@@ -1583,7 +1585,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables15, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum_tables23, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_15 <- matrix("", nrow = 1, ncol = 3)
 
