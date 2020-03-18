@@ -514,7 +514,7 @@ Individuals in the data are assumed to enter the labor force 10 years after the 
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2, 
-                 c("$w_t =  \\text{#weeks} \\times w_0 (1 + g)^{Xp}(1 + \\hat{\\beta_1} Xp + \\hat{\\beta_2} Xp^2) \\quad \\text{for } t=10, \\dots, 50$", 
+                 c("$w_t =  \\text{#weeks} \\times w_0 (1 + g)^{Xp}(1 + \\hat{\\beta_1} Xp + \\hat{\\beta_2} Xp^2) \\quad $", 
                    paste0("$(", sum_table_index, ")$") )
     )
 
@@ -1029,7 +1029,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2, 
                  c("$E_t = \\mathbf{1}(10 \\text{<} t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\text{<} t \\leq 20)\\alpha^{KLPS3} + \\mathbf{1}(t \\text{>} 20)\\alpha^{KLPS4}
-\\text{ for } t \\leq 50$", 
+$", 
                    paste0("$(", sum_table_index, ")$") )
     )
 
