@@ -1027,7 +1027,10 @@ knitr::kable(table_9, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
 
-The additional cost on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
+With the intervention there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual, who tends to spend more time in school than an untreated counterpart.
+
+<details><summary>Equations</summary>
+The additional costs on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
 
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
@@ -1080,7 +1083,7 @@ delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 Without externalities, they obtain total NPV of benefits of `r df_research_so$param[1]`, with `r df_research_so$param[2]` in tax revenue for government (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and rows `r paste0(df_research_so$table_row[1], ", ", df_research_so$table_row[2])` respectively).
 
 Including externalities, they obtain total NPV of benefits of `r df_research_so$param[3]`, with `r df_research_so$param[4]` in tax revenue for government (table `r df_research_so$tablenum[3]`, column `r df_research_so$table_col[3]`, and rows `r paste0(df_research_so$table_row[3], ", ", df_research_so$table_row[4])` respectively).
-
+</details>
 
 ```{r, eval=FALSE}
 # Numbers are reproduces, the only difference is that  Baird et al, presents them in a different way.

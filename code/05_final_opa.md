@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "19 March, 2020"
+date: "20 March, 2020"
 output:
   html_document:
     code_folding: hide
@@ -1450,7 +1450,10 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
 
-The additional cost on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
+With the intervention there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by the treated individuals, who tend to spend more time in school than their untreated counterparts.
+
+<details><summary>Equations</summary>
+The additional costs on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
 
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
@@ -1504,7 +1507,7 @@ delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
 
 Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for government (table 5, column 3, and rows 12, 13 respectively).
-
+</details>
 
 
 ```r
