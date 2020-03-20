@@ -1110,7 +1110,7 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 ## Approach 2: @klps4
 
-In this second approach, benefits follow the same principle as in approach 1 (increased in lifetime earninings), but now there is more data on the actual effects on the labor market outcomes. Instead of proyecting a trend of earnings into the future, this analysis use the data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  
+In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but now there is more data on the actual effects on the labor market outcomes. Instead of projecting a trend of earnings into the future, this analysis uses the data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  
 
 The interest rate here is updated to current values of return on (Kenyan) goverment bonds and inflation.
 
@@ -1121,6 +1121,9 @@ interest_in_new <- interest
 
 ### Gains in earnings ($E_t$)
 
+Gains in earnings from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time.  
+
+<details><summary>Equation</summary>
 AQUI VOY
 
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
@@ -1143,7 +1146,7 @@ E_t = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alph
 This expression assumes that there are no additional earnings gains for the treatment group for the first 10 years post-intervention. This model also disregards externality effects.
 
 Using earnings gains to measure welfare, we substitute each $\alpha$ term with the average treatment effect on earnings in each round of data collection: `r round(lambda1_new_so,0)` dollars per person per year.
-
+</details>
 
 ```{r delta-earnings, eval=TRUE}
 # - inputs:
