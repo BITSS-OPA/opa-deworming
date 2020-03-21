@@ -1131,7 +1131,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ### Costs
 
-The costs are a combinantion of direct costs on mass deworming (relative to the status quo), and indirect costs on the education system due to the additional time treated individuals spend in school.
+The costs are a combination of direct costs on mass deworming (relative to the status quo, which is no subsidy for deworming) and indirect costs on the education system due to the additional time treated individuals spend in school.
 
 \begin{equation}
 C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)
@@ -1201,7 +1201,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 #### Increase in deworming costs
 
-Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the govemerment provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
+Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the government provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
 
 \begin{equation}
 DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
@@ -1458,7 +1458,10 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
 
-The additional cost on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
+With the intervention there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by the treated individuals, who tend to spend more time in school than their untreated counterparts.
+
+<details><summary>Equations</summary>
+The additional costs on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
 
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
@@ -1512,7 +1515,7 @@ delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
 
 Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for government (table 5, column 3, and rows 12, 13 respectively).
-
+</details>
 
 
 ```r
@@ -1623,7 +1626,7 @@ Including externalities, they obtain total NPV of benefits of 766.81, with 102.9
 
 ## Approach 2: @klps4
 
-In this second approach, benefits follow the same principle as in approach 1 (increased in lifetime earninings), but now there is more data on the actual effects on the labor market outcomes. Instead of proyecting a trend of earnings into the future, this analysis use the data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  
+In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but now there is more data on the actual effects on the labor market outcomes. Instead of projecting a trend of earnings into the future, this analysis uses the data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  
 
 The interest rate here is updated to current values of return on (Kenyan) goverment bonds and inflation.
 
@@ -1635,6 +1638,9 @@ interest_in_new <- interest
 
 ### Gains in earnings ($E_t$)
 
+Gains in earnings from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time.  
+
+<details><summary>Equation</summary>
 AQUI VOY
 
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
@@ -1657,7 +1663,7 @@ E_t = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alph
 This expression assumes that there are no additional earnings gains for the treatment group for the first 10 years post-intervention. This model also disregards externality effects.
 
 Using earnings gains to measure welfare, we substitute each $\alpha$ term with the average treatment effect on earnings in each round of data collection: 87, 83, 85 dollars per person per year.
-
+</details>
 
 
 ```r
