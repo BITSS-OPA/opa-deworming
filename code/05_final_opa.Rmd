@@ -927,7 +927,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 #### Increase in deworming costs
 
-Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the government provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
+Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($Q_{2}$) intervention, times the per-capita costs of deworming under the intervention ($S_{2}$). This costs are compared to a scenario where the government provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
 
 \begin{equation}
 DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
