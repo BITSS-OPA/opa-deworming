@@ -544,7 +544,7 @@ Individuals in the data are assumed to enter the labor force 10 years after the 
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$w_t =  \\text{#weeks} \\times w_0 (1 + g)^{Xp}(1 + \\hat{\\beta_1} Xp + \\hat{\\beta_2} Xp^2) \\quad \\text{for } t=10, \\dots, 50$",
+                 c("$w_t =  \\text{#weeks} \\times w_0 (1 + g)^{Xp}(1 + \\hat{\\beta_1} Xp + \\hat{\\beta_2} Xp^2)$",
                    paste0("$(", sum_table_index, ")$") )
     )
 
@@ -894,6 +894,11 @@ table_8 <- rbind(table_8, c(paste0("$S_1=" , NA, "$"),
 table_8 <- rbind(table_8, c(paste0("$r=", NA, "$"),
                             paste0("$t=" , NA, "$"),
                             paste0("$\\Delta \\bar{E}_t=" , NA, "$")))
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$C =  \\left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\right) + K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_{t}(S1,S2)$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
 
 knitr::kable(table_8, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
 ```
@@ -1194,7 +1199,19 @@ table_10 <- rbind(table_10, c(paste0("$\\alpha^{KLPS3}=" , NA, "$"),
 knitr::kable(table_10, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
 ```
 </details>
+<details><summary>View Summary Table</summary>
+```{r sum_table14, purl=FALSE, echo=FALSE, eval=TRUE}
 
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$E_t = \\mathbf{1}(10 \\text{<} t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\text{<} t \\leq 20)\alpha^{KLPS3} + \\mathbf{1}(t \\text{>} 20)\\alpha^{KLPS4}$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+</details>
 ### Costs
 
 The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.
@@ -1265,7 +1282,24 @@ table_11 <- rbind(table_11, c(paste0("$Q=" , NA, "$"),
 knitr::kable(table_11, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
 ```
 </details>
+<details><summary>View Summary Table</summary>
+```{r sum_table15, purl=FALSE, echo=FALSE, eval=TRUE}
 
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$DC = \\sum_{t=0}^{`r round(years_of_treat_so,1)-1`} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$DC = \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big] + \\left( \\frac{1}{1 + r}\\right)\\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big] + \\
+.4\\left( \\frac{1}{1 + r}\\right)^2 \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+</details>
 
 #### Cost of schooling
 
@@ -1511,6 +1545,29 @@ table_13 <- rbind(table_13,c(paste0("$l=", NA, "$"),
 knitr::kable(table_13, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
 ```
 </details>
+<details><summary>View Summary Table</summary>
+```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$C = \\sum_{i \\in Countries } \\omega_{i} c_{i}$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$\\omega_{i} = \\frac{N_{i}}{\\sum_{j}N_{j}} \\
+c_{i} = \frac{C_{i}}{N_{i}} \\
+C_{i} = (1 + \\delta_{g})\\sum_{k \\in payers}C_{i,k} \\
+C_{i,k} = \\sum_{l \\in items}\\sum_{m \\in regions}C_{i,k,l,m}$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+
+</details>
 
 #### Data required to compute costs.
 
@@ -1561,7 +1618,19 @@ table_14[1,2] <- paste0("$\\lambda_{1}^{eff}=" , NA, "$")
 knitr::kable(table_14, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
 ```
 </details>
+<details><summary>View Summary Table</summary>
+```{r sum_table20, purl=FALSE, echo=FALSE, eval=TRUE}
 
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$\\lambda_{1} = \\alpha \\lambda^{eff}_{1} + (1 -  \\alpha) \\times 0$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+</details>
 
 ### Different format of policy estimate {#policy-estimate}
 
@@ -1603,6 +1672,27 @@ knitr::kable(table_15, col.names = c("Data", "Research", "Guesswork"), caption =
 ```
 </details>
 
+<details><summary>View Summary Table</summary>
+```{r sum_table21, purl=FALSE, echo=FALSE, eval=TRUE}
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$CEA_{deworming} = \frac{B (1 + F_{0})}{C}$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$RCEA = \frac{CEA_{deworming}}{CEA_{cash}}$
+",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+```
+
+</details>
 # Main results
 
 
