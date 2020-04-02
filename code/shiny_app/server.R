@@ -548,19 +548,106 @@ shinyServer( function(input, output, session) {
               )
             
           } else if (input$policy_est ==  "Fiscal effects, 2016(W@W) B & C, yes ext"){
-            withMathJax(helpText("$$\\pi2$$"))
+            withMathJax(helpText("$$              
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
+                      \\right]
+                            }_{\\text{net labor market gains}} - 
+                      \\underbrace{
+                      \\left[\\sum_{t=0}^{2} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+            \\label{eq:2}
+            \\tag{2}
+            \\end{equation}$$"))
           } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext"){
-            withMathJax(helpText("$$\\pi3$$"))
+            withMathJax(helpText("$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
+                      \\right]
+                            }_{\\text{net labor market gains}} - 
+                      \\underbrace{
+                      \\left[\\sum_{t=0}^{2} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+            \\label{eq:3}
+            \\tag{3}
+            \\end{equation}$$"))
           } else if (input$policy_est ==  "Total effects, 2016(W@W) B & C, yes ext"){
-            withMathJax(helpText("$$\\pi4$$"))
+            withMathJax(helpText("$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
+                      \\right]
+                            }_{\\text{net labor market gains}} - 
+                      \\underbrace{
+                      \\left[\\sum_{t=0}^{2} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+            \\label{eq:4}
+            \\tag{4}
+            \\end{equation}$$"))
           } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
-            withMathJax(helpText("$$\\pi5$$"))
+            withMathJax(helpText("$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t}  \\mathbf{1}(10 < t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 < t \\leq 20)\\alpha^{KLPS3} + \\mathbf{1}(t > 20)\\alpha^{KLPS4}
+                      \\right]
+                            }_{\\text{gains in earnings}} - 
+                      \\underbrace{
+                      \\left[\\sum_{t=0}^{2} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+            \\label{eq:5}
+            \\tag{5}
+            \\end{equation}$$"))
           } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
-            withMathJax(helpText("$$\\pi6$$"))
+            withMathJax(helpText("$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\mathbf{1}(10 < t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 < t \\leq 20)\\alpha^{KLPS3} + \\mathbf{1}(t > 20)\\alpha^{KLPS4}
+                      \\right]
+                            }_{\\text{gains in earnings}} - 
+                      \\underbrace{
+                      \\left[\\sum_{t=0}^{2} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+            \\label{eq:6}
+            \\tag{6}
+            \\end{equation}$$"))
           } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext"){
-            withMathJax(helpText("$$\\pi7$$"))
+            withMathJax(helpText("$$   
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
+                      \\right]
+                            }_{\\text{net labor market gains}} - 
+                      \\underbrace{
+                      \\sum_{i \\in Countries } \\frac{C_{i}}{\\sum_{j}N_{j}} \\
+                      }_{\\text{cost of deworming medication}}
+            \\label{eq:7}
+            \\tag{7}
+            \\end{equation}$$"))
           } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext"){
-            withMathJax(helpText("$$\\pi8$$"))
+            withMathJax(helpText("$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
+                      \\right]
+                            }_{\\text{net labor market gains}} - 
+                      \\underbrace{
+                      \\sum_{i \\in Countries } \\frac{C_{i}}{\\sum_{j}N_{j}} \\
+                      }_{\\text{cost of deworming medication}}
+            \\label{eq:8}
+            \\tag{8}
+            \\end{equation}8$$"))
           } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext"){
             withMathJax(helpText("$$\\pi9$$"))
           }else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext"){
