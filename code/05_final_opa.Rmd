@@ -1218,6 +1218,7 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 The direct deworming costs under approach 2 are calculated similarly to approach 1 (by comparing the costs under a complete subsidy to the status quo), but differ because the direct costs are now discounted over the treatment period.
 
 <details><summary>Equations</summary>
+
 The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.  
 
 New way to compute unit costs of deworming treatment:
@@ -1306,6 +1307,8 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 #### Cost of schooling
 
+Computing the indirect costs on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. However, under approach 2 we assume that the additional burden on educational institutions is imposed for nine years at most.  
+<details><summary>Equation</summary>
 We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
 
 The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school as a result of deworming. Assuming pressure is added to educational institutions for a maximum of nine years, starting at year zero, we have
@@ -1331,6 +1334,7 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
                                           n_students_var = 45)
 
 ```
+</details>
 
 Over this nine year period, students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average.
 

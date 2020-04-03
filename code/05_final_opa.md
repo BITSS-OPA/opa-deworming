@@ -2004,6 +2004,8 @@ Adding all indirect cost, the average cost of deworming each child over the enti
 
 #### Cost of schooling
 
+Computing the indirect costs on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. However, under approach 2 we assume that the additional burden on educational institutions is imposed for nine years at most.  
+<details><summary>Equation</summary>
 We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
 
 The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school as a result of deworming. Assuming pressure is added to educational institutions for a maximum of nine years, starting at year zero, we have
@@ -2015,7 +2017,7 @@ K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 \tag{17}
 \end{equation}
 
-The cost per student ($K$) is updated wtih new information on annual teacher salary (including benefits)[^9], $12055 (also adjusted for PPP), and same number of average number of students per teacher (45).
+The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^9], $12055 (also adjusted for PPP), and same number of average number of students per teacher (45).
 
 Hence, the cost of schooling each child for an additional year is now $267.9 (USD).
 
@@ -2028,6 +2030,7 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
                                           teach_ben_var = 0,
                                           n_students_var = 45)
 ```
+</details>
 
 Over this nine year period, students attended school for an additional 0.15 years on average.
 
