@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "30 March, 2020"
+date: "03 April, 2020"
 output:
   html_document:
     code_folding: hide
@@ -1201,7 +1201,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 #### Increase in deworming costs
 
-Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the government provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
+Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($Q_{2}$) intervention, times the per-capita costs of deworming under the intervention ($S_{2}$). This costs are compared to a scenario where the government provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
 
 \begin{equation}
 DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
@@ -1813,9 +1813,13 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 </tbody>
 </table>
 </details>
+
 ### Costs
 
-The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.
+The direct deworming costs under approach 2 are calculated similarly to approach 1 (by comparing the costs under a complete subsidy to the status quo), but differ because the direct costs are now discounted over the treatment period.
+
+<details><summary>Equations</summary>
+The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.  
 
 New way to compute unit costs of deworming treatment:
 \begin{equation}
@@ -1833,7 +1837,7 @@ DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\bi
 \label{eq:16}
 \tag{16}
 \end{equation}
-
+</details>
 
 With complete subsidy, $S_2$ represents the total direct costs of deworming each child in USD. Most recent (2018) data from Evidence Action reveals this cost to be $0.42$. Adjusting for purchasing power and inflation, we get a per capita cost of $0.83$.
 
@@ -1865,7 +1869,6 @@ q2_in <- q_full_so
 ```
 
 Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $1.40.
-
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 

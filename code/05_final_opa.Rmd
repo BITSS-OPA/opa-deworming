@@ -1212,9 +1212,13 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
 ```
 </details>
+
 ### Costs
 
-The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.
+The direct deworming costs under approach 2 are calculated similarly to approach 1 (by comparing the costs under a complete subsidy to the status quo), but differ because the direct costs are now discounted over the treatment period.
+
+<details><summary>Equations</summary>
+The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.  
 
 New way to compute unit costs of deworming treatment:
 \begin{equation}
@@ -1232,7 +1236,7 @@ DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\bi
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
-
+</details>
 
 With complete subsidy, $S_2$ represents the total direct costs of deworming each child in USD. Most recent (2018) data from Evidence Action reveals this cost to be $`r unit_cost_so`$. Adjusting for purchasing power and inflation, we get a per capita cost of $`r round(unit_cost_2017usdppp_so,2)`$.
 
@@ -1263,7 +1267,6 @@ q2_in <- q_full_so
 ```
 
 Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $`r format(round(s2_in * q2_in,2), nsmall = 2)`.
-
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
@@ -1314,7 +1317,7 @@ K \sum_{t=0}^{`r dim(delta_ed_so)[1]-1`} \left( \frac{1}{1 + r}\right)^{t} \Delt
 \tag{`r equationIndex`}
 \end{equation}
 
-The cost per student ($K$) is updated wtih new information on annual teacher salary (including benefits)[^9], $`r format(round(teach_sal_2017usdppp_so,0), scientific=FALSE)` (also adjusted for PPP), and same number of average number of students per teacher (`r n_students_so`).
+The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^9], $`r format(round(teach_sal_2017usdppp_so,0), scientific=FALSE)` (also adjusted for PPP), and same number of average number of students per teacher (`r n_students_so`).
 
 Hence, the cost of schooling each child for an additional year is now $`r round(teach_sal_2017usdppp_so/n_students_so, 2)` (USD).
 
