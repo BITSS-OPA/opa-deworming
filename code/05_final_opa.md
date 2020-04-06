@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "20 March, 2020"
+date: "06 April, 2020"
 output:
   html_document:
     code_folding: hide
@@ -1458,7 +1458,7 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
 
-With the intervention there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by the treated individuals, who tend to spend more time in school than their untreated counterparts.
+With the intervention there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual, who tends to spend more time in school than an untreated counterpart.
 
 <details><summary>Equations</summary>
 The additional costs on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
