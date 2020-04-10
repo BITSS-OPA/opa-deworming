@@ -1215,7 +1215,7 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 ### Costs
 
-The direct deworming costs under approach 2 are calculated similarly to approach 1 (by comparing the costs under a complete subsidy to the status quo), but differ because the direct costs are now discounted over the treatment period.
+Like approach 1, the direct deworming costs under approach 2 are calculated by comparing the costs under a complete subsidy to the status quo, but the direct costs are now discounted over the treatment period.
 
 <details><summary>Equations</summary>
 

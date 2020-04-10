@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "09 April, 2020"
+date: "10 April, 2020"
 output:
   html_document:
     code_folding: hide
@@ -1638,7 +1638,7 @@ interest_in_new <- interest
 
 ### Gains in earnings ($E_t$)
 
-Gains in earnings from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time.  
+Gains in earnings from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time. Because we assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life, the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
 
 <details><summary>Equation</summary>
 AQUI VOY
