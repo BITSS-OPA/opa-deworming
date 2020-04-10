@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "03 April, 2020"
+date: "09 April, 2020"
 output:
   html_document:
     code_folding: hide
@@ -230,7 +230,7 @@ We first describe the common elements across all three approaches, and then desc
 
 ## Common structure
 
-The starting point is a comparison of a stream of benefits and costs over the lifetime of the recepients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
+The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
 <details><summary>Equations</summary>
 
@@ -1819,6 +1819,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 The direct deworming costs under approach 2 are calculated similarly to approach 1 (by comparing the costs under a complete subsidy to the status quo), but differ because the direct costs are now discounted over the treatment period.
 
 <details><summary>Equations</summary>
+
 The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.  
 
 New way to compute unit costs of deworming treatment:

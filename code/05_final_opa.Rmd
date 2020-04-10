@@ -253,7 +253,7 @@ We first describe the common elements across all three approaches, and then desc
 
 ## Common structure
 
-The starting point is a comparison of a stream of benefits and costs over the lifetime of the recepients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
+The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
 <details><summary>Equations</summary>
 
@@ -1129,7 +1129,7 @@ interest_in_new <- interest
 
 ### Gains in earnings ($E_t$)
 
-Gains in earnings from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time.  
+Gains in earnings from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time. Because we assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life, the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
 
 <details><summary>Equation</summary>
 AQUI VOY
