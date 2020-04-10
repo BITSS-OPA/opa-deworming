@@ -297,7 +297,7 @@ table_1 <- matrix("", nrow = 1, ncol = 3)
 table_2 <- matrix("", nrow = 1, ncol = 2)
 ```
 
-Benefits are equal to the discounted sum of earnings over time period t up to t=50. The benefits are characterized by the real interest rate r.
+Benefits are represented by the discounted sum of gains in earnings over time, characterized by the real interest rate r.
 
 <details><summary>Equations</summary>
 
@@ -429,7 +429,7 @@ effects on hours worked by individuals in the original treatment group, ten year
 
 ###  Gains in earnings  ("$E_t$")  
 
-The indirect effect of deworming is multiplied by the fraction of the population effectively using the treatment, then divided by the fraction of neighboring schools that are in the treatment group. This value is value is combined with the direct deworming effect on earnings, then multiplied by the earnings in period t. This yields the effect on earnings in period t.  
+The indirect effect of deworming is multiplied by the fraction of the population effectively using the treatment, then divided by the fraction of neighboring schools that are in the treatment group. This value is combined with the direct deworming effect on earnings, then multiplied by the earnings in period t. This yields the effect on earnings in period t.  
 
 <details><summary>Equations</summary>
 
