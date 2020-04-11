@@ -429,7 +429,7 @@ effects on hours worked by individuals in the original treatment group, ten year
 
 ###  Gains in earnings  ("$E_t$")  
 
-The indirect effect of deworming is multiplied by the fraction of the population effectively using the treatment, then divided by the fraction of neighboring schools that are in the treatment group. This value is combined with the direct deworming effect on earnings, then multiplied by the earnings in period t. This yields the effect on earnings in period t.  
+Gains in earnings ($E_t$) are the product of earnings in a certain period and the combined direct and indirect effects of deworming on earnings. The indirect effects are considered within the context of the treatment's coverage and saturation.
 
 <details><summary>Equations</summary>
 
