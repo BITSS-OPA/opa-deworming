@@ -297,7 +297,7 @@ table_1 <- matrix("", nrow = 1, ncol = 3)
 table_2 <- matrix("", nrow = 1, ncol = 2)
 ```
 
-Benefits are represented by the discounted sum of gains in earnings over time, characterized by the real interest rate r.
+Benefits are equal to the discounted sum of earnings over time period, t, up to t=50. The benefits are characterized by the real interest rate r.
 
 <details><summary>Equations</summary>
 
