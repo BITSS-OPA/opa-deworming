@@ -255,7 +255,7 @@ We first describe the common elements across all three approaches, and then desc
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
-<details><summary>Equations</summary>
+<details><summary>Show all the details</summary>
 
 \begin{equation}
 NPV = B - C \\
@@ -265,9 +265,6 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
-
-</details>
-
 
 ```{r eq_1, echo=print_code}
 # - inputs: total per capita benefits, total per capita costs, fudging factor
@@ -297,9 +294,14 @@ table_1 <- matrix("", nrow = 1, ncol = 3)
 table_2 <- matrix("", nrow = 1, ncol = 2)
 ```
 
-Benefits are equal to the discounted sum of earnings over time period, t, up to t=50. The benefits are characterized by the real interest rate r.
 
-<details><summary>Equations</summary>
+</details>
+
+Benefits are equal to the addtional earnings that indivudual are expected to generate due to a deworming treatment. These additional earrnings are computed as a discounted sum over their working lifetime.  
+
+
+<details><summary>Show all the details</summary>
+
 
 \begin{equation}
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
@@ -307,7 +309,6 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
-</details>
 
 ```{r benefits, echo=print_code}
 # - inputs: nothing
@@ -329,27 +330,6 @@ chunk_benefits <- function(){
 }
 invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ```
-
-
-<details><summary>Summary of equations and sources</summary>
-
-```{r sum_tables1, purl=FALSE, echo=FALSE}
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$NPV = B - C$",
-                   paste0("$(",sum_table_index,")$" ))
-    )
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$B=\\sum_{t=0}^{50}\\left(\\frac{1}{1+r}\\right)^{t}E_{t}$",
-                   paste0("$(",sum_table_index,")$" ))
-    )
-
-
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
-```
-
 </details>
 
 
@@ -361,9 +341,18 @@ The main differences in costs have to do with whether indirect costs are include
 
 
 
-### "$r$"  
+### The discounting rate  
 
-The real interest rate $r$ is obtained from the interest rate on goverment bonds (`r round(gov_bonds_so, 3)`) minus the inflation rate (`r inflation_so`).
+All approaches use the real interest rate ($r$) as a the discounting rate. This is obtained from the interest rate on goverment bonds ($i$) minus the inflation rate ($\pi$).
+
+<details><summary>Show all the details</summary>
+
+\begin{equation}
+r =   g - \pi
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
 
 ```{r interest-rate, echo=print_code}
 # - inputs: gov_bonds_so, inflation_so
@@ -384,28 +373,40 @@ chunk_interest <- function(){
 }
 
 invisible( list2env(chunk_interest(),.GlobalEnv) )
-interest <- as.numeric( interest_f() )
+interest_16 <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so,
+                                      inflation_var = inflation_so) )
+interest_19 <- as.numeric( interest_f(gov_bonds_var = gov_bonds_new_so,
+                                      inflation_var = inflation_new_so)  )
 ```
 
+</details>
 
-\begin{equation}
-r =   g - \pi
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-
-The resulting value is a $r$ = `r paste(round(100 * interest,2), "%", sep="")`
+The actual value will vary across approaches depending on the time and country chosen. For example approach 1 used the return from government bonds and inflation in Kenya for the year 2016, while approach 3 used the values for the same country but for the year 2019. This resulted in discount rates of `r paste(round(100 * interest_16,2), "%", sep="")` and `r paste(round(100 * interest_19,2), "%", sep="")` respectively. 
 
 <!-- Add fold/unfold for tables -->
 <details><summary>View Summary Table</summary>
 
 ```{r sum_tables2, purl=FALSE, echo=FALSE}
-
-table_1[1,1] <- paste0("$\\pi=" , inflation_so, "$")
+table_1[1,1] <- paste0("$\\pi_{16}=" , inflation_so, "$")
 
 table_1 <- rbind(table_1,
-                 c( paste0("$g=" , gov_bonds_so, "$"),  "", "" )
+                 c( paste0("$i_{16}=" , gov_bonds_so, "$"),  "", "" ),
+                 c( paste0("$\\pi_{19}=" , inflation_new_so, "$"),  "", "" ),
+                 c( paste0("$i_{19}=" , gov_bonds_new_so, "$"),  "", "" ) 
+    )
+
+
+
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$NPV = B - C$",
+                   paste0("$(",sum_table_index,")$" ))
+    )
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$B=\\sum_{t=0}^{50}\\left(\\frac{1}{1+r}\\right)^{t}E_{t}$",
+                   paste0("$(",sum_table_index,")$" ))
     )
 
 sum_table_index <- sum_table_index+1
@@ -414,8 +415,14 @@ table_2 <- rbind(table_2,
                    paste0("$(", sum_table_index, ")$") )
     )
 
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+
+
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document")
+
+# TODO: add space here for the printout
+
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document")
+
 ```
 
 </details>
@@ -423,17 +430,16 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 ## Approach 1: @baird2016worms
 
-In this first approach, the effect on earnings are predicted by extrapolating the
-effects on hours worked by individuals in the original treatment group, ten years after the intervention. Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. As with the original analysis of @baird2016worms, the effects are calculated in two scenarios: with and without externalities.
+In this first approach, the effect on earnings over the entire lifecycle are predicted by extrapolating the effects on hours worked by individuals in the original treatment group, ten years after the intervention. 
 
+Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. The effects are calculated in two scenarios: with and without externalities.
 
-###  Gains in earnings  ("$E_t$")  
+###  Gains in earnings
 
-Gains in earnings ($E_t$) are the product of earnings in a certain period and the combined direct and indirect effects of deworming on earnings. The indirect effects are considered within the context of the treatment's coverage and saturation.
+Gains in earnings ($E_t$) are the result of multiplying expected earnings in a certain period ($w_t$) with the effects of deworming on worked hours. This effect can have two components: a direct effect of deworming on the individual ($\lambda_1$) and the indirect effect on earnings due to externalities ($\lambda_2$). The indirect effects are considered within the context of the treatment's coverage and saturation.
 
-<details><summary>Equations</summary>
+<details><summary>Show all the details</summary>
 
-@baird2016worms compute effect on earnings like this[^6]:
 
 [^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
@@ -444,15 +450,13 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 \tag{`r equationIndex`}
 \end{equation}
 
-Where:   
+Where[^6]:   
 
  - $w_t$: are the earnings in period $t$.   
  - $\lambda_{1}$: is the direct effects of deworming on earnings.  
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
  - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
-
-</details>
 
 ```{r earnings1}
 # - inputs: gov_bonds_so, inflation_so
@@ -477,56 +481,21 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r, results = 'hide'}
-# Data = c(paste0("$w_t=" , NA, "$"),
-#          paste0("$p=" , NA, "$"),  paste0("$R=" , NA, "$") )
-# Research = c(paste0("$\\lambda_1=" , NA, "$"))
-# Guesswork = c(paste0("$\\lambda_2=" , NA, "$"))
-# table_3 = data.frame(Data, Research, Guesswork)
-# # output as a table
-# # stargazer(table_3, summary = FALSE,
-# #           dep.var.labels.include = F, out = "Table2c2.txt",
-# #           ci=TRUE, ci.level=0.95)
-```
-
-```{r sum_tables3, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_3 <- matrix("", nrow = 1, ncol = 3)
-
-table_3[1,1] <- paste0("$E_t=" , NA, "$")
-
-table_3 <- rbind(table_3,
-                 c(paste0("$w_t=" , NA, "$"),
-                 paste0("$p=" , NA, "$"),  paste0("$R=" , NA, "$") ))
-
-table_3[1,2] <- paste0("$\\lambda_1=" , NA, "$")
-
-
-table_3[1,3] <- paste0("$\\lambda_2=" , NA, "$")
-
-
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$E_t = w_{t}\\left( \\lambda_{1} + \\frac{p \\lambda_{2}}{R} \\right)$",
-                   paste0("$(", sum_table_index, ")$") )
-    )
-
-knitr::kable(table_3, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
-```
-
 </details>
 
+#### Earnings over time
+
+Earnings in period t ($w_t$) are determined by multiplying the number of weeks worked up to time t by the weekly starting wage, which is adjusted to account for per capita GDP growth and a concave life cycle path for wages (wages typically increase with more years of work, then decline later in a life cycle). This all operates under the assumption that individuals in the data enter the labor force 10 years after the present day.
+
+Individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0, Xp = 0$ for $t<10$, and $Xp = t - 10$ for $t\geq 10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
+
+The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.  
+
+The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows:
 
 
-#### "$w_{t}$"
+<details><summary>Show all the details</summary>
 
-Earnings in period t are determined by multiplying the number of weeks worked up to time t by the weekly starting wage, which is adjusted to account for per capita GDP growth and a concave life cycle path for wages (wages typically increase with more years of work, then decline later in a life cycle). This all operates under the assumption that individuals in the data enter the labor force 10 years after the present day.
-
-<details><summary>Equations</summary>
 The wages/earnings are determined by:  
 
 \begin{equation}
@@ -535,49 +504,6 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
-
-Individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0, Xp = 0$ for $t<10$, and $Xp = t - 10$ for $t\geq 10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
-</details>
-
-<details><summary>View Summary Table</summary>
-```{r sum_tables4, purl=FALSE, echo=FALSE, eval=TRUE}
-
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$w_t =  \\text{#weeks} \\times w_0 (1 + g)^{Xp}(1 + \\hat{\\beta_1} Xp + \\hat{\\beta_2} Xp^2)$",
-                   paste0("$(", sum_table_index, ")$") )
-    )
-
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
-```
-</details>
-
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables5, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_4 <- matrix("", nrow = 1, ncol = 3)
-
-table_4[1,1] <- paste0("$w_t=" , NA, "$")
-
-table_4 <- rbind(table_4,
-                 c(paste0("$w_0=" , NA, "$")," ",  
-                   paste0("$\\hat{\\beta}_2=" , NA, "$")))
-
-table_4[1,2] <- paste0("$X_p=" , NA, "$")
-
-table_4[1,3] <- paste0("$\\hat{\\beta}_1=" , NA, "$")
-table_4 <- rbind(table_4, c(paste0("$g=" , NA, "$"), "    ",
-                            "    "))
-
-knitr::kable(table_4, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-```
-
-</details>
-
-#### "$w_0$"
 
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
@@ -591,63 +517,12 @@ w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
 \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
 \end{equation}
 
-The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.  
-
-
-The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows:
-
 \begin{equation}
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
-
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages ($E[h_{se}|h_{se}>0]$) is different from the one used to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
-
-<details><summary>View Summary Table</summary>
-```{r sum_tables6, purl=FALSE, echo=FALSE, eval=TRUE}
-
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$w_0 = \\frac{1}{ex} \\sum_{l \\in \\{ag, ww, se\\}}w_{l}\\alpha_{l}
-                     \\quad \\text{with: } \\alpha_{l}= \\frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$",
-                   paste0("$(", sum_table_index, ")$") )
-    )
-
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$w_{se} = \\frac{\\text{Monthly self-employed profits}}{4.5 \\times E[h_{se}|h_{se} \\text{>} 0]}$",
-                   paste0("$(", sum_table_index, ")$") )
-    )
-```
-
-
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables7, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_5 <- matrix("", nrow = 1, ncol = 3)
-
-table_5[1,1] <- paste0("$w_l=" , NA, "$")
-
-table_5 <- rbind(table_5,
-                 c(paste0("$\\alpha_l=" , NA, "$"),
-                   paste0("$w_{se}=" , NA, "$"),  
-                   paste0("$h_l=" , NA, "$")))
-
-table_5[1,2] <- paste0("$h_{ag}=" , NA, "$")
-
-table_5[1,3] <- paste0("$h_{ww}=" , NA, "$")
-table_5 <- rbind(table_5, c(paste0("$h_{se}=" , NA, "$"),
-                            "   ",
-                            "    "))
-
-knitr::kable(table_5, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-```
-
-</details>
 
 
 ```{r wage_t}
@@ -710,6 +585,12 @@ chunk_wages <- function(){
 invisible( list2env(chunk_wages(),.GlobalEnv) )
 ```
 
+</details>
+
+Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages ($E[h_{se}|h_{se}>0]$) is different from the one used to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
+
+
+
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
 $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men and women. This two parameters are combined with a simple mean:
@@ -723,19 +604,7 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:`r equationIndex`} come from @baird2016worms.
 
-<details><summary>View Summary Table</summary>
-```{r sum_tables8, purl=FALSE, echo=FALSE, eval=TRUE}
 
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$\\lambda_{1} = \\frac{1}{2} \\lambda_{1,male} + \\frac{1}{2} \\lambda_{1,female}$",
-                   paste0("$(", sum_table_index, ")$") )
-    )
-
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
-```
-</details>
 
 ```{r lambdas}
 # - inputs:
@@ -772,28 +641,6 @@ lambda1_r_in <- lambda_r_f()
 lambda2_in <- lambda2_in_f()
 ```
 
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables9, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_6 <- matrix("", nrow = 1, ncol = 3)
-
-table_6[1,1] <- "    "
-
-table_6[1,3] <- paste0("$\\lambda_1=" , NA, "$")
-table_6 <- rbind(table_6, c("    ",
-                            "    ",
-                            paste0("$\\lambda_{1, male}=", NA, "$")))
-
-table_6 <- rbind(table_6, c("    ",
-                            "    ",
-                            paste0("$\\lambda_{1, female}=", NA, "$")))
-
-knitr::kable(table_6, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-```
-</details>
-
 #### $R$ and $p$
 
 
@@ -809,20 +656,6 @@ p = R \times Q(full)  + (1 - R) \times Q(0)
 \end{equation}
 
 For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assigned the value of `r q_zero_so`. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = `r q_full_so`$.
-
-<details><summary>View Summary Table</summary>
-```{r sum_tables10, purl=FALSE, echo=FALSE, eval=TRUE}
-
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$p = R \\times Q(full)  + (1 - R) \\times Q(0)$",
-                   paste0("$(", sum_table_index, ")$") )
-    )
-
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
-```
-</details>
 
 ```{r coverage-and-saturation}
 # - inputs: coverage_so, q_full_so, q_zero_so
@@ -847,24 +680,81 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ```
 
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
 
-```{r sum_tables11, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_7 <- matrix("", nrow = 1, ncol = 3)
+<details><summary>View Summary Table</summary>
 
-table_7[1,1] <- paste0("$p=" , NA, "$")
 
-table_7[1,2] <- paste0("$Q(full)=" , 0.75, "$")
-table_7 <- rbind(table_7, c(paste0("$R=" , 0.68, "$"),
-                            paste0("$Q(0)=" , 0, "$"),
-                            "    "))
+```{r sum_tables3, purl=FALSE, echo=FALSE, eval=TRUE}
 
-knitr::kable(table_7, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
+table_1[1,2] <- paste0("$p=" , NA, "$")
+table_1[2,2] <- paste0("$R=" , NA, "$")
+table_1[3,2] <- paste0("$\\lambda_1=" , NA, "$")
+table_1[4,2] <- paste0("$\\lambda_2=" , NA, "$")
+
+table_1 <-rbind(table_1, 
+                c( "", paste0("$\\hat{\\beta}_1=" , NA, "$"), ""), 
+                c( "", paste0("$\\hat{\\beta}_2=" , NA, "$"), "") )
+
+table_1[5,1] <- paste0("$w_l=" , NA, "$") 
+table_1[6,1] <- paste0("$w_{ww}=" , NA, "$") 
+
+table_1 <-rbind(table_1,
+                c( paste0("$w_{se}=" , NA, "$"), "", ""), 
+                c( paste0("$h_l=" , NA, "$"), "", ""), 
+                c( paste0("$h_{ag}=" , NA, "$"), "", ""), 
+                c( paste0("$h_{ww}=" , NA, "$"), "", ""), 
+                c( paste0("$h_{se}=" , NA, "$"), "", ""),  
+                c( paste0("$Q(full)=" , 0.75, "$"), "", ""), 
+                c( paste0("$Q(0)=" , 0, "$"), "", "")
+                ) 
+
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$E_t = w_{t}\\left( \\lambda_{1} + \\frac{p \\lambda_{2}}{R} \\right)$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$w_t =  \\text{#weeks} \\times w_0 (1 + g)^{Xp}(1 + \\hat{\\beta_1} Xp + \\hat{\\beta_2} Xp^2)$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$w_0 = \\frac{1}{ex} \\sum_{l \\in \\{ag, ww, se\\}}w_{l}\\alpha_{l}
+                     \\quad \\text{with: } \\alpha_{l}= \\frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$w_{se} = \\frac{\\text{Monthly self-employed profits}}{4.5 \\times E[h_{se}|h_{se} \\text{>} 0]}$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+sum_table_index <- sum_table_index+1
+
+table_2 <- rbind(table_2,
+                 c("$\\lambda_{1} = \\frac{1}{2} \\lambda_{1,male} + \\frac{1}{2} \\lambda_{1,female}$",
+                   paste0("$(", sum_table_index, ")$") ) )
+
+
+sum_table_index <- sum_table_index+1
+table_2 <- rbind(table_2,
+                 c("$p = R \\times Q(full)  + (1 - R) \\times Q(0)$",
+                   paste0("$(", sum_table_index, ")$") )
+    )
+
+
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary of equations")
+knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs")
 ```
-</details>
 
+
+</details>
 
 ### Costs
 
@@ -1124,7 +1014,7 @@ The interest rate here is updated to current values of return on (Kenyan) goverm
 
 ```{r new-interest}
 #interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
-interest_in_new <- interest
+interest_in_new <- interest_19
 ```
 
 ### Gains in earnings ($E_t$)

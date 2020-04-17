@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "10 April, 2020"
+date: "17 April, 2020"
 output:
   html_document:
     code_folding: hide
@@ -232,7 +232,7 @@ We first describe the common elements across all three approaches, and then desc
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
-<details><summary>Equations</summary>
+<details><summary>Show all the details</summary>
 
 \begin{equation}
 NPV = B - C \\
@@ -242,9 +242,6 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 \label{eq:1}
 \tag{1}
 \end{equation}
-
-</details>
-
 
 
 ```r
@@ -275,9 +272,14 @@ table_1 <- matrix("", nrow = 1, ncol = 3)
 table_2 <- matrix("", nrow = 1, ncol = 2)
 ```
 
-Benefits are equal to the discounted sum of earnings over time period t up to t=50. The benefits are characterized by the real interest rate r.
 
-<details><summary>Equations</summary>
+</details>
+
+Benefits are equal to the addtional earnings that indivudual are expected to generate due to a deworming treatment. These additional earrnings are computed as a discounted sum over their working lifetime.  
+
+
+<details><summary>Show all the details</summary>
+
 
 \begin{equation}
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
@@ -285,7 +287,6 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \label{eq:2}
 \tag{2}
 \end{equation}
-</details>
 
 
 ```r
@@ -308,52 +309,6 @@ chunk_benefits <- function(){
 }
 invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ```
-
-
-<details><summary>Summary of equations and sources</summary>
-
-<table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-</tbody>
-</table>
-
 </details>
 
 
@@ -365,9 +320,18 @@ The main differences in costs have to do with whether indirect costs are include
 
 
 
-### "$r$"  
+### The discounting rate  
 
-The real interest rate $r$ is obtained from the interest rate on goverment bonds (0.118) minus the inflation rate (0.02).
+All approaches use the real interest rate ($r$) as a the discounting rate. This is obtained from the interest rate on goverment bonds ($i$) minus the inflation rate ($\pi$).
+
+<details><summary>Show all the details</summary>
+
+\begin{equation}
+r =   g - \pi
+
+\label{eq:3}
+\tag{3}
+\end{equation}
 
 
 ```r
@@ -389,47 +353,21 @@ chunk_interest <- function(){
 }
 
 invisible( list2env(chunk_interest(),.GlobalEnv) )
-interest <- as.numeric( interest_f() )
+interest_16 <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so,
+                                      inflation_var = inflation_so) )
+interest_19 <- as.numeric( interest_f(gov_bonds_var = gov_bonds_new_so,
+                                      inflation_var = inflation_new_so)  )
 ```
 
+</details>
 
-\begin{equation}
-r =   g - \pi
-
-\label{eq:3}
-\tag{3}
-\end{equation}
-
-The resulting value is a $r$ = 9.85%
+The actual value will vary across approaches depending on the time and country chosen. For example approach 1 used the return from government bonds and inflation in Kenya for the year 2016, while approach 3 used the values for the same country but for the year 2019. This resulted in discount rates of 9.85% and 5% respectively. 
 
 <!-- Add fold/unfold for tables -->
 <details><summary>View Summary Table</summary>
 
 <table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-<table>
-<caption>Model: summary of equations</caption>
+<caption>Summary of equations use until this point in the document</caption>
  <thead>
   <tr>
    <th style="text-align:left;"> Equation </th>
@@ -456,22 +394,54 @@ The resulting value is a $r$ = 9.85%
 </tbody>
 </table>
 
+<table>
+<caption>Sources: summary of inputs specified until this point in the document</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Data </th>
+   <th style="text-align:left;"> Research </th>
+   <th style="text-align:left;"> Guesswork </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+
 </details>
 
 
 ## Approach 1: @baird2016worms
 
-In this first approach, the effect on earnings are predicted by extrapolating the
-effects on hours worked by individuals in the original treatment group, ten years after the intervention. Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. As with the original analysis of @baird2016worms, the effects are calculated in two scenarios: with and without externalities.
+In this first approach, the effect on earnings over the entire lifecycle are predicted by extrapolating the effects on hours worked by individuals in the original treatment group, ten years after the intervention. 
 
+Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. The effects are calculated in two scenarios: with and without externalities.
 
-###  Gains in earnings  ("$E_t$")  
+###  Gains in earnings
 
-The indirect effect of deworming is multiplied by the fraction of the population effectively using the treatment, then divided by the fraction of neighboring schools that are in the treatment group. This value is value is combined with the direct deworming effect on earnings, then multiplied by the earnings in period t. This yields the effect on earnings in period t.  
+Gains in earnings ($E_t$) are the result of multiplying expected earnings in a certain period ($w_t$) with the effects of deworming on worked hours. This effect can have two components: a direct effect of deworming on the individual ($\lambda_1$) and the indirect effect on earnings due to externalities ($\lambda_2$). The indirect effects are considered within the context of the treatment's coverage and saturation.
 
-<details><summary>Equations</summary>
+<details><summary>Show all the details</summary>
 
-@baird2016worms compute effect on earnings like this[^6]:
 
 [^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
@@ -482,15 +452,13 @@ E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 \tag{4}
 \end{equation}
 
-Where:   
+Where[^6]:   
 
  - $w_t$: are the earnings in period $t$.   
  - $\lambda_{1}$: is the direct effects of deworming on earnings.  
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
  - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
-
-</details>
 
 
 ```r
@@ -516,86 +484,21 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-
-```r
-# Data = c(paste0("$w_t=" , NA, "$"),
-#          paste0("$p=" , NA, "$"),  paste0("$R=" , NA, "$") )
-# Research = c(paste0("$\\lambda_1=" , NA, "$"))
-# Guesswork = c(paste0("$\\lambda_2=" , NA, "$"))
-# table_3 = data.frame(Data, Research, Guesswork)
-# # output as a table
-# # stargazer(table_3, summary = FALSE,
-# #           dep.var.labels.include = F, out = "Table2c2.txt",
-# #           ci=TRUE, ci.level=0.95)
-```
-
-<table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $E_t=NA$ </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
-   <td style="text-align:left;"> $\lambda_2=NA$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t=NA$ </td>
-   <td style="text-align:left;"> $p=NA$ </td>
-   <td style="text-align:left;"> $R=NA$ </td>
-  </tr>
-</tbody>
-</table>
-
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-</tbody>
-</table>
-
 </details>
 
+#### Earnings over time
+
+Earnings in period t ($w_t$) are determined by multiplying the number of weeks worked up to time t by the weekly starting wage, which is adjusted to account for per capita GDP growth and a concave life cycle path for wages (wages typically increase with more years of work, then decline later in a life cycle). This all operates under the assumption that individuals in the data enter the labor force 10 years after the present day.
+
+Individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0, Xp = 0$ for $t<10$, and $Xp = t - 10$ for $t\geq 10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
+
+The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.  
+
+The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows:
 
 
-#### "$w_{t}$"
+<details><summary>Show all the details</summary>
 
-Earnings in period t are determined by multiplying the number of weeks worked up to time t by the weekly starting wage, which is adjusted to account for per capita GDP growth and a concave life cycle path for wages (wages typically increase with more years of work, then decline later in a life cycle). This all operates under the assumption that individuals in the data enter the labor force 10 years after the present day.
-
-<details><summary>Equations</summary>
 The wages/earnings are determined by:  
 
 \begin{equation}
@@ -604,105 +507,6 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 \label{eq:5}
 \tag{5}
 \end{equation}
-
-Individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0, Xp = 0$ for $t<10$, and $Xp = t - 10$ for $t\geq 10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
-</details>
-
-<details><summary>View Summary Table</summary>
-<table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-</tbody>
-</table>
-</details>
-
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-<table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $w_t=NA$ </td>
-   <td style="text-align:left;"> $X_p=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-</details>
-
-#### "$w_0$"
 
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
@@ -716,56 +520,12 @@ w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
 \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
 \end{equation}
 
-The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.  
-
-
-The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows:
-
 \begin{equation}
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
 
 \label{eq:7}
 \tag{7}
 \end{equation}
-
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages ($E[h_{se}|h_{se}>0]$) is different from the one used to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
-
-<details><summary>View Summary Table</summary>
-
-
-
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-<table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $w_l=NA$ </td>
-   <td style="text-align:left;"> $h_{ag}=NA$ </td>
-   <td style="text-align:left;"> $h_{ww}=NA$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\alpha_l=NA$ </td>
-   <td style="text-align:left;"> $w_{se}=NA$ </td>
-   <td style="text-align:left;"> $h_l=NA$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-</details>
 
 
 
@@ -829,6 +589,12 @@ chunk_wages <- function(){
 invisible( list2env(chunk_wages(),.GlobalEnv) )
 ```
 
+</details>
+
+Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages ($E[h_{se}|h_{se}>0]$) is different from the one used to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
+
+
+
 #### "$\lambda_{1}$"  and  "$\lambda_{2}$"
 
 $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men and women. This two parameters are combined with a simple mean:
@@ -842,79 +608,7 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 
 $\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:8} come from @baird2016worms.
 
-<details><summary>View Summary Table</summary>
-<table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
 
-<table>
-<caption>Model: summary of equations</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=g-\pi$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-</tbody>
-</table>
-</details>
 
 
 ```r
@@ -952,38 +646,6 @@ lambda1_r_in <- lambda_r_f()
 lambda2_in <- lambda2_in_f()
 ```
 
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-<table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\lambda_{1, male}=NA$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\lambda_{1, female}=NA$ </td>
-  </tr>
-</tbody>
-</table>
-</details>
-
 #### $R$ and $p$
 
 
@@ -1000,29 +662,33 @@ p = R \times Q(full)  + (1 - R) \times Q(0)
 
 For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy, hence $Q(0)$ is assigned the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy is $Q(full) = 0.75$.
 
+
+```r
+# - inputs: coverage_so, q_full_so, q_zero_so
+# - outputs: saturation_in
+chunk_coverage <- function(){
+###############################################################################
+###############################################################################  
+
+    saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so,
+                                q_zero_var = q_zero_so){
+        saturation_in <- coverage_so * q_full_so + ( 1 - coverage_so ) * q_zero_so
+        return(list("saturation_in" = saturation_in))
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("saturation_in_f" = saturation_in_f))    # Try to return only functions
+}
+invisible( list2env(chunk_coverage(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+```
+
+
+
 <details><summary>View Summary Table</summary>
-<table>
-<caption>Sources: summary of inputs</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
+
 
 <table>
 <caption>Model: summary of equations</caption>
@@ -1076,33 +742,6 @@ For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row
   </tr>
 </tbody>
 </table>
-</details>
-
-
-```r
-# - inputs: coverage_so, q_full_so, q_zero_so
-# - outputs: saturation_in
-chunk_coverage <- function(){
-###############################################################################
-###############################################################################  
-
-    saturation_in_f <- function(coverage_var = coverage_so, q_full_var = q_full_so,
-                                q_zero_var = q_zero_so){
-        saturation_in <- coverage_so * q_full_so + ( 1 - coverage_so ) * q_zero_so
-        return(list("saturation_in" = saturation_in))
-    }
-
-###############################################################################
-###############################################################################  
-    return(list("saturation_in_f" = saturation_in_f))    # Try to return only functions
-}
-invisible( list2env(chunk_coverage(),.GlobalEnv) )
-
-##### Execute values of the functions above when needed for the text:
-```
-
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
 
 <table>
 <caption>Sources: summary of inputs</caption>
@@ -1115,19 +754,75 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
  </thead>
 <tbody>
   <tr>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
    <td style="text-align:left;"> $p=NA$ </td>
-   <td style="text-align:left;"> $Q(full)=0.75$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $R=0.68$ </td>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
    <td style="text-align:left;"> $Q(0)=0$ </td>
+   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
 </tbody>
 </table>
-</details>
 
+
+</details>
 
 ### Costs
 
@@ -1222,12 +917,67 @@ DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -1321,12 +1071,67 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -1540,12 +1345,67 @@ Including externalities, they obtain total NPV of benefits of 766.81, with 102.9
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -1633,7 +1493,7 @@ The interest rate here is updated to current values of return on (Kenyan) goverm
 
 ```r
 #interest_in_new <- as.numeric(interest_f(gov_bonds_var = 0.09, inflation_var = 0.04))
-interest_in_new <- interest
+interest_in_new <- interest_19
 ```
 
 ### Gains in earnings ($E_t$)
@@ -1728,12 +1588,67 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -1816,7 +1731,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 
 ### Costs
 
-The direct deworming costs under approach 2 are calculated similarly to approach 1 (by comparing the costs under a complete subsidy to the status quo), but differ because the direct costs are now discounted over the treatment period.
+Like approach 1, the direct deworming costs under approach 2 are calculated by comparing the costs under a complete subsidy to the status quo, but the direct costs are now discounted over the treatment period.
 
 <details><summary>Equations</summary>
 
@@ -1869,7 +1784,7 @@ s2_new <- s2_in
 q2_in <- q_full_so
 ```
 
-Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $1.40.
+Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $1.44.
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
@@ -1908,12 +1823,67 @@ Adding all indirect cost, the average cost of deworming each child over the enti
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -2035,7 +2005,7 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
 
 Over this nine year period, students attended school for an additional 0.15 years on average.
 
-**Then we get an average cost of additional schooling per child over the nine-year period, $26.97.**
+**Then we get an average cost of additional schooling per child over the nine-year period, $32.40.**
 
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
@@ -2077,12 +2047,67 @@ Over this nine year period, students attended school for an additional 0.15 year
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -2376,12 +2401,67 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -2557,12 +2637,67 @@ In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.7
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -2730,12 +2865,67 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> $\pi=0.02$ </td>
+   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
+   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
+   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
+   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
+   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_l=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=NA$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=NA$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $g=0.1185$ </td>
+   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
