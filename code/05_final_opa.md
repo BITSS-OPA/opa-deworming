@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "02 April, 2020"
+date: "10 April, 2020"
 output:
   html_document:
     code_folding: hide
@@ -230,7 +230,7 @@ We first describe the common elements across all three approaches, and then desc
 
 ## Common structure
 
-The starting point is a comparison of a stream of benefits and costs over the lifetime of the recepients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
+The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
 <details><summary>Equations</summary>
 
@@ -1131,7 +1131,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ### Costs
 
-The costs are a combinantion of direct costs on mass deworming (relative to the status quo), and indirect costs on the education system due to the additional time treated individuals spend in school.
+The costs are a combination of direct costs on mass deworming (relative to the status quo, which is no subsidy for deworming) and indirect costs on the education system due to the additional time treated individuals spend in school.
 
 \begin{equation}
 C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)
@@ -1201,7 +1201,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 #### Increase in deworming costs
 
-Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($S_{2}$) intervention, times the per-capita costs of deworming under the intervention ($Q(S_{2})$). This costs are compared to a scenario where the govemerment provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
+Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($Q_{2}$) intervention, times the per-capita costs of deworming under the intervention ($S_{2}$). This costs are compared to a scenario where the government provides no additional resource for deworming ($S_{1}Q(S_{1})$).  
 
 \begin{equation}
 DC = S_{2}Q(S_{2}) - S_{1}Q(S_{1})
@@ -1458,7 +1458,10 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 
 #### $K$ and $\Delta \overline{E}_{t}(S1,S2)$
 
-The additional cost on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
+With the intervention there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual, who tends to spend more time in school than an untreated counterpart.
+
+<details><summary>Equations</summary>
+The additional costs on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
 
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
@@ -1512,7 +1515,7 @@ delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 Without externalities, they obtain total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
 
 Including externalities, they obtain total NPV of benefits of 766.81, with 102.97 in tax revenue for government (table 5, column 3, and rows 12, 13 respectively).
-
+</details>
 
 
 ```r
@@ -1623,7 +1626,7 @@ Including externalities, they obtain total NPV of benefits of 766.81, with 102.9
 
 ## Approach 2: @klps4
 
-In this second approach, benefits follow the same principle as in approach 1 (increased in lifetime earninings), but now there is more data on the actual effects on the labor market outcomes. Instead of proyecting a trend of earnings into the future, this analysis use the data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  
+In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but now there is more data on the actual effects on the labor market outcomes. Instead of projecting a trend of earnings into the future, this analysis uses the data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  
 
 The interest rate here is updated to current values of return on (Kenyan) goverment bonds and inflation.
 
@@ -1635,6 +1638,9 @@ interest_in_new <- interest
 
 ### Gains in earnings ($E_t$)
 
+Gains in earnings from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time. Because we assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life, the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
+
+<details><summary>Equation</summary>
 AQUI VOY
 
 $E_t$ represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
@@ -1657,7 +1663,7 @@ E_t = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alph
 This expression assumes that there are no additional earnings gains for the treatment group for the first 10 years post-intervention. This model also disregards externality effects.
 
 Using earnings gains to measure welfare, we substitute each $\alpha$ term with the average treatment effect on earnings in each round of data collection: 87, 83, 85 dollars per person per year.
-
+</details>
 
 
 ```r
@@ -1807,9 +1813,14 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 </tbody>
 </table>
 </details>
+
 ### Costs
 
-The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.
+The direct deworming costs under approach 2 are calculated similarly to approach 1 (by comparing the costs under a complete subsidy to the status quo), but differ because the direct costs are now discounted over the treatment period.
+
+<details><summary>Equations</summary>
+
+The costs have a  similar structure as @baird2016worms. Two differences: unit costs are estimated more accurately now, and the specific prices have been updated.  
 
 New way to compute unit costs of deworming treatment:
 \begin{equation}
@@ -1827,7 +1838,7 @@ DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\bi
 \label{eq:16}
 \tag{16}
 \end{equation}
-
+</details>
 
 With complete subsidy, $S_2$ represents the total direct costs of deworming each child in USD. Most recent (2018) data from Evidence Action reveals this cost to be $0.42$. Adjusting for purchasing power and inflation, we get a per capita cost of $0.83$.
 
@@ -1859,7 +1870,6 @@ q2_in <- q_full_so
 ```
 
 Adding all indirect cost, the average cost of deworming each child over the entire treatment period is $1.40.
-
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
@@ -1995,6 +2005,8 @@ Adding all indirect cost, the average cost of deworming each child over the enti
 
 #### Cost of schooling
 
+Computing the indirect costs on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. However, under approach 2 we assume that the additional burden on educational institutions is imposed for nine years at most.  
+<details><summary>Equation</summary>
 We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
 
 The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school as a result of deworming. Assuming pressure is added to educational institutions for a maximum of nine years, starting at year zero, we have
@@ -2006,7 +2018,7 @@ K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 \tag{17}
 \end{equation}
 
-The cost per student ($K$) is updated wtih new information on annual teacher salary (including benefits)[^9], $12055 (also adjusted for PPP), and same number of average number of students per teacher (45).
+The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^9], $12055 (also adjusted for PPP), and same number of average number of students per teacher (45).
 
 Hence, the cost of schooling each child for an additional year is now $267.9 (USD).
 
@@ -2019,6 +2031,7 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
                                           teach_ben_var = 0,
                                           n_students_var = 45)
 ```
+</details>
 
 Over this nine year period, students attended school for an additional 0.15 years on average.
 
