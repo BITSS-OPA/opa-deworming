@@ -1279,6 +1279,9 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 ### Costs ("$C$")
 
+For each country where Evidence Action provides technical assistance, GiveWell estimates the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. GiveWell's estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
+
+<details><summary>Equation</summary>
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
 `r equationIndex <- equationIndex + 1`
@@ -1294,7 +1297,7 @@ The final cost is a weighted average of the unit cost across countries.
 
 - $\omega_{i}$: Weight for the weighted average.  
 - $c_{i}$: Total cost per child, per year in country $i$.  
-
+</details>
 ```{r eq_2, echo=print_code}
 # - inputs: nothing
 # - outputs: function that computs the weighted sum of country costs
