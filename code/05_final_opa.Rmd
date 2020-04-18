@@ -297,7 +297,7 @@ table_2 <- matrix("", nrow = 1, ncol = 2)
 
 </details>
 
-Benefits are equal to the addtional earnings that indivudual are expected to generate due to a deworming treatment. These additional earrnings are computed as a discounted sum over their working lifetime.  
+Benefits are equal to the additional earnings that indivudual are expected to generate due to a deworming treatment. These additional earrnings are computed as a discounted sum over their working lifetime.  
 
 
 <details><summary>Show all the details</summary>
@@ -343,7 +343,7 @@ The main differences in costs have to do with whether indirect costs are include
 
 ### The discounting rate  
 
-All approaches use the real interest rate ($r$) as a the discounting rate. This is obtained from the interest rate on goverment bonds ($i$) minus the inflation rate ($\pi$).
+All approaches use the real interest rate ($r$) as the discounting rate. This is obtained from the interest rate on goverment bonds ($i$) minus the inflation rate ($\pi$).
 
 <details><summary>Show all the details</summary>
 
@@ -1211,7 +1211,8 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 #### Cost of schooling
 
-Computing the indirect costs on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. However, under approach 2 we assume that the additional burden on educational institutions is imposed for nine years at most.  
+The indirect cost on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. However, under approach 2 the additional cost of education is discounted because we assume that the additional burden on educational institutions is imposed for nine years at most. 
+
 <details><summary>Equation</summary>
 We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
 
@@ -1292,6 +1293,9 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Model: summary 
 
 ### Costs ("$C$")
 
+For each country where Evidence Action provides technical assistance, GiveWell estimates the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. GiveWell's estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
+
+<details><summary>Equation</summary>
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
 `r equationIndex <- equationIndex + 1`
@@ -1307,7 +1311,7 @@ The final cost is a weighted average of the unit cost across countries.
 
 - $\omega_{i}$: Weight for the weighted average.  
 - $c_{i}$: Total cost per child, per year in country $i$.  
-
+</details>
 ```{r eq_2, echo=print_code}
 # - inputs: nothing
 # - outputs: function that computs the weighted sum of country costs
