@@ -810,21 +810,6 @@ chunk_cost2 <- function(){
                 delta_ed_s * cost_of_schooling_var) +
         (s2_var * q2_var  - s1_var * q1_var)
     }
-    
-npv_rcc <- function(initial_costs_var, discount_var) {
-  sapply(
-    discount_var, function(x) sum(
-    c( rep(-initial_costs_var, 100), rep(23, 600) ) * 
-      ( 1 / (1 + x)^ (0:699) ) 
-    )
-  )
-}
-
-rates <- seq(0.01, 0.1, length.out = 100)
-plot(cbind(rates, npv_rcc(1, rates)), type = "l", ylim = c(-100,100))
-abline(h=0, col = 'red')    
-lines(cbind(rates, npv_rcc(0.1, rates)), lty = 2)
-lines(cbind(rates, npv_rcc(3, rates)), lty = 3)
 ###############################################################################
 ###############################################################################  
     return(list("cost2_f" = cost2_f))    # Try to return only functions
