@@ -2444,7 +2444,7 @@ for ( i in policy_estimates ) {
 ################
 ###### Results/Viz
 ################
-
+library(plotly)
 nsims <- nsims_so
 
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
@@ -2475,8 +2475,7 @@ rescale <- rescale_so
                           )
         )
     }
-
-print(plot1)
+ggplotly(plot1)
 #knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 ```
 
