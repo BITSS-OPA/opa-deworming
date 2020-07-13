@@ -227,7 +227,13 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-![](main_pe.png) 
+
+
+```{r out.width = '70%', fig.align='center'}
+# url
+knitr::include_graphics("/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png") 
+```
+
 
 # Introduction  
 
