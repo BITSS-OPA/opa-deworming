@@ -27,7 +27,9 @@ link-citations: true
 
 ```{r setup, include=FALSE, purl=TRUE}
 # Loading required libraries
-list.of.packages <- c("tidyverse", "haven", "here", "kableExtra", "readxl","plotly")
+list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly")
+
+# sapply(list.of.packages, function(x) pacman::p_load(get(x)))
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos= "http://cran.cnr.berkeley.edu/")
@@ -50,6 +52,8 @@ colorize = function(x, color){
     sprintf("<font color='%s'>%s</font>", color, x)
   } else x
 }
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 ```
 
 
@@ -223,6 +227,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
+![](main_pe.png) 
 
 # Introduction  
 
@@ -2482,8 +2487,7 @@ rescale <- rescale_so
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
            x = "NPV" ,
-           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
-           ),
+           title = "Distribution of Economic of Effects From Deworming (NPV)",
            subtitle = paste0("N = ", nsims, " simulations. Takes ",
                              round(total_time, 1)," ",attributes(total_time)$unit )  )+
       annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 4)+
