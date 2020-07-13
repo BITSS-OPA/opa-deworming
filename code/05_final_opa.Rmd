@@ -2502,11 +2502,12 @@ rescale <- rescale_so
         )
     }
 ggplotly(plot1)
-dens <- density(npv_sim)
-fig <- plot_ly(x=~dens$x, y = ~dens$y, type='scatter', mode='lines', fill='tozeroy')
-fig <- fig %>% 
-  layout(xaxis=list(title='NPV'), yaxis=list(title='Distribution Density'), title=paste0("Distribution of NPV of ", policy_estimates_text[position]))
-fig
+
+# dens <- density(npv_sim)
+# fig <- plot_ly(x=~dens$x, y = ~dens$y, type='scatter', mode='lines', fill='tozeroy')
+# fig <- fig %>% 
+#   layout(xaxis=list(title='NPV'), yaxis=list(title='Distribution Density'), title=paste0("Distribution of NPV of ", policy_estimates_text[position]))
+# fig
 #knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 ```
 

@@ -42,6 +42,7 @@ vignettes/*.pdf
 /code/*
 !/code/*.Rmd
 !/code/*.R
+!/code/*.png
 !/code/*.md
 !/code/shiny_app*
 .Rproj.user
