@@ -464,16 +464,14 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 In this first approach, the effect on earnings over the entire lifecycle are predicted by extrapolating the effects on hours worked by individuals in the original treatment group, ten years after the intervention. 
 
-Two type of results are presented: the total effect on earnings projected over a lifetime, and the estimated additional fiscal effect due to the goverment collecting taxes on higher earnings. The effects are calculated in two scenarios: with and without externalities.
+Two types of results are presented: the total effect on earnings projected over a lifetime and the estimated fiscal effect due to the government collecting additional taxes on higher earnings. The effects are calculated in two scenarios: with and without externalities over the population of children who did not receive deworming interventions.
+
 
 ###  Gains in earnings
 
 Gains in earnings ($E_t$) are the result of multiplying expected earnings in a certain period ($w_t$) with the effects of deworming on worked hours. This effect can have two components: a direct effect of deworming on the individual ($\lambda_1$) and the indirect effect on earnings due to externalities ($\lambda_2$). The indirect effects are considered within the context of the treatment's coverage and saturation.
 
 <details><summary>Show all the details</summary>
-
-
-[^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
 \begin{equation}
 E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
@@ -489,6 +487,8 @@ Where[^6]:
  - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
  - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
+
+[^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
 ```{r earnings1}
 # - inputs: gov_bonds_so, inflation_so
@@ -514,6 +514,7 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
 </details>
+<br>
 
 #### Earnings over time
 
