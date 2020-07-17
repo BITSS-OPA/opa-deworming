@@ -2,8 +2,8 @@
 pdf_document:
   extra_dependencies: ["xcolor"]
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output:
-  html_document:
+output: 
+  bookdown::html_document2:
     code_folding: hide
     code_download: true
     collapsed: yes
@@ -13,8 +13,6 @@ output:
     toc: yes
     toc_depth: 3
     toc_float: yes
-  pdf_document: default
-  word_document: default
 editor_options:
   chunk_output_type: console
 title: "A Unifying Open Policy Analysis for Deworming"
@@ -23,6 +21,8 @@ link-citations: true
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
+
+
 
 
 ```{r setup, include=FALSE, purl=TRUE}
@@ -58,19 +58,20 @@ knitr::opts_chunk$set(warning = FALSE)
 
 
 
-```{r notes, purl=FALSE}
+```{r notes, purl=FALSE} 
 ################
 #####  Notes:
 ################
-### Source ---------->  Input ---------->  Model ---------->  Policy Estimates (output)
-###  (_so)              (_in)              (_mo)                (_pe)
-### values            functions          functions              values
-###                   & values           & values             
-# - call_sources_f- tax_elasticity_in_f  - tax_revenue_mo_f     - ten_year_revenue_pe
-# - policy_f      - est_billionares_in_f - total_rev_mo_f       - ten_year_top_tax_pe
-#                                        - ten_years_mo_f       - total_rev_pe
+# Types of objects:
+### Source ------->  Input ------->  Model ------->  Policy Estimates (output)
+###  (_so)           (_in)           (_mo)           (_pe)
+### values           functions       functions       values
+###                  & values        & values             
+# Examples:                   
+# - call_sou_f     - tax_elas_in_f   - tax_rev_mo_f  - ten_year_revenue_pe
+# - policy_f       - est_bill_in_f   - tot_rev_mo_f  - ten_year_top_tax_pe
+#                                    - ten_yrs_mo_f  - total_rev_pe
 ### arguments in functions should used "_var" and functions should "_f"
-
 
 # DESCRIBE CHUNK STRUCTURE
 # - inputs: list
@@ -84,8 +85,8 @@ knitr::opts_chunk$set(warning = FALSE)
 #
 ##########################################
 ##########################################  
-#    return( )                                  # A list with all (most?) the elements
-#}                                              # generated inside the function
+#    return( )                         # A list with all (most?) the elements
+#}                                     # generated inside the function
 #invisible( list2env(sample_function_f(),.GlobalEnv) )
 #
 ```
@@ -229,7 +230,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 
-```{r out.width = '70%', fig.align='center'}
+```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Polity Estimate", echo=FALSE}
 # url
 knitr::include_graphics("/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png") 
 ```
@@ -237,25 +238,26 @@ knitr::include_graphics("/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_p
 
 # Introduction  
 
-Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output, presented in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](add link).
+Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](add link).
 
 
-The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:   
+The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:     
+
   1. the original CBA produced by @baird2016worms,   
   2. an updated version of such analysis by a symilar research team [@klps4], and   
-  3. a third approach that borrows some components of the previous two and some specific components requested by the NGO, Evidence Action (EA)[^1].
+  3. a third approach that borrows some components of the previous two and some specific components added after consulting with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
 
 
 
 <!--
-OLD TEXT:
+OLD TEXT (DELETE SOON):
 The key policy estimate consists of a cost effectiveness analysis that compares the present
 value of benefits and costs. The benefits quantified here are the effects on wages an the
 costs are those of delivering the deworming treatment.  
 
 The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population.
 
-This analaysis contains elements from GiveWell's cost effectiveness analaysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
+This analaysis contains elements from GiveWell's cost effectiveness analysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
 -->
 
 # Methodology  
@@ -266,7 +268,7 @@ We first describe the common elements across all three approaches, and then desc
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
-<details><summary>Show all the details</summary>
+<details><summary>Click here to see the corresponding equations</summary>
 
 \begin{equation}
 NPV = B - C \\
@@ -301,17 +303,16 @@ chunk_policy_est <- function(){
                 "NPV_pe_f" = NPV_pe_f))
 }
 invisible( list2env(chunk_policy_est(),.GlobalEnv) )
-table_1 <- matrix("", nrow = 1, ncol = 3)
-table_2 <- matrix("", nrow = 1, ncol = 2)
 ```
 
 
 </details>
+<br>
 
 Benefits are equal to the additional earnings that indivudual are expected to generate due to a deworming treatment. These additional earrnings are computed as a discounted sum over their working lifetime.  
 
 
-<details><summary>Show all the details</summary>
+<details><summary>Click here to see the corresponding equations</summary>
 
 
 \begin{equation}
@@ -342,15 +343,19 @@ chunk_benefits <- function(){
 invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ```
 </details>
+<br>
+
+<!-- Emma: figure out how to add half a line break, as oppose to one full "<br>"-->
+
 
 
 At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is probably an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implementing deworming policies, and indirect costs associated with the benefits of deworming.
 
 The main differences across the three approaches regarding benefits have to do with how to predict the earnings profiles over a lifecycle, and whether or not to account for different prevalence rates. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections.
 
-The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries.
+The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries. 
 
-
+In summary, approaches 1 and 2 reflect different types of estimating earning profiles for one specific context (Kenya). And approach 3 incorporates both earning profile methodologies, focuses only on direct costs, and generalizes costs and prevalence for different settings. 
 
 ### The discounting rate  
 
@@ -359,23 +364,28 @@ All approaches use the real interest rate ($r$) as the discounting rate. This is
 <details><summary>Show all the details</summary>
 
 \begin{equation}
-r =   g - \pi
+r = \frac{1 + i}{1 + \pi} - \pi \\
+r \approx i - \pi
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
 
+TO DO: after confirming that reproduction works, change all `interest_in` to `interest_exct_in`
+
 ```{r interest-rate, echo=print_code}
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in
+# - inputs: gov_bonds_so, inflation_so 
+# - outputs: interest_in 
 chunk_interest <- function(){
 ###############################################################################
-###############################################################################  
+###############################################################################   
 
     interest_f <- function(gov_bonds_var = gov_bonds_so ,
                            inflation_var = inflation_so) {  
+        interest_exct_in <- (1 + gov_bonds_var) / (1 + inflation_var) - 1
         interest_in = gov_bonds_var - inflation_var
-        return(list("interest_in" = interest_in))
+        return(list("interest_in" = interest_in, 
+                    "interest_exct_in" = interest_exct_in))
     }
 
 ###############################################################################
@@ -384,20 +394,29 @@ chunk_interest <- function(){
 }
 
 invisible( list2env(chunk_interest(),.GlobalEnv) )
-interest_16 <- as.numeric( interest_f(gov_bonds_var = gov_bonds_so,
-                                      inflation_var = inflation_so) )
-interest_19 <- as.numeric( interest_f(gov_bonds_var = gov_bonds_new_so,
-                                      inflation_var = inflation_new_so)  )
+interest_16 <- as.numeric( 
+  interest_f(gov_bonds_var = gov_bonds_so,
+             inflation_var = inflation_so)$interest_in 
+  )
+interest_19 <- as.numeric( 
+  interest_f(gov_bonds_var = gov_bonds_new_so,
+             inflation_var = inflation_new_so)$interest_in  
+  )
 ```
 
 </details>
+<br>
 
-The actual value will vary across approaches depending on the time and country chosen. For example approach 1 used the return from government bonds and inflation in Kenya for the year 2016, while approach 3 used the values for the same country but for the year 2019. This resulted in discount rates of `r paste(round(100 * interest_16,2), "%", sep="")` and `r paste(round(100 * interest_19,2), "%", sep="")` respectively. 
+The actual value will vary across approaches depending on the time and country chosen. For example approach 1 used the return from government bonds and inflation in Kenya for the year 2016, while approach 3 used the values for the same country but for the year 2019. This resulted in discount rates of `r paste(round(100 * interest_16,2), "%", sep="")` and `r paste(round(100 * interest_19,2), "%", sep="")` for approach 1 and 3 respectively. 
 
-<!-- Add fold/unfold for tables -->
 <details><summary>View Summary Table</summary>
 
+<!-- Emma: figure out a way to remove "(#tab:sum_tables2)" from the caption of the summary tables. -->
+
 ```{r sum_tables2, purl=FALSE, echo=FALSE}
+table_1 <- matrix("", nrow = 1, ncol = 3)
+table_2 <- matrix("", nrow = 1, ncol = 2)
+
 table_1[1,1] <- paste0("$\\pi_{16}=" , inflation_so, "$")
 
 table_1 <- rbind(table_1,
@@ -422,14 +441,16 @@ table_2 <- rbind(table_2,
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$r=g-\\pi$",
+                 c("$r=\\frac{1+i}{1+\\pi}",
                    paste0("$(", sum_table_index, ")$") )
     )
-
+# Emma: update all tables bellow with new formulat for r. 
 
 
 knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+#(#tab:sum_tables2)Summary of equations use until this point in the document
 
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
