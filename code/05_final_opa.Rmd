@@ -414,6 +414,9 @@ interest_19 <- as.numeric(
 
 The actual value will vary across approaches depending on the time and country chosen. For example approach 1 used the return from government bonds and inflation in Kenya for the year 2016, while approach 3 used the values for the same country but for the year 2019. This resulted in discount rates of `r paste(round(100 * interest_16,2), "%", sep="")` and `r paste(round(100 * interest_19,2), "%", sep="")` for approach 1 and 3 respectively. 
 
+
+-------
+
 <details><summary>View Summary Table</summary>
 
 <!-- Emma: figure out a way to remove "(#tab:sum_tables2)" from the caption of the summary tables. -->
@@ -731,6 +734,8 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 <!-- Emma: please complete the values of the summary table (from the sources code chunk)-->
 
+-------
+
 <details><summary>View Summary Table</summary>
 
 
@@ -809,7 +814,9 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 </details>
 
 ### Costs
+
 AQUI VOY
+
 The costs are a combination of direct costs of mass deworming (relative to the status quo, which is no subsidy for deworming) and indirect costs on the education system due to the additional time treated individuals spend in school.
 
 <details><summary>Show all the details</summary>
