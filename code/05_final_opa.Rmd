@@ -230,11 +230,16 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 
-```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Polity Estimate", echo=FALSE}
+```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Policy Estimate", echo=FALSE}
 # url
 knitr::include_graphics("/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png") 
 ```
 
+# ADD A STANTARD DESCPRIPTION OF AN OPA REPORT {-}
+
+- Complete narrative description. 
+- Equations and code added to implement the narrated description. 
+- Displayed in a layered fashion. Text should provide a good narrative explanation to policy makers, equations and code are meant to provide a full picture to analysts and researchers. 
 
 # Introduction  
 
@@ -471,6 +476,8 @@ Two types of results are presented: the total effect on earnings projected over 
 
 Gains in earnings ($E_t$) are the result of multiplying expected earnings in a certain period ($w_t$) with the effects of deworming on worked hours. This effect can have two components: a direct effect of deworming on the individual ($\lambda_1$) and the indirect effect on earnings due to externalities ($\lambda_2$). The indirect effects are considered within the context of the treatment's coverage and saturation.
 
+<!-- Emma: pleas replace all "Show all the details" by "Click here to see the corresponding equations"-->
+
 <details><summary>Show all the details</summary>
 
 \begin{equation}
@@ -490,6 +497,8 @@ Where[^6]:
 
 [^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
+<!-- Emma:  please make sure each code chunk with a "chunk_*" function has its inputs and outputs listed in its first two lines-->
+
 ```{r earnings1}
 # - inputs: gov_bonds_so, inflation_so
 # - outputs: interest_in
@@ -501,7 +510,8 @@ chunk_earnings1 <- function(){
                           lambda1_var = lambda1_so,
                           lambda2_var = lambda2_so,
                           saturation_var = saturation, coverage_var) {  
-        res1 <- wage_var * ( lambda1_var + saturation_var * lambda2_var / coverage_var )
+        res1 <- wage_var * ( lambda1_var + saturation_var * 
+                               lambda2_var / coverage_var )
         return(res1)
     }
 
@@ -518,14 +528,17 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 
 #### Earnings over time
 
-Earnings in period t ($w_t$) are determined by multiplying the number of weeks worked up to time t by the weekly starting wage, which is adjusted to account for per capita GDP growth and a concave life cycle path for wages (wages typically increase with more years of work, then decline later in a life cycle). This all operates under the assumption that individuals in the data enter the labor force 10 years after the present day.
+Wages in year $t$ correspond to the initial weekly wage ($w_0$) adjusted by an economy-wide increase in salaries and by an increase in salaries due to additional experience at the individual level. The economy-wide wage adjustment is assumed to be equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). The life cycle path for wages increases at decreasing rates (wages typically increase with more years of work, then decline later in a life cycle). It is assumed that individuals enter the labor force 10 years after the treatment period. Weekly wages are multiplied by 52 weeks to obtain the annual rate. 
 
-Individuals in the data are assumed to enter the labor force 10 years after the (data) present day ($w_t = 0, Xp = 0$ for $t<10$, and $Xp = t - 10$ for $t\geq 10$). Wage at time $t$ is the weekly starting wage in USD ($w_0$) that has a base growth rate equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). In addition to this growth, the salaries are adjusted to represent a (concave) wage life cycle profile ($1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2$).
+The initial wage in dollars ($w_{0}$) is a weighted average of wages for the control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the fraction of all the average worked hours dedicated to each sector ($h$).  
 
-The initial wage in dollars ($w_{0}$) is a weighted average of wages for control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the average number of hours in each sector ($h_l$) relative to the sum of the average number of hours in each sector.  
+<!--Emma: pleas find the specific reference from in Suri (page, and table location), and add using the @notation (you will need to edit the bibliography.bib file). If you cannot find the Suri reference, send me an email and I will look for it-->
 
-The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as  hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as follows:
+The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as an hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as the reported monthly earnings from self-employed profits, divided by the reported weekly number of hours work in self-employment for those who worked a positive number of hours (multiplied by 4.5 to obtain the monthly total). 
 
+<!-- Emma, please record where are exactyl the values from below-->
+
+The monthly self-employed profits and self-employed hours for the control group, for those with possitive hours, come from data [@baird2016worms]. The measure of hours in self employment used to compute wages ($E[h_{se}|h_{se}>0]$) is different from the one used to compute the weights above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
 <details><summary>Show all the details</summary>
 
@@ -539,15 +552,11 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 \end{equation}
 
 \begin{equation}
-w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)
+w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
+\\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
-\end{equation}
-
-\begin{equation}
-w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
-\\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}  
 \end{equation}
 
 \begin{equation}
@@ -564,20 +573,22 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
 #  growth rate (growth_rate_so), mincer coef (coef_exp_so[1], coef_exp_so[2])
 #
-#outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), Wage trajectory:
-#  value (wage_t_mo) and function (wage_t_mo_f).
+#outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), 
+# Wage trajectory: value (wage_t_mo) and function (wage_t_mo_f).
 chunk_wages <- function(){
 ################################################################################
 ################################################################################  
     #close to value from spreadsheet (Assumps&Panel A Calcs!B137 = 0.1481084),
     #but I suspect diff due to computational precision
 
-    wage_0_mo_f <- function(wage_ag_var, wage_ww_var, profits_se_var, hours_se_cond_var,
-                            hours_ag_var, hours_ww_var, hours_se_var, ex_rate_var) {
+    wage_0_mo_f <- function(wage_ag_var, wage_ww_var, profits_se_var, 
+                            hours_se_cond_var, hours_ag_var, hours_ww_var, 
+                            hours_se_var, ex_rate_var) {
         experience_aux <- 0:periods_so - time_to_jm_so
         wage_se <- profits_se_var / (4.5 * hours_se_cond_var)
         wage_ls <- c(wage_ag_var, wage_ww_var, wage_se)
-        alpha_ls <- c(hours_ag_var, hours_ww_var, hours_se_var) / sum( c(hours_ag_var, hours_ww_var, hours_se_var) )
+        alpha_ls <- c(hours_ag_var, hours_ww_var, hours_se_var) / 
+          sum( c(hours_ag_var, hours_ww_var, hours_se_var) )
         res1 <- 1/ex_rate_var * sum( wage_ls * alpha_ls )
         return(res1)
     }
@@ -587,9 +598,9 @@ chunk_wages <- function(){
                        coef_exp1_var,
                        coef_exp2_var) {
         experience_aux <- 0:periods_so - time_to_jm_so
-        res1 <- 52 * wage_0_var *( ( 1 + growth_rate_var )^experience_aux ) *
-          ( 1 + coef_exp1_var * experience_aux + coef_exp2_var * (experience_aux^2) ) *
-          ifelse(0:periods_so >= time_to_jm_so, 1, 0)
+        res1 <- 52 * wage_0_var * ( ( 1 + growth_rate_var )^experience_aux ) *
+          ( 1 + coef_exp1_var * experience_aux + coef_exp2_var * 
+              (experience_aux^2) ) * ifelse(0:periods_so >= time_to_jm_so, 1, 0)
         return(res1)
     }
 
@@ -619,14 +630,15 @@ invisible( list2env(chunk_wages(),.GlobalEnv) )
 ```
 
 </details>
+<br>
 
-Where both parameters (Monthly self-employed profits and self-employed hours for the control group, conditional on hrs >0 - $E[h_{se}|h_{se}>0]$ -) come from the data [@baird2016worms].  The measure of hours in self employment used to compute wages ($E[h_{se}|h_{se}>0]$) is different from the one used to compute the weights $\alpha_l$ above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
+#### Deworming effects: direct and externalities 
 
+The estimated impact of deworming on hours worked come from @baird2016worms and are estimate separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). This two parameters are combined with a simple mean in the analysis. 
 
+$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:`r equationIndex`} come from @baird2016worms.
 
-#### "$\lambda_{1}$"  and  "$\lambda_{2}$"
-
-$\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of work for men and women. This two parameters are combined with a simple mean:
+<details><summary>Show all the details</summary>
 
 \begin{equation}
 \lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}\\
@@ -635,7 +647,8 @@ $\lambda_{1,\gamma}$ represents the estimated impact of deworming on hours of wo
 \tag{`r equationIndex`}
 \end{equation}
 
-$\lambda_{2,\gamma}$ the estimated externality effect (EXPLAIN) and comes from research (W\@W). Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:`r equationIndex`} come from @baird2016worms.
+</details>
+<br>
 
 
 
@@ -714,6 +727,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 ```
 
 
+<!-- Emma: please complete the values of the summary table (from the sources code chunk)-->
 
 <details><summary>View Summary Table</summary>
 
