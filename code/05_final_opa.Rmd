@@ -449,7 +449,7 @@ table_2 <- rbind(table_2,
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$r=\\frac{1+i}{1+\\pi}",
+                 c("$r=\\frac{1+i}{1+\\pi}-1$",
                    paste0("$(", sum_table_index, ")$") )
     )
 # Emma: update all tables bellow with new formulat for r. 
@@ -500,9 +500,9 @@ Where[^6]:
 
 <!-- Emma:  please make sure each code chunk with a "chunk_*" function has its inputs and outputs listed in its first two lines-->
 
-```{r earnings1}
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in
+```{r earnings1} 
+# - inputs: wage_in, lambda1_so, lambda2_so,
+# - outputs: earnings (no name speceified)
 chunk_earnings1 <- function(){
 ###############################################################################
 ###############################################################################  
@@ -521,7 +521,7 @@ chunk_earnings1 <- function(){
     return(list("earnings1_f" = earnings1_f))
 }
 
-invisible( list2env(chunk_earnings1(),.GlobalEnv) )
+invisible( list2env(chunk_earnings1(),.GlobalEnv) ) 
 ```
 
 </details>
@@ -533,9 +533,9 @@ Wages in year $t$ correspond to the initial weekly wage ($w_0$) adjusted by an e
 
 The initial wage in dollars ($w_{0}$) is a weighted average of wages for the control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the fraction of all the average worked hours dedicated to each sector ($h$).  
 
-<!--Emma: pleas find the specific reference from in Suri (page, and table location), and add using the @notation (you will need to edit the bibliography.bib file). If you cannot find the Suri reference, send me an email and I will look for it-->
+<!--Emma: pleas find the specific reference from in Suri (page, and table #,  location), and add using the @notation (you will need to edit the bibliography.bib file). If you cannot find the Suri reference, send me an email and I will look for it-->
 
-The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as an hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as the reported monthly earnings from self-employed profits, divided by the reported weekly number of hours work in self-employment for those who worked a positive number of hours (multiplied by 4.5 to obtain the monthly total). 
+The wage in agriculture comes from research @suri2011 (Suri, 2011), the working wage comes from the data and is defined as an hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as the reported monthly earnings from self-employed profits, divided by the reported weekly number of hours work in self-employment for those who worked a positive number of hours (multiplied by 4.5 to obtain the monthly total). 
 
 <!-- Emma, please record where are exactyl the values from below-->
 
