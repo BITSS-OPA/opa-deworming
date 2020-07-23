@@ -149,12 +149,13 @@ chunk_params <- function(){
     # "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
     df_alpha_so <- read_excel("data/prevalence_data.xlsx",
                            sheet = "Sheet1")
+    # alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
 
     #############
     ##### Research
     #############
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
-    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women CONFIRM
+    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women 
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
     lambda1_new_so <- c(86.54642,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
                                82.99311,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
@@ -327,7 +328,7 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \tag{`r equationIndex`}
 \end{equation}
 
-```{r benefits, echo=print_code}
+```{r benefits, echo=print_code} 
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 chunk_benefits <- function(){
@@ -535,7 +536,7 @@ The initial wage in dollars ($w_{0}$) is a weighted average of wages for the con
 
 <!--Emma: pleas find the specific reference from in Suri (page, and table #,  location), and add using the @notation (you will need to edit the bibliography.bib file). If you cannot find the Suri reference, send me an email and I will look for it-->
 
-The wage in agriculture comes from research @suri2011 (Suri, 2011), the working wage comes from the data and is defined as an hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as the reported monthly earnings from self-employed profits, divided by the reported weekly number of hours work in self-employment for those who worked a positive number of hours (multiplied by 4.5 to obtain the monthly total). 
+The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as an hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as the reported monthly earnings from self-employed profits, divided by the reported weekly number of hours work in self-employment for those who worked a positive number of hours (multiplied by 4.5 to obtain the monthly total). 
 
 <!-- Emma, please record where are exactyl the values from below-->
 
@@ -1006,7 +1007,7 @@ In this second approach, benefits follow the same principle as in approach 1 (in
 
 Gains in earnings ($E_t$) from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference with approach 1, which only measures gains in earnings by year 10 and extrapolates into the future. To extrapolate after the 20-year measurement, the authors assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life. Hence the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
 
-Gains in earnings represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. This approach also disregards externality effects. Their estimated treatment effects ($\alpha_{t}$) for years 10, 15, and 20, are `r paste0("$", round(lambda1_new_so,0))` dollars per person per year.
+Gains in earnings represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. This approach also disregards externality effects. Their estimated treatment effects ($\alpha_{t}$) for years 10, 15, and 20, are `r paste0("$", round(lambda1_new_so,0) )` dollars per person per year.
 
 [^8]: In another specification the authors assume that effects disappear after 25 years. Here we select the more persistent specification.
 
@@ -1143,12 +1144,14 @@ With complete subsidy, the costs of the intervention become the total direct cos
 
 #### Indirect costs: additional years of education and its costs for government  
 
+The indirect cost on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school as a result of deworming. This analysis assumes that pressure is added to educational institutions for a maximum of nine years, starting at year zero. The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^9], $`r format(round(teach_sal_2017usdppp_so,0), scientific=FALSE)` (also adjusted for PPP), and same average number of students per teacher (`r n_students_so`).
 
-The indirect cost on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. However, under approach 2 the additional cost of education is discounted because we assume that the additional burden on educational institutions is imposed for nine years at most. 
+Hence, the cost of schooling each child for an additional year is now $`r round(teach_sal_2017usdppp_so/n_students_so, 2)` (USD).
 
-We account for the cost of schooling since deworming medication increases school attendance and may put pressure on educational institutions. Schooling costs are given by the discounted sum of the additional cost of education per child as a result of deworming.
+[^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor [FIND SOURCES]. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is `r n_students_so`, based on **[FIND SOURCE]**.
 
-The cost of additional schooling is given by the product of the annual cost of schooling each child and number of additional years children attend school as a result of deworming. Assuming pressure is added to educational institutions for a maximum of nine years, starting at year zero, we have
+<!-- Emma (w11): find sources for the above footnote-->
+
 
 <details><summary>Show all the details</summary>
 
@@ -1159,11 +1162,6 @@ K \sum_{t=0}^{`r dim(delta_ed_so)[1]-1`} \left( \frac{1}{1 + r}\right)^{t} \Delt
 \tag{`r equationIndex`}
 \end{equation}
 
-The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^9], $`r format(round(teach_sal_2017usdppp_so,0), scientific=FALSE)` (also adjusted for PPP), and same number of average number of students per teacher (`r n_students_so`).
-
-Hence, the cost of schooling each child for an additional year is now $`r round(teach_sal_2017usdppp_so/n_students_so, 2)` (USD).
-
-[^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor [FIND SOURCES]. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is `r n_students_so`, based on **[FILL IN]**.
 
 ```{r ed-costs-new}
 
@@ -1174,78 +1172,24 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
 
 ```
 </details>
+<br>
 
-Over this nine year period, students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average.
+Over this nine year period, students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average. Then we get an average cost of additional schooling per child over the nine-year period, $`r format(round((cost_per_student_in_new*sum( (1/(1+interest_19))^(0:8) * delta_ed_in )),2), nsmall = 2)`.
 
-**Then we get an average cost of additional schooling per child over the nine-year period, $`r format(round((cost_per_student_in_new*sum( (1/(1+interest_19))^(0:8) * delta_ed_in )),2), nsmall = 2)`.**
+TO DO:  add a sentence with final NPV (analogous to last sentence in app1) 
+
+-------------------
 
 
+<details><summary>View summary table</summary>
+```{r sum_tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables18, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_11 <- matrix("", nrow = 1, ncol = 3)
-
-table_11[1,1] <- paste0("$DC=" , NA, "$")
-table_11[1,2] <- paste0("$r=" , NA, "$")
-table_11[1,3] <- paste0("$S_2=" , NA, "$")
-
-table_11 <- rbind(table_11, c(paste0("$Q=" , NA, "$"),
-                            paste0("$S_1=" , NA, "$"),
-                            "    "))
-
-knitr::kable(table_11, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
-</details>
-<details><summary>View Summary Table</summary>
-```{r sum_table15, purl=FALSE, echo=FALSE, eval=TRUE}
-
-sum_table_index <- sum_table_index+1
-table_2 <- rbind(table_2,
-                 c("$DC = \\sum_{t=0}^{`r round(years_of_treat_so,1)-1`} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]$",
-                   paste0("$(", sum_table_index, ")$") )
-    )
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
                  c("$DC = \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big] + \\left( \\frac{1}{1 + r}\\right)\\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big] + \\
 .4\\left( \\frac{1}{1 + r}\\right)^2 \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]$",
                    paste0("$(", sum_table_index, ")$") )
     )
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
-</details>
-
-
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables19, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_12 <- matrix("", nrow = 1, ncol = 3)
-
-table_12[1,1] <- paste0("$K=" , NA, "$")
-table_12[1,2] <- paste0("$r=" , NA, "$")
-table_12[1,3] <- paste0("$t=" , NA, "$")
-
-table_12 <- rbind(table_12,c(paste0("$\\Delta \\bar{E}_t=", NA, "$"),
-                            paste0("$S_1=" , NA, "$"),
-                            paste0("$S_2=" , NA, "$")))
-
-knitr::kable(table_12, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
-</details>
-
-
-<details><summary>View Summary Table</summary>
-```{r sum_tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1260,20 +1204,45 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 </details>
+ 
 
--------------------
+## Approach 3: Combinantion of Previous Approaches and Input From Policy Makers
 
+In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key policy maker in this area: the NGO Evidence Action (EA). EA provided feedback on what are the relevant costs and benefits that they, and other local policy makers like ministries of health, would consider when making decisions on deworming interventions. Additionally, EA provided insights and data on what are the key main costs of implementing a deworming intervention in different countries. 
 
-
-
-## Approach 3: Evidence Action
-
-- Key elements:
-  - No costs on ed.
-  - Country specific costs.   
+In this final approach the benefits from deworming described in the previous approachces are scaled to reflect differences prevalence rates. Additionally, the relevant costs are constrained to be only the direct costs, with varying implementation costs for different countries. 
 
 
-### Costs ("$C$")
+When the original deworming study was conducted in Kenya in 1999, the prevalence rates of the different types of worms infections where of up to XXX for the relevant population, and the costs of for this setting where of XXXX. Today Evidence Actions supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
+
+<!-- Emma (11): please read the three paragraph above and improve writing -->
+
+### Benefits   
+
+In order to account for different prevalence rates, the estimated treatment effect are decomposed in the the impact of deworming on children who where treated ($\lambda_{1}^{eff}$) and had a worm infection and children who where treated and did not had a worm infection. By construction, the effect on this last group should be zero.
+
+Refer to equations 13 (app2) 4, and 8 (app1)  
+
+#### $\lambda_{1}^{eff}$  
+
+\begin{equation}
+\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
+
+
+Where:      
+
+ - $\alpha$: represents the incidence of the condition.  
+ - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
+
+**TO DO: add a section that discusses where are the $\alpha's$ comming from**   
+
+In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.77 = 2.72$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
+
+### Costs
 
 For each country where Evidence Action provides technical assistance, GiveWell estimates the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. GiveWell's estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
 
@@ -1294,7 +1263,7 @@ The final cost is a weighted average of the unit cost across countries.
 - $\omega_{i}$: Weight for the weighted average.  
 - $c_{i}$: Total cost per child, per year in country $i$.  
 </details>
-```{r eq_2, echo=print_code}
+```{r eq_2, echo=print_code} 
 # - inputs: nothing
 # - outputs: function that computs the weighted sum of country costs
 chunk_cost1 <- function(){
@@ -1331,9 +1300,6 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
 
 \end{equation}
 
-
-
-
 All costs are in USD.
 
 GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
@@ -1345,7 +1311,7 @@ GW original analysis weights each country to take into account the number of tre
 - $l$: Each payers costs come from $l$ items.   
 
 
-```{r eq_3, echo=print_code, eval=TRUE}
+```{r eq_3, echo=print_code, eval=TRUE}  
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 chunk_cost1_inp <- function(){
@@ -1475,36 +1441,6 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 $N_{i}, C_{i,k,l}, \delta_{g}$
 
 
-### Benefits   
-From either @baird2016worms or @klps4. Only difference is that results now take into account prevalence.
-
-#### "$\lambda_{1}^{eff}$"  
-
-\begin{equation}
-\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-
-
-
-Where:      
-
- - $\alpha$: represents the incidence of the condition.  
- - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
-
-**TO DO: add a section that discusses where are the $\alpha's$ comming from**   
-
-```{r alphas, eval=FALSE, purl=FALSE}
-alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
-df_alpha_so <- read_excel("data/prevalence_data.xlsx",
-                           sheet = "Sheet1")
-```
-
-
-
-In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.77 = 2.72$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
 
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
