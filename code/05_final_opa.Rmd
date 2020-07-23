@@ -751,13 +751,10 @@ table_1 <-rbind(table_1,
                 c( "", paste0("$\\hat{\\beta}_1=" , coef_exp_so[1], "$"), ""), # round 
                 c( "", paste0("$\\hat{\\beta}_2=" , coef_exp_so[2], "$"), "") ) # round
 
-table_1[5,1] <- paste0("$w_l=" , NA, "$") #remove this
-table_1[6,1] <- paste0("$w_{ww}=" , wage_ww_so, "$") # round; shift up to [5,1]
-#need a [6,1] before using rbind below?
+table_1[5,1] <- paste0("$w_{ww}=" , wage_ww_so, "$") # round
+table_1[6,1] <- paste0("$w_{se}=" , round(profits_se_so / (4.5 * hours_se_cond_so),2), "$") #copied from 589 in wage_0_mo but wage_se is never calculated outside the fn
 
 table_1 <-rbind(table_1,
-                c( paste0("$w_{se}=" , round(profits_se_so / (4.5 * hours_se_cond_so),2), "$"), "", ""), #do i have to calculate this? copied from 589 in wage_0_mo fn but wage_se is never calculated outside the fn
-                c( paste0("$h_l=" , NA, "$"), "", ""), #remove this
                 c( paste0("$h_{ag}=" , hours_ag_so, "$"), "", ""), 
                 c( paste0("$h_{ww}=" , hours_ww_so, "$"), "", ""), 
                 c( paste0("$h_{se}=" , hours_se_so, "$"), "", ""),  
