@@ -231,7 +231,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 
-```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Policy Estimate", echo=FALSE}
+```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Policy Estimate", echo=FALSE, eval=FALSE}
 # url
 knitr::include_graphics("/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png") 
 ```
@@ -742,24 +742,25 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ```{r sum_tables3, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_1[1,2] <- paste0("$p=" , NA, "$")
-table_1[2,2] <- paste0("$R=" , NA, "$")
-table_1[3,2] <- paste0("$\\lambda_1=" , NA, "$")
-table_1[4,2] <- paste0("$\\lambda_2=" , NA, "$")
+table_1[1,2] <- paste0("$p=" , saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so), "$") # round
+table_1[2,2] <- paste0("$R=" , coverage_so, "$") # round
+table_1[3,2] <- paste0("$\\lambda_1=" , lambda1_in_f(lambda1_var = lambda1_so)[1], "$")
+table_1[4,2] <- paste0("$\\lambda_2=" , lambda2_so, "$")
 
 table_1 <-rbind(table_1, 
-                c( "", paste0("$\\hat{\\beta}_1=" , NA, "$"), ""), 
-                c( "", paste0("$\\hat{\\beta}_2=" , NA, "$"), "") )
+                c( "", paste0("$\\hat{\\beta}_1=" , coef_exp_so[1], "$"), ""), # round 
+                c( "", paste0("$\\hat{\\beta}_2=" , coef_exp_so[2], "$"), "") ) # round
 
-table_1[5,1] <- paste0("$w_l=" , NA, "$") 
-table_1[6,1] <- paste0("$w_{ww}=" , NA, "$") 
+table_1[5,1] <- paste0("$w_l=" , NA, "$") #remove this
+table_1[6,1] <- paste0("$w_{ww}=" , wage_ww_so, "$") # round; shift up to [5,1]
+#need a [6,1] before using rbind below?
 
 table_1 <-rbind(table_1,
-                c( paste0("$w_{se}=" , NA, "$"), "", ""), 
-                c( paste0("$h_l=" , NA, "$"), "", ""), 
-                c( paste0("$h_{ag}=" , NA, "$"), "", ""), 
-                c( paste0("$h_{ww}=" , NA, "$"), "", ""), 
-                c( paste0("$h_{se}=" , NA, "$"), "", ""),  
+                c( paste0("$w_{se}=" , round(profits_se_so / (4.5 * hours_se_cond_so),2), "$"), "", ""), #do i have to calculate this? copied from 589 in wage_0_mo fn but wage_se is never calculated outside the fn
+                c( paste0("$h_l=" , NA, "$"), "", ""), #remove this
+                c( paste0("$h_{ag}=" , hours_ag_so, "$"), "", ""), 
+                c( paste0("$h_{ww}=" , hours_ww_so, "$"), "", ""), 
+                c( paste0("$h_{se}=" , hours_se_so, "$"), "", ""),  
                 c( paste0("$Q(full)=" , 0.75, "$"), "", ""), 
                 c( paste0("$Q(0)=" , 0, "$"), "", "")
                 ) 
