@@ -1262,48 +1262,9 @@ lambda1_r_in <- lambda_eff_f()
 
 ### Costs
 
-To estimtate the costs, we follow a similar approach to @givewell. They estimate, for each country where Evidence Action provides technical assistance, the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. GiveWell's estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
-
+To estimate the costs, we follow a similar approach to @givewell. They estimate, for each country where Evidence Action provides technical assistance, the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. 
 
 <details><summary>Show all the details</summary>
-
-\begin{equation}
-C = \sum_{i \in Countries } \omega_{i} c_{i}
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-
-GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance. These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO.
-
-Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
-
-The final cost is a weighted average of the unit cost across countries.
-
-- $\omega_{i}$: Weight for the weighted average.  
-- $c_{i}$: Total cost per child, per year in country $i$.  
-</details>
-```{r eq_2, echo=print_code} 
-# - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
-chunk_cost1 <- function(){
-###############################################################################
-###############################################################################  
-
-    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
-        sum(country_w_var * country_cost_var)
-    }
-
-###############################################################################
-###############################################################################  
-    return(list("costs1_f" = costs1_f))
-}
-
-
-invisible( list2env(chunk_cost1(),.GlobalEnv) )
-```
-
-
 
 \begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
@@ -1409,6 +1370,52 @@ chunk_cost1_inp <- function(){
 }
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```
+
+</details>
+<br>
+
+
+The final estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
+
+<details><summary>Show all the details</summary>
+
+\begin{equation}
+C = \sum_{i \in Countries } \omega_{i} c_{i}
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
+
+GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance. These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO.
+
+Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
+
+The final cost is a weighted average of the unit cost across countries.
+
+- $\omega_{i}$: Weight for the weighted average.  
+- $c_{i}$: Total cost per child, per year in country $i$.  
+```{r eq_2, echo=print_code} 
+# - inputs: nothing
+# - outputs: function that computs the weighted sum of country costs
+chunk_cost1 <- function(){
+###############################################################################
+###############################################################################  
+
+    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
+        sum(country_w_var * country_cost_var)
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("costs1_f" = costs1_f))
+}
+
+
+invisible( list2env(chunk_cost1(),.GlobalEnv) )
+```
+
+</details>
+<br>
 
 <!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
