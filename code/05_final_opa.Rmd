@@ -270,7 +270,7 @@ This analaysis contains elements from GiveWell's cost effectiveness analysis (se
 
 We first describe the common elements across all three approaches, and then describe each approach in detail.
 
-## Common structure
+## Common structure {-}
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
@@ -363,7 +363,7 @@ The main differences in costs have to do with whether indirect costs are include
 
 In summary, approaches 1 and 2 reflect different types of estimating earning profiles for one specific context (Kenya). And approach 3 incorporates both earning profile methodologies, focuses only on direct costs, and generalizes costs and prevalence for different settings. 
 
-### The discounting rate  
+### The discounting rate  {-}
 
 All approaches use the real interest rate ($r$) as the discounting rate. This is obtained from the interest rate on goverment bonds ($i$) minus the inflation rate ($\pi$).
 
@@ -660,28 +660,19 @@ chunk_lambdas<- function(){
     lambda1_in_f <- function(lambda1_var = lambda1_so) {
         rep(0.5 * lambda1_var[1] + 0.5 *lambda1_var[2], 2)
     }
-    # lambda_r_f is describe in the third approach REVIEW
-    lambda_r_f <- function(lambda1_var = lambda1_in_f(), 
-                           alpha_0_var = alpha_0_so, alpha_r_var=alpha_r_so){
-        lambda1_eff_temp <- lambda1_var / alpha_0_var
-        return( lambda1_eff_temp * alpha_r_var )
-    }  
-
     lambda2_in_f <- function(lambda2_var = lambda2_so){
         rep(lambda2_var, 2)
     }
 
 ##############################################################################
 ###############################################################################  
-    return(list("lambda_r_f" = lambda_r_f,     
-                "lambda1_in_f" = lambda1_in_f,
+    return(list("lambda1_in_f" = lambda1_in_f,
                 "lambda2_in_f" = lambda2_in_f ) )
 }
 invisible( list2env(chunk_lambdas(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 lambda1_in <- lambda1_in_f()
-lambda1_r_in <- lambda_r_f()
 lambda2_in <- lambda2_in_f()
 ```
 
@@ -1217,34 +1208,65 @@ When the original deworming study was conducted in Kenya in 1999, the prevalence
 
 ### Benefits   
 
-In order to account for different prevalence rates, the estimated treatment effect are decomposed in the the impact of deworming on children who where treated ($\lambda_{1}^{eff}$) and had a worm infection and children who where treated and did not had a worm infection. By construction, the effect on this last group should be zero.
+In order to account for different prevalence rates, the estimated treatment effect are decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who where treated and did not had a worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatement, divided by the proportion of the prevalence of infections. 
 
-Refer to equations 13 (app2) 4, and 8 (app1)  
+In the original evaluation, the prevalence rates where very high (`r alpha_0_so`), hence the effect on the infected population was similar to that of the ovearll population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$)
 
-#### $\lambda_{1}^{eff}$  
+
+
+<details><summary>Show all the details</summary>
+
+For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 8 respectively) by the following:   
 
 \begin{equation}
-\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0
+\lambda_{1} = \eta \lambda^{eff}_{1} + (1 -  \eta) \times 0 \\
+\lambda^{r}_{1} = \eta_{r}\lambda^{eff}_{1}
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
 
-
 Where:      
 
- - $\alpha$: represents the incidence of the condition.  
- - $\lambda_{1}^{eff}$: represents the effect of deworming over those affected with the condition.  
+ - $\eta$: represents the prevalence of any worm infection.
+ - $\lambda_{1}^{eff}$: represents the effect of deworming over those infected.  
 
-**TO DO: add a section that discusses where are the $\alpha's$ comming from**   
+```{r lambdas_eff}
+# - inputs:
+# - outputs:
+chunk_lambdas_eff<- function(){
+###############################################################################
+###############################################################################    
 
-In the original evaluation, $\alpha = 0.77$, hence $\lambda_{1}^{eff} = 1.75/0.77 = 2.72$. The value of $\lambda^{r}_{1}$ for each region $r$ will depend on that region's $\alpha^{r}$.  
+    lambda_eff_f <- function(lambda1_var = lambda1_in_f(), 
+                           alpha_0_var = alpha_0_so, 
+                           alpha_r_var = alpha_r_so){
+        lambda1_eff_temp <- lambda1_var / alpha_0_var
+        return( lambda1_eff_temp * alpha_r_var )
+    }  
+
+##############################################################################
+###############################################################################  
+    return( list("lambda_eff_f" = lambda_eff_f) )
+}
+invisible( list2env(chunk_lambdas_eff(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+lambda1_r_in <- lambda_eff_f()
+```
+
+</details>
+<br>
+
+**TO DO: add a section that discusses where are the prevalence rates are comming from**   
 
 ### Costs
 
-For each country where Evidence Action provides technical assistance, GiveWell estimates the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. GiveWell's estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
+To estimtate the costs, we follow a similar approach to @givewell. They estimate, for each country where Evidence Action provides technical assistance, the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. GiveWell's estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
 
-<details><summary>Equation</summary>
+
+<details><summary>Show all the details</summary>
+
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
 `r equationIndex <- equationIndex + 1`
@@ -1568,11 +1590,11 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 # │      |      ├──── wage_t_mo_f
 # │      |      |      └──── wage_0_mo_f
 # |      |      ├──── lambda1_in_f
-# │      |      |      └────lambda_r_f
+# │      |      |      └────lambda_eff_f
 # |      |      ├──── lambda2_in_f
 # │      |      └──── saturation_in_f
 # │      ├──── earnings2_f
-# │      |      └────lambda_r_f
+# │      |      └────lambda_eff_f
 # │      └──── interest_f
 # └──── cost1_f
 # │      └──── costs1_ratios_in_f
@@ -1657,7 +1679,7 @@ one_run <-
     wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_var1,
                              coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp2_var1)
 
-    lambda1_in <- lambda_r_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
+    lambda1_in <- lambda_eff_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
                              alpha_0_var = alpha_0_var1, alpha_r_var = alpha_r_var1)
 
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
@@ -1669,7 +1691,7 @@ one_run <-
     # ADD UNIT TEST FOR SATURATION AN LAMBDAS    
 
     ###------------ Inputs for earnings2_f------------------------------------------
-    lambda1_new_in <- lambda_r_f(lambda1_var = lambda1_new_var1,
+    lambda1_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
                                  alpha_0_var = alpha_0_var1,
                                  alpha_r_var = alpha_r_var1)
     #ADD UNIT TEST FOR LAMBDAS    
