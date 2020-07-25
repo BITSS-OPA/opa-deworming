@@ -1207,8 +1207,6 @@ In order to account for different prevalence rates, the estimated treatment effe
 
 In the original evaluation, the prevalence rates where very high (`r alpha_0_so`), hence the effect on the infected population was similar to that of the ovearll population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$)
 
-
-
 <details><summary>Show all the details</summary>
 
 For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 8 respectively) by the following:   
@@ -1257,7 +1255,51 @@ lambda1_r_in <- lambda_eff_f()
 
 ### Costs
 
-To estimate the costs, we follow a similar approach to @givewell. They estimate, for each country where Evidence Action provides technical assistance, the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. 
+To estimate the costs, we follow a similar approach to @givewell. The default cost is the per unit of treatment across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions. 
+
+Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
+
+<details><summary>Show all the details</summary>
+
+\begin{equation}
+C = \sum_{i \in Countries } \omega_{i} c_{i}
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
+
+
+```{r eq_2, echo=print_code} 
+# - inputs: nothing
+# - outputs: function that computes the weighted sum of country costs
+chunk_cost1 <- function(){
+###############################################################################
+###############################################################################  
+
+    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
+        sum(country_w_var * country_cost_var)
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("costs1_f" = costs1_f))
+}
+
+
+invisible( list2env(chunk_cost1(),.GlobalEnv) )
+```
+
+</details>
+<br>
+AQUI VOY: Flesh out points bellow, then review code (below), generate some intermediary result (table of costs and/or locations)
+
+Weights are based on number of treated individuals. 
+
+Per capita costs as computed as total costs divided by number of treated children. 
+
+Total costs are computed as the country level costs over the folling payers: 
+
+Country level costs at the payer level are computed as the sum of item-level costs with-in a specific region of a country. 
 
 <details><summary>Show all the details</summary>
 
@@ -1269,7 +1311,6 @@ c_{i} = \frac{C_{i}}{N_{i}} \\
 \tag{`r equationIndex`}
 \end{equation}
 
-
 \begin{equation}
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
@@ -1278,8 +1319,7 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
 
 All costs are in USD.
 
-GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
-
+(Move to footnote) GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
 
 - $N_{i}$: Number of treated children in country $i$.  
 - $Ex_{i}$: Exchange rate from country $i$ to USD.  
@@ -1370,53 +1410,8 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 <br>
 
 
-The final estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
-
-<details><summary>Show all the details</summary>
-
-\begin{equation}
-C = \sum_{i \in Countries } \omega_{i} c_{i}
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-
-GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance. These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO.
-
-Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
-
-The final cost is a weighted average of the unit cost across countries.
-
-- $\omega_{i}$: Weight for the weighted average.  
-- $c_{i}$: Total cost per child, per year in country $i$.  
-```{r eq_2, echo=print_code} 
-# - inputs: nothing
-# - outputs: function that computes the weighted sum of country costs
-chunk_cost1 <- function(){
-###############################################################################
-###############################################################################  
-
-    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
-        sum(country_w_var * country_cost_var)
-    }
-
-###############################################################################
-###############################################################################  
-    return(list("costs1_f" = costs1_f))
-}
-
-
-invisible( list2env(chunk_cost1(),.GlobalEnv) )
-```
-
-</details>
-<br>
-
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables21, purl=FALSE, echo=FALSE, eval=TRUE}
-
+<details><summary>View Summary Table</summary>
+```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
 table_13 <- matrix("", nrow = 1, ncol = 3)
 
 table_13[1,1] <- paste0("$N_i=" , NA, "$")
@@ -1429,10 +1424,8 @@ table_13 <- rbind(table_13,c(paste0("$l=", NA, "$"),
 
 knitr::kable(table_13, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
-</details>
-<details><summary>View Summary Table</summary>
-```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
+
+
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
