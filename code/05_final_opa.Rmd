@@ -287,7 +287,7 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 
 ```{r eq_1, echo=print_code}
 # - inputs: total per capita benefits, total per capita costs, fudging factor
-# - outputs: Cost-effectiveness ratio & ratio to cash CEA
+# - outputs: Cost-effectiveness ratio & ratio to cash CEA, NPV
 chunk_policy_est <- function(){
 ###############################################################################
 ###############################################################################  
@@ -315,7 +315,7 @@ invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 </details>
 <br>
 
-Benefits are equal to the additional earnings that indivudual are expected to generate due to a deworming treatment. These additional earrnings are computed as a discounted sum over their working lifetime.  
+Benefits are equal to the additional earnings that individuals are expected to generate due to a deworming treatment. These additional earnings are computed as a discounted sum over their working lifetime.  
 
 
 <details><summary>Show all the details</summary>
@@ -381,7 +381,7 @@ TO DO: after confirming that reproduction works, change all `interest_in` to `in
 
 ```{r interest-rate, echo=print_code}
 # - inputs: gov_bonds_so, inflation_so 
-# - outputs: interest_in 
+# - outputs: interest_in, interest_exct_in 
 chunk_interest <- function(){
 ###############################################################################
 ###############################################################################   
@@ -453,8 +453,6 @@ table_2 <- rbind(table_2,
                  c("$r=\\frac{1+i}{1+\\pi}-1$",
                    paste0("$(", sum_table_index, ")$") )
     )
-# Emma: update all tables bellow with new formulat for r. 
-
 
 knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
@@ -499,11 +497,10 @@ Where[^6]:
 
 [^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
-<!-- Emma:  please make sure each code chunk with a "chunk_*" function has its inputs and outputs listed in its first two lines-->
 
 ```{r earnings1} 
-# - inputs: wage_in, lambda1_so, lambda2_so,
-# - outputs: earnings (no name speceified)
+# - inputs: wage_in, lambda1_so, lambda2_so, saturation, FERNANDO: coverage_var is not specified
+# - outputs: earnings (no name specified)
 chunk_earnings1 <- function(){
 ###############################################################################
 ###############################################################################  
@@ -638,7 +635,7 @@ invisible( list2env(chunk_wages(),.GlobalEnv) )
 
 The estimated impact of deworming on hours worked come from @baird2016worms and are estimate separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). This two parameters are combined with a simple mean in the analysis. 
 
-The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not recieve the treatment but still saw reductions in the likelihood of infection due to increase inmuinity in their community.  Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:`r equationIndex + 1`} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study. 
+The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not recieve the treatment but still saw reductions in the likelihood of infection due to increased immunity in their community.  Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:`r equationIndex + 1`} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study. 
 
 <details><summary>Show all the details</summary>
 
@@ -651,8 +648,8 @@ The estimated externality effect ($\lambda_{2}$) reflects the additional hours w
 
 
 ```{r lambdas}
-# - inputs:
-# - outputs:
+# - inputs: lambda1_so, lambda2_so
+# - outputs: lambda1_in_f, lambda2_in_f functions
 chunk_lambdas<- function(){
 ###############################################################################
 ###############################################################################    
@@ -724,8 +721,6 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 </details>
 <br>
 
-<!-- Emma: please complete the values of the summary table (from the sources code chunk)-->
-
 -------
 
 <details><summary>View Summary Table</summary>
@@ -733,24 +728,22 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ```{r sum_tables3, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_1[1,2] <- paste0("$p=" , NA, "$")
-table_1[2,2] <- paste0("$R=" , NA, "$")
-table_1[3,2] <- paste0("$\\lambda_1=" , NA, "$")
-table_1[4,2] <- paste0("$\\lambda_2=" , NA, "$")
+table_1[1,2] <- paste0("$p=" , saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so), "$") # round
+table_1[2,2] <- paste0("$R=" , coverage_so, "$") # round
+table_1[3,2] <- paste0("$\\lambda_1=" , lambda1_in_f(lambda1_var = lambda1_so)[1], "$")
+table_1[4,2] <- paste0("$\\lambda_2=" , lambda2_so, "$")
 
 table_1 <-rbind(table_1, 
-                c( "", paste0("$\\hat{\\beta}_1=" , NA, "$"), ""), 
-                c( "", paste0("$\\hat{\\beta}_2=" , NA, "$"), "") )
+                c( "", paste0("$\\hat{\\beta}_1=" , coef_exp_so[1], "$"), ""), # round 
+                c( "", paste0("$\\hat{\\beta}_2=" , coef_exp_so[2], "$"), "") ) # round
 
-table_1[5,1] <- paste0("$w_l=" , NA, "$") 
-table_1[6,1] <- paste0("$w_{ww}=" , NA, "$") 
+table_1[5,1] <- paste0("$w_{ww}=" , wage_ww_so, "$") # round
+table_1[6,1] <- paste0("$w_{se}=" , round(profits_se_so / (4.5 * hours_se_cond_so),2), "$") #copied from 589 in wage_0_mo but wage_se is never calculated outside the fn
 
 table_1 <-rbind(table_1,
-                c( paste0("$w_{se}=" , NA, "$"), "", ""), 
-                c( paste0("$h_l=" , NA, "$"), "", ""), 
-                c( paste0("$h_{ag}=" , NA, "$"), "", ""), 
-                c( paste0("$h_{ww}=" , NA, "$"), "", ""), 
-                c( paste0("$h_{se}=" , NA, "$"), "", ""),  
+                c( paste0("$h_{ag}=" , hours_ag_so, "$"), "", ""), 
+                c( paste0("$h_{ww}=" , hours_ww_so, "$"), "", ""), 
+                c( paste0("$h_{se}=" , hours_se_so, "$"), "", ""),  
                 c( paste0("$Q(full)=" , 0.75, "$"), "", ""), 
                 c( paste0("$Q(0)=" , 0, "$"), "", "")
                 ) 
@@ -818,8 +811,8 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
 \end{equation}
 
 ```{r cost2}
-# - inputs:
-# - outputs:
+# - inputs: periods_so, delta_ed_final_in, interest FERNANDO: should this be interest_in or interest_19?, cost_per_student_in, s2_in, q2_in
+# - outputs: cost2_f
 chunk_cost2 <- function(){
 ###############################################################################
 ###############################################################################  
@@ -867,8 +860,8 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 \end{equation}
 
 ```{r unit_costs2} 
-# - inputs:
-# - outputs:
+# - inputs: unit_cost_local_so, ex_rate_so, years_of_treat_so
+# - outputs: s2_f
 chunk_unit_costs2 <- function(){
 ###############################################################################
 ###############################################################################  
@@ -916,8 +909,8 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 
 
 ```{r ed-costs}
-# - inputs:
-# - outputs:
+# - inputs: teach_sal_so, teach_ben_so, n_students_so, include_ext_so, delta_ed_so, delta_ed_ext_so
+# - outputs: cost_per_student_f, delta_ed_final_f
 chunk_edcosts <- function(){
 ###############################################################################
 ###############################################################################    
@@ -1014,8 +1007,8 @@ E_t = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alph
 
 
 ```{r delta-earnings, eval=TRUE}
-# - inputs:
-# - outputs:
+# - inputs: t_var, lambda1_new_so[1], lambda1_new_so[2], lambda1_new_so[3]
+# - outputs: earnings2_f
 chunk_new_earnings <- function(){
 ###############################################################################
 ###############################################################################  
@@ -1102,8 +1095,8 @@ DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\bi
 
 
 ```{r unit_costs2_new}
-# - inputs:
-# - outputs:
+# - inputs: unit_cost_local_so, ex_rate_so, interest_19
+# - outputs: s2_f_new
 chunk_unit_costs2_new <- function(){
 ###############################################################################
 ###############################################################################  
@@ -1234,8 +1227,8 @@ Where:
  - $\lambda_{1}^{eff}$: represents the effect of deworming over those infected.  
 
 ```{r lambdas_eff}
-# - inputs:
-# - outputs:
+# - inputs: lambda1_in_f(), alpha_0_so, alpha_r_so
+# - outputs: lambda_eff_f
 chunk_lambdas_eff<- function(){
 ###############################################################################
 ###############################################################################    
@@ -1398,7 +1391,7 @@ The final cost is a weighted average of the unit cost across countries.
 - $c_{i}$: Total cost per child, per year in country $i$.  
 ```{r eq_2, echo=print_code} 
 # - inputs: nothing
-# - outputs: function that computs the weighted sum of country costs
+# - outputs: function that computes the weighted sum of country costs
 chunk_cost1 <- function(){
 ###############################################################################
 ###############################################################################  

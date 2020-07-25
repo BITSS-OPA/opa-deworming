@@ -2,7 +2,7 @@
 pdf_document:
   extra_dependencies: ["xcolor"]
 date: "24 July, 2020"
-output: 
+output:
   bookdown::html_document2:
     code_folding: hide
     code_download: true
@@ -128,7 +128,7 @@ chunk_params <- function(){
     ##### Research
     #############
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
-    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women 
+    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
     lambda1_new_so <- c(86.54642,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
                                82.99311,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
@@ -204,16 +204,13 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 
-<div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="70%" />
-<p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
-</div>
+
 
 # ADD A STANTARD DESCPRIPTION OF AN OPA REPORT {-}
 
-- Complete narrative description. 
-- Equations and code added to implement the narrated description. 
-- Displayed in a layered fashion. Text should provide a good narrative explanation to policy makers, equations and code are meant to provide a full picture to analysts and researchers. 
+- Complete narrative description.
+- Equations and code added to implement the narrated description.
+- Displayed in a layered fashion. Text should provide a good narrative explanation to policy makers, equations and code are meant to provide a full picture to analysts and researchers.
 
 # Introduction  
 
@@ -334,9 +331,9 @@ At a high level all three approaches focus on the same type of benefits: the inc
 
 The main differences across the three approaches regarding benefits have to do with how to predict the earnings profiles over a lifecycle, and whether or not to account for different prevalence rates. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections.
 
-The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries. 
+The main differences in costs have to do with whether indirect costs are included, and what is the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) while the third approach does not include indirect costs and use unit costs of multiple countries.
 
-In summary, approaches 1 and 2 reflect different types of estimating earning profiles for one specific context (Kenya). And approach 3 incorporates both earning profile methodologies, focuses only on direct costs, and generalizes costs and prevalence for different settings. 
+In summary, approaches 1 and 2 reflect different types of estimating earning profiles for one specific context (Kenya). And approach 3 incorporates both earning profile methodologies, focuses only on direct costs, and generalizes costs and prevalence for different settings.
 
 ### The discounting rate  {-}
 
@@ -356,8 +353,8 @@ TO DO: after confirming that reproduction works, change all `interest_in` to `in
 
 
 ```r
-# - inputs: gov_bonds_so, inflation_so 
-# - outputs: interest_in 
+# - inputs: gov_bonds_so, inflation_so
+# - outputs: interest_in
 chunk_interest <- function(){
 ###############################################################################
 ###############################################################################   
@@ -366,7 +363,7 @@ chunk_interest <- function(){
                            inflation_var = inflation_so) {  
         interest_exct_in <- (1 + gov_bonds_var) / (1 + inflation_var) - 1
         interest_in = gov_bonds_var - inflation_var
-        return(list("interest_in" = interest_in, 
+        return(list("interest_in" = interest_in,
                     "interest_exct_in" = interest_exct_in))
     }
 
@@ -376,11 +373,11 @@ chunk_interest <- function(){
 }
 
 invisible( list2env(chunk_interest(),.GlobalEnv) )
-interest_16 <- as.numeric( 
+interest_16 <- as.numeric(
   interest_f(gov_bonds_var = gov_bonds_so,
-             inflation_var = inflation_so)$interest_in 
+             inflation_var = inflation_so)$interest_in
   )
-interest_19 <- as.numeric( 
+interest_19 <- as.numeric(
   interest_f(gov_bonds_var = gov_bonds_new_so,
              inflation_var = inflation_new_so)$interest_in  
   )
@@ -389,7 +386,7 @@ interest_19 <- as.numeric(
 </details>
 <br>
 
-The actual value will vary across approaches depending on the time and country chosen. For example approach 1 used the return from government bonds and inflation in Kenya for the year 2016, while approach 3 used the values for the same country but for the year 2019. This resulted in discount rates of 9.85% and 5% for approach 1 and 3 respectively. 
+The actual value will vary across approaches depending on the time and country chosen. For example approach 1 used the return from government bonds and inflation in Kenya for the year 2016, while approach 3 used the values for the same country but for the year 2019. This resulted in discount rates of 9.85% and 5% for approach 1 and 3 respectively.
 
 
 -------
@@ -464,7 +461,7 @@ The actual value will vary across approaches depending on the time and country c
 
 ## Approach 1: @baird2016worms
 
-In this first approach, the effect on earnings over the entire lifecycle are predicted by extrapolating the effects on hours worked by individuals in the original treatment group, ten years after the intervention. 
+In this first approach, the effect on earnings over the entire lifecycle are predicted by extrapolating the effects on hours worked by individuals in the original treatment group, ten years after the intervention.
 
 Two types of results are presented: the total effect on earnings projected over a lifetime and the estimated fiscal effect due to the government collecting additional taxes on higher earnings. The effects are calculated in two scenarios: with and without externalities over the population of children who did not receive deworming interventions.
 
@@ -506,7 +503,7 @@ chunk_earnings1 <- function(){
                           lambda1_var = lambda1_so,
                           lambda2_var = lambda2_so,
                           saturation_var = saturation, coverage_var) {  
-        res1 <- wage_var * ( lambda1_var + saturation_var * 
+        res1 <- wage_var * ( lambda1_var + saturation_var *
                                lambda2_var / coverage_var )
         return(res1)
     }
@@ -516,7 +513,7 @@ chunk_earnings1 <- function(){
     return(list("earnings1_f" = earnings1_f))
 }
 
-invisible( list2env(chunk_earnings1(),.GlobalEnv) ) 
+invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
 </details>
@@ -524,13 +521,13 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 
 #### Earnings over time
 
-Wages in year $t$ correspond to the initial weekly wage ($w_0$) adjusted by an economy-wide increase in salaries and by an increase in salaries due to additional experience at the individual level. The economy-wide wage adjustment is assumed to be equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). The life cycle path for wages increases at decreasing rates (wages typically increase with more years of work, then decline later in a life cycle). It is assumed that individuals enter the labor force 10 years after the treatment period. Weekly wages are multiplied by 52 weeks to obtain the annual rate. 
+Wages in year $t$ correspond to the initial weekly wage ($w_0$) adjusted by an economy-wide increase in salaries and by an increase in salaries due to additional experience at the individual level. The economy-wide wage adjustment is assumed to be equal to the per capita GDP growth ($g$) applied to however many years of work ($Xp$). The life cycle path for wages increases at decreasing rates (wages typically increase with more years of work, then decline later in a life cycle). It is assumed that individuals enter the labor force 10 years after the treatment period. Weekly wages are multiplied by 52 weeks to obtain the annual rate.
 
 The initial wage in dollars ($w_{0}$) is a weighted average of wages for the control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the fraction of all the average worked hours dedicated to each sector ($h$).  
 
 <!--Emma: pleas find the specific reference from in Suri (page, and table #,  location), and add using the @notation (you will need to edit the bibliography.bib file). If you cannot find the Suri reference, send me an email and I will look for it-->
 
-The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as an hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as the reported monthly earnings from self-employed profits, divided by the reported weekly number of hours work in self-employment for those who worked a positive number of hours (multiplied by 4.5 to obtain the monthly total). 
+The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as an hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as the reported monthly earnings from self-employed profits, divided by the reported weekly number of hours work in self-employment for those who worked a positive number of hours (multiplied by 4.5 to obtain the monthly total).
 
 <!-- Emma, please record where are exactyl the values from below-->
 
@@ -570,7 +567,7 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
 #  growth rate (growth_rate_so), mincer coef (coef_exp_so[1], coef_exp_so[2])
 #
-#outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f), 
+#outputs: Starting wages: value (wage_0_mo) and function (wage_0_mo_f),
 # Wage trajectory: value (wage_t_mo) and function (wage_t_mo_f).
 chunk_wages <- function(){
 ################################################################################
@@ -578,13 +575,13 @@ chunk_wages <- function(){
     #close to value from spreadsheet (Assumps&Panel A Calcs!B137 = 0.1481084),
     #but I suspect diff due to computational precision
 
-    wage_0_mo_f <- function(wage_ag_var, wage_ww_var, profits_se_var, 
-                            hours_se_cond_var, hours_ag_var, hours_ww_var, 
+    wage_0_mo_f <- function(wage_ag_var, wage_ww_var, profits_se_var,
+                            hours_se_cond_var, hours_ag_var, hours_ww_var,
                             hours_se_var, ex_rate_var) {
         experience_aux <- 0:periods_so - time_to_jm_so
         wage_se <- profits_se_var / (4.5 * hours_se_cond_var)
         wage_ls <- c(wage_ag_var, wage_ww_var, wage_se)
-        alpha_ls <- c(hours_ag_var, hours_ww_var, hours_se_var) / 
+        alpha_ls <- c(hours_ag_var, hours_ww_var, hours_se_var) /
           sum( c(hours_ag_var, hours_ww_var, hours_se_var) )
         res1 <- 1/ex_rate_var * sum( wage_ls * alpha_ls )
         return(res1)
@@ -596,7 +593,7 @@ chunk_wages <- function(){
                        coef_exp2_var) {
         experience_aux <- 0:periods_so - time_to_jm_so
         res1 <- 52 * wage_0_var * ( ( 1 + growth_rate_var )^experience_aux ) *
-          ( 1 + coef_exp1_var * experience_aux + coef_exp2_var * 
+          ( 1 + coef_exp1_var * experience_aux + coef_exp2_var *
               (experience_aux^2) ) * ifelse(0:periods_so >= time_to_jm_so, 1, 0)
         return(res1)
     }
@@ -629,11 +626,11 @@ invisible( list2env(chunk_wages(),.GlobalEnv) )
 </details>
 <br>
 
-#### Deworming effects: direct and externalities 
+#### Deworming effects: direct and externalities
 
-The estimated impact of deworming on hours worked come from @baird2016worms and are estimate separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). This two parameters are combined with a simple mean in the analysis. 
+The estimated impact of deworming on hours worked come from @baird2016worms and are estimate separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). This two parameters are combined with a simple mean in the analysis.
 
-The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not recieve the treatment but still saw reductions in the likelihood of infection due to increase inmuinity in their community.  Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:8} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study. 
+The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not recieve the treatment but still saw reductions in the likelihood of infection due to increase inmuinity in their community.  Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:8} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study.
 
 <details><summary>Show all the details</summary>
 
@@ -681,7 +678,7 @@ The coverage ($R$) is defined as the fraction, among all neighboring schools (wi
 
 The saturation of the intervention, $p$, measures the fraction of the population that is effectively using the treatment and is defined as a weighted average of the take-up under a full subsidy for deworming and the take-up under zero subsidy.   
 
-<!-- Emma: find the reference below, let me know if you cannot find it--> 
+<!-- Emma: find the reference below, let me know if you cannot find it-->
 
 For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy ($Q(0)$), hence  is assigned the value of 0. The same article [add page, table, col, row] estimates that take-up with full subsidy ($Q(full)$) was of 0.75.
 
@@ -702,7 +699,7 @@ chunk_coverage <- function(){
 ###############################################################################
 ###############################################################################  
 
-    saturation_in_f <- function(coverage_var = coverage_so, 
+    saturation_in_f <- function(coverage_var = coverage_so,
                                 q_full_var = q_full_so, q_zero_var = q_zero_so){
       saturation_in <- coverage_so * q_full_so + ( 1 - coverage_so ) * q_zero_so
       return(list("saturation_in" = saturation_in))
@@ -792,56 +789,46 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $p=0.51099999975$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;"> $R=0.681333333$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_l=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;"> $w_{ww}=14.5850933$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=0.1019575$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{ww}=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=-0.0010413$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ww}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_{se}=3.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -881,19 +868,19 @@ chunk_cost2 <- function(){
 ###############################################################################
 ###############################################################################  
 
-    cost2_f <- function(periods_var = periods_so, 
+    cost2_f <- function(periods_var = periods_so,
                         delta_ed_var = delta_ed_final_in,
-                        interest_r_var = interest, 
+                        interest_r_var = interest,
                         cost_of_schooling_var = cost_per_student_in,
                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in) {
         index_t <- 0:periods_var
         delta_ed_s <- c(0, delta_ed_var, rep(0,41))
-        (s2_var * q2_var  - s1_var * q1_var) + 
+        (s2_var * q2_var  - s1_var * q1_var) +
           sum( ( 1 / (1 + interest_r_var) )^index_t *
-                 delta_ed_s * cost_of_schooling_var) 
+                 delta_ed_s * cost_of_schooling_var)
 
     }
-    
+
 ###############################################################################
 ###############################################################################  
     return(list("cost2_f" = cost2_f))    # Try to return only functions
@@ -932,7 +919,7 @@ chunk_unit_costs2 <- function(){
 ###############################################################################  
 
     s2_f <- function(unit_cost_local_var = unit_cost_local_so,
-                     ex_rate_var = ex_rate_so, 
+                     ex_rate_var = ex_rate_so,
                      years_of_treat_var = years_of_treat_so) {
       ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
     }
@@ -985,7 +972,7 @@ chunk_edcosts <- function(){
         (teach_sal_var + teach_ben_var) / n_students_var
     }
 
-    delta_ed_final_f <- function(include_ext_var = include_ext_so, 
+    delta_ed_final_f <- function(include_ext_var = include_ext_so,
                                  delta_ed_var = delta_ed_so,
                                  delta_ed_ext_var = delta_ed_ext_so){
         if (include_ext_var == TRUE){
@@ -1090,56 +1077,46 @@ Including externalities, they obtain a total NPV of benefits of 766.81, with 102
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $p=0.51099999975$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;"> $R=0.681333333$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_l=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;"> $w_{ww}=14.5850933$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=0.1019575$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{ww}=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=-0.0010413$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ww}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_{se}=3.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -1163,7 +1140,7 @@ Including externalities, they obtain a total NPV of benefits of 766.81, with 102
 In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but now there is more data on the actual effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  Additionally. the interest rate here is updated to current values of return on (Kenyan) goverment bonds and inflation.
 
 
-### Gains in earnings 
+### Gains in earnings
 
 Gains in earnings ($E_t$) from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference with approach 1, which only measures gains in earnings by year 10 and extrapolates into the future. To extrapolate after the 20-year measurement, the authors assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life. Hence the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
 
@@ -1310,56 +1287,46 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $p=0.51099999975$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;"> $R=0.681333333$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_l=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;"> $w_{ww}=14.5850933$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=0.1019575$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{ww}=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=-0.0010413$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ww}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_{se}=3.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -1470,7 +1437,7 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
 
 Over this nine year period, students attended school for an additional 0.15 years on average. Then we get an average cost of additional schooling per child over the nine-year period, $32.40.
 
-TO DO:  add a sentence with final NPV (analogous to last sentence in app1) 
+TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 
 -------------------
 
@@ -1558,56 +1525,46 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $p=0.51099999975$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;"> $R=0.681333333$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_l=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;"> $w_{ww}=14.5850933$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=0.1019575$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{ww}=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=-0.0010413$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ww}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_{se}=3.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -1624,22 +1581,22 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 </tbody>
 </table>
 </details>
- 
+
 
 ## Approach 3: Combinantion of Previous Approaches and Input From Policy Makers
 
-In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key policy maker in this area: the NGO Evidence Action (EA). EA provided feedback on what are the relevant costs and benefits that they, and other local policy makers like ministries of health, would consider when making decisions on deworming interventions. Additionally, EA provided insights and data on what are the key main costs of implementing a deworming intervention in different countries. 
+In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key policy maker in this area: the NGO Evidence Action (EA). EA provided feedback on what are the relevant costs and benefits that they, and other local policy makers like ministries of health, would consider when making decisions on deworming interventions. Additionally, EA provided insights and data on what are the key main costs of implementing a deworming intervention in different countries.
 
-In this final approach the benefits from deworming described in the previous approachces are scaled to reflect differences prevalence rates. Additionally, the relevant costs are constrained to be only the direct costs, with varying implementation costs for different countries. 
+In this final approach the benefits from deworming described in the previous approachces are scaled to reflect differences prevalence rates. Additionally, the relevant costs are constrained to be only the direct costs, with varying implementation costs for different countries.
 
 
-When the original deworming study was conducted in Kenya in 1999, the prevalence rates of the different types of worms infections where of up to XXX for the relevant population, and the costs of for this setting where of XXXX. Today Evidence Actions supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
+When the original deworming study was conducted in Kenya in 1999, the prevalence rates of the different types of worms infections where of up to XXX for the relevant population, and the costs of for this setting where of XXXX. Today Evidence Actions supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX.
 
 <!-- Emma (11): please read the three paragraph above and improve writing -->
 
 ### Benefits   
 
-In order to account for different prevalence rates, the estimated treatment effect are decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who where treated and did not had a worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatement, divided by the proportion of the prevalence of infections. 
+In order to account for different prevalence rates, the estimated treatment effect are decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who where treated and did not had a worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatement, divided by the proportion of the prevalence of infections.
 
 In the original evaluation, the prevalence rates where very high (1), hence the effect on the infected population was similar to that of the ovearll population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$)
 
@@ -1670,8 +1627,8 @@ chunk_lambdas_eff<- function(){
 ###############################################################################
 ###############################################################################    
 
-    lambda_eff_f <- function(lambda1_var = lambda1_in_f(), 
-                           alpha_0_var = alpha_0_so, 
+    lambda_eff_f <- function(lambda1_var = lambda1_in_f(),
+                           alpha_0_var = alpha_0_so,
                            alpha_r_var = alpha_r_so){
         lambda1_eff_temp <- lambda1_var / alpha_0_var
         return( lambda1_eff_temp * alpha_r_var )
@@ -1694,7 +1651,7 @@ lambda1_r_in <- lambda_eff_f()
 
 ### Costs
 
-To estimate the costs, we follow a similar approach to @givewell. They estimate, for each country where Evidence Action provides technical assistance, the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. 
+To estimate the costs, we follow a similar approach to @givewell. They estimate, for each country where Evidence Action provides technical assistance, the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs.
 
 <details><summary>Show all the details</summary>
 
@@ -1951,7 +1908,7 @@ invisible( list2env(chunk_cost1(),.GlobalEnv) )
   </tr>
   <tr>
    <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} = rac{C_{i}}{N_{i}} \
+c_{i} =rac{C_{i}}{N_{i}} \
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
    <td style="text-align:left;"> $(15)$ </td>
@@ -1971,56 +1928,46 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $p=0.51099999975$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;"> $R=0.681333333$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_l=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;"> $w_{ww}=14.5850933$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=0.1019575$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{ww}=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=-0.0010413$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ww}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_{se}=3.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -2140,7 +2087,7 @@ $N_{i}, C_{i,k,l}, \delta_{g}$
   </tr>
   <tr>
    <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} = rac{C_{i}}{N_{i}} \
+c_{i} =rac{C_{i}}{N_{i}} \
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
    <td style="text-align:left;"> $(15)$ </td>
@@ -2164,56 +2111,46 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $p=0.51099999975$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;"> $R=0.681333333$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_l=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;"> $w_{ww}=14.5850933$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=0.1019575$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{ww}=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=-0.0010413$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ww}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_{se}=3.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -2352,7 +2289,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
   </tr>
   <tr>
    <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} = rac{C_{i}}{N_{i}} \
+c_{i} =rac{C_{i}}{N_{i}} \
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
    <td style="text-align:left;"> $(15)$ </td>
@@ -2362,11 +2299,11 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
    <td style="text-align:left;"> $(16)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $CEA_{deworming} = rac{B (1 + F_{0})}{C}$ </td>
+   <td style="text-align:left;"> $CEA_{deworming} =rac{B (1 + F_{0})}{C}$ </td>
    <td style="text-align:left;"> $(17)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $RCEA = rac{CEA_{deworming}}{CEA_{cash}}$ </td>
+   <td style="text-align:left;"> $RCEA =rac{CEA_{deworming}}{CEA_{cash}}$ </td>
    <td style="text-align:left;"> $(18)$ </td>
   </tr>
 </tbody>
@@ -2384,56 +2321,46 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $p=NA$ </td>
+   <td style="text-align:left;"> $p=0.51099999975$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $R=NA$ </td>
+   <td style="text-align:left;"> $R=0.681333333$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\lambda_1=NA$ </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\lambda_2=NA$ </td>
+   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_l=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=NA$ </td>
+   <td style="text-align:left;"> $w_{ww}=14.5850933$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_1=0.1019575$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{ww}=NA$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=NA$ </td>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $\hat{\beta}_2=-0.0010413$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_l=NA$ </td>
+   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ag}=NA$ </td>
+   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ww}=NA$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=NA$ </td>
+   <td style="text-align:left;"> $h_{se}=3.3$ </td>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
@@ -3471,7 +3398,7 @@ ggplotly(plot1)
 ```r
 # dens <- density(npv_sim)
 # fig <- plot_ly(x=~dens$x, y = ~dens$y, type='scatter', mode='lines', fill='tozeroy')
-# fig <- fig %>% 
+# fig <- fig %>%
 #   layout(xaxis=list(title='NPV'), yaxis=list(title='Distribution Density'), title=paste0("Distribution of NPV of ", policy_estimates_text[position]))
 # fig
 #knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
