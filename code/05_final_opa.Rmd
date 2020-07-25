@@ -231,7 +231,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 
-```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Policy Estimate", echo=FALSE, eval=FALSE}
+```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Policy Estimate", echo=FALSE}
 # url
 knitr::include_graphics("/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png") 
 ```
