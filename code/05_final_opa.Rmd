@@ -1255,7 +1255,7 @@ lambda1_r_in <- lambda_eff_f()
 
 ### Costs
 
-To estimate the costs, we follow a similar approach to @givewell. The default cost is the per unit of treatment across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions. 
+To estimate the costs, we follow a similar approach to @givewell. The default cost is the per unit cost of treatment across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions. 
 
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
 
@@ -1291,11 +1291,11 @@ invisible( list2env(chunk_cost1(),.GlobalEnv) )
 
 </details>
 <br>
-AQUI VOY: Flesh out points bellow, then review code (below), generate some intermediary result (table of costs and/or locations)
 
-Weights are based on number of treated individuals. 
+Flesh out points bellow, then review code (below), generate some intermediary result (table of costs and/or locations)
 
-Per capita costs as computed as total costs divided by number of treated children. 
+The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country are obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs are 
+
 
 Total costs are computed as the country level costs over the folling payers: 
 
