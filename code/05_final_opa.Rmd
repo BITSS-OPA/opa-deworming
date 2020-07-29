@@ -1259,6 +1259,14 @@ To estimate the costs, we follow a similar approach to @givewell. The default co
 
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
 
+Flesh out points bellow, then review code (below), generate some intermediary result (table of costs and/or locations)
+
+The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country are obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across regions faced by Evidence Action, local governments, and other partners.  
+
+
+
+Country level costs at the payer level are computed as the sum of item-level costs with-in a specific region of a country. 
+
 <details><summary>Show all the details</summary>
 
 \begin{equation}
@@ -1267,41 +1275,6 @@ C = \sum_{i \in Countries } \omega_{i} c_{i}
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
-
-
-```{r eq_2, echo=print_code} 
-# - inputs: nothing
-# - outputs: function that computes the weighted sum of country costs
-chunk_cost1 <- function(){
-###############################################################################
-###############################################################################  
-
-    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
-        sum(country_w_var * country_cost_var)
-    }
-
-###############################################################################
-###############################################################################  
-    return(list("costs1_f" = costs1_f))
-}
-
-
-invisible( list2env(chunk_cost1(),.GlobalEnv) )
-```
-
-</details>
-<br>
-
-Flesh out points bellow, then review code (below), generate some intermediary result (table of costs and/or locations)
-
-The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country are obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs are 
-
-
-Total costs are computed as the country level costs over the folling payers: 
-
-Country level costs at the payer level are computed as the sum of item-level costs with-in a specific region of a country. 
-
-<details><summary>Show all the details</summary>
 
 \begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
@@ -1327,81 +1300,104 @@ All costs are in USD.
 - $l$: Each payers costs come from $l$ items.   
 
 
+
+
+```{r eq_2, echo=print_code} 
+# - inputs: nothing
+# - outputs: function that computes the weighted sum of country costs
+chunk_cost1 <- function(){
+###############################################################################
+###############################################################################  
+
+    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
+        sum(country_w_var * country_cost_var)
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("costs1_f" = costs1_f))
+}
+
+
+invisible( list2env(chunk_cost1(),.GlobalEnv) )
+```
+
+
 ```{r eq_3, echo=print_code, eval=TRUE}  
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
-    costs1_costs_f <- function(df_costs_var = df_costs_so,
-                               df_costs_cw_var = df_costs_cw_so,
-                               staff_time_var = staff_time_so){
+      costs1_p1_f <- function(df_costs_var = df_costs_so,
+                           df_costs_cw_var = df_costs_cw_so,
+                           df_counts_var = df_counts_so,
+                           staff_time_var = staff_time_so) {
+    
+      ## Counts
+      # Data cleanning:
       # Add country
-      df_costs_var <- df_costs_cw_var %>%
-        right_join(df_costs_var, by = "Country/State") %>%
-        select(-Country.y) %>% rename(Country = Country.x) %>%
-        mutate(Country = tolower(Country))
-      # values for last year with cost information
-      df_costs_last <- df_costs_var %>%
-        group_by(Country) %>%
-        summarise("last_year" = max(Year)) %>%
-        right_join(df_costs_var, by = "Country") %>%
-        filter(Year == last_year)    
-
-      # summing across payers and regions (last equation)
-      costs_by_item_temp <- df_costs_last %>%
-        filter(Payer != "Total") %>%
-        group_by(Country, `Program Area`) %>%
-        summarise("costs_by_region" = sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE))
-
-      #sum across country/state and multiply by delta
-      country_cost <- costs_by_item_temp %>%
-        group_by(Country) %>%
-        summarise("costs_by_country" = sum(costs_by_region) * (1 + staff_time_var))  
-
-      return( list("cost_data" = country_cost) )
-    }
-
-    costs1_counts_f <- function(df_counts_var = df_counts_so,
-                          df_costs_cw_var = df_costs_cw_so){
-      # Add country
-      df_counts_var <- df_costs_cw_var %>%
+      df_counts_temp <- df_costs_cw_var %>%
         right_join(df_counts_var, by = "Country/State") %>%
         mutate(Country = tolower(Country))
-
-      # values for last year with cost information
-      df_counts_last <- df_counts_var %>%
+      # keep only last year on record
+      df_counts_last <- df_counts_temp %>%
         group_by(Country) %>%
         summarise("last_year" = max(Year)) %>%
-        right_join(df_counts_var, by = "Country") %>%
-        filter(Year == last_year)    
-
+        right_join(df_counts_temp, by = "Country") %>%
+        filter(Year == last_year)          
+      # compute counts as the sum with-in country-year of treatments
       c_counts <- df_counts_last %>%
         group_by(Country, Year) %>%
         summarise("total" = sum(`# dewormed`))
 
-      return( list("counts_data" = c_counts) )
-    }
-
-    costs1_ratios_in_f <- function(counts_var = costs1_counts_f()$counts_data,
-                                   costs_var = costs1_costs_f()$cost_data){
       # create country weight
-      c_weights <- counts_var %>% ungroup() %>%
+      c_weights <- c_counts %>% 
+        ungroup() %>% 
         mutate(country_w = total / sum(total))
+        
+      ## Costs 
+      # Data cleaning:
+      # Add country
+      df_costs_temp <- df_costs_cw_var %>% 
+        right_join(df_costs_var, by = "Country/State") %>%
+        select(-Country.y) %>% rename(Country = Country.x) %>%
+        mutate(Country = tolower(Country))
+      # values for last year with cost information
+      df_costs_last <- df_costs_temp %>%
+        group_by(Country) %>%
+        summarise("last_year" = max(Year)) %>%
+        right_join(df_costs_temp, by = "Country") %>%
+        filter(Year == last_year)    
+      
+      # summing across payers and regions (last equation)
+      costs_by_item_temp <- df_costs_last %>%
+        filter(Payer != "Total") %>%
+        group_by(Country, Payer) %>% 
+        summarise("costs_by_payer" = sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE)) 
+    
+      #sum across payers and multiply by delta (second to last)
+      country_cost <- costs_by_item_temp %>%
+        group_by(Country) %>%
+        summarise("costs_by_country" = sum(costs_by_payer) * (1 + staff_time_var))  
 
-      # Compute the per capita cost for each country
-      ratios_data <- costs_var %>%
+      # Compute the per capita cost for each country (c_i and w_i)
+      costs_data <- country_cost %>%
          left_join(c_weights, by = "Country") %>%
          mutate("per_cap" = costs_by_country / total)
+    
+      return( costs_data )
+    }
 
-          return( list("ratios_data" = ratios_data) )
-      }
+    costs1_p2_f <- function(country_w_var = costs_data$country_w, 
+                         country_cost_var = costs_data$per_cap) {
+        sum(country_w_var * country_cost_var)
+    }
 
 ###############################################################################
 ###############################################################################  
-    return( list("costs1_costs_f" = costs1_costs_f,
-                "costs1_counts_f" = costs1_counts_f,
-                "costs1_ratios_in_f" = costs1_ratios_in_f) )
+    return( list("costs1_p1_f" = costs1_p1_f, 
+                 "costs1_p2_f" = costs1_p2_f) )
 }
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```
@@ -1591,10 +1587,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 # │      ├──── earnings2_f
 # │      |      └────lambda_eff_f
 # │      └──── interest_f
-# └──── cost1_f
-# │      └──── costs1_ratios_in_f
-# |             ├──── costs1_costs_f
-# │             └──── costs1_counts_f
+# └──── cost1_f = 
 # └──── cost2_f = 11.776188118988
 #        ├──── delta_ed_final_f
 #        ├──── interest_f
@@ -1712,7 +1705,9 @@ one_run <-
     unit_test(earnings_in_yes_ext, 167.667817450905, main_run_var = main_run_var1)
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
-    ###------------- Inputs for costs1_ratios_in_f----------------------------------
+    #TO DELETE:
+if (FALSE){
+        ###------------- Inputs for costs1_ratios_in_f----------------------------------
     costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var1,
                                         df_costs_cw_var = df_costs_cw_var1)$counts_data
     costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_var1,
@@ -1729,7 +1724,7 @@ one_run <-
                                             costs_var =  costs1_costs_in)
       unit_test(unlist(costs1_country$ratios_data$costs_by_country),  
                 6880801.84046596, main_run_var = main_run_var1)
-
+}
     ##-------------- Inputs for costs2_f--------------------------------------------
     # Make explicit non-function inputs:
     delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
@@ -1755,7 +1750,7 @@ one_run <-
     unit_test(cost_per_student_in,  116.8549, main_run_var = main_run_var1)
 
 
-    #TODO: remove hardcoded numbers
+    #TO DO: remove hardcoded numbers
     cost_per_student_in_new <- cost_per_student_f(teach_sal_var = teach_sal_new_var1,
                                           teach_ben_var = teach_ben_new_var1,
                                           n_students_var = n_students_var1)
@@ -1796,8 +1791,9 @@ one_run <-
 
     #Costs
     # costs1: EA costs no externalities
-    cost1_in <- costs1_f(country_w_var = costs1_country$ratios_data$country_w,
-                         country_cost_var = costs1_country$ratios_data$per_cap)
+    browser() 
+    costs_data <- costs1_p1_f()
+    cost1_in <- costs1_p2_f()
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
 
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
