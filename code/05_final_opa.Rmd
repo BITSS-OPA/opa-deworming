@@ -728,24 +728,24 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ```{r sum_tables3, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_1[1,2] <- paste0("$p=" , saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so), "$") # round
-table_1[2,2] <- paste0("$R=" , coverage_so, "$") # round
+table_1[1,2] <- paste0("$p=" , round(unlist(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so), 2)), "$")
+table_1[2,2] <- paste0("$R=" , round(coverage_so,2), "$")
 table_1[3,2] <- paste0("$\\lambda_1=" , lambda1_in_f(lambda1_var = lambda1_so)[1], "$")
 table_1[4,2] <- paste0("$\\lambda_2=" , lambda2_so, "$")
 
 table_1 <-rbind(table_1, 
-                c( "", paste0("$\\hat{\\beta}_1=" , coef_exp_so[1], "$"), ""), # round 
-                c( "", paste0("$\\hat{\\beta}_2=" , coef_exp_so[2], "$"), "") ) # round
+                c( "", paste0("$\\hat{\\beta}_1=" , round(coef_exp_so[1],2), "$"), ""),
+                c( "", paste0("$\\hat{\\beta}_2=" , round(coef_exp_so[2],2), "$"), "") ) 
 
-table_1[5,1] <- paste0("$w_{ww}=" , wage_ww_so, "$") # round
+table_1[5,1] <- paste0("$w_{ww}=" , round(wage_ww_so,2), "$")
 table_1[6,1] <- paste0("$w_{se}=" , round(profits_se_so / (4.5 * hours_se_cond_so),2), "$") #copied from 589 in wage_0_mo but wage_se is never calculated outside the fn
 
 table_1 <-rbind(table_1,
                 c( paste0("$h_{ag}=" , hours_ag_so, "$"), "", ""), 
                 c( paste0("$h_{ww}=" , hours_ww_so, "$"), "", ""), 
                 c( paste0("$h_{se}=" , hours_se_so, "$"), "", ""),  
-                c( paste0("$Q(full)=" , 0.75, "$"), "", ""), 
-                c( paste0("$Q(0)=" , 0, "$"), "", "")
+                c( paste0("$Q(full)=" , q_full_so, "$"), "", ""), 
+                c( paste0("$Q(0)=" , q_zero_so, "$"), "", "")
                 ) 
 
 
@@ -967,6 +967,8 @@ Including externalities, they obtain a total NPV of benefits of `r df_research_s
 <details><summary>View Summary Table</summary>
 ```{r sum_tables16, purl=FALSE, echo=FALSE, eval=TRUE}
 
+table_1[7, 2] <- paste0("$K=" , round(cost_per_student_f(),2), "$")
+
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
                  c("$K = \\frac{\\text{teacher salary} + \\text{teacher benefits}}{\\text{# Students}}$",
@@ -1040,22 +1042,30 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 
 ```{r sum_tables17, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_10 <- matrix("", nrow = 1, ncol = 3)
+# table_10 <- matrix("", nrow = 1, ncol = 3)
+# 
+# table_10[1,1] <- paste0("$E_t=" , NA, "$")
+# table_10[1,2] <- paste0("$t=" , NA, "$")
+# table_10[1,3] <- paste0("$\\alpha^{KLPS2}=" , NA, "$")
+# 
+# table_10 <- rbind(table_10, c(paste0("$\\alpha^{KLPS3}=" , NA, "$"),
+#                             paste0("$\\alpha^{KLPS4}=" , NA, "$"),
+#                             "    "))
+# 
+# knitr::kable(table_10, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
+#   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
-table_10[1,1] <- paste0("$E_t=" , NA, "$")
-table_10[1,2] <- paste0("$t=" , NA, "$")
-table_10[1,3] <- paste0("$\\alpha^{KLPS2}=" , NA, "$")
+#why are the treatment effects in different columns?
+table_1[8,2] <- paste0("$t=" , NA, "$")
+table_1[9,2] <- paste0("$\\alpha^{KLPS4}=" , round(lambda1_new_so[3],2), "$")
+table_1[1,3] <- paste0("$\\alpha^{KLPS2}=" , round(lambda1_new_so[1],2), "$")
 
-table_10 <- rbind(table_10, c(paste0("$\\alpha^{KLPS3}=" , NA, "$"),
-                            paste0("$\\alpha^{KLPS4}=" , NA, "$"),
-                            "    "))
-
-knitr::kable(table_10, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+table_1 <- rbind(table_1, c(paste0("$E_t=" , earnings2_f(), "$"), "", ""),
+                          c(paste0("$\\alpha^{KLPS3}=" , round(lambda1_new_so[2],2), "$"), "", ""))
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$E_t = \\mathbf{1}(10 \\text{<} t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\text{<} t \\leq 20)\alpha^{KLPS3} + \\mathbf{1}(t \\text{>} 20)\\alpha^{KLPS4}$",
+                 c("$E_t = \\mathbf{1}(10 \\text{<} t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\text{<} t \\leq 20)\alpha^{KLPS3} + \\mathbf{1}(t \\text{>} 20)\\alpha^{KLPS4}$",#fix greater than/ less than symbols
                    paste0("$(", sum_table_index, ")$") )
     )
 
@@ -1168,6 +1178,10 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 <details><summary>View summary table</summary>
 ```{r sum_tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
+table_1[10,2] <- paste0("$S_1=", NA, "$")
+table_1[11,2] <- paste0("$S_2=", NA, "$")
+table_1[12, 2] <- paste0("$\\Delta \\overline{E}_{t}(S1,S2)=", NA, "$") #delta_ed_so[,1] is a series
+
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
                  c("$DC = \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big] + \\left( \\frac{1}{1 + r}\\right)\\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big] + \\
@@ -1206,6 +1220,8 @@ When the original deworming study was conducted in Kenya in 1999, the prevalence
 In order to account for different prevalence rates, the estimated treatment effect are decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who where treated and did not had a worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatement, divided by the proportion of the prevalence of infections. 
 
 In the original evaluation, the prevalence rates where very high (`r alpha_0_so`), hence the effect on the infected population was similar to that of the ovearll population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$)
+
+
 
 <details><summary>Show all the details</summary>
 
@@ -1268,19 +1284,13 @@ Country level costs at the payer level are computed as the sum of item-level cos
 <details><summary>Show all the details</summary>
 
 \begin{equation}
-C = \sum_{i \in Countries } \omega_{i} c_{i}
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-
-\begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
 c_{i} = \frac{C_{i}}{N_{i}} \\
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
+
 
 \begin{equation}
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
@@ -1290,7 +1300,8 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
 
 All costs are in USD.
 
-(Move to footnote) GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
+GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
+
 
 - $N_{i}$: Number of treated children in country $i$.  
 - $Ex_{i}$: Exchange rate from country $i$ to USD.  
@@ -1306,75 +1317,75 @@ All costs are in USD.
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
-      costs1_p1_f <- function(df_costs_var = df_costs_so,
-                           df_costs_cw_var = df_costs_cw_so,
-                           df_counts_var = df_counts_so,
-                           staff_time_var = staff_time_so) {
-    
-      ## Counts
-      # Data cleanning:
+    costs1_costs_f <- function(df_costs_var = df_costs_so,
+                               df_costs_cw_var = df_costs_cw_so,
+                               staff_time_var = staff_time_so){
       # Add country
-      df_counts_temp <- df_costs_cw_var %>%
-        right_join(df_counts_var, by = "Country/State") %>%
-        mutate(Country = tolower(Country))
-      # keep only last year on record
-      df_counts_last <- df_counts_temp %>%
-        group_by(Country) %>%
-        summarise("last_year" = max(Year)) %>%
-        right_join(df_counts_temp, by = "Country") %>%
-        filter(Year == last_year)          
-      # compute counts as the sum with-in country-year of treatments
-      c_counts <- df_counts_last %>%
-        group_by(Country, Year) %>%
-        summarise("total" = sum(`# dewormed`))
-
-      # create country weight
-      c_weights <- c_counts %>% 
-        ungroup() %>% 
-        mutate(country_w = total / sum(total))
-        
-      ## Costs 
-      # Data cleaning:
-      # Add country
-      df_costs_temp <- df_costs_cw_var %>% 
+      df_costs_var <- df_costs_cw_var %>%
         right_join(df_costs_var, by = "Country/State") %>%
         select(-Country.y) %>% rename(Country = Country.x) %>%
         mutate(Country = tolower(Country))
       # values for last year with cost information
-      df_costs_last <- df_costs_temp %>%
+      df_costs_last <- df_costs_var %>%
         group_by(Country) %>%
         summarise("last_year" = max(Year)) %>%
-        right_join(df_costs_temp, by = "Country") %>%
+        right_join(df_costs_var, by = "Country") %>%
         filter(Year == last_year)    
-      
+
       # summing across payers and regions (last equation)
       costs_by_item_temp <- df_costs_last %>%
         filter(Payer != "Total") %>%
-        group_by(Country, Payer) %>% 
-        summarise("costs_by_payer" = sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE)) 
-    
-      #sum across payers and multiply by delta (second to last)
+        group_by(Country, `Program Area`) %>%
+        summarise("costs_by_region" = sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE))
+
+      #sum across country/state and multiply by delta
       country_cost <- costs_by_item_temp %>%
         group_by(Country) %>%
-        summarise("costs_by_country" = sum(costs_by_payer) * (1 + staff_time_var))  
+        summarise("costs_by_country" = sum(costs_by_region) * (1 + staff_time_var))  
 
-      # Compute the per capita cost for each country (c_i and w_i)
-      costs_data <- country_cost %>%
+      return( list("cost_data" = country_cost) )
+    }
+
+    costs1_counts_f <- function(df_counts_var = df_counts_so,
+                          df_costs_cw_var = df_costs_cw_so){
+      # Add country
+      df_counts_var <- df_costs_cw_var %>%
+        right_join(df_counts_var, by = "Country/State") %>%
+        mutate(Country = tolower(Country))
+
+      # values for last year with cost information
+      df_counts_last <- df_counts_var %>%
+        group_by(Country) %>%
+        summarise("last_year" = max(Year)) %>%
+        right_join(df_counts_var, by = "Country") %>%
+        filter(Year == last_year)    
+
+      c_counts <- df_counts_last %>%
+        group_by(Country, Year) %>%
+        summarise("total" = sum(`# dewormed`))
+
+      return( list("counts_data" = c_counts) )
+    }
+
+    costs1_ratios_in_f <- function(counts_var = costs1_counts_f()$counts_data,
+                                   costs_var = costs1_costs_f()$cost_data){
+      # create country weight
+      c_weights <- counts_var %>% ungroup() %>%
+        mutate(country_w = total / sum(total))
+
+      # Compute the per capita cost for each country
+      ratios_data <- costs_var %>%
          left_join(c_weights, by = "Country") %>%
          mutate("per_cap" = costs_by_country / total)
-    
-      return( costs_data )
-    }
 
-    costs1_p2_f <- function(country_w_var = costs_data$country_w, 
-                         country_cost_var = costs_data$per_cap) {
-        sum(country_w_var * country_cost_var)
-    }
+          return( list("ratios_data" = ratios_data) )
+      }
 
 ###############################################################################
 ###############################################################################  
-    return( list("costs1_p1_f" = costs1_p1_f, 
-                 "costs1_p2_f" = costs1_p2_f) )
+    return( list("costs1_costs_f" = costs1_costs_f,
+                "costs1_counts_f" = costs1_counts_f,
+                "costs1_ratios_in_f" = costs1_ratios_in_f) )
 }
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```
@@ -1382,8 +1393,54 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 </details>
 <br>
 
-<details><summary>View Summary Table</summary>
-```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
+
+The final estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
+
+<details><summary>Show all the details</summary>
+
+\begin{equation}
+C = \sum_{i \in Countries } \omega_{i} c_{i}
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
+
+GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance. These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO.
+
+Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
+
+The final cost is a weighted average of the unit cost across countries.
+
+- $\omega_{i}$: Weight for the weighted average.  
+- $c_{i}$: Total cost per child, per year in country $i$.  
+```{r eq_2, echo=print_code} 
+# - inputs: nothing
+# - outputs: function that computes the weighted sum of country costs
+chunk_cost1 <- function(){
+###############################################################################
+###############################################################################  
+
+    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
+        sum(country_w_var * country_cost_var)
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("costs1_f" = costs1_f))
+}
+
+
+invisible( list2env(chunk_cost1(),.GlobalEnv) )
+```
+
+</details>
+<br>
+
+<!-- Add fold/unfold for tables -->
+<details><summary>Click Here to View Analysis Table</summary>
+
+```{r sum_tables21, purl=FALSE, echo=FALSE, eval=TRUE}
+
 table_13 <- matrix("", nrow = 1, ncol = 3)
 
 table_13[1,1] <- paste0("$N_i=" , NA, "$")
@@ -1396,8 +1453,10 @@ table_13 <- rbind(table_13,c(paste0("$l=", NA, "$"),
 
 knitr::kable(table_13, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-
-
+```
+</details>
+<details><summary>View Summary Table</summary>
+```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1678,9 +1737,7 @@ one_run <-
     unit_test(earnings_in_yes_ext, 167.667817450905, main_run_var = main_run_var1)
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
-    #TO DELETE:
-if (FALSE){
-        ###------------- Inputs for costs1_ratios_in_f----------------------------------
+    ###------------- Inputs for costs1_ratios_in_f----------------------------------
     costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var1,
                                         df_costs_cw_var = df_costs_cw_var1)$counts_data
     costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_var1,
@@ -1697,7 +1754,7 @@ if (FALSE){
                                             costs_var =  costs1_costs_in)
       unit_test(unlist(costs1_country$ratios_data$costs_by_country),  
                 6880801.84046596, main_run_var = main_run_var1)
-}
+
     ##-------------- Inputs for costs2_f--------------------------------------------
     # Make explicit non-function inputs:
     delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
@@ -1723,7 +1780,7 @@ if (FALSE){
     unit_test(cost_per_student_in,  116.8549, main_run_var = main_run_var1)
 
 
-    #TO DO: remove hardcoded numbers
+    #TODO: remove hardcoded numbers
     cost_per_student_in_new <- cost_per_student_f(teach_sal_var = teach_sal_new_var1,
                                           teach_ben_var = teach_ben_new_var1,
                                           n_students_var = n_students_var1)
