@@ -1217,10 +1217,9 @@ When the original deworming study was conducted in Kenya in 1999, the prevalence
 
 ### Benefits   
 
-In order to account for different prevalence rates, the estimated treatment effect are decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who where treated and did not had a worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatement, divided by the proportion of the prevalence of infections. 
+To account for different prevalence rates ($\eta$), the estimated treatment effect is decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who were treated and did not have worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatment, divided by the proportion of the prevalence of infections. 
 
-In the original evaluation, the prevalence rates where very high (`r alpha_0_so`), hence the effect on the infected population was similar to that of the ovearll population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$)
-
+In the original evaluation, the prevalence rates where very high (`r alpha_0_so`), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$).
 
 
 <details><summary>Show all the details</summary>
@@ -1234,11 +1233,6 @@ For approach 3, we will modify treatement effects of approaches 1 and 2 (equatio
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
-
-Where:      
-
- - $\eta$: represents the prevalence of any worm infection.
- - $\lambda_{1}^{eff}$: represents the effect of deworming over those infected.  
 
 ```{r lambdas_eff}
 # - inputs: lambda1_in_f(), alpha_0_so, alpha_r_so
@@ -1313,79 +1307,74 @@ GW original analysis weights each country to take into account the number of tre
 # - inputs: nothing
 # - outputs: (1) function that computes the country weights used in the final 
 # costs (2)  function that computes the weighted sum of country costs 
-
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
-    costs1_costs_f <- function(df_costs_var = df_costs_so,
-                               df_costs_cw_var = df_costs_cw_so,
-                               staff_time_var = staff_time_so){
+      costs1_p1_f <- function(df_costs_var = df_costs_so,
+                           df_costs_cw_var = df_costs_cw_so,
+                           df_counts_var = df_counts_so,
+                           staff_time_var = staff_time_so) {
+    
+      ## Counts
+      # Data cleanning:
       # Add country
-      df_costs_var <- df_costs_cw_var %>%
+      df_counts_temp <- df_costs_cw_var %>%
+        right_join(df_counts_var, by = "Country/State") %>%
+        mutate(Country = tolower(Country))
+      # keep only last year on record
+      df_counts_last <- df_counts_temp %>%
+        group_by(Country) %>%
+        summarise("last_year" = max(Year)) %>%
+        right_join(df_counts_temp, by = "Country") %>%
+        filter(Year == last_year)          
+      # compute counts as the sum with-in country-year of treatments
+      c_counts <- df_counts_last %>%
+        group_by(Country, Year) %>%
+        summarise("total" = sum(`# dewormed`))
+      # create country weight
+      c_weights <- c_counts %>% 
+        ungroup() %>% 
+        mutate(country_w = total / sum(total))
+        
+      ## Costs 
+      # Data cleaning:
+      # Add country
+      df_costs_temp <- df_costs_cw_var %>% 
         right_join(df_costs_var, by = "Country/State") %>%
         select(-Country.y) %>% rename(Country = Country.x) %>%
         mutate(Country = tolower(Country))
       # values for last year with cost information
-      df_costs_last <- df_costs_var %>%
+      df_costs_last <- df_costs_temp %>%
         group_by(Country) %>%
         summarise("last_year" = max(Year)) %>%
-        right_join(df_costs_var, by = "Country") %>%
+        right_join(df_costs_temp, by = "Country") %>%
         filter(Year == last_year)    
-
+      
       # summing across payers and regions (last equation)
       costs_by_item_temp <- df_costs_last %>%
         filter(Payer != "Total") %>%
-        group_by(Country, `Program Area`) %>%
-        summarise("costs_by_region" = sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE))
-
-      #sum across country/state and multiply by delta
+        group_by(Country, Payer) %>% 
+        summarise("costs_by_payer" = sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE)) 
+    
+      #sum across payers and multiply by delta (second to last)
       country_cost <- costs_by_item_temp %>%
         group_by(Country) %>%
-        summarise("costs_by_country" = sum(costs_by_region) * (1 + staff_time_var))  
-
-      return( list("cost_data" = country_cost) )
-    }
-
-    costs1_counts_f <- function(df_counts_var = df_counts_so,
-                          df_costs_cw_var = df_costs_cw_so){
-      # Add country
-      df_counts_var <- df_costs_cw_var %>%
-        right_join(df_counts_var, by = "Country/State") %>%
-        mutate(Country = tolower(Country))
-
-      # values for last year with cost information
-      df_counts_last <- df_counts_var %>%
-        group_by(Country) %>%
-        summarise("last_year" = max(Year)) %>%
-        right_join(df_counts_var, by = "Country") %>%
-        filter(Year == last_year)    
-
-      c_counts <- df_counts_last %>%
-        group_by(Country, Year) %>%
-        summarise("total" = sum(`# dewormed`))
-
-      return( list("counts_data" = c_counts) )
-    }
-
-    costs1_ratios_in_f <- function(counts_var = costs1_counts_f()$counts_data,
-                                   costs_var = costs1_costs_f()$cost_data){
-      # create country weight
-      c_weights <- counts_var %>% ungroup() %>%
-        mutate(country_w = total / sum(total))
-
-      # Compute the per capita cost for each country
-      ratios_data <- costs_var %>%
+        summarise("costs_by_country" = sum(costs_by_payer) * (1 + staff_time_var))  
+      # Compute the per capita cost for each country (c_i and w_i)
+      costs_data <- country_cost %>%
          left_join(c_weights, by = "Country") %>%
          mutate("per_cap" = costs_by_country / total)
-
-          return( list("ratios_data" = ratios_data) )
-      }
-
+    
+      return( costs_data )
+    }
+    costs1_p2_f <- function(country_w_var = costs_data$country_w, 
+                         country_cost_var = costs_data$per_cap) {
+        sum(country_w_var * country_cost_var)
+    }
 ###############################################################################
 ###############################################################################  
-    return( list("costs1_costs_f" = costs1_costs_f,
-                "costs1_counts_f" = costs1_counts_f,
-                "costs1_ratios_in_f" = costs1_ratios_in_f) )
+    return( list("costs1_p1_f" = costs1_p1_f, 
+                 "costs1_p2_f" = costs1_p2_f) )
 }
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```
@@ -1730,14 +1719,16 @@ one_run <-
                                           lambda1k1_var = lambda1_new_in[1],
                                           lambda1k2_var = lambda1_new_in[2],
                                           lambda1k3_var = lambda1_new_in[3])
-    # ADD UNIT TEST
+    # interest rate NEED TO UPDATE TO EXACT RESULT
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1,
-                                          inflation_var = inflation_var1) )
+                                          inflation_var = inflation_var1)$interest_in )
     unit_test(earnings_in_no_ext, 31.1421332040266, main_run_var = main_run_var1)
     unit_test(earnings_in_yes_ext, 167.667817450905, main_run_var = main_run_var1)
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
-    ###------------- Inputs for costs1_ratios_in_f----------------------------------
+    #TO DELETE:
+if (FALSE){
+        ###------------- Inputs for costs1_ratios_in_f----------------------------------
     costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var1,
                                         df_costs_cw_var = df_costs_cw_var1)$counts_data
     costs1_costs_in <- costs1_costs_f(df_costs_var = df_costs_var1,
@@ -1754,7 +1745,7 @@ one_run <-
                                             costs_var =  costs1_costs_in)
       unit_test(unlist(costs1_country$ratios_data$costs_by_country),  
                 6880801.84046596, main_run_var = main_run_var1)
-
+}
     ##-------------- Inputs for costs2_f--------------------------------------------
     # Make explicit non-function inputs:
     delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
@@ -1768,11 +1759,11 @@ one_run <-
     unit_test(delta_ed_final_in_x,  0.05911765, main_run_var = main_run_var1)
 
     interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1,
-                                          inflation_var = inflation_var1) )
+                                          inflation_var = inflation_var1)$interest_in )
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
     interest_in_new <- as.numeric(interest_f(gov_bonds_var = gov_bonds_new_var1,
-                                             inflation_var = inflation_new_var1))
+                                             inflation_var = inflation_new_var1)$interest_in)
 
     cost_per_student_in <-  cost_per_student_f(teach_sal_var = teach_sal_var1,
                                                teach_ben_var = teach_ben_var1,
