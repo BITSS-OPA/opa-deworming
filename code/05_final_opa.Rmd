@@ -1271,7 +1271,15 @@ lambda1_r_in <- lambda_eff_f()
 
 ### Costs
 
-To estimate the costs, we follow a similar approach to @givewell. They estimate, for each country where Evidence Action provides technical assistance, the deworming cost per child using a combination of technical assistance costs, indirect and direct government expenditure, and partner costs. 
+To estimate the costs, we follow a similar approach to @givewell. The default cost is the per unit cost of treatment across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions. 
+
+Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
+
+Flesh out points bellow, then review code (below), generate some intermediary result (table of costs and/or locations)
+
+The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country are obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across regions faced by Evidence Action, local governments, and other partners.  
+
+Country level costs at the payer level are computed as the sum of item-level costs with-in a specific region of a country. 
 
 <details><summary>Show all the details</summary>
 
@@ -1303,7 +1311,9 @@ GW original analysis weights each country to take into account the number of tre
 
 ```{r eq_3, echo=print_code, eval=TRUE}  
 # - inputs: nothing
-# - outputs: function that computes the country weights used in the final costs
+# - outputs: (1) function that computes the country weights used in the final 
+# costs (2)  function that computes the weighted sum of country costs 
+
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
@@ -1476,9 +1486,6 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 $N_{i}, C_{i,k,l}, \delta_{g}$
 
-
-
-<!-- Add fold/unfold for tables -->
 <details><summary>Click Here to View Analysis Table</summary>
 
 ```{r sum_tables22, purl=FALSE, echo=FALSE, eval=TRUE}
@@ -1612,10 +1619,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 # │      ├──── earnings2_f
 # │      |      └────lambda_eff_f
 # │      └──── interest_f
-# └──── cost1_f
-# │      └──── costs1_ratios_in_f
-# |             ├──── costs1_costs_f
-# │             └──── costs1_counts_f
+# └──── cost1_f = 0.08480686
 # └──── cost2_f = 11.776188118988
 #        ├──── delta_ed_final_f
 #        ├──── interest_f
@@ -1817,8 +1821,9 @@ one_run <-
 
     #Costs
     # costs1: EA costs no externalities
-    cost1_in <- costs1_f(country_w_var = costs1_country$ratios_data$country_w,
-                         country_cost_var = costs1_country$ratios_data$per_cap)
+    costs_data <- costs1_p1_f()
+    cost1_in <- costs1_p2_f(country_w_var = costs_data$country_w,
+                            country_cost_var = costs_data$per_cap)
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
 
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
@@ -1852,8 +1857,7 @@ one_run <-
                   "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
                   "earnings_in_yes_ext" = earnings_in_yes_ext,
                   "earnings_in_no_ext_new" = earnings_in_no_ext_new,
-                  "interest_in" = interest_in, "costs1_counts_in" = costs1_counts_in,
-                  "costs1_costs_in" = costs1_costs_in, "costs1_country" = costs1_country,
+                  "interest_in" = interest_in, "costs1_country" = costs_data,
                   "delta_ed_final_in" = delta_ed_final_in, "delta_ed_final_in_x" = delta_ed_final_in_x,
                   "cost_per_student_in" = cost_per_student_in, "s2_in" = s2_in,  
                   "pv_benef_tax_nx_in"= pv_benef_tax_nx_in, "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
@@ -2117,22 +2121,38 @@ sim.data1 <- function(nsims = 1e2,
     colnames(delta_ed_ext_sim) <- 1999:2007
     #######    
     #######    
-    costs1_counts_in <- costs1_counts_f(df_counts_var = df_counts_var2,
-                                        df_costs_cw_var = df_costs_cw_var2)$counts_data
+    
+    costs1_counts_in <- costs1_country
+    
     costs1_counts_sim <- sapply(costs1_counts_in$total,
-                                function(x)  rnorm(nsims, mean = x * counts_par_var2,  
-                                                   sd = counts_par_var2_sd * x) )
+                                function(x)  rnorm(nsims, 
+                                                   mean = x * counts_par_var2,  
+                                                   sd = counts_par_var2_sd * x) 
+                                )
 
     staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
+    # Different costs for each staff time draw
 
-    costs1_costs_in <- lapply(staff_time_sim,
-                              function(x) costs1_costs_f(df_costs_var = df_costs_var2,
-                                                         df_costs_cw_var = df_costs_cw_var2,
-                                                         staff_time_var = x)$cost_data)
+    # Emma: figure out how to avoid "grouping" messages.     
+    suppressMessages(
+    costs1_data_in <- lapply(staff_time_sim,
+                                function(x) costs1_p1_f(
+                                  df_costs_var = df_costs_so,
+                                  df_costs_cw_var = df_costs_cw_so,
+                                  df_counts_var = df_counts_so,
+                                  staff_time_var = x))
+    )
 
-    costs1_costs_sim <- t( sapply(costs1_costs_in, function(x)  {
+    # draw total costs sameples from each costs data draw
+    # TODO:Think how to make the code below more readable: 
+    # For each costs_data in list: 
+    # get the country level costs, 
+    # and generate normal random draws from N(country costs, 0.1 * country costs)
+    costs1_costs_sim <- t( sapply(costs1_data_in, function(x)  {
         aux1 <- x$costs_by_country
-        rnorm(length(aux1), mean = costs_par_var2 * aux1,  sd = costs_par_var2_sd * aux1)
+        rnorm(length(aux1), 
+              mean = costs_par_var2 * aux1,  
+              sd = costs_par_var2_sd * aux1)
     } )
     )
 
@@ -2313,7 +2333,8 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             q_full_var2             = q_full_so         ,                          
             q_full_var2_sd          = q_full_so * 0.1   ,                         
             coef_exp_var2           = coef_exp_so,                      
-            #                      coef_exp_var2_sd = c(as.numeric(input$param21_1_1), as.numeric(input$param21_2_1)),                       
+            # coef_exp_var2_sd = c(as.numeric(input$param21_1_1), 
+            # as.numeric(input$param21_2_1)),                       
             teach_sal_var2          = teach_sal_so         ,                                          
             teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
             teach_ben_var2          = teach_ben_so         ,                                          
