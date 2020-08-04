@@ -1273,13 +1273,18 @@ To estimate the costs, we follow a similar approach to @givewell. The default co
 
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
 
-Flesh out points bellow, then review code (below), generate some intermediary result (table of costs and/or locations)
+The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country are obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across county regions faced by three different payers: Evidence Action, local governments, and other partners.  
 
-The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country are obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across regions faced by Evidence Action, local governments, and other partners.  
-
-Country level costs at the payer level are computed as the sum of item-level costs with-in a specific region of a country. 
+Country level costs at the payer level are computed as the sum of item-level costs with-in a specific country region. This items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence survey, program Management, planning public mobilization, community sensitization, and training & distribution.
 
 <details><summary>Show all the details</summary>
+
+\begin{equation}
+C = \sum_{i \in Countries } \omega_{i} c_{i}
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
 
 \begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
@@ -1293,18 +1298,7 @@ c_{i} = \frac{C_{i}}{N_{i}} \\
 \begin{equation}
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
-
 \end{equation}
-
-All costs are in USD.
-
-GW original analysis weights each country to take into account the number of treatments provided as well as the proportion of costs incurred by DtWI in that geography. The analytical foundations for such weights are not clear. Also not clear why should only account for DtW costs.  
-
-
-- $N_{i}$: Number of treated children in country $i$.  
-- $Ex_{i}$: Exchange rate from country $i$ to USD.  
-- $k$: Costs distribute across $k$ payers.   
-- $l$: Each payers costs come from $l$ items.   
 
 
 ```{r eq_3, echo=print_code, eval=TRUE}  
@@ -1314,11 +1308,15 @@ GW original analysis weights each country to take into account the number of tre
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
-      costs1_p1_f <- function(df_costs_var = df_costs_so,
-                           df_costs_cw_var = df_costs_cw_so,
-                           df_counts_var = df_counts_so,
-                           staff_time_var = staff_time_so) {
-    
+    costs1_p2_f <- function(country_w_var = costs_data$country_w, 
+                         country_cost_var = costs_data$per_cap) {
+          sum(country_w_var * country_cost_var)
+    }
+  
+    costs1_p1_f <- function(df_costs_var = df_costs_so,
+                         df_costs_cw_var = df_costs_cw_so,
+                         df_counts_var = df_counts_so,
+                         staff_time_var = staff_time_so) {
       ## Counts
       # Data cleanning:
       # Add country
@@ -1355,26 +1353,25 @@ chunk_cost1_inp <- function(){
         filter(Year == last_year)    
       
       # summing across payers and regions (last equation)
-      costs_by_item_temp <- df_costs_last %>%
+      costs_by_payer <- df_costs_last %>%
         filter(Payer != "Total") %>%
         group_by(Country, Payer) %>% 
         summarise("costs_by_payer" = sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE)) 
     
       #sum across payers and multiply by delta (second to last)
-      country_cost <- costs_by_item_temp %>%
+      country_cost <- costs_by_payer %>%
         group_by(Country) %>%
         summarise("costs_by_country" = sum(costs_by_payer) * (1 + staff_time_var))  
       # Compute the per capita cost for each country (c_i and w_i)
+
+      browser()
       costs_data <- country_cost %>%
          left_join(c_weights, by = "Country") %>%
          mutate("per_cap" = costs_by_country / total)
     
       return( costs_data )
     }
-    costs1_p2_f <- function(country_w_var = costs_data$country_w, 
-                         country_cost_var = costs_data$per_cap) {
-        sum(country_w_var * country_cost_var)
-    }
+
 ###############################################################################
 ###############################################################################  
     return( list("costs1_p1_f" = costs1_p1_f, 
@@ -1386,68 +1383,8 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 </details>
 <br>
 
+-----
 
-The final estimated cost is a weighted average of the unit costs across countries: for each country, the annual per capita cost is weighted by the proportion of the country's deworming costs relative to the total deworming costs across countries.
-
-<details><summary>Show all the details</summary>
-
-\begin{equation}
-C = \sum_{i \in Countries } \omega_{i} c_{i}
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-
-GiveWell estimates the cost per child dewormed in geographies where Evidence Action provides technical assistance. These costs include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO.
-
-Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
-
-The final cost is a weighted average of the unit cost across countries.
-
-- $\omega_{i}$: Weight for the weighted average.  
-- $c_{i}$: Total cost per child, per year in country $i$.  
-```{r eq_2, echo=print_code} 
-# - inputs: nothing
-# - outputs: function that computes the weighted sum of country costs
-chunk_cost1 <- function(){
-###############################################################################
-###############################################################################  
-
-    costs1_f <- function(country_w_var = 1, country_cost_var = 1) {
-        sum(country_w_var * country_cost_var)
-    }
-
-###############################################################################
-###############################################################################  
-    return(list("costs1_f" = costs1_f))
-}
-
-
-invisible( list2env(chunk_cost1(),.GlobalEnv) )
-```
-
-</details>
-<br>
-
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables21, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_13 <- matrix("", nrow = 1, ncol = 3)
-
-table_13[1,1] <- paste0("$N_i=" , NA, "$")
-table_13[1,2] <- paste0("$Ex_i=" , NA, "$")
-table_13[1,3] <- paste0("$k=" , NA, "$")
-
-table_13 <- rbind(table_13,c(paste0("$l=", NA, "$"),
-                            "    ",
-                            "    "))
-
-knitr::kable(table_13, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
-</details>
 <details><summary>View Summary Table</summary>
 ```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
 
@@ -1465,36 +1402,6 @@ C_{i,k} = \\sum_{l \\in items}\\sum_{m \\in regions}C_{i,k,l,m}$",
                    paste0("$(", sum_table_index, ")$") )
     )
 
-
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-
-knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
-
-</details>
-
-#### Data required to compute costs.
-
-$N_{i}, C_{i,k,l}, \delta_{g}$
-
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables22, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_14 <- matrix("", nrow = 1, ncol = 3)
-
-table_14[1,1] <- paste0("$\\alpha=" , NA, "$")
-table_14[1,2] <- paste0("$\\lambda_{1}^{eff}=" , NA, "$")
-
-knitr::kable(table_14, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
-</details>
-<details><summary>View Summary Table</summary>
-```{r sum_table20, purl=FALSE, echo=FALSE, eval=TRUE}
-
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
                  c("$\\lambda_{1} = \\alpha \\lambda^{eff}_{1} + (1 -  \\alpha) \\times 0$",
@@ -1507,7 +1414,9 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equa
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
+
 </details>
+
 
 ### Different format of policy estimate {#policy-estimate}
 
@@ -1534,23 +1443,10 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 \tag{`r equationIndex`}
 \end{equation}
 
-<!-- Add fold/unfold for tables -->
-<details><summary>Click Here to View Analysis Table</summary>
-
-```{r sum_tables23, purl=FALSE, echo=FALSE, eval=TRUE}
-
-table_15 <- matrix("", nrow = 1, ncol = 3)
-
-table_15[1,1] <- paste0("$C=" , NA, "$")
-table_15[1,2] <- paste0("$B=" , NA, "$")
-table_15[1,3] <- paste0("$F_0=" , NA, "$")
-
-knitr::kable(table_15, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
-</details>
 
 <details><summary>View Summary Table</summary>
+
+
 ```{r sum_table21, purl=FALSE, echo=FALSE, eval=TRUE}
 
 sum_table_index <- sum_table_index+1
@@ -1574,7 +1470,10 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 ```
 
 </details>
-# Main results
+
+
+# Main results  
+
 
 
 | Name    | Benfits                                   | Costs        |

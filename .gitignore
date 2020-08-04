@@ -37,6 +37,8 @@ vignettes/*.pdf
 
 # Mac
 .DS_Store
+*/.DS_Store
+
 
 # All files in code folder except .R and .rmd
 /code/*
