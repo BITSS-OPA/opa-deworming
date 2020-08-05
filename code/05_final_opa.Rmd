@@ -1455,6 +1455,8 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 
 ```{r sum_table21, purl=FALSE, echo=FALSE, eval=TRUE}
 
+table_1 <- rbind(table_1,
+                 c("", paste0("$F_{0}=", NA, "$"))) #should average benefits and costs be included in summary table?
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
                  c("$CEA_{deworming} = \\frac{B (1 + F_{0})}{C}$",
