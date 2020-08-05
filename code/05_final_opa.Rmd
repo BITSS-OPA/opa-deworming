@@ -731,7 +731,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ```{r sum_tables3, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_1[1,2] <- paste0("$p=" , round(unlist(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so), 2)), "$")
+table_1[1,2] <- paste0("$p=" , round(unlist(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so)),2), "$")
 table_1[2,2] <- paste0("$R=" , round(coverage_so,2), "$")
 table_1[3,2] <- paste0("$\\lambda_1=" , lambda1_in_f(lambda1_var = lambda1_so)[1], "$")
 table_1[4,2] <- paste0("$\\lambda_2=" , lambda2_so, "$")
@@ -1059,13 +1059,11 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 # knitr::kable(table_10, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
 #   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
-#why are the treatment effects in different columns?
-table_1[8,2] <- paste0("$t=" , NA, "$")
-table_1[9,2] <- paste0("$\\alpha^{KLPS4}=" , round(lambda1_new_so[3],2), "$")
-table_1[1,3] <- paste0("$\\alpha^{KLPS2}=" , round(lambda1_new_so[1],2), "$")
+table_1[8,2] <- paste0("$\\alpha^{KLPS2}=" , round(lambda1_new_so[1],2), "$")
+table_1[9,2] <- paste0("$\\alpha^{KLPS3}=" , round(lambda1_new_so[2],2), "$")
+table_1[10,2] <- paste0("$\\alpha^{KLPS4}=" , round(lambda1_new_so[3],2), "$")
 
-table_1 <- rbind(table_1, c(paste0("$E_t=" , earnings2_f(), "$"), "", ""),
-                          c(paste0("$\\alpha^{KLPS3}=" , round(lambda1_new_so[2],2), "$"), "", ""))
+table_1 <- rbind(table_1, c(paste0("$E_t=" , earnings2_f(), "$"), "", ""))
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1182,9 +1180,11 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 <details><summary>View summary table</summary>
 ```{r sum_tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_1[10,2] <- paste0("$S_1=", NA, "$")
-table_1[11,2] <- paste0("$S_2=", NA, "$")
-table_1[12, 2] <- paste0("$\\overline{\\Delta \\overline{E}_{t}(S1,S2)}=", mean(1:2), "$") #delta_ed_so[,1] is a series
+table_1[11,2] <- paste0("$r_{16}=", interest_16, "$")
+table_1[12,2] <- paste0("$r_{19}=", interest_19, "$")
+
+table_1 <- rbind(table_1, c( "", paste0("$S_2=", 1, "$"), ""), #S2 is a complete subsidy
+                 c( "",paste0("$\\overline{\\Delta \\overline{E}_{t}(S1,S2)}=", round(mean(delta_ed_so[,1]),2), "$"), ""))
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1388,6 +1388,12 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 <details><summary>View Summary Table</summary>
 ```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
 
+table_1[1,3] <- paste0("$\\delta_{g}=", staff_time_so, "$")
+table_1 <- rbind(table_1,
+                 c("", paste0("$\\overline{{C}_{i}}=", NA, "$"), ""),
+                 c("", paste0("$\\overline{{N}_{i}}=", NA, "$"), ""),
+                 c("", paste0("$\\lambda^{eff}_{1}=", NA, "$"), "")) #add alpha here?
+
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
                  c("$C = \\sum_{i \\in Countries } \\omega_{i} c_{i}$",
@@ -1451,12 +1457,12 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$CEA_{deworming} = \frac{B (1 + F_{0})}{C}$",
+                 c("$CEA_{deworming} = \\frac{B (1 + F_{0})}{C}$",
                    paste0("$(", sum_table_index, ")$") )
     )
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$RCEA = \frac{CEA_{deworming}}{CEA_{cash}}$
+                 c("$RCEA = \\frac{CEA_{deworming}}{CEA_{cash}}$
 ",
                    paste0("$(", sum_table_index, ")$") )
     )
