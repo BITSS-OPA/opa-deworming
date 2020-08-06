@@ -1364,7 +1364,6 @@ chunk_cost1_inp <- function(){
         summarise("costs_by_country" = sum(costs_by_payer) * (1 + staff_time_var))  
       # Compute the per capita cost for each country (c_i and w_i)
 
-      browser()
       costs_data <- country_cost %>%
          left_join(c_weights, by = "Country") %>%
          mutate("per_cap" = costs_by_country / total)
@@ -1530,7 +1529,9 @@ unit_test <- function(to_test_var, original_var, main_run_var = TRUE){
             text_val <- to_test_var
         }
         if (fails_test) {
-            print(paste("Output has change at", deparse(substitute(to_test_var) ), " to ", text_val) )
+            print(paste("Output has change at", 
+                        deparse(substitute(to_test_var) ), 
+                        " to ", text_val) )
         }
       }
 }
@@ -1582,40 +1583,63 @@ one_run <-
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so) {                                        
     ####------------ Inputs for wage_t ---------------------------------------------
-    wage_0_in <- wage_0_mo_f(wage_ag_var = wage_ag_var1, wage_ww_var = wage_ww_var1,
-                             profits_se_var = profits_se_var1, hours_se_cond_var = hours_se_cond_var1,  
-                             hours_ag_var = hours_ag_var1, hours_ww_var = hours_ww_var1,
-                             hours_se_var = hours_se_var1, ex_rate_var = ex_rate_var1)
+    wage_0_in <- wage_0_mo_f(
+      wage_ag_var = wage_ag_var1,
+      wage_ww_var = wage_ww_var1,
+      profits_se_var = profits_se_var1,
+      hours_se_cond_var = hours_se_cond_var1,
+      hours_ag_var = hours_ag_var1,
+      hours_ww_var = hours_ww_var1,
+      hours_se_var = hours_se_var1,
+      ex_rate_var = ex_rate_var1
+    )
     unit_test(wage_0_in, 0.170124466664436, main_run_var = main_run_var1)
     ###---------- Inputs for earnings1_f -------------------------------------------
-    wage_t_in <- wage_t_mo_f(wage_0_var = wage_0_in, growth_rate_var = growth_rate_var1,
-                             coef_exp1_var = coef_exp_var1, coef_exp2_var = coef_exp2_var1)
+    wage_t_in <- wage_t_mo_f(
+      wage_0_var = wage_0_in,
+      growth_rate_var = growth_rate_var1,
+      coef_exp1_var = coef_exp_var1,
+      coef_exp2_var = coef_exp2_var1
+    )
 
-    lambda1_in <- lambda_eff_f(lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
-                             alpha_0_var = alpha_0_var1, alpha_r_var = alpha_r_var1)
+    lambda1_in <- lambda_eff_f(
+      lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
+      alpha_0_var = alpha_0_var1,
+      alpha_r_var = alpha_r_var1
+    )
 
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
 
-    saturation_in <- as.numeric(saturation_in_f(coverage_var = coverage_var1,
-                                                q_full_var = q_full_var1,
-                                                q_zero_var = q_zero_var1) )
+    saturation_in <- saturation_in_f(coverage_var = coverage_var1,
+                                     q_full_var = q_full_var1,
+                                     q_zero_var = q_zero_var1)$saturation_in 
     unit_test(wage_t_in, 17.8464946727946, main_run_var = main_run_var1)
-    # ADD UNIT TEST FOR SATURATION AN LAMBDAS    
+    unit_test(lambda1_in[1], 1.745, main_run_var = main_run_var1)
+    unit_test(lambda2_in[1], 10.2 , main_run_var = main_run_var1)
+    unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
 
     ###------------ Inputs for earnings2_f------------------------------------------
     lambda1_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
                                  alpha_0_var = alpha_0_var1,
                                  alpha_r_var = alpha_r_var1)
-    #ADD UNIT TEST FOR LAMBDAS    
+    unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f -------------------------------------------
     # earnings1
-    earnings_in_no_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
-                                      lambda2_var = 0, saturation_var = saturation_in,
-                                      coverage_var = coverage_var1)
-    earnings_in_yes_ext <- earnings1_f(wage_var = wage_t_in, lambda1_var = lambda1_in[1],
-                                       lambda2_var = lambda2_in[1], saturation_var = saturation_in,
-                                       coverage_var = coverage_var1)
+    earnings_in_no_ext <- earnings1_f(
+      wage_var = wage_t_in,
+      lambda1_var = lambda1_in[1],
+      lambda2_var = 0,
+      saturation_var = saturation_in,
+      coverage_var = coverage_var1
+    )
+    earnings_in_yes_ext <- earnings1_f(
+      wage_var = wage_t_in,
+      lambda1_var = lambda1_in[1],
+      lambda2_var = lambda2_in[1],
+      saturation_var = saturation_in,
+      coverage_var = coverage_var1
+    )
 
     # earnings2
     earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
@@ -1623,10 +1647,12 @@ one_run <-
                                           lambda1k2_var = lambda1_new_in[2],
                                           lambda1k3_var = lambda1_new_in[3])
     # interest rate NEED TO UPDATE TO EXACT RESULT
-    interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1,
-                                          inflation_var = inflation_var1)$interest_in )
-    unit_test(earnings_in_no_ext, 31.1421332040266, main_run_var = main_run_var1)
-    unit_test(earnings_in_yes_ext, 167.667817450905, main_run_var = main_run_var1)
+    interest_in <- interest_f(gov_bonds_var = gov_bonds_var1,
+                              inflation_var = inflation_var1)$interest_in
+    unit_test(earnings_in_no_ext, 31.1421332040266, 
+              main_run_var = main_run_var1)
+    unit_test(earnings_in_yes_ext, 167.667817450905, 
+              main_run_var = main_run_var1)
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
     #TO DELETE:
@@ -1656,57 +1682,80 @@ if (FALSE){
                                           delta_ed_ext_var = delta_ed_ext_var1)
     unit_test(delta_ed_final_in, 0.01134819, main_run_var = main_run_var1)
 
-    delta_ed_final_in_x <- delta_ed_final_f(include_ext_var = TRUE,
-                                            delta_ed_var = delta_ed_var1,
-                                            delta_ed_ext_var = delta_ed_ext_var1)
+    delta_ed_final_in_x <- delta_ed_final_f(
+      include_ext_var = TRUE,
+      delta_ed_var = delta_ed_var1,
+      delta_ed_ext_var = delta_ed_ext_var1
+    )
     unit_test(delta_ed_final_in_x,  0.05911765, main_run_var = main_run_var1)
 
-    interest_in <- as.numeric( interest_f(gov_bonds_var = gov_bonds_var1,
-                                          inflation_var = inflation_var1)$interest_in )
+    interest_in <- interest_f(gov_bonds_var = gov_bonds_var1,
+                              inflation_var = inflation_var1)$interest_in 
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
-    interest_in_new <- as.numeric(interest_f(gov_bonds_var = gov_bonds_new_var1,
-                                             inflation_var = inflation_new_var1)$interest_in)
+    interest_in_new <- interest_f(
+      gov_bonds_var = gov_bonds_new_var1,
+      inflation_var = inflation_new_var1)$interest_in
 
     cost_per_student_in <-  cost_per_student_f(teach_sal_var = teach_sal_var1,
                                                teach_ben_var = teach_ben_var1,
                                                n_students_var = n_students_var1)
     unit_test(cost_per_student_in,  116.8549, main_run_var = main_run_var1)
 
+    cost_per_student_in_new <- cost_per_student_f(
+      teach_sal_var = teach_sal_new_var1,
+      teach_ben_var = teach_ben_new_var1,
+      n_students_var = n_students_var1
+    )
 
-    #TODO: remove hardcoded numbers
-    cost_per_student_in_new <- cost_per_student_f(teach_sal_var = teach_sal_new_var1,
-                                          teach_ben_var = teach_ben_new_var1,
-                                          n_students_var = n_students_var1)
-
-    s2_in <- s2_f(unit_cost_local_var = unit_cost_local_var1,
-                  ex_rate_var = ex_rate_var1, years_of_treat_var = years_of_treat_var1)
+    s2_in <- s2_f(
+      unit_cost_local_var = unit_cost_local_var1,
+      ex_rate_var = ex_rate_var1,
+      years_of_treat_var = years_of_treat_var1
+    )
     unit_test(s2_in, 1.4219, main_run_var = main_run_var1)
     #--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
     # Make explicit non-function inputs:
     #Benefits:
     #Baird w/tax and no externalities (no ext)
-    pv_benef_tax_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext * tax_var1,
-                                     interest_r_var = interest_in, periods_var = periods_var1)
-    unit_test(pv_benef_tax_nx_in, 23.6070893378784, main_run_var = main_run_var1)
+    pv_benef_tax_nx_in <- pv_benef_f(
+      earnings_var = earnings_in_no_ext * tax_var1,
+      interest_r_var = interest_in,
+      periods_var = periods_var1
+    )
+    unit_test(pv_benef_tax_nx_in, 23.6070893378784, 
+              main_run_var = main_run_var1)
     #Baird w/t and ext
-    pv_benef_tax_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext * tax_var1,
-                                     interest_r_var = interest_in, periods_var = periods_var1)
+    pv_benef_tax_yx_in <- pv_benef_f(
+      earnings_var = earnings_in_yes_ext * tax_var1,
+      interest_r_var = interest_in,
+      periods_var = periods_var1
+    )
     unit_test(pv_benef_tax_yx_in, 127.0994867217, main_run_var = main_run_var1)
     #Baird all and no
-    pv_benef_all_nx_in <- pv_benef_f(earnings_var = earnings_in_no_ext,
-                                     interest_r_var = interest_in, periods_var = periods_var1)
+    pv_benef_all_nx_in <- pv_benef_f(
+      earnings_var = earnings_in_no_ext,
+      interest_r_var = interest_in,
+      periods_var = periods_var1
+    )
     unit_test(pv_benef_all_nx_in, 142.42587835824, main_run_var = main_run_var1)
     #Baird all and ext
-    pv_benef_all_yx_in <- pv_benef_f(earnings_var = earnings_in_yes_ext,
-                                     interest_r_var = interest_in, periods_var = periods_var1)
-    unit_test(pv_benef_all_yx_in, 766.814399527604, main_run_var = main_run_var1)
+    pv_benef_all_yx_in <- pv_benef_f(
+      earnings_var = earnings_in_yes_ext,
+      interest_r_var = interest_in,
+      periods_var = periods_var1
+    )
+    unit_test(pv_benef_all_yx_in, 766.814399527604,
+              main_run_var = main_run_var1)
 
     #KLPS4 w/t and no ext
-    pv_benef_tax_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new * tax_var1,
-                                   interest_r_var = interest_in_new,
-                                   periods_var = periods_var1)
-    # ADD UNIT TEST
+    pv_benef_tax_new <- pv_benef_f(
+      earnings_var = earnings_in_no_ext_new * tax_var1,
+      interest_r_var = interest_in_new,
+      periods_var = periods_var1
+    )
+    unit_test(pv_benef_tax_new, 157.5017,
+              main_run_var = main_run_var1)
     # KLPS4 all and no ext
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
                                    interest_r_var = interest_in_new,
@@ -1715,6 +1764,7 @@ if (FALSE){
 
     #Costs
     # costs1: EA costs no externalities
+    # AQUI VOY
     costs_data <- costs1_p1_f()
     cost1_in <- costs1_p2_f(country_w_var = costs_data$country_w,
                             country_cost_var = costs_data$per_cap)
