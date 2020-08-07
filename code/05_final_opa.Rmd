@@ -1208,14 +1208,13 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 </details>
  
 
-## Approach 3: Combinantion of Previous Approaches and Input From Policy Makers
+## Approach 3: Combination of Previous Approaches and Input From Policy Makers
 
-In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key policy maker in this area: the NGO Evidence Action (EA). EA provided feedback on what are the relevant costs and benefits that they, and other local policy makers like ministries of health, would consider when making decisions on deworming interventions. Additionally, EA provided insights and data on what are the key main costs of implementing a deworming intervention in different countries. 
+In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key policy maker in this area: the NGO Evidence Action (EA). EA provided insights on the relevant costs and benefits considered when making decisions on deworming interventions, as well as data on the main costs of implementing deworming interventions in different countries.
 
-In this final approach the benefits from deworming described in the previous approachces are scaled to reflect differences prevalence rates. Additionally, the relevant costs are constrained to be only the direct costs, with varying implementation costs for different countries. 
+Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries. 
 
-
-When the original deworming study was conducted in Kenya in 1999, the prevalence rates of the different types of worms infections where of up to XXX for the relevant population, and the costs of for this setting where of XXXX. Today Evidence Actions supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
+In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to XXX for the relevant population and costs were as high as XXXX. Today EA supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
 
 <!-- Emma (11): please read the three paragraph above and improve writing -->
 
