@@ -1377,6 +1377,10 @@ chunk_cost1_inp <- function(){
                  "costs1_p2_f" = costs1_p2_f) )
 }
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+costs1_p1_in <- costs1_p1_f()
+#costs1_p2_in <- costs1_p2_f()
 ```
 
 </details>
@@ -1388,10 +1392,12 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[1,3] <- paste0("$\\delta_{g}=", staff_time_so, "$")
+table_1[13,1] <- paste0("$\\overline{{C}_{i}}=", round(costs1_p2_f(country_w_var = costs1_p1_in$country_w, country_cost_var = costs1_p1_in$per_cap), 2), "$") #weighted average
+table_1[14,1] <- paste0("$\\overline{{N}_{i}}=", mean(costs1_p1_in$total), "$")
+
 table_1 <- rbind(table_1,
-                 c("", paste0("$\\overline{{C}_{i}}=", NA, "$"), ""),
-                 c("", paste0("$\\overline{{N}_{i}}=", NA, "$"), ""),
-                 c("", paste0("$\\lambda^{eff}_{1}=", NA, "$"), "")) #add alpha here?
+                 c("", paste0("$\\eta=", alpha_0_so, "$"), ""), #change to eta
+                 c("", paste0("$\\eta_{r}=", alpha_r_so, "$"), ""))
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1453,6 +1459,9 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 
 
 ```{r sum_table21, purl=FALSE, echo=FALSE, eval=TRUE}
+
+table_1 <- rbind(table_1,
+                 c("", paste0("$F_{0}=", 0, "$"), ""))
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
