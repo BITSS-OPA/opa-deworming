@@ -457,7 +457,7 @@ table_2 <- rbind(table_2,
                    paste0("$(", sum_table_index, ")$") )
     )
 
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations used until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 #(#tab:sum_tables2)Summary of equations use until this point in the document
@@ -791,7 +791,7 @@ table_2 <- rbind(table_2,
     )
 
 
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations used until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
@@ -979,7 +979,7 @@ table_2 <- rbind(table_2,
                    paste0("$(", sum_table_index, ")$") )
     )
 
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations used until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
@@ -1042,7 +1042,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 
 ----------
 
-<details><summary>View summary table</summary>
+<details><summary>View Summary Table</summary>
 
 ```{r sum-tables17, purl=FALSE, echo=FALSE, eval=TRUE}
 
@@ -1067,11 +1067,11 @@ table_1 <- rbind(table_1, c(paste0("$E_t=" , earnings2_f(), "$"), "", ""))
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$E_t = \\mathbf{1}(10 \\text{<} t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\text{<} t \\leq 20)\alpha^{KLPS3} + \\mathbf{1}(t \\text{>} 20)\\alpha^{KLPS4}$",#fix greater than/ less than symbols
+                 c("$E_t = \\mathbf{1}(10 \\lt t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\lt t \\leq 20)\\alpha^{KLPS3} + \\mathbf{1}(t \\gt 20)\\alpha^{KLPS4}$",#fix greater than/ less than symbols
                    paste0("$(", sum_table_index, ")$") )
     )
 
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations used until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
@@ -1177,7 +1177,7 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 -------------------
 
 
-<details><summary>View summary table</summary>
+<details><summary>View Summary Table</summary>
 ```{r sum-tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[11,2] <- paste0("$r_{16}=", interest_16, "$")
@@ -1199,7 +1199,7 @@ table_2 <- rbind(table_2,
                    paste0("$(", sum_table_index, ")$") )
     )
 
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations used until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
@@ -1416,7 +1416,7 @@ table_2 <- rbind(table_2,
                    paste0("$(", sum_table_index, ")$") )
     )
 
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations used until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
@@ -1473,7 +1473,7 @@ table_2 <- rbind(table_2,
     )
 
 
-knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations use until this point in the document") %>%
+knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equations used until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
