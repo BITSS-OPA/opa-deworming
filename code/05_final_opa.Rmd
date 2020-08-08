@@ -425,7 +425,7 @@ The actual value will vary across approaches depending on the time and country c
 
 <!-- Emma: figure out a way to remove "(#tab:sum_tables2)" from the caption of the summary tables. -->
 
-```{r sum_tables2, purl=FALSE, echo=FALSE}
+```{r sum-tables2, purl=FALSE, echo=FALSE}
 table_1 <- matrix("", nrow = 1, ncol = 3)
 table_2 <- matrix("", nrow = 1, ncol = 2)
 
@@ -729,7 +729,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 <details><summary>View Summary Table</summary>
 
 
-```{r sum_tables3, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum-tables3, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[1,2] <- paste0("$p=" , round(unlist(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so)),2), "$")
 table_1[2,2] <- paste0("$R=" , round(coverage_so,2), "$")
@@ -969,7 +969,7 @@ Including externalities, they obtain a total NPV of benefits of `r df_research_s
 
 -----------------
 <details><summary>View Summary Table</summary>
-```{r sum_tables16, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum-tables16, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[7, 2] <- paste0("$K=" , round(cost_per_student_f(),2), "$")
 
@@ -1044,7 +1044,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 
 <details><summary>View summary table</summary>
 
-```{r sum_tables17, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum-tables17, purl=FALSE, echo=FALSE, eval=TRUE}
 
 # table_10 <- matrix("", nrow = 1, ncol = 3)
 # 
@@ -1178,7 +1178,7 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 
 
 <details><summary>View summary table</summary>
-```{r sum_tables20, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum-tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[11,2] <- paste0("$r_{16}=", interest_16, "$")
 table_1[12,2] <- paste0("$r_{19}=", interest_19, "$")
@@ -1215,8 +1215,6 @@ In this third and final approach, we borrowed some methodological elements from 
 Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries. 
 
 In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to XXX for the relevant population and costs were as high as XXXX. Today EA supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
-
-<!-- Emma (11): please read the three paragraph above and improve writing -->
 
 ### Benefits   
 
@@ -1388,7 +1386,7 @@ costs1_p1_in <- costs1_p1_f()
 -----
 
 <details><summary>View Summary Table</summary>
-```{r sum_table18, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum-table18, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[1,3] <- paste0("$\\delta_{g}=", staff_time_so, "$")
 table_1[13,1] <- paste0("$\\overline{{C}_{i}}=", round(costs1_p2_f(country_w_var = costs1_p1_in$country_w, country_cost_var = costs1_p1_in$per_cap), 2), "$") #weighted average
@@ -1457,7 +1455,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 <details><summary>View Summary Table</summary>
 
 
-```{r sum_table21, purl=FALSE, echo=FALSE, eval=TRUE}
+```{r sum-table21, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1 <- rbind(table_1,
                  c("", paste0("$F_{0}=", 0, "$"), ""))
