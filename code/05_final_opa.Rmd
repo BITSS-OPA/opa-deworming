@@ -1144,7 +1144,7 @@ The indirect cost on the education system is calculated similarly to approach 1:
 
 Hence, the cost of schooling each child for an additional year is now $`r round(teach_sal_2017usdppp_so/n_students_so, 2)` (USD).
 
-[^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: Nyanchama (2018) and Oduor [FIND SOURCES]. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is `r n_students_so`, based on **[FIND SOURCE]**.
+[^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: @nyanchama2018 and @oduor2017. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is `r n_students_so`, based on **[FIND SOURCE]**.
 
 <!-- Emma (w11): find sources for the above footnote-->
 
