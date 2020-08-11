@@ -687,7 +687,7 @@ The saturation of the intervention, $p$, measures the fraction of the population
 
 <!-- Emma: find the reference below, let me know if you cannot find it--> 
 
-For this (or similar?) setting Miguel and Kremer 2007 [add page, table, col, row] estimate that there is almost no take-up without subsidy ($Q(0)$), hence  is assigned the value of `r q_zero_so`. The same article [add page, table, col, row] estimates that take-up with full subsidy ($Q(full)$) was of `r q_full_so`.
+For this (or similar?) setting @kremer2007illusion [add page, table, col, row] estimate that there is almost no take-up without subsidy ($Q(0)$), hence  is assigned the value of `r q_zero_so`. The same article [add page, table, col, row] estimates that take-up with full subsidy ($Q(full)$) was of `r q_full_so`.
 
 <details><summary>Show all the details</summary>
 
