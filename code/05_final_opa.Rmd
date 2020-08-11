@@ -502,7 +502,7 @@ Where[^6]:
 
 
 ```{r earnings1} 
-# - inputs: wage_in, lambda1_so, lambda2_so, saturation, FERNANDO: coverage_var is not specified
+# - inputs: wage_in, lambda1_so, lambda2_so, saturation, coverage_so
 # - outputs: earnings (no name specified)
 chunk_earnings1 <- function(){
 ###############################################################################
@@ -511,7 +511,8 @@ chunk_earnings1 <- function(){
     earnings1_f <- function(wage_var = wage_in,
                           lambda1_var = lambda1_so,
                           lambda2_var = lambda2_so,
-                          saturation_var = saturation, coverage_var) {  
+                          saturation_var = saturation,
+                          coverage_var = coverage_so) {  
         res1 <- wage_var * ( lambda1_var + saturation_var * 
                                lambda2_var / coverage_var )
         return(res1)
@@ -1046,24 +1047,9 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 
 ```{r sum-tables17, purl=FALSE, echo=FALSE, eval=TRUE}
 
-# table_10 <- matrix("", nrow = 1, ncol = 3)
-# 
-# table_10[1,1] <- paste0("$E_t=" , NA, "$")
-# table_10[1,2] <- paste0("$t=" , NA, "$")
-# table_10[1,3] <- paste0("$\\alpha^{KLPS2}=" , NA, "$")
-# 
-# table_10 <- rbind(table_10, c(paste0("$\\alpha^{KLPS3}=" , NA, "$"),
-#                             paste0("$\\alpha^{KLPS4}=" , NA, "$"),
-#                             "    "))
-# 
-# knitr::kable(table_10, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs") %>%
-#   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-
 table_1[8,2] <- paste0("$\\alpha^{KLPS2}=" , round(lambda1_new_so[1],2), "$")
 table_1[9,2] <- paste0("$\\alpha^{KLPS3}=" , round(lambda1_new_so[2],2), "$")
 table_1[10,2] <- paste0("$\\alpha^{KLPS4}=" , round(lambda1_new_so[3],2), "$")
-
-table_1 <- rbind(table_1, c(paste0("$E_t=" , earnings2_f(), "$"), "", ""))
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1181,8 +1167,8 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 ```{r sum-tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[11,2] <- paste0("$r_{16}=", interest_16, "$")
-table_1[12,2] <- paste0("$r_{19}=", interest_19, "$")
 
+table_1 <- rbind(table_1, c("", paste0("$r_{19}=", interest_19, "$"), ""))
 table_1 <- rbind(table_1, c( "", paste0("$S_2=", 1, "$"), ""), #S2 is a complete subsidy
                  c( "",paste0("$\\overline{\\Delta \\overline{E}_{t}(S1,S2)}=", round(mean(delta_ed_so[,1]),2), "$"), ""))
 
@@ -1389,8 +1375,8 @@ costs1_p1_in <- costs1_p1_f()
 ```{r sum-table18, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[1,3] <- paste0("$\\delta_{g}=", staff_time_so, "$")
-table_1[13,1] <- paste0("$\\overline{{C}_{i}}=", round(costs1_p2_f(country_w_var = costs1_p1_in$country_w, country_cost_var = costs1_p1_in$per_cap), 2), "$") #weighted average
-table_1[14,1] <- paste0("$\\overline{{N}_{i}}=", mean(costs1_p1_in$total), "$")
+table_1[12,1] <- paste0("$\\overline{{C}_{i}}=", round(costs1_p2_f(country_w_var = costs1_p1_in$country_w, country_cost_var = costs1_p1_in$per_cap), 2), "$") #weighted average
+table_1[13,1] <- paste0("$\\overline{{N}_{i}}=", round(mean(costs1_p1_in$total)), "$")
 
 table_1 <- rbind(table_1,
                  c("", paste0("$\\eta=", alpha_0_so, "$"), ""), #change to eta
