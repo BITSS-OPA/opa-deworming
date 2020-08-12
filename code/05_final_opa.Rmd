@@ -1763,7 +1763,11 @@ if (FALSE){
     #Costs
     # costs1: EA costs no externalities
     # AQUI VOY
-    costs_data <- costs1_p1_f()
+    browser()
+    costs_data <- costs1_p1_f(df_costs_var = df_costs_var1,
+                              df_costs_cw_var = df_costs_cw_var1,
+                              df_counts_var = df_counts_var1,
+                              staff_time_var = staff_time_var1)
     cost1_in <- costs1_p2_f(country_w_var = costs_data$country_w,
                             country_cost_var = costs_data$per_cap)
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
