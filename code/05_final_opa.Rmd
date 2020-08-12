@@ -112,7 +112,8 @@ chunk_params <- function(){
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
     wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
     profits_se_so <- 1766          #Control group monthly self-employed profits -
-                                   #Table 4, Panel A FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
+                                   #Table 4, Panel C, Column 5, Row 1 
+                                   #FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
     hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
     hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
     hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
@@ -541,7 +542,7 @@ The wage in agriculture comes from research (Suri, 2011), the working wage comes
 
 <!-- Emma, please record where are exactyl the values from below-->
 
-The monthly self-employed profits and self-employed hours for the control group, for those with possitive hours, come from data [@baird2016worms]. The measure of hours in self employment used to compute wagesis different from the one used to compute the weights above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
+The monthly self-employed profits and self-employed hours for the control group, for those with positive hours, come from data [@baird2016worms] (Page 1168, Table 4, Panel C, Column 5, Row 1). The measure of hours in self employment used to compute wages is different from the one used to compute the weights above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
 <details><summary>Show all the details</summary>
 
@@ -688,7 +689,7 @@ The saturation of the intervention, $p$, measures the fraction of the population
 
 <!-- Emma: find the reference below, let me know if you cannot find it--> 
 
-For this (or similar?) setting @kremer2007illusion [add page, table, col, row] estimate that there is almost no take-up without subsidy ($Q(0)$), hence  is assigned the value of `r q_zero_so`. The same article [add page, table, col, row] estimates that take-up with full subsidy ($Q(full)$) was of `r q_full_so`.
+For this (or similar?) setting @kremer2007illusion (Page 55, Table 7, Regression 1, Row 1 - FERNANDO please verify) estimate that there is almost no take-up without subsidy ($Q(0)$), hence  is assigned the value of `r q_zero_so`. The same article (Page 48, Table 1, Panel C, Col 1, Row 3) estimates that take-up with full subsidy ($Q(full)$) was of `r q_full_so`.
 
 <details><summary>Show all the details</summary>
 
@@ -1053,7 +1054,7 @@ table_1[10,2] <- paste0("$\\alpha^{KLPS4}=" , round(lambda1_new_so[3],2), "$")
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$E_t = \\mathbf{1}(10 \\lt t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\lt t \\leq 20)\\alpha^{KLPS3} + \\mathbf{1}(t \\gt 20)\\alpha^{KLPS4}$",#fix greater than/ less than symbols
+                 c("$E_t = \\mathbf{1}(10 \\lt t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\lt t \\leq 20)\\alpha^{KLPS3} + \\mathbf{1}(t \\gt 20)\\alpha^{KLPS4}$",
                    paste0("$(", sum_table_index, ")$") )
     )
 
