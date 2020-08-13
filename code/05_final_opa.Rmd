@@ -1763,40 +1763,68 @@ if (FALSE){
 
     #Costs
     # costs1: EA costs no externalities
-    # AQUI VOY
-    browser()
     costs_data <- costs1_p1_f(df_costs_var = df_costs_var1,
                               df_costs_cw_var = df_costs_cw_var1,
                               df_counts_var = df_counts_var1,
                               staff_time_var = staff_time_var1)
+    
     cost1_in <- costs1_p2_f(country_w_var = costs_data$country_w,
                             country_cost_var = costs_data$per_cap)
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
 
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
                       unit_cost_local_var = cost1_in, ex_rate_var = 1)
-    costs2_ea_in <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
-                         interest_r_var = interest_in_new, cost_of_schooling_var = 0,
-                         s1_var = 0, q1_var = 0, s2_var = s2_ea_in, q2_var = q_full_var1)
+    costs2_ea_in <- cost2_f(
+      periods_var = periods_var1,
+      delta_ed_var = delta_ed_final_in,
+      interest_r_var = interest_in_new,
+      cost_of_schooling_var = 0,
+      s1_var = 0,
+      q1_var = 0,
+      s2_var = s2_ea_in,
+      q2_var = q_full_var1
+    )
 
     # costs2: Baird no externalities
-    costs2_in <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
-                         interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
-                         s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
+    costs2_in <- cost2_f(
+      periods_var = periods_var1,
+      delta_ed_var = delta_ed_final_in,
+      interest_r_var = interest_in,
+      cost_of_schooling_var = cost_per_student_in,
+      s1_var = 0,
+      q1_var = 0,
+      s2_var = s2_in,
+      q2_var = q_full_var1
+    )
     unit_test(costs2_in, 11.776188118988, main_run_var = main_run_var1)
 
     # Baird yes externalities
-    costs2_in_x <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in_x,
-                           interest_r_var = interest_in, cost_of_schooling_var = cost_per_student_in,
-                           s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q_full_var1)
+    costs2_in_x <- cost2_f(
+      periods_var = periods_var1,
+      delta_ed_var = delta_ed_final_in_x,
+      interest_r_var = interest_in,
+      cost_of_schooling_var = cost_per_student_in,
+      s1_var = 0,
+      q1_var = 0,
+      s2_var = s2_in,
+      q2_var = q_full_var1
+    )
     unit_test(costs2_in_x,  25.1962130559894, main_run_var = main_run_var1)
 
-    s2_new_in <- s2_f_new(interest_var = interest_in_new, unit_cost_local_var = unit_cost_local_new_var1, ex_rate_var = 1)
+    s2_new_in <- s2_f_new(interest_var = interest_in_new, 
+                          unit_cost_local_var = unit_cost_local_new_var1, 
+                          ex_rate_var = 1)
     # costs2: KLPS4
-    costs_k <- cost2_f(periods_var = periods_var1, delta_ed_var = delta_ed_final_in,
-                         interest_r_var = interest_in_new,
-                       cost_of_schooling_var = cost_per_student_in_new,
-                         s1_var = 0, q1_var = 0, s2_var = s2_new_in, q2_var = q_full_var1)
+    costs_k <- cost2_f(
+      periods_var = periods_var1,
+      delta_ed_var = delta_ed_final_in,
+      interest_r_var = interest_in_new,
+      cost_of_schooling_var = cost_per_student_in_new,
+      s1_var = 0,
+      q1_var = 0,
+      s2_var = s2_new_in,
+      q2_var = q_full_var1
+    )
     unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
 
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
@@ -1857,7 +1885,7 @@ ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in)
 unit_test(ea3, 950.089412364501)
 
 #CEA for EA
-#TODO: update CEA values.
+#TODO: update CEA values. AQUI VOY
 cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in, fudging_var = 0)
 unit_test(cea_no_ext_ea, 6452.86204429499)
 
