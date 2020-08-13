@@ -1848,14 +1848,15 @@ invisible( list2env(one_run(),.GlobalEnv) )
 
 
 ```{r main-results, purl=FALSE}
-#TODO: update unit test values
-#Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
+#TODO: update unit test values after updating interest rates to exact formula
+#Baird 1: Costs = Baird w/tax and no externalities (no ext); 
+#Benef = Baird no ext
 baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
 unit_test(baird1, 11.8309012188904)
-#Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
+#Baird 2: Costs = Baird w/tax and yes externalities (no ext); 
+#Benef = Baird yes ext
 baird2 <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
 unit_test(baird2, 101.903273665711)
-
 # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
 baird3 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
 unit_test(baird3, 130.649690239252)
@@ -1870,10 +1871,6 @@ unit_test(klps4_1, 125.202113576337)
 klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_k)
 unit_test(klps4_2, 917.937055971637)
 
-
-# res_npv_no_ext_klps_eacosts <- NPV_pe_f(benefits_var = pv_benef_in_new, costs_var = cost1_in)
-# unit_test(res_npv_no_ext_klps_eacosts, 59.15516)
-
 # EA1: no externality NPV using EAs costs
 ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_ea_in)
 unit_test(ea1, 142.278620185973)
@@ -1884,13 +1881,16 @@ unit_test(ea2, 766.667141355337)
 ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in)
 unit_test(ea3, 950.089412364501)
 
-#CEA for EA
-#TODO: update CEA values. AQUI VOY
-cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in, fudging_var = 0)
+# CEA for EA
+cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_new, 
+                          costs_var = costs2_ea_in, 
+                          fudging_var = 0)
 unit_test(cea_no_ext_ea, 6452.86204429499)
 
-rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in, fudging_var = 0),
-         CEA_cash_var = 744)
+rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_new, 
+                                                costs_var = costs2_ea_in, 
+                                                fudging_var = 0),
+                             CEA_cash_var = 744)
 unit_test(rcea_no_ext_ea, 8.6732016724395)
 
 npv_table <- data.frame("no_ext" =  round( c(baird1, NA,
@@ -1939,6 +1939,7 @@ kable(npv_table, caption = "Caption of the table") %>%
 # Montecarlo simulations  
 
 ```{r mc-setup, eval=TRUE}  
+# 
 sim.data1 <- function(nsims = 1e2,
                       main_run_var2,
                       run_sim_var2,
