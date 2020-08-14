@@ -2,10 +2,7 @@
 
 [See here for a complete list of all the collaborators behind this OPA](LINK TO DEWORMING CONTRIBUTORS).
 
-<p align="middle">
-  <img width="200" src="./code/BITSS_logo_horizontal.png">
-  <img width="200" src="./code/CEGA_logo.png">
-</p>
+<img width="200" src="./code/BITSS_logo_horizontal.png"><img width="200" src="./code/CEGA_logo.png">
 <!--![BITSS logo](./code/BITSS_logo_horizontal.png){style="width: 40%"} ![CEGA logo](./code/CEGA_logo.png){style="width: 50%"}{style="display: block; margin-left: auto;
   margin-right: auto; width: 50%"} 
   
