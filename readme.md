@@ -10,6 +10,7 @@
   margin-right: auto; width: 50%"} 
   
 REPLACE WEALTH TAX LINKS WITH OPA LINKS  -->
+<br>
 
 Open in RStudio: [![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS/opa-wealthtax/master?urlpath=rstudio)
 
