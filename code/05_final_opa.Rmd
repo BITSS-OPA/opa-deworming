@@ -1292,17 +1292,19 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
-    costs1_p2_f <- function(country_w_var = costs_data$country_w, 
-                         country_cost_var = costs_data$per_cap) {
-          sum(country_w_var * country_cost_var)
+    costs1_p2_f <- function(country_total_var = costs_data$total, 
+                         country_cost_var = costs_data$costs_by_country,
+                         staff_time_var = staff_time_so) {
+      # create country weight
+      c_weights <- country_total_var / sum(country_total_var)
+      per_cap <- country_cost_var * (1 + staff_time_var) / country_total_var
+      sum(c_weights * per_cap) 
     }
   
     costs1_p1_f <- function(df_costs_var = df_costs_so,
                          df_costs_cw_var = df_costs_cw_so,
-                         df_counts_var = df_counts_so,
-                         staff_time_var = staff_time_so) {
+                         df_counts_var = df_counts_so) {
       #anoying message: https://stackoverflow.com/questions/62140483/how-to-interpret-dplyr-message-summarise-regrouping-output-by-x-override
-
       ## Counts
       # Data cleanning:
       # Add country
@@ -1326,11 +1328,7 @@ chunk_cost1_inp <- function(){
         group_by(Country, Year) %>%
         summarise("total" = sum(`# dewormed`))
   )
-      # create country weight
-      c_weights <- c_counts %>% 
-        ungroup() %>% 
-        mutate(country_w = total / sum(total))
-        
+
       ## Costs 
       # Data cleaning:
       # Add country
@@ -1359,13 +1357,11 @@ chunk_cost1_inp <- function(){
       country_cost <- costs_by_payer %>%
         group_by(Country) %>%
         summarise("costs_by_country" = 
-                    sum(costs_by_payer) * (1 + staff_time_var))  
+                    sum(costs_by_payer) )  
       # Compute the per capita cost for each country (c_i and w_i)
   )
-      costs_data <- country_cost %>%
-         left_join(c_weights, by = "Country") %>%
-         mutate("per_cap" = costs_by_country / total)
-        
+        costs_data <- country_cost %>%
+         left_join(c_counts, by = "Country") 
       return( costs_data )
     }
 
@@ -1378,7 +1374,8 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 costs1_p1_in <- costs1_p1_f()
-#costs1_p2_in <- costs1_p2_f()
+costs_data <- costs1_p1_in
+costs1_p2_in <- costs1_p2_f()
 ```
 
 </details>
@@ -1512,6 +1509,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 # 1     2       3     4
 #       ##     ###    ####
 # NPV_pe_f, CEA_pe_f, RCEA_pe_f
+#  TO DO: review and update this function tree
 # ├──── pv_benef_f
 # │      ├──── earnings1_f
 # │      |      ├──── wage_t_mo_f
@@ -1523,7 +1521,8 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 # │      ├──── earnings2_f
 # │      |      └────lambda_eff_f
 # │      └──── interest_f
-# └──── cost1_f = 0.08480686
+# └──── costs1_p2_f
+#        └──── costs1_p1_f
 # └──── cost2_f = 11.776188118988
 #        ├──── delta_ed_final_f
 #        ├──── interest_f
@@ -1595,7 +1594,7 @@ one_run <-
            years_of_treat_var1 = years_of_treat_so,                                        
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so) {                                        
-    ####------------ Inputs for wage_t ---------------------------------------------
+    ####------------ Inputs for wage_t -----------------------------------------
     wage_0_in <- wage_0_mo_f(
       wage_ag_var = wage_ag_var1,
       wage_ww_var = wage_ww_var1,
@@ -1607,7 +1606,7 @@ one_run <-
       ex_rate_var = ex_rate_var1
     )
     unit_test(wage_0_in, 0.170124466664436, main_run_var = main_run_var1)
-    ###---------- Inputs for earnings1_f -------------------------------------------
+    ###---------- Inputs for earnings1_f ---------------------------------------
     wage_t_in <- wage_t_mo_f(
       wage_0_var = wage_0_in,
       growth_rate_var = growth_rate_var1,
@@ -1631,13 +1630,13 @@ one_run <-
     unit_test(lambda2_in[1], 10.2 , main_run_var = main_run_var1)
     unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
 
-    ###------------ Inputs for earnings2_f------------------------------------------
+    ###------------ Inputs for earnings2_f--------------------------------------
     lambda1_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
                                  alpha_0_var = alpha_0_var1,
                                  alpha_r_var = alpha_r_var1)
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
 
-    ##------------ Inputs for pv_benef_f -------------------------------------------
+    ##------------ Inputs for pv_benef_f ---------------------------------------
     # earnings1
     earnings_in_no_ext <- earnings1_f(
       wage_var = wage_t_in,
@@ -1668,7 +1667,7 @@ one_run <-
               main_run_var = main_run_var1)
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
-    ##-------------- Inputs for costs2_f--------------------------------------------
+    ##-------------- Inputs for costs2_f----------------------------------------
     # Make explicit non-function inputs:
     delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE,
                                           delta_ed_var = delta_ed_var1,
@@ -1759,15 +1758,16 @@ one_run <-
     # costs1: EA costs no externalities
     costs_data <- costs1_p1_f(df_costs_var = df_costs_var1,
                               df_costs_cw_var = df_costs_cw_var1,
-                              df_counts_var = df_counts_var1,
-                              staff_time_var = staff_time_var1)
+                              df_counts_var = df_counts_var1)
     
-    cost1_in <- costs1_p2_f(country_w_var = costs_data$country_w,
-                            country_cost_var = costs_data$per_cap)
+    cost1_in <- costs1_p2_f(country_total_var = costs_data$total,
+                            country_cost_var = costs_data$costs_by_country,
+                              staff_time_var = staff_time_var1)
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
-
+# s2_ea_in <-- cost1_in (costs1_p2_f) <-- cost_data (costs1_p1_f())
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
-                      unit_cost_local_var = cost1_in, ex_rate_var = 1)
+                      unit_cost_local_var = cost1_in, 
+                      ex_rate_var = 1)
     costs2_ea_in <- cost2_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
@@ -1820,7 +1820,7 @@ one_run <-
       q2_var = q_full_var1
     )
     unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
-#browser()
+
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
                   "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
@@ -2058,39 +2058,53 @@ sim.data1 <- function(nsims = 1e2,
     aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
     aux2 <- lapply(1:2,function(x) c(lambda1_var2[x], aux1[x] ) )
-    lambda1_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
+    lambda1_sim <- sapply(aux2, 
+                          function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
     lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)
     # New lambdas here
-    aux3 <- lapply(1:3,function(x) c(lambda1_new_var2[x], lambda1_new_var2_sd[x] ) )
-    lambda1_new_sim <- sapply(aux3, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
+    aux3 <- lapply(1:3,
+                   function(x) c(lambda1_new_var2[x], 
+                                 lambda1_new_var2_sd[x] ) )
+    lambda1_new_sim <- sapply(aux3, 
+                              function(x)  rnorm(nsims, 
+                                                 mean = x[1], sd = x[2]) )
 
     q_full_sim <-           rnorm(nsims, q_full_var2, q_full_var2_sd)
     q_zero_sim <-           rnorm(nsims, q_zero_var2, q_zero_var2_sd)
 
     # Prevalence here TO DO: draw from a beta instead of "truncated" normal
     alpha_0_sim <- rnorm(nsims, alpha_0_var2, alpha_0_var2_sd)
-    alpha_0_sim <- ifelse(alpha_0_sim > 1, yes = 1, ifelse(alpha_0_sim < 0, 0, alpha_0_sim) )
+    alpha_0_sim <- ifelse(alpha_0_sim > 1, yes = 1, 
+                          no = ifelse(alpha_0_sim < 0, 0, alpha_0_sim) )
 
     alpha_r_sim <- rnorm(nsims, alpha_r_var2, alpha_r_var2_sd)
-    alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
+    alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, 
+                          no = ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
     ## Guess work
     periods_val <- 50           #Total number of periods to forecast wages
-    time_to_jm_val <- 10        #Time from initial period until individual join the labor force
+    time_to_jm_val <- 10        #periods until individual join the labor force
     aux2 <- lapply(1:2, function(x) c(coef_exp_var2[x],c(0.001 , 0.001)[x]) )
-    coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )     
+    coef_exp_sim <- sapply(aux2, function(x)  rnorm(nsims, mean = x[1], 
+                                                    sd = x[2]) )     
     teach_sal_sim <-    rnorm(nsims, teach_sal_var2, teach_sal_var2_sd)
     teach_ben_sim <-    rnorm(nsims, teach_ben_var2, teach_ben_var2_sd)
 
-    teach_sal_new_sim <-    rnorm(nsims, teach_sal_new_var2, teach_sal_new_var2_sd)
-    teach_ben_new_sim <-    rnorm(nsims, teach_ben_new_var2, teach_ben_new_var2_sd)
+    teach_sal_new_sim <-    rnorm(nsims, teach_sal_new_var2, 
+                                  teach_sal_new_var2_sd)
+    teach_ben_new_sim <-    rnorm(nsims, teach_ben_new_var2, 
+                                  teach_ben_new_var2_sd)
 
     n_students_sim <-   rnorm(nsims, n_students_var2, n_students_var2_sd)
-    # TO DO: modify to have a scalar multlying the series, and have that scalar being N(1,0.1)
-    delta_ed_sim <- sapply(delta_ed_so[,1], function(x) rnorm(nsims, mean =
-                                                                x * delta_ed_var2,
-                                                              sd = delta_ed_var2_sd * sd(delta_ed_so[,1]) ) )
+    # TO DO: modify to have a scalar multlying the series, and have that 
+    # scalar being N(1,0.1)
+    delta_ed_sim <- sapply(delta_ed_so[,1], 
+                           function(x) rnorm(
+                             nsims,
+                             mean = x * delta_ed_var2,
+                             sd = delta_ed_var2_sd * sd(delta_ed_so[, 1])) )
     colnames(delta_ed_sim) <- 1999:2007
-    # modify to have a scalar multlying the series, and have that scalar being N(1,0.1)
+    # modify to have a scalar multlying the series, and have that scalar 
+    # being N(1,0.1)
     delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1],
                                function(x)  {
                                  rnorm(
@@ -2101,27 +2115,38 @@ sim.data1 <- function(nsims = 1e2,
                                  )
                                  }
                                )
-    # OLD (WORKING)
-    #delta_ed_ext_sim <- sapply(delta_ed_ext_so[,1], function(x) rnorm(nsims,
-    #                                                                   mean = x * 1,
-    #                                                                   sd = 1 * sd(delta_ed_ext_so[,1])))
-
     colnames(delta_ed_ext_sim) <- 1999:2007
 
     ######    
     ######    
-    browser()
-    costs1_counts_in <- costs1_p1_f(
+    #browser()
+    # Get costs with no staff time
+    costs1_data_in <- costs1_p1_f(
       df_costs_var = df_costs_var2,
       df_costs_cw_var = df_costs_cw_var2,
-      df_counts_var = df_counts_var2,
-      staff_time_var = staff_time_var2
-    )
+      df_counts_var = df_counts_var1
+      )
+
+costs_data <- costs1_p1_f(df_costs_var = df_costs_var1,
+                              df_costs_cw_var = df_costs_cw_var1,
+                              df_counts_var = df_counts_var1)
     
-    costs1_counts_sim <- sapply(costs1_counts_in$total,
+    cost1_in <- costs1_p2_f(country_total_var = costs_data$total,
+                            country_cost_var = costs_data$costs_by_country,
+                              staff_time_var = staff_time_var1)    
+        AQUI VOY
+    counts_in <- costs1_data_in$total
+    costs_no_staff_in <- costs1_data_in$costs_by_country
+    
+    costs1_counts_sim <- sapply(counts_in,
                                 function(x)  rnorm(nsims, 
                                                    mean = x * counts_par_var2,  
                                                    sd = x * counts_par_var2_sd) 
+                                )
+    costs1_costs_sim <- sapply(costs_no_staff_in,
+                                function(x)  rnorm(nsims, 
+                                                   mean = x * costs_par_var2,  
+                                                   sd = x * costs_par_var2_sd) 
                                 )
 
     staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
@@ -2131,14 +2156,13 @@ sim.data1 <- function(nsims = 1e2,
     suppressMessages(
     costs1_data_in <- lapply(staff_time_sim,
                                 function(x) costs1_p1_f(
-                                  df_costs_var = df_costs_so,
-                                  df_costs_cw_var = df_costs_cw_so,
-                                  df_counts_var = df_counts_so,
+                                  df_costs_var = df_costs_var2,
+                                  df_costs_cw_var = df_costs_cw_var2,
+                                  df_counts_var = df_counts_var2,
                                   staff_time_var = x))
     )
 
     # draw total costs sameples from each costs data draw
-    # TODO: 
     # For each costs_data in list: 
     # get the country level costs, 
     # and generate normal random draws from N(country costs, 0.1 * country costs)
@@ -2206,9 +2230,9 @@ sim.data1 <- function(nsims = 1e2,
                 years_of_treat_var1 = years_of_treat_sim[i],
                 tax_var1 = tax_sim[i],
                 periods_var1 = periods_so,
-                df_costs_var1 = df_costs_var2,
-                df_costs_cw_var1 = df_costs_cw_var2,
-                df_counts_var1 = df_counts_var2,
+                df_costs_var1 = df_costs_var2, #CHECK
+                df_costs_cw_var1 = df_costs_cw_var2,#CHECK
+                df_counts_var1 = df_counts_var2,#CHECK
                 counts_sim_var1 = costs1_counts_sim[i,],
                 costs_sim_var1 = costs1_costs_sim[i,]),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
@@ -2285,9 +2309,9 @@ policy_estimates_text <- c(
 ### TEMP
 npv_sim_all <-   sim.data1(nsims = nsims_so,                        
             gov_bonds_var2          = gov_bonds_so             ,                                    
-            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
-            inflation_var2          = inflation_so             ,                                    
-            inflation_var2_sd       = inflation_so * 0.1          ,                                 
+            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,
+            inflation_var2          = inflation_so             ,
+            inflation_var2_sd       = inflation_so * 0.1          ,
             gov_bonds_new_var2      = gov_bonds_new_so      ,          #add to app
             gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          #add to app
             inflation_new_var2      = inflation_new_so      ,          #add to app
@@ -2437,8 +2461,8 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
 total_time <- npv_sim_all$total_time
 position <- which( policy_estimates == policy_estimate_so )
 npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 1))
+npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 1))
 #Unit test the simulations for nsims = 100, 1000, 10000
 all_res_100_sims <- c(
   8.7094550833253,
@@ -2515,7 +2539,7 @@ rescale <- rescale_so
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
            x = "NPV" ,
-           title = "Distribution of Economic of Effects From Deworming (NPV)",
+           title = "Distribution of Economic Effects of Deworming (NPV)",
            subtitle = paste0("N = ", nsims, " simulations. Takes ",
                              round(total_time, 1)," ",attributes(total_time)$unit )  )+
       annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 4)+
