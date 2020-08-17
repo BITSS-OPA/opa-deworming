@@ -16,6 +16,7 @@ Go straight to the Shiny app: [![Binder](http://mybinder.org/badge_logo.svg)](ht
 This repository and its accompanying dynamic document and Shiny app are three key components of an Open Policy Analysis (OPA) on the costs and benefits of mass deworming interventions in various settings. Together, these materials create a transparent and reproducible analysis to facilitate collaboration and discussion about deworming policy.
 
 <img align="right" width="50%" src="./code/OPA_layers.png">
+
 1 - [An interactive plot](http://wealthtaxsimulator.org/simulator_app/), which summarizes the interactions between all key parameters for a given set of assumptions. Materials can be found in: [`code\shiny_app`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/shiny_app).
 
 2 - Open policy report in the form of a [dynamic document](http://wealthtaxsimulator.org/analysis/) [replace with link to deworming doc], which details all data, code, and assumptions included in the analysis. Materials can be found in: [`code\dynamic_doc`](https://github.com/BITSS/opa-wealthtax/tree/master/code/dynamic_doc).
