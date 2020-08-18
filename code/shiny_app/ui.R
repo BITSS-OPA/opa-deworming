@@ -6,6 +6,7 @@ library(here)
 library(kableExtra)
 library(readxl)
 library(shinyjs)
+library(plotly)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
@@ -14,8 +15,7 @@ knitr::opts_knit$set(root.dir = here())
 nsims <- 1e2
 
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
-source("all_analysis.R")
-
+source(here("code", "shiny_app", "all_analysis.R"))
 
 #fluidPage is something must have
 shinyUI( 
@@ -42,10 +42,18 @@ shinyUI(
                                                          min = 0.001, max = 0.2, value = gov_bonds_so),
                                              sliderInput("param2_1", label = "SD = ",
                                                          min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so),
+                                             sliderInput("param2_new", label = "Gov Bonds (\\( i \\))"  ,
+                                                         min = 0.001, max = 0.2, value = gov_bonds_new_so),
+                                             sliderInput("param2_1_new", label = "SD = ",
+                                                         min = 0.0000001, max = 0.4 * gov_bonds_new_so, value = 0.1 * gov_bonds_new_so),
                                              sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
                                                          min = 0.001, max = 0.2, value = inflation_so),
                                              sliderInput("param3_1", label = "SD = ",
                                                          min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so),
+                                             sliderInput("param3_new", label = "Inflation (\\( \\pi \\) ) = ",
+                                                         min = 0.001, max = 0.2, value = inflation_new_so),
+                                             sliderInput("param3_1_new", label = "SD = ",
+                                                         min = 0.0000001, max = 0.4 * inflation_new_so, value = 0.1 * inflation_new_so),
                                              sliderInput("param4", label = "Agri Wages (\\( w_{ag} \\))",
                                                          min = wage_ag_so / 2, max = 2 * wage_ag_so, value = wage_ag_so),
                                              sliderInput("param4_1", label = "SD = ",

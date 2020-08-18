@@ -149,11 +149,11 @@ chunk_params <- function(){
     # Prevalence data:
     # original study
     # Any infection on original study
-    #alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55,
+    #prevalence_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55,
     # "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
-    df_alpha_so <- read_excel("data/prevalence_data.xlsx",
+    df_prevalence_so <- read_excel("data/prevalence_data.xlsx",
                            sheet = "Sheet1")
-    # alpha_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
+    # prevalence_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
 
     #############
     ##### Research
@@ -178,8 +178,10 @@ chunk_params <- function(){
     delta_ed_par_so <- 1
     delta_ed_ext_par_so <- 1
     include_ext_so <- TRUE
-    alpha_0_so <- 1#0.77 #0.77
-    alpha_r_so <- 1#0.15 #0.15
+    
+    #Start renaming to eta throughout
+    prevalence_0_so <- 1#0.77 #0.77
+    prevalence_r_so <- 1#0.15 #0.15
     #############
     ##### Guess work   
     #############
@@ -206,10 +208,10 @@ chunk_params <- function(){
     costs_par_sd_so <- 0.1
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
-    nsims_so <- 1e1
+    nsims_so <- 1e2
     # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim",
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
-    policy_estimate_so <- "ea3_sim"
+    policy_estimate_so <- "klps4_1_sim"
 
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
@@ -235,7 +237,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 
-```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Policy Estimate", echo=FALSE}
+```{r main-pe-print, out.width = '70%', fig.align='center', fig.cap="Main Policy Estimate", echo=FALSE, purl=FALSE}
 # url
 knitr::include_graphics(path = paste0(here(),"/code/main_pe.png") ) 
 ```
@@ -958,7 +960,7 @@ Without externalities, the original analysis obtains a total NPV of benefits of 
 Including externalities, they obtain a total NPV of benefits of `r df_research_so$param[3]`, with `r df_research_so$param[4]` in tax revenue for government (table `r df_research_so$tablenum[3]`, column `r df_research_so$table_col[3]`, and rows `r paste0(df_research_so$table_row[3], ", ", df_research_so$table_row[4])` respectively).
 
 
-```{r, eval=FALSE,echo=FALSE}
+```{r, eval=FALSE,echo=FALSE, purl=FALSE}
 # Numbers are reproduces, the only difference is that  Baird et al, presents them in a different way.
 # Equivalence below:
 # Baird et al 2016                                          Here
@@ -1207,7 +1209,7 @@ In the original deworming study conducted in Kenya in 1999, the prevalence rates
 
 To account for different prevalence rates ($\eta$), the estimated treatment effect is decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who were treated and did not have worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatment, divided by the proportion of the prevalence of infections. 
 
-In the original evaluation, the prevalence rates where very high (`r alpha_0_so`), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$).
+In the original evaluation, the prevalence rates where very high (`r prevalence_0_so`), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$).
 
 
 <details><summary>Show all the details</summary>
@@ -1223,17 +1225,17 @@ For approach 3, we will modify treatement effects of approaches 1 and 2 (equatio
 \end{equation}
 
 ```{r lambdas_eff}
-# - inputs: lambda1_in_f(), alpha_0_so, alpha_r_so
+# - inputs: lambda1_in_f(), prevalence_0_so, prevalence_r_so
 # - outputs: lambda_eff_f
 chunk_lambdas_eff<- function(){
 ###############################################################################
 ###############################################################################    
 
     lambda_eff_f <- function(lambda1_var = lambda1_in_f(), 
-                           alpha_0_var = alpha_0_so, 
-                           alpha_r_var = alpha_r_so){
-        lambda1_eff_temp <- lambda1_var / alpha_0_var
-        return( lambda1_eff_temp * alpha_r_var )
+                           prevalence_0_var = prevalence_0_so, 
+                           prevalence_r_var = prevalence_r_so){
+        lambda1_eff_temp <- lambda1_var / prevalence_0_var
+        return( lambda1_eff_temp * prevalence_r_var )
     }  
 
 ##############################################################################
@@ -1394,8 +1396,8 @@ table_1[12,1] <- paste0("$\\overline{{C}_{i}}=", round(costs1_p2_f(country_total
 table_1[13,1] <- paste0("$\\overline{{N}_{i}}=", round(mean(costs1_p1_in$total)), "$")
 
 table_1 <- rbind(table_1,
-                 c("", paste0("$\\eta=", alpha_0_so, "$"), ""), #change to eta
-                 c("", paste0("$\\eta_{r}=", alpha_r_so, "$"), ""))
+                 c("", paste0("$\\eta=", prevalence_0_so, "$"), ""), #change to eta
+                 c("", paste0("$\\eta_{r}=", prevalence_r_so, "$"), ""))
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
@@ -1573,8 +1575,8 @@ one_run <-
            coef_exp_var1 = coef_exp_so[1],
            coef_exp2_var1 = coef_exp_so[2],
            lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_so),
-           alpha_0_var1 = alpha_0_so,
-           alpha_r_var1 = alpha_r_so,
+           prevalence_0_var1 = prevalence_0_so,
+           prevalence_r_var1 = prevalence_r_so,
            lambda2_var1 = lambda2_so,                                        
            coverage_var1 = coverage_so,                                        
            q_full_var1 = q_full_so,                                        
@@ -1620,8 +1622,8 @@ one_run <-
 
     lambda1_in <- lambda_eff_f(
       lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
-      alpha_0_var = alpha_0_var1,
-      alpha_r_var = alpha_r_var1
+      prevalence_0_var = prevalence_0_var1,
+      prevalence_r_var = prevalence_r_var1
     )
 
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
@@ -1636,8 +1638,8 @@ one_run <-
 
     ###------------ Inputs for earnings2_f--------------------------------------
     lambda1_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
-                                 alpha_0_var = alpha_0_var1,
-                                 alpha_r_var = alpha_r_var1)
+                                 prevalence_0_var = prevalence_0_var1,
+                                 prevalence_r_var = prevalence_r_var1)
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f ---------------------------------------
@@ -1968,10 +1970,10 @@ sim.data1 <- function(nsims = 1e2,
                       coef_exp_var2,         # sd for coef_exp is hard coded
                       lambda1_var2,
                       lambda1_var2_sd,
-                      alpha_0_var2,
-                      alpha_0_var2_sd,
-                      alpha_r_var2,
-                      alpha_r_var2_sd,
+                      prevalence_0_var2,
+                      prevalence_0_var2_sd,
+                      prevalence_r_var2,
+                      prevalence_r_var2_sd,
                       lambda2_var2,
                       lambda2_var2_sd,
                       coverage_var2,
@@ -2077,13 +2079,13 @@ sim.data1 <- function(nsims = 1e2,
     q_zero_sim <-           rnorm(nsims, q_zero_var2, q_zero_var2_sd)
 
     # Prevalence here TO DO: draw from a beta instead of "truncated" normal
-    alpha_0_sim <- rnorm(nsims, alpha_0_var2, alpha_0_var2_sd)
-    alpha_0_sim <- ifelse(alpha_0_sim > 1, yes = 1, 
-                          no = ifelse(alpha_0_sim < 0, 0, alpha_0_sim) )
+    prevalence_0_sim <- rnorm(nsims, prevalence_0_var2, prevalence_0_var2_sd)
+    prevalence_0_sim <- ifelse(prevalence_0_sim > 1, yes = 1, 
+                          no = ifelse(prevalence_0_sim < 0, 0, prevalence_0_sim) )
 
-    alpha_r_sim <- rnorm(nsims, alpha_r_var2, alpha_r_var2_sd)
-    alpha_r_sim <- ifelse(alpha_r_sim > 1, yes = 1, 
-                          no = ifelse(alpha_r_sim < 0, 0, alpha_r_sim) )
+    prevalence_r_sim <- rnorm(nsims, prevalence_r_var2, prevalence_r_var2_sd)
+    prevalence_r_sim <- ifelse(prevalence_r_sim > 1, yes = 1, 
+                          no = ifelse(prevalence_r_sim < 0, 0, prevalence_r_sim) )
     ## Guess work
     periods_val <- 50           #Total number of periods to forecast wages
     time_to_jm_val <- 10        #periods until individual join the labor force
@@ -2195,8 +2197,8 @@ sim.data1 <- function(nsims = 1e2,
                 growth_rate_var1 = growth_rate_sim[i],
                 coef_exp_var1 = coef_exp_sim[i, 1], coef_exp2_var1 = coef_exp_sim[i,2],
                 lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_sim[i,]),
-                alpha_0_var1 = alpha_0_sim[i],
-                alpha_r_var1 = alpha_r_sim[i],
+                prevalence_0_var1 = prevalence_0_sim[i],
+                prevalence_r_var1 = prevalence_r_sim[i],
                 lambda2_var1 = lambda2_sim[i],
                 coverage_var1 = coverage_sim[i],
                 q_full_var1 = q_full_sim[i],
@@ -2287,82 +2289,6 @@ policy_estimates_text <- c(
   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
 
-
-
-### TEMP
-npv_sim_all <-   sim.data1(nsims = nsims_so,                        
-            gov_bonds_var2          = gov_bonds_so             ,                                    
-            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,
-            inflation_var2          = inflation_so             ,
-            inflation_var2_sd       = inflation_so * 0.1          ,
-            gov_bonds_new_var2      = gov_bonds_new_so      ,          #add to app
-            gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          #add to app
-            inflation_new_var2      = inflation_new_so      ,          #add to app
-            inflation_new_var2_sd   = inflation_new_so * 0.1,          #add to app
-            wage_ag_var2            = wage_ag_so               ,                                      
-            wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
-            wage_ww_var2            = wage_ww_so               ,                                      
-            wage_ww_var2_sd         = wage_ww_so * 0.1            ,                                   
-            profits_se_var2         = profits_se_so            ,                                   
-            profits_se_var2_sd      = profits_se_so * 0.1         ,                                
-            hours_se_cond_var2      = hours_se_cond_so         ,                                
-            hours_se_cond_var2_sd   = hours_se_cond_so * 0.1      ,                             
-            hours_ag_var2           = hours_ag_so              ,                                     
-            hours_ag_var2_sd        = hours_ag_so * 0.1           ,                                  
-            hours_ww_var2           = hours_ww_so              ,                                     
-            hours_ww_var2_sd        = hours_ww_so * 0.1           ,                                  
-            hours_se_var2           = hours_se_so              ,                                     
-            hours_se_var2_sd        = hours_se_so * 0.1           ,                                  
-            ex_rate_var2            = ex_rate_so               ,                                      
-            ex_rate_var2_sd         = ex_rate_so * 0.1            ,                                   
-            growth_rate_var2        = growth_rate_so           ,                                  
-            growth_rate_var2_sd     = growth_rate_so * 0.1        ,
-            coverage_var2           = coverage_so              ,
-            coverage_var2_sd        = coverage_so * 0.1           ,  
-            tax_var2                = tax_so                   ,                                             
-            tax_var2_sd             = tax_so * 0.1                ,                                        
-            unit_cost_local_var2    = unit_cost_local_so       ,                                     
-            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,                                       
-            years_of_treat_var2     = years_of_treat_so        ,                                    
-            years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
-            lambda1_var2            = lambda1_so,                                          
-            lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
-            lambda2_var2            = lambda2_so        ,                         
-            lambda2_var2_sd         = lambda2_so * 0.1  ,                      
-            q_full_var2             = q_full_so         ,                          
-            q_full_var2_sd          = q_full_so * 0.1   ,                         
-            coef_exp_var2           = coef_exp_so,                      
-            # coef_exp_var2_sd = c(as.numeric(input$param21_1_1), 
-            # as.numeric(input$param21_2_1)),                       
-            teach_sal_var2          = teach_sal_so         ,                                          
-            teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
-            teach_ben_var2          = teach_ben_so         ,                                          
-            teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
-            teach_sal_new_var2      = teach_sal_new_so         ,          #add to app                                
-            teach_sal_new_var2_sd   = teach_sal_new_so * 0.1      ,       #add to app                                
-            teach_ben_new_var2      = teach_ben_new_so         ,          #add to app                               
-            teach_ben_new_var2_sd   = 0.000001      ,                     #add to app
-            n_students_var2         = n_students_so        ,                                         
-            n_students_var2_sd      = n_students_so * 0.1     ,                                      
-            delta_ed_var2           = delta_ed_par_so          ,                                           
-            delta_ed_var2_sd        = delta_ed_par_so * 0.1       ,                                            
-            delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
-            delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
-            q_zero_var2             = q_zero_so            ,                                             
-            q_zero_var2_sd          = q_zero_so * 0.1         ,
-            lambda1_new_var2        = lambda1_new_so,                   
-            lambda1_new_var2_sd     = lambda1_new_sd_so,             
-            alpha_0_var2            = alpha_0_so       ,  
-            alpha_0_var2_sd         = alpha_0_so * 0.1    ,
-            alpha_r_var2            = alpha_r_so       ,  
-            alpha_r_var2_sd         = alpha_r_so * 0.1    ,                                                                         
-            staff_time_var2         = staff_time_so    ,
-            staff_time_var2_sd      = staff_time_so * 0.1,
-            counts_par_var2         = counts_par_so    ,
-            counts_par_var2_sd      = counts_par_sd_so ,
-            costs_par_var2          = costs_par_so     ,
-            costs_par_var2_sd       = costs_par_sd_so)
-
 ```
 
 
@@ -2429,10 +2355,10 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             q_zero_var2_sd          = q_zero_so * 0.1         ,
             lambda1_new_var2        = lambda1_new_so,                   
             lambda1_new_var2_sd     = lambda1_new_sd_so,             
-            alpha_0_var2            = alpha_0_so       ,  
-            alpha_0_var2_sd         = alpha_0_so * 0.1    ,
-            alpha_r_var2            = alpha_r_so       ,  
-            alpha_r_var2_sd         = alpha_r_so * 0.1    ,                                                                         
+            prevalence_0_var2            = prevalence_0_so       ,  
+            prevalence_0_var2_sd         = prevalence_0_so * 0.1    ,
+            prevalence_r_var2            = prevalence_r_so       ,  
+            prevalence_r_var2_sd         = prevalence_r_so * 0.1    ,                                                                         
             staff_time_var2         = staff_time_so    ,
             staff_time_var2_sd      = staff_time_so * 0.1,
             counts_par_var2         = counts_par_so    ,
@@ -2536,7 +2462,9 @@ rescale <- rescale_so
                           )
         )
     }
-ggplotly(plot1)
+    print(plot1)
+    #FUTURE: 
+    #ggplotly(plot1)
 
 # dens <- density(npv_sim)
 # fig <- plot_ly(x=~dens$x, y = ~dens$y, type='scatter', mode='lines', fill='tozeroy')
