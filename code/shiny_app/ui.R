@@ -104,6 +104,12 @@ shinyUI(
                                                            animationOptions(interval = 3000, loop = TRUE)),
                                              sliderInput("param16_1", label = "SD = ",
                                                          min = 0.000001* unit_cost_local_so, max = 1 * unit_cost_local_so, value = 0.1 * unit_cost_local_so, step = 0.0001),
+                                             sliderInput("param16_new", label = "Costs of T (local $) = ", step = 0.0001,
+                                                         min = unit_cost_2017usdppp_so / 2, max = 2 * unit_cost_2017usdppp_so,
+                                                         value = unit_cost_2017usdppp_so, pre = "$", animate =
+                                                           animationOptions(interval = 3000, loop = TRUE)),
+                                             sliderInput("param16_1_new", label = "SD = ",
+                                                         min = 0.000001* unit_cost_2017usdppp_so, max = 1 * unit_cost_2017usdppp_so, value = 0.1 * unit_cost_2017usdppp_so, step = 0.0001),
                                              sliderInput("param17", label = "Years of T = ",
                                                          min = years_of_treat_so / 2, max = 2 * years_of_treat_so, value = years_of_treat_so),
                                              sliderInput("param17_1", label = "SD = ",
@@ -152,9 +158,9 @@ shinyUI(
                                              numericInput("param29_3", label = h3("Lambda 1_3_new = "), value = lambda1_new_so[3]),
                                              numericInput("param29_3_1", label = h3("sd = "), value = lambda1_new_sd_so[3]),
                                              sliderInput("param30", label = "Prevalence in original study = ",
-                                                         min = 0, max = 1, value = alpha_0_so),
+                                                         min = 0, max = 1, value = prevalence_0_so),
                                              sliderInput("param30_1", label = "SD = ",
-                                                         min = 0.0000001 * alpha_r_so, max = 1 * alpha_0_so, value = 0.1 * alpha_0_so)
+                                                         min = 0.0000001 * prevalence_r_so, max = 1 * prevalence_0_so, value = 0.1 * prevalence_0_so)
                                              ),
                                     # end tabpanel research ----
                                     # 
@@ -175,9 +181,9 @@ shinyUI(
                                              sliderInput("param24_1", label = "SD = ",
                                                          min = 0.0000001* n_students_so, max = 1 * n_students_so, value = 0.1 * n_students_so),
                                              sliderInput("param31", label = "Prevalence in new region = ",
-                                                         min = 0 / 2, max = 1, value = alpha_r_so),
+                                                         min = 0 / 2, max = 1, value = prevalence_r_so),
                                              sliderInput("param31_1", label = "SD = ",
-                                                         min = 0.0000001* alpha_r_so, max = 1 * alpha_r_so, value = 0.1 * alpha_r_so),
+                                                         min = 0.0000001* prevalence_r_so, max = 1 * prevalence_r_so, value = 0.1 * prevalence_r_so),
                                              sliderInput("param33", label = "Additional costs due to staff time = ",
                                                          min = staff_time_so / 2, max = 2 * staff_time_so, value = staff_time_so),
                                              sliderInput("param33_1", label = "SD = ",

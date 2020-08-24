@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "17 August, 2020"
+date: "24 August, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -103,8 +103,10 @@ chunk_params <- function(){
     unit_cost_local_so <- 43.66    #Deworm the World
 
     unit_cost_so <- 0.42           # Unit cost of deworming (in 2018 USD) - from Evidence Action
-    unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
-    unit_cost_2017usdppp_so <- unit_cost_ppp_so*cpi_2017_so/cpi_2018_so
+    #CALCULATIONS TO CONVERT ALL CURRENCY TO 2017 USD PPP
+    unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so 
+    # Adjust for inflation: convert all costs to 2017 USD
+    unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
 
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
     # costs data
@@ -1343,6 +1345,7 @@ DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{
 \end{equation}
 
 Since the analysis is discrete, and we can not sum over a non-integer, we find
+
 \begin{equation}
 DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \\
 .4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
@@ -1374,8 +1377,12 @@ chunk_unit_costs2_new <- function(){
 }
 invisible( list2env(chunk_unit_costs2_new(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
-
-s2_in <- s2_f_new(interest_var = interest_19, unit_cost_local_var = 0.8296927, ex_rate_var = 1)
+# New costs are all in dollars so, will compute them using ex rate of 1.
+s2_in <- s2_f_new(
+  interest_var = interest_19,
+  unit_cost_local_var = unit_cost_2017usdppp_so,
+  ex_rate_var = 1
+)
 s2_new <- s2_in
 q2_in <- q_full_so
 ```
@@ -2287,7 +2294,7 @@ one_run <-
            teach_sal_new_var1 = teach_sal_new_so,                                            
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
-           unit_cost_local_new_var1 = 0.8296927,             #  CALL SO          
+           unit_cost_local_new_var1 = unit_cost_2017usdppp_so,             #  CALL SO          
            years_of_treat_var1 = years_of_treat_so,                                        
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so) {                                        
@@ -2769,6 +2776,8 @@ sim.data1 <- function(nsims = 1e2,
                       n_students_var2_sd,
                       unit_cost_local_var2,
                       unit_cost_local_var2_sd,
+                      unit_cost_local_new_var2,
+                      unit_cost_local_new_var2_sd,
                       years_of_treat_var2,
                       years_of_treat_var2_sd,
                       tax_var2,
@@ -2811,7 +2820,11 @@ sim.data1 <- function(nsims = 1e2,
 
     unit_cost_local_sim <-  rnorm(nsims, unit_cost_local_var2, 
                                   unit_cost_local_var2_sd)
-    # unit_cost_local_new_sim
+    
+    unit_cost_local_new_sim <-  rnorm(nsims, unit_cost_local_new_var2, 
+                              unit_cost_local_new_var2_sd)
+        
+
     years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, 
                                   years_of_treat_var2_sd)
 
@@ -2881,16 +2894,6 @@ sim.data1 <- function(nsims = 1e2,
     ######    
     ######    
 
-    # Get costs with no staff time
-    # TO DO: remove this step out of the sim loop, should be called only once. 
-
-            #           costs_par_var2,
-            #           costs_par_var2_sd,
-            #           staff_time_var2,
-            #           staff_time_var2_sd,
-            #           counts_par_var2,  
-    
-#      AQUI VOY
     counts_in <- costs_data_var2$total
     costs_no_staff_in <- costs_data_var2$costs_by_country
 
@@ -2969,6 +2972,7 @@ sim.data1 <- function(nsims = 1e2,
                 teach_ben_new_var1 = teach_ben_new_sim[i],
                 n_students_var1 = n_students_sim[i],
                 unit_cost_local_var1 = unit_cost_local_sim[i],
+                unit_cost_local_new_var1 = unit_cost_local_new_sim[i],
                 years_of_treat_var1 = years_of_treat_sim[i],
                 tax_var1 = tax_sim[i],
                 periods_var1 = periods_so,
@@ -3078,7 +3082,9 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             tax_var2                = tax_so                   ,                                             
             tax_var2_sd             = tax_so * 0.1                ,                                        
             unit_cost_local_var2    = unit_cost_local_so       ,                                     
-            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,                                       
+            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,
+            unit_cost_local_new_var2 = unit_cost_2017usdppp_so,
+            unit_cost_local_new_var2_sd = unit_cost_2017usdppp_so * 0.1  ,  
             years_of_treat_var2     = years_of_treat_so        ,                                    
             years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
             lambda1_var2            = lambda1_so,                                          
