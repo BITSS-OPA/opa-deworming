@@ -136,6 +136,7 @@ chunk_params <- function(){
     #CALCULATIONS TO CONVERT ALL CURRENCY TO 2017 USD PPP
     unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so 
     # Adjust for inflation: convert all costs to 2017 USD
+    # Move this calculations into the body of the document (and outside of the sources chunk)
     unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
 
     years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
@@ -193,7 +194,7 @@ chunk_params <- function(){
                                                     #- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
-    teach_sal_new_so <- (50000*12/49.77)
+    teach_sal_new_so <- (50000 * 12 / 49.77)
     teach_ben_new_so <- 0
                                   #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
                                   #news sources * 12 / ex_rate_2017_ppp_so
@@ -213,7 +214,7 @@ chunk_params <- function(){
     nsims_so <- 1e3
     # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim",
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
-    policy_estimate_so <- "ea3_sim"
+    policy_estimate_so <- "baird1_sim"
 
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
@@ -821,12 +822,12 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
 
 ```{r cost2}
 # - inputs: periods_so, delta_ed_final_in, interest (varies by approach), cost_per_student_in, s2_in, q2_in
-# - outputs: cost2_f
+# - outputs: pv_costs_f
 chunk_cost2 <- function(){
 ###############################################################################
 ###############################################################################  
 
-    cost2_f <- function(periods_var = periods_so, 
+    pv_costs_f <- function(periods_var = periods_so, 
                         delta_ed_var = delta_ed_final_in,
                         interest_r_var = NULL, 
                         cost_of_schooling_var = cost_per_student_in,
@@ -842,7 +843,7 @@ chunk_cost2 <- function(){
     
 ###############################################################################
 ###############################################################################  
-    return(list("cost2_f" = cost2_f))    # Try to return only functions
+    return(list("pv_costs_f" = pv_costs_f))    # Try to return only functions
 }
 invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
@@ -1517,9 +1518,9 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 # f
 # └──── g
 #
-#       ##     ###    ####
-# 1     2       3     4
-#       ##     ###    ####
+#       ##     ###    ####    #####
+# 1     2       3     4       5
+#       ##     ###    ####    #####
 # NPV_pe_f, CEA_pe_f, RCEA_pe_f
 #  TO DO: review and update this function tree
 # ├──── pv_benef_f
@@ -1533,14 +1534,15 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 # │      ├──── earnings2_f
 # │      |      └────lambda_eff_f
 # │      └──── interest_f
-# └──── costs1_p2_f
-#        └──── costs1_p1_f
-# └──── cost2_f = 11.776188118988
+# └──── pv_costs_f (pv_costs_f)
 #        ├──── delta_ed_final_f
 #        ├──── interest_f
+#        └──── s2_f_new
+#        |      └──── costs1_p2_f
+#        |             └──── costs1_p1_f
 #        ├──── s2_f
 #        └──── cost_per_student_f
-#       ##     ###    ####
+#       ##     ###    ####    #####
 
 #unit test function
 unit_test <- function(to_test_var, original_var, main_run_var = TRUE){
@@ -1603,7 +1605,7 @@ one_run <-
            teach_sal_new_var1 = teach_sal_new_so,                                            
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
-           unit_cost_local_new_var1 = unit_cost_2017usdppp_so,             #  CALL SO          
+           unit_cost_local_new_var1 = unit_cost_2017usdppp_so,                    
            years_of_treat_var1 = years_of_treat_so,                                        
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so) {                                        
@@ -1707,6 +1709,8 @@ one_run <-
                                                n_students_var = n_students_var1)
     unit_test(cost_per_student_in,  116.8549, main_run_var = main_run_var1)
 
+
+
     cost_per_student_in_new <- cost_per_student_f(
       teach_sal_var = teach_sal_new_var1,
       teach_ben_var = teach_ben_new_var1,
@@ -1777,7 +1781,7 @@ one_run <-
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
                       unit_cost_local_var = cost1_in, 
                       ex_rate_var = 1)
-    costs2_ea_in <- cost2_f(
+    costs2_ea_in <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
       interest_r_var = interest_in_new,
@@ -1789,7 +1793,7 @@ one_run <-
     )
 
     # costs2: Baird no externalities
-    costs2_in <- cost2_f(
+    costs2_in <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
       interest_r_var = interest_in,
@@ -1802,7 +1806,7 @@ one_run <-
     unit_test(costs2_in, 11.776188118988, main_run_var = main_run_var1)
 
     # Baird yes externalities
-    costs2_in_x <- cost2_f(
+    costs2_in_x <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in_x,
       interest_r_var = interest_in,
@@ -1818,7 +1822,7 @@ one_run <-
                           unit_cost_local_var = unit_cost_local_new_var1, 
                           ex_rate_var = 1)
     # costs2: KLPS4
-    costs_k <- cost2_f(
+    costs_k <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
       interest_r_var = interest_in_new,

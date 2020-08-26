@@ -20,10 +20,36 @@ source(here("code", "shiny_app", "all_analysis.R"))
 #fluidPage is something must have
 shinyUI( 
     fluidPage(
-        navbarPage("My Application",
-            tabPanel(
-                "Component 1",
-                sidebarPanel(
+        navbarPage("Open Policy Analysis for Deworming Interventions",
+                   tabPanel(
+                     "Main Policy Estimate"),
+                   tabPanel(
+                     "Key Assumptions", #TO DO: repeat all code but with costs and prevalence as reactive only
+                     sidebarPanel(
+                       fluidRow(id = "tPanel_keyassum",style = "max-width: 400px; max-height: 300px; position:relative;",
+                                withMathJax(),
+                                useShinyjs(),
+                                selectInput("policy_est_keyassum", "Policy Estimate:",
+                                            choices = policy_estimates_text, 
+                                            selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
+                       ), 
+                       fluidRow(id = "tPanel1_keyassum",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
+                                
+                                           sliderInput("param2_keyassum", label = "Gov Bonds (\\( i \\))"  ,
+                                                       min = 0.001, max = 0.2, value = gov_bonds_so),
+                                           sliderInput("param2_1_keyassum", label = "SD = ",
+                                                       min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so),
+                                           sliderInput("param2_new_keyassum", label = "Gov Bonds (\\( i \\))"  ,
+                                                       min = 0.001, max = 0.2, value = gov_bonds_new_so),
+                                           sliderInput("param2_1_new_keyassum", label = "SD = ",
+                                                       min = 0.0000001, max = 0.4 * gov_bonds_new_so, value = 0.1 * gov_bonds_new_so)
+                   )
+                   )
+                   ),
+                   # Begin All assumptions tab ----
+                   tabPanel(
+                     "All Assumptions",
+                      sidebarPanel(
                              fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 300px; position:relative;",
                                       actionButton("run", label = "Run Simulation"),
                                       checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
@@ -202,11 +228,8 @@ shinyUI(
                              uiOutput('eqns', container = div)
                         )
                     ) 
-                ),  
-            tabPanel(
-              "Component 2"
-                ),
-            tabPanel("Component 3")
+                )
+                # End All Assumptions tab ----
         )                
     )
 )

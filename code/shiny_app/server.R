@@ -11,7 +11,7 @@ shinyServer( function(input, output, session) {
       gov_bonds_var2_sd  = as.numeric(input$param2_1),                                      
       inflation_var2     = as.numeric(input$param3),                                           
       inflation_var2_sd  = as.numeric(input$param3_1),    
-      gov_bonds_new_var2    = as.numeric(input$param2_new),    #TEMP                                                                  
+      gov_bonds_new_var2    = as.numeric(input$param2_new),                                                                    
       gov_bonds_new_var2_sd = as.numeric(input$param2_1_new),                                                            
       inflation_new_var2    = as.numeric(input$param3_new),                                
       inflation_new_var2_sd = as.numeric(input$param3_1_new), 
@@ -90,11 +90,16 @@ shinyServer( function(input, output, session) {
   
  # Show/hide components of each model 
   observeEvent(input$policy_est,{ 
+    # all params
     list_master <- c(
       "param2",                                             #Data
       "param2_1",
+      "param2_new",
+      "param2_1_new",
       "param3",
       "param3_1",
+      "param3_new",
+      "param3_1_new",
       "param4",
       "param4_1",
       "param5",
@@ -119,6 +124,8 @@ shinyServer( function(input, output, session) {
       "param15_1",
       "param16",
       "param16_1",
+      "param16_new",
+      "param16_1_new",
       "param17",
       "param17_1",
       "param18_1",                                          #Research
@@ -161,6 +168,9 @@ shinyServer( function(input, output, session) {
       "param33_1"
     )
     if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
+      # remove: counts adj, costs adj, lambda 2, delda ed w/ext, new lambdas, 
+      # costs due to staff, 
+      # new gov bonds, new inflation, new cost of teaching, 
       list_hide <- c("param32",
                        "param32_1",
                        "param34",
@@ -176,7 +186,13 @@ shinyServer( function(input, output, session) {
                        "param29_3",
                        "param29_3_1", 
                        "param33",
-                       "param33_1")
+                       "param33_1", 
+                       "param2_new",
+                       "param2_1_new",
+                       "param3_new",
+                       "param3_1_new",
+                       "param16_new",
+                       "param6_1_new")
         list_show <- list_master[ - which(list_master %in% list_hide)]
         
     } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
@@ -191,7 +207,13 @@ shinyServer( function(input, output, session) {
                        "param29_3",
                        "param29_3_1", 
                        "param33",
-                       "param33_1")
+                       "param33_1", 
+                       "param2_new",
+                       "param2_1_new",
+                       "param3_new",
+                       "param3_1_new",
+                       "param16_new",
+                       "param6_1_new")
         list_show <- list_master[ - which(list_master %in% list_hide)]
           
     } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
@@ -212,7 +234,13 @@ shinyServer( function(input, output, session) {
                      "param33",
                      "param33_1", 
                      "param15", 
-                     "param15_1")
+                     "param15_1", 
+                     "param2_new",
+                     "param2_1_new",
+                     "param3_new",
+                     "param3_1_new",
+                     "param16_new",
+                     "param6_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
@@ -227,7 +255,13 @@ shinyServer( function(input, output, session) {
                      "param29_3",
                      "param29_3_1", 
                      "param33",
-                     "param33_1")
+                     "param33_1", 
+                     "param2_new",
+                     "param2_1_new",
+                     "param3_new",
+                     "param3_1_new",
+                     "param16_new",
+                     "param6_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
 
@@ -263,7 +297,13 @@ shinyServer( function(input, output, session) {
                      "param18_2",
                      "param18_2_1",
                      "param33",
-                     "param33_1" 
+                     "param33_1" , 
+                     "param2",
+                     "param2_1",
+                     "param3",
+                     "param3_1",
+                     "param16",
+                     "param6_1"
                      )
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
@@ -301,7 +341,13 @@ shinyServer( function(input, output, session) {
                      "param33",
                      "param33_1", 
                      "param15", 
-                     "param15_1")
+                     "param15_1", 
+                     "param2",
+                     "param2_1",
+                     "param3",
+                     "param3_1",
+                     "param16",
+                     "param16_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
 
     } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
@@ -326,7 +372,11 @@ shinyServer( function(input, output, session) {
                      "param29_3",
                      "param29_3_1",  
                      "param16", 
-                     "param16_1")
+                     "param16_1", 
+                     "param2_new",
+                     "param2_1_new",
+                     "param3_new",
+                     "param3_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       #Aqui voy      
     } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
@@ -349,7 +399,11 @@ shinyServer( function(input, output, session) {
                      "param29_3",
                      "param29_3_1",  
                      "param16", 
-                     "param16_1")
+                     "param16_1", 
+                     "param2_new",
+                     "param2_1_new",
+                     "param3_new",
+                     "param3_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
@@ -402,7 +456,11 @@ shinyServer( function(input, output, session) {
                      "param33",
                      "param33_1", 
                      "param15", 
-                     "param15_1")
+                     "param15_1", 
+                     "param2",
+                     "param2_1",
+                     "param3",
+                     "param3_1")
     
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
