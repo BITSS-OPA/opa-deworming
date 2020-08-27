@@ -79,7 +79,9 @@ shinyServer( function(input, output, session) {
       staff_time_var2 = as.numeric(input$param33), 
       staff_time_var2_sd = as.numeric(input$param33_1), 
       costs_par_var2 = as.numeric(input$param34), 
-      costs_par_var2_sd = as.numeric(input$param34_1) 
+      costs_par_var2_sd = as.numeric(input$param34_1), 
+      new_costs_var2 = as.numeric(input$param35),
+      countries_var2 = input$param36
       )
     } 
   )
@@ -719,33 +721,69 @@ shinyServer( function(input, output, session) {
     })
       
     output$plot1 <- renderPlot({      
-    npv_sim_all <- reactive.data1()
+    # TO DO: wrap all the following steps in a function and call them again below (instead of copying and pasting)
+      
+      npv_sim_all <- reactive.data1()
+  
+      total_time <- npv_sim_all$total_time
+      position <- which( policy_estimates_text == input$policy_est)
+      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+      npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+      npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+      
+      plot1 <- ggplot() +
+        geom_density(aes(x = npv_sim,
+                         alpha = 1/2, ..scaled..), kernel = "gau") +
+        geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
+        coord_cartesian(xlim = c(-10, 400)) +
+        guides(alpha = "none", colour="none") +
+        labs(y = NULL,
+             x = "NPV" ,
+             title = paste0("Distribution of NPV of ", policy_estimates_text[position]
+             ),
+             subtitle = paste0("N = ", input$param1, " simulations. Takes ",
+                               round(total_time, 1)," ",attributes(total_time)$unit )  )+
+        annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
+        annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
+        theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+      if (input$rescale == TRUE) {
+        plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
+        }
+      print(plot1)  
+      }, height = 700, width = 600 
+    )
 
-    total_time <- npv_sim_all$total_time
-    position <- which( policy_estimates_text == input$policy_est)
-    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-    
-    plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-      coord_cartesian(xlim = c(-10, 400)) +
-      guides(alpha = "none", colour="none") +
-      labs(y = NULL,
-           x = "NPV" ,
-           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
-           ),
-           subtitle = paste0("N = ", input$param1, " simulations. Takes ",
-                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-    if (input$rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
+    output$plot1_ka <- renderPlot({      
+      npv_sim_all <- reactive.data1()
+      
+      total_time <- npv_sim_all$total_time
+      position <- which( policy_estimates_text == input$policy_est)
+      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+      npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+      npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+      
+      plot1 <- ggplot() +
+        geom_density(aes(x = npv_sim,
+                         alpha = 1/2, ..scaled..), kernel = "gau") +
+        geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
+        coord_cartesian(xlim = c(-10, 400)) +
+        guides(alpha = "none", colour="none") +
+        labs(y = NULL,
+             x = "NPV" ,
+             title = paste0("Distribution of NPV of ", policy_estimates_text[position]), 
+             subtitle = "Add Subtitle"
+             ) +
+        annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
+        annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
+        theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+      if (input$rescale == TRUE) {
+        plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
       }
-    print(plot1)  
-    }, height = 700, width = 600 )
+      print(plot1)  
+    }, height = 700, width = 600 
+    )
+    
+    
+    
   })
 })

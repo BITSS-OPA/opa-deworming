@@ -26,26 +26,30 @@ shinyUI(
                    tabPanel(
                      "Key Assumptions", #TO DO: repeat all code but with costs and prevalence as reactive only
                      sidebarPanel(
-                       fluidRow(id = "tPanel_keyassum",style = "max-width: 400px; max-height: 300px; position:relative;",
+                       fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 300px; position:relative;",
                                 withMathJax(),
                                 useShinyjs(),
-                                selectInput("policy_est_keyassum", "Policy Estimate:",
+                                selectInput("policy_est_ka", "Policy Estimate:",
                                             choices = policy_estimates_text, 
                                             selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
                        ), 
-                       fluidRow(id = "tPanel1_keyassum",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
-                                
-                                           sliderInput("param2_keyassum", label = "Gov Bonds (\\( i \\))"  ,
-                                                       min = 0.001, max = 0.2, value = gov_bonds_so),
-                                           sliderInput("param2_1_keyassum", label = "SD = ",
-                                                       min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so),
-                                           sliderInput("param2_new_keyassum", label = "Gov Bonds (\\( i \\))"  ,
-                                                       min = 0.001, max = 0.2, value = gov_bonds_new_so),
-                                           sliderInput("param2_1_new_keyassum", label = "SD = ",
-                                                       min = 0.0000001, max = 0.4 * gov_bonds_new_so, value = 0.1 * gov_bonds_new_so)
-                   )
-                   )
-                   ),
+                       fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
+                                           numericInput("param35", label = h3("Unit costs in new country"), value = -99), 
+                                checkboxGroupInput("param36", "Choose countries:",
+                                                   choiceNames =
+                                                     list("India", "Kenya", "Nigeria", "Vietnam"),
+                                                   choiceValues =
+                                                     list("india", "kenya", "nigeria", "vietnam"), 
+                                                   selected = list("india", "kenya", "nigeria", "vietnam") 
+                                  )
+                                )
+                            ), 
+                     mainPanel(
+                       fluidRow(id = "output_id1_ka", style = "max-width: 800px; max-height: 700px; position:relative;",
+                                plotOutput("plot1_ka")
+                       )
+                      )
+                     ),
                    # Begin All assumptions tab ----
                    tabPanel(
                      "All Assumptions",
@@ -221,7 +225,7 @@ shinyUI(
                                     ),
                 mainPanel(
                     fluidRow(id = "output_id1", style = "max-width: 800px; max-height: 700px; position:relative;",
-                        plotOutput("plot1"),
+                        plotOutput("plot1")
                       ),
                     fluidRow(id = "output_id2", style = "max-width: 800px; max-height: 300px; position:absolute;top: 700px;",
                              checkboxInput("show_eq", label = "Show equations", value = FALSE),
@@ -229,7 +233,6 @@ shinyUI(
                         )
                     ) 
                 )
-                # End All Assumptions tab ----
         )                
     )
 )

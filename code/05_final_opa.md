@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "25 August, 2020"
+date: "26 August, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -184,7 +184,7 @@ chunk_params <- function(){
     nsims_so <- 1e3
     # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim",
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
-    policy_estimate_so <- "baird1_sim"
+    policy_estimate_so <- "ea3_sim"
 
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
@@ -1755,10 +1755,25 @@ chunk_cost1_inp <- function(){
     # Compute weights and per capta costs
     costs1_p2_f <- function(country_total_var = costs_data$total, 
                          country_cost_var = costs_data$costs_by_country,
-                         staff_time_var = staff_time_so) {
+                         staff_time_var = staff_time_so, 
+                         country_name_var = costs_data$Country,
+                         select_var = list("india", "kenya", "nigeria", "vietnam"), 
+                         other_costs = -99) {
+      # select countries 
+      country_total_var_temp <- country_total_var[country_name_var %in% select_var]
+      country_cost_var_temp <- country_cost_var[country_name_var %in% select_var]
       # create country weight
-      c_weights <- country_total_var / sum(country_total_var)
-      per_cap <- country_cost_var * (1 + staff_time_var) / country_total_var
+      c_weights <- country_total_var_temp / sum(country_total_var_temp)
+      # create country per capita costs, adjusted by staff time
+      per_cap <- country_cost_var_temp * (1 + staff_time_var) / country_total_var_temp
+
+      # replace contry costs with new one if there is a new country (only count that new country)
+      #  (the weighthed sum of this scalar will just be the same number)
+      if (other_costs>0) {
+      #if (FALSE) {  
+        per_cap <- other_costs * (1 + staff_time_var) 
+      }
+
       sum(c_weights * per_cap) 
     }
 ###############################################################################
@@ -2296,7 +2311,9 @@ one_run <-
            teach_sal_new_var1 = teach_sal_new_so,                                            
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
-           unit_cost_local_new_var1 = unit_cost_2017usdppp_so,                    
+           unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
+           new_costs_var1 = -99,
+           countries_var1 = list("india", "kenya", "nigeria", "vietnam"),
            years_of_treat_var1 = years_of_treat_so,                                        
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so) {                                        
@@ -2464,9 +2481,12 @@ one_run <-
     # costs1: EA costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
                             country_cost_var = df_costs_var1$costs_by_country,
-                              staff_time_var = staff_time_var1)
+                              staff_time_var = staff_time_var1, 
+                              country_name_var = df_costs_var1$Country,
+                              select_var = countries_var1, 
+                              other_costs = new_costs_var1)
     unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
-# s2_ea_in <-- cost1_in (costs1_p2_f) <-- cost_data (costs1_p1_f())
+    # s2_ea_in <-- cost1_in (costs1_p2_f) <-- cost_data (costs1_p1_f())
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
                       unit_cost_local_var = cost1_in, 
                       ex_rate_var = 1)
@@ -2785,7 +2805,9 @@ sim.data1 <- function(nsims = 1e2,
                       tax_var2,
                       tax_var2_sd,
                       periods_var2, 
-                      costs_data_var2 = costs_data
+                      costs_data_var2 = costs_data, 
+                      new_costs_var2, 
+                      countries_var2
                       ) {
     start_time <- Sys.time()
     ################
@@ -2911,13 +2933,17 @@ sim.data1 <- function(nsims = 1e2,
                                                    mean = x * costs_par_var2,  
                                                    sd = x * costs_par_var2_sd) 
                                 )
+    
+
     # drawing samples from staff time
     staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
     
     #computing unit cost for each simulation draw
     costs1_df_sim <- NULL
+    
     for (aux1_i in 1:nsims){
       costs1_df_sim[[aux1_i]] <- data.frame(
+        "Country" = costs_data_var2$Country,
         "total" = costs1_counts_sim[aux1_i,],
         "costs_by_country" = costs1_all_costs_sim[aux1_i,]
         )
@@ -2978,7 +3004,10 @@ sim.data1 <- function(nsims = 1e2,
                 years_of_treat_var1 = years_of_treat_sim[i],
                 tax_var1 = tax_sim[i],
                 periods_var1 = periods_so,
-                df_costs_var1 = costs1_df_sim[[i]]),.GlobalEnv) ) # add costs here
+                df_costs_var1 = costs1_df_sim[[i]], 
+                new_costs_var1 = new_costs_var2, 
+                countries_var1 = countries_var2
+                ),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
       baird1_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
       #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
@@ -3047,20 +3076,17 @@ policy_estimates_text <- c(
   "Total effects, 2019(KLPS4) B & EA C, no ext",
   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
-```
 
-
-
-```r
+if  (FALSE){
 npv_sim_all <-   sim.data1(nsims = nsims_so,                        
             gov_bonds_var2          = gov_bonds_so             ,                                    
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
             inflation_var2          = inflation_so             ,                                    
             inflation_var2_sd       = inflation_so * 0.1          ,                                 
-            gov_bonds_new_var2      = gov_bonds_new_so      ,          #add to app
-            gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          #add to app
-            inflation_new_var2      = inflation_new_so      ,          #add to app
-            inflation_new_var2_sd   = inflation_new_so * 0.1,          #add to app
+            gov_bonds_new_var2      = gov_bonds_new_so      ,          
+            gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          
+            inflation_new_var2      = inflation_new_so      ,        
+            inflation_new_var2_sd   = inflation_new_so * 0.1,          
             wage_ag_var2            = wage_ag_so               ,                                      
             wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
             wage_ww_var2            = wage_ww_so               ,                                      
@@ -3125,7 +3151,92 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             counts_par_var2         = counts_par_so    ,
             counts_par_var2_sd      = counts_par_sd_so ,
             costs_par_var2          = costs_par_so     ,
-            costs_par_var2_sd       = costs_par_sd_so)
+            costs_par_var2_sd       = costs_par_sd_so, 
+            new_costs_var2 = 1, 
+            countries_var2 = list("india", "kenya", "nigeria", "vietnam"))
+
+}
+```
+
+
+
+```r
+npv_sim_all <-   sim.data1(nsims = nsims_so,                        
+            gov_bonds_var2          = gov_bonds_so             ,                                    
+            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
+            inflation_var2          = inflation_so             ,                                    
+            inflation_var2_sd       = inflation_so * 0.1          ,                                 
+            gov_bonds_new_var2      = gov_bonds_new_so      ,          
+            gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          
+            inflation_new_var2      = inflation_new_so      ,        
+            inflation_new_var2_sd   = inflation_new_so * 0.1,          
+            wage_ag_var2            = wage_ag_so               ,                                      
+            wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
+            wage_ww_var2            = wage_ww_so               ,                                      
+            wage_ww_var2_sd         = wage_ww_so * 0.1            ,                                   
+            profits_se_var2         = profits_se_so            ,                                   
+            profits_se_var2_sd      = profits_se_so * 0.1         ,                                
+            hours_se_cond_var2      = hours_se_cond_so         ,                                
+            hours_se_cond_var2_sd   = hours_se_cond_so * 0.1      ,                             
+            hours_ag_var2           = hours_ag_so              ,                                     
+            hours_ag_var2_sd        = hours_ag_so * 0.1           ,                                  
+            hours_ww_var2           = hours_ww_so              ,                                     
+            hours_ww_var2_sd        = hours_ww_so * 0.1           ,                                  
+            hours_se_var2           = hours_se_so              ,                                     
+            hours_se_var2_sd        = hours_se_so * 0.1           ,                                  
+            ex_rate_var2            = ex_rate_so               ,                                      
+            ex_rate_var2_sd         = ex_rate_so * 0.1            ,                                   
+            growth_rate_var2        = growth_rate_so           ,                                  
+            growth_rate_var2_sd     = growth_rate_so * 0.1        ,
+            coverage_var2           = coverage_so              ,
+            coverage_var2_sd        = coverage_so * 0.1           ,  
+            tax_var2                = tax_so                   ,                                             
+            tax_var2_sd             = tax_so * 0.1                ,                                        
+            unit_cost_local_var2    = unit_cost_local_so       ,                                     
+            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,
+            unit_cost_local_new_var2 = unit_cost_2017usdppp_so,
+            unit_cost_local_new_var2_sd = unit_cost_2017usdppp_so * 0.1  ,  
+            years_of_treat_var2     = years_of_treat_so        ,                                    
+            years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
+            lambda1_var2            = lambda1_so,                                          
+            lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
+            lambda2_var2            = lambda2_so        ,                         
+            lambda2_var2_sd         = lambda2_so * 0.1  ,                      
+            q_full_var2             = q_full_so         ,                          
+            q_full_var2_sd          = q_full_so * 0.1   ,                         
+            coef_exp_var2           = coef_exp_so,                      
+            # coef_exp_var2_sd = c(as.numeric(input$param21_1_1), 
+            # as.numeric(input$param21_2_1)),                       
+            teach_sal_var2          = teach_sal_so         ,                                          
+            teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
+            teach_ben_var2          = teach_ben_so         ,                                          
+            teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
+            teach_sal_new_var2      = teach_sal_new_so         ,          #add to app                                
+            teach_sal_new_var2_sd   = teach_sal_new_so * 0.1      ,       #add to app                                
+            teach_ben_new_var2      = teach_ben_new_so         ,          #add to app                               
+            teach_ben_new_var2_sd   = 0.000001      ,                     #add to app
+            n_students_var2         = n_students_so        ,                                         
+            n_students_var2_sd      = n_students_so * 0.1     ,                                      
+            delta_ed_var2           = delta_ed_par_so          ,                                           
+            delta_ed_var2_sd        = delta_ed_par_so * 0.1       ,                                            
+            delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
+            delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
+            q_zero_var2             = q_zero_so            ,                                             
+            q_zero_var2_sd          = q_zero_so * 0.1         ,
+            lambda1_new_var2        = lambda1_new_so,                   
+            lambda1_new_var2_sd     = lambda1_new_sd_so,             
+            prevalence_0_var2            = prevalence_0_so       ,  
+            prevalence_0_var2_sd         = prevalence_0_so * 0.1    ,
+            prevalence_r_var2            = prevalence_r_so       ,  
+            prevalence_r_var2_sd         = prevalence_r_so * 0.1    ,                                                                         
+            staff_time_var2         = staff_time_so    ,
+            staff_time_var2_sd      = staff_time_so * 0.1,
+            counts_par_var2         = counts_par_so    ,
+            counts_par_var2_sd      = counts_par_sd_so ,
+            costs_par_var2          = costs_par_so     ,
+            costs_par_var2_sd       = costs_par_sd_so, 
+            new_costs_var2 = -99, 
+            countries_var2 = list("india", "kenya", "nigeria", "vietnam"))
 
 
 total_time <- npv_sim_all$total_time
@@ -3133,7 +3244,7 @@ position <- which( policy_estimates == policy_estimate_so )
 npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 1))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 1))
-#Unit test the simulations for nsims = 100, 1000, 10000
+#Unit test the simulations for nsims = 100, 1000, 10000 UPDATE
 all_res_100_sims <- c(
   8.7094550833253,
   49.2632644048296,
@@ -3196,7 +3307,7 @@ for ( i in policy_estimates ) {
 library(plotly)
 nsims <- nsims_so
 
-npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim),6))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 rescale <- rescale_so
