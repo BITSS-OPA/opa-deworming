@@ -65,12 +65,13 @@ spelling and grammar.
   - Emma Ng –
   - Ryan Scholes –
 
-The individuals below (in alphabetical order) have contributed to this
-repository:
+The individuals below have contributed to this repository. This list is
+ordered by each individual’s number of commits, which may not perfectly
+reflect their intellectual contribution to this project.
 
-Emma Ng ([@em-ng21](https://github.com/em-ng21)), Fernando Hoces de la
-Guardia ([@fhoces](https://github.com/fhoces)),
+Fernando Hoces de la Guardia ([@fhoces](https://github.com/fhoces)),
+Emma Ng ([@em-ng21](https://github.com/em-ng21)),
 [@Gracemorgan7](https://github.com/Gracemorgan7),
-[@oriajia](https://github.com/oriajia),
 [@scholesy](https://github.com/scholesy), Sophia Bai
-([@sophiabai2022](https://github.com/sophiabai2022))
+([@sophiabai2022](https://github.com/sophiabai2022)),
+[@oriajia](https://github.com/oriajia)

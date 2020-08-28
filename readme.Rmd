@@ -46,7 +46,7 @@ Major contributions to this project will be acknowledged below. This OPA employs
  - Emma Ng – 
  - Ryan Scholes –
  
-The individuals below (in alphabetical order) have contributed to this repository:  
+The individuals below have contributed to this repository. This list is ordered by each individual's number of commits, which may not perfectly reflect their intellectual contribution to this project.
 
 ```{r deworming-contributors, echo=FALSE, results="asis", message=FALSE}
 # adapted from Hadley Wickham's scripts to credit contributors to R for Data Science
