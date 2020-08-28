@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "26 August, 2020"
+date: "28 August, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -211,7 +211,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="70%" />
+<img src="/Users/emmang/Documents/GitHub/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="70%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -687,9 +687,7 @@ The coverage ($R$) is defined as the fraction, among all neighboring schools (wi
 
 The saturation of the intervention, $p$, measures the fraction of the population that is effectively using the treatment and is defined as a weighted average of the take-up under a full subsidy for deworming and the take-up under zero subsidy.   
 
-<!-- Emma: find the reference below, let me know if you cannot find it--> 
-
-For this (or similar?) setting @kremer2007illusion (Page 55, Table 7, Regression 1, Row 1 - FERNANDO please verify) estimate that there is almost no take-up without subsidy ($Q(0)$), hence  is assigned the value of 0. The same article (Page 48, Table 1, Panel C, Col 1, Row 3) estimates that take-up with full subsidy ($Q(full)$) was of 0.75.
+For this (or similar?) setting @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) estimate that take-up with full subsidy ($Q(full)$) was 0.75. Miguel and Kremer (2004) (Table 3 and footnote 18) observed minimal to no take-up without subsidy ($Q(0)$), hence it is assigned the value of 0.  
 
 <details><summary>Show all the details</summary>
 
