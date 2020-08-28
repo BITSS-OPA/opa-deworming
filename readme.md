@@ -54,20 +54,28 @@ spelling and grammar.
 
 *(in alphabetical order)*
 
-  - Sophia Bai –
-  - Aleksandar Bogdanoski –  
-  - Fernando Hoces de la Guardia –  
-  - Katherine Hoeberling –  
+  - Sophia Bai – Visualization, Writing (original draft), Writing
+    (reviewing and editing)
+  - Aleksandar Bogdanoski – Funding acquisition, Project administration
+  - Fernando Hoces de la Guardia – Conceptualization, Funding
+    acquisition, Supervision, Visualization, Writing (original draft),
+    Writing (reviewing and editing)
+  - Katherine Hoeberling – Funding acquisition, Project administration
   - Grace Hollister –
-  - Orianna Jia –
-  - Edward Miguel –  
-  - Grace Morgan –
-  - Emma Ng –
-  - Ryan Scholes –
+  - Orianna Jia – Writing (original draft), Writing (reviewing and
+    editing)
+  - Edward Miguel – Conceptualization, Funding acquisition, Supervision
+  - Grace Morgan – Writing (original draft), Writing (reviewing and
+    editing)
+  - Emma Ng – Visualization, Writing (original draft), Writing
+    (reviewing and editing)
+  - Ryan Scholes – Visualization, Writing (original draft), Writing
+    (reviewing and editing)
 
-The individuals below have contributed to this repository. This list is
-ordered by each individual’s number of commits, which may not perfectly
-reflect their intellectual contribution to this project.
+This list of contributors to this repository (also available at [this
+page](https://github.com/BITSS-OPA/opa-deworming/graphs/contributors))
+is ordered by each individual’s number of commits, which may not
+perfectly reflect their intellectual contribution to this project:
 
 Fernando Hoces de la Guardia ([@fhoces](https://github.com/fhoces)),
 Emma Ng ([@em-ng21](https://github.com/em-ng21)),
