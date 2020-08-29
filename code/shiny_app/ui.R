@@ -44,7 +44,7 @@ shinyUI(
                                             selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
                        ), 
                        fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
-                                           numericInput("param35", label = h3("Unit costs in new country"), value = -99), 
+                                           numericInput("param35", label = h3("Unit costs in new country"), value = costs2_ea_in), 
                                 checkboxGroupInput("param36", "Choose countries:",
                                                    choiceNames =
                                                      list("India", "Kenya", "Nigeria", "Vietnam"),

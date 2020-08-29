@@ -1,4 +1,4 @@
-## ----setup, include=FALSE, purl=TRUE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----setup, include=FALSE, purl=TRUE---------------------------------------------------------------------------------------------------------------------------------------------
 # Loading required libraries
 list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly")
 
@@ -34,7 +34,7 @@ knitr::opts_chunk$set(warning = FALSE)
 
 
 
-## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE-----------------------------------------------------------------------------------------------------------------------------------
+## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE---------------------------------------------------------------------------------------------------------
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
 chunk_params <- function(){
@@ -123,8 +123,8 @@ chunk_params <- function(){
     
     #This is are the parameters labeled eta in the doc
     prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
-    prevalence_r_so <- 0.56 # c("india", "kenya", "nigeria", "vietnam") c(0.5665, 0.345, 0.27, 0.145)
-    #https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
+    prevalence_r_so <- 0.56 # c("india" = 0.5665, "kenya" = 0.345, "nigeria" = 0.27, "vietnam" = 0.145) 
+    # based on https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
     #############
     ##### Guess work   
     #############
@@ -152,6 +152,7 @@ chunk_params <- function(){
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
     nsims_so <- 1e3
+    new_costs_so <- NULL
     # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim",
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
     policy_estimate_so <- "ea3_sim"
@@ -180,7 +181,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 
-## ----eq_1, echo=print_code---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----eq_1, echo=print_code-------------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: total per capita benefits, total per capita costs, fudging factor
 # - outputs: Cost-effectiveness ratio & ratio to cash CEA, NPV
 chunk_policy_est <- function(){
@@ -206,7 +207,7 @@ chunk_policy_est <- function(){
 invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 
 
-## ----benefits, echo=print_code-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----benefits, echo=print_code---------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 chunk_benefits <- function(){
@@ -227,7 +228,7 @@ chunk_benefits <- function(){
 invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 
-## ----interest-rate, echo=print_code------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----interest-rate, echo=print_code----------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: gov_bonds_so, inflation_so 
 # - outputs: interest_in, interest_exct_in 
 chunk_interest <- function(){
@@ -260,7 +261,7 @@ interest_19 <- as.numeric(
 
 
 
-## ----earnings1---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----earnings1-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: wage_in, lambda1_so, lambda2_so, saturation, coverage_so
 # - outputs: earnings (no name specified)
 chunk_earnings1 <- function(){
@@ -285,7 +286,7 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) ) 
 
 
-## ----wage_t------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----wage_t----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
@@ -347,7 +348,7 @@ chunk_wages <- function(){
 invisible( list2env(chunk_wages(),.GlobalEnv) )
 
 
-## ----lambdas-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----lambdas---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: lambda1_so, lambda2_so
 # - outputs: lambda1_in_f, lambda2_in_f functions
 chunk_lambdas<- function(){
@@ -373,7 +374,7 @@ lambda1_in <- lambda1_in_f()
 lambda2_in <- lambda2_in_f()
 
 
-## ----coverage-and-saturation-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----coverage-and-saturation-----------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: coverage_so, q_full_so, q_zero_so
 # - outputs: saturation_in
 chunk_coverage <- function(){
@@ -398,7 +399,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 
 
-## ----cost2-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----cost2-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: periods_so, delta_ed_final_in, interest (varies by approach), cost_per_student_in, s2_in, q2_in
 # - outputs: pv_costs_f
 chunk_cost2 <- function(){
@@ -428,7 +429,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:  
 
 
-## ----unit_costs2-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----unit_costs2-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: unit_cost_local_so, ex_rate_so, years_of_treat_so
 # - outputs: s2_f
 chunk_unit_costs2 <- function(){
@@ -451,7 +452,7 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 
 
 
-## ----ed-costs----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----ed-costs--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: teach_sal_so, teach_ben_so, n_students_so, include_ext_so, delta_ed_so, delta_ed_ext_so
 # - outputs: cost_per_student_f, delta_ed_final_f
 chunk_edcosts <- function(){
@@ -491,7 +492,7 @@ delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 
 
 
-## ----delta-earnings, eval=TRUE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----delta-earnings, eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: t_var, lambda1_new_so[1], lambda1_new_so[2], lambda1_new_so[3]
 # - outputs: earnings2_f
 chunk_new_earnings <- function(){
@@ -518,7 +519,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 
 
 
-## ----unit_costs2_new---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----unit_costs2_new-------------------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: unit_cost_local_so, ex_rate_so, interest_19
 # - outputs: s2_f_new
 chunk_unit_costs2_new <- function(){
@@ -548,7 +549,7 @@ s2_new <- s2_in
 q2_in <- q_full_so
 
 
-## ----ed-costs-new------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----ed-costs-new----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 delta_ed_in <- delta_ed_so[,1]
 cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
@@ -559,7 +560,7 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
 
 
 
-## ----lambdas_eff-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----lambdas_eff-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: lambda1_in_f(), prevalence_0_so, prevalence_r_so
 # - outputs: lambda_eff_f
 chunk_lambdas_eff<- function(){
@@ -583,7 +584,7 @@ invisible( list2env(chunk_lambdas_eff(),.GlobalEnv) )
 lambda1_r_in <- lambda_eff_f()
 
 
-## ----eq_3, echo=print_code, eval=TRUE----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----eq_3, echo=print_code, eval=TRUE--------------------------------------------------------------------------------------------------------------------------------------------
 # - inputs: nothing
 # - outputs: (1) function that computes the country weights used in the final 
 # costs (2)  function that computes the weighted sum of country costs 
@@ -661,7 +662,7 @@ chunk_cost1_inp <- function(){
                          staff_time_var = staff_time_so, 
                          country_name_var = costs_data$Country,
                          select_var = list("india", "kenya", "nigeria", "vietnam"), 
-                         other_costs = -99) {
+                         other_costs = NULL) {
       # select countries 
       country_total_var_temp <- country_total_var[country_name_var %in% select_var]
       country_cost_var_temp <- country_cost_var[country_name_var %in% select_var]
@@ -672,7 +673,7 @@ chunk_cost1_inp <- function(){
 
       # replace contry costs with new one if there is a new country (only count that new country)
       #  (the weighthed sum of this scalar will just be the same number)
-      if (other_costs>0) {
+      if (!is.null(other_costs)) {
       #if (FALSE) {  
         per_cap <- other_costs * (1 + staff_time_var) 
       }
@@ -696,7 +697,7 @@ costs1_p2_in <- costs1_p2_f()
 
 
 
-## ----all-steps---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----all-steps-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function dependency is depicted as follows:
 # f(g()) =
 # f
@@ -790,7 +791,7 @@ one_run <-
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
            unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
-           new_costs_var1 = -99,
+           new_costs_var1 = new_costs_so,
            countries_var1 = list("india", "kenya", "nigeria", "vietnam"),
            years_of_treat_var1 = years_of_treat_so,                                        
            tax_var1 = tax_so,                                        
@@ -814,32 +815,37 @@ one_run <-
       coef_exp1_var = coef_exp_var1,
       coef_exp2_var = coef_exp2_var1
     )
-
+    unit_test(wage_t_in, 17.8464946727946, main_run_var = main_run_var1)
+    
     lambda1_in <- lambda1_in_f(lambda1_var = lambda1_var1)
-
+    unit_test(lambda1_in[1], 1.745, main_run_var = main_run_var1)
+    
     lambda1_prev_in <- lambda_eff_f(
       lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
       prevalence_0_var = prevalence_0_var1,
       prevalence_r_var = prevalence_r_var1
     )
-
+    unit_test(lambda1_prev_in[1], 1.062174, main_run_var = main_run_var1)
+    
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
-
+    unit_test(lambda2_in[1], 10.2 , main_run_var = main_run_var1)
+    
     saturation_in <- saturation_in_f(coverage_var = coverage_var1,
                                      q_full_var = q_full_var1,
                                      q_zero_var = q_zero_var1)$saturation_in 
-    unit_test(wage_t_in, 17.8464946727946, main_run_var = main_run_var1)
-    unit_test(lambda1_in[1], 1.745, main_run_var = main_run_var1)
-    unit_test(lambda2_in[1], 10.2 , main_run_var = main_run_var1)
     unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
+
+    
+    
 
     ###------------ Inputs for earnings2_f--------------------------------------
     lambda1_new_in <- lambda1_new_var1
+    unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
+    
     lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
                              prevalence_0_var = prevalence_0_var1,
                              prevalence_r_var = prevalence_r_var1)
-
-    unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
+    unit_test(lambda1_prev_new_in, 1.10686158182606, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f ---------------------------------------
     # earnings1
@@ -892,6 +898,10 @@ one_run <-
               main_run_var = main_run_var1)
     unit_test(earnings_in_yes_ext, 167.667817450905, 
               main_run_var = main_run_var1)
+    unit_test(earnings_in_no_ext_prev, 18.9560810807118, 
+              main_run_var = main_run_var1)
+    unit_test(earnings_in_yes_ext_prev, 155.481765327591, 
+              main_run_var = main_run_var1)    
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
     ##-------------- Inputs for costs2_f----------------------------------------
@@ -966,7 +976,7 @@ one_run <-
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
-    unit_test(pv_benef_all_nx_in, 142.42587835824, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_nx_prev_in, 86.6940129137116, main_run_var = main_run_var1)
     #Baird all and ext
     pv_benef_all_yx_in <- pv_benef_f(
       earnings_var = earnings_in_yes_ext,
@@ -981,7 +991,7 @@ one_run <-
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
-    unit_test(pv_benef_all_yx_in, 766.814399527604,
+    unit_test(pv_benef_all_yx_prev_in, 711.082534083075,
               main_run_var = main_run_var1)
 
     #KLPS4 w/t and no ext
@@ -1002,9 +1012,9 @@ one_run <-
     pv_benef_all_prev_new <- pv_benef_f(earnings_var = earnings_in_no_ext_prev_new,
                                    interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
-    unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_prev_new, 578.404929891946, main_run_var = main_run_var1)
     
-    #Costs
+    #Costs asd
     # costs1: EA costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
                             country_cost_var = df_costs_var1$costs_by_country,
@@ -1102,7 +1112,7 @@ invisible( list2env(one_run(),.GlobalEnv) )
 
 
 
-## ----mc-setup, eval=TRUE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----mc-setup, eval=TRUE---------------------------------------------------------------------------------------------------------------------------------------------------------
 # EXPLAIN
 # This function takes as inputs means and standard deviations of source 
 # parameters and simualte draws of each source. When the source is a scalar, 

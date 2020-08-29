@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "28 August, 2020"
+date: "29 August, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -154,8 +154,8 @@ chunk_params <- function(){
     
     #This is are the parameters labeled eta in the doc
     prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
-    prevalence_r_so <- 0.56 # c("india", "kenya", "nigeria", "vietnam") c(0.5665, 0.345, 0.27, 0.145)
-    #https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
+    prevalence_r_so <- 0.56 # c("india" = 0.5665, "kenya" = 0.345, "nigeria" = 0.27, "vietnam" = 0.145) 
+    # based on https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
     #############
     ##### Guess work   
     #############
@@ -183,6 +183,7 @@ chunk_params <- function(){
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
     nsims_so <- 1e3
+    new_costs_so <- NULL
     # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim",
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
     policy_estimate_so <- "ea3_sim"
@@ -212,7 +213,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/emmang/Documents/GitHub/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="70%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="70%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -1757,7 +1758,7 @@ chunk_cost1_inp <- function(){
                          staff_time_var = staff_time_so, 
                          country_name_var = costs_data$Country,
                          select_var = list("india", "kenya", "nigeria", "vietnam"), 
-                         other_costs = -99) {
+                         other_costs = NULL) {
       # select countries 
       country_total_var_temp <- country_total_var[country_name_var %in% select_var]
       country_cost_var_temp <- country_cost_var[country_name_var %in% select_var]
@@ -1768,7 +1769,7 @@ chunk_cost1_inp <- function(){
 
       # replace contry costs with new one if there is a new country (only count that new country)
       #  (the weighthed sum of this scalar will just be the same number)
-      if (other_costs>0) {
+      if (!is.null(other_costs)) {
       #if (FALSE) {  
         per_cap <- other_costs * (1 + staff_time_var) 
       }
@@ -2311,7 +2312,7 @@ one_run <-
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
            unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
-           new_costs_var1 = -99,
+           new_costs_var1 = new_costs_so,
            countries_var1 = list("india", "kenya", "nigeria", "vietnam"),
            years_of_treat_var1 = years_of_treat_so,                                        
            tax_var1 = tax_so,                                        
@@ -2335,32 +2336,37 @@ one_run <-
       coef_exp1_var = coef_exp_var1,
       coef_exp2_var = coef_exp2_var1
     )
-
+    unit_test(wage_t_in, 17.8464946727946, main_run_var = main_run_var1)
+    
     lambda1_in <- lambda1_in_f(lambda1_var = lambda1_var1)
-
+    unit_test(lambda1_in[1], 1.745, main_run_var = main_run_var1)
+    
     lambda1_prev_in <- lambda_eff_f(
       lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
       prevalence_0_var = prevalence_0_var1,
       prevalence_r_var = prevalence_r_var1
     )
-
+    unit_test(lambda1_prev_in[1], 1.062174, main_run_var = main_run_var1)
+    
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
-
+    unit_test(lambda2_in[1], 10.2 , main_run_var = main_run_var1)
+    
     saturation_in <- saturation_in_f(coverage_var = coverage_var1,
                                      q_full_var = q_full_var1,
                                      q_zero_var = q_zero_var1)$saturation_in 
-    unit_test(wage_t_in, 17.8464946727946, main_run_var = main_run_var1)
-    unit_test(lambda1_in[1], 1.745, main_run_var = main_run_var1)
-    unit_test(lambda2_in[1], 10.2 , main_run_var = main_run_var1)
     unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
+
+    
+    
 
     ###------------ Inputs for earnings2_f--------------------------------------
     lambda1_new_in <- lambda1_new_var1
+    unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
+    
     lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
                              prevalence_0_var = prevalence_0_var1,
                              prevalence_r_var = prevalence_r_var1)
-
-    unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
+    unit_test(lambda1_prev_new_in, 1.10686158182606, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f ---------------------------------------
     # earnings1
@@ -2413,6 +2419,10 @@ one_run <-
               main_run_var = main_run_var1)
     unit_test(earnings_in_yes_ext, 167.667817450905, 
               main_run_var = main_run_var1)
+    unit_test(earnings_in_no_ext_prev, 18.9560810807118, 
+              main_run_var = main_run_var1)
+    unit_test(earnings_in_yes_ext_prev, 155.481765327591, 
+              main_run_var = main_run_var1)    
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
     ##-------------- Inputs for costs2_f----------------------------------------
@@ -2485,7 +2495,7 @@ one_run <-
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
-    unit_test(pv_benef_all_nx_in, 142.42587835824, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_nx_prev_in, 86.6940129137116, main_run_var = main_run_var1)
     #Baird all and ext
     pv_benef_all_yx_in <- pv_benef_f(
       earnings_var = earnings_in_yes_ext,
@@ -2500,7 +2510,7 @@ one_run <-
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
-    unit_test(pv_benef_all_yx_in, 766.814399527604,
+    unit_test(pv_benef_all_yx_prev_in, 711.082534083075,
               main_run_var = main_run_var1)
 
     #KLPS4 w/t and no ext
@@ -2521,9 +2531,9 @@ one_run <-
     pv_benef_all_prev_new <- pv_benef_f(earnings_var = earnings_in_no_ext_prev_new,
                                    interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
-    unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_prev_new, 578.404929891946, main_run_var = main_run_var1)
     
-    #Costs
+    #Costs asd
     # costs1: EA costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
                             country_cost_var = df_costs_var1$costs_by_country,
