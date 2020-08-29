@@ -20,9 +20,19 @@ source(here("code", "shiny_app", "all_analysis.R"))
 #fluidPage is something must have
 shinyUI( 
     fluidPage(
-        navbarPage("Open Policy Analysis for Deworming Interventions",
+        navbarPage("Open Policy Analysis for Deworming Interventions: Open Output Component",
                    tabPanel(
-                     "Main Policy Estimate"),
+                     "Main Policy Estimate", 
+                     sidebarPanel(
+                       fluidRow(id = "tPanel_main",style = "max-width: 400px; max-height: 300px; position:relative;",
+                       "Description \n results")
+                     ), 
+                     mainPanel(
+                       fluidRow(id = "output_id1_main", style = "max-width: 800px; max-height: 700px; position:relative;",
+                                plotOutput("plot1_main")
+                       )
+                     )
+                   ),
                    tabPanel(
                      "Key Assumptions", #TO DO: repeat all code but with costs and prevalence as reactive only
                      sidebarPanel(
@@ -41,7 +51,8 @@ shinyUI(
                                                    choiceValues =
                                                      list("india", "kenya", "nigeria", "vietnam"), 
                                                    selected = list("india", "kenya", "nigeria", "vietnam") 
-                                  )
+                                  ), 
+                                numericInput("param37", label = h3("Prevalence in the new region"), value = prevalence_r_so),
                                 )
                             ), 
                      mainPanel(

@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "26 August, 2020"
+date: "28 August, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -152,9 +152,10 @@ chunk_params <- function(){
     delta_ed_ext_par_so <- 1
     include_ext_so <- TRUE
     
-    #Start renaming to eta throughout
-    prevalence_0_so <- 1#0.77 #0.77
-    prevalence_r_so <- 1#0.15 #0.15
+    #This is are the parameters labeled eta in the doc
+    prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
+    prevalence_r_so <- 0.56 # c("india", "kenya", "nigeria", "vietnam") c(0.5665, 0.345, 0.27, 0.145)
+    #https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
     #############
     ##### Guess work   
     #############
@@ -477,12 +478,12 @@ Two types of results are presented: the total effect on earnings projected over 
 
 ###  Gains in earnings
 
-Gains in earnings ($E_t$) are the result of multiplying expected earnings in a certain period ($w_t$) with the effects of deworming on worked hours. This effect can have two components: a direct effect of deworming on the individual ($\lambda_1$) and the indirect effect on earnings due to externalities ($\lambda_2$). The indirect effects are considered within the context of the treatment's coverage and saturation.
+Gains in earnings ($\Delta W_{t}$) are the result of multiplying expected earnings in a certain period ($w_t$) with the effects of deworming on worked hours. This effect can have two components: a direct effect of deworming on the individual ($\lambda_1$) and the indirect effect on earnings due to externalities ($\lambda_2$). The indirect effects are considered within the context of the treatment's coverage and saturation.
 
 <details><summary>Show all the details</summary>
 
 \begin{equation}
-E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
+\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 
 \label{eq:4}
 \tag{4}
@@ -757,7 +758,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
    <td style="text-align:left;"> $(3)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
    <td style="text-align:left;"> $(4)$ </td>
   </tr>
   <tr>
@@ -1042,7 +1043,7 @@ Including externalities, they obtain a total NPV of benefits of 766.81, with 102
    <td style="text-align:left;"> $(3)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
    <td style="text-align:left;"> $(4)$ </td>
   </tr>
   <tr>
@@ -1150,7 +1151,7 @@ In this second approach, benefits follow the same principle as in approach 1 (in
 
 ### Gains in earnings 
 
-Gains in earnings ($E_t$) from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference with approach 1, which only measures gains in earnings by year 10 and extrapolates into the future. To extrapolate after the 20-year measurement, the authors assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life. Hence the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
+Gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference with approach 1, which only measures gains in earnings by year 10 and extrapolates into the future. To extrapolate after the 20-year measurement, the authors assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life. Hence the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
 
 Gains in earnings represents the treatment effect on welfare, so it implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. This approach also disregards externality effects. Their estimated treatment effects ($\alpha_{t}$) for years 10, 15, and 20, are $87, $83, $85 dollars per person per year.
 
@@ -1159,7 +1160,7 @@ Gains in earnings represents the treatment effect on welfare, so it implicitly t
 <details><summary>Show all the details</summary>
 
 \begin{equation}
-E_t = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t > 20)\alpha^{KLPS4}
+\Delta W_{t} = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t > 20)\alpha^{KLPS4}
 \text{ for } t \leq 50
 
 \label{eq:13}
@@ -1225,7 +1226,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
    <td style="text-align:left;"> $(3)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
    <td style="text-align:left;"> $(4)$ </td>
   </tr>
   <tr>
@@ -1254,7 +1255,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
    <td style="text-align:left;"> $(10)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \lt t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \lt t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \gt 20)\alpha^{KLPS4}$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = \mathbf{1}(10 \lt t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \lt t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \gt 20)\alpha^{KLPS4}$ </td>
    <td style="text-align:left;"> $(11)$ </td>
   </tr>
 </tbody>
@@ -1459,7 +1460,7 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
    <td style="text-align:left;"> $(3)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
    <td style="text-align:left;"> $(4)$ </td>
   </tr>
   <tr>
@@ -1488,7 +1489,7 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
    <td style="text-align:left;"> $(10)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \lt t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \lt t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \gt 20)\alpha^{KLPS4}$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = \mathbf{1}(10 \lt t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \lt t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \gt 20)\alpha^{KLPS4}$ </td>
    <td style="text-align:left;"> $(11)$ </td>
   </tr>
   <tr>
@@ -1594,13 +1595,13 @@ In this third and final approach, we borrowed some methodological elements from 
 
 Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries. 
 
-In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to XXX for the relevant population and costs were as high as XXXX. Today EA supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
+In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to 92% for the relevant population and costs were as high as XXXX. Today EA supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
 
 ### Benefits   
 
 To account for different prevalence rates ($\eta$), the estimated treatment effect is decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who were treated and did not have worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatment, divided by the proportion of the prevalence of infections. 
 
-In the original evaluation, the prevalence rates where very high (1), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$).
+In the original evaluation, the prevalence rates where very high (0.92), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$).
 
 
 <details><summary>Show all the details</summary>
@@ -1821,7 +1822,7 @@ costs1_p2_in <- costs1_p2_f()
    <td style="text-align:left;"> $(3)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
    <td style="text-align:left;"> $(4)$ </td>
   </tr>
   <tr>
@@ -1850,7 +1851,7 @@ costs1_p2_in <- costs1_p2_f()
    <td style="text-align:left;"> $(10)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \lt t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \lt t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \gt 20)\alpha^{KLPS4}$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = \mathbf{1}(10 \lt t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \lt t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \gt 20)\alpha^{KLPS4}$ </td>
    <td style="text-align:left;"> $(11)$ </td>
   </tr>
   <tr>
@@ -1962,12 +1963,12 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta=1$ </td>
+   <td style="text-align:left;"> $\eta=0.92$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta_{r}=1$ </td>
+   <td style="text-align:left;"> $\eta_{r}=0.56$ </td>
    <td style="text-align:left;">  </td>
   </tr>
 </tbody>
@@ -2031,7 +2032,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
    <td style="text-align:left;"> $(3)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
    <td style="text-align:left;"> $(4)$ </td>
   </tr>
   <tr>
@@ -2060,7 +2061,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
    <td style="text-align:left;"> $(10)$ </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $E_t = \mathbf{1}(10 \lt t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \lt t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \gt 20)\alpha^{KLPS4}$ </td>
+   <td style="text-align:left;"> $\Delta W_{t} = \mathbf{1}(10 \lt t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 \lt t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t \gt 20)\alpha^{KLPS4}$ </td>
    <td style="text-align:left;"> $(11)$ </td>
   </tr>
   <tr>
@@ -2180,12 +2181,12 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta=1$ </td>
+   <td style="text-align:left;"> $\eta=0.92$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta_{r}=1$ </td>
+   <td style="text-align:left;"> $\eta_{r}=0.56$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -2337,7 +2338,9 @@ one_run <-
       coef_exp2_var = coef_exp2_var1
     )
 
-    lambda1_in <- lambda_eff_f(
+    lambda1_in <- lambda1_in_f(lambda1_var = lambda1_var1)
+
+    lambda1_prev_in <- lambda_eff_f(
       lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
       prevalence_0_var = prevalence_0_var1,
       prevalence_r_var = prevalence_r_var1
@@ -2354,9 +2357,11 @@ one_run <-
     unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
 
     ###------------ Inputs for earnings2_f--------------------------------------
-    lambda1_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
-                                 prevalence_0_var = prevalence_0_var1,
-                                 prevalence_r_var = prevalence_r_var1)
+    lambda1_new_in <- lambda1_new_var1
+    lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
+                             prevalence_0_var = prevalence_0_var1,
+                             prevalence_r_var = prevalence_r_var1)
+
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f ---------------------------------------
@@ -2376,11 +2381,33 @@ one_run <-
       coverage_var = coverage_var1
     )
 
+    # earnings1 with prevalence
+    earnings_in_no_ext_prev <- earnings1_f(
+      wage_var = wage_t_in,
+      lambda1_var = lambda1_prev_in[1],
+      lambda2_var = 0,
+      saturation_var = saturation_in,
+      coverage_var = coverage_var1
+    )
+    earnings_in_yes_ext_prev <- earnings1_f(
+      wage_var = wage_t_in,
+      lambda1_var = lambda1_prev_in[1],
+      lambda2_var = lambda2_in[1],
+      saturation_var = saturation_in,
+      coverage_var = coverage_var1
+    )
+    
     # earnings2
     earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
                                           lambda1k1_var = lambda1_new_in[1],
                                           lambda1k2_var = lambda1_new_in[2],
                                           lambda1k3_var = lambda1_new_in[3])
+    # earnings2 with prevalence 
+    earnings_in_no_ext_prev_new <- earnings2_f(t_var = 0:50,
+                                          lambda1k1_var = lambda1_prev_new_in[1],
+                                          lambda1k2_var = lambda1_prev_new_in[2],
+                                          lambda1k3_var = lambda1_prev_new_in[3])
+    
     # interest rate NEED TO UPDATE TO EXACT RESULT
     interest_in <- interest_f(gov_bonds_var = gov_bonds_var1,
                               inflation_var = inflation_var1)$interest_in
@@ -2454,9 +2481,24 @@ one_run <-
       periods_var = periods_var1
     )
     unit_test(pv_benef_all_nx_in, 142.42587835824, main_run_var = main_run_var1)
+    #Baird all and no ext + prevalence
+    pv_benef_all_nx_prev_in <- pv_benef_f(
+      earnings_var = earnings_in_no_ext_prev,
+      interest_r_var = interest_in,
+      periods_var = periods_var1
+    )
+    unit_test(pv_benef_all_nx_in, 142.42587835824, main_run_var = main_run_var1)
     #Baird all and ext
     pv_benef_all_yx_in <- pv_benef_f(
       earnings_var = earnings_in_yes_ext,
+      interest_r_var = interest_in,
+      periods_var = periods_var1
+    )
+    unit_test(pv_benef_all_yx_in, 766.814399527604,
+              main_run_var = main_run_var1)
+    #Baird all and ext
+    pv_benef_all_yx_prev_in <- pv_benef_f(
+      earnings_var = earnings_in_yes_ext_prev,
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
@@ -2471,12 +2513,18 @@ one_run <-
     )
     unit_test(pv_benef_tax_new, 157.5017,
               main_run_var = main_run_var1)
+    
     # KLPS4 all and no ext
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
                                    interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
     unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
-
+    # KLPS4 all and no ext + prevalence
+    pv_benef_all_prev_new <- pv_benef_f(earnings_var = earnings_in_no_ext_prev_new,
+                                   interest_r_var = interest_in_new,
+                                   periods_var = periods_var1)
+    unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
+    
     #Costs
     # costs1: EA costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
@@ -2542,20 +2590,32 @@ one_run <-
       q2_var = q_full_var1
     )
     unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
-
+    
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
+                  "lambda1_prev_in" = lambda1_prev_in,
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
-                  "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
+                  "lambda1_new_in" = lambda1_new_in, 
+                  "lambda1_prev_new_in" = lambda1_prev_new_in,
+                  "earnings_in_no_ext" = earnings_in_no_ext,
+                  "earnings_in_no_ext_prev" = earnings_in_no_ext_prev,
                   "earnings_in_yes_ext" = earnings_in_yes_ext,
+                  "earnings_in_yes_ext_prev" = earnings_in_yes_ext_prev, 
                   "earnings_in_no_ext_new" = earnings_in_no_ext_new,
+                  "earnings_in_no_ext_prev_new" = earnings_in_no_ext_prev_new, 
                   "interest_in" = interest_in, "costs1_country" = costs_data,
                   "delta_ed_final_in" = delta_ed_final_in, "delta_ed_final_in_x" = delta_ed_final_in_x,
                   "cost_per_student_in" = cost_per_student_in, "s2_in" = s2_in,  
                   "pv_benef_tax_nx_in"= pv_benef_tax_nx_in, "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
                   "pv_benef_all_nx_in" = pv_benef_all_nx_in,
-                  "pv_benef_all_yx_in" =  pv_benef_all_yx_in, "pv_benef_tax_new" = pv_benef_tax_new,
-                  "pv_benef_all_new" = pv_benef_all_new, "costs2_ea_in" = costs2_ea_in,
-                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x, "costs_k" = costs_k, "cost1_in" = cost1_in) )
+                  "pv_benef_all_nx_prev_in" = pv_benef_all_nx_prev_in,
+                  "pv_benef_all_yx_in" =  pv_benef_all_yx_in, 
+                  "pv_benef_all_yx_prev_in" = pv_benef_all_yx_prev_in, 
+                  "pv_benef_tax_new" = pv_benef_tax_new,
+                  "pv_benef_all_new" = pv_benef_all_new, 
+                  "pv_benef_all_prev_new" = pv_benef_all_prev_new, 
+                  "costs2_ea_in" = costs2_ea_in,
+                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x, "costs_k" = costs_k, "cost1_in" = cost1_in 
+                                ) )
   }
 
 invisible( list2env(one_run(),.GlobalEnv) )
@@ -2589,15 +2649,35 @@ klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_k)
 unit_test(klps4_2, 917.937055971637)
 
 # EA1: no externality NPV using EAs costs
-ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_ea_in)
+ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
 unit_test(ea1, 142.278620185973)
-# EA2: yes externality NPV using EAs costs
-ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_ea_in)
-unit_test(ea2, 766.667141355337)
-# EA3: benef= KLPS all and no ext; Costs=EA
-ea3 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in)
-unit_test(ea3, 950.089412364501)
+```
 
+```
+## [1] "Output has change at ea1  to  86.5467547414442"
+```
+
+```r
+# EA2: yes externality NPV using EAs costs
+ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_prev_in, costs_var = costs2_ea_in)
+unit_test(ea2, 766.667141355337)
+```
+
+```
+## [1] "Output has change at ea2  to  710.935275910808"
+```
+
+```r
+# EA3: benef= KLPS all and no ext; Costs=EA
+ea3 <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
+unit_test(ea3, 950.089412364501)
+```
+
+```
+## [1] "Output has change at ea3  to  578.257671719679"
+```
+
+```r
 # CEA for EA
 cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_new, 
                           costs_var = costs2_ea_in, 
@@ -2686,10 +2766,10 @@ kable(npv_table, caption = "Caption of the table") %>%
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext_ </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 142.3 </td>
-   <td style="text-align:right;"> 766.7 </td>
+   <td style="text-align:right;"> 86.5 </td>
+   <td style="text-align:right;"> 710.9 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 950.1 </td>
+   <td style="text-align:right;"> 578.3 </td>
   </tr>
 </tbody>
 </table>
@@ -2704,11 +2784,11 @@ kable(npv_table, caption = "Caption of the table") %>%
 
 - **NPV without externalities in @klps4:** 917.9   
 
-- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 142.3    
+- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 86.5    
 
-- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 766.7
+- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 710.9
 
-- **NPV without ext and benef from @klps4 and EA costs 2019 :** 950.1
+- **NPV without ext and benef from @klps4 and EA costs 2019 :** 578.3
 
 - **CEA format:** 6452.9    
 
@@ -3021,11 +3101,11 @@ sim.data1 <- function(nsims = 1e2,
       #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
       klps4_2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
       # EA1: no externality NPV using EAs costs
-      ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_ea_in)
+      ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
       # EA2: yes externality NPV using EAs costs
-      ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_ea_in)
+      ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prev_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=EA
-      ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in)
+      ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
       #CEA for EA
       cea_no_ext_ea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in,
                                         costs_var = costs2_ea_in, fudging_var = 0)

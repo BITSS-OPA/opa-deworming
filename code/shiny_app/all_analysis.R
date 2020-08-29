@@ -121,9 +121,10 @@ chunk_params <- function(){
     delta_ed_ext_par_so <- 1
     include_ext_so <- TRUE
     
-    #Start renaming to eta throughout
-    prevalence_0_so <- 1#0.77 #0.77
-    prevalence_r_so <- 1#0.15 #0.15
+    #This is are the parameters labeled eta in the doc
+    prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
+    prevalence_r_so <- 0.56 # c("india", "kenya", "nigeria", "vietnam") c(0.5665, 0.345, 0.27, 0.145)
+    #https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
     #############
     ##### Guess work   
     #############
@@ -814,7 +815,9 @@ one_run <-
       coef_exp2_var = coef_exp2_var1
     )
 
-    lambda1_in <- lambda_eff_f(
+    lambda1_in <- lambda1_in_f(lambda1_var = lambda1_var1)
+
+    lambda1_prev_in <- lambda_eff_f(
       lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
       prevalence_0_var = prevalence_0_var1,
       prevalence_r_var = prevalence_r_var1
@@ -831,9 +834,11 @@ one_run <-
     unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
 
     ###------------ Inputs for earnings2_f--------------------------------------
-    lambda1_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
-                                 prevalence_0_var = prevalence_0_var1,
-                                 prevalence_r_var = prevalence_r_var1)
+    lambda1_new_in <- lambda1_new_var1
+    lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
+                             prevalence_0_var = prevalence_0_var1,
+                             prevalence_r_var = prevalence_r_var1)
+
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f ---------------------------------------
@@ -853,11 +858,33 @@ one_run <-
       coverage_var = coverage_var1
     )
 
+    # earnings1 with prevalence
+    earnings_in_no_ext_prev <- earnings1_f(
+      wage_var = wage_t_in,
+      lambda1_var = lambda1_prev_in[1],
+      lambda2_var = 0,
+      saturation_var = saturation_in,
+      coverage_var = coverage_var1
+    )
+    earnings_in_yes_ext_prev <- earnings1_f(
+      wage_var = wage_t_in,
+      lambda1_var = lambda1_prev_in[1],
+      lambda2_var = lambda2_in[1],
+      saturation_var = saturation_in,
+      coverage_var = coverage_var1
+    )
+    
     # earnings2
     earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
                                           lambda1k1_var = lambda1_new_in[1],
                                           lambda1k2_var = lambda1_new_in[2],
                                           lambda1k3_var = lambda1_new_in[3])
+    # earnings2 with prevalence 
+    earnings_in_no_ext_prev_new <- earnings2_f(t_var = 0:50,
+                                          lambda1k1_var = lambda1_prev_new_in[1],
+                                          lambda1k2_var = lambda1_prev_new_in[2],
+                                          lambda1k3_var = lambda1_prev_new_in[3])
+    
     # interest rate NEED TO UPDATE TO EXACT RESULT
     interest_in <- interest_f(gov_bonds_var = gov_bonds_var1,
                               inflation_var = inflation_var1)$interest_in
@@ -933,9 +960,24 @@ one_run <-
       periods_var = periods_var1
     )
     unit_test(pv_benef_all_nx_in, 142.42587835824, main_run_var = main_run_var1)
+    #Baird all and no ext + prevalence
+    pv_benef_all_nx_prev_in <- pv_benef_f(
+      earnings_var = earnings_in_no_ext_prev,
+      interest_r_var = interest_in,
+      periods_var = periods_var1
+    )
+    unit_test(pv_benef_all_nx_in, 142.42587835824, main_run_var = main_run_var1)
     #Baird all and ext
     pv_benef_all_yx_in <- pv_benef_f(
       earnings_var = earnings_in_yes_ext,
+      interest_r_var = interest_in,
+      periods_var = periods_var1
+    )
+    unit_test(pv_benef_all_yx_in, 766.814399527604,
+              main_run_var = main_run_var1)
+    #Baird all and ext
+    pv_benef_all_yx_prev_in <- pv_benef_f(
+      earnings_var = earnings_in_yes_ext_prev,
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
@@ -950,12 +992,18 @@ one_run <-
     )
     unit_test(pv_benef_tax_new, 157.5017,
               main_run_var = main_run_var1)
+    
     # KLPS4 all and no ext
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
                                    interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
     unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
-
+    # KLPS4 all and no ext + prevalence
+    pv_benef_all_prev_new <- pv_benef_f(earnings_var = earnings_in_no_ext_prev_new,
+                                   interest_r_var = interest_in_new,
+                                   periods_var = periods_var1)
+    unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
+    
     #Costs
     # costs1: EA costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
@@ -1021,20 +1069,32 @@ one_run <-
       q2_var = q_full_var1
     )
     unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
-
+    
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
+                  "lambda1_prev_in" = lambda1_prev_in,
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
-                  "lambda1_new_in" = lambda1_new_in, "earnings_in_no_ext" = earnings_in_no_ext,
+                  "lambda1_new_in" = lambda1_new_in, 
+                  "lambda1_prev_new_in" = lambda1_prev_new_in,
+                  "earnings_in_no_ext" = earnings_in_no_ext,
+                  "earnings_in_no_ext_prev" = earnings_in_no_ext_prev,
                   "earnings_in_yes_ext" = earnings_in_yes_ext,
+                  "earnings_in_yes_ext_prev" = earnings_in_yes_ext_prev, 
                   "earnings_in_no_ext_new" = earnings_in_no_ext_new,
+                  "earnings_in_no_ext_prev_new" = earnings_in_no_ext_prev_new, 
                   "interest_in" = interest_in, "costs1_country" = costs_data,
                   "delta_ed_final_in" = delta_ed_final_in, "delta_ed_final_in_x" = delta_ed_final_in_x,
                   "cost_per_student_in" = cost_per_student_in, "s2_in" = s2_in,  
                   "pv_benef_tax_nx_in"= pv_benef_tax_nx_in, "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
                   "pv_benef_all_nx_in" = pv_benef_all_nx_in,
-                  "pv_benef_all_yx_in" =  pv_benef_all_yx_in, "pv_benef_tax_new" = pv_benef_tax_new,
-                  "pv_benef_all_new" = pv_benef_all_new, "costs2_ea_in" = costs2_ea_in,
-                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x, "costs_k" = costs_k, "cost1_in" = cost1_in) )
+                  "pv_benef_all_nx_prev_in" = pv_benef_all_nx_prev_in,
+                  "pv_benef_all_yx_in" =  pv_benef_all_yx_in, 
+                  "pv_benef_all_yx_prev_in" = pv_benef_all_yx_prev_in, 
+                  "pv_benef_tax_new" = pv_benef_tax_new,
+                  "pv_benef_all_new" = pv_benef_all_new, 
+                  "pv_benef_all_prev_new" = pv_benef_all_prev_new, 
+                  "costs2_ea_in" = costs2_ea_in,
+                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x, "costs_k" = costs_k, "cost1_in" = cost1_in 
+                                ) )
   }
 
 invisible( list2env(one_run(),.GlobalEnv) )
@@ -1345,11 +1405,11 @@ sim.data1 <- function(nsims = 1e2,
       #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
       klps4_2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
       # EA1: no externality NPV using EAs costs
-      ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_ea_in)
+      ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
       # EA2: yes externality NPV using EAs costs
-      ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_ea_in)
+      ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prev_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=EA
-      ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_ea_in)
+      ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
       #CEA for EA
       cea_no_ext_ea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in,
                                         costs_var = costs2_ea_in, fudging_var = 0)
