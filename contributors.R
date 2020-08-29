@@ -30,7 +30,7 @@ more_info <- tibble(
 # combine contributor information from both tables
 deworming_contribs_all <- deworming_contribs%>%
   left_join(more_info) %>%
-  arrange(login) #arranged contributors alphabetically by login
+  arrange(desc(n)) #arranged contributors alphabetically by number of contributions
 
 # contributors' names with links
 names_with_links <- deworming_contribs_all %>% 
