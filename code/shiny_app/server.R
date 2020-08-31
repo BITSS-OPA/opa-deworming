@@ -72,8 +72,6 @@ shinyServer( function(input, output, session) {
                               as.numeric(input$param29_3_1)),             
       prevalence_0_var2 = as.numeric(input$param30),    
       prevalence_0_var2_sd = as.numeric(input$param30_1), 
-      prevalence_r_var2 = as.numeric(input$param37),    
-      prevalence_r_var2_sd = as.numeric(input$param31_1),                                                                         
       counts_par_var2 = as.numeric(input$param32), 
       counts_par_var2_sd = as.numeric(input$param32_1),
       staff_time_var2 = as.numeric(input$param33), 
@@ -81,6 +79,7 @@ shinyServer( function(input, output, session) {
       costs_par_var2 = as.numeric(input$param34), 
       costs_par_var2_sd = as.numeric(input$param34_1), 
       new_costs_var2 = as.numeric(input$param35),
+      new_prev_r_var2 = as.numeric(input$param37),
       countries_var2 = input$param36
       )
     } 

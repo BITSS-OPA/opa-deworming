@@ -44,7 +44,7 @@ shinyUI(
                                             selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
                        ), 
                        fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
-                                           numericInput("param35", label = h3("Unit costs in new country"), value = costs2_ea_in), 
+                                numericInput("param35", label = h3("Unit costs in new country"), value = costs2_ea_in), 
                                 checkboxGroupInput("param36", "Choose countries:",
                                                    choiceNames =
                                                      list("India", "Kenya", "Nigeria", "Vietnam"),
@@ -52,7 +52,7 @@ shinyUI(
                                                      list("india", "kenya", "nigeria", "vietnam"), 
                                                    selected = list("india", "kenya", "nigeria", "vietnam") 
                                   ), 
-                                numericInput("param37", label = h3("Prevalence in the new region"), value = prevalence_r_so),
+                                numericInput("param37", label = h3("Prevalence in the new region"), value = prevalence_r_in),
                                 )
                             ), 
                      mainPanel(
@@ -221,10 +221,6 @@ shinyUI(
                                                          min = n_students_so / 2, max = 2 * n_students_so, value = n_students_so),
                                              sliderInput("param24_1", label = "SD = ",
                                                          min = 0.0000001* n_students_so, max = 1 * n_students_so, value = 0.1 * n_students_so),
-                                             sliderInput("param31", label = "Prevalence in new region = ",
-                                                         min = 0 / 2, max = 1, value = prevalence_r_so),
-                                             sliderInput("param31_1", label = "SD = ",
-                                                         min = 0.0000001* prevalence_r_so, max = 1 * prevalence_r_so, value = 0.1 * prevalence_r_so),
                                              sliderInput("param33", label = "Additional costs due to staff time = ",
                                                          min = staff_time_so / 2, max = 2 * staff_time_so, value = staff_time_so),
                                              sliderInput("param33_1", label = "SD = ",

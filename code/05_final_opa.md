@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "29 August, 2020"
+date: "31 August, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -122,7 +122,7 @@ chunk_params <- function(){
     # Prevalence data:
     # original study
     # Any infection on original study
-    #prevalence_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55,
+    #prevalence_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" = 0.55,
     # "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
     df_prevalence_so <- read_excel("data/prevalence_data.xlsx",
                            sheet = "Sheet1")
@@ -154,7 +154,8 @@ chunk_params <- function(){
     
     #This is are the parameters labeled eta in the doc
     prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
-    prevalence_r_so <- 0.56 # c("india" = 0.5665, "kenya" = 0.345, "nigeria" = 0.27, "vietnam" = 0.145) 
+    prevalence_r_so <- c("india" = 0.5665, "kenya" = 0.345, "nigeria" = 0.27, "vietnam" = 0.145)  #0.56 
+    new_prevalence_r_so <- NULL
     # based on https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
     #############
     ##### Guess work   
@@ -184,6 +185,14 @@ chunk_params <- function(){
     counts_par_sd_so <- 0.1
     nsims_so <- 1e3
     new_costs_so <- NULL
+    country_sel_so <- list("india", "kenya", "nigeria", "vietnam")
+    country_sel_pop_so <- c(
+      "india" = 1.366417750 * 1e9,
+      "kenya" = 5.257397 * 1e7,
+      "nigeria" = 2.0096360 * 1e8,
+      "vietnam" = 9.646211 * 1e7
+    ) 
+    #https://data.worldbank.org/indicator/SP.POP.TOTL
     # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim",
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
     policy_estimate_so <- "ea3_sim"
@@ -1625,9 +1634,26 @@ chunk_lambdas_eff<- function(){
 
     lambda_eff_f <- function(lambda1_var = lambda1_in_f(), 
                            prevalence_0_var = prevalence_0_so, 
-                           prevalence_r_var = prevalence_r_so){
-        lambda1_eff_temp <- lambda1_var / prevalence_0_var
-        return( lambda1_eff_temp * prevalence_r_var )
+                           prevalence_r_var = prevalence_r_so, 
+                           country_sel_var = country_sel_so, 
+                           country_sel_pop_var = country_sel_pop_so, 
+                           other_prev_r = new_prevalence_r_so){
+      temp_sel <- as.character(country_sel_var)
+      # if a positive number of countries is selected
+      if (is.null(other_prev_r)) {
+        temp_weights <- country_sel_pop_var[temp_sel] / 
+          sum(country_sel_pop_var[temp_sel])
+        prevalence_r_final <- sum( prevalence_r_var[temp_sel] * temp_weights )
+      } else {
+        prevalence_r_final <- prevalence_r_var  
+      }
+
+      lambda1_eff_temp <- lambda1_var / prevalence_0_var
+      lambda1_eff_in <- lambda1_eff_temp * prevalence_r_final
+        return(  
+          list("lambda1_eff_in" = lambda1_eff_in, 
+                "prevalence_r_in" = prevalence_r_final)
+                )
     }  
 
 ##############################################################################
@@ -1637,7 +1663,7 @@ chunk_lambdas_eff<- function(){
 invisible( list2env(chunk_lambdas_eff(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-lambda1_r_in <- lambda_eff_f()
+lambda1_r_in <- lambda_eff_f()$lambda1_eff_in
 ```
 
 </details>
@@ -1967,8 +1993,8 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta_{r}=0.56$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\eta_{r}=0.5665$ </td>
+   <td style="text-align:left;"> $\eta_{r}=0.345$ </td>
   </tr>
 </tbody>
 </table>
@@ -2185,8 +2211,8 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta_{r}=0.56$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\eta_{r}=0.5665$ </td>
+   <td style="text-align:left;"> $\eta_{r}=0.345$ </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2292,6 +2318,7 @@ one_run <-
            lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_so),
            prevalence_0_var1 = prevalence_0_so,
            prevalence_r_var1 = prevalence_r_so,
+           new_prev_r_var1 = new_prevalence_r_so,
            lambda2_var1 = lambda2_so,                                        
            coverage_var1 = coverage_so,                                        
            q_full_var1 = q_full_so,                                        
@@ -2313,7 +2340,7 @@ one_run <-
            unit_cost_local_var1 = unit_cost_local_so,     
            unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
            new_costs_var1 = new_costs_so,
-           countries_var1 = list("india", "kenya", "nigeria", "vietnam"),
+           countries_var1 = country_sel_so,
            years_of_treat_var1 = years_of_treat_so,                                        
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so) {                                        
@@ -2344,10 +2371,13 @@ one_run <-
     lambda1_prev_in <- lambda_eff_f(
       lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
       prevalence_0_var = prevalence_0_var1,
-      prevalence_r_var = prevalence_r_var1
-    )
-    unit_test(lambda1_prev_in[1], 1.062174, main_run_var = main_run_var1)
-    
+      prevalence_r_var = prevalence_r_var1, 
+      country_sel_var = countries_var1, 
+      country_sel_pop_var = country_sel_pop_so,
+      other_prev_r = new_prev_r_var1
+    )$lambda1_eff_in
+    unit_test(lambda1_prev_in[1], 0.9508583, main_run_var = main_run_var1)
+
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
     unit_test(lambda2_in[1], 10.2 , main_run_var = main_run_var1)
     
@@ -2363,10 +2393,24 @@ one_run <-
     lambda1_new_in <- lambda1_new_var1
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
     
-    lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
-                             prevalence_0_var = prevalence_0_var1,
-                             prevalence_r_var = prevalence_r_var1)
-    unit_test(lambda1_prev_new_in, 1.10686158182606, main_run_var = main_run_var1)
+    lambda1_prev_new_in <- lambda_eff_f(
+      lambda1_var = lambda1_new_var1,
+      prevalence_0_var = prevalence_0_var1,
+      prevalence_r_var = prevalence_r_var1,
+      country_sel_var = countries_var1,
+      country_sel_pop_var = country_sel_pop_so,
+      other_prev_r = new_prev_r_var1
+    )$lambda1_eff_in
+    
+    prevalence_r_in <- lambda_eff_f(
+      lambda1_var = lambda1_new_var1,
+      prevalence_0_var = prevalence_0_var1,
+      prevalence_r_var = prevalence_r_var1,
+      country_sel_var = countries_var1,
+      country_sel_pop_var = country_sel_pop_so,
+      other_prev_r = new_prev_r_var1
+    )$prevalence_r_in
+    unit_test(lambda1_prev_new_in,  0.9908627, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f ---------------------------------------
     # earnings1
@@ -2546,6 +2590,7 @@ one_run <-
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
                       unit_cost_local_var = cost1_in, 
                       ex_rate_var = 1)
+    unit_test(s2_ea_in,  0.19634422968991, main_run_var = main_run_var1)
     costs2_ea_in <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
@@ -2556,7 +2601,7 @@ one_run <-
       s2_var = s2_ea_in,
       q2_var = q_full_var1
     )
-
+    unit_test(costs2_ea_in,  0.147258172267433, main_run_var = main_run_var1)
     # costs2: Baird no externalities
     costs2_in <- pv_costs_f(
       periods_var = periods_var1,
@@ -2604,6 +2649,7 @@ one_run <-
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
                   "lambda1_new_in" = lambda1_new_in, 
                   "lambda1_prev_new_in" = lambda1_prev_new_in,
+                  "prevalence_r_in" = prevalence_r_in,
                   "earnings_in_no_ext" = earnings_in_no_ext,
                   "earnings_in_no_ext_prev" = earnings_in_no_ext_prev,
                   "earnings_in_yes_ext" = earnings_in_yes_ext,
@@ -2627,6 +2673,14 @@ one_run <-
   }
 
 invisible( list2env(one_run(),.GlobalEnv) )
+```
+
+```
+## [1] "Output has change at earnings_in_no_ext_prev  to  16.9694876943406"
+## [1] "Output has change at earnings_in_yes_ext_prev  to  153.495171941219"
+## [1] "Output has change at pv_benef_all_nx_prev_in  to  77.608498246463"
+## [1] "Output has change at pv_benef_all_yx_prev_in  to  701.997019415827"
+## [1] "Output has change at pv_benef_all_prev_new  to  517.78821257177"
 ```
 
 
@@ -2662,7 +2716,7 @@ unit_test(ea1, 142.278620185973)
 ```
 
 ```
-## [1] "Output has change at ea1  to  86.5467547414442"
+## [1] "Output has change at ea1  to  77.4612400741955"
 ```
 
 ```r
@@ -2672,7 +2726,7 @@ unit_test(ea2, 766.667141355337)
 ```
 
 ```
-## [1] "Output has change at ea2  to  710.935275910808"
+## [1] "Output has change at ea2  to  701.849761243559"
 ```
 
 ```r
@@ -2682,7 +2736,7 @@ unit_test(ea3, 950.089412364501)
 ```
 
 ```
-## [1] "Output has change at ea3  to  578.257671719679"
+## [1] "Output has change at ea3  to  517.640954399502"
 ```
 
 ```r
@@ -2774,10 +2828,10 @@ kable(npv_table, caption = "Caption of the table") %>%
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext_ </td>
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 86.5 </td>
-   <td style="text-align:right;"> 710.9 </td>
+   <td style="text-align:right;"> 77.5 </td>
+   <td style="text-align:right;"> 701.8 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 578.3 </td>
+   <td style="text-align:right;"> 517.6 </td>
   </tr>
 </tbody>
 </table>
@@ -2792,11 +2846,11 @@ kable(npv_table, caption = "Caption of the table") %>%
 
 - **NPV without externalities in @klps4:** 917.9   
 
-- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 86.5    
+- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 77.5    
 
-- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 710.9
+- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 701.8
 
-- **NPV without ext and benef from @klps4 and EA costs 2019 :** 578.3
+- **NPV without ext and benef from @klps4 and EA costs 2019 :** 517.6
 
 - **CEA format:** 6452.9    
 
@@ -2844,6 +2898,7 @@ sim.data1 <- function(nsims = 1e2,
                       lambda1_var2_sd,
                       prevalence_0_var2,
                       prevalence_0_var2_sd,
+                      new_prev_r_var2, 
                       prevalence_r_var2,
                       prevalence_r_var2_sd,
                       lambda2_var2,
@@ -2939,7 +2994,6 @@ sim.data1 <- function(nsims = 1e2,
 
     years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, 
                                   years_of_treat_var2_sd)
-
     ## Research
     aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
@@ -2962,10 +3016,27 @@ sim.data1 <- function(nsims = 1e2,
     prevalence_0_sim <- rnorm(nsims, prevalence_0_var2, prevalence_0_var2_sd)
     prevalence_0_sim <- ifelse(prevalence_0_sim > 1, yes = 1, 
                           no = ifelse(prevalence_0_sim < 0, 0, prevalence_0_sim) )
-
-    prevalence_r_sim <- rnorm(nsims, prevalence_r_var2, prevalence_r_var2_sd)
+    # compute weighted prevalence. TO DO: add SD as a variable 
+    aux4 <- lapply(1:4,
+                   function(x) c(prevalence_r_var2[x], 
+                                 prevalence_r_var2_sd[x] ) )
+    # first draw samples of prevalence for each country
+    prevalence_r_sim <- sapply(aux4, 
+                              function(x)  rnorm(nsims, 
+                                                 mean = x[1], sd = x[2]) )
     prevalence_r_sim <- ifelse(prevalence_r_sim > 1, yes = 1, 
                           no = ifelse(prevalence_r_sim < 0, 0, prevalence_r_sim) )
+    colnames(prevalence_r_sim) <- c("india",   "kenya" ,  "nigeria", "vietnam")
+    # Second, if there is a new entry of prevalence, draw from it. If there is not
+    # then leave as null
+    if (!is.null(new_prev_r_var2)){
+          new_prev_r_sim <- rnorm(nsims, new_prev_r_var2, new_prev_r_var2 * 0.1)
+          new_prev_r_sim <- ifelse(new_prev_r_sim > 1, yes = 1, 
+                          no = ifelse(new_prev_r_sim < 0, 0, new_prev_r_sim) )
+    } else if (is.null(new_prev_r_var2)){
+          new_prev_r_sim <- NULL
+    }
+    
     ## Guess work
     periods_val <- 50           #Total number of periods to forecast wages
     time_to_jm_val <- 10        #periods until individual join the labor force
@@ -3070,7 +3141,8 @@ sim.data1 <- function(nsims = 1e2,
                 coef_exp_var1 = coef_exp_sim[i, 1], coef_exp2_var1 = coef_exp_sim[i,2],
                 lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_sim[i,]),
                 prevalence_0_var1 = prevalence_0_sim[i],
-                prevalence_r_var1 = prevalence_r_sim[i],
+                prevalence_r_var1 = prevalence_r_sim[i,],
+                new_prev_r_var1 = new_prev_r_sim[i],
                 lambda2_var1 = lambda2_sim[i],
                 coverage_var1 = coverage_sim[i],
                 q_full_var1 = q_full_sim[i],
@@ -3165,7 +3237,7 @@ policy_estimates_text <- c(
   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
 
-if  (FALSE){
+if  (TRUE){
 npv_sim_all <-   sim.data1(nsims = nsims_so,                        
             gov_bonds_var2          = gov_bonds_so             ,                                    
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
@@ -3232,6 +3304,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             lambda1_new_var2_sd     = lambda1_new_sd_so,             
             prevalence_0_var2            = prevalence_0_so       ,  
             prevalence_0_var2_sd         = prevalence_0_so * 0.1    ,
+            new_prev_r_var2         = new_prevalence_r_so, 
             prevalence_r_var2            = prevalence_r_so       ,  
             prevalence_r_var2_sd         = prevalence_r_so * 0.1    ,                                                                         
             staff_time_var2         = staff_time_so    ,
@@ -3240,7 +3313,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             counts_par_var2_sd      = counts_par_sd_so ,
             costs_par_var2          = costs_par_so     ,
             costs_par_var2_sd       = costs_par_sd_so, 
-            new_costs_var2 = 1, 
+            new_costs_var2 = NULL, 
             countries_var2 = list("india", "kenya", "nigeria", "vietnam"))
 
 }
@@ -3315,6 +3388,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             lambda1_new_var2_sd     = lambda1_new_sd_so,             
             prevalence_0_var2            = prevalence_0_so       ,  
             prevalence_0_var2_sd         = prevalence_0_so * 0.1    ,
+            new_prev_r_var2         = new_prevalence_r_so, 
             prevalence_r_var2            = prevalence_r_so       ,  
             prevalence_r_var2_sd         = prevalence_r_so * 0.1    ,                                                                         
             staff_time_var2         = staff_time_so    ,
@@ -3323,7 +3397,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             counts_par_var2_sd      = counts_par_sd_so ,
             costs_par_var2          = costs_par_so     ,
             costs_par_var2_sd       = costs_par_sd_so, 
-            new_costs_var2 = -99, 
+            new_costs_var2 = NULL, 
             countries_var2 = list("india", "kenya", "nigeria", "vietnam"))
 
 
