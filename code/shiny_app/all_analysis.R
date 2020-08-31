@@ -154,7 +154,7 @@ chunk_params <- function(){
     counts_par_sd_so <- 0.1
     nsims_so <- 1e3
     new_costs_so <- NULL
-    country_sel_so <- list("india", "kenya", "nigeria", "vietnam")
+    country_sel_so <- list("india", "kenya", "nigeria", "vietnam") #list("india", "kenya", "nigeria", "vietnam")
     country_sel_pop_so <- c(
       "india" = 1.366417750 * 1e9,
       "kenya" = 5.257397 * 1e7,
@@ -1314,17 +1314,21 @@ sim.data1 <- function(nsims = 1e2,
     prevalence_0_sim <- rnorm(nsims, prevalence_0_var2, prevalence_0_var2_sd)
     prevalence_0_sim <- ifelse(prevalence_0_sim > 1, yes = 1, 
                           no = ifelse(prevalence_0_sim < 0, 0, prevalence_0_sim) )
+    #browser()
     # compute weighted prevalence. TO DO: add SD as a variable 
-    aux4 <- lapply(1:4,
-                   function(x) c(prevalence_r_var2[x], 
-                                 prevalence_r_var2_sd[x] ) )
+    aux4 <- lapply(countries_var2,                      #will have trouble when selecting no countries
+                   function(x) c(prevalence_r_so[x], 
+                                 prevalence_r_so[x]) )
+    
     # first draw samples of prevalence for each country
     prevalence_r_sim <- sapply(aux4, 
                               function(x)  rnorm(nsims, 
-                                                 mean = x[1], sd = x[2]) )
+                                                 mean = x[1] * prevalence_r_var2,
+                                                 sd = x[2] * prevalence_r_var2_sd) )
     prevalence_r_sim <- ifelse(prevalence_r_sim > 1, yes = 1, 
                           no = ifelse(prevalence_r_sim < 0, 0, prevalence_r_sim) )
-    colnames(prevalence_r_sim) <- c("india",   "kenya" ,  "nigeria", "vietnam")
+    colnames(prevalence_r_sim) <- as.character(countries_var2)
+    #browser()
     # Second, if there is a new entry of prevalence, draw from it. If there is not
     # then leave as null
     if (!is.null(new_prev_r_var2)){
@@ -1603,8 +1607,8 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             prevalence_0_var2            = prevalence_0_so       ,  
             prevalence_0_var2_sd         = prevalence_0_so * 0.1    ,
             new_prev_r_var2         = new_prevalence_r_so, 
-            prevalence_r_var2            = prevalence_r_so       ,  
-            prevalence_r_var2_sd         = prevalence_r_so * 0.1    ,                                                                         
+            prevalence_r_var2            = 1       ,  #TEMP
+            prevalence_r_var2_sd         =  0.1    ,                                                                         
             staff_time_var2         = staff_time_so    ,
             staff_time_var2_sd      = staff_time_so * 0.1,
             counts_par_var2         = counts_par_so    ,
@@ -1612,7 +1616,7 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             costs_par_var2          = costs_par_so     ,
             costs_par_var2_sd       = costs_par_sd_so, 
             new_costs_var2 = NULL, 
-            countries_var2 = list("india", "kenya", "nigeria", "vietnam"))
+            countries_var2 = country_sel_so)
 
 }
 

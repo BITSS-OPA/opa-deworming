@@ -72,6 +72,9 @@ shinyServer( function(input, output, session) {
                               as.numeric(input$param29_3_1)),             
       prevalence_0_var2 = as.numeric(input$param30),    
       prevalence_0_var2_sd = as.numeric(input$param30_1), 
+      prevalence_r_var2 = as.numeric(input$param31),    
+      prevalence_r_var2_sd = as.numeric(input$param31_1),                                                                         
+      new_prev_r_var2 = as.numeric(input$param37), #HERE IS PREV
       counts_par_var2 = as.numeric(input$param32), 
       counts_par_var2_sd = as.numeric(input$param32_1),
       staff_time_var2 = as.numeric(input$param33), 
@@ -79,17 +82,16 @@ shinyServer( function(input, output, session) {
       costs_par_var2 = as.numeric(input$param34), 
       costs_par_var2_sd = as.numeric(input$param34_1), 
       new_costs_var2 = as.numeric(input$param35),
-      new_prev_r_var2 = as.numeric(input$param37),
       countries_var2 = input$param36
-      )
-    } 
+    )
+  } 
   )
   
-
   
- 
   
- # Show/hide components of each model 
+  
+  
+  # Show/hide components of each model 
   observeEvent(input$policy_est,{ 
     # all params
     list_master <- c(
@@ -173,50 +175,50 @@ shinyServer( function(input, output, session) {
       # costs due to staff, 
       # new gov bonds, new inflation, new cost of teaching, 
       list_hide <- c("param32",
-                       "param32_1",
-                       "param34",
-                       "param34_1", 
-                       "param19",
-                       "param19_1",
-                       "param27",
-                       "param27_1",
-                       "param29_1",
-                       "param29_1_1",
-                       "param29_2",
-                       "param29_2_1",
-                       "param29_3",
-                       "param29_3_1", 
-                       "param33",
-                       "param33_1", 
-                       "param2_new",
-                       "param2_1_new",
-                       "param3_new",
-                       "param3_1_new",
-                       "param16_new",
-                       "param6_1_new")
-        list_show <- list_master[ - which(list_master %in% list_hide)]
-        
+                     "param32_1",
+                     "param34",
+                     "param34_1", 
+                     "param19",
+                     "param19_1",
+                     "param27",
+                     "param27_1",
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1", 
+                     "param33",
+                     "param33_1", 
+                     "param2_new",
+                     "param2_1_new",
+                     "param3_new",
+                     "param3_1_new",
+                     "param16_new",
+                     "param6_1_new")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      
     } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
-        list_hide <- c("param32",
-                       "param32_1",
-                       "param34",
-                       "param34_1", 
-                       "param29_1",
-                       "param29_1_1",
-                       "param29_2",
-                       "param29_2_1",
-                       "param29_3",
-                       "param29_3_1", 
-                       "param33",
-                       "param33_1", 
-                       "param2_new",
-                       "param2_1_new",
-                       "param3_new",
-                       "param3_1_new",
-                       "param16_new",
-                       "param6_1_new")
-        list_show <- list_master[ - which(list_master %in% list_hide)]
-          
+      list_hide <- c("param32",
+                     "param32_1",
+                     "param34",
+                     "param34_1", 
+                     "param29_1",
+                     "param29_1_1",
+                     "param29_2",
+                     "param29_2_1",
+                     "param29_3",
+                     "param29_3_1", 
+                     "param33",
+                     "param33_1", 
+                     "param2_new",
+                     "param2_1_new",
+                     "param3_new",
+                     "param3_1_new",
+                     "param16_new",
+                     "param6_1_new")
+      list_show <- list_master[ - which(list_master %in% list_hide)]
+      
     } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
       list_hide <- c("param32",
                      "param32_1",
@@ -265,7 +267,7 @@ shinyServer( function(input, output, session) {
                      "param6_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-
+      
     } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
       list_hide <- c("param32",
                      "param32_1",
@@ -305,7 +307,7 @@ shinyServer( function(input, output, session) {
                      "param3_1",
                      "param16",
                      "param6_1"
-                     )
+      )
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
@@ -350,7 +352,7 @@ shinyServer( function(input, output, session) {
                      "param16",
                      "param16_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
-
+      
     } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
       list_hide <- c("param17",
                      "param17_1",
@@ -456,7 +458,7 @@ shinyServer( function(input, output, session) {
                      "param2_1",
                      "param3",
                      "param3_1")
-    
+      
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
@@ -570,21 +572,21 @@ shinyServer( function(input, output, session) {
     sapply(list_show, 
            function(x) showElement(id = x) ) 
   })
-
   
-
+  
+  
   hideElement("show_eq")
   #observeEvent(input$run, {
   ################
   ###### Results/Viz
   ################
-    output$eqns <- renderUI({
-      #if (input$run == TRUE) {showElement("show_eq")}
-      showElement("show_eq")
-      if (input$show_eq == TRUE) {
-          if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext" ) { 
-            withMathJax(
-              helpText('$$
+  output$eqns <- renderUI({
+    #if (input$run == TRUE) {showElement("show_eq")}
+    showElement("show_eq")
+    if (input$show_eq == TRUE) {
+      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext" ) { 
+        withMathJax(
+          helpText('$$
               \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}) -
@@ -599,11 +601,11 @@ shinyServer( function(input, output, session) {
             \\tag{1}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
-              )
-            
-          } else if (input$policy_est ==  "Fiscal effects, 2016(W@W) B & C, yes ext"){
-            withMathJax(
-              helpText('$$
+        )
+        
+      } else if (input$policy_est ==  "Fiscal effects, 2016(W@W) B & C, yes ext"){
+        withMathJax(
+          helpText('$$
               \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}, \\lambda_{2}) -
@@ -618,10 +620,10 @@ shinyServer( function(input, output, session) {
             \\tag{2}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
-              )
-          } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext"){
-            withMathJax(
-              helpText('$$
+        )
+      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext"){
+        withMathJax(
+          helpText('$$
               \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}) -
@@ -636,11 +638,11 @@ shinyServer( function(input, output, session) {
             \\tag{3}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  
-                       )
-            )
-          } else if (input$policy_est ==  "Total effects, 2016(W@W) B & C, yes ext"){
-            withMathJax(
-              helpText('$$
+          )
+        )
+      } else if (input$policy_est ==  "Total effects, 2016(W@W) B & C, yes ext"){
+        withMathJax(
+          helpText('$$
               \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}, \\lambda_{2}) -
@@ -655,9 +657,9 @@ shinyServer( function(input, output, session) {
             \\tag{4}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  )
-            )
-          } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
-            withMathJax(helpText('$$
+        )
+      } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
+        withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
                  \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) -
@@ -672,8 +674,8 @@ shinyServer( function(input, output, session) {
             \\tag{5}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details'))
-          } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
-            withMathJax(helpText('$$
+      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
+        withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
                  \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) -
@@ -688,8 +690,8 @@ shinyServer( function(input, output, session) {
             \\tag{6}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details' ))
-          } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext"){
-            withMathJax(helpText('$$   
+      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext"){
+        withMathJax(helpText('$$   
             \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}) 
@@ -702,8 +704,8 @@ shinyServer( function(input, output, session) {
             \\tag{7}
             \\end{equation}
              $$ \n See approach 3 in the documentation component for more details'))
-          } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext"){
-            withMathJax(helpText("$$
+      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext"){
+        withMathJax(helpText("$$
             \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}, \\lambda_{2}) 
@@ -716,9 +718,9 @@ shinyServer( function(input, output, session) {
             \\tag{8}
             \\end{equation}
             $$ \n See approach 3 in the documentation component for more details"))
-          } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext"){
-            withMathJax(helpText(
-              "$$
+      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext"){
+        withMathJax(helpText(
+          "$$
             \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) 
@@ -731,9 +733,9 @@ shinyServer( function(input, output, session) {
             \\tag{9}
             \\end{equation}
               $$ \n See approach 3 in the documentation component for more details"
-            ))
-          }else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext"){
-            withMathJax(helpText("$$
+        ))
+      }else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext"){
+        withMathJax(helpText("$$
                                  \\begin{equation}
                                  CEA_{deworming} = \\frac{B (1 + F_{0})}{C}
                                  \\label{eq:10}
@@ -741,114 +743,114 @@ shinyServer( function(input, output, session) {
                                  \\end{equation}
                                  $$ 
                                  \n Benefits (B) and costs (C) as defined in preferred policy estimate (A3-2020)"))
-          }else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext"){
-            withMathJax(helpText(
-              "$$
+      }else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext"){
+        withMathJax(helpText(
+          "$$
                                  \\begin{equation}
                                  RCEA = \\frac{CEA_{deworming}}{CEA_{cash}}
                                  \\label{eq:11}
                                  \\tag{11}
                                  \\end{equation}
                                  $$  \n CEA as define in equation 10, CEA_{cash} from SOURCE")
-              )
-          }
-      } 
-    })
-      
-    output$plot1 <- renderPlot({      
-    # TO DO: wrap all the following steps in a function and call them again below (instead of copying and pasting)
-      
-      npv_sim_all <- reactive.data1()
+        )
+      }
+    } 
+  })
   
-      total_time <- npv_sim_all$total_time
-      position <- which( policy_estimates_text == input$policy_est)
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-      npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-      npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-      
-      plot1 <- ggplot() +
-        geom_density(aes(x = npv_sim,
-                         alpha = 1/2, ..scaled..), kernel = "gau") +
-        geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-        coord_cartesian(xlim = c(-10, 400)) +
-        guides(alpha = "none", colour="none") +
-        labs(y = NULL,
-             x = "NPV" ,
-             title = paste0("Distribution of NPV of ", policy_estimates_text[position]
-             ),
-             subtitle = paste0("N = ", input$param1, " simulations. Takes ",
-                               round(total_time, 1)," ",attributes(total_time)$unit )  )+
-        annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
-        annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
-        theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-      if (input$rescale == TRUE) {
-        plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
-        }
-      print(plot1)  
-      }, height = 700, width = 600 
-    )
-
-    output$plot1_ka <- renderPlot({      
-      npv_sim_all <- reactive.data1()
-      
-      total_time <- npv_sim_all$total_time
-      position <- which( policy_estimates_text == input$policy_est)
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-      npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-      npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-      
-      plot1 <- ggplot() +
-        geom_density(aes(x = npv_sim,
-                         alpha = 1/2, ..scaled..), kernel = "gau") +
-        geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-        coord_cartesian(xlim = c(-10, 400)) +
-        guides(alpha = "none", colour="none") +
-        labs(y = NULL,
-             x = "NPV" ,
-             title = paste0("Distribution of NPV of ", policy_estimates_text[position]), 
-             subtitle = "Add Subtitle"
-             ) +
-        annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
-        annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
-        theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-      if (input$rescale == TRUE) {
-        plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
-      }
-      print(plot1)  
-    }, height = 700, width = 600 
-    )
+  output$plot1 <- renderPlot({      
+    # TO DO: wrap all the following steps in a function and call them again below (instead of copying and pasting)
     
-    output$plot1_main <- renderPlot({      
-      # TO DO: wrap all the following steps in a function and call them again below (instead of copying and pasting)
-      
-      npv_sim_all <- reactive.data1()
-      
-      total_time <- npv_sim_all$total_time
-      position <- which( policy_estimates_text == input$policy_est)
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-      npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-      npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-      
-      plot1 <- ggplot() +
-        geom_density(aes(x = npv_sim,
-                         alpha = 1/2, ..scaled..), kernel = "gau") +
-        geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-        coord_cartesian(xlim = c(-10, 400)) +
-        guides(alpha = "none", colour="none") +
-        labs(y = NULL,
-             x = "NPV" ,
-             title = paste0("Distribution of NPV of ", policy_estimates_text[position]
-             ),
-             subtitle = paste0("N = ", input$param1, " simulations. Takes ",
-                               round(total_time, 1)," ",attributes(total_time)$unit )  )+
-        annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
-        annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
-        theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-      if (input$rescale == TRUE) {
-        plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
-      }
-      print(plot1)  
-    }, height = 700, width = 600 
-    )
-#  })
+    npv_sim_all <- reactive.data1()
+    
+    total_time <- npv_sim_all$total_time
+    position <- which( policy_estimates_text == input$policy_est)
+    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+    
+    plot1 <- ggplot() +
+      geom_density(aes(x = npv_sim,
+                       alpha = 1/2, ..scaled..), kernel = "gau") +
+      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
+      coord_cartesian(xlim = c(-10, 400)) +
+      guides(alpha = "none", colour="none") +
+      labs(y = NULL,
+           x = "NPV" ,
+           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
+           ),
+           subtitle = paste0("N = ", input$param1, " simulations. Takes ",
+                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
+      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+    if (input$rescale == TRUE) {
+      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
+    }
+    print(plot1)  
+  }, height = 700, width = 600 
+  )
+  
+  output$plot1_ka <- renderPlot({      
+    npv_sim_all <- reactive.data1()
+    
+    total_time <- npv_sim_all$total_time
+    position <- which( policy_estimates_text == input$policy_est)
+    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+    
+    plot1 <- ggplot() +
+      geom_density(aes(x = npv_sim,
+                       alpha = 1/2, ..scaled..), kernel = "gau") +
+      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
+      coord_cartesian(xlim = c(-10, 400)) +
+      guides(alpha = "none", colour="none") +
+      labs(y = NULL,
+           x = "NPV" ,
+           title = paste0("Distribution of NPV of ", policy_estimates_text[position]), 
+           subtitle = "Add Subtitle"
+      ) +
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
+      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+    if (input$rescale == TRUE) {
+      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
+    }
+    print(plot1)  
+  }, height = 700, width = 600 
+  )
+  
+  output$plot1_main <- renderPlot({      
+    # TO DO: wrap all the following steps in a function and call them again below (instead of copying and pasting)
+    
+    npv_sim_all <- reactive.data1()
+    
+    total_time <- npv_sim_all$total_time
+    position <- which( policy_estimates_text == input$policy_est)
+    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
+    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
+    
+    plot1 <- ggplot() +
+      geom_density(aes(x = npv_sim,
+                       alpha = 1/2, ..scaled..), kernel = "gau") +
+      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
+      coord_cartesian(xlim = c(-10, 400)) +
+      guides(alpha = "none", colour="none") +
+      labs(y = NULL,
+           x = "NPV" ,
+           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
+           ),
+           subtitle = paste0("N = ", input$param1, " simulations. Takes ",
+                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
+      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
+      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
+    if (input$rescale == TRUE) {
+      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
+    }
+    print(plot1)  
+  }, height = 700, width = 600 
+  )
+  #  })
 })
