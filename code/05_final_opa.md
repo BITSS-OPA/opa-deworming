@@ -193,8 +193,8 @@ chunk_params <- function(){
       "vietnam" = 9.646211 * 1e7
     ) 
     #https://data.worldbank.org/indicator/SP.POP.TOTL
-    # options: "baird1_sim","baird2_sim","baird3_sim", "baird4_sim", "klps4_1_sim",
-    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "cea_no_ext_ea_sim", "rcea_no_ext_ea_sim"
+    # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "klps4_1_sim",
+    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "a3_mpe_cea_sim", "a3_mpe_rcea_sim"
     policy_estimate_so <- "ea3_sim"
 
     # Fix teach_sal_so       
@@ -1647,17 +1647,12 @@ chunk_lambdas_eff<- function(){
       } else {
         prevalence_r_final <- other_prev_r  
       }
-      # IF TO SELECT COUNTRY OR ENTER DATA
-      # IF SELECT COUNTRY, PICK FROM:
-      # country_sel_so 
-      # country_sel_pop_so   
-      # If no country selection then one number must be provided. 
-      
+
       lambda1_eff_temp <- lambda1_var / prevalence_0_var
       lambda1_eff_in <- lambda1_eff_temp * prevalence_r_final
       return(  
         list("lambda1_eff_in" = lambda1_eff_in, 
-             "prevalence_r_in" = prevalence_r_final)
+             "prevalence_r_final_in" = prevalence_r_final)
               )
     }  
 
@@ -1669,7 +1664,7 @@ invisible( list2env(chunk_lambdas_eff(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 lambda1_r_in <- lambda_eff_f()$lambda1_eff_in
-prevalence_r_in <- prevalence_r_so #TEMP
+prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 ```
 
 </details>
@@ -2675,18 +2670,18 @@ invisible( list2env(one_run(),.GlobalEnv) )
 #TODO: update unit test values after updating interest rates to exact formula
 #Baird 1: Costs = Baird w/tax and no externalities (no ext); 
 #Benef = Baird no ext
-baird1 <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
-unit_test(baird1, 11.8309012188904)
+a1_tax <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
+unit_test(a1_tax, 11.8309012188904)
 #Baird 2: Costs = Baird w/tax and yes externalities (no ext); 
 #Benef = Baird yes ext
-baird2 <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
-unit_test(baird2, 101.903273665711)
+a1_x_tax <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
+unit_test(a1_x_tax, 101.903273665711)
 # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
-baird3 <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
-unit_test(baird3, 130.649690239252)
+a1_all <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
+unit_test(a1_all, 130.649690239252)
 # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
-baird4 <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
-unit_test(baird4, 741.618186471615)
+a1_x_all <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
+unit_test(a1_x_all, 741.618186471615)
 
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
 klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_k)
@@ -2706,23 +2701,23 @@ ea3 <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
 unit_test(ea3, 517.640954399502)
 
 # CEA for EA
-cea_no_ext_ea <- CEA_pe_f(benefits_var = pv_benef_all_new, 
+a3_mpe_cea <- CEA_pe_f(benefits_var = pv_benef_all_new, 
                           costs_var = costs2_ea_in, 
                           fudging_var = 0)
-unit_test(cea_no_ext_ea, 6452.86204429499)
+unit_test(a3_mpe_cea, 6452.86204429499)
 
-rcea_no_ext_ea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_new, 
+a3_mpe_rcea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_new, 
                                                 costs_var = costs2_ea_in, 
                                                 fudging_var = 0),
                              CEA_cash_var = 744)
-unit_test(rcea_no_ext_ea, 8.6732016724395)
+unit_test(a3_mpe_rcea, 8.6732016724395)
 
-npv_table <- data.frame("no_ext" =  round( c(baird1, NA,
+npv_table <- data.frame("no_ext" =  round( c(a1_tax, NA,
                                              NA), 1) ,
-                        "yes_ext" = round( c(NA, baird2, NA), 1) ,
-                        "no_ext_" = round( c(baird3, NA,
+                        "yes_ext" = round( c(NA, a1_x_tax, NA), 1) ,
+                        "no_ext_" = round( c(a1_all, NA,
                                              ea1), 1) ,
-                        "yes_ext_" = round( c(NA, baird4,
+                        "yes_ext_" = round( c(NA, a1_x_all,
                                              ea2), 1) ,
                         "no_ext " = round( c(klps4_1, NA,
                                              NA), 1) ,
@@ -3082,17 +3077,17 @@ sim.data1 <- function(nsims = 1e2,
     ###### Runs    
     ################
 
-    baird1_sim           <- rep(NA, nsims)
-    baird2_sim           <- rep(NA, nsims)
-    baird3_sim           <- rep(NA, nsims)
-    baird4_sim           <- rep(NA, nsims)
-    klps4_1_sim          <- rep(NA, nsims)
-    klps4_2_sim          <- rep(NA, nsims)
-    ea1_sim              <- rep(NA, nsims)
-    ea2_sim              <- rep(NA, nsims)
-    ea3_sim              <- rep(NA, nsims)
-    cea_no_ext_ea_sim    <- rep(NA, nsims)
-    rcea_no_ext_ea_sim   <- rep(NA, nsims)
+    a1_tax_sim           <- rep(NA, nsims) #a1_tax
+    a1_x_tax_sim         <- rep(NA, nsims) #a1_x_tax
+    a1_all_sim           <- rep(NA, nsims) #a1_all
+    a1_x_all_sim         <- rep(NA, nsims) #a1_x_all
+    klps4_1_sim          <- rep(NA, nsims) #a2_tax
+    klps4_2_sim          <- rep(NA, nsims) #a2_all
+    ea1_sim              <- rep(NA, nsims) #a3_inc_a1_all
+    ea2_sim              <- rep(NA, nsims) #a3_inc_a1_all_x
+    ea3_sim              <- rep(NA, nsims) #a3_inc_a2_all_mpe
+    a3_mpe_cea_sim    <- rep(NA, nsims) #a3_mpe_cea
+    a3_mpe_rcea_sim   <- rep(NA, nsims) #a3_mpe_rcea
 
     for (i in 1:nsims) {
     # one_run, for the most part, does not include standard deviations   
@@ -3139,13 +3134,13 @@ sim.data1 <- function(nsims = 1e2,
                 countries_var1 = countries_var2
                 ),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
-      baird1_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
+      a1_tax_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
       #Baird 2: Costs = Baird w/tax and yes externalities (no ext); Benef = Baird yes ext
-      baird2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
+      a1_x_tax_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_in_x)
       # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
-      baird3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
+      a1_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
       # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
-      baird4_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
+      a1_x_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
       #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
       klps4_1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
       #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
@@ -3157,9 +3152,9 @@ sim.data1 <- function(nsims = 1e2,
       # EA3: benef= KLPS all and no ext; Costs=EA
       ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
       #CEA for EA
-      cea_no_ext_ea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in,
+      a3_mpe_cea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in,
                                         costs_var = costs2_ea_in, fudging_var = 0)
-      rcea_no_ext_ea_sim[i]  <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in,
+      a3_mpe_rcea_sim[i]  <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in,
                                                               costs_var = costs2_ea_in, fudging_var = 0),
                                            CEA_cash_var = 744 )
     }
@@ -3167,45 +3162,61 @@ sim.data1 <- function(nsims = 1e2,
     total_time <- Sys.time() - start_time
 
     return( list(
-      "baird1_sim"        = baird1_sim,         
-      "baird2_sim"        = baird2_sim,         
-      "baird3_sim"        = baird3_sim,         
-      "baird4_sim"        = baird4_sim,         
+      "a1_tax_sim"        = a1_tax_sim,         
+      "a1_x_tax_sim"        = a1_x_tax_sim,         
+      "a1_all_sim"        = a1_all_sim,         
+      "a1_x_all_sim"        = a1_x_all_sim,         
       "klps4_1_sim"        = klps4_1_sim,        
       "klps4_2_sim"        = klps4_2_sim,        
       "ea1_sim"            = ea1_sim,            
       "ea2_sim"            = ea2_sim,            
       "ea3_sim"            = ea3_sim,            
-      "cea_no_ext_ea_sim"  = cea_no_ext_ea_sim,  
-      "rcea_no_ext_ea_sim" = rcea_no_ext_ea_sim,
+      "a3_mpe_cea_sim"  = a3_mpe_cea_sim,  
+      "a3_mpe_rcea_sim" = a3_mpe_rcea_sim,
       "total_time"         = total_time
     ) )
 }
 
-policy_estimates <- c("baird1_sim",          
-"baird2_sim"         ,
-"baird3_sim"         ,
-"baird4_sim"         ,
-"klps4_1_sim"        ,
-"klps4_2_sim"        ,
-"ea1_sim"            ,
-"ea2_sim"            ,
-"ea3_sim"            ,
-"cea_no_ext_ea_sim"  ,
-"rcea_no_ext_ea_sim" )
+policy_estimates <- c(
+  "a1_tax_sim",
+  "a1_x_tax_sim"         ,
+  "a1_all_sim"         ,
+  "a1_x_all_sim"         ,
+  "klps4_1_sim"        ,
+  "klps4_2_sim"        ,
+  "ea1_sim"            ,
+  "ea2_sim"            ,
+  "ea3_sim"            ,
+  "a3_mpe_cea_sim"  ,
+  "a3_mpe_rcea_sim"
+)
 
 policy_estimates_text <- c(
-  "Fiscal effects, 2016(W@W) B & C, no ext",
-  "Fiscal effects, 2016(W@W) B & C, yes ext",  
-  "Total effects, 2016(W@W) B & C, no ext",  
-  "Total effects, 2016(W@W) B & C, yes ext",  
-  "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext",   
-  "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
-  "Total effects, 2016(W@W) B & EA C, no ext",  
-  "Total effects, 2016(W@W) B & EA C, ext",  
-  "Total effects, 2019(KLPS4) B & EA C, no ext",
-  "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
-  "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
+  "A1. Tax revenue",
+  "A1. With externalities. Tax", 
+  "A1. All income", 
+  "A1. With ext. All income", 
+  "A2. Tax", 
+  "A2. All income", 
+  "A3. All income of A1", 
+  "A3. All income of A1, with ext.", 
+  "A3. All income of A2. Main Policy Estimate",
+  "Main Policy Estimate. CEA format", 
+  "Main Policy Estimate. RCEA format"
+  )
+
+# c(
+#   "Fiscal effects, 2016(W@W) B & C, no ext",
+#   "Fiscal effects, 2016(W@W) B & C, yes ext",  
+#   "Total effects, 2016(W@W) B & C, no ext",  
+#   "Total effects, 2016(W@W) B & C, yes ext",  
+#   "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext",   
+#   "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
+#   "Total effects, 2016(W@W) B & EA C, no ext",  
+#   "Total effects, 2016(W@W) B & EA C, ext",  
+#   "Total effects, 2019(KLPS4) B & EA C, no ext",
+#   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
+#   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
 ```
 
 

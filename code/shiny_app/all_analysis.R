@@ -123,9 +123,9 @@ chunk_params <- function(){
     
     #This is are the parameters labeled eta in the doc
     prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
-    prevalence_r_so <- c("india" = 0.5665, "kenya" = 0.345, "nigeria" = 0.27, "vietnam" = 0.145)  #0.56 
-    new_prevalence_r_so <- NULL
+    prevalence_r_so <- c("india" = 0.5665, "kenya" = 0.345, "nigeria" = 0.27, "vietnam" = 0.145)  #0.5665   0.5013121
     # based on https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
+    new_prevalence_r_so <- NULL
     #############
     ##### Guess work   
     #############
@@ -154,7 +154,7 @@ chunk_params <- function(){
     counts_par_sd_so <- 0.1
     nsims_so <- 1e3
     new_costs_so <- NULL
-    country_sel_so <- list("india", "kenya", "nigeria", "vietnam") #list("india", "kenya", "nigeria", "vietnam")
+    country_sel_so <- list("india", "kenya", "nigeria", "vietnam")
     country_sel_pop_so <- c(
       "india" = 1.366417750 * 1e9,
       "kenya" = 5.257397 * 1e7,
@@ -582,22 +582,27 @@ chunk_lambdas_eff<- function(){
                            country_sel_var = country_sel_so, 
                            country_sel_pop_var = country_sel_pop_so, 
                            other_prev_r = new_prevalence_r_so){
-      temp_sel <- as.character(country_sel_var)
+      temp_sel <- as.character(country_sel_var)  
       # if a positive number of countries is selected
       if (is.null(other_prev_r)) {
         temp_weights <- country_sel_pop_var[temp_sel] / 
           sum(country_sel_pop_var[temp_sel])
         prevalence_r_final <- sum( prevalence_r_var[temp_sel] * temp_weights )
       } else {
-        prevalence_r_final <- prevalence_r_var  
+        prevalence_r_final <- other_prev_r  
       }
-
+      # IF TO SELECT COUNTRY OR ENTER DATA
+      # IF SELECT COUNTRY, PICK FROM:
+      # country_sel_so 
+      # country_sel_pop_so   
+      # If no country selection then one number must be provided. 
+      
       lambda1_eff_temp <- lambda1_var / prevalence_0_var
       lambda1_eff_in <- lambda1_eff_temp * prevalence_r_final
-        return(  
-          list("lambda1_eff_in" = lambda1_eff_in, 
-                "prevalence_r_in" = prevalence_r_final)
-                )
+      return(  
+        list("lambda1_eff_in" = lambda1_eff_in, 
+             "prevalence_r_final_in" = prevalence_r_final)
+              )
     }  
 
 ##############################################################################
@@ -608,6 +613,7 @@ invisible( list2env(chunk_lambdas_eff(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 lambda1_r_in <- lambda_eff_f()$lambda1_eff_in
+prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 
 
 ## ----eq_3, echo=print_code, eval=TRUE--------------------------------------------------------------------------------------------------------------------------------------------
@@ -846,17 +852,16 @@ one_run <-
     
     lambda1_in <- lambda1_in_f(lambda1_var = lambda1_var1)
     unit_test(lambda1_in[1], 1.745, main_run_var = main_run_var1)
-    
+#browser()
     lambda1_prev_in <- lambda_eff_f(
       lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
       prevalence_0_var = prevalence_0_var1,
       prevalence_r_var = prevalence_r_var1, 
-      country_sel_var = countries_var1, 
-      country_sel_pop_var = country_sel_pop_so,
-      other_prev_r = new_prev_r_var1
-    )$lambda1_eff_in
-    unit_test(lambda1_prev_in[1], 0.9508583, main_run_var = main_run_var1)
-
+      other_prev_r = new_prev_r_var1, 
+      country_sel_var = countries_var1
+      )$lambda1_eff_in
+    unit_test(lambda1_prev_in[1], 0.9508583060968, main_run_var = main_run_var1)
+    
     lambda2_in <- lambda2_in_f(lambda2_var = lambda2_var1)
     unit_test(lambda2_in[1], 10.2 , main_run_var = main_run_var1)
     
@@ -872,24 +877,13 @@ one_run <-
     lambda1_new_in <- lambda1_new_var1
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
     
-    lambda1_prev_new_in <- lambda_eff_f(
-      lambda1_var = lambda1_new_var1,
-      prevalence_0_var = prevalence_0_var1,
-      prevalence_r_var = prevalence_r_var1,
-      country_sel_var = countries_var1,
-      country_sel_pop_var = country_sel_pop_so,
-      other_prev_r = new_prev_r_var1
-    )$lambda1_eff_in
-    
-    prevalence_r_in <- lambda_eff_f(
-      lambda1_var = lambda1_new_var1,
-      prevalence_0_var = prevalence_0_var1,
-      prevalence_r_var = prevalence_r_var1,
-      country_sel_var = countries_var1,
-      country_sel_pop_var = country_sel_pop_so,
-      other_prev_r = new_prev_r_var1
-    )$prevalence_r_in
-    unit_test(lambda1_prev_new_in,  0.9908627, main_run_var = main_run_var1)
+    lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
+                             prevalence_0_var = prevalence_0_var1,
+                             prevalence_r_var = prevalence_r_var1, 
+                             other_prev_r = new_prev_r_var1, 
+                            country_sel_var = countries_var1
+                            )$lambda1_eff_in
+    unit_test(lambda1_prev_new_in, 0.990862716410, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f ---------------------------------------
     # earnings1
@@ -942,9 +936,9 @@ one_run <-
               main_run_var = main_run_var1)
     unit_test(earnings_in_yes_ext, 167.667817450905, 
               main_run_var = main_run_var1)
-    unit_test(earnings_in_no_ext_prev, 18.9560810807118, 
+    unit_test(earnings_in_no_ext_prev, 16.9694876943406, 
               main_run_var = main_run_var1)
-    unit_test(earnings_in_yes_ext_prev, 155.481765327591, 
+    unit_test(earnings_in_yes_ext_prev, 153.495171941219, 
               main_run_var = main_run_var1)    
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
@@ -1020,7 +1014,7 @@ one_run <-
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
-    unit_test(pv_benef_all_nx_prev_in, 86.6940129137116, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_nx_prev_in, 77.608498246463, main_run_var = main_run_var1)
     #Baird all and ext
     pv_benef_all_yx_in <- pv_benef_f(
       earnings_var = earnings_in_yes_ext,
@@ -1035,7 +1029,7 @@ one_run <-
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
-    unit_test(pv_benef_all_yx_prev_in, 711.082534083075,
+    unit_test(pv_benef_all_yx_prev_in, 701.997019415827,
               main_run_var = main_run_var1)
 
     #KLPS4 w/t and no ext
@@ -1056,7 +1050,7 @@ one_run <-
     pv_benef_all_prev_new <- pv_benef_f(earnings_var = earnings_in_no_ext_prev_new,
                                    interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
-    unit_test(pv_benef_all_prev_new, 578.404929891946, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_prev_new, 517.78821257177, main_run_var = main_run_var1)
     
     #Costs asd
     # costs1: EA costs no externalities
@@ -1130,7 +1124,6 @@ one_run <-
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
                   "lambda1_new_in" = lambda1_new_in, 
                   "lambda1_prev_new_in" = lambda1_prev_new_in,
-                  "prevalence_r_in" = prevalence_r_in,
                   "earnings_in_no_ext" = earnings_in_no_ext,
                   "earnings_in_no_ext_prev" = earnings_in_no_ext_prev,
                   "earnings_in_yes_ext" = earnings_in_yes_ext,
@@ -1196,9 +1189,9 @@ sim.data1 <- function(nsims = 1e2,
                       lambda1_var2_sd,
                       prevalence_0_var2,
                       prevalence_0_var2_sd,
-                      new_prev_r_var2, 
                       prevalence_r_var2,
                       prevalence_r_var2_sd,
+                      new_prev_r_var2,
                       lambda2_var2,
                       lambda2_var2_sd,
                       coverage_var2,
@@ -1292,6 +1285,7 @@ sim.data1 <- function(nsims = 1e2,
 
     years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, 
                                   years_of_treat_var2_sd)
+
     ## Research
     aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
@@ -1314,9 +1308,8 @@ sim.data1 <- function(nsims = 1e2,
     prevalence_0_sim <- rnorm(nsims, prevalence_0_var2, prevalence_0_var2_sd)
     prevalence_0_sim <- ifelse(prevalence_0_sim > 1, yes = 1, 
                           no = ifelse(prevalence_0_sim < 0, 0, prevalence_0_sim) )
-    #browser()
-    # compute weighted prevalence. TO DO: add SD as a variable 
-    aux4 <- lapply(countries_var2,                      #will have trouble when selecting no countries
+
+     aux4 <- lapply(countries_var2,                      #will have trouble when selecting no countries
                    function(x) c(prevalence_r_so[x], 
                                  prevalence_r_so[x]) )
     
@@ -1327,9 +1320,11 @@ sim.data1 <- function(nsims = 1e2,
                                                  sd = x[2] * prevalence_r_var2_sd) )
     prevalence_r_sim <- ifelse(prevalence_r_sim > 1, yes = 1, 
                           no = ifelse(prevalence_r_sim < 0, 0, prevalence_r_sim) )
-    colnames(prevalence_r_sim) <- as.character(countries_var2)
-    #browser()
-    # Second, if there is a new entry of prevalence, draw from it. If there is not
+    colnames(prevalence_r_sim) <- as.character(countries_var2)  
+    
+                                                  
+    
+    # if there is a new entry of prevalence, draw from it. If there is not
     # then leave as null
     if (!is.null(new_prev_r_var2)){
           new_prev_r_sim <- rnorm(nsims, new_prev_r_var2, new_prev_r_var2 * 0.1)
@@ -1338,7 +1333,6 @@ sim.data1 <- function(nsims = 1e2,
     } else if (is.null(new_prev_r_var2)){
           new_prev_r_sim <- NULL
     }
-    
     ## Guess work
     periods_val <- 50           #Total number of periods to forecast wages
     time_to_jm_val <- 10        #periods until individual join the labor force
@@ -1443,7 +1437,7 @@ sim.data1 <- function(nsims = 1e2,
                 coef_exp_var1 = coef_exp_sim[i, 1], coef_exp2_var1 = coef_exp_sim[i,2],
                 lambda1_var1 = lambda1_in_f(lambda1_var = lambda1_sim[i,]),
                 prevalence_0_var1 = prevalence_0_sim[i],
-                prevalence_r_var1 = prevalence_r_sim[i,],
+                prevalence_r_var1 = prevalence_r_sim[i, ],
                 new_prev_r_var1 = new_prev_r_sim[i],
                 lambda2_var1 = lambda2_sim[i],
                 coverage_var1 = coverage_sim[i],
@@ -1514,110 +1508,46 @@ sim.data1 <- function(nsims = 1e2,
     ) )
 }
 
-policy_estimates <- c("baird1_sim",          
-"baird2_sim"         ,
-"baird3_sim"         ,
-"baird4_sim"         ,
-"klps4_1_sim"        ,
-"klps4_2_sim"        ,
-"ea1_sim"            ,
-"ea2_sim"            ,
-"ea3_sim"            ,
-"cea_no_ext_ea_sim"  ,
-"rcea_no_ext_ea_sim" )
+policy_estimates <- c(
+  "baird1_sim",
+  "baird2_sim"         ,
+  "baird3_sim"         ,
+  "baird4_sim"         ,
+  "klps4_1_sim"        ,
+  "klps4_2_sim"        ,
+  "ea1_sim"            ,
+  "ea2_sim"            ,
+  "ea3_sim"            ,
+  "cea_no_ext_ea_sim"  ,
+  "rcea_no_ext_ea_sim"
+)
 
 policy_estimates_text <- c(
-  "Fiscal effects, 2016(W@W) B & C, no ext",
-  "Fiscal effects, 2016(W@W) B & C, yes ext",  
-  "Total effects, 2016(W@W) B & C, no ext",  
-  "Total effects, 2016(W@W) B & C, yes ext",  
-  "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext",   
-  "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
-  "Total effects, 2016(W@W) B & EA C, no ext",  
-  "Total effects, 2016(W@W) B & EA C, ext",  
-  "Total effects, 2019(KLPS4) B & EA C, no ext",
-  "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
-  "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
+  "A1. Tax revenue",
+  "A1. With externalities. Tax", 
+  "A1. All income", 
+  "A1. With ext. All income", 
+  "A2. Tax", 
+  "A2. All income", 
+  "A3. All income of A1", 
+  "A3. All income of A1, with ext.", 
+  "A3. All income of A2. Main Policy Estimate",
+  "Main Policy Estimate. CEA format", 
+  "Main Policy Estimate. RCEA format"
+  )
 
-if  (TRUE){
-npv_sim_all <-   sim.data1(nsims = nsims_so,                        
-            gov_bonds_var2          = gov_bonds_so             ,                                    
-            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
-            inflation_var2          = inflation_so             ,                                    
-            inflation_var2_sd       = inflation_so * 0.1          ,                                 
-            gov_bonds_new_var2      = gov_bonds_new_so      ,          
-            gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          
-            inflation_new_var2      = inflation_new_so      ,        
-            inflation_new_var2_sd   = inflation_new_so * 0.1,          
-            wage_ag_var2            = wage_ag_so               ,                                      
-            wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
-            wage_ww_var2            = wage_ww_so               ,                                      
-            wage_ww_var2_sd         = wage_ww_so * 0.1            ,                                   
-            profits_se_var2         = profits_se_so            ,                                   
-            profits_se_var2_sd      = profits_se_so * 0.1         ,                                
-            hours_se_cond_var2      = hours_se_cond_so         ,                                
-            hours_se_cond_var2_sd   = hours_se_cond_so * 0.1      ,                             
-            hours_ag_var2           = hours_ag_so              ,                                     
-            hours_ag_var2_sd        = hours_ag_so * 0.1           ,                                  
-            hours_ww_var2           = hours_ww_so              ,                                     
-            hours_ww_var2_sd        = hours_ww_so * 0.1           ,                                  
-            hours_se_var2           = hours_se_so              ,                                     
-            hours_se_var2_sd        = hours_se_so * 0.1           ,                                  
-            ex_rate_var2            = ex_rate_so               ,                                      
-            ex_rate_var2_sd         = ex_rate_so * 0.1            ,                                   
-            growth_rate_var2        = growth_rate_so           ,                                  
-            growth_rate_var2_sd     = growth_rate_so * 0.1        ,
-            coverage_var2           = coverage_so              ,
-            coverage_var2_sd        = coverage_so * 0.1           ,  
-            tax_var2                = tax_so                   ,                                             
-            tax_var2_sd             = tax_so * 0.1                ,                                        
-            unit_cost_local_var2    = unit_cost_local_so       ,                                     
-            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,
-            unit_cost_local_new_var2 = unit_cost_2017usdppp_so,
-            unit_cost_local_new_var2_sd = unit_cost_2017usdppp_so * 0.1  ,  
-            years_of_treat_var2     = years_of_treat_so        ,                                    
-            years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
-            lambda1_var2            = lambda1_so,                                          
-            lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
-            lambda2_var2            = lambda2_so        ,                         
-            lambda2_var2_sd         = lambda2_so * 0.1  ,                      
-            q_full_var2             = q_full_so         ,                          
-            q_full_var2_sd          = q_full_so * 0.1   ,                         
-            coef_exp_var2           = coef_exp_so,                      
-            # coef_exp_var2_sd = c(as.numeric(input$param21_1_1), 
-            # as.numeric(input$param21_2_1)),                       
-            teach_sal_var2          = teach_sal_so         ,                                          
-            teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
-            teach_ben_var2          = teach_ben_so         ,                                          
-            teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
-            teach_sal_new_var2      = teach_sal_new_so         ,          #add to app                                
-            teach_sal_new_var2_sd   = teach_sal_new_so * 0.1      ,       #add to app                                
-            teach_ben_new_var2      = teach_ben_new_so         ,          #add to app                               
-            teach_ben_new_var2_sd   = 0.000001      ,                     #add to app
-            n_students_var2         = n_students_so        ,                                         
-            n_students_var2_sd      = n_students_so * 0.1     ,                                      
-            delta_ed_var2           = delta_ed_par_so          ,                                           
-            delta_ed_var2_sd        = delta_ed_par_so * 0.1       ,                                            
-            delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
-            delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
-            q_zero_var2             = q_zero_so            ,                                             
-            q_zero_var2_sd          = q_zero_so * 0.1         ,
-            lambda1_new_var2        = lambda1_new_so,                   
-            lambda1_new_var2_sd     = lambda1_new_sd_so,             
-            prevalence_0_var2            = prevalence_0_so       ,  
-            prevalence_0_var2_sd         = prevalence_0_so * 0.1    ,
-            new_prev_r_var2         = new_prevalence_r_so, 
-            prevalence_r_var2            = 1       ,  #TEMP
-            prevalence_r_var2_sd         =  0.1    ,                                                                         
-            staff_time_var2         = staff_time_so    ,
-            staff_time_var2_sd      = staff_time_so * 0.1,
-            counts_par_var2         = counts_par_so    ,
-            counts_par_var2_sd      = counts_par_sd_so ,
-            costs_par_var2          = costs_par_so     ,
-            costs_par_var2_sd       = costs_par_sd_so, 
-            new_costs_var2 = NULL, 
-            countries_var2 = country_sel_so)
+# c(
+#   "Fiscal effects, 2016(W@W) B & C, no ext",
+#   "Fiscal effects, 2016(W@W) B & C, yes ext",  
+#   "Total effects, 2016(W@W) B & C, no ext",  
+#   "Total effects, 2016(W@W) B & C, yes ext",  
+#   "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext",   
+#   "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
+#   "Total effects, 2016(W@W) B & EA C, no ext",  
+#   "Total effects, 2016(W@W) B & EA C, ext",  
+#   "Total effects, 2019(KLPS4) B & EA C, no ext",
+#   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
+#   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
 
-}
 
 

@@ -41,7 +41,7 @@ shinyUI(
                             useShinyjs(),
                             selectInput("policy_est_ka", "Policy Estimate:",
                                         choices = policy_estimates_text, 
-                                        selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
+                                        selected = "A3. All income of A2. Main Policy Estimate")
                    ), 
                    fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                             numericInput("param35", label = h3("Unit costs in new country"), value = costs2_ea_in), 
@@ -52,7 +52,7 @@ shinyUI(
                                                  list("india", "kenya", "nigeria", "vietnam"), 
                                                selected = list("india", "kenya", "nigeria", "vietnam") 
                             ), 
-                            numericInput("param37", label = h3("Prevalence in the new region"), value = prevalence_r_final),
+                            numericInput("param37", label = h3("Prevalence in the new region"), value = prevalence_r_in),
                    )
                  ), 
                  mainPanel(
@@ -73,7 +73,7 @@ shinyUI(
                             useShinyjs(),
                             selectInput("policy_est", "Policy Estimate:",
                                         choices = policy_estimates_text, 
-                                        selected = "Total effects, 2019(KLPS4) B & EA C, no ext")
+                                        selected = "A3. All income of A2. Main Policy Estimate")
                    ),
                    fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                             tabsetPanel(

@@ -170,7 +170,7 @@ shinyServer( function(input, output, session) {
       "param33",
       "param33_1"
     )
-    if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext") {
+    if (input$policy_est == "A1. Tax revenue") {
       # remove: counts adj, costs adj, lambda 2, delda ed w/ext, new lambdas, 
       # costs due to staff, 
       # new gov bonds, new inflation, new cost of teaching, 
@@ -198,7 +198,7 @@ shinyServer( function(input, output, session) {
                      "param6_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, yes ext") {
+    } else if (input$policy_est == "A1. With externalities. Tax") {
       list_hide <- c("param32",
                      "param32_1",
                      "param34",
@@ -219,7 +219,7 @@ shinyServer( function(input, output, session) {
                      "param6_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext") {
+    } else if (input$policy_est == "A1. All income") {
       list_hide <- c("param32",
                      "param32_1",
                      "param34",
@@ -246,7 +246,7 @@ shinyServer( function(input, output, session) {
                      "param6_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "Total effects, 2016(W@W) B & C, yes ext") {
+    } else if (input$policy_est == "A1. With ext. All income") {
       list_hide <- c("param32",
                      "param32_1",
                      "param34",
@@ -268,7 +268,7 @@ shinyServer( function(input, output, session) {
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
       
-    } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
+    } else if (input$policy_est == "A2. Tax") {
       list_hide <- c("param32",
                      "param32_1",
                      "param34",
@@ -310,7 +310,7 @@ shinyServer( function(input, output, session) {
       )
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext") {
+    } else if (input$policy_est == "A2. All income") {
       list_hide <- c("param32",
                      "param32_1",
                      "param34",
@@ -353,7 +353,7 @@ shinyServer( function(input, output, session) {
                      "param16_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext") {
+    } else if (input$policy_est == "A3. All income of A1") {
       list_hide <- c("param17",
                      "param17_1",
                      "param19",
@@ -381,8 +381,7 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
-      #Aqui voy      
-    } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext") {
+    } else if (input$policy_est == "A3. All income of A1, with ext.") {
       list_hide <- c("param17",
                      "param17_1",
                      "param22",
@@ -409,7 +408,7 @@ shinyServer( function(input, output, session) {
                      "param3_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext") {
+    } else if (input$policy_est == "A3. All income of A2. Main Policy Estimate") {
       list_hide <- c("param17",
                      "param17_1",
                      "param19",
@@ -461,7 +460,7 @@ shinyServer( function(input, output, session) {
       
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext") {
+    } else if (input$policy_est == "Main Policy Estimate. CEA format") {
       list_hide <- c("param17",
                      "param17_1",
                      "param19",
@@ -514,7 +513,7 @@ shinyServer( function(input, output, session) {
                      "param15_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext") {
+    } else if (input$policy_est == "Main Policy Estimate. RCEA format") {
       list_hide <- c("param17",
                      "param17_1",
                      "param19",
@@ -584,7 +583,7 @@ shinyServer( function(input, output, session) {
     #if (input$run == TRUE) {showElement("show_eq")}
     showElement("show_eq")
     if (input$show_eq == TRUE) {
-      if (input$policy_est == "Fiscal effects, 2016(W@W) B & C, no ext" ) { 
+      if (input$policy_est == "A1. Tax revenue" ) { 
         withMathJax(
           helpText('$$
               \\begin{equation}
@@ -603,7 +602,7 @@ shinyServer( function(input, output, session) {
             $$ \n See approach 1 in the documentation component for more details'  ) 
         )
         
-      } else if (input$policy_est ==  "Fiscal effects, 2016(W@W) B & C, yes ext"){
+      } else if (input$policy_est ==  "A1. With externalities. Tax"){
         withMathJax(
           helpText('$$
               \\begin{equation}
@@ -621,7 +620,7 @@ shinyServer( function(input, output, session) {
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
         )
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & C, no ext"){
+      } else if (input$policy_est == "A1. All income"){
         withMathJax(
           helpText('$$
               \\begin{equation}
@@ -640,7 +639,7 @@ shinyServer( function(input, output, session) {
             $$ \n See approach 1 in the documentation component for more details'  
           )
         )
-      } else if (input$policy_est ==  "Total effects, 2016(W@W) B & C, yes ext"){
+      } else if (input$policy_est ==  "A1. With ext. All income"){
         withMathJax(
           helpText('$$
               \\begin{equation}
@@ -658,7 +657,7 @@ shinyServer( function(input, output, session) {
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  )
         )
-      } else if (input$policy_est == "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
+      } else if (input$policy_est == "A2. Tax"){
         withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
@@ -674,7 +673,7 @@ shinyServer( function(input, output, session) {
             \\tag{5}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details'))
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext"){
+      } else if (input$policy_est == "A2. All income"){
         withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
@@ -690,7 +689,7 @@ shinyServer( function(input, output, session) {
             \\tag{6}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details' ))
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, no ext"){
+      } else if (input$policy_est == "A3. All income of A1"){
         withMathJax(helpText('$$   
             \\begin{equation}
               NPV =  \\underbrace{
@@ -704,7 +703,7 @@ shinyServer( function(input, output, session) {
             \\tag{7}
             \\end{equation}
              $$ \n See approach 3 in the documentation component for more details'))
-      } else if (input$policy_est == "Total effects, 2016(W@W) B & EA C, ext"){
+      } else if (input$policy_est == "A3. All income of A1, with ext."){
         withMathJax(helpText("$$
             \\begin{equation}
               NPV =  \\underbrace{
@@ -718,7 +717,7 @@ shinyServer( function(input, output, session) {
             \\tag{8}
             \\end{equation}
             $$ \n See approach 3 in the documentation component for more details"))
-      } else if (input$policy_est == "Total effects, 2019(KLPS4) B & EA C, no ext"){
+      } else if (input$policy_est == "A3. All income of A2. Main Policy Estimate"){
         withMathJax(helpText(
           "$$
             \\begin{equation}
@@ -734,7 +733,7 @@ shinyServer( function(input, output, session) {
             \\end{equation}
               $$ \n See approach 3 in the documentation component for more details"
         ))
-      }else if (input$policy_est == "CEA for total effects, 2019(KLPS4) B & EA C, no ext"){
+      }else if (input$policy_est == "Main Policy Estimate. CEA format"){
         withMathJax(helpText("$$
                                  \\begin{equation}
                                  CEA_{deworming} = \\frac{B (1 + F_{0})}{C}
@@ -743,7 +742,7 @@ shinyServer( function(input, output, session) {
                                  \\end{equation}
                                  $$ 
                                  \n Benefits (B) and costs (C) as defined in preferred policy estimate (A3-2020)"))
-      }else if (input$policy_est == "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext"){
+      }else if (input$policy_est == "Main Policy Estimate. RCEA format"){
         withMathJax(helpText(
           "$$
                                  \\begin{equation}
@@ -776,9 +775,9 @@ shinyServer( function(input, output, session) {
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
            x = "NPV" ,
-           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
-           ),
-           subtitle = paste0("N = ", input$param1, " simulations. Takes ",
+           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           subtitle = paste0(policy_estimates_text[position], ". ",
+                             "N = ", input$param1, " simulations. Takes ",
                              round(total_time, 1)," ",attributes(total_time)$unit )  )+
       annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
       annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
@@ -807,9 +806,9 @@ shinyServer( function(input, output, session) {
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
            x = "NPV" ,
-           title = paste0("Distribution of NPV of ", policy_estimates_text[position]), 
-           subtitle = "Add Subtitle"
-      ) +
+           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           subtitle = paste0(policy_estimates_text[position], ". ")
+           )+
       annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
       annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
@@ -838,13 +837,11 @@ shinyServer( function(input, output, session) {
       coord_cartesian(xlim = c(-10, 400)) +
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
-           x = "NPV" ,
-           title = paste0("Distribution of NPV of ", policy_estimates_text[position]
-           ),
-           subtitle = paste0("N = ", input$param1, " simulations. Takes ",
-                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
+           x = "Net Present Value (Benefits -  Costs)" ,
+           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+           ) +
       annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
     if (input$rescale == TRUE) {
       plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
