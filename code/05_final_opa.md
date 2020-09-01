@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "31 August, 2020"
+date: "01 September, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -21,7 +21,6 @@ link-citations: true
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
-
 
 
 
@@ -183,7 +182,7 @@ chunk_params <- function(){
     costs_par_sd_so <- 0.1
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
-    nsims_so <- 1e3
+    nsims_so <- 1e2
     new_costs_so <- NULL
     country_sel_so <- list("india", "kenya", "nigeria", "vietnam")
     country_sel_pop_so <- c(
@@ -220,21 +219,22 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 ```
 
 
-
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="70%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
+<!--
 # ADD A STANTARD DESCPRIPTION OF AN OPA REPORT {-}
 
 - Complete narrative description. 
 - Equations and code added to implement the narrated description. 
 - Displayed in a layered fashion. Text should provide a good narrative explanation to policy makers, equations and code are meant to provide a full picture to analysts and researchers. 
+-->
 
 # Introduction  
 
-Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](add link).
+Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
 
 The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:     
@@ -2003,7 +2003,25 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 </details>
 
 
-### Different format of policy estimate {#policy-estimate}
+
+### Summary of all approaches  
+
+
+| Approach    | Benfits                                   | Costs        |
+|---------|-------------------------------------------|--------------|
+| 1.1 | @baird2016worms w/tax and no externalities (no ext) |  Treatment, Education |
+| 1.2 | @baird2016worms w/t and ext                         |    Treatment, Education (w/ext)    |
+| 1.3 | @baird2016worms  all and no ext                      |  Treatment, Education |
+| 1.4 | @baird2016worms all and ext                         |  Treatment, Education (w/ext)    |
+| 2.1 | @klps4  w/t and no ext                      |  Treatment, Education |
+| 2.2 | @klps4  all and no ext                      |  Treatment, Education|
+| 3.1    | 1.3 + prevalence                       | Treatment (EA/GW)          |
+| 3.2    | 1.4 + prevalence                       | Treatment (EA/GW)             |
+| **3.3**    | **2.2 + prevalence**                       | **Treatment (EA/GW)  **           |  
+
+
+
+### Main policy estimate and additional formats {#policy-estimate}
 
 The key result for policy makers is defined as the cost effectiveness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
 
@@ -2226,21 +2244,9 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 </details>
 
 
+
 # Main results  
-
-
-
-| Name    | Benfits                                   | Costs        |
-|---------|-------------------------------------------|--------------|
-| Baird 1 | Baird w/tax and no externalities (no ext) | Baird no ext |
-| Baird 2 | Baird w/t and ext                         | Baird ext    |
-| Baird 3 | Baird all and no ext                      | Baird no ext |
-| Baird 4 | Baird all and ext                         | Baird ext    |
-| KLPS4_1 | KLPS4 w/t and no ext                      | Baird no ext |
-| KLPS4_2 | KLPS4 all and no ext                      | Baird no ext |
-| EA 1    | Baird all and no ext                      | EA           |
-| EA 2    | Baird all and ext                         | EA           |
-| EA 3    | KLPS all and no ext                       | EA           |  
+ The main policy estimate of this analysis 
 
 
 
@@ -2725,7 +2731,7 @@ npv_table <- data.frame("no_ext" =  round( c(a1_tax, NA,
                                              ea3), 1) ,
                         row.names = c("no_ext", "yes_ext", "no_ext_"))
 
-kable(npv_table, caption = "Caption of the table") %>%
+kable(npv_table, caption = "Summary of Policy Estimates Using Different Approachs") %>%
   add_header_above(c(" ", "tax" = 2, "all" = 2, "tax" = 1, "all" = 1)) %>%
   add_header_above(c(" ", "Baird = EA" = 4, "KLPS4" = 2)) %>%
   add_header_above(c(" ", "Benefits" = 6)) %>%
@@ -2735,7 +2741,7 @@ kable(npv_table, caption = "Caption of the table") %>%
 ```
 
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:main-results)Caption of the table</caption>
+<caption>(\#tab:main-results)Summary of Policy Estimates Using Different Approachs</caption>
  <thead>
 <tr>
 <th style="border-bottom:hidden" colspan="1"></th>
@@ -2817,7 +2823,7 @@ kable(npv_table, caption = "Caption of the table") %>%
 - **RCEA format (relative to cash):** 8.7    
 
 
-# Montecarlo simulations  
+# Accounting for Uncertainty
 
 
 ```r
@@ -3369,7 +3375,7 @@ for ( i in policy_estimates ) {
 library(plotly)
 nsims <- nsims_so
 
-npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim),6))
+npv_for_text <- paste(round(median(npv_sim),1))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 rescale <- rescale_so
@@ -3377,16 +3383,15 @@ rescale <- rescale_so
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
                        alpha = 1/2, ..scaled..), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-      coord_cartesian(xlim = c(-10, 400)) +
+      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black", "blue") ) +
+      coord_cartesian(xlim = c(-100, 800)) +
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
-           x = "NPV" ,
-           title = "Distribution of Economic Effects of Deworming (NPV)",
-           subtitle = paste0("N = ", nsims, " simulations. Takes ",
-                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 4)+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 4)+
+           x = "Net Present Value (Benefits -  Costs)" ,
+           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+           ) +
+      annotate("text", x = 2 * median(npv_sim), y = 0.15, label = npv_for_text, size = 4, col = "blue")+
       theme(axis.ticks = element_blank(), axis.text.y = element_blank())
     if (rescale == TRUE) {
       plot1 <- suppressMessages(
@@ -3404,7 +3409,7 @@ rescale <- rescale_so
 ```r
     #FUTURE: 
     #ggplotly(plot1)
-
+    ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
 # dens <- density(npv_sim)
 # fig <- plot_ly(x=~dens$x, y = ~dens$y, type='scatter', mode='lines', fill='tozeroy')
 # fig <- fig %>% 
@@ -3413,7 +3418,12 @@ rescale <- rescale_so
 #knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 ```
 
-# Sensitivity Analysis  
+# Sensitivity Analysis (Discuss)
+
+## Sample of a Opaque and Favorable Report 
+
+## Sample of a Opaque and Unfavorable Report 
+
 
 
 

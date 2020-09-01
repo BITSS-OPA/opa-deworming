@@ -15,8 +15,9 @@ knitr::opts_knit$set(root.dir = here())
 nsims <- 1e2
 
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
-source(here("code", "shiny_app", "all_analysis.R"))
-
+# here() creates conflits with shiny deployment. Use source("all_analysis.R") intead
+# source(here("code", "shiny_app", "all_analysis.R"))
+source("all_analysis.R") 
 #fluidPage is something must have
 shinyUI( 
   fluidPage(

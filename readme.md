@@ -18,7 +18,7 @@ facilitate collaboration and discussion about deworming policy.
 
 <img align="right" width="50%" src="./code/OPA_layers.png">
 
-1 - [An interactive plot](),
+1 - [An interactive plot](https://fhoces.shinyapps.io/shiny_app_test/),
 which summarizes the interactions between all key parameters for a given
 set of assumptions. Materials can be found in:
 [`code\shiny_app`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/shiny_app).
