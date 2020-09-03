@@ -46,14 +46,13 @@ shinyUI(
                    ), 
                    fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                             numericInput("param35", label = h3("Unit costs in new country"), value = costs2_ea_in), 
-                            checkboxGroupInput("param36", "Choose countries:",
-                                               choiceNames =
-                                                 list("India", "Kenya", "Nigeria", "Vietnam"),
-                                               choiceValues =
-                                                 list("india", "kenya", "nigeria", "vietnam"), 
-                                               selected = list("india", "kenya", "nigeria", "vietnam") 
-                            ), 
-                            numericInput("param37", label = h3("Prevalence in the new region"), value = prevalence_r_in),
+                            # checkboxGroupInput("param36", "Choose countries:",
+                            #                    choiceNames =
+                            #                      list("India", "Kenya", "Nigeria", "Vietnam"),
+                            #                    choiceValues =
+                            #                      list("india", "kenya", "nigeria", "vietnam"), 
+                            #                    selected = list("india", "kenya", "nigeria", "vietnam")  ), 
+                            numericInput("param37", label = h3("Prevalence in the new region"), value = prevalence_r_in)
                    )
                  ), 
                  mainPanel(

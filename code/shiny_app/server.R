@@ -11,7 +11,7 @@ shinyServer( function(input, output, session) {
       gov_bonds_var2_sd  = as.numeric(input$param2_1),                                      
       inflation_var2     = as.numeric(input$param3),                                           
       inflation_var2_sd  = as.numeric(input$param3_1),    
-      gov_bonds_new_var2    = as.numeric(input$param2_new),                                                                    
+      gov_bonds_new_var2    = as.numeric(input$param2_new),       
       gov_bonds_new_var2_sd = as.numeric(input$param2_1_new),                                                            
       inflation_new_var2    = as.numeric(input$param3_new),                                
       inflation_new_var2_sd = as.numeric(input$param3_1_new), 
@@ -82,7 +82,7 @@ shinyServer( function(input, output, session) {
       costs_par_var2 = as.numeric(input$param34), 
       costs_par_var2_sd = as.numeric(input$param34_1), 
       new_costs_var2 = as.numeric(input$param35),
-      countries_var2 = input$param36
+      countries_var2 = list("india", "kenya", "nigeria", "vietnam"), # = input$param36  to make it interactive
     )
   } 
   )
@@ -354,9 +354,7 @@ shinyServer( function(input, output, session) {
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A3. All income of A1") {
-      list_hide <- c("param17",
-                     "param17_1",
-                     "param19",
+      list_hide <- c("param19",
                      "param19_1",
                      "param22",
                      "param22_1",
@@ -382,9 +380,7 @@ shinyServer( function(input, output, session) {
                      "param3_1_new")
       list_show <- list_master[ - which(list_master %in% list_hide)]
     } else if (input$policy_est == "A3. All income of A1, with ext.") {
-      list_hide <- c("param17",
-                     "param17_1",
-                     "param22",
+      list_hide <- c("param22",
                      "param22_1",
                      "param23",
                      "param23_1",
@@ -409,9 +405,7 @@ shinyServer( function(input, output, session) {
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A3. All income of A2. Main Policy Estimate") {
-      list_hide <- c("param17",
-                     "param17_1",
-                     "param19",
+      list_hide <- c("param19",
                      "param19_1",
                      "param21_1",
                      "param21_2",
@@ -461,9 +455,7 @@ shinyServer( function(input, output, session) {
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "Main Policy Estimate. CEA format") {
-      list_hide <- c("param17",
-                     "param17_1",
-                     "param19",
+      list_hide <- c("param19",
                      "param19_1",
                      "param21_1",
                      "param21_2",
@@ -514,9 +506,7 @@ shinyServer( function(input, output, session) {
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "Main Policy Estimate. RCEA format") {
-      list_hide <- c("param17",
-                     "param17_1",
-                     "param19",
+      list_hide <- c("param19",
                      "param19_1",
                      "param21",
                      "param21_1",

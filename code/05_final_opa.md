@@ -182,7 +182,7 @@ chunk_params <- function(){
     costs_par_sd_so <- 0.1
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
-    nsims_so <- 1e2
+    nsims_so <- 1e4
     new_costs_so <- NULL
     country_sel_so <- list("india", "kenya", "nigeria", "vietnam")
     country_sel_pop_so <- c(
@@ -2023,7 +2023,14 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 ### Main policy estimate and additional formats {#policy-estimate}
 
+The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3. 
+
+This estimate can also me presented in two additional formats. 
+
+<!--
 The key result for policy makers is defined as the cost effectiveness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
+-->
+Cost effectiveness ratio. 
 
 \begin{equation}
 CEA_{deworming} = \frac{B (1 + F_{0})}{C}
@@ -2032,10 +2039,12 @@ CEA_{deworming} = \frac{B (1 + F_{0})}{C}
 \tag{20}
 \end{equation}
 
- - $C$ is the costs per person dewormed (`F2, 4,B23` --> [`F1, 2, H16`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=H16)).     
+$F_{0}$ is a factor to account for leverage/fudging [not reviewed in this excercise] ([`F2, 6, D259`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1611790402&range=D259))
+<!--
+ - $C$ is the costs per person dewormed (`F2, 4,B23`  [`F1, 2, H16`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=H16)).     
  - $B$ is the benefits per person dewormed (`F2, 4,B22`).
  - $F_{0}$ is a factor to account for leverage/fudging [not reviewed in this excercise] ([`F2, 6, D259`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1611790402&range=D259))
-
+-->
 
 Also this quantity could be expressed in relative terms to the benchmark of cash transfers (cell [`Results!B9`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1034883018&range=B9)):
 
@@ -2246,8 +2255,6 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 
 # Main results  
- The main policy estimate of this analysis 
-
 
 
 
@@ -2707,16 +2714,16 @@ ea3 <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
 unit_test(ea3, 517.640954399502)
 
 # CEA for EA
-a3_mpe_cea <- CEA_pe_f(benefits_var = pv_benef_all_new, 
+a3_mpe_cea <- CEA_pe_f(benefits_var = pv_benef_all_prev_new, 
                           costs_var = costs2_ea_in, 
                           fudging_var = 0)
-unit_test(a3_mpe_cea, 6452.86204429499)
+unit_test(a3_mpe_cea, 3516.19339422076)
 
-a3_mpe_rcea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_new, 
+a3_mpe_rcea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_prev_new, 
                                                 costs_var = costs2_ea_in, 
                                                 fudging_var = 0),
                              CEA_cash_var = 744)
-unit_test(a3_mpe_rcea, 8.6732016724395)
+unit_test(a3_mpe_rcea, 4.7260663900816)
 
 npv_table <- data.frame("no_ext" =  round( c(a1_tax, NA,
                                              NA), 1) ,
@@ -2806,21 +2813,21 @@ kable(npv_table, caption = "Summary of Policy Estimates Using Different Approach
 ## Results for overall welfare (not only taxes)
 
 
-- **NPV without externalities in @baird2016worms ($\lambda_2 = 0$):** 130.6    
+- NPV without externalities in @baird2016worms ($\lambda_2 = 0$): 130.6    
 
-- **NPV with externalities in @baird2016worms ($\lambda_2 = 10.2$ ):** 741.6  
+- NPV with externalities in @baird2016worms ($\lambda_2 = 10.2$ ): 741.6  
 
-- **NPV without externalities in @klps4:** 917.9   
+- NPV without externalities in @klps4: 917.9   
 
-- **NPV without externalities in EA 2019 ($\lambda_2 = 0$):** 77.5    
+- NPV without externalities in EA 2019 ($\lambda_2 = 0$): 77.5    
 
-- **NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ):** 701.8
+- NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ): 701.8
 
 - **NPV without ext and benef from @klps4 and EA costs 2019 :** 517.6
 
-- **CEA format:** 6452.9    
+- **CEA format:** 3516.2    
 
-- **RCEA format (relative to cash):** 8.7    
+- **RCEA format (relative to cash):** 4.7    
 
 
 # Accounting for Uncertainty
