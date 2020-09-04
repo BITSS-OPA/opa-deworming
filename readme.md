@@ -5,10 +5,10 @@
 <br>
 
 Open in RStudio:
-[![Binder]()
+[![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS/opa-wealthtax/master?urlpath=rstudio)
 
 Go straight to the Shiny app:
-[![Binder]()
+[![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS/opa-wealthtax/master?urlpath=shiny/code/interactive_visualization/)
 
 This repository, its accompanying dynamic document and Shiny app are
 three key components of an Open Policy Analysis (OPA) on the costs and
