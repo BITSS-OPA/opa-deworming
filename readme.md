@@ -34,7 +34,7 @@ document](https://rpubs.com/fhoces/547979), which details all data, code, and as
 included in the analysis. Materials can be found in:
 [`code\dynamic_doc`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/05_final_opa.Rmd).
 
-3. This Github repository, which stores all data, code, and materials
+3 - This Github repository, which stores all data, code, and materials
 necessary to replicate the analysis in full with minimal effort.
 
 This case study complies with the highest levels of the [Open Policy
