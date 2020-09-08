@@ -5,18 +5,24 @@
 <br>
 
 Open in RStudio:
-[![Binder]()
+[![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS/opa-wealthtax/master?urlpath=rstudio)
 
 Go straight to the Shiny app:
-[![Binder]()
+[![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS/opa-wealthtax/master?urlpath=shiny/code/interactive_visualization/)
 
-This repository and its accompanying dynamic document and Shiny app are
+This repository, its accompanying dynamic document and Shiny app are
 three key components of an Open Policy Analysis (OPA) on the costs and
 benefits of mass deworming interventions in various settings. Together,
 these materials create a transparent and reproducible analysis to
 facilitate collaboration and discussion about deworming policy.
 
-<img align="right" width="50%" src="./code/OPA_layers.png">
+<p align = "center">
+  <img  width="50%" src="./code/OPA_layers.png">
+  <br>
+    <em>A Conception Framework for Open Policy Analysis</em>
+</p>
+
+The three things this case study includes are:
 
 1 - [An interactive plot](https://fhoces.shinyapps.io/shiny_app_test/),
 which summarizes the interactions between all key parameters for a given
@@ -40,7 +46,7 @@ will inform the Guidelines.
 
 To learn more about BITSS and our OPA initiative [click
 here](https://www.bitss.org/opa/). If you would like to collaborate with
-BITSS to develop a demonstration of a OPA in your organization please
+BITSS to develop a demonstration of an OPA in your organization, please
 email Aleks Bogdanoski (<abogdanoski@berkeley.edu>).
 
 Major contributions to this project will be acknowledged below. This OPA
@@ -51,7 +57,7 @@ spelling and grammar.
 
 ## List of Contributors:
 
-*(in alphabetical order)*
+*(in alphabetical order by last name)*
 
   - Sophia Bai – Visualization
   - Aleksandar Bogdanoski – Funding acquisition, Project administration, Writing (reviewing and editing)
@@ -74,9 +80,9 @@ page](https://github.com/BITSS-OPA/opa-deworming/graphs/contributors))
 is ordered by each individual’s number of commits, which may not
 perfectly reflect their intellectual contribution to this project:
 
-Fernando Hoces de la Guardia ([@fhoces](https://github.com/fhoces)),
-Emma Ng ([@em-ng21](https://github.com/em-ng21)),
-[@Gracemorgan7](https://github.com/Gracemorgan7),
-[@scholesy](https://github.com/scholesy), Sophia Bai
-([@sophiabai2022](https://github.com/sophiabai2022)),
-[@oriajia](https://github.com/oriajia)
+- Fernando Hoces de la Guardia ([@fhoces](https://github.com/fhoces))
+- Emma Ng ([@em-ng21](https://github.com/em-ng21))
+- Grace Hollister([@Gracemorgan7](https://github.com/Gracemorgan7))
+- Ryan Scholes([@scholesy](https://github.com/scholesy))
+- Sophia Bai([@sophiabai2022](https://github.com/sophiabai2022))
+- Orianna Jia([@oriajia](https://github.com/oriajia))
