@@ -745,99 +745,73 @@ shinyServer( function(input, output, session) {
       }
     } 
   })
-  
+  call_plot_f <- function() {
+    npv_sim_all <- reactive.data1()
+    
+    total_time <- npv_sim_all$total_time
+    position <- which( policy_estimates_text == input$policy_est)
+    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+    npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
+    npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+    
+    plot1 <- ggplot() +
+      geom_density(aes(x = npv_sim,
+                       alpha = 1/2, ..scaled..), kernel = "gau", lwd = 1) +
+      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black","blue"),lwd = c(1, 2)) +
+      #coord_cartesian(xlim = c(-10,800))) +
+      xlim(range(density(npv_sim)$x))+
+      guides(alpha = "none", colour="none") +
+      
+      annotate("text", x = 2.5 * median(npv_sim), y = 0.9, label = npv_for_text, size = 6, color = "blue")+
+      annotate("text", x = 2.5 * median(npv_sim), y = 0.7, label = npv_for_text2, size = 6, color = "blue")+
+      theme(axis.ticks = element_blank(), axis.text.x = element_text(size = 18), axis.title.x = element_text(size = 18), axis.text.y = element_blank(),  
+            plot.title = element_text(size = 24),
+            plot.subtitle = element_text(size = 20))
+    if (input$rescale == TRUE) {
+      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
+    }
+    return (list(plot1,position,total_time))
+  }
   output$plot1 <- renderPlot({      
     # TO DO: wrap all the following steps in a function and call them again below (instead of copying and pasting)
     
-    npv_sim_all <- reactive.data1()
-    
-    total_time <- npv_sim_all$total_time
-    position <- which( policy_estimates_text == input$policy_est)
-    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-    
-    plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-      coord_cartesian(xlim = c(-10, 400)) +
-      guides(alpha = "none", colour="none") +
-      labs(y = NULL,
-           x = "NPV" ,
+    plot1 <- call_plot_f()[[1]]
+    position <- call_plot_f()[[2]]
+    total_time <- call_plot_f()[[3]]
+    plot1 <- plot1 + labs(y = NULL,
+           x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = paste0(policy_estimates_text[position], ". ",
                              "N = ", input$param1, " simulations. Takes ",
-                             round(total_time, 1)," ",attributes(total_time)$unit )  )+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-    if (input$rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
-    }
+                             round(total_time, 1)," ",attributes(total_time)$unit )  ) 
+      
     print(plot1)  
-  }, height = 700, width = 600 
+  }, height = 500, width = 750 
   )
   
   output$plot1_ka <- renderPlot({      
-    npv_sim_all <- reactive.data1()
+    plot1 <- call_plot_f()[[1]]
+    position <- call_plot_f()[[2]]
     
-    total_time <- npv_sim_all$total_time
-    position <- which( policy_estimates_text == input$policy_est)
-    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-    
-    plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-      coord_cartesian(xlim = c(-10, 400)) +
-      guides(alpha = "none", colour="none") +
-      labs(y = NULL,
-           x = "NPV" ,
+    plot1 <- plot1 + labs(y = NULL,
+           x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = paste0(policy_estimates_text[position], ". ")
-           )+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.10, label = npv_for_text2, size = 6)+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-    if (input$rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
-    }
+           )
     print(plot1)  
-  }, height = 700, width = 600 
+  }, height = 500, width = 750 
   )
   
   output$plot1_main <- renderPlot({      
-    # TO DO: wrap all the following steps in a function and call them again below (instead of copying and pasting)
-    
-    npv_sim_all <- reactive.data1()
-    
-    total_time <- npv_sim_all$total_time
-    position <- which( policy_estimates_text == input$policy_est)
-    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-    npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 2))
-    npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-    
-    plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(npv_sim)), col="blue") +
-      coord_cartesian(xlim = c(-10, 400)) +
-      guides(alpha = "none", colour="none") +
-      labs(y = NULL,
+    plot1 <- call_plot_f()[[1]]
+    position <- call_plot_f()[[2]]
+    plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = "Distribution of the Net Present Value of Deworming Interventions"
-           ) +
-      annotate("text", x = 1.5 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6)+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-    if (input$rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
-    }
+           ) 
     print(plot1)  
-  }, height = 700, width = 600 
+  }, height = 500, width = 750 
   )
   #  })
 })

@@ -44,15 +44,26 @@ shinyUI(
                                         choices = policy_estimates_text, 
                                         selected = "A3. All income of A2. Main Policy Estimate")
                    ), 
-                   fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
-                            numericInput("param35", label = h3("Unit costs in new country"), value = costs2_ea_in), 
+                   fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 600px; position:relative;",
+                            numericInput("param35", label = h3("Unit costs in new country"), value = round(costs2_ea_in,2)), 
                             # checkboxGroupInput("param36", "Choose countries:",
                             #                    choiceNames =
                             #                      list("India", "Kenya", "Nigeria", "Vietnam"),
                             #                    choiceValues =
                             #                      list("india", "kenya", "nigeria", "vietnam"), 
                             #                    selected = list("india", "kenya", "nigeria", "vietnam")  ), 
-                            numericInput("param37", label = h3("Prevalence in the new region"), value = prevalence_r_in)
+                            helpText("For reference:", br(),
+                                     "Unit costs in India is *insert india*", br(),
+                                     "Unit costs in Kenya is *insert kenya*", br(), 
+                                     "Unit costs in Nigeria is *insert nigeria*", br(), 
+                                     "Unit costs in Vietnam is *insert vietnam*"),
+                            numericInput("param37", label = h3("Prevalence in the new region"), value = round(prevalence_r_in,2)),
+                            
+                            helpText("For reference:", br(),
+                                     "Prevalence in India is 0.57", br(),
+                                     "Prevalence in Kenya is 0.35", br(), 
+                                     "Prevalence in Nigeria is 0.27", br(), 
+                                     "Prevalence in Vietnam is 0.15")
                    )
                  ), 
                  mainPanel(
