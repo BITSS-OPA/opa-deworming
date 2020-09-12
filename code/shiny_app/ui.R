@@ -25,8 +25,32 @@ shinyUI(
                tabPanel(
                  "Main Policy Estimate", 
                  sidebarPanel(
-                   fluidRow(id = "tPanel_main",style = "max-width: 400px; max-height: 300px; position:relative;",
-                            "Description \n results")
+                   fluidRow(id = "tPanel_main", style = "max-width: 400px; max-height: 300px; position:relative;",
+                            p("logos go here"),
+                            br(),
+                            h5("Description of Results"),
+                            p("This layer of the app displays a density plot of 
+                              simulated values for the net present value (NPV) of deworming.
+                              The median NPV is represented by the blue vertical 
+                              line to the right, while the blue vertical line at 
+                              NPV = 0 represents ______.")),
+                   fluidRow(
+                            br(),
+                            p("The app is the result of a collaboration between the",
+                              tags$a(href="https://www.bitss.org/", "Berkeley Initiative 
+                                     for Transparency in the Social Sciences"),
+                              "and",
+                              tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/", "Evidence Action."),
+                            br(),
+                            p("This visualization is one of three key components of an Open 
+                            Policy Analysis (OPA) on the costs and benefits of 
+                            mass deworming interventions in various settings. 
+                            Together, these materials create a transparent and 
+                            reproducible analysis to facilitate collaboration and 
+                            discussion about deworming policy."),
+                            p(tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "Click here"),
+                                     "to visit source code"))
+                            )
                  ), 
                  mainPanel(
                    fluidRow(id = "output_id1_main", style = "max-width: 800px; max-height: 700px; position:relative;",
