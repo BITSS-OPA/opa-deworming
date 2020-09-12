@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "11 September, 2020"
+date: "12 September, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -108,7 +108,8 @@ chunk_params <- function(){
     # Move this calculations into the body of the document (and outside of the sources chunk)
     unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
 
-    years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    years_of_treat_0_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    years_of_treat_t_so <- 2.41      #Years of Treatment in new setting
     # costs data
     df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Costs")
@@ -931,7 +932,7 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 
 
 ```r
-# - inputs: unit_cost_local_so, ex_rate_so, years_of_treat_so
+# - inputs: unit_cost_local_so, ex_rate_so, years_of_treat_0_so
 # - outputs: s2_f
 chunk_unit_costs2 <- function(){
 ###############################################################################
@@ -939,7 +940,7 @@ chunk_unit_costs2 <- function(){
 
     s2_f <- function(unit_cost_local_var = unit_cost_local_so,
                      ex_rate_var = ex_rate_so, 
-                     years_of_treat_var = years_of_treat_so) {
+                     years_of_treat_var = years_of_treat_0_so) {
       ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
     }
 
@@ -1603,11 +1604,14 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 
 In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key policy maker in this area: the NGO Evidence Action (EA). EA provided insights on the relevant costs and benefits considered when making decisions on deworming interventions, as well as data on the main costs of implementing deworming interventions in different countries.
 
-Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries. 
+Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length ot treatment. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries. 
 
 In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to 92% for the relevant population and costs were as high as XXXX. Today EA supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
 
 ### Benefits   
+
+
+#### Adjusting for different prevalence rates  
 
 To account for different prevalence rates ($\eta$), the estimated treatment effect is decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who were treated and did not have worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatment, divided by the proportion of the prevalence of infections. 
 
@@ -1674,6 +1678,64 @@ prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 
 **TO DO: add a section that discusses where are the prevalence rates are comming from**   
 
+#### Adjusting for different length of treatment  
+
+Different time of exposure to deworming interventions are likely to have different effects on the treated population. The two approaches reproduced so far hold the length of treatment constant at the levels of the original study (2.4 years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years, with no additional effects after 6 years of treatment. [GRACE PLEASE ADD TO THIS PARAGRAPH]
+
+
+<details><summary>Show all the details</summary>
+
+For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 8 respectively) by the following:   
+
+\begin{equation}
+\lambda_{1,t = 1} = \frac{\lambda_{1}}{T_{0}} \\
+\lambda_{1,t} = t \lambda_{1,t = 1} \quad \text{for } t=1, \dots, 6 
+
+\label{eq:18}
+\tag{18}
+\end{equation}
+
+
+```r
+# - inputs: lambda1_in_f(), years_of_treat_0_so, years_of_treat_0_so
+# - outputs: lambda_t_f
+chunk_lambdas_t<- function(){
+###############################################################################
+###############################################################################    
+
+    lambda_t_f <- function(lambda1_var = lambda1_in_f(), 
+                           years_of_treat_0_var = years_of_treat_0_so, 
+                           years_of_treat_t_var = years_of_treat_0_so){
+          lambda1_t1 <- lambda1_var / years_of_treat_0_var
+          if (years_of_treat_t_var<=6){
+            lambda1_t <- years_of_treat_t_var * lambda1_t1 
+          } else if  (years_of_treat_t_var>6) {
+            lambda1_t <- 6 * lambda1_t1 
+          }
+                              
+          
+          
+            return(
+              list("lambda1_t1" = lambda1_t1, 
+                   "lambda1_t" = lambda1_t)
+              )
+    }  
+
+##############################################################################
+###############################################################################  
+    return( list("lambda_t_f" = lambda_t_f) )
+}
+invisible( list2env(chunk_lambdas_t(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+lambda1_t_in <- lambda_eff_f(
+  lambda1_var = lambda_t_f()$lambda1_t
+  )$lambda1_eff_in 
+```
+
+
+</details>
+
 ### Costs
 
 To estimate the costs, we follow a similar approach to @givewell. The default cost is the per unit cost of treatment across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions. 
@@ -1689,16 +1751,16 @@ Country level costs at the payer level are computed as the sum of item-level cos
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
 
-\label{eq:18}
-\tag{18}
+\label{eq:19}
+\tag{19}
 \end{equation}
 
 \begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
 c_{i} = \frac{C_{i}}{N_{i}} \\
 
-\label{eq:19}
-\tag{19}
+\label{eq:20}
+\tag{20}
 \end{equation}
 
 
@@ -2037,8 +2099,8 @@ Cost effectiveness ratio.
 \begin{equation}
 CEA_{deworming} = \frac{B (1 + F_{0})}{C}
 
-\label{eq:20}
-\tag{20}
+\label{eq:21}
+\tag{21}
 \end{equation}
 
 $F_{0}$ is a factor to account for leverage/fudging [not reviewed in this excercise] ([`F2, 6, D259`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1611790402&range=D259))
@@ -2053,8 +2115,8 @@ Also this quantity could be expressed in relative terms to the benchmark of cash
 \begin{equation}
 RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
 
-\label{eq:21}
-\tag{21}
+\label{eq:22}
+\tag{22}
 \end{equation}
 
 
@@ -2275,12 +2337,15 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 # │      ├──── earnings1_f
 # │      |      ├──── wage_t_mo_f
 # │      |      |      └──── wage_0_mo_f
+# |      |      ├──── lambda_eff_f
+# │      |      |      └────lambda1_t_f
+# │      |      |            └────lambda1_in_f
 # |      |      ├──── lambda1_in_f
-# │      |      |      └────lambda_eff_f
 # |      |      ├──── lambda2_in_f
 # │      |      └──── saturation_in_f
 # │      ├──── earnings2_f
 # │      |      └────lambda_eff_f
+# │      |           └────lambda1_t_f
 # │      └──── interest_f
 # └──── pv_costs_f (pv_costs_f)
 #        ├──── delta_ed_final_f
@@ -2357,7 +2422,8 @@ one_run <-
            unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
            new_costs_var1 = new_costs_so,
            countries_var1 = country_sel_so,
-           years_of_treat_var1 = years_of_treat_so,                                        
+           years_of_treat_0_var1 = years_of_treat_0_so, 
+           years_of_treat_t_var1 = years_of_treat_t_so, 
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so) {                                        
     ####------------ Inputs for wage_t -----------------------------------------
@@ -2383,9 +2449,15 @@ one_run <-
     
     lambda1_in <- lambda1_in_f(lambda1_var = lambda1_var1)
     unit_test(lambda1_in[1], 1.745, main_run_var = main_run_var1)
-#browser()
+
+    lambda1_t_temp = lambda_t_f(
+        lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1), 
+        years_of_treat_0_var = years_of_treat_0_var1,
+        years_of_treat_t_var = years_of_treat_t_var1  
+        )$lambda1_t
+
     lambda1_prev_in <- lambda_eff_f(
-      lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
+      lambda1_var = lambda1_t_temp,
       prevalence_0_var = prevalence_0_var1,
       prevalence_r_var = prevalence_r_var1, 
       other_prev_r = new_prev_r_var1, 
@@ -2407,8 +2479,13 @@ one_run <-
     ###------------ Inputs for earnings2_f--------------------------------------
     lambda1_new_in <- lambda1_new_var1
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
-    
-    lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
+    lambda1_t_temp = lambda_t_f(
+      lambda1_var = lambda1_new_var1, 
+      years_of_treat_0_var = years_of_treat_0_var1,
+      years_of_treat_t_var = years_of_treat_t_var1  
+    )$lambda1_t
+
+    lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_t_temp,
                              prevalence_0_var = prevalence_0_var1,
                              prevalence_r_var = prevalence_r_var1, 
                              other_prev_r = new_prev_r_var1, 
@@ -2509,7 +2586,7 @@ one_run <-
     s2_in <- s2_f(
       unit_cost_local_var = unit_cost_local_var1,
       ex_rate_var = ex_rate_var1,
-      years_of_treat_var = years_of_treat_var1
+      years_of_treat_var = years_of_treat_0_var1
     )
     unit_test(s2_in, 1.4219, main_run_var = main_run_var1)
     #--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
@@ -2918,8 +2995,10 @@ sim.data1 <- function(nsims = 1e2,
                       unit_cost_local_var2_sd,
                       unit_cost_local_new_var2,
                       unit_cost_local_new_var2_sd,
-                      years_of_treat_var2,
-                      years_of_treat_var2_sd,
+                      years_of_treat_0_var2,
+                      years_of_treat_0_var2_sd,
+                      years_of_treat_t_var2,
+                      years_of_treat_t_var2_sd,
                       tax_var2,
                       tax_var2_sd,
                       periods_var2, 
@@ -2967,8 +3046,10 @@ sim.data1 <- function(nsims = 1e2,
                               unit_cost_local_new_var2_sd)
         
 
-    years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, 
-                                  years_of_treat_var2_sd)
+    years_of_treat_0_sim <-   rnorm(nsims, years_of_treat_0_var2, 
+                                  years_of_treat_0_var2_sd)
+    years_of_treat_t_sim <-   rnorm(nsims, years_of_treat_t_var2, 
+                                  years_of_treat_t_var2_sd)
 
     ## Research
     aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
@@ -3147,7 +3228,8 @@ sim.data1 <- function(nsims = 1e2,
                 n_students_var1 = n_students_sim[i],
                 unit_cost_local_var1 = unit_cost_local_sim[i],
                 unit_cost_local_new_var1 = unit_cost_local_new_sim[i],
-                years_of_treat_var1 = years_of_treat_sim[i],
+                years_of_treat_0_var1 = years_of_treat_0_sim[i],
+                years_of_treat_t_var1 = years_of_treat_t_sim[i],
                 tax_var1 = tax_sim[i],
                 periods_var1 = periods_so,
                 df_costs_var1 = costs1_df_sim[[i]], 
@@ -3278,8 +3360,10 @@ npv_sim_all <-   sim.data1(nsims = nsims_so,
             unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,
             unit_cost_local_new_var2 = unit_cost_2017usdppp_so,
             unit_cost_local_new_var2_sd = unit_cost_2017usdppp_so * 0.1  ,  
-            years_of_treat_var2     = years_of_treat_so        ,                                    
-            years_of_treat_var2_sd  = years_of_treat_so * 0.1     ,                                      
+            years_of_treat_0_var2   = years_of_treat_0_so        ,    
+            years_of_treat_0_var2_sd= years_of_treat_0_so * 0.1     ,
+            years_of_treat_t_var2   = years_of_treat_t_so        ,    
+            years_of_treat_t_var2_sd= years_of_treat_t_so * 0.1     ,
             lambda1_var2            = lambda1_so,                                          
             lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
             lambda2_var2            = lambda2_so        ,                         
