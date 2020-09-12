@@ -16,11 +16,7 @@ benefits of mass deworming interventions in various settings. Together,
 these materials create a transparent and reproducible analysis to
 facilitate collaboration and discussion about deworming policy.
 
-<p align = "center">
-  <img  width="50%" src="./code/OPA_layers.png">
-  <br>
-    <em>A Conception Framework for Open Policy Analysis</em>
-</p>
+<img align="right" width="50%" src="./code/OPA_layers.png">
 
 The three things this case study includes are:
 
@@ -82,7 +78,7 @@ perfectly reflect their intellectual contribution to this project:
 
 - Fernando Hoces de la Guardia ([@fhoces](https://github.com/fhoces))
 - Emma Ng ([@em-ng21](https://github.com/em-ng21))
-- Grace Hollister([@Gracemorgan7](https://github.com/Gracemorgan7))
+- Grace Morgan([@Gracemorgan7](https://github.com/Gracemorgan7))
 - Ryan Scholes([@scholesy](https://github.com/scholesy))
 - Sophia Bai([@sophiabai2022](https://github.com/sophiabai2022))
 - Orianna Jia([@oriajia](https://github.com/oriajia))
