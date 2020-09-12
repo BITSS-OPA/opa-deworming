@@ -78,7 +78,7 @@ perfectly reflect their intellectual contribution to this project:
 
 - Fernando Hoces de la Guardia ([@fhoces](https://github.com/fhoces))
 - Emma Ng ([@em-ng21](https://github.com/em-ng21))
-- Grace Hollister([@Gracemorgan7](https://github.com/Gracemorgan7))
+- Grace Morgan([@Gracemorgan7](https://github.com/Gracemorgan7))
 - Ryan Scholes([@scholesy](https://github.com/scholesy))
 - Sophia Bai([@sophiabai2022](https://github.com/sophiabai2022))
 - Orianna Jia([@oriajia](https://github.com/oriajia))
