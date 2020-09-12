@@ -1220,11 +1220,14 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key policy maker in this area: the NGO Evidence Action (EA). EA provided insights on the relevant costs and benefits considered when making decisions on deworming interventions, as well as data on the main costs of implementing deworming interventions in different countries.
 
-Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries. 
+Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length ot treatment. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries. 
 
 In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to `r paste0(round(prevalence_0_so * 100), "%")` for the relevant population and costs were as high as XXXX. Today EA supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
 
 ### Benefits   
+
+
+#### Adjusting for different prevalence rates  
 
 To account for different prevalence rates ($\eta$), the estimated treatment effect is decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who were treated and did not have worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatment, divided by the proportion of the prevalence of infections. 
 
@@ -1289,6 +1292,11 @@ prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 <br>
 
 **TO DO: add a section that discusses where are the prevalence rates are comming from**   
+
+#### Adjusting for different length of treatment  
+
+
+
 
 ### Costs
 

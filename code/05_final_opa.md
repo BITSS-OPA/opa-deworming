@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "01 September, 2020"
+date: "11 September, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -233,6 +233,8 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 -->
 
 # Introduction  
+
+Deworming refers to the medical practice of removing parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake and can thus lead to serious consequences on human health. In particular, evidence indicates that these worms contribute to malnourishment and impairment of mental and physical development [needs citation].
 
 Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
@@ -3000,8 +3002,11 @@ sim.data1 <- function(nsims = 1e2,
                               function(x)  rnorm(nsims, 
                                                  mean = x[1] * prevalence_r_var2,
                                                  sd = x[2] * prevalence_r_var2_sd) )
-    prevalence_r_sim <- ifelse(prevalence_r_sim > 1, yes = 1, 
-                          no = ifelse(prevalence_r_sim < 0, 0, prevalence_r_sim) )
+    prevalence_r_sim <- ifelse(
+      prevalence_r_sim > 1,
+      yes = 1,
+      no = ifelse(prevalence_r_sim < 0, yes = 0, no = prevalence_r_sim)
+    )
     colnames(prevalence_r_sim) <- as.character(countries_var2)  
     
                                                   
@@ -3010,8 +3015,11 @@ sim.data1 <- function(nsims = 1e2,
     # then leave as null
     if (!is.null(new_prev_r_var2)){
           new_prev_r_sim <- rnorm(nsims, new_prev_r_var2, new_prev_r_var2 * 0.1)
-          new_prev_r_sim <- ifelse(new_prev_r_sim > 1, yes = 1, 
-                          no = ifelse(new_prev_r_sim < 0, 0, new_prev_r_sim) )
+          new_prev_r_sim <- ifelse(
+            new_prev_r_sim > 1,
+            yes = 1,
+            no = ifelse(new_prev_r_sim < 0, 0, new_prev_r_sim)
+          )
     } else if (is.null(new_prev_r_var2)){
           new_prev_r_sim <- NULL
     }
@@ -3416,7 +3424,7 @@ rescale <- rescale_so
 ```r
     #FUTURE: 
     #ggplotly(plot1)
-    ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
+    #ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
 # dens <- density(npv_sim)
 # fig <- plot_ly(x=~dens$x, y = ~dens$y, type='scatter', mode='lines', fill='tozeroy')
 # fig <- fig %>% 
