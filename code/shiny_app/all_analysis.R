@@ -1,4 +1,4 @@
-## ----setup, include=FALSE, purl=TRUE------------------------------------------------------------------------------------------------------------
+## ----setup, include=FALSE, purl=TRUE-----------------------------------------------------------------------------------------------------
 # Loading required libraries
 list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly")
 
@@ -34,7 +34,7 @@ knitr::opts_chunk$set(warning = FALSE)
 
 
 
-## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE------------------------------------------------------------------------
+## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE-----------------------------------------------------------------
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
 chunk_params <- function(){
@@ -78,7 +78,8 @@ chunk_params <- function(){
     # Move this calculations into the body of the document (and outside of the sources chunk)
     unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
 
-    years_of_treat_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    years_of_treat_0_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    years_of_treat_t_so <- 2.41      #Years of Treatment in new setting
     # costs data
     df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Costs")
@@ -103,10 +104,10 @@ chunk_params <- function(){
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women 
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
-    lambda1_new_so <- c(80,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
-                               80,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
-                               80)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
-    lambda1_new_sd_so <- c(76, 76, 76)  # ADD SOURCE
+    lambda1_new_so <- c(86.54642,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
+                               82.99311,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
+                               85.44088)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
+    lambda1_new_sd_so <- c(43, 83, 172)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
     delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
@@ -190,7 +191,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 
-## ----eq_1, echo=print_code----------------------------------------------------------------------------------------------------------------------
+## ----eq_1, echo=print_code---------------------------------------------------------------------------------------------------------------
 # - inputs: total per capita benefits, total per capita costs, fudging factor
 # - outputs: Cost-effectiveness ratio & ratio to cash CEA, NPV
 chunk_policy_est <- function(){
@@ -216,7 +217,7 @@ chunk_policy_est <- function(){
 invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 
 
-## ----benefits, echo=print_code------------------------------------------------------------------------------------------------------------------
+## ----benefits, echo=print_code-----------------------------------------------------------------------------------------------------------
 # - inputs: nothing
 # - outputs: function that computes the country weights used in the final costs
 chunk_benefits <- function(){
@@ -237,7 +238,7 @@ chunk_benefits <- function(){
 invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 
-## ----interest-rate, echo=print_code-------------------------------------------------------------------------------------------------------------
+## ----interest-rate, echo=print_code------------------------------------------------------------------------------------------------------
 # - inputs: gov_bonds_so, inflation_so 
 # - outputs: interest_in, interest_exct_in 
 chunk_interest <- function(){
@@ -270,7 +271,7 @@ interest_19 <- as.numeric(
 
 
 
-## ----earnings1----------------------------------------------------------------------------------------------------------------------------------
+## ----earnings1---------------------------------------------------------------------------------------------------------------------------
 # - inputs: wage_in, lambda1_so, lambda2_so, saturation, coverage_so
 # - outputs: earnings (no name specified)
 chunk_earnings1 <- function(){
@@ -295,7 +296,7 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) ) 
 
 
-## ----wage_t-------------------------------------------------------------------------------------------------------------------------------------
+## ----wage_t------------------------------------------------------------------------------------------------------------------------------
 #inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
@@ -357,7 +358,7 @@ chunk_wages <- function(){
 invisible( list2env(chunk_wages(),.GlobalEnv) )
 
 
-## ----lambdas------------------------------------------------------------------------------------------------------------------------------------
+## ----lambdas-----------------------------------------------------------------------------------------------------------------------------
 # - inputs: lambda1_so, lambda2_so
 # - outputs: lambda1_in_f, lambda2_in_f functions
 chunk_lambdas<- function(){
@@ -383,7 +384,7 @@ lambda1_in <- lambda1_in_f()
 lambda2_in <- lambda2_in_f()
 
 
-## ----coverage-and-saturation--------------------------------------------------------------------------------------------------------------------
+## ----coverage-and-saturation-------------------------------------------------------------------------------------------------------------
 # - inputs: coverage_so, q_full_so, q_zero_so
 # - outputs: saturation_in
 chunk_coverage <- function(){
@@ -408,7 +409,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 
 
-## ----cost2--------------------------------------------------------------------------------------------------------------------------------------
+## ----cost2-------------------------------------------------------------------------------------------------------------------------------
 # - inputs: periods_so, delta_ed_final_in, interest (varies by approach), cost_per_student_in, s2_in, q2_in
 # - outputs: pv_costs_f
 chunk_cost2 <- function(){
@@ -438,8 +439,8 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:  
 
 
-## ----unit_costs2--------------------------------------------------------------------------------------------------------------------------------
-# - inputs: unit_cost_local_so, ex_rate_so, years_of_treat_so
+## ----unit_costs2-------------------------------------------------------------------------------------------------------------------------
+# - inputs: unit_cost_local_so, ex_rate_so, years_of_treat_0_so
 # - outputs: s2_f
 chunk_unit_costs2 <- function(){
 ###############################################################################
@@ -447,7 +448,7 @@ chunk_unit_costs2 <- function(){
 
     s2_f <- function(unit_cost_local_var = unit_cost_local_so,
                      ex_rate_var = ex_rate_so, 
-                     years_of_treat_var = years_of_treat_so) {
+                     years_of_treat_var = years_of_treat_0_so) {
       ( unit_cost_local_var / ex_rate_var ) * years_of_treat_var
     }
 
@@ -461,7 +462,7 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 
 
 
-## ----ed-costs-----------------------------------------------------------------------------------------------------------------------------------
+## ----ed-costs----------------------------------------------------------------------------------------------------------------------------
 # - inputs: teach_sal_so, teach_ben_so, n_students_so, include_ext_so, delta_ed_so, delta_ed_ext_so
 # - outputs: cost_per_student_f, delta_ed_final_f
 chunk_edcosts <- function(){
@@ -501,7 +502,7 @@ delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 
 
 
-## ----delta-earnings, eval=TRUE------------------------------------------------------------------------------------------------------------------
+## ----delta-earnings, eval=TRUE-----------------------------------------------------------------------------------------------------------
 # - inputs: t_var, lambda1_new_so[1], lambda1_new_so[2], lambda1_new_so[3]
 # - outputs: earnings2_f
 chunk_new_earnings <- function(){
@@ -528,7 +529,7 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 
 
 
-## ----unit_costs2_new----------------------------------------------------------------------------------------------------------------------------
+## ----unit_costs2_new---------------------------------------------------------------------------------------------------------------------
 # - inputs: unit_cost_local_so, ex_rate_so, interest_19
 # - outputs: s2_f_new
 chunk_unit_costs2_new <- function(){
@@ -558,7 +559,7 @@ s2_new <- s2_in
 q2_in <- q_full_so
 
 
-## ----ed-costs-new-------------------------------------------------------------------------------------------------------------------------------
+## ----ed-costs-new------------------------------------------------------------------------------------------------------------------------
 
 delta_ed_in <- delta_ed_so[,1]
 cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
@@ -569,7 +570,7 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
 
 
 
-## ----lambdas_eff--------------------------------------------------------------------------------------------------------------------------------
+## ----lambdas_eff-------------------------------------------------------------------------------------------------------------------------
 # - inputs: lambda1_in_f(), prevalence_0_so, prevalence_r_so
 # - outputs: lambda_eff_f
 chunk_lambdas_eff<- function(){
@@ -611,7 +612,45 @@ lambda1_r_in <- lambda_eff_f()$lambda1_eff_in
 prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 
 
-## ----eq_3, echo=print_code, eval=TRUE-----------------------------------------------------------------------------------------------------------
+## ----lambdas_t---------------------------------------------------------------------------------------------------------------------------
+# - inputs: lambda1_in_f(), years_of_treat_0_so, years_of_treat_0_so
+# - outputs: lambda_t_f
+chunk_lambdas_t<- function(){
+###############################################################################
+###############################################################################    
+
+    lambda_t_f <- function(lambda1_var = lambda1_in_f(), 
+                           years_of_treat_0_var = years_of_treat_0_so, 
+                           years_of_treat_t_var = years_of_treat_0_so){
+          lambda1_t1 <- lambda1_var / years_of_treat_0_var
+          if (years_of_treat_t_var<=6){
+            lambda1_t <- years_of_treat_t_var * lambda1_t1 
+          } else if  (years_of_treat_t_var>6) {
+            lambda1_t <- 6 * lambda1_t1 
+          }
+                              
+          
+          
+            return(
+              list("lambda1_t1" = lambda1_t1, 
+                   "lambda1_t" = lambda1_t)
+              )
+    }  
+
+##############################################################################
+###############################################################################  
+    return( list("lambda_t_f" = lambda_t_f) )
+}
+invisible( list2env(chunk_lambdas_t(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+lambda1_t_in <- lambda_eff_f(
+  lambda1_var = lambda_t_f()$lambda1_t
+  )$lambda1_eff_in 
+
+
+
+## ----eq_3, echo=print_code, eval=TRUE----------------------------------------------------------------------------------------------------
 # - inputs: nothing
 # - outputs: (1) function that computes the country weights used in the final 
 # costs (2)  function that computes the weighted sum of country costs 
@@ -724,7 +763,7 @@ costs1_p2_in <- costs1_p2_f()
 
 
 
-## ----all-steps----------------------------------------------------------------------------------------------------------------------------------
+## ----all-steps---------------------------------------------------------------------------------------------------------------------------
 # Function dependency is depicted as follows:
 # f(g()) =
 # f
@@ -739,12 +778,15 @@ costs1_p2_in <- costs1_p2_f()
 # │      ├──── earnings1_f
 # │      |      ├──── wage_t_mo_f
 # │      |      |      └──── wage_0_mo_f
+# |      |      ├──── lambda_eff_f
+# │      |      |      └────lambda1_t_f
+# │      |      |            └────lambda1_in_f
 # |      |      ├──── lambda1_in_f
-# │      |      |      └────lambda_eff_f
 # |      |      ├──── lambda2_in_f
 # │      |      └──── saturation_in_f
 # │      ├──── earnings2_f
 # │      |      └────lambda_eff_f
+# │      |           └────lambda1_t_f
 # │      └──── interest_f
 # └──── pv_costs_f (pv_costs_f)
 #        ├──── delta_ed_final_f
@@ -821,7 +863,8 @@ one_run <-
            unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
            new_costs_var1 = new_costs_so,
            countries_var1 = country_sel_so,
-           years_of_treat_var1 = years_of_treat_so,                                        
+           years_of_treat_0_var1 = years_of_treat_0_so, 
+           years_of_treat_t_var1 = years_of_treat_t_so, 
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so) {                                        
     ####------------ Inputs for wage_t -----------------------------------------
@@ -847,9 +890,15 @@ one_run <-
     
     lambda1_in <- lambda1_in_f(lambda1_var = lambda1_var1)
     unit_test(lambda1_in[1], 1.745, main_run_var = main_run_var1)
-#browser()
+
+    lambda1_t_temp = lambda_t_f(
+        lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1), 
+        years_of_treat_0_var = years_of_treat_0_var1,
+        years_of_treat_t_var = years_of_treat_t_var1  
+        )$lambda1_t
+
     lambda1_prev_in <- lambda_eff_f(
-      lambda1_var = lambda1_in_f(lambda1_var = lambda1_var1),
+      lambda1_var = lambda1_t_temp,
       prevalence_0_var = prevalence_0_var1,
       prevalence_r_var = prevalence_r_var1, 
       other_prev_r = new_prev_r_var1, 
@@ -871,8 +920,13 @@ one_run <-
     ###------------ Inputs for earnings2_f--------------------------------------
     lambda1_new_in <- lambda1_new_var1
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
-    
-    lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_new_var1,
+    lambda1_t_temp = lambda_t_f(
+      lambda1_var = lambda1_new_var1, 
+      years_of_treat_0_var = years_of_treat_0_var1,
+      years_of_treat_t_var = years_of_treat_t_var1  
+    )$lambda1_t
+
+    lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_t_temp,
                              prevalence_0_var = prevalence_0_var1,
                              prevalence_r_var = prevalence_r_var1, 
                              other_prev_r = new_prev_r_var1, 
@@ -975,7 +1029,7 @@ one_run <-
     s2_in <- s2_f(
       unit_cost_local_var = unit_cost_local_var1,
       ex_rate_var = ex_rate_var1,
-      years_of_treat_var = years_of_treat_var1
+      years_of_treat_var = years_of_treat_0_var1
     )
     unit_test(s2_in, 1.4219, main_run_var = main_run_var1)
     #--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
@@ -1146,7 +1200,7 @@ invisible( list2env(one_run(),.GlobalEnv) )
 
 
 
-## ----mc-setup, eval=TRUE------------------------------------------------------------------------------------------------------------------------
+## ----mc-setup, eval=TRUE-----------------------------------------------------------------------------------------------------------------
 # EXPLAIN
 # This function takes as inputs means and standard deviations of source 
 # parameters and simualte draws of each source. When the source is a scalar, 
@@ -1229,8 +1283,10 @@ sim.data1 <- function(nsims = 1e2,
                       unit_cost_local_var2_sd,
                       unit_cost_local_new_var2,
                       unit_cost_local_new_var2_sd,
-                      years_of_treat_var2,
-                      years_of_treat_var2_sd,
+                      years_of_treat_0_var2,
+                      years_of_treat_0_var2_sd,
+                      years_of_treat_t_var2,
+                      years_of_treat_t_var2_sd,
                       tax_var2,
                       tax_var2_sd,
                       periods_var2, 
@@ -1278,8 +1334,10 @@ sim.data1 <- function(nsims = 1e2,
                               unit_cost_local_new_var2_sd)
         
 
-    years_of_treat_sim <-   rnorm(nsims, years_of_treat_var2, 
-                                  years_of_treat_var2_sd)
+    years_of_treat_0_sim <-   rnorm(nsims, years_of_treat_0_var2, 
+                                  years_of_treat_0_var2_sd)
+    years_of_treat_t_sim <-   rnorm(nsims, years_of_treat_t_var2, 
+                                  years_of_treat_t_var2_sd)
 
     ## Research
     aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
@@ -1458,7 +1516,8 @@ sim.data1 <- function(nsims = 1e2,
                 n_students_var1 = n_students_sim[i],
                 unit_cost_local_var1 = unit_cost_local_sim[i],
                 unit_cost_local_new_var1 = unit_cost_local_new_sim[i],
-                years_of_treat_var1 = years_of_treat_sim[i],
+                years_of_treat_0_var1 = years_of_treat_0_sim[i],
+                years_of_treat_t_var1 = years_of_treat_t_sim[i],
                 tax_var1 = tax_sim[i],
                 periods_var1 = periods_so,
                 df_costs_var1 = costs1_df_sim[[i]], 
