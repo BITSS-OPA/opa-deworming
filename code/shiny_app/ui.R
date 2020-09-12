@@ -17,17 +17,41 @@ nsims <- 1e2
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
 # here() creates conflits with shiny deployment. Use source("all_analysis.R") intead
 # source(here("code", "shiny_app", "all_analysis.R"))
-source("all_analysis.R") 
+source("all_analysis.R")
 #fluidPage is something must have
-shinyUI( 
+shinyUI(
   fluidPage(
     navbarPage("Open Policy Analysis for Deworming Interventions: Open Output Component",
                tabPanel(
-                 "Main Policy Estimate", 
+                 "Main Policy Estimate",
                  sidebarPanel(
-                   fluidRow(id = "tPanel_main",style = "max-width: 400px; max-height: 300px; position:relative;",
-                            "Description \n results")
-                 ), 
+                   fluidRow(id = "tPanel_main", style = "max-width: 400px; max-height: 300px; position:relative;",
+                            p("logos go here"),
+                            br(),
+                            h5("Description of Results"),
+                            p("This layer of the app displays a density plot of
+                              simulated values for the net present value (NPV) of deworming.
+                              The median NPV is represented by the blue vertical
+                              line to the right, while the blue vertical line at
+                              NPV = 0 represents ______.")),
+                   fluidRow(
+                            br(),
+                            p("The app is the result of a collaboration between the",
+                              tags$a(href="https://www.bitss.org/", "Berkeley Initiative
+                                     for Transparency in the Social Sciences"),
+                              "and",
+                              tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/", "Evidence Action."),
+                            br(),
+                            p("This visualization is one of three key components of an Open
+                            Policy Analysis (OPA) on the costs and benefits of
+                            mass deworming interventions in various settings.
+                            Together, these materials create a transparent and
+                            reproducible analysis to facilitate collaboration and
+                            discussion about deworming policy."),
+                            p(tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "Click here"),
+                                     "to visit source code"))
+                            )
+                 ),
                  mainPanel(
                    fluidRow(id = "output_id1_main", style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1_main")
@@ -41,11 +65,12 @@ shinyUI(
                             withMathJax(),
                             useShinyjs(),
                             selectInput("policy_est_ka", "Policy Estimate:",
-                                        choices = policy_estimates_text, 
+                                        choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate")
                    ), 
                    fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 600px; position:relative;",
                             numericInput("param35", label = h3("Unit costs in new country"), value = round(costs2_ea_in,2)), 
+
                             # checkboxGroupInput("param36", "Choose countries:",
                             #                    choiceNames =
                             #                      list("India", "Kenya", "Nigeria", "Vietnam"),
@@ -65,7 +90,7 @@ shinyUI(
                                      "Prevalence in Nigeria is 0.27", br(), 
                                      "Prevalence in Vietnam is 0.15")
                    )
-                 ), 
+                 ),
                  mainPanel(
                    fluidRow(id = "output_id1_ka", style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1_ka")
@@ -83,7 +108,7 @@ shinyUI(
                             withMathJax(),
                             useShinyjs(),
                             selectInput("policy_est", "Policy Estimate:",
-                                        choices = policy_estimates_text, 
+                                        choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate")
                    ),
                    fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
@@ -176,7 +201,7 @@ shinyUI(
                                                    min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so)
                               ),
                               # end tabpanel data ----
-                              # 
+                              #
                               # Begin tabpanel research ----
                               tabPanel("Research",
                                        numericInput("param18_1", label = h3("Lambda 1_m = "), value = lambda1_so[1]),
@@ -215,7 +240,7 @@ shinyUI(
                                                    min = 0.0000001 , max = 1 , value = 0.1 )
                               ),
                               # end tabpanel research ----
-                              # 
+                              #
                               # Begin tabpanel GW ----
                               tabPanel("GW",
                                        numericInput("param21_1", label = h3("Coef Xp = "), value = coef_exp_so[1]),
@@ -253,8 +278,8 @@ shinyUI(
                             checkboxInput("show_eq", label = "Show equations", value = FALSE),
                             uiOutput('eqns', container = div)
                    )
-                 ) 
+                 )
                )
-    )                
+    )
   )
 )
