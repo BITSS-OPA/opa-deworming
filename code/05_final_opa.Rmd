@@ -107,14 +107,14 @@ chunk_params <- function(){
     inflation_new_so <- 0.04
 
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
-    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B
+    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B (Source data took the log, here we recover it)
     profits_se_so <- 1766          #Control group monthly self-employed profits -
                                    #Table 4, Panel C, Column 5, Row 1 
                                    #FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
     hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
-    hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 4, Panel D
-    hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 4, Panel B
-    hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 4, Panel A
+    hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 3, Panel B
+    hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 3, Panel B
+    hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 3, Panel B
     ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
 
     ex_rate_2018        <- 101.30  # Exchange rate (KES per international $)
@@ -459,7 +459,7 @@ table_1 <- rbind(table_1,
 
 
 
-
+t
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
                  c("$NPV = B - C$",
