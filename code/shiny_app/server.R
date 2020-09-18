@@ -41,10 +41,8 @@ shinyServer( function(input, output, session) {
       unit_cost_local_var2_sd = as.numeric(input$param16_1), 
       unit_cost_local_new_var2 = as.numeric(input$param16_new),                                           
       unit_cost_local_new_var2_sd = as.numeric(input$param16_1_new), 
-      years_of_treat_0_var2   = as.numeric(input$param17)        ,    
-      years_of_treat_0_var2_sd= as.numeric(input$param17_1)     ,
-      years_of_treat_t_var2   = as.numeric(input$param17)   ,    
-      years_of_treat_t_var2_sd= as.numeric(input$param17_1)     ,
+      years_of_treat_var2 = as.numeric(input$param17),                                          
+      years_of_treat_var2_sd = as.numeric(input$param17_1),                                          
       lambda1_var2 = c(as.numeric(input$param18_1), as.numeric(input$param18_2)),                                          
       lambda1_var2_sd = c(as.numeric(input$param18_1_1), as.numeric(input$param18_2_1)),                                     
       lambda2_var2 = as.numeric(input$param19),                                             
@@ -747,7 +745,9 @@ shinyServer( function(input, output, session) {
       }
     } 
   })
-  call_plot_f <- function() {
+  
+  # Define a function that generates policy estimate plots
+  call_plot_f <- function(mainPlot) {
     npv_sim_all <- reactive.data1()
     
     total_time <- npv_sim_all$total_time
@@ -755,6 +755,11 @@ shinyServer( function(input, output, session) {
     npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
     npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
     npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+    
+    if (mainPlot == TRUE){
+      npv_for_text <- paste(round(median(npv_sim), 2))
+      npv_for_text2 <- NULL
+    } 
     
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
@@ -764,8 +769,8 @@ shinyServer( function(input, output, session) {
       xlim(range(density(npv_sim)$x))+
       guides(alpha = "none", colour="none") +
       
-      annotate("text", x = 2.5 * median(npv_sim), y = 0.9, label = npv_for_text, size = 6, color = "blue")+
-      annotate("text", x = 2.5 * median(npv_sim), y = 0.7, label = npv_for_text2, size = 6, color = "blue")+
+      annotate("text", x = 1.6 * median(npv_sim), y = 0.3, label = npv_for_text, size = 6, color = "blue")+
+      annotate("text", x = 1.6 * median(npv_sim), y = 0.2, label = npv_for_text2, size = 6, color = "blue")+
       theme(axis.ticks = element_blank(), axis.text.x = element_text(size = 18), axis.title.x = element_text(size = 18), axis.text.y = element_blank(),  
             plot.title = element_text(size = 24),
             plot.subtitle = element_text(size = 20))
@@ -774,12 +779,14 @@ shinyServer( function(input, output, session) {
     }
     return (list(plot1,position,total_time))
   }
+  
+  # Generate Plot with All Asumptions
   output$plot1 <- renderPlot({      
-    # TO DO: wrap all the following steps in a function and call them again below (instead of copying and pasting)
+   
     
-    plot1 <- call_plot_f()[[1]]
-    position <- call_plot_f()[[2]]
-    total_time <- call_plot_f()[[3]]
+    plot1 <- call_plot_f(FALSE)[[1]]
+    position <- call_plot_f(FALSE)[[2]]
+    total_time <- call_plot_f(FALSE)[[3]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
@@ -791,9 +798,10 @@ shinyServer( function(input, output, session) {
   }, height = 500, width = 750 
   )
   
+  # Generate Plot with Key Assumptions
   output$plot1_ka <- renderPlot({      
-    plot1 <- call_plot_f()[[1]]
-    position <- call_plot_f()[[2]]
+    plot1 <- call_plot_f(FALSE)[[1]]
+    position <- call_plot_f(FALSE)[[2]]
     
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
@@ -804,9 +812,11 @@ shinyServer( function(input, output, session) {
   }, height = 500, width = 750 
   )
   
+  
+  # Generate Main Policy Estimate Plot 
   output$plot1_main <- renderPlot({      
-    plot1 <- call_plot_f()[[1]]
-    position <- call_plot_f()[[2]]
+    plot1 <- call_plot_f(TRUE)[[1]]
+    position <- call_plot_f(TRUE)[[2]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",

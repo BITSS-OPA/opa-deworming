@@ -113,9 +113,10 @@ Code tracker: Code chunk `earnings1`
 Key parameter: starting monthly wages in US dollars($\Delta w_{0}$), monthly wages after t years in US dollars ($\Delta w_{t}$)
 
 Code tracker: Code chunk `wage_t`
-- `wage_0_mo_f()`: *function* that calculates the initial wage in dollars, by taking the weighted average of wages for the control group in agriculture, working wage, and self-employed sectors.
-- `wage_0_mo`: *value* of initial wage calculated with inputs from research (Suri paper, Worms at Work paper)
-- `wage_t_mo_f()`: *function* that  
+- `wage_0_mo_f()`: *function* that calculates the initial weekly wage in dollars, by taking the weighted average of wages for the control group in agriculture, working wage, and self-employed sectors.
+- `wage_0_mo`: *value* of initial weekly wage calculated with inputs from research (Suri paper, Worms at Work paper)
+- `wage_t_mo_f()`: *function* that  calculates the weekly wage in dollars after t years
+- `wage_t_mo`: *value* of the weekly wage in dollars after t years with inputs from research
 
 
 
@@ -133,7 +134,7 @@ B: benefits
 
 ## Appendix B: Input Meanings  
 
-*\pi*
+*\pi_16*: inflation rates for 2016
 
 **2.1.1.1 Earnings over time**  
 *w*<sub>t</sub>: wages in year t  
