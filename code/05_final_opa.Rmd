@@ -1340,8 +1340,12 @@ invisible( list2env(chunk_lambdas_t(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 lambda1_t_in <- lambda_eff_f(
-  lambda1_var = lambda_t_f()$lambda1_t
-  )$lambda1_eff_in 
+  lambda1_var = lambda_t_f(
+    lambda1_var = lambda1_in_f(),
+    years_of_treat_0_var =  years_of_treat_0_so,
+    years_of_treat_t_var = years_of_treat_t_so
+  )$lambda1_t
+)$lambda1_eff_in 
 
 ```
 
