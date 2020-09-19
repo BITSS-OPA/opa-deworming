@@ -25,8 +25,9 @@ shinyUI(
                tabPanel(
                  "Main Policy Estimate",
                  sidebarPanel(
+                   img(src="BITSS_logo_horizontal.png", width="45%", height="auto"),
+                   img(src="CEGA_logo.png", width="45%", height="auto"),
                    fluidRow(id = "tPanel_main", style = "max-width: 400px; max-height: 300px; position:relative;",
-                            p("logos go here"),
                             br(),
                             h4("Description of Results"),
                             p("We simulate finding the lifetime income effects on
@@ -37,7 +38,7 @@ shinyUI(
                               The blue line indicates that half of all values are
                               on either side of the line.")
                             ),
-                   fluidRow(p("Under the other two tabs, you can adjust the model's
+                    fluidRow(p("Under the other two tabs, you can adjust the model's
                               assumptions and rerun the simulation to explore the
                               impact on lifetime income effects."),
                             br(),
