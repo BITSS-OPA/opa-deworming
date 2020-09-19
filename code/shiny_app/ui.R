@@ -10,7 +10,15 @@ library(plotly)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
+costs_temp_india <- 1
+costs_temp_kenya <- 2
+costs_temp_nigeria <- 3
+costs_temp_vietnam <- 4
 
+prevalence_india <- 0.57
+prevalence_kenya <- 0.35
+prevalence_nigeria <- 0.27
+prevalence_vietnam <- 0.15
 
 nsims <- 1e2
 
@@ -78,17 +86,17 @@ shinyUI(
                             #                      list("india", "kenya", "nigeria", "vietnam"), 
                             #                    selected = list("india", "kenya", "nigeria", "vietnam")  ), 
                             helpText("For reference:", br(),
-                                     "Unit costs in India is *insert india*", br(),
-                                     "Unit costs in Kenya is *insert kenya*", br(), 
-                                     "Unit costs in Nigeria is *insert nigeria*", br(), 
-                                     "Unit costs in Vietnam is *insert vietnam*"),
+                                     paste("Unit costs in India is", costs_temp_india), br(),
+                                     paste("Unit costs in Kenya is", costs_temp_kenya), br(), 
+                                     paste("Unit costs in Nigeria is", costs_temp_nigeria), br(), 
+                                     paste("Unit costs in Vietnam is", costs_temp_vietnam)),
                             numericInput("param37", label = h3("Prevalence in the new region"), value = round(prevalence_r_in,2)),
                             
                             helpText("For reference:", br(),
-                                     "Prevalence in India is 0.57", br(),
-                                     "Prevalence in Kenya is 0.35", br(), 
-                                     "Prevalence in Nigeria is 0.27", br(), 
-                                     "Prevalence in Vietnam is 0.15")
+                                     paste("Prevalence in India is", prevalence_india), br(),
+                                     paste("Prevalence in Kenya is", prevalence_kenya), br(), 
+                                     paste("Prevalence in Nigeria is", prevalence_nigeria), br(), 
+                                     paste("Prevalence in Vietnam is", prevalence_vietnam))
                    )
                  ),
                  mainPanel(
@@ -187,10 +195,14 @@ shinyUI(
                                                      animationOptions(interval = 3000, loop = TRUE)),
                                        sliderInput("param16_1_new", label = "SD = ",
                                                    min = 0.000001* unit_cost_2017usdppp_so, max = 1 * unit_cost_2017usdppp_so, value = 0.1 * unit_cost_2017usdppp_so, step = 0.0001),
-                                       sliderInput("param17", label = "Years of T = ",
-                                                   min = years_of_treat_so / 2, max = 2 * years_of_treat_so, value = years_of_treat_so),
+                                       sliderInput("param17", label = "Years of treatment in orginal study",
+                                                   min = years_of_treat_0_so / 2, max = 2 * years_of_treat_0_so, value = years_of_treat_0_so),
                                        sliderInput("param17_1", label = "SD = ",
-                                                   min = 0.000001* years_of_treat_so, max = 1 * years_of_treat_so, value = 0.1 * years_of_treat_so, step = 0.0001),
+                                                   min = 0.000001* years_of_treat_0_so, max = 1 * years_of_treat_0_so, value = 0.1 * years_of_treat_0_so, step = 0.0001),
+                                       sliderInput("param17_new", label = "Years of treatment in new setting",
+                                                   min = years_of_treat_t_so / 2, max = 2 * years_of_treat_t_so, value = years_of_treat_t_so),
+                                       sliderInput("param17_1_new", label = "SD = ",
+                                                   min = 0.000001* years_of_treat_t_so, max = 1 * years_of_treat_t_so, value = 0.1 * years_of_treat_t_so, step = 0.0001),
                                        sliderInput("param34", label = "Costs adjustments = ",
                                                    min = costs_par_so / 2, max = 20000 * costs_par_so, value = costs_par_so),
                                        sliderInput("param34_1", label = "SD = ",

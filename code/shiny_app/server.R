@@ -41,8 +41,10 @@ shinyServer( function(input, output, session) {
       unit_cost_local_var2_sd = as.numeric(input$param16_1), 
       unit_cost_local_new_var2 = as.numeric(input$param16_new),                                           
       unit_cost_local_new_var2_sd = as.numeric(input$param16_1_new), 
-      years_of_treat_var2 = as.numeric(input$param17),                                          
-      years_of_treat_var2_sd = as.numeric(input$param17_1),                                          
+      years_of_treat_0_var2   = as.numeric(input$param17)        ,    
+      years_of_treat_0_var2_sd= as.numeric(input$param17_1)     ,
+      years_of_treat_t_var2   = as.numeric(input$param17_new)   ,    
+      years_of_treat_t_var2_sd= as.numeric(input$param17_1_new)     ,
       lambda1_var2 = c(as.numeric(input$param18_1), as.numeric(input$param18_2)),                                          
       lambda1_var2_sd = c(as.numeric(input$param18_1_1), as.numeric(input$param18_2_1)),                                     
       lambda2_var2 = as.numeric(input$param19),                                             
@@ -83,6 +85,8 @@ shinyServer( function(input, output, session) {
       costs_par_var2_sd = as.numeric(input$param34_1), 
       new_costs_var2 = as.numeric(input$param35),
       countries_var2 = list("india", "kenya", "nigeria", "vietnam"), # = input$param36  to make it interactive
+      
+      
     )
   } 
   )
@@ -756,6 +760,7 @@ shinyServer( function(input, output, session) {
     npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
     npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
     
+    
     if (mainPlot == TRUE){
       npv_for_text <- paste(round(median(npv_sim), 2))
       npv_for_text2 <- NULL
@@ -769,8 +774,8 @@ shinyServer( function(input, output, session) {
       xlim(range(density(npv_sim)$x))+
       guides(alpha = "none", colour="none") +
       
-      annotate("text", x = 1.6 * median(npv_sim), y = 0.3, label = npv_for_text, size = 6, color = "blue")+
-      annotate("text", x = 1.6 * median(npv_sim), y = 0.2, label = npv_for_text2, size = 6, color = "blue")+
+      annotate("text", x = 2.5 * median(npv_sim), y = 0.3, label = npv_for_text, size = 6, color = "blue")+
+      annotate("text", x = 2.5 * median(npv_sim), y = 0.2, label = npv_for_text2, size = 6, color = "blue")+
       theme(axis.ticks = element_blank(), axis.text.x = element_text(size = 18), axis.title.x = element_text(size = 18), axis.text.y = element_blank(),  
             plot.title = element_text(size = 24),
             plot.subtitle = element_text(size = 20))
@@ -780,9 +785,10 @@ shinyServer( function(input, output, session) {
     return (list(plot1,position,total_time))
   }
   
+  
   # Generate Plot with All Asumptions
   output$plot1 <- renderPlot({      
-   
+    
     
     plot1 <- call_plot_f(FALSE)[[1]]
     position <- call_plot_f(FALSE)[[2]]
@@ -811,7 +817,6 @@ shinyServer( function(input, output, session) {
     print(plot1)  
   }, height = 500, width = 750 
   )
-  
   
   # Generate Main Policy Estimate Plot 
   output$plot1_main <- renderPlot({      
