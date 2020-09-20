@@ -33,23 +33,30 @@ shinyUI(
                tabPanel(
                  "Main Policy Estimate",
                  sidebarPanel(
+                   img(src="BITSS_logo_horizontal.png", width="45%", height="auto"),
+                   img(src="CEGA_logo.png", width="45%", height="auto"),
                    fluidRow(id = "tPanel_main", style = "max-width: 400px; max-height: 300px; position:relative;",
-                            p("logos go here"),
                             br(),
-                            h5("Description of Results"),
-                            p("This layer of the app displays a density plot of
-                              simulated values for the net present value (NPV) of deworming.
-                              The median NPV is represented by the blue vertical
-                              line to the right, while the blue vertical line at
-                              NPV = 0 represents ______.")),
-                   fluidRow(
+                            h4("Description of Results"),
+                            p("We simulate finding the lifetime income effects on
+                              treated children many times, then plot the values 
+                              to create this curve. The height of the curve represents
+                              how often an outcome appeared, i.e. the highest point
+                              means that particular value appeared the most frequently.
+                              The blue line indicates that half of all values are
+                              on either side of the line.")
+                            ),
+                    fluidRow(p("Under the other two tabs, you can adjust the model's
+                              assumptions and rerun the simulation to explore the
+                              impact on lifetime income effects."),
+                            br(),
                             br(),
                             p("The app is the result of a collaboration between the",
                               tags$a(href="https://www.bitss.org/", "Berkeley Initiative
                                      for Transparency in the Social Sciences"),
                               "and",
-                              tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/", "Evidence Action."),
-                            br(),
+                              tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/", 
+                                     "Evidence Action.")),
                             p("This visualization is one of three key components of an Open
                             Policy Analysis (OPA) on the costs and benefits of
                             mass deworming interventions in various settings.
@@ -57,7 +64,7 @@ shinyUI(
                             reproducible analysis to facilitate collaboration and
                             discussion about deworming policy."),
                             p(tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "Click here"),
-                                     "to visit source code"))
+                                     "to visit source code.")
                             )
                  ),
                  mainPanel(
