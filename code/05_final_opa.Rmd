@@ -63,39 +63,46 @@ knitr::opts_chunk$set(warning = FALSE)
 #####  Notes:
 ################
 # Types of objects:
-### Source ------->  Input ------->  Model ------->  Policy Estimates (output)
-###  (_so)           (_in)           (_mo)           (_pe)
-### values           functions       functions       values
-###                  & values        & values             
+### Source ------->  Input & Model ------->  Policy Estimates (output)
+###  (_so)           (_in)                           (_pe)
+### values           functions                       values
+###                  & values          
 # Examples:                   
-# - call_sou_f     - tax_elas_in_f   - tax_rev_mo_f  - ten_year_revenue_pe
-# - policy_f       - est_bill_in_f   - tot_rev_mo_f  - ten_year_top_tax_pe
-#                                    - ten_yrs_mo_f  - total_rev_pe
-### arguments in functions should used "_var" and functions should "_f"
+# - call_so_f       - tax_elas_in_f         - ten_year_revenue_pe
+# - policy_so       - est_bill_in_f         - ten_year_top_tax_pe
+#                                           - total_rev_pe
+### arguments in functions should used "_var" and functions should used "_f"
 
-# DESCRIBE CHUNK STRUCTURE
+# Each analytic code chunk will begin by listing all the inputs it needs, and 
+# the outputs it produces. 
 # - inputs: list
 # - outputs: list
-#### function:  
-#sample_function_f <- function(){
+#### The key essential analytic steps are wrapted in a function   
+#chunk_name_of_chunk <- function(){
 ##########################################
 ##########################################  
 #
-# here goes the content
+# here goes the essential analytic content
 #
 ##########################################
 ##########################################  
-#    return( )                         # A list with all (most?) the elements
-#}                                     # generated inside the function
-#invisible( list2env(sample_function_f(),.GlobalEnv) )
+#    return( )                         # A list with all the objects
+#}                                     # generated inside the function 
+# The following line executes the the code chunk and deposits on the its results
+# into the current R enviornmen:
+#invisible( list2env(chunk_name_of_chunk(),.GlobalEnv) )
 #
+##### Execute values of the functions above when needed for the text:
+# Anything under this comment is to create objects that are used in the body of
+# text. Not to be used in the final results (could be deleted). Each of these
+# object should end with the sufix _temp
 ```
 
 
 ```{r sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE}
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
-chunk_params <- function(){
+chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
     #############
@@ -233,7 +240,7 @@ chunk_params <- function(){
 ###############################################################################
 ###############################################################################    
 }
-invisible( list2env(chunk_params(),.GlobalEnv) )
+invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 #############
 ##### Notes:
@@ -309,10 +316,10 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 \tag{`r equationIndex`}
 \end{equation}
 
-```{r eq_1, echo=print_code}
+```{r final-pe, echo=print_code}
 # - inputs: total per capita benefits, total per capita costs, fudging factor
 # - outputs: Cost-effectiveness ratio & ratio to cash CEA, NPV
-chunk_policy_est <- function(){
+chunk_final_pe <- function(){
 ###############################################################################
 ###############################################################################  
 
@@ -332,7 +339,7 @@ chunk_policy_est <- function(){
                 "RCEA_pe_f" = RCEA_pe_f,
                 "NPV_pe_f" = NPV_pe_f))
 }
-invisible( list2env(chunk_policy_est(),.GlobalEnv) )
+invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 ```
 
 
@@ -353,8 +360,8 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \end{equation}
 
 ```{r benefits, echo=print_code} 
-# - inputs: nothing
-# - outputs: function that computes the country weights used in the final costs
+# - inputs: stream earnings, discounting rate, number of periods
+# - outputs: function that computes the present value of benefits
 chunk_benefits <- function(){
 ###############################################################################
 ###############################################################################  
@@ -404,8 +411,8 @@ r \approx i - \pi
 TO DO: after confirming that reproduction works, change all `interest_in` to `interest_exct_in`
 
 ```{r interest-rate, echo=print_code}
-# - inputs: gov_bonds_so, inflation_so 
-# - outputs: interest_in, interest_exct_in 
+# - inputs: nominal interest rate, inflation rate 
+# - outputs: real interest rate. exact and approximate formula
 chunk_interest <- function(){
 ###############################################################################
 ###############################################################################   
@@ -456,8 +463,6 @@ table_1 <- rbind(table_1,
                  c( paste0("$\\pi_{19}=" , inflation_new_so, "$"),  "", "" ),
                  c( paste0("$i_{19}=" , gov_bonds_new_so, "$"),  "", "" ) 
     )
-
-
 
 
 sum_table_index <- sum_table_index+1

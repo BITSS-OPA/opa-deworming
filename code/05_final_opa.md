@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "18 September, 2020"
+date: "19 September, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -60,6 +60,10 @@ link-citations: true
 #}                                     # generated inside the function
 #invisible( list2env(sample_function_f(),.GlobalEnv) )
 #
+##### Execute values of the functions above when needed for the text:
+# Anything under this comment is to create objects that are used in the body of
+# text. Not to be used in the final results (could be deleted). Each of these
+# object should end with the sufix _temp
 ```
 
 
@@ -224,7 +228,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/emmang/Documents/GitHub/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -285,7 +289,7 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 ```r
 # - inputs: total per capita benefits, total per capita costs, fudging factor
 # - outputs: Cost-effectiveness ratio & ratio to cash CEA, NPV
-chunk_policy_est <- function(){
+chunk_final_pe <- function(){
 ###############################################################################
 ###############################################################################  
 
@@ -305,7 +309,7 @@ chunk_policy_est <- function(){
                 "RCEA_pe_f" = RCEA_pe_f,
                 "NPV_pe_f" = NPV_pe_f))
 }
-invisible( list2env(chunk_policy_est(),.GlobalEnv) )
+invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 ```
 
 
