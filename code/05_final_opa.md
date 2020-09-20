@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "11 September, 2020"
+date: "18 September, 2020"
 output: 
   bookdown::html_document2:
     code_folding: hide
@@ -196,6 +196,9 @@ chunk_params <- function(){
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "klps4_1_sim",
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "a3_mpe_cea_sim", "a3_mpe_rcea_sim"
     policy_estimate_so <- "ea3_sim"
+    
+    
+    costs_temp_so <- 1
 
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
@@ -221,7 +224,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -346,7 +349,7 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 </details>
 <br>
 
-<!-- Emma: figure out how to add half a line break, as oppose to one full "<br>"-->
+<!-- URAP: figure out how to add half a line break, as oppose to one full "<br>"-->
 
 
 
@@ -416,7 +419,6 @@ The actual value will vary across approaches depending on the time and country c
 
 <details><summary>View Summary Table</summary>
 
-<!-- Emma: figure out a way to remove "(#tab:sum_tables2)" from the caption of the summary tables. -->
 
 <table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 <caption>(\#tab:sum-tables2)Summary of equations used until this point in the document</caption>
@@ -548,11 +550,9 @@ Wages in year $t$ correspond to the initial weekly wage ($w_0$) adjusted by an e
 
 The initial wage in dollars ($w_{0}$) is a weighted average of wages for the control group in agriculture, working wage, and self-employed sectors ($ag, ww, se$). The weights correspond to the fraction of all the average worked hours dedicated to each sector ($h$).  
 
-<!--Emma: pleas find the specific reference from in Suri (page, and table #,  location), and add using the @notation (you will need to edit the bibliography.bib file). If you cannot find the Suri reference, send me an email and I will look for it-->
+<!--To do: find the specific reference from in Suri (page, and table #,  location), and add using the @notation (you will need to edit the bibliography.bib file). If you cannot find the Suri reference, send me an email and I will look for it-->
 
 The wage in agriculture comes from research (Suri, 2011), the working wage comes from the data and is defined as an hourly wage for the control group for those who reported more than 10 hrs of work per week. The self-employed wage ($w_{se}$) was constructed as the reported monthly earnings from self-employed profits, divided by the reported weekly number of hours work in self-employment for those who worked a positive number of hours (multiplied by 4.5 to obtain the monthly total). 
-
-<!-- Emma, please record where are exactyl the values from below-->
 
 The monthly self-employed profits and self-employed hours for the control group, for those with positive hours, come from data [@baird2016worms] (Page 1168, Table 4, Panel C, Column 5, Row 1). The measure of hours in self employment used to compute wages is different from the one used to compute the weights above. The first one captures hours of work among those actively employed in the self-employed sector, and the second one captures the average hours of work in self-employed among all the population of working age in the sample (hence capturing the relative importance of the self employed sector in the economy).
 
@@ -1414,8 +1414,6 @@ Hence, the cost of schooling each child for an additional year is now $267.9 (US
 
 [^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: @nyanchama2018 and @oduor2017. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is 45, based on **[FIND SOURCE]**.
 
-<!-- Emma (w11): find sources for the above footnote-->
-
 
 <details><summary>Show all the details</summary>
 
@@ -1729,8 +1727,12 @@ invisible( list2env(chunk_lambdas_t(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 lambda1_t_in <- lambda_eff_f(
-  lambda1_var = lambda_t_f()$lambda1_t
-  )$lambda1_eff_in 
+  lambda1_var = lambda_t_f(
+    lambda1_var = lambda1_in_f(),
+    years_of_treat_0_var =  years_of_treat_0_so,
+    years_of_treat_t_var = years_of_treat_t_so
+  )$lambda1_t
+)$lambda1_eff_in 
 ```
 
 
