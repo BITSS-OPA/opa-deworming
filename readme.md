@@ -66,9 +66,9 @@ spelling and grammar.
   - Edward Miguel – Conceptualization, Funding acquisition, Supervision
   - Grace Morgan – Writing (original draft), Writing (reviewing and
     editing)
-  - Emma Ng – Visualization, Writing (original draft), Writing
+  - Emma Ng – Visualization, Writing (original draft, supporting), Writing
     (reviewing and editing, supporting)
-  - Ryan Scholes – Visualization, Writing (original draft), Writing
+  - Ryan Scholes – Visualization, Writing (original draft, supporting), Writing
     (reviewing and editing, supporting)
 
 This list of contributors to this repository (also available at [this
