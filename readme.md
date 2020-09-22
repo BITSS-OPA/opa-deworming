@@ -55,21 +55,21 @@ spelling and grammar.
 
 *(in alphabetical order by last name)*
 
-  - Sophia Bai – Visualization
+  - Sophia Bai – Visualization (supporting)
   - Aleksandar Bogdanoski – Funding acquisition, Project administration, Writing (reviewing and editing)
   - Fernando Hoces de la Guardia – Conceptualization, Funding
     acquisition, Supervision, Visualization, Writing (original draft),
     Writing (reviewing and editing)
   - Katherine Hoeberling – Funding acquisition, Project administration, Writing (reviewing and editing)
   - Grace Hollister – Conceptualization, Supervision
-  - Orianna Jia – Writing (reviewing and editing)
+  - Orianna Jia – Writing (reviewing and editing, supporting)
   - Edward Miguel – Conceptualization, Funding acquisition, Supervision
   - Grace Morgan – Writing (original draft), Writing (reviewing and
     editing)
   - Emma Ng – Visualization, Writing (original draft), Writing
-    (reviewing and editing)
+    (reviewing and editing, supporting)
   - Ryan Scholes – Visualization, Writing (original draft), Writing
-    (reviewing and editing)
+    (reviewing and editing, supporting)
 
 This list of contributors to this repository (also available at [this
 page](https://github.com/BITSS-OPA/opa-deworming/graphs/contributors))
