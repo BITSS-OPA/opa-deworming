@@ -46,7 +46,7 @@ This code chunk is a brief description of the object naming format that this DD 
 
 ##### Code chunk: sources
 
-This code chunk defines the different sources to be used in the analysis. Following [Hoces de la Guardia et al. 2020](https://osf.io/preprints/metaarxiv/jnyqh/), theses sources are separated into three categories: data, research and guesswork. Each sources is assinged to an R object (a variable) so that it can be systematically used throughout the DD. Inline comments describe the definitions and sources of the data.
+This code chunk defines the different sources to be used in the analysis. Following [Hoces de la Guardia et al. 2020](https://osf.io/preprints/metaarxiv/jnyqh/), theses sources are separated into three categories: data, research and guesswork. Each source is assinged to an R object (a variable) so that it can be systematically used throughout the DD. Inline comments describe the definitions and sources of the data.
 
 *Insert naming conventions in appendix*
 

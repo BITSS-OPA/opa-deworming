@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "19 September, 2020"
+date: "23 September, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -34,31 +34,34 @@ link-citations: true
 #####  Notes:
 ################
 # Types of objects:
-### Source ------->  Input ------->  Model ------->  Policy Estimates (output)
-###  (_so)           (_in)           (_mo)           (_pe)
-### values           functions       functions       values
-###                  & values        & values             
+### Source ------->  Input & Model ------->  Policy Estimates (output)
+###  (_so)           (_in)                           (_pe)
+### values           functions                       values
+###                  & values          
 # Examples:                   
-# - call_sou_f     - tax_elas_in_f   - tax_rev_mo_f  - ten_year_revenue_pe
-# - policy_f       - est_bill_in_f   - tot_rev_mo_f  - ten_year_top_tax_pe
-#                                    - ten_yrs_mo_f  - total_rev_pe
-### arguments in functions should used "_var" and functions should "_f"
+# - call_so_f       - tax_elas_in_f         - ten_year_revenue_pe
+# - policy_so       - est_bill_in_f         - ten_year_top_tax_pe
+#                                           - total_rev_pe
+### arguments in functions should used "_var" and functions should used "_f"
 
-# DESCRIBE CHUNK STRUCTURE
+# Each analytic code chunk will begin by listing all the inputs it needs, and
+# the outputs it produces.
 # - inputs: list
 # - outputs: list
-#### function:  
-#sample_function_f <- function(){
+#### The key essential analytic steps are wrapted in a function   
+#chunk_name_of_chunk <- function(){
 ##########################################
 ##########################################  
 #
-# here goes the content
+# here goes the essential analytic content
 #
 ##########################################
 ##########################################  
-#    return( )                         # A list with all (most?) the elements
+#    return( )                         # A list with all the objects
 #}                                     # generated inside the function
-#invisible( list2env(sample_function_f(),.GlobalEnv) )
+# The following line executes the the code chunk and deposits on the its results
+# into the current R enviornmen:
+#invisible( list2env(chunk_name_of_chunk(),.GlobalEnv) )
 #
 ##### Execute values of the functions above when needed for the text:
 # Anything under this comment is to create objects that are used in the body of
@@ -71,7 +74,7 @@ link-citations: true
 ```r
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
-chunk_params <- function(){
+chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
     #############
@@ -201,7 +204,6 @@ chunk_params <- function(){
     # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "a3_mpe_cea_sim", "a3_mpe_rcea_sim"
     policy_estimate_so <- "ea3_sim"
 
-
     costs_temp_so <- 1
 
     # Fix teach_sal_so       
@@ -209,7 +211,7 @@ chunk_params <- function(){
 ###############################################################################
 ###############################################################################    
 }
-invisible( list2env(chunk_params(),.GlobalEnv) )
+invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 #############
 ##### Notes:
@@ -228,7 +230,7 @@ invisible( list2env(chunk_params(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -331,8 +333,8 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 
 
 ```r
-# - inputs: nothing
-# - outputs: function that computes the country weights used in the final costs
+# - inputs: stream earnings, discounting rate, number of periods
+# - outputs: function that computes the present value of benefits
 chunk_benefits <- function(){
 ###############################################################################
 ###############################################################################  
@@ -383,8 +385,8 @@ TO DO: after confirming that reproduction works, change all `interest_in` to `in
 
 
 ```r
-# - inputs: gov_bonds_so, inflation_so
-# - outputs: interest_in, interest_exct_in
+# - inputs: nominal interest rate, inflation rate
+# - outputs: real interest rate. exact and approximate formula
 chunk_interest <- function(){
 ###############################################################################
 ###############################################################################   
@@ -1715,8 +1717,6 @@ chunk_lambdas_t<- function(){
             lambda1_t <- 6 * lambda1_t1
           }
 
-
-
             return(
               list("lambda1_t1" = lambda1_t1,
                    "lambda1_t" = lambda1_t)
@@ -1965,7 +1965,7 @@ costs1_p2_in <- costs1_p2_f()
   </tr>
   <tr>
    <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} =rac{C_{i}}{N_{i}} \
+c_{i} = rac{C_{i}}{N_{i}} \
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
    <td style="text-align:left;"> $(15)$ </td>
@@ -2202,7 +2202,7 @@ RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
   </tr>
   <tr>
    <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} =rac{C_{i}}{N_{i}} \
+c_{i} = rac{C_{i}}{N_{i}} \
 C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
    <td style="text-align:left;"> $(15)$ </td>
@@ -2478,9 +2478,6 @@ one_run <-
                                      q_full_var = q_full_var1,
                                      q_zero_var = q_zero_var1)$saturation_in
     unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
-
-
-
 
     ###------------ Inputs for earnings2_f--------------------------------------
     lambda1_new_in <- lambda1_new_var1
@@ -3051,7 +3048,6 @@ sim.data1 <- function(nsims = 1e2,
     unit_cost_local_new_sim <-  rnorm(nsims, unit_cost_local_new_var2,
                               unit_cost_local_new_var2_sd)
 
-
     years_of_treat_0_sim <-   rnorm(nsims, years_of_treat_0_var2,
                                   years_of_treat_0_var2_sd)
     years_of_treat_t_sim <-   rnorm(nsims, years_of_treat_t_var2,
@@ -3095,8 +3091,6 @@ sim.data1 <- function(nsims = 1e2,
       no = ifelse(prevalence_r_sim < 0, yes = 0, no = prevalence_r_sim)
     )
     colnames(prevalence_r_sim) <- as.character(countries_var2)  
-
-
 
     # if there is a new entry of prevalence, draw from it. If there is not
     # then leave as null
@@ -3165,7 +3159,6 @@ sim.data1 <- function(nsims = 1e2,
                                                    mean = x * costs_par_var2,  
                                                    sd = x * costs_par_var2_sd)
                                 )
-
 
     # drawing samples from staff time
     staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
