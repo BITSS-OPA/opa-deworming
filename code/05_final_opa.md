@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "23 September, 2020"
+date: "25 September, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -230,7 +230,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
