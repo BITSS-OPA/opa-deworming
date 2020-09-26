@@ -120,4 +120,34 @@ In our case we define the function `sim.data1` to complete the Monte Carlo simul
 
 - `NPV_pe_f`: calculate the NPV formula for policy estimates
 - `CEA_pe_f`: calculate the CEA formula for policy estimates
+<<<<<<< Updated upstream
 - `RCEA_pe_f`: calculate the RCEA formula for policy estimates
+=======
+- `RCEA_pe_f`: calculate the RCEA formula for policy estimates 
+   
+    
+        ├──── pv_benef_f
+        │      ├──── earnings1_f
+        │      |      ├──── wage_t_mo_f
+        │      |      |      └──── wage_0_mo_f
+        |      |      ├──── lambda_eff_f
+        │      |      |      └────lambda1_t_f
+        │      |      |            └────lambda1_in_f
+        |      |      ├──── lambda1_in_f
+        |      |      ├──── lambda2_in_f
+        │      |      └──── saturation_in_f
+        │      ├──── earnings2_f
+        │      |      └────lambda_eff_f
+        │      |           └────lambda1_t_f
+        │      └──── interest_f
+        └──── pv_costs_f (pv_costs_f)
+               ├──── delta_ed_final_f
+               ├──── interest_f
+               └──── s2_f_new
+               |      └──── costs1_p2_f
+               |             └──── costs1_p1_f
+               ├──── s2_f
+               └──── cost_per_student_f
+              ##     ###    ####    #####
+    
+>>>>>>> Stashed changes
