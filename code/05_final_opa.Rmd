@@ -1212,13 +1212,13 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 </details>
  
 
-## Approach 3: Combination of Previous Approaches and Input From Policy Makers
+## Approach 3: Combination of Previous Approaches and Input From Key Partners
 
-In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key policy maker in this area: the NGO Evidence Action (EA). EA provided insights on the relevant costs and benefits considered when making decisions on deworming interventions, as well as data on the main costs of implementing deworming interventions in different countries.
+In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key technical assistance partner in this area: the NGO Evidence Action. Evidence Action provided insights on certain aspects of the analysis that could be updated with present-day data, providing key inputs on the differences in worm prevalence, length of treatment, and costs across various regions. 
 
 Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length ot treatment. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries. 
 
-In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to `r paste0(round(prevalence_0_so * 100), "%")` for the relevant population and costs were as high as XXXX. Today EA supports deworming interventions in XXX countries, with prevalence rates ranging from XXXX to XXXXX and costs ranging from XXXXX to XXXXX. 
+In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to `r paste0(round(prevalence_0_so * 100), "%")` for the relevant population and costs were estimated at $0.49 per treatment. As of 2020, Evidence Action supports deworming interventions in four countries.
 
 ### Benefits   
 
@@ -1227,7 +1227,7 @@ In the original deworming study conducted in Kenya in 1999, the prevalence rates
 
 To account for different prevalence rates ($\eta$), the estimated treatment effect is decomposed in the impact of deworming on children who were treated and had a worm infection ($\lambda_{1}^{eff}$) and children who were treated and did not have worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatment, divided by the proportion of the prevalence of infections. 
 
-In the original evaluation, the prevalence rates where very high (`r prevalence_0_so`), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are discussed in geographies with much lower prevalence rates, hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$).
+In the original evaluation, the prevalence rates were very high (`r prevalence_0_so`), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are often implemented in geographies with much lower prevalence rates (though in populations with sufficient infection to justify treatment in accordance with World Health Organization guidelines), hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$).
 
 
 <details><summary>Show all the details</summary>
@@ -1287,12 +1287,13 @@ prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 </details>
 <br>
 
-**TO DO: add a section that discusses where are the prevalence rates are comming from**   
+Evidence Action provided prevalence survey data for the geographies where they are involved. In order to be most analogous with the baseline prevalence estimate used in the original study, the prevalence estimates used are 1) the earliest point estimates available from before, or close to the time of, Evidence Action's involvement in that geography, and 2) are representative of any STH infection.      
 
 #### Adjusting for different length of treatment  
 
-Different time of exposure to deworming interventions are likely to have different effects on the treated population. The two approaches reproduced so far hold the length of treatment constant at the levels of the original study (`r round(years_of_treat_0_so, 1)` years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years, with no additional effects after 6 years of treatment. [GRACE PLEASE ADD TO THIS PARAGRAPH]
+The number of consistent years over which a population is exposed to deworming treatment is a factor in the achieved population effects over time. The two approaches reproduced so far hold the length of treatment constant at the levels of the original study (`r round(years_of_treat_0_so, 1)` years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years of treatment, with no additional effects after 6 years of treatment. [ASK TED/FERNANDO TO ADD IN EXPLANATION FOR THE CHOICE OF 6 YEARS]
 
+This added analysis factor allows us to take into account differences in the number of years of deworming treatment across different country contexts depending on program dynamics. Although the counterfactual of worm prevalence in the absence of treatment is largely unknown, we know that consistent deworming continues to decrease worm prevalence over time, contributing to controlled worm environments and sustainted benefits. In many deworming programs today, children receive regular treatment throughout a portion (and in some cases for the full term) of their primary schooling. It is worth noting that the assumption of linearity is an imperfect measure for various epidemiological reasons, though we include this variable of time into the equation as an estimate of our best guess at the differences in achieved impact over time, and in part because it helps capture that a new cohort enters primary school--and is therefore eligible for treatment--with each successive year of a deworming program.
 
 <details><summary>Show all the details</summary>
 
@@ -1349,13 +1350,13 @@ lambda1_t_in <- lambda_eff_f(
 
 ### Costs
 
-To estimate the costs, we follow a similar approach to @givewell. The default cost is the per unit cost of treatment across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions. 
+Evidence Action is an organization that provides technical assistance to governments to deliver school-based deworming programs. As such, Evidence Action has access to country-level cost data on what it takes to implement and evaluate school-based deworming programs across different contexts. To estimate the costs in this analysis, we use Evidence Action's costs of deworming and then follow a similar approach to @givewell, which includes an additional estimate around the amount of government staff time required to run deworming programs. The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions. 
 
-Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
+Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. These items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence surveys, program management, public mobilization/community sensitization, and training and distribution. Costs can vary by geography due to factors of population size, treatment strategies, age of the program, and costs of "doing business."
 
-The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country are obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across county regions faced by three different payers: Evidence Action, local governments, and other partners.  
+The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country is obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across country regions faced by three different payers: Evidence Action, country governments, and other partners.  
 
-Country level costs at the payer level are computed as the sum of item-level costs with-in a specific country region. This items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence survey, program Management, planning public mobilization, community sensitization, and training & distribution.
+
 
 <details><summary>Show all the details</summary>
 
