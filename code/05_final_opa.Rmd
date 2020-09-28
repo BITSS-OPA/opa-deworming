@@ -266,18 +266,18 @@ knitr::include_graphics(path = paste0(here(),"/code/main_pe.png") )
 
 # Introduction  
 
-Parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis, are endemic in many countries across the globe, disproportionately affecting the poor. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake and can thus lead to serious consequences on human health, education outcomes, and long-term economic well being. In particular, evidence indicates that these worms contribute to malnourishment, impairment of mental and physical development, lower school attendance, and decreased wages [Croke et al., 2016; Miguel & Kremer, 2004; Baird et al., 2016].
+Parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis, are endemic in many countries across the globe, disproportionately affecting the poor. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake and can thus lead to serious consequences on human health, education outcomes, and long-term economic well being. In particular, evidence indicates that these worms contribute to malnourishment, impairment of mental and physical development, lower school attendance, and decreased wages [Croke et al, 2016; Miguel & Kremer, 2004; Baird et al, 2016].
 
-Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
+Mass deworming has demonstrated to be a highly effective public health intervention. Here we provide a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into more policy-relevant outputs.The goal of this analysis is to: 1) provide more transparency and understanding behind existing evidence on the return on investment for mass deworming programs, and 2) allow for policymakers to better understand the value of investing in deworming programs in their own settings. 
 
 
 The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:     
 
-  1. the original CBA produced by @baird2016worms,   
-  2. an updated version of such analysis by a symilar research team [@klps4], and   
-  3. a third approach that borrows some components of the previous two and some specific components added after consulting with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
+  1. Replicating the original CBA produced by @baird2016worms, which demonstrates the long-run return on investment of a Kenya school-based deworming program    
+  2. an updated version of such analysis by a similar research team [@klps4], and   
+  3. a third approach that borrows some components of the previous two approaches and adds data from deworming programs in other geographies outside of the original study geograpy through consulation with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
 
-
+This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
 <!--
 OLD TEXT (DELETE SOON):
@@ -296,7 +296,7 @@ We first describe the common elements across all three approaches, and then desc
 
 ## Common structure {-}
 
-The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
+This analysis begins by recreating the estimates conducted by Baird et al (2016), in which authors calculate a rate of return for government investment in a school-based deworming program in a worm-endemic area. Children who were dewormed in school proved to have higher income as adults, thus generating additional tax revenue for the government. Authors show that the monetary benefits of deworming more than offset the costs required to deliver school-based programs, resulting in a high return on investment. The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
 
 <details><summary>Show all the details</summary>
 
@@ -339,7 +339,7 @@ invisible( list2env(chunk_policy_est(),.GlobalEnv) )
 </details>
 <br>
 
-Benefits are equal to the additional earnings that individuals are expected to generate due to a deworming treatment. These additional earnings are computed as a discounted sum over their working lifetime.  
+Benefits are equal to the additional lifetime earnings that individuals are expected to generate due to deworming treatment. These additional earnings are computed as a discounted sum over their working lifetime.  
 
 
 <details><summary>Show all the details</summary>
