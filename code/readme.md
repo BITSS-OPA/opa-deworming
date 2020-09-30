@@ -110,7 +110,7 @@ Code chunks with `purl = TRUE` in the curly brackets at the top of the chunk are
 - KLPS2: Kenya Life Panel Survey Round 2
 - KLPS3: Kenya Life Panel Survey Round 3
 - KLPS4: Kenya Life Panel Survey Round 4  
-
+- EA: Evidence Action
 
 
 #### Variable Definition
@@ -124,13 +124,30 @@ Code chunks with `purl = TRUE` in the curly brackets at the top of the chunk are
 - i: interest rate on government bonds
 - <html>&#960</html>: inflation rate
 - <html>&#916W<sub>t</sub></html>: gains in earnings
+
+  * Baird (Approach 1)：only measures gains in earnings by year 10 and extrapolates into the future
+  * Hamory (Approach 2): measures gains in earnings from 10, 15, and 20 years after intervention and extrapolates into the future
+
+
 - <html>&#955<sub>1</sub></html>: direct effects of deworming on the individual's earnings  
 
-  * Baird takes the simple average of the impact of deworming on hours worked for men and women **inline html latex**
+  * Baird (Approach 1) takes the simple average of the impact of deworming on hours worked for men and women:
+    + <html>&#955<sub>1,male</sub></html>: estimated impact of deworming on hours for men
+    + <html>&#955<sub>1,female</sub></html>: estimated impact of deworming on hours for women
+  * EA(Approach 3) decomposes this value into the impact of deworming on children who were treated and had a worm infection and children who were treated and did not have worm infection.
+
+- <html>&#955<sub>1</sub><sup>eff</sup></html>: impact of deworming on children who were treated and had a worm infection in the original evaluation
+
+- <html>&#955<sub>1</sub><sup>r</sup></html>: impact of deworming on children who were treated and had a worm infection in the new region
+
+
 - <html>&#955<sub>2</sub></html>: indirect effects of deworming on individual's earnings
+
+  * Baird repeat this value twice to match the direct impact for men and women.
 - p: saturation, measures the fraction of the population that is effectively using the treatment
 - R: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group
 - w<sub>0</sub>: initial weekly wage
+- w<sub>t</sub>: weekly wage at period t
 - g: per capita GDP growth
 - Xp: years of work
 - <html>&#946&#770<sub>1</sub> </html>: ***definition?***
@@ -140,6 +157,20 @@ Code chunks with `purl = TRUE` in the curly brackets at the top of the chunk are
 - ww: working wage sector
 - se: self-employed sector
 - ex: exchange rate
+- Q(full): take-up with full subsidy
+- Q(0): take-up without subsidy
+- Q(S<sub>2</sub>): take-up under a mass deworming intervention
+- S<sub>2</sub>: per-capita cost costs of deworming under said intervention
+- S<sub>1</sub>: per-capita cost costs of deworming if the government does not provide any additional resource for deworming
+- K: cost per student to get education
+- <html>&#916E&#772<sub>t</sub>(S<sub>1</sub>, S<sub>2</sub>)</html>: estimated increase in school attendance
+- DC: Direct deworming costs
+- <html>&#951</html>: prevalence rates in the original evaluation
+- <html>&#951</html>: prevalence rates in the new region
+- <html>&#969<sub>i</sub></html>: country weights for computing the costs in Approach 3
+- N: the number of all treated individuals
+- C<sub>i, k</sub>: costs of a country at a specific payer level
+- <html>&#948<sub>g</sub></html>: ***definition?***
 
 
 
@@ -152,6 +183,24 @@ Code chunks with `purl = TRUE` in the curly brackets at the top of the chunk are
 - `pv_benef_f`: calculate the present value of benefits
 - `interest_f`: calculate the real interest rate given
 - `earnings1_f`: calculates gains in earnings using the first approach (Baird et al.)
+- `earnings2_f`: calculates gains in earnings using the second approach(Hamory et al.)
 - `wage_0_mo_f`: calculates the starting wage that is the weighted average of the three sectors: ag, ww, se
 - `wage_t_mo_f`: calculates the wage at period t that is the weighted average of the three sectors: ag, ww, se
--
+- `lambda1_in_f`: calculates the direct impact of deworming for Approach 1 and 2
+- `lambda_eff_f`: calculates impact of deworming on children who were treated and had a worm infection in the original evaluation, as well as the prevalence rate for Approach 3
+- `lambda_t_f`: calculates the direct impact of deworming after adjusting for different length of treatment for Approach 3
+- `lambda2_in_f`: calculates the indirect/externality impact of deworming for Approach 1 and 2
+- `saturation_in_f`: calculates p, the saturation
+- `pv_costs_f`: calculates both the direct costs of mass deworming and indirect costs on the education system due to the additional time treated individuals spend in school
+- `s2_f`: calculates the total direct costs of deworming in USD with complete subsidy using Approach 1
+- `s2_f_new`: calculates the total direct costs of deworming in USD with complete subsidy using Approach 2
+- `cost_per_student_f`: calculates the cost per student to get education, K
+- `delta_ed_final_f`: calculates both the direct increase in secondary schooling and the externality effects on secondary schooling
+- `costs1_p1_f`: cleans and aggregates data at country level
+- `costs1_p2_f`: computes weights and per capita costs
+
+
+
+
+##### comments
+- is there a latex formula for delta E only for the direct increase?
