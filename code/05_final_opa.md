@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "01 October, 2020"
+date: "02 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -312,6 +312,8 @@ chunk_final_pe <- function(){
                 "NPV_pe_f" = NPV_pe_f))
 }
 invisible( list2env(chunk_final_pe(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
 ```
 
 
@@ -351,6 +353,8 @@ chunk_benefits <- function(){
     return(list("pv_benef_f" = pv_benef_f))
 }
 invisible( list2env(chunk_benefits(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
 ```
 </details>
 <br>
@@ -404,10 +408,15 @@ chunk_interest <- function(){
 }
 
 invisible( list2env(chunk_interest(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+
 interest_16 <- as.numeric(
   interest_f(gov_bonds_var = gov_bonds_so,
              inflation_var = inflation_so)$interest_in
   )
+interest_in <- interest_16
+
 interest_19 <- as.numeric(
   interest_f(gov_bonds_var = gov_bonds_new_so,
              inflation_var = inflation_new_so)$interest_in  
@@ -528,7 +537,7 @@ chunk_earnings1 <- function(){
 ###############################################################################
 ###############################################################################  
 
-    earnings1_f <- function(wage_var = wage_in,
+    earnings1_f <- function(wage_var = wage_t_in,
                           lambda1_var = lambda1_so,
                           lambda2_var = lambda2_so,
                           saturation_var = saturation,
@@ -742,10 +751,47 @@ chunk_coverage <- function(){
 invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
+saturation_in <- saturation_in_f()$saturation_in
+earnings_no_ext_in <- earnings1_f(
+  wage_var = wage_t_in,
+  lambda1_var = lambda1_in[1],
+  saturation_var = saturation_in,
+  lambda2_var = 0,
+  coverage_var = coverage_so
+)
+
+earnings_yes_ext_in <- earnings1_f(
+  wage_var = wage_t_in,
+  lambda1_var = lambda1_in[1],
+  saturation_var = saturation_in,
+  lambda2_var = lambda2_in[1],
+  coverage_var = coverage_so
+)
+
+pv_benef_no_ext_in <- pv_benef_f(
+  earnings_var = earnings_no_ext_in,
+  interest_r_var = interest_in,
+  periods_var = periods_so
+)
+
+pv_benef_yes_ext_in <- pv_benef_f(
+  earnings_var = earnings_yes_ext_in,
+  interest_r_var = interest_in,
+  periods_var = periods_so
+)
 ```
 
 </details>
 <br>
+
+#### Assessing computational reproducibiliy of original results  
+
+Without externalities, the original analysis (@baird2016worms) obtains a present value of benefits of 142.43 (table 5, column 3, and row 9). Including externalities, they obtain a present value of benefits of 766.81 (table 5, column 3, and row 12). Following the steps described in this section, this analysis obtains the same result (142.4258784 and 766.8143995 respectively without rounding).  
+
+
+
+
+
 
 -------
 
@@ -817,42 +863,42 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;"> $R=0.68$ </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
    <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
+   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
    <td style="text-align:left;"> $Q(full)=0.75$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
    <td style="text-align:left;"> $Q(0)=0$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
+   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -949,6 +995,7 @@ chunk_unit_costs2 <- function(){
 }
 invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
+s2_in <- s2_f()
 ```
 
 </details>
@@ -1011,20 +1058,41 @@ invisible( list2env(chunk_edcosts(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 cost_per_student_in <- cost_per_student_f()
-delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
+delta_ed_final_no_ext_in <- delta_ed_final_f(include_ext_var = FALSE)
+delta_ed_final_yes_ext_in <- delta_ed_final_f(include_ext_var = TRUE)
+
+pv_cost_no_ext_in <- pv_costs_f(
+      periods_var = periods_so,
+      delta_ed_var = delta_ed_final_no_ext_in,
+      interest_r_var = interest_in,
+      cost_of_schooling_var = cost_per_student_in,
+      s1_var = 0,
+      q1_var = 0,
+      s2_var = s2_in,
+      q2_var = q_full_so
+    )
+
+pv_cost_yes_ext_in <- pv_costs_f(
+      periods_var = periods_so,
+      delta_ed_var = delta_ed_final_yes_ext_in,
+      interest_r_var = interest_in,
+      cost_of_schooling_var = cost_per_student_in,
+      s1_var = 0,
+      q1_var = 0,
+      s2_var = s2_in,
+      q2_var = q_full_so
+    )
 ```
 
 </details>
 <br>
 
-Without externalities, the original analysis (@baird2016worms) obtains a total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
+#### Assessing computational reproducibiliy of original results  
 
-Including externalities, they obtain a total NPV of benefits of 766.81, with 102.97 in tax revenue for government (table 5, column 3, and rows 12, 13 respectively).
-
-NOW COMPARE WITH RESULTS HERE
+Without externalities, the original analysis (@baird2016worms) obtains a present value of costs of 11.78 (table 5, column 3, and adding rows 6 and 3). Including externalities, they obtain a present value of benefits of  25.2 (table 5, column 3, and adding rows 6 and 3 and 7). Following the steps described in this section, this analysis obtains the same result (11.7761881 and 25.1962131 respectively without rounding).  
 
 
-wage_0_mo_f --> wage_0_in
+
 
 
 
@@ -1100,32 +1168,32 @@ wage_0_mo_f --> wage_0_in
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;"> $R=0.68$ </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
    <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -1135,7 +1203,7 @@ wage_0_mo_f --> wage_0_in
   </tr>
   <tr>
    <td style="text-align:left;"> $h_{ww}=6.9$ </td>
-   <td style="text-align:left;"> $Q(0)=0$ </td>
+   <td style="text-align:left;">  </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -1150,16 +1218,16 @@ wage_0_mo_f --> wage_0_in
 
 ## Approach 2: @klps4
 
-In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but we use updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account discounting of the several rounds of treatment required for effective deworming.  Additionally, the interest rate is updated to current values of return on (Kenyan) government bonds and inflation.
+In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but we use updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in this second approach, the costs also account for discounting of the several rounds of treatment required for effective deworming.  Additionally, the interest rate is updated to current values of return on (Kenyan) government bonds and inflation.
 
 
 ### Gains in earnings
 
-Gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after the intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference from approach 1, which only measures gains in earnings at year 10 and extrapolates them into the future. To extrapolate earnings after the 20-year measurement, the authors assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life. Hence the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
+Gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after the intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference from approach 1, which only measures gains in earnings at year 10 and extrapolates them into the future. To extrapolate earnings after the 20-year measurement, the authors assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life. Hence the treatment effect over an individual's working life is the sum of the treatment effects over their working lifetime.
 
-Gains in earnings represent the treatment effect on welfare, which implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. This approach also disregards externality effects. Their estimated treatment effects ($\alpha^{KLPS}$) for years 10, 15, and 20, are $80 dollars per person per year.
+Gains in yearly earnings represent the treatment effect on welfare ($\alpha$), which implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. This approach also disregards externality effects. The estimated treatment effects that pools years 10, 15, and 20, is $80 dollars per person per year.
 
-[^8]: In another specification the authors assume that effects disappear after 25 years. Here we select the more persistent specification.
+[^8]: In another specification the authors assume that effects disappear after 25 years. Here we select the more persistent specification. The authors also analyse the welfare effects over consumption, but given that they do not aggregate both outcomes in the welfare effect we only choose one and focus on earning for comparability with the approach 1). 
 
 <details><summary>Show all the details</summary>
 
@@ -1195,9 +1263,15 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 </details>
 <br>
 
-UPDATE THIS
+40.7 IRR with NPV of 230.71
 
-Without externalities, the original analysis (@baird2016worms) obtains a total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
+1 - record this number in research params db.   
+2 - obtain the same values.   
+3 - Write summary below. 
+4 - go to appr 3 and update any changes to benefits. 
+
+
+Without externalities, the original analysis (@klps4) obtains a total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
 
 
 ----------
@@ -1277,32 +1351,32 @@ Without externalities, the original analysis (@baird2016worms) obtains a total N
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;"> $R=0.68$ </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
    <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -1508,32 +1582,32 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;"> $R=0.68$ </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
    <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -1957,32 +2031,32 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;"> $\delta_{g}=0.3$ </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
    <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
@@ -2192,32 +2266,32 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 <tbody>
   <tr>
    <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
    <td style="text-align:left;"> $\delta_{g}=0.3$ </td>
   </tr>
   <tr>
    <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\lambda_2=10.2$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
    <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $i_{19}=0.09$ </td>
    <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
+   <td style="text-align:left;"> $Q(full)=0.75$ </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> $w_{se}=10.3$ </td>
+   <td style="text-align:left;"> $Q(0)=0$ </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
