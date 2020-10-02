@@ -169,10 +169,10 @@ chunk_sources <- function(){
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
-    lambda1_new_so <- c(86.54642,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
-                               82.99311,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
-                               85.44088)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
-    lambda1_new_sd_so <- c(43, 83, 172)  # ADD SOURCE
+    lambda1_new_so <- c(79.51465,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
+                               79.51465,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
+                               79.51465)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
+    lambda1_new_sd_so <- c(76, 76, 76)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
     delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
@@ -400,7 +400,7 @@ All 3 approaches use the real interest rate ($r$) as the discounting rate. This 
 <details><summary>Show all the details</summary>
 
 \begin{equation}
-r = \frac{1 + i}{1 + \pi} - \pi \\
+r = \frac{1 + i}{1 + \pi} - 1 \\
 r \approx i - \pi
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
@@ -652,6 +652,11 @@ chunk_wages <- function(){
 }
 
 invisible( list2env(chunk_wages(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+wage_0_in <- wage_0_mo
+wage_t_in <- wage_t_mo
+
 ```
 
 </details>
@@ -708,7 +713,7 @@ The coverage ($R$) is defined as the fraction, among all neighboring schools (wi
 
 The saturation of the intervention, $p$, measures the fraction of the population that is effectively using the treatment. It is defined as a weighted average of the treatment take-up under a full subsidy for deworming and the take-up under zero subsidy.   
 
-For this (or similar?) setting @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) estimate that take-up with full subsidy ($Q(full)$) was `r q_full_so`. Miguel and Kremer (2004) (Table 3 and footnote 18) observed minimal to no take-up without subsidy ($Q(0)$), hence it is assigned the value of `r q_zero_so`.  
+For this setting @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) estimate that take-up with full subsidy ($Q(full)$) was `r q_full_so`. Miguel and Kremer (2004) (Table 3 and footnote 18) observed minimal to no take-up without subsidy ($Q(0)$), hence it is assigned the value of `r q_zero_so`.  
 
 <details><summary>Show all the details</summary>
 
@@ -752,24 +757,23 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ```{r sum-tables3, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_1[1,2] <- paste0("$p=" , round(unlist(saturation_in_f(coverage_var = coverage_so, q_full_var = q_full_so, q_zero_var = q_zero_so)),2), "$")
-table_1[2,2] <- paste0("$R=" , round(coverage_so,2), "$")
-table_1[3,2] <- paste0("$\\lambda_1=" , lambda1_in_f(lambda1_var = lambda1_so)[1], "$")
-table_1[4,2] <- paste0("$\\lambda_2=" , lambda2_so, "$")
+
+table_1[1,3] <- paste0("$R=" , round(coverage_so,2), "$")
+table_1[1,2] <- paste0("$\\lambda_1=" , lambda1_in_f(lambda1_var = lambda1_so)[1], "$")
+table_1[2,2] <- paste0("$\\lambda_2=" , lambda2_so, "$")
+
+table_1[3,2] <- paste0("$\\hat{\\beta}_1=" , round(coef_exp_so[1],2), "$")
+table_1[4,2] <- paste0("$\\hat{\\beta}_2=" , round(coef_exp_so[2],2), "$")
+
+#w_{se} copied from 589 in wage_0_mo but wage_se is never calculated outside the fn
 
 table_1 <-rbind(table_1,
-                c( "", paste0("$\\hat{\\beta}_1=" , round(coef_exp_so[1],2), "$"), ""),
-                c( "", paste0("$\\hat{\\beta}_2=" , round(coef_exp_so[2],2), "$"), "") )
-
-table_1[5,1] <- paste0("$w_{ww}=" , round(wage_ww_so,2), "$")
-table_1[6,1] <- paste0("$w_{se}=" , round(profits_se_so / (4.5 * hours_se_cond_so),2), "$") #copied from 589 in wage_0_mo but wage_se is never calculated outside the fn
-
-table_1 <-rbind(table_1,
+                c( paste0("$w_{ww}=" , round(wage_ww_so,2), "$"), paste0("$Q(full)=" , q_full_so, "$"), ""),
+                c( paste0("$w_{se}=" , round(profits_se_so / (4.5 * hours_se_cond_so),2), "$") ,
+                   paste0("$Q(0)=" , q_zero_so, "$"), ""),
                 c( paste0("$h_{ag}=" , hours_ag_so, "$"), "", ""),
                 c( paste0("$h_{ww}=" , hours_ww_so, "$"), "", ""),
-                c( paste0("$h_{se}=" , hours_se_so, "$"), "", ""),  
-                c( paste0("$Q(full)=" , q_full_so, "$"), "", ""),
-                c( paste0("$Q(0)=" , q_zero_so, "$"), "", "")
+                c( paste0("$h_{se}=" , hours_se_so, "$"), "", "")
                 )
 
 
@@ -972,10 +976,14 @@ delta_ed_final_in <- delta_ed_final_f(include_ext_var = FALSE)
 </details>
 <br>
 
-Without externalities, the original analysis obtains a total NPV of benefits of `r df_research_so$param[1]`, with `r df_research_so$param[2]` in tax revenue for government (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and rows `r paste0(df_research_so$table_row[1], ", ", df_research_so$table_row[2])` respectively).
+Without externalities, the original analysis (@baird2016worms) obtains a total NPV of benefits of `r df_research_so$param[1]`, with `r df_research_so$param[2]` in tax revenue for government (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and rows `r paste0(df_research_so$table_row[1], ", ", df_research_so$table_row[2])` respectively).
 
 Including externalities, they obtain a total NPV of benefits of `r df_research_so$param[3]`, with `r df_research_so$param[4]` in tax revenue for government (table `r df_research_so$tablenum[3]`, column `r df_research_so$table_col[3]`, and rows `r paste0(df_research_so$table_row[3], ", ", df_research_so$table_row[4])` respectively).
 
+NOW COMPARE WITH RESULTS HERE
+
+
+wage_0_mo_f --> wage_0_in
 
 ```{r, eval=FALSE,echo=FALSE, purl=FALSE}
 # Numbers are reproduces, the only difference is that  Baird et al, presents them in a different way.
@@ -1011,22 +1019,21 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 ## Approach 2: @klps4
 
-In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but we use updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  Additionally. the interest rate is updated to current values of return on (Kenyan) government bonds and inflation.
+In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but we use updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account discounting of the several rounds of treatment required for effective deworming.  Additionally, the interest rate is updated to current values of return on (Kenyan) government bonds and inflation.
 
 
 ### Gains in earnings
 
 Gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after the intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference from approach 1, which only measures gains in earnings at year 10 and extrapolates them into the future. To extrapolate earnings after the 20-year measurement, the authors assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life. Hence the treatment effect over an individual's working life is the sum of the treatment effects on welfare at each follow-up.
 
-Gains in earnings represent the treatment effect on welfare, which implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. This approach also disregards externality effects. Their estimated treatment effects ($\alpha_{t}$) for years 10, 15, and 20, are `r paste0("$", round(lambda1_new_so,0) )` dollars per person per year.
+Gains in earnings represent the treatment effect on welfare, which implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. This approach also disregards externality effects. Their estimated treatment effects ($\alpha^{KLPS}$) for years 10, 15, and 20, are `r paste0("$", round(mean(lambda1_new_so),0) )` dollars per person per year.
 
 [^8]: In another specification the authors assume that effects disappear after 25 years. Here we select the more persistent specification.
 
 <details><summary>Show all the details</summary>
 
 \begin{equation}
-\Delta W_{t} = \mathbf{1}(10 < t \leq 15)\alpha^{KLPS2} + \mathbf{1}(15 < t \leq 20)\alpha^{KLPS3} + \mathbf{1}(t > 20)\alpha^{KLPS4}
-\text{ for } t \leq 50
+\Delta W_{t} = \mathbf{1}(10 < t \leq 50)\alpha^{KLPS}
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
@@ -1035,18 +1042,14 @@ Gains in earnings represent the treatment effect on welfare, which implicitly ta
 
 ```{r delta-earnings, eval=TRUE}
 # - inputs: t_var, lambda1_new_so[1], lambda1_new_so[2], lambda1_new_so[3]
-# - outputs: earnings2_f
+# - outputs: earnings2_f REWRITE
 chunk_new_earnings <- function(){
 ###############################################################################
 ###############################################################################  
 
     earnings2_f <- function(t_var = 1,
-                               lambda1k1_var = lambda1_new_so[1],
-                               lambda1k2_var = lambda1_new_so[2],
-                               lambda1k3_var = lambda1_new_so[3]) {
-        1*(10 <= t_var & t_var < 15) * lambda1k1_var +
-        1*(15 <= t_var & t_var < 20) * lambda1k2_var +
-        1*(20 <= t_var) * lambda1k3_var
+                               lambda1k1_var = lambda1_new_so[1]) {
+        1*(10 <= t_var & t_var < 50) * lambda1k1_var
     }
 
 ###############################################################################
@@ -1061,19 +1064,22 @@ invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 </details>
 <br>
 
+UPDATE THIS
+
+Without externalities, the original analysis (@baird2016worms) obtains a total NPV of benefits of `r df_research_so$param[1]`, with `r df_research_so$param[2]` in tax revenue for government (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and rows `r paste0(df_research_so$table_row[1], ", ", df_research_so$table_row[2])` respectively).
+
+
 ----------
 
 <details><summary>View Summary Table</summary>
 
 ```{r sum-tables17, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_1[8,2] <- paste0("$\\alpha^{KLPS2}=" , round(lambda1_new_so[1],2), "$")
-table_1[9,2] <- paste0("$\\alpha^{KLPS3}=" , round(lambda1_new_so[2],2), "$")
-table_1[10,2] <- paste0("$\\alpha^{KLPS4}=" , round(lambda1_new_so[3],2), "$")
+table_1[8,2] <- paste0("$\\alpha^{KLPS}=" , round(lambda1_new_so[1],2), "$")
 
 sum_table_index <- sum_table_index+1
 table_2 <- rbind(table_2,
-                 c("$\\Delta W_{t} = \\mathbf{1}(10 \\lt t \\leq 15)\\alpha^{KLPS2} + \\mathbf{1}(15 \\lt t \\leq 20)\\alpha^{KLPS3} + \\mathbf{1}(t \\gt 20)\\alpha^{KLPS4}$",
+                 c("$\\Delta W_{t} = \\mathbf{1}(10 \\lt t \\leq 50)\\alpha^{KLPS}$",
                    paste0("$(", sum_table_index, ")$") )
     )
 
@@ -1189,7 +1195,7 @@ TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
 <details><summary>View Summary Table</summary>
 ```{r sum-tables20, purl=FALSE, echo=FALSE, eval=TRUE}
 
-table_1[11,2] <- paste0("$r_{16}=", interest_16, "$")
+table_1[9,2] <- paste0("$r_{16}=", interest_16, "$")
 
 table_1 <- rbind(table_1, c("", paste0("$r_{19}=", interest_19, "$"), ""))
 table_1 <- rbind(table_1, c( "", paste0("$S_2=", 1, "$"), ""), #S2 is a complete subsidy
@@ -1509,10 +1515,10 @@ costs1_p2_in <- costs1_p2_f()
 ```{r sum-table18, purl=FALSE, echo=FALSE, eval=TRUE}
 
 table_1[1,3] <- paste0("$\\delta_{g}=", staff_time_so, "$")
-table_1[12,1] <- paste0("$\\overline{{C}_{i}}=", round(costs1_p2_f(country_total_var = costs_data$total,
+table_1[10,1] <- paste0("$\\overline{{C}_{i}}=", round(costs1_p2_f(country_total_var = costs_data$total,
                          country_cost_var = costs_data$costs_by_country,
                          staff_time_var = staff_time_so), 2), "$") #weighted average
-table_1[13,1] <- paste0("$\\overline{{N}_{i}}=", round(mean(costs1_p1_in$total)), "$")
+table_1[11,1] <- paste0("$\\overline{{N}_{i}}=", round(mean(costs1_p1_in$total)), "$")
 
 table_1 <- rbind(table_1,
                  c("", paste0("$\\eta=", prevalence_0_so, "$"), ""), #change to eta
@@ -1789,7 +1795,6 @@ one_run <-
 
 
 
-
     ###------------ Inputs for earnings2_f--------------------------------------
     lambda1_new_in <- lambda1_new_var1
     unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
@@ -1842,14 +1847,10 @@ one_run <-
 
     # earnings2
     earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
-                                          lambda1k1_var = lambda1_new_in[1],
-                                          lambda1k2_var = lambda1_new_in[2],
-                                          lambda1k3_var = lambda1_new_in[3])
+                                          lambda1k1_var = lambda1_new_in[1])
     # earnings2 with prevalence
     earnings_in_no_ext_prev_new <- earnings2_f(t_var = 0:50,
-                                          lambda1k1_var = lambda1_prev_new_in[1],
-                                          lambda1k2_var = lambda1_prev_new_in[2],
-                                          lambda1k3_var = lambda1_prev_new_in[3])
+                                          lambda1k1_var = lambda1_prev_new_in[1])
 
     # interest rate NEED TO UPDATE TO EXACT RESULT
     interest_in <- interest_f(gov_bonds_var = gov_bonds_var1,
@@ -2011,7 +2012,7 @@ one_run <-
       q2_var = q_full_var1
     )
     unit_test(costs2_in, 11.776188118988, main_run_var = main_run_var1)
-
+earnings_in_no_ext
     # Baird yes externalities
     costs2_in_x <- pv_costs_f(
       periods_var = periods_var1,
@@ -2040,7 +2041,6 @@ one_run <-
       q2_var = q_full_var1
     )
     unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
-
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
                   "lambda1_prev_in" = lambda1_prev_in,
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
