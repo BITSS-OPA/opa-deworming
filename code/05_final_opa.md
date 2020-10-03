@@ -1249,7 +1249,7 @@ chunk_new_earnings <- function(){
 
     earnings2_f <- function(t_var = 1,
                                lambda1k1_var = lambda1_new_so[1]) {
-        1*(10 <= t_var & t_var < 50) * lambda1k1_var
+        1*(10 <= t_var & t_var < 25) * lambda1k1_var
     }
 
 ###############################################################################
@@ -1258,20 +1258,11 @@ chunk_new_earnings <- function(){
 }
 
 invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
+#####
 ```
 
 </details>
 <br>
-
-40.7 IRR with NPV of 230.71
-
-1 - record this number in research params db.   
-2 - obtain the same values.   
-3 - Write summary below. 
-4 - go to appr 3 and update any changes to benefits. 
-
-
-Without externalities, the original analysis (@klps4) obtains a total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
 
 
 ----------
@@ -1448,19 +1439,19 @@ chunk_unit_costs2_new <- function(){
 invisible( list2env(chunk_unit_costs2_new(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 # New costs are all in dollars so, will compute them using ex rate of 1.
-s2_in <- s2_f_new(
+s2_new_in <- s2_f_new(
   interest_var = interest_19,
   unit_cost_local_var = unit_cost_2017usdppp_so,
   ex_rate_var = 1
 )
-s2_new <- s2_in
+
 q2_in <- q_full_so
 ```
 
 </details>
 <br>
 
-With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). Most recent (2018) data from Evidence Action reveals this cost to be \$0.42 per year. Adjusting for purchasing power and inflation, we get a per capita cost of \$0.83. Adding all indirect cost over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is $1.44.
+With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). Most recent (2018) data from Evidence Action reveals this cost to be \$0.42 per year. Adjusting for purchasing power and inflation, we get a per capita cost of \$0.83. Adding all indirect cost over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is $1.07.
 
 
 #### Indirect costs: additional years of education and its costs for government  
@@ -1494,7 +1485,24 @@ cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
 
 Over this nine year period, treated students attended school for an additional 0.15 years on average. Then we get an average cost of additional schooling per child over the nine-year period, $32.40.
 
-TO DO:  add a sentence with final NPV (analogous to last sentence in app1)
+
+### Assessing computational reproducibiliy of original results  
+
+The second approach does not report benefits and costs separatedly.[make sure we reference above that this is the case without externalities, and that we discuss that they also estimate effects on consumtion]. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of 499.72 (table A13, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). 
+
+40.7 IRR with NPV of 230.71
+The original anlaysis focus
+The main 40.7%
+
+1 - record this number in research params db.   
+2 - obtain the same values.   
+3 - Write summary below.   
+4 - go to appr 3 and update any changes to benefits. 
+
+
+Without externalities, the original analysis (@klps4) obtains a total NPV of benefits of 142.43, with 12.9 in tax revenue for government (table 5, column 3, and rows 9, 10 respectively).
+
+
 
 -------------------
 
@@ -2757,7 +2765,8 @@ earnings_in_no_ext
                   "earnings_in_no_ext_new" = earnings_in_no_ext_new,
                   "earnings_in_no_ext_prev_new" = earnings_in_no_ext_prev_new,
                   "interest_in" = interest_in, "costs1_country" = costs_data,
-                  "delta_ed_final_in" = delta_ed_final_in, "delta_ed_final_in_x" = delta_ed_final_in_x,
+                  "delta_ed_final_in" = delta_ed_final_in, 
+                  "delta_ed_final_in_x" = delta_ed_final_in_x,
                   "cost_per_student_in" = cost_per_student_in, "s2_in" = s2_in,  
                   "pv_benef_tax_nx_in"= pv_benef_tax_nx_in, "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
                   "pv_benef_all_nx_in" = pv_benef_all_nx_in,
@@ -2778,9 +2787,9 @@ invisible( list2env(one_run(),.GlobalEnv) )
 ```
 ## [1] "Output has change at lambda1_new_in  to  0"
 ## [1] "Output has change at lambda1_prev_new_in  to  0"
-## [1] "Output has change at pv_benef_tax_new  to  145.777721168234"
-## [1] "Output has change at pv_benef_all_new  to  879.503596791756"
-## [1] "Output has change at pv_benef_all_prev_new  to  479.245444270217"
+## [1] "Output has change at pv_benef_tax_new  to  88.1820199569814"
+## [1] "Output has change at pv_benef_all_new  to  532.018219951622"
+## [1] "Output has change at pv_benef_all_prev_new  to  289.899107986178"
 ```
 
 
@@ -2809,7 +2818,7 @@ unit_test(klps4_1, 125.202113576337)
 ```
 
 ```
-## [1] "Output has change at klps4_1  to  113.478106576446"
+## [1] "Output has change at klps4_1  to  55.8824053651938"
 ```
 
 ```r
@@ -2819,7 +2828,7 @@ unit_test(klps4_2, 917.937055971637)
 ```
 
 ```
-## [1] "Output has change at klps4_2  to  847.203982199968"
+## [1] "Output has change at klps4_2  to  499.718605359835"
 ```
 
 ```r
@@ -2835,7 +2844,7 @@ unit_test(ea3, 517.640954399502)
 ```
 
 ```
-## [1] "Output has change at ea3  to  479.09818609795"
+## [1] "Output has change at ea3  to  289.751849813911"
 ```
 
 ```r
@@ -2847,7 +2856,7 @@ unit_test(a3_mpe_cea, 3516.19339422076)
 ```
 
 ```
-## [1] "Output has change at a3_mpe_cea  to  3254.45737164162"
+## [1] "Output has change at a3_mpe_cea  to  1968.64529501085"
 ```
 
 ```r
@@ -2859,7 +2868,7 @@ unit_test(a3_mpe_rcea, 4.7260663900816)
 ```
 
 ```
-## [1] "Output has change at a3_mpe_rcea  to  4.37427066080862"
+## [1] "Output has change at a3_mpe_rcea  to  2.64602862232641"
 ```
 
 ```r
@@ -2922,8 +2931,8 @@ kable(npv_table, caption = "Summary of Policy Estimates Using Different Approach
    <td style="text-align:right;"> NA </td>
    <td style="text-align:right;"> 130.6 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 113.5 </td>
-   <td style="text-align:right;"> 847.2 </td>
+   <td style="text-align:right;"> 55.9 </td>
+   <td style="text-align:right;"> 499.7 </td>
   </tr>
   <tr>
    <td style="text-align:left; padding-left: 2em;" indentlevel="1"> yes_ext </td>
@@ -2942,7 +2951,7 @@ kable(npv_table, caption = "Summary of Policy Estimates Using Different Approach
    <td style="text-align:right;"> 77.5 </td>
    <td style="text-align:right;"> 701.8 </td>
    <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 479.1 </td>
+   <td style="text-align:right;"> 289.8 </td>
   </tr>
 </tbody>
 </table>
@@ -2955,17 +2964,17 @@ kable(npv_table, caption = "Summary of Policy Estimates Using Different Approach
 
 - NPV with externalities in @baird2016worms ($\lambda_2 = 10.2$ ): 741.6  
 
-- NPV without externalities in @klps4: 847.2   
+- NPV without externalities in @klps4: 499.7   
 
 - NPV without externalities in EA 2019 ($\lambda_2 = 0$): 77.5    
 
 - NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ): 701.8
 
-- **NPV without ext and benef from @klps4 and EA costs 2019 :** 479.1
+- **NPV without ext and benef from @klps4 and EA costs 2019 :** 289.8
 
-- **CEA format:** 3254.5    
+- **CEA format:** 1968.6    
 
-- **RCEA format (relative to cash):** 4.4    
+- **RCEA format (relative to cash):** 2.6    
 
 
 # Accounting for Uncertainty
