@@ -37,7 +37,7 @@ shinyUI(
                    img(src="CEGA_logo.png", width="45%", height="auto"),
                    fluidRow(id = "tPanel_main", style = "max-width: 400px; max-height: 300px; position:relative;",
                             br(),
-                            h4("Description of Results"),
+                            h4(strong("Description of Results")),
                             p("We simulate finding the lifetime income effects on
                               treated children many times, then plot the values 
                               to create this curve. The height of the curve represents
@@ -57,8 +57,9 @@ shinyUI(
                               "and",
                               tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/", 
                                      "Evidence Action.")),
-                            p("This visualization is one of three key components of an Open
-                            Policy Analysis (OPA) on the costs and benefits of
+                            p("This visualization is one of three key components of an",
+                              tags$a(href="http://www.bitss.org/opa/projects/deworming/","Open Policy Analysis (OPA)"),
+                            "on the costs and benefits of
                             mass deworming interventions in various settings.
                             Together, these materials create a transparent and
                             reproducible analysis to facilitate collaboration and
@@ -232,7 +233,7 @@ shinyUI(
                                        sliderInput("param19_1", label = "SD = ",
                                                    min = 0.0000001* lambda2_so, max = 1 * lambda2_so, value = 0.1 * lambda2_so, step = 1e-5),
                                        sliderInput("param20", label = "Take-up = ",
-                                                   min = q_full_so / 2, max = 2 * q_full_so, value = q_full_so),
+                                                   min = 0, max = 1, value = q_full_so),
                                        sliderInput("param20_1", label = "SD = ",
                                                    min = 0.00000001* q_full_so, max = 1 * q_full_so, value = 0.1 * q_full_so, step = 1e-5),
                                        sliderInput("param28", label = "Take-up with no subsidy = ",
