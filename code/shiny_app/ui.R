@@ -262,7 +262,7 @@ shinyUI(
                               # end tabpanel research ----
                               #
                               # Begin tabpanel GW ----
-                              tabPanel("GW",
+                              tabPanel("Guesswork",
                                        numericInput("param21_1", label = h3("Coef Xp = "), value = coef_exp_so[1]),
                                        numericInput("param21_2", label = h3("Coef Xp^2 = "), value = coef_exp_so[2]),
                                        sliderInput("param22", label = "Teacher salary = ",
