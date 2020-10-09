@@ -150,6 +150,7 @@ npv_mo_f <- function(interest_r_var = interest_in,
   for (i in 1:2){
   benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * delta_welfare_var
   }
+  #browser()
 
   res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
           apply( ( 1 / (1 + interest_r_var) )^l_index_t *
@@ -420,6 +421,7 @@ e_tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_
 #########
 
 e_irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_p_in), .1, maxiter=1000000, positive = T))$root
+#THIS ONE
 e_irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_in), .1, maxiter=10000000, positive = T))$root
 e_irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_p_in), .1, maxiter=1000000, positive = T))$root
 e_irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_in), .1, maxiter=1000000, positive = T))$root

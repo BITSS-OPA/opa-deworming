@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "02 October, 2020"
+date: "09 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -173,7 +173,7 @@ chunk_sources <- function(){
                                                     #- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
-    teach_sal_new_so <- (50000 * 12 / 49.77)
+    teach_sal_new_so <- (50000 * 12 / 49.773)
     teach_ben_new_so <- 0
                                   #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
                                   #news sources * 12 / ex_rate_2017_ppp_so
@@ -421,6 +421,7 @@ interest_19 <- as.numeric(
   interest_f(gov_bonds_var = gov_bonds_new_so,
              inflation_var = inflation_new_so)$interest_in  
   )
+interest_new_in <- interest_19
 ```
 
 </details>
@@ -926,7 +927,8 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
 
 
 ```r
-# - inputs: periods_so, delta_ed_final_in, interest (varies by approach), cost_per_student_in, s2_in, q2_in
+# - inputs: periods_so, delta_ed_final_in, interest (varies by approach), 
+#           cost_per_student_in, s2_in, q2_in
 # - outputs: pv_costs_f
 chunk_cost2 <- function(){
 ###############################################################################
@@ -945,7 +947,6 @@ chunk_cost2 <- function(){
                  delta_ed_s * cost_of_schooling_var)
 
     }
-
 ###############################################################################
 ###############################################################################  
     return(list("pv_costs_f" = pv_costs_f))    # Try to return only functions
@@ -1259,6 +1260,8 @@ chunk_new_earnings <- function(){
 
 invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
 #####
+earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
+                                      lambda1k1_var = lambda1_new_so[1])
 ```
 
 </details>
@@ -1458,7 +1461,7 @@ With complete subsidy, the costs of the intervention become the total direct cos
 
 The indirect cost on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. The cost of additional schooling is given by the product of the annual cost of schooling each child and the number of additional years children attend school as a result of deworming. This analysis assumes that pressure is added to educational institutions for a maximum of nine years, starting at year zero. The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^9], $12055 (also adjusted for PPP), and the same average number of students per teacher (45).
 
-Hence, the cost of schooling each child for an additional year is now $267.9 (USD).
+Hence, the cost of schooling each child for an additional year is now $267.88 (USD).
 
 [^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: @nyanchama2018 and @oduor2017. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is 45, based on **[FIND SOURCE]**.
 
@@ -1476,9 +1479,56 @@ K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 
 ```r
 delta_ed_in <- delta_ed_so[,1]
-cost_per_student_in_new <- cost_per_student_f(teach_sal_var = (50000*12/49.77),
-                                          teach_ben_var = 0,
-                                          n_students_var = 45)
+cost_per_student_in_new <- cost_per_student_f(
+  teach_sal_var = teach_sal_new_so,
+  teach_ben_var = 0,
+  n_students_var = n_students_so
+)
+
+
+pv_costs2_in <- pv_costs_f(
+   periods_var = periods_so,
+   delta_ed_var = delta_ed_in,
+   interest_r_var = interest_new_in,
+   cost_of_schooling_var = cost_per_student_in_new,
+   s1_var = 0,
+   q1_var = 0,
+   s2_var = s2_new_in,
+   q2_var = q_full_so
+)
+
+
+pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
+                                interest_r_var = interest_new_in,
+                                periods_var = periods_so)
+
+a2_all_pe <- NPV_pe_f(benefits_var = pv_benef_all_new_in,
+                      costs_var = pv_costs2_in)
+
+get_irr <- function(rate_var) {
+  pv_benef_f(
+      earnings_var = earnings_in_no_ext_new,
+    interest_r_var = rate_var,
+    periods_var = periods_so
+  ) - pv_costs_f(
+   periods_var = periods_so,
+   delta_ed_var = delta_ed_in,
+   interest_r_var = rate_var,
+   cost_of_schooling_var = cost_per_student_in_new,
+   s1_var = 0,
+   q1_var = 0,
+   s2_var = s2_f_new(
+     interest_var = rate_var,
+     unit_cost_local_var = unit_cost_2017usdppp_so,
+     ex_rate_var = 1
+   ), 
+   q2_var = q_full_so
+  )
+}
+
+
+library(rootSolve)
+irr_in <- (multiroot(function(x) get_irr(rate_var = x), .1, maxiter=10000000, positive = T))$root
 ```
 </details>
 <br>
@@ -1488,11 +1538,7 @@ Over this nine year period, treated students attended school for an additional 0
 
 ### Assessing computational reproducibiliy of original results  
 
-The second approach does not report benefits and costs separatedly.[make sure we reference above that this is the case without externalities, and that we discuss that they also estimate effects on consumtion]. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of 499.72 (table A13, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). 
-
-40.7 IRR with NPV of 230.71
-The original anlaysis focus
-The main 40.7%
+The second approach does not report benefits and costs separatedly.[make sure we reference above that this is the case without externalities, and that we discuss that they also estimate effects on consumtion]. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of 499.72 (table A13, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). Following the steps described in this section, this analysis obtains the same result (499.7204653 and 40.7492806546435% respectively without rounding).
 
 1 - record this number in research params db.   
 2 - obtain the same values.   
@@ -2790,6 +2836,7 @@ invisible( list2env(one_run(),.GlobalEnv) )
 ## [1] "Output has change at pv_benef_tax_new  to  88.1820199569814"
 ## [1] "Output has change at pv_benef_all_new  to  532.018219951622"
 ## [1] "Output has change at pv_benef_all_prev_new  to  289.899107986178"
+## [1] "Output has change at costs_k  to  32.2977546110344"
 ```
 
 
@@ -2818,7 +2865,7 @@ unit_test(klps4_1, 125.202113576337)
 ```
 
 ```
-## [1] "Output has change at klps4_1  to  55.8824053651938"
+## [1] "Output has change at klps4_1  to  55.884265345947"
 ```
 
 ```r
@@ -2828,7 +2875,7 @@ unit_test(klps4_2, 917.937055971637)
 ```
 
 ```
-## [1] "Output has change at klps4_2  to  499.718605359835"
+## [1] "Output has change at klps4_2  to  499.720465340588"
 ```
 
 ```r

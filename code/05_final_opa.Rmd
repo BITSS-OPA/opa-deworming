@@ -27,12 +27,13 @@ link-citations: true
 
 ```{r setup, include=FALSE, purl=TRUE}
 # Loading required libraries
-list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly")
+list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly", 
+                      "bookdown", "rootSolve")
 
 # sapply(list.of.packages, function(x) pacman::p_load(get(x)))
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages, repos= "http://cran.cnr.berkeley.edu/")
+if(length(new.packages)) install.packages(new.packages, repos= "https://cloud.r-project.org")
 
 lapply(list.of.packages, library, character.only = TRUE)
 
@@ -201,7 +202,7 @@ chunk_sources <- function(){
                                                     #- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
-    teach_sal_new_so <- (50000 * 12 / 49.77)
+    teach_sal_new_so <- (50000 * 12 / 49.773)
     teach_ben_new_so <- 0
                                   #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
                                   #news sources * 12 / ex_rate_2017_ppp_so
@@ -887,7 +888,8 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
 \end{equation}
 
 ```{r cost2}
-# - inputs: periods_so, delta_ed_final_in, interest (varies by approach), cost_per_student_in, s2_in, q2_in
+# - inputs: periods_so, delta_ed_final_in, interest (varies by approach), 
+#           cost_per_student_in, s2_in, q2_in
 # - outputs: pv_costs_f
 chunk_cost2 <- function(){
 ###############################################################################
@@ -906,7 +908,6 @@ chunk_cost2 <- function(){
                  delta_ed_s * cost_of_schooling_var)
 
     }
-CONTINUE COMPARING COSTS FUNS
 ###############################################################################
 ###############################################################################  
     return(list("pv_costs_f" = pv_costs_f))    # Try to return only functions
@@ -1278,7 +1279,7 @@ a2_all_pe <- NPV_pe_f(benefits_var = pv_benef_all_new_in,
 
 get_irr <- function(rate_var) {
   pv_benef_f(
-    earnings_var = earnings_in_no_ext_new,
+      earnings_var = earnings_in_no_ext_new,
     interest_r_var = rate_var,
     periods_var = periods_so
   ) - pv_costs_f(
@@ -1288,14 +1289,18 @@ get_irr <- function(rate_var) {
    cost_of_schooling_var = cost_per_student_in_new,
    s1_var = 0,
    q1_var = 0,
-   s2_var = s2_new_in,
+   s2_var = s2_f_new(
+     interest_var = rate_var,
+     unit_cost_local_var = unit_cost_2017usdppp_so,
+     ex_rate_var = 1
+   ), 
    q2_var = q_full_so
   )
 }
 
 
 library(rootSolve)
-(multiroot(function(x) get_irr(rate_var = x), .2, maxiter=10000000, positive = T))$root
+irr_in <- (multiroot(function(x) get_irr(rate_var = x), .1, maxiter=10000000, positive = T))$root
 
 ```
 </details>
@@ -1306,21 +1311,7 @@ Over this nine year period, treated students attended school for an additional `
 
 ### Assessing computational reproducibiliy of original results  
 
-The second approach does not report benefits and costs separatedly.[make sure we reference above that this is the case without externalities, and that we discuss that they also estimate effects on consumtion]. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of `r df_research_so$param[9]` (table `r df_research_so$tablenum[9]`, column `r df_research_so$table_col[9]`, and row `r df_research_so$table_row[9]`) This result corresponds to a social internal rate of return of `r paste0(df_research_so$param[8], "%")` located as an inline result in the paper - also in `r df_research_so$figure_num[8]` - and in the appendix at table `r df_research_so$tablenum[8]`, column `r df_research_so$table_col[8]`, and row `r df_research_so$table_row[8]`). 
-
-40.7 IRR with NPV of 230.71
-The original anlaysis focus
-The main `r paste0(df_research_so$param[8], "%")`
-
-1 - record this number in research params db.   
-2 - obtain the same values.   
-3 - Write summary below.   
-4 - go to appr 3 and update any changes to benefits. 
-
-
-Without externalities, the original analysis (@klps4) obtains a total NPV of benefits of `r df_research_so$param[1]`, with `r df_research_so$param[2]` in tax revenue for government (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and rows `r paste0(df_research_so$table_row[1], ", ", df_research_so$table_row[2])` respectively).
-
-
+The second approach does not report benefits and costs separatedly.[make sure we reference above that this is the case without externalities, and that we discuss that they also estimate effects on consumtion]. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of `r df_research_so$param[9]` (table `r df_research_so$tablenum[9]`, column `r df_research_so$table_col[9]`, and row `r df_research_so$table_row[9]`) This result corresponds to a social internal rate of return of `r paste0(df_research_so$param[8], "%")` located as an inline result in the paper - also in `r df_research_so$figure_num[8]` - and in the appendix at table `r df_research_so$tablenum[8]`, column `r df_research_so$table_col[8]`, and row `r df_research_so$table_row[8]`). Following the steps described in this section, this analysis obtains the same result (`r a2_all_pe` and `r paste0(irr_in * 100, "%")` respectively without rounding).
 
 -------------------
 
