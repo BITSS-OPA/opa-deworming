@@ -237,7 +237,7 @@ shinyUI(
                                        sliderInput("param20_1", label = "SD = ",
                                                    min = 0.00000001* q_full_so, max = 1 * q_full_so, value = 0.1 * q_full_so, step = 1e-5),
                                        sliderInput("param28", label = "Take-up with no subsidy = ",
-                                                   min = q_zero_so / 2, max = 2 * q_zero_so, value = q_zero_so),
+                                                   min = 0, max = 1, value = q_zero_so),
                                        sliderInput("param28_1", label = "SD = ",
                                                    min = 0.00000001* q_zero_so, max = 1 * q_zero_so, value = 0.1 * q_zero_so),
                                        sliderInput("param26", label = "x * Delta E = ",
