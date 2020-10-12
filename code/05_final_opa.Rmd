@@ -287,16 +287,6 @@ The Cost Benefit Analysis (CBA) of deworming is computed using three different a
 
 This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
-<!--
-OLD TEXT (DELETE SOON):
-The key policy estimate consists of a cost effectiveness analysis that compares the present
-value of benefits and costs. The benefits quantified here are the effects on wages an the
-costs are those of delivering the deworming treatment.  
-
-The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population.
-
-This analaysis contains elements from GiveWell's cost effectiveness analysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
--->
 
 # Methodology  
 
@@ -1367,7 +1357,7 @@ In the original evaluation, the prevalence rates were very high (`r prevalence_0
 
 <details><summary>Show all the details</summary>
 
-For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 8 respectively) by the following:   
+For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 13 respectively) by the following:   
 
 \begin{equation}
 \lambda_{1} = \eta \lambda^{eff}_{1} + (1 -  \eta) \times 0 \\
@@ -1426,13 +1416,13 @@ Evidence Action provided prevalence survey data for the geographies where they a
 
 #### Adjusting for different length of treatment  
 
-The number of consistent years over which a population is exposed to deworming treatment is a factor in the achieved population effects over time. The two approaches reproduced so far hold the length of treatment constant at the levels of the original study (`r round(years_of_treat_0_so, 1)` years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years of treatment, with no additional effects after 6 years of treatment.We assumed a maximum of 6 years of impact in this case based off of the 20 year KLPS follow-up research, which shows a levelling-off of treatment effect after approximately 6 years of deworming (Hamory et al., 2020; Appendix A.5). [FERNANDO TO EDIT CITATION TO BE SIMILAR TO HOW YOU ARE TREATING CITATIONS ELSEWHERE] 
+The number of consistent years over which a population is exposed to deworming treatment is a factor in the achieved population effects over time. The two approaches reproduced so far hold the length of treatment constant at the levels of the original study (`r round(years_of_treat_0_so, 1)` years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years of treatment, with no additional effects after 6 years of treatment. We assumed a maximum of 6 years of impact in this case based off of the 20 year KLPS follow-up research, which shows a levelling-off of treatment effect after approximately 6 years of deworming (@klps4; Figure A.5 in Appendix, page A-6). 
 
 This added analysis factor allows us to take into account differences in the number of years of deworming treatment across different country contexts depending on program dynamics. Although the counterfactual of worm prevalence in the absence of treatment is largely unknown, we know that consistent deworming continues to decrease worm prevalence over time, contributing to controlled worm environments and sustainted benefits. In many deworming programs today, children receive regular treatment throughout a portion (and in some cases for the full term) of their primary schooling. It is worth noting that the assumption of linearity is an imperfect measure for various epidemiological reasons, though we include this variable of time into the equation as an estimate of our best guess at the differences in achieved impact over time, and in part because it helps capture that a new cohort enters primary school--and is therefore eligible for treatment--with each successive year of a deworming program.
 
 <details><summary>Show all the details</summary>
 
-For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 8 respectively) by the following:   
+For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 13 respectively) by the following:   
 
 \begin{equation}
 \lambda_{1,t = 1} = \frac{\lambda_{1}}{T_{0}} \\
@@ -1486,6 +1476,10 @@ lambda1_t_in <- lambda_eff_f(
 
 
 </details>
+
+
+ADD A PARAGRAPH ON SUMMARY OF BENFITS. THEY SHOULD BE THE SAME AS IN APP 2, ILUSTRATE WIHT DIFF PREVALENCES.  
+
 
 ### Costs
 
@@ -1634,6 +1628,10 @@ costs1_p2_in <- costs1_p2_f()
 </details>
 <br>
 
+
+ADD A PARAGRAPH ON SUMMARY OF COSTS THEY SHOULD BE THE SAME AS IN APP 2, ILUSTRATE WIHT DIFF PREVALENCES.  
+
+
 -----
 
 <details><summary>View Summary Table</summary>
@@ -1682,6 +1680,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 ### Summary of all approaches  
 
+ADD INTRO PARAGRAPH 
 
 | Approach    | Benfits                                   | Costs        |
 |---------|-------------------------------------------|--------------|
@@ -1698,6 +1697,8 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 
 ### Main policy estimate and additional formats {#policy-estimate}
+
+DELETE THIS SECTION
 
 The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3.
 
@@ -1766,6 +1767,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 # Main results  
 
+UPDATE UNIT TESTS
 
 ```{r all-steps}
 # Function dependency is depicted as follows:
@@ -2289,6 +2291,8 @@ kable(npv_table, caption = "Summary of Policy Estimates Using Different Approach
 
 
 # Accounting for Uncertainty
+
+EXPLAIN MC PROCESS
 
 ```{r mc-setup, eval=TRUE}  
 # EXPLAIN
@@ -2894,8 +2898,11 @@ rescale <- rescale_so
 # Sensitivity Analysis (Discuss)
 
 ## Sample of a Opaque and Favorable Report
+DO OPAQUE FAVORABLE REPORT (OR ASK A URAP TO DO IT)
+
 
 ## Sample of a Opaque and Unfavorable Report
+DO OPAQUE UNFAVORABLE REPORT  (OR ASK A URAP TO DO IT)
 
 
 
