@@ -33,8 +33,8 @@ shinyUI(
                tabPanel(
                  "Main Policy Estimate",
                  sidebarPanel(
-                   img(src="BITSS_logo_horizontal.png", width="45%", height="auto"),
-                   img(src="CEGA_logo.png", width="45%", height="auto"),
+                   tags$a(img(src="BITSS_logo_horizontal.png", width="45%", height="auto"), href="https://bitss.org"),
+                   tags$a(img(src="CEGA_logo.png", width="45%", height="auto"), href="https://cega.berkeley.edu"),
                    fluidRow(id = "tPanel_main", style = "max-width: 400px; max-height: 300px; position:relative;",
                             br(),
                             h4(strong("Description of Results")),
