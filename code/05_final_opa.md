@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "13 October, 2020"
+date: "16 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -1810,18 +1810,63 @@ lambda1_t_in <- lambda_eff_f(
   lambda1_var = lambda_t_f(
     lambda1_var = lambda1_in_f(),
     years_of_treat_0_var =  years_of_treat_0_so,
-    years_of_treat_t_var = years_of_treat_t_so
-  )$lambda1_t
+    years_of_treat_t_var =  years_of_treat_t_so
+  )$lambda1_t, prevalence_0_var = 1, other_prev_r = 1
 )$lambda1_eff_in
+
+
+app3_earnings_no_ext_in <- earnings1_f(
+  wage_var = wage_t_in,
+  lambda1_var = lambda1_t_in[1],
+  saturation_var = saturation_in,
+  lambda2_var = 0,
+  coverage_var = coverage_so
+)
+
+app3_earnings_yes_ext_in <- earnings1_f(
+  wage_var = wage_t_in,
+  lambda1_var = lambda1_t_in[1],
+  saturation_var = saturation_in,
+  lambda2_var = lambda2_in[1],
+  coverage_var = coverage_so
+)
+
+app3_pv_benef_no_ext_in <- pv_benef_f(
+  earnings_var = app3_earnings_no_ext_in,
+  interest_r_var = interest_16,
+  periods_var = periods_so
+)
+
+app3_pv_benef_yes_ext_in <- pv_benef_f(
+  earnings_var = app3_earnings_yes_ext_in,
+  interest_r_var = interest_16,
+  periods_var = periods_so
+)
+
+
+lambda1_t_new_in <- lambda_eff_f(
+  lambda1_var = lambda_t_f(
+    lambda1_var = lambda1_new_so[1],
+    years_of_treat_0_var =  years_of_treat_0_so,
+    years_of_treat_t_var =  years_of_treat_t_so
+  )$lambda1_t, prevalence_0_var = 1, other_prev_r = 1
+)$lambda1_eff_in
+
+
+earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
+                                      lambda1k1_var = lambda1_t_new_in)
+
+app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
+                                interest_r_var = interest_new_in,
+                                periods_var = periods_so) 
 ```
 
 
 </details>
 
-Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Readers interested in assessing the effects of deworming for a specific value of prevalence and lenght of treatment are refereed to the interactive app (tab on key assumtions) where they can input the values that best reflect their setting. 
+Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Both approaches implicitly assume prevalence rates of 100% and do not distinguish between original population and target populuation. Both approaches also set the length of treatment at 2.41 years. Readers interested in assessing the effects of deworming for a specific value of prevalence and lenght of treatment are refereed to the interactive app (tab on key assumtions) where they can input the values that best reflect their setting. 
 
-Under apporach 3, and using the same assumptions as above, the benefits will be the same as in approaches 1 and 2: 
-
+Under apporach 3, and using the same assumptions as above, the benefits will be the same as in approaches 1 and 2: 142.43 and 766.81 for approach 1 without and with externalities, and 532.02 when using the benefit structure of approach 2.  
 
 ### Costs
 
@@ -1831,7 +1876,6 @@ Through Evidence Action's technical assistance, which typically includes financi
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. These items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence surveys, program management, public mobilization/community sensitization, and training and distribution. Costs can vary by geography due to factors of population size, treatment strategies, age of the program, and costs of "doing business."
 
 The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country is obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across country regions faced by three different payers: Evidence Action, country governments, and other partners.  
-
 
 
 <details><summary>Show all the details</summary>
@@ -1965,15 +2009,12 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 costs1_p1_in <- costs1_p1_f()
 costs_data <- costs1_p1_in
-costs1_p2_in <- costs1_p2_f()
+costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria", "vietnam")) 
 ```
 
 </details>
-<br>
 
-
-ADD A PARAGRAPH ON SUMMARY OF COSTS THEY SHOULD BE THE SAME AS IN APP 2, ILUSTRATE WIHT DIFF PREVALENCES.  
-
+The unit costs of treatments, although small, vary substantially across regions. When including cost information for all the countries where Evidence action has data (India, Kenya, Nigeria, Vietnam) the unit costs is $0.08 per round of treatment. This final costs is primarily driven by the costs large population of India, with a unit cost of $0.06, the other 3 remaining countries have relatively much larger unit costs: $0.54, $0.86, $0.52 for Kenya, Nigeria and Vietnam respectively. 
 
 -----
 
@@ -2154,6 +2195,9 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 ADD INTRO PARAGRAPH 
 
+The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3.
+
+
 | Approach    | Benfits                                   | Costs        |
 |---------|-------------------------------------------|--------------|
 | 1.1 | @baird2016worms w/tax and no externalities (no ext) |  Treatment, Education |
@@ -2162,234 +2206,10 @@ ADD INTRO PARAGRAPH
 | 1.4 | @baird2016worms all and ext                         |  Treatment, Education (w/ext)    |
 | 2.1 | @klps4  w/t and no ext                      |  Treatment, Education |
 | 2.2 | @klps4  all and no ext                      |  Treatment, Education|
-| 3.1    | 1.3 + prevalence                       | Treatment (EA/GW)          |
-| 3.2    | 1.4 + prevalence                       | Treatment (EA/GW)             |
-| **3.3**    | **2.2 + prevalence**                       | **Treatment (EA/GW)  **           |  
+| 3.1    | 1.3 + prevalence + length of treatment                       | Treatment (EA)          |
+| 3.2    | 1.4 + prevalence + length                        | Treatment (EA)             |
+| **3.3**    | **2.2 + prevalence + length**                       | **Treatment (EA)  **           |  
 
-
-
-### Main policy estimate and additional formats {#policy-estimate}
-
-DELETE THIS SECTION
-
-The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3.
-
-This estimate can also me presented in two additional formats.
-
-<!--
-The key result for policy makers is defined as the cost effectiveness ratio (cell [`Deworming!B32`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=472531943&range=B32)).
--->
-Cost effectiveness ratio.
-
-\begin{equation}
-CEA_{deworming} = \frac{B (1 + F_{0})}{C}
-
-\label{eq:21}
-\tag{21}
-\end{equation}
-
-$F_{0}$ is a factor to account for leverage/fudging [not reviewed in this excercise] ([`F2, 6, D259`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1611790402&range=D259))
-<!--
- - $C$ is the costs per person dewormed (`F2, 4,B23`  [`F1, 2, H16`](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=1891183342&range=H16)).     
- - $B$ is the benefits per person dewormed (`F2, 4,B22`).
- - $F_{0}$ is a factor to account for leverage/fudging [not reviewed in this excercise] ([`F2, 6, D259`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1611790402&range=D259))
--->
-
-Also this quantity could be expressed in relative terms to the benchmark of cash transfers (cell [`Results!B9`](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1034883018&range=B9)):
-
-\begin{equation}
-RCEA = \frac{CEA_{deworming}}{CEA_{cash}}
-
-\label{eq:22}
-\tag{22}
-\end{equation}
-
-
-<details><summary>View Summary Table</summary>
-
-
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-table21)Summary of equations used until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=\frac{1+i}{1+\pi}-1$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = \mathbf{1}(10 \lt t \leq 50)\alpha^{KLPS}$ </td>
-   <td style="text-align:left;"> $(11)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
-.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(12)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
-   <td style="text-align:left;"> $(13)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C = \sum_{i \in Countries } \omega_{i} c_{i}$ </td>
-   <td style="text-align:left;"> $(14)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} = rac{C_{i}}{N_{i}} \
-C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
-C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
-   <td style="text-align:left;"> $(15)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0$ </td>
-   <td style="text-align:left;"> $(16)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $CEA_{deworming} = \frac{B (1 + F_{0})}{C}$ </td>
-   <td style="text-align:left;"> $(17)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $RCEA = \frac{CEA_{deworming}}{CEA_{cash}}$ </td>
-   <td style="text-align:left;"> $(18)$ </td>
-  </tr>
-</tbody>
-</table>
-
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-table21)Sources: summary of inputs specified until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;"> $\delta_{g}=0.3$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
-   <td style="text-align:left;"> $Q(full)=0.75$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
-   <td style="text-align:left;"> $Q(0)=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
-   <td style="text-align:left;"> $K=116.85$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
-   <td style="text-align:left;"> $\alpha^{KLPS}=79.51$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=3.3$ </td>
-   <td style="text-align:left;"> $r_{16}=0.0985$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\overline{{C}_{i}}=0.08$ </td>
-   <td style="text-align:left;"> $r_{19}=0.05$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\overline{{N}_{i}}=65798181$ </td>
-   <td style="text-align:left;"> $S_2=1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\overline{\Delta \overline{E}_{t}(S1,S2)}=0.02$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta=0.92$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta_{r}=0.5665$ </td>
-   <td style="text-align:left;"> $\eta_{r}=0.345$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $F_{0}=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-</details>
 
 
 
@@ -2432,6 +2252,28 @@ UPDATE UNIT TESTS
 #        ├──── s2_f
 #        └──── cost_per_student_f
 #       ##     ###    ####    #####
+
+
+# App1
+# NPV_pe_f --> a1_tax
+#     └────pv_benef_f --> pv_benef_tax_nx_in
+#     |     ├────earnings1_f --> earnings_in_no_ext * tax_var1
+#     |     |     ├────wage_t_mo_f --> wage_t_in
+#     |     |     |     └────wage_0_mo_f --> wage_0_in
+#     |     |     ├────lambda1_in_f --> lambda1_in
+#     |     |     └────saturation_in_f --> saturation_in
+#     |     └────interest_f --> interest_in
+#     |
+#     |
+#     └────pv_costs_f --> costs2_in
+#           ├────delta_ed_final_f --> delta_ed_final_in
+#           ├────cost_per_student_f --> cost_per_student_in
+#           ├────s2_f --> s2_in
+#           └────interest_f --> interest_in
+
+
+
+
 
 #unit test function
 unit_test <- function(to_test_var, original_var, main_run_var = TRUE){
