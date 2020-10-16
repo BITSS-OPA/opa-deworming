@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "25 September, 2020"
+date: "15 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -182,7 +182,7 @@ chunk_sources <- function(){
     teach_sal_2017usdppp_so <- teach_sal_new_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
 
     n_students_so <- 45            #Average pupils per teacher	45
-    staff_time_so <- 0.3           #Added Deworming costs due to goverment staff time
+    staff_time_so <- 0.3           #Added Deworming costs due to government staff time
     run_sim_so <- FALSE
     main_run_so <- TRUE
     rescale_so <- TRUE
@@ -230,7 +230,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -244,7 +244,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 # Introduction  
 
-Deworming refers to the medical practice of removing parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake and can thus lead to serious consequences on human health. In particular, evidence indicates that these worms contribute to malnourishment and impairment of mental and physical development [needs citation].
+Parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis, are endemic in many countries across the globe, disproportionately affecting the poor. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake and can thus lead to serious consequences on human health, education outcomes, and long-term economic well being. In particular, evidence indicates that these worms contribute to malnourishment, impairment of mental and physical development, lower school attendance, and decreased wages [Croke et al., 2016; Miguel & Kremer, 2004; Baird et al., 2016].
 
 Mass deworming has demonstrated to be a highly effective public health intervention in the past. Here we provide a policy analysis that compares benefits and costs of deworming for different potential new settings. The goal of this analysis is to provide the best empirical information for policy makers debating the implemention of a deworming policy. This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
@@ -369,7 +369,7 @@ In summary, approaches 1 and 2 reflect different types of estimating earning pro
 
 ### The discounting rate  {-}
 
-All approaches use the real interest rate ($r$) as the discounting rate. This is obtained from the interest rate on goverment bonds ($i$) minus the inflation rate ($\pi$).
+All approaches use the real interest rate ($r$) as the discounting rate. This is obtained from the interest rate on government bonds ($i$) minus the inflation rate ($\pi$).
 
 <details><summary>Show all the details</summary>
 
@@ -1163,7 +1163,7 @@ Including externalities, they obtain a total NPV of benefits of 766.81, with 102
 
 ## Approach 2: @klps4
 
-In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but now there is more data on the actual effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  Additionally. the interest rate here is updated to current values of return on (Kenyan) goverment bonds and inflation.
+In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but now there is more data on the actual effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups to the original intervention.  Costs are fairly similar to approach 1, with the addition that in the second approach, the costs also account for several rounds of treatment required for effective deworming.  Additionally. the interest rate here is updated to current values of return on (Kenyan) government bonds and inflation.
 
 
 ### Gains in earnings
