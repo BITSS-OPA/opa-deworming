@@ -32,9 +32,10 @@ shinyUI(
     navbarPage("Open Policy Analysis for Deworming Interventions: Open Output Component",
                tabPanel(
                  "Main Policy Estimate",
-                 sidebarPanel(
-                   tags$a(img(src="BITSS_logo_horizontal.png", width="45%", height="auto"), href="https://bitss.org"),
-                   tags$a(img(src="CEGA_logo.png", width="45%", height="auto"), href="https://cega.berkeley.edu"),
+                 sidebarPanel(fluidRow(
+                   column(12, align= "center",
+                   tags$a(img(src="bitss_just_logo_transparent.png", width="20%", height="auto"), href="https://bitss.org"),
+                   tags$a(img(src="cega_transparent.png", width="70%", height="auto"), href="https://cega.berkeley.edu"))),
                    fluidRow(id = "tPanel_main", style = "max-width: 400px; max-height: 300px; position:relative;",
                             br(),
                             h4(strong("Description of Results")),
