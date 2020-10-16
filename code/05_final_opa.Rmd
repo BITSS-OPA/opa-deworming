@@ -1477,8 +1477,9 @@ lambda1_t_in <- lambda_eff_f(
 
 </details>
 
+Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Readers interested in assessing the effects of deworming for a specific value of prevalence and lenght of treatment are refereed to the interactive app (tab on key assumtions) where they can input the values that best reflect their setting. 
 
-ADD A PARAGRAPH ON SUMMARY OF BENFITS. THEY SHOULD BE THE SAME AS IN APP 2, ILUSTRATE WIHT DIFF PREVALENCES.  
+Under apporach 3, and using the same assumptions as above, the benefits will be the same as in approaches 1 and 2: XXXX and XXXX for app1 with and wihtout externalities, and XXX for app2. 
 
 
 ### Costs

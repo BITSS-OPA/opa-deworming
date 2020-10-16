@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "09 October, 2020"
+date: "13 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -257,16 +257,6 @@ The Cost Benefit Analysis (CBA) of deworming is computed using three different a
 
 This document describes all the analytical steps required to reproduce the analysis, displaying the actual computer code use in each step. In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
-<!--
-OLD TEXT (DELETE SOON):
-The key policy estimate consists of a cost effectiveness analysis that compares the present
-value of benefits and costs. The benefits quantified here are the effects on wages an the
-costs are those of delivering the deworming treatment.  
-
-The benefits will account for the direct effects of deworming and plus the indirect effects of deworming due to smaller pool of sick people in the community (herd inmunity). Effects are computed as a change in the earning profile of the population.
-
-This analaysis contains elements from GiveWell's cost effectiveness analysis (see [here](https://docs.google.com/spreadsheets/d/1McptF0GVGv-QBlhWx_IoNVstWvt1z-RwVSu16ciypgs/edit#gid=1537947274), an editable version can be found [here](https://docs.google.com/spreadsheets/d/1rL8NPB8xnxqs1pr_MMEA0j27sAqEuAluwGSML7pREzk/edit#gid=1537947274))  and the cost benefit analysis described in [Baird et al., 2016](https://academic.oup.com/qje/article/131/4/1637/2468871).  
--->
 
 # Methodology  
 
@@ -1775,7 +1765,7 @@ This added analysis factor allows us to take into account differences in the num
 
 <details><summary>Show all the details</summary>
 
-For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 8 respectively) by the following:   
+For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 13 respectively) by the following:   
 
 \begin{equation}
 \lambda_{1,t = 1} = \frac{\lambda_{1}}{T_{0}} \\
@@ -1827,6 +1817,11 @@ lambda1_t_in <- lambda_eff_f(
 
 
 </details>
+
+Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Readers interested in assessing the effects of deworming for a specific value of prevalence and lenght of treatment are refereed to the interactive app (tab on key assumtions) where they can input the values that best reflect their setting. 
+
+Under apporach 3, and using the same assumptions as above, the benefits will be the same as in approaches 1 and 2: 
+
 
 ### Costs
 
@@ -1975,6 +1970,10 @@ costs1_p2_in <- costs1_p2_f()
 
 </details>
 <br>
+
+
+ADD A PARAGRAPH ON SUMMARY OF COSTS THEY SHOULD BE THE SAME AS IN APP 2, ILUSTRATE WIHT DIFF PREVALENCES.  
+
 
 -----
 
@@ -2153,6 +2152,7 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 ### Summary of all approaches  
 
+ADD INTRO PARAGRAPH 
 
 | Approach    | Benfits                                   | Costs        |
 |---------|-------------------------------------------|--------------|
@@ -2169,6 +2169,8 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 
 ### Main policy estimate and additional formats {#policy-estimate}
+
+DELETE THIS SECTION
 
 The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3.
 
@@ -2393,6 +2395,7 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 # Main results  
 
+UPDATE UNIT TESTS
 
 
 ```r
@@ -3017,6 +3020,8 @@ kable(npv_table, caption = "Summary of Policy Estimates Using Different Approach
 
 # Accounting for Uncertainty
 
+EXPLAIN MC PROCESS
+
 
 ```r
 # EXPLAIN
@@ -3622,8 +3627,11 @@ rescale <- rescale_so
 # Sensitivity Analysis (Discuss)
 
 ## Sample of a Opaque and Favorable Report
+DO OPAQUE FAVORABLE REPORT (OR ASK A URAP TO DO IT)
+
 
 ## Sample of a Opaque and Unfavorable Report
+DO OPAQUE UNFAVORABLE REPORT  (OR ASK A URAP TO DO IT)
 
 
 
