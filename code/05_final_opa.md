@@ -2014,7 +2014,7 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria", "viet
 
 </details>
 
-The unit costs of treatments, although small, vary substantially across regions. When including cost information for all the countries where Evidence action has data (India, Kenya, Nigeria, Vietnam) the unit costs is $0.08 per round of treatment. This final costs is primarily driven by the costs large population of India, with a unit cost of $0.06, the other 3 remaining countries have relatively much larger unit costs: $0.54, $0.86, $0.52 for Kenya, Nigeria and Vietnam respectively. 
+The unit costs of treatments, although small, vary substantially across regions. When including cost information for all the countries where Evidence action has data (India, Kenya, Nigeria, Vietnam) the unit costs is $0.08 per round of treatment. This final costs is primarily driven by the costs, and large population, of India, with a unit cost of $0.06, the other 3 remaining countries have relatively larger unit costs: $0.54, $0.86, $0.52 for Kenya, Nigeria and Vietnam respectively. 
 
 -----
 
@@ -2193,7 +2193,7 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 ### Summary of all approaches  
 
-ADD INTRO PARAGRAPH 
+In this document we have presented three different approaches to measuring the welfare effects of deworming  internventions. The first approach was based on the the original paper that measure the welfare effects of deworming (@baird2016worms) and prosed four different ways to compute this effect (with and without externalities, and from a societal or fiscal perspective). The second approach, based on more recent data, focused only on direct effects, and relies less on predictive effects over the lifecycle. Result for the second approach are also separated between the societal and fiscal perspective. The third and final approach uses similar methodologies, but focuses only on societal effects and does not consider the effects on increasin costs of schooling. In this third approach, we 
 
 The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3.
 
@@ -2854,11 +2854,6 @@ kable(npv_table, caption = "Summary of Policy Estimates Using Different Approach
 - NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ): 701.8
 
 - **NPV without ext and benef from @klps4 and EA costs 2019 :** 289.8
-
-- **CEA format:** 1968.6    
-
-- **RCEA format (relative to cash):** 2.6    
-
 
 # Accounting for Uncertainty
 

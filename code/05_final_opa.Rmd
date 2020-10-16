@@ -1723,7 +1723,11 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 ### Summary of all approaches  
 
-ADD INTRO PARAGRAPH 
+In this document we have presented three different approaches to measuring the welfare effects of deworming  internventions. The first approach was based on the the original paper that measure the welfare effects of deworming (@baird2016worms) and prosed four different ways to compute this effect (with and without externalities, and from a societal or fiscal perspective). The second approach, based on more recent data, focused only on direct effects, and relies less on predictive effects over the lifecycle. Result for the second approach are also separated between the societal and fiscal perspective. 
+
+The third and final approach uses similar methodologies, with three main differences. First, the benefits now are scaled to account for the prevalence of worm infections (both in the original study and in prospective settings). Second benefits are also scaled by the length of treatment. Finally, based on input from Evidence Action, the costs used in 
+
+but focuses only on societal effects and does not consider the effects on increasin costs of schooling. In this third approach, we 
 
 The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3.
 
