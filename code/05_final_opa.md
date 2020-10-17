@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "15 October, 2020"
+date: "16 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -59,14 +59,14 @@ link-citations: true
 ##########################################  
 #    return( )                         # A list with all the objects
 #}                                     # generated inside the function
-# The following line executes the the code chunk and deposits on the its results
-# into the current R enviornmen:
+# The following line executes the code chunk and deposits its results
+# into the current R enviornment:
 #invisible( list2env(chunk_name_of_chunk(),.GlobalEnv) )
 #
 ##### Execute values of the functions above when needed for the text:
 # Anything under this comment is to create objects that are used in the body of
 # text. Not to be used in the final results (could be deleted). Each of these
-# object should end with the sufix _temp
+# object should end with the suffix _temp
 ```
 
 

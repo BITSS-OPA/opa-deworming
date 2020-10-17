@@ -88,14 +88,14 @@ knitr::opts_chunk$set(warning = FALSE)
 ##########################################  
 #    return( )                         # A list with all the objects
 #}                                     # generated inside the function
-# The following line executes the the code chunk and deposits on the its results
-# into the current R enviornmen:
+# The following line executes the code chunk and deposits its results
+# into the current R enviornment:
 #invisible( list2env(chunk_name_of_chunk(),.GlobalEnv) )
 #
 ##### Execute values of the functions above when needed for the text:
 # Anything under this comment is to create objects that are used in the body of
 # text. Not to be used in the final results (could be deleted). Each of these
-# object should end with the sufix _temp
+# object should end with the suffix _temp
 ```
 
 
@@ -316,6 +316,15 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 \tag{`r equationIndex`}
 \end{equation}
 
+Where:
+- $NPV$: net present value of the deworming treatment
+- $B$: benefits of the deworming treatment
+- $C$: costs of the deworming treatment
+- $CEA$: cost effectiveness ratio of the deworming treatment in absolute terms, another format of our final policy estimate 
+- $RCEA$: relative cost effectiveness ratio of the deworming treatment relative to the benchmark of cash transfers
+
+
+
 ```{r final-pe, echo=print_code}
 # - inputs: total per capita benefits, total per capita costs, fudging factor
 # - outputs: Cost-effectiveness ratio & ratio to cash CEA, NPV
@@ -358,6 +367,11 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
+
+Where:
+- $E_{t}$: earnings individuals are expected to generate at period t
+- $r$: real interest rate as the discounting rate
+- $t$: period t
 
 ```{r benefits, echo=print_code}
 # - inputs: stream earnings, discounting rate, number of periods
@@ -407,6 +421,11 @@ r \approx i - \pi
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
+
+Where:
+- $r$: real interest rate as the discounting rate
+- $i$: interest rate on government bonds
+- $\pi$: inflation rate
 
 TO DO: after confirming that reproduction works, change all `interest_in` to `interest_exct_in`
 
@@ -517,9 +536,9 @@ Gains in earnings ($\Delta W_{t}$) are the result of multiplying expected earnin
 
 Where[^6]:   
 
- - $w_t$: are the earnings in period $t$.   
- - $\lambda_{1}$: is the direct effects of deworming on earnings.  
- - $\lambda_{2}$: is the indirect effects of deworming on earnings.   
+ - $w_t$: the earnings in period $t$.   
+ - $\lambda_{1}$: the direct effects of deworming on earnings.  
+ - $\lambda_{2}$: the indirect effects of deworming on earnings.   
  - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
  - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
 
@@ -591,6 +610,19 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
+
+Where:
+- $w_t$: the weekly earnings in period $t$
+- $w_0$: the initial weekly earnings
+- $g$: per capita GDP growth
+- $Xp$: years of work 
+- $\hat{\beta_1}$: ???
+- $\hat{\beta_2}$: ???
+- $ex$: exchange rate 
+- $h$: average worked hours dedicated to each sector
+- $ag$: agriculture 
+- $ww$: working wage
+- $se$: self-employed sectors 
 
 
 ```{r wage_t}
@@ -673,6 +705,11 @@ The estimated externality effect ($\lambda_{2}$) reflects the additional hours w
 \tag{`r equationIndex`}
 \end{equation}
 
+Where:
+- $\lambda_1$: average impact of deworming on hours worked for both men and women
+- $\lambda_{1,male}$: average impact of deworming on hours worked for men
+- $\lambda_{1, female}$: average impact of deworming on hours worked for women 
+
 
 ```{r lambdas}
 # - inputs: lambda1_so, lambda2_so
@@ -719,6 +756,13 @@ p = R \times Q(full)  + (1 - R) \times Q(0)
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
+
+Where:
+- $p$: saturation, measures the fraction of the population that is effectively using the treatment
+- $R$: coverage, measures the fraction of the population that is effectively using the treatment
+- $Q(full)$: take-up with full subsidy 
+- $Q(0)$: take-up without subsidy 
+
 
 ```{r coverage-and-saturation}
 # - inputs: coverage_so, q_full_so, q_zero_so
@@ -834,6 +878,14 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
+
+Where: 
+- $S_2$: per-capita costs of deworming under the deworming intervention
+- $S_1$: per-capita costs of deworming if the government does not provide any additional resources for deworming 
+- $Q(S_2)$: take-up under a mass deworming intervention
+- $Q(S_1)$: take-up without additional resources from the government 
+- $K$: cost per student to get education 
+- $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance 
 
 ```{r cost2}
 # - inputs: periods_so, delta_ed_final_in, interest (varies by approach), cost_per_student_in, s2_in, q2_in
@@ -1033,6 +1085,12 @@ Gains in earnings represents the treatment effect on welfare, so it implicitly t
 \tag{`r equationIndex`}
 \end{equation}
 
+Where:
+- $\Delta W_t$: gains in earnings from 10, 15, and 20 years after intervention
+- $\alpha^{KLPS2}$: estimated treatment effects 10 years after intervention 
+- $\alpha^{KLPS3}$: estimated treatment effects 15 years after intervention
+- $\alpha^{KLPS4}$: estimated treatment effects 20 years after intervention 
+
 
 ```{r delta-earnings, eval=TRUE}
 # - inputs: t_var, lambda1_new_so[1], lambda1_new_so[2], lambda1_new_so[3]
@@ -1102,6 +1160,7 @@ DC = \sum_{t=0}^{`r round(years_of_treat_0_so,1)-1`} \left( \frac{1}{1 + r}\righ
 \tag{`r equationIndex`}
 \end{equation}
 
+
 Since the analysis is discrete, and we can not sum over a non-integer, we find
 
 \begin{equation}
@@ -1112,6 +1171,13 @@ DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\bi
 \tag{`r equationIndex`}
 \end{equation}
 
+Where:
+- $DC$: direct deworming costs
+- $r$: discounting rate, defined as the real interest rate
+- $S_2$: per-capita costs of deworming under the deworming intervention
+- $S_1$: per-capita costs of deworming if the government does not provide any additional resources for deworming 
+- $Q(S_2)$: take-up under a mass deworming intervention
+- $Q(S_1)$: take-up without additional resources from the government 
 
 
 ```{r unit_costs2_new}
@@ -1167,6 +1233,10 @@ K \sum_{t=0}^{`r dim(delta_ed_so)[1]-1`} \left( \frac{1}{1 + r}\right)^{t} \Delt
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
 \end{equation}
+
+Where:
+- $K$: cost per student to get education 
+- $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance  
 
 
 ```{r ed-costs-new}
@@ -1248,6 +1318,13 @@ For approach 3, we will modify treatement effects of approaches 1 and 2 (equatio
 \tag{`r equationIndex`}
 \end{equation}
 
+Where:
+- $\lambda_1$: direct effects of deworming on individuals' earnings
+- $\lambda^{eff}_1$: impact of deworming on children who were treated and had a worm infection in the original evaluation
+- $\lambda^r_1$: impact of deworming on children who were treated and had a worm infection in the new region 
+- $\eta$: prevalence rates in the original evaluation 
+- $\eta_r$: prevalence rates in the new region 
+
 ```{r lambdas_eff}
 # - inputs: lambda1_in_f(), prevalence_0_so, prevalence_r_so
 # - outputs: lambda_eff_f
@@ -1312,6 +1389,7 @@ For approach 3, we will modify treatement effects of approaches 1 and 2 (equatio
 \tag{`r equationIndex`}
 \end{equation}
 
+
 ```{r lambdas_t}
 # - inputs: lambda1_in_f(), years_of_treat_0_so, years_of_treat_0_so
 # - outputs: lambda_t_f
@@ -1359,7 +1437,7 @@ lambda1_t_in <- lambda_eff_f(
 
 ### Costs
 
-To estimate the costs, we follow a similar approach to @givewell. The default cost is the per unit cost of treatment across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions.
+To estimate the costs, we follow a similar approach to @givewell. The default cost is the per unit cost of treatment across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions.
 
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. Costs can vary by geography due to factors of scale, treatment strategies, age of the program, and costs of "doing business."
 
@@ -1390,6 +1468,13 @@ C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
 \end{equation}
 
+Where:
+- $C$: weighted average of per unit costs in all countries 
+- $c_i$: per unit costs in different countries
+- $\omega_i$: country weights for computing the costs 
+- $N$: the number of all treated individuals 
+- $C_{i,k}$: costs of a country at a specific payer level
+-$\delta_g$: ???
 
 ```{r eq_3, echo=print_code, eval=TRUE}  
 # - inputs: nothing

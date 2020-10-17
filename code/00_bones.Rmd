@@ -73,14 +73,14 @@ print_code <- TRUE
 ##########################################  
 #    return( )                         # A list with all the objects
 #}                                     # generated inside the function
-# The following line executes the the code chunk and deposits on the its results
-# into the current R enviornmen:
+# The following line executes the code chunk and deposits its results
+# into the current R enviornment:
 #invisible( list2env(chunk_name_of_chunk(),.GlobalEnv) )
 #
 ##### Execute values of the functions above when needed for the text:
 # Anything under this comment is to create objects that are used in the body of
 # text. Not to be used in the final results (could be deleted). Each of these
-# object should end with the sufix _temp
+# object should end with the suffix _temp
 
 ```
 
@@ -237,7 +237,7 @@ This is the formula used to calculate component 2[^2]
 
 \begin{equation}
 q =  \text{input} \times \alpha_0 (1 + g)^{X}(1 + \hat{\beta_1} X + \hat{\beta_2} X^2)
-\label{eq:4}
+\label{eq:}
 \tag{4}
 \end{equation}
 
@@ -269,11 +269,11 @@ This is the formula used to calculate component 3[^3]
 
 \begin{equation}
 k = R \times X  + (1 - R) \times X
-\label{eq:4}
-\tag{4}
+\label{eq:5}
+\tag{5}
 \end{equation}
 
-Not sure why this part renders weirdly...
+
 
 ```{r comp3,  echo=print_code, eval=FALSE}
 # - inputs: factors of q
