@@ -1,7 +1,8 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "18 October, 2020"
+date: "16 October, 2020"
+
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -59,14 +60,14 @@ link-citations: true
 ##########################################  
 #    return( )                         # A list with all the objects
 #}                                     # generated inside the function
-# The following line executes the the code chunk and deposits on the its results
-# into the current R enviornmen:
+# The following line executes the code chunk and deposits its results
+# into the current R enviornment:
 #invisible( list2env(chunk_name_of_chunk(),.GlobalEnv) )
 #
 ##### Execute values of the functions above when needed for the text:
 # Anything under this comment is to create objects that are used in the body of
 # text. Not to be used in the final results (could be deleted). Each of these
-# object should end with the sufix _temp
+# object should end with the suffix _temp
 ```
 
 
@@ -230,7 +231,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -246,7 +247,9 @@ This report is part of an open policy analysis (OPA) on deworming interventions.
 
 # Introduction  
 
+
 Parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis, are endemic in many countries across the globe, disproportionately affecting the poor. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake and can thus lead to serious consequences on human health, education outcomes, and long-term economic well being. In particular, evidence indicates that these worms contribute to malnourishment, impairment of mental and physical development, lower school attendance, and decreased wages [Croke et al, 2016; Miguel & Kremer, 2004; Baird et al, 2016].
+
 
 Mass deworming has demonstrated to be a highly effective public health intervention. Here we provide a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into more policy-relevant outputs.The goal of this analysis is to: 1) provide more transparency and understanding behind existing evidence on the return on investment for mass deworming programs, and 2) allow for policymakers to better understand the value of investing in deworming programs in their own settings.
 
@@ -364,7 +367,9 @@ The main differences in costs between scenarios have to do with a) whether indir
 
 ### The discounting rate  {-}
 
+
 All 3 approaches use the real interest rate ($r$) as the discounting rate. This is obtained from the interest rate on government bonds ($i$) minus the inflation rate ($\pi$).
+
 
 <details><summary>Show all the details</summary>
 
@@ -1209,9 +1214,9 @@ Without externalities, the original analysis (@baird2016worms) obtains a present
 </details>
 
 
-## Approach 2: @klps4
 
 In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but we use updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in this second approach, the costs also account for discounting of the several rounds of treatment required for effective deworming.  Additionally, the interest rate is updated to current values of return on (Kenyan) government bonds and inflation.
+
 
 
 ### Gains in earnings

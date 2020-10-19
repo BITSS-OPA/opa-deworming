@@ -80,9 +80,11 @@ shinyUI(
                    fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 300px; position:relative;",
                             withMathJax(),
                             useShinyjs(),
-                            selectInput("policy_est_ka", "Policy Estimate:",
+                            helpText("Choose your approach to generate the policy estimate"),
+                            selectInput("policy_est_ka", "Policy Estimates",
                                         choices = policy_estimates_text,
-                                        selected = "A3. All income of A2. Main Policy Estimate")
+                                        selected = "A3. All income of A2. Main Policy Estimate"),
+                            
                    ), 
                    fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 600px; position:relative;",
                             numericInput("param35", label = h3("Unit costs in new country"), value = round(costs2_ea_in,2)), 
@@ -123,9 +125,11 @@ shinyUI(
                             numericInput("param1", label = h4("Number of simulations"), value = 1e2),
                             withMathJax(),
                             useShinyjs(),
+                            helpText("Choose your approach to generate the policy estimate"),
                             selectInput("policy_est", "Policy Estimate:",
                                         choices = policy_estimates_text,
-                                        selected = "A3. All income of A2. Main Policy Estimate")
+                                        selected = "A3. All income of A2. Main Policy Estimate"),
+                            
                    ),
                    fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                             tabsetPanel(
