@@ -118,7 +118,7 @@ shinyUI(
                  "All Assumptions",
                  sidebarPanel(
                    fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 300px; position:relative;",
-                            actionButton("run", label = "Run Simulation"),
+                            
                             checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
                             numericInput("param1", label = h4("Number of simulations"), value = 1e2),
                             withMathJax(),
