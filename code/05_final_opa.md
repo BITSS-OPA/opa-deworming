@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "16 October, 2020"
+date: "18 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -234,13 +234,15 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
-<!--
-# ADD A STANTARD DESCPRIPTION OF AN OPA REPORT {-}
 
-- Complete narrative description.
-- Equations and code added to implement the narrated description.
+# Brief description of Open Policy Analysis {-}
+
+This report is part of an open policy analysis (OPA) on deworming interventions.   
+
+- Complete narrative description.  
+- Equations and code added to implement the narrated description.  
 - Displayed in a layered fashion. Text should provide a good narrative explanation to policy makers, equations and code are meant to provide a full picture to analysts and researchers.
--->
+
 
 # Introduction  
 
@@ -1792,11 +1794,11 @@ chunk_lambdas_t<- function(){
           } else if  (years_of_treat_t_var>6) {
             lambda1_t <- 6 * lambda1_t1
           }
-
-            return(
-              list("lambda1_t1" = lambda1_t1,
-                   "lambda1_t" = lambda1_t)
-              )
+          return(
+            list(
+              "lambda1_t1" = lambda1_t1,
+              "lambda1_t" = lambda1_t)
+            )
     }  
 
 ##############################################################################
@@ -1811,7 +1813,10 @@ lambda1_t_in <- lambda_eff_f(
     lambda1_var = lambda1_in_f(),
     years_of_treat_0_var =  years_of_treat_0_so,
     years_of_treat_t_var =  years_of_treat_t_so
-  )$lambda1_t, prevalence_0_var = 1, other_prev_r = 1
+  )$lambda1_t, 
+  prevalence_0_var = prevalence_0_so, 
+  country_sel_var = list("india", "kenya", "nigeria", "vietnam"), 
+  other_prev_r = NULL
 )$lambda1_eff_in
 
 
@@ -1849,7 +1854,10 @@ lambda1_t_new_in <- lambda_eff_f(
     lambda1_var = lambda1_new_so[1],
     years_of_treat_0_var =  years_of_treat_0_so,
     years_of_treat_t_var =  years_of_treat_t_so
-  )$lambda1_t, prevalence_0_var = 1, other_prev_r = 1
+  )$lambda1_t, 
+  prevalence_0_var = prevalence_0_so, 
+  country_sel_var = list("india", "kenya", "nigeria", "vietnam"), 
+  other_prev_r = NULL
 )$lambda1_eff_in
 
 
@@ -1864,9 +1872,13 @@ app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
 
 </details>
 
-Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Both approaches implicitly assume prevalence rates of 100% and do not distinguish between original population and target populuation. Both approaches also set the length of treatment at 2.41 years. Readers interested in assessing the effects of deworming for a specific value of prevalence and lenght of treatment are refereed to the interactive app (tab on key assumtions) where they can input the values that best reflect their setting. 
+<!--
+Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Both approaches implicitly assume prevalence rates of 100% and do not distinguish between original population and target populuation. Both approaches also set the length of treatment at 2.41 years.
+-->
 
-Under apporach 3, and using the same assumptions as above, the benefits will be the same as in approaches 1 and 2: 142.43 and 766.81 for approach 1 without and with externalities, and 532.02 when using the benefit structure of approach 2.  
+To compute the benefits for this approach, we use data on prevalence and length of treatment for the four countries that Evidence Action has records for. Readers interested in assessing the effects of deworming for a specific value of prevalence and lenght of treatment are refereed to the interactive app (tab on key assumtions) where they can input the values that best reflect their setting. To facilitate comparison with the other two approaches, we present here the results using the same length of treatment assumptions parameters as in approach 1 and 2.  
+
+Under apporach 3, and using the same assumptions as above, the benefits will be the same as in approaches 1 and 2: 77.61 and 702 for approach 1 without and with externalities, and 289.9 when using the benefit structure of approach 2.  
 
 ### Costs
 
@@ -2193,29 +2205,15 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 ### Summary of all approaches  
 
-In this document we have presented three different approaches to measuring the welfare effects of deworming  internventions. The first approach was based on the the original paper that measure the welfare effects of deworming (@baird2016worms) and prosed four different ways to compute this effect (with and without externalities, and from a societal or fiscal perspective). The second approach, based on more recent data, focused only on direct effects, and relies less on predictive effects over the lifecycle. Result for the second approach are also separated between the societal and fiscal perspective. The third and final approach uses similar methodologies, but focuses only on societal effects and does not consider the effects on increasin costs of schooling. In this third approach, we 
+In this document we have presented three different approaches to measuring the welfare effects of deworming  interventions. The first approach was based on the original paper that measured the welfare effects of deworming (@baird2016worms) and proposed four different ways to compute this effect (with and without externalities, and from a societal or fiscal perspective). The second approach, based on more recent data, focused only on direct effects, and relies less on predictive effects over the lifecycle. Results for the second approach are also separated between the societal and fiscal perspective. 
 
-The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3.
+The third and final approach uses similar methodologies, with three main differences. First, the benefits now are scaled to account for the prevalence of worm infections (both in the original study and in prospective settings). Second benefits are also scaled by the length of treatment. Finally, based on feedback from Evidence Action on the relevant costs from the perspective of policy makers, this approach does not take into account the effects of additional schooling costs, and uses more up to date information on treatment costs. 
 
-
-| Approach    | Benfits                                   | Costs        |
-|---------|-------------------------------------------|--------------|
-| 1.1 | @baird2016worms w/tax and no externalities (no ext) |  Treatment, Education |
-| 1.2 | @baird2016worms w/t and ext                         |    Treatment, Education (w/ext)    |
-| 1.3 | @baird2016worms  all and no ext                      |  Treatment, Education |
-| 1.4 | @baird2016worms all and ext                         |  Treatment, Education (w/ext)    |
-| 2.1 | @klps4  w/t and no ext                      |  Treatment, Education |
-| 2.2 | @klps4  all and no ext                      |  Treatment, Education|
-| 3.1    | 1.3 + prevalence + length of treatment                       | Treatment (EA)          |
-| 3.2    | 1.4 + prevalence + length                        | Treatment (EA)             |
-| **3.3**    | **2.2 + prevalence + length**                       | **Treatment (EA)  **           |  
-
+The table below summarises the three different approaches and the different alternatives within each approach. The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3 in the table.
 
 
 
 # Main results  
-
-UPDATE UNIT TESTS
 
 
 ```r
@@ -2392,21 +2390,21 @@ one_run <-
     unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
 
     ###------------ Inputs for earnings2_f--------------------------------------
-    lambda1_new_in <- lambda1_new_var1
-    unit_test(lambda1_new_in, 1.8184154558571, main_run_var = main_run_var1)
+    lambda1_new_in <- lambda1_new_var1[1]
+    unit_test(lambda1_new_in, 79.51465, 
+              main_run_var = main_run_var1)
     lambda1_t_temp = lambda_t_f(
       lambda1_var = lambda1_new_var1,
       years_of_treat_0_var = years_of_treat_0_var1,
       years_of_treat_t_var = years_of_treat_t_var1  
     )$lambda1_t
-
     lambda1_prev_new_in <- lambda_eff_f(lambda1_var = lambda1_t_temp,
                              prevalence_0_var = prevalence_0_var1,
                              prevalence_r_var = prevalence_r_var1,
                              other_prev_r = new_prev_r_var1,
                             country_sel_var = countries_var1
                             )$lambda1_eff_in
-    unit_test(lambda1_prev_new_in, 0.990862716410, main_run_var = main_run_var1)
+    unit_test(lambda1_prev_new_in[1], 43.3278884864681, main_run_var = main_run_var1)
 
     ##------------ Inputs for pv_benef_f ---------------------------------------
     # earnings1
@@ -2555,19 +2553,19 @@ one_run <-
       interest_r_var = interest_in_new,
       periods_var = periods_var1
     )
-    unit_test(pv_benef_tax_new, 157.5017,
+    unit_test(pv_benef_tax_new, 88.1820199569814,
               main_run_var = main_run_var1)
 
     # KLPS4 all and no ext
     pv_benef_all_new <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
                                    interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
-    unit_test(pv_benef_all_new, 950.2367, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_new, 532.018219951622, main_run_var = main_run_var1)
     # KLPS4 all and no ext + prevalence
     pv_benef_all_prev_new <- pv_benef_f(earnings_var = earnings_in_no_ext_prev_new,
                                    interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
-    unit_test(pv_benef_all_prev_new, 517.78821257177, main_run_var = main_run_var1)
+    unit_test(pv_benef_all_prev_new, 289.899107986178, main_run_var = main_run_var1)
 
     #Costs asd
     # costs1: EA costs no externalities
@@ -2634,7 +2632,7 @@ earnings_in_no_ext
       s2_var = s2_new_in,
       q2_var = q_full_var1
     )
-    unit_test(costs_k, 32.2996145651321, main_run_var = main_run_var1)
+    unit_test(costs_k, 32.2977546110344, main_run_var = main_run_var1)
     return( list( "wage_0_in" = wage_0_in, "wage_t_in" = wage_t_in, "lambda1_in" = lambda1_in,
                   "lambda1_prev_in" = lambda1_prev_in,
                   "lambda2_in" = lambda2_in, "saturation_in" = saturation_in,
@@ -2659,20 +2657,12 @@ earnings_in_no_ext
                   "pv_benef_all_new" = pv_benef_all_new,
                   "pv_benef_all_prev_new" = pv_benef_all_prev_new,
                   "costs2_ea_in" = costs2_ea_in,
-                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x, "costs_k" = costs_k, "cost1_in" = cost1_in
+                  "costs2_in" = costs2_in, "costs2_in_x" = costs2_in_x, 
+                  "costs_k" = costs_k, "cost1_in" = cost1_in
                                 ) )
   }
 
 invisible( list2env(one_run(),.GlobalEnv) )
-```
-
-```
-## [1] "Output has change at lambda1_new_in  to  0"
-## [1] "Output has change at lambda1_prev_new_in  to  0"
-## [1] "Output has change at pv_benef_tax_new  to  88.1820199569814"
-## [1] "Output has change at pv_benef_all_new  to  532.018219951622"
-## [1] "Output has change at pv_benef_all_prev_new  to  289.899107986178"
-## [1] "Output has change at costs_k  to  32.2977546110344"
 ```
 
 
@@ -2697,24 +2687,11 @@ unit_test(a1_x_all, 741.618186471615)
 
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
 klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_k)
-unit_test(klps4_1, 125.202113576337)
-```
-
-```
-## [1] "Output has change at klps4_1  to  55.884265345947"
-```
-
-```r
+unit_test(klps4_1, 55.884265345947)
 #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
 klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_k)
-unit_test(klps4_2, 917.937055971637)
-```
+unit_test(klps4_2, 499.720465340588)
 
-```
-## [1] "Output has change at klps4_2  to  499.720465340588"
-```
-
-```r
 # EA1: no externality NPV using EAs costs
 ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
 unit_test(ea1, 77.4612400741955)
@@ -2723,121 +2700,25 @@ ea2 <- NPV_pe_f(benefits_var = pv_benef_all_yx_prev_in, costs_var = costs2_ea_in
 unit_test(ea2, 701.849761243559)
 # EA3: benef= KLPS all and no ext; Costs=EA
 ea3 <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
-unit_test(ea3, 517.640954399502)
+unit_test(ea3, 289.751849813911)
 ```
 
-```
-## [1] "Output has change at ea3  to  289.751849813911"
-```
 
-```r
-# CEA for EA
-a3_mpe_cea <- CEA_pe_f(benefits_var = pv_benef_all_prev_new,
-                          costs_var = costs2_ea_in,
-                          fudging_var = 0)
-unit_test(a3_mpe_cea, 3516.19339422076)
-```
 
-```
-## [1] "Output has change at a3_mpe_cea  to  1968.64529501085"
-```
+| Approach    | Benfits                                     | Costs                          |   NPV
+|---------|-------------------------------------------------|--------------------------------|----------|
+| 1.1 | @baird2016worms w/tax and no externalities (no ext) |  Treatment, Education          | 11.8   |
+| 1.2 | @baird2016worms w/t and ext                         |    Treatment, Education (w/ext)| 101.9 |
+| 1.3 | @baird2016worms  all and no ext                     |  Treatment, Education          | 130.6   |
+| 1.4 | @baird2016worms all and ext                         |  Treatment, Education (w/ext)  | 741.6 |
+| 2.1 | @klps4  w/t and no ext                              |  Treatment, Education          | 55.9  |
+| 2.2 | @klps4  all and no ext                              |  Treatment, Education          | 499.7  |
+| 3.1 | 1.3 + prevalence + length of treatment              | Treatment (EA)                 | 77.5      |
+| 3.2 | 1.4 + prevalence + length                           | Treatment (EA)                 | 701.8      |
+| **3.3**    | **2.2 + prevalence + length**                | **Treatment (EA)  **           | **289.8**  |  
 
-```r
-a3_mpe_rcea <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_prev_new,
-                                                costs_var = costs2_ea_in,
-                                                fudging_var = 0),
-                             CEA_cash_var = 744)
-unit_test(a3_mpe_rcea, 4.7260663900816)
-```
 
-```
-## [1] "Output has change at a3_mpe_rcea  to  2.64602862232641"
-```
 
-```r
-npv_table <- data.frame("no_ext" =  round( c(a1_tax, NA,
-                                             NA), 1) ,
-                        "yes_ext" = round( c(NA, a1_x_tax, NA), 1) ,
-                        "no_ext_" = round( c(a1_all, NA,
-                                             ea1), 1) ,
-                        "yes_ext_" = round( c(NA, a1_x_all,
-                                             ea2), 1) ,
-                        "no_ext " = round( c(klps4_1, NA,
-                                             NA), 1) ,
-                        ".no_ext " = round( c(klps4_2, NA,
-                                             ea3), 1) ,
-                        row.names = c("no_ext", "yes_ext", "no_ext_"))
-
-kable(npv_table, caption = "Summary of Policy Estimates Using Different Approachs") %>%
-  add_header_above(c(" ", "tax" = 2, "all" = 2, "tax" = 1, "all" = 1)) %>%
-  add_header_above(c(" ", "Baird = EA" = 4, "KLPS4" = 2)) %>%
-  add_header_above(c(" ", "Benefits" = 6)) %>%
-  kable_styling("striped", full_width = F) %>%
-  group_rows("Costs: Baird = KLPS4", 1, 2) %>%
-  group_rows("Costs: EA", 3, 3)   # same result with group 1=4
-```
-
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:main-results)Summary of Policy Estimates Using Different Approachs</caption>
- <thead>
-<tr>
-<th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="6"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Benefits</div></th>
-</tr>
-<tr>
-<th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Baird = EA</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">KLPS4</div></th>
-</tr>
-<tr>
-<th style="border-bottom:hidden" colspan="1"></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">tax</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">all</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">tax</div></th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">all</div></th>
-</tr>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> no_ext </th>
-   <th style="text-align:right;"> yes_ext </th>
-   <th style="text-align:right;"> no_ext_ </th>
-   <th style="text-align:right;"> yes_ext_ </th>
-   <th style="text-align:right;"> no_ext. </th>
-   <th style="text-align:right;"> .no_ext. </th>
-  </tr>
- </thead>
-<tbody>
-  <tr grouplength="2"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: Baird = KLPS4</strong></td></tr>
-<tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext </td>
-   <td style="text-align:right;"> 11.8 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 130.6 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 55.9 </td>
-   <td style="text-align:right;"> 499.7 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> yes_ext </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 101.9 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 741.6 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
-  </tr>
-  <tr grouplength="1"><td colspan="7" style="border-bottom: 1px solid;"><strong>Costs: EA</strong></td></tr>
-<tr>
-   <td style="text-align:left; padding-left: 2em;" indentlevel="1"> no_ext_ </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 77.5 </td>
-   <td style="text-align:right;"> 701.8 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 289.8 </td>
-  </tr>
-</tbody>
-</table>
 
 
 ## Results for overall welfare (not only taxes)
@@ -2857,7 +2738,32 @@ kable(npv_table, caption = "Summary of Policy Estimates Using Different Approach
 
 # Accounting for Uncertainty
 
-EXPLAIN MC PROCESS
+This policy analysis has identified each source used in the analysis behind benefits and costs of Deworming interventions. Each of these sources in turn is measured with some uncertainty (either in prediction of future values or estimation of past ones). Traditional policy analysis assumes that each of these sources have no uncertainty, and in some cases incorporates uncertainty or performed sensitivity analysis for a few parameters of interest. By following the open policy analysis principles we now can allow for each source to vary and explore the overall uncertainty of the final policy estimate. 
+
+Our approach consists in assuming that each source used in the analysis can be represented as a random draw from a normal distribution. The mean corresponds to the measured value. The standard deviation corresponds to the estimated standard error when available, and to a fraction of the mean when not available. As a default analysis we suggest to set it these standard deviations to 10% of the mean. This choice is arbitrary, but unlike the default arbitrary choice of setting the standard deviations to zero, it makes explicit the uncertainty and it can be modified in the app. 
+
+
+
+
+<details><summary>Show all the details</summary>
+
+Let $x$ denote each source used in this analysis.  
+
+\begin{equation}
+x \sim N(\hat{x}, \sigma_{x}) 
+
+\label{eq:21}
+\tag{21}
+\\
+\sigma_{x} =
+\begin{cases}
+\hat{\sigma_{x}} \quad \text{If $\sigma_{x}$ is available}\\
+\\
+\delta_{u}\hat{x} \quad \text{otherwise}
+\end{cases}
+\end{equation}
+
+As a default $\delta_{u} = 0.1$
 
 
 ```r
@@ -3266,209 +3172,10 @@ policy_estimates_text <- c(
 #   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
 ```
 
+</details>
 
-
-```r
-npv_sim_all <-   sim.data1(nsims = nsims_so,                        
-            gov_bonds_var2          = gov_bonds_so             ,                                    
-            gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
-            inflation_var2          = inflation_so             ,                                    
-            inflation_var2_sd       = inflation_so * 0.1          ,                                 
-            gov_bonds_new_var2      = gov_bonds_new_so      ,          
-            gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          
-            inflation_new_var2      = inflation_new_so      ,        
-            inflation_new_var2_sd   = inflation_new_so * 0.1,          
-            wage_ag_var2            = wage_ag_so               ,                                      
-            wage_ag_var2_sd         = wage_ag_so * 0.1            ,                                   
-            wage_ww_var2            = wage_ww_so               ,                                      
-            wage_ww_var2_sd         = wage_ww_so * 0.1            ,                                   
-            profits_se_var2         = profits_se_so            ,                                   
-            profits_se_var2_sd      = profits_se_so * 0.1         ,                                
-            hours_se_cond_var2      = hours_se_cond_so         ,                                
-            hours_se_cond_var2_sd   = hours_se_cond_so * 0.1      ,                             
-            hours_ag_var2           = hours_ag_so              ,                                     
-            hours_ag_var2_sd        = hours_ag_so * 0.1           ,                                  
-            hours_ww_var2           = hours_ww_so              ,                                     
-            hours_ww_var2_sd        = hours_ww_so * 0.1           ,                                  
-            hours_se_var2           = hours_se_so              ,                                     
-            hours_se_var2_sd        = hours_se_so * 0.1           ,                                  
-            ex_rate_var2            = ex_rate_so               ,                                      
-            ex_rate_var2_sd         = ex_rate_so * 0.1            ,                                   
-            growth_rate_var2        = growth_rate_so           ,                                  
-            growth_rate_var2_sd     = growth_rate_so * 0.1        ,
-            coverage_var2           = coverage_so              ,
-            coverage_var2_sd        = coverage_so * 0.1           ,  
-            tax_var2                = tax_so                   ,                                             
-            tax_var2_sd             = tax_so * 0.1                ,                                        
-            unit_cost_local_var2    = unit_cost_local_so       ,                                     
-            unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,
-            unit_cost_local_new_var2 = unit_cost_2017usdppp_so,
-            unit_cost_local_new_var2_sd = unit_cost_2017usdppp_so * 0.1  ,  
-            years_of_treat_0_var2   = years_of_treat_0_so        ,    
-            years_of_treat_0_var2_sd= years_of_treat_0_so * 0.1     ,
-            years_of_treat_t_var2   = years_of_treat_t_so        ,    
-            years_of_treat_t_var2_sd= years_of_treat_t_so * 0.1     ,
-            lambda1_var2            = lambda1_so,                                          
-            lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
-            lambda2_var2            = lambda2_so        ,                         
-            lambda2_var2_sd         = lambda2_so * 0.1  ,                      
-            q_full_var2             = q_full_so         ,                          
-            q_full_var2_sd          = q_full_so * 0.1   ,                         
-            coef_exp_var2           = coef_exp_so,                      
-            # coef_exp_var2_sd = c(as.numeric(input$param21_1_1),
-            # as.numeric(input$param21_2_1)),                       
-            teach_sal_var2          = teach_sal_so         ,                                          
-            teach_sal_var2_sd       = teach_sal_so * 0.1      ,                                       
-            teach_ben_var2          = teach_ben_so         ,                                          
-            teach_ben_var2_sd       = teach_ben_so * 0.1      ,                                       
-            teach_sal_new_var2      = teach_sal_new_so         ,          #add to app                                
-            teach_sal_new_var2_sd   = teach_sal_new_so * 0.1      ,       #add to app                                
-            teach_ben_new_var2      = teach_ben_new_so         ,          #add to app                               
-            teach_ben_new_var2_sd   = 0.000001      ,                     #add to app
-            n_students_var2         = n_students_so        ,                                         
-            n_students_var2_sd      = n_students_so * 0.1     ,                                      
-            delta_ed_var2           = delta_ed_par_so          ,                                           
-            delta_ed_var2_sd        = delta_ed_par_so * 0.1       ,                                            
-            delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
-            delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
-            q_zero_var2             = q_zero_so            ,                                             
-            q_zero_var2_sd          = q_zero_so * 0.1         ,
-            lambda1_new_var2        = lambda1_new_so,                   
-            lambda1_new_var2_sd     = lambda1_new_sd_so,             
-            prevalence_0_var2            = prevalence_0_so       ,  
-            prevalence_0_var2_sd         = prevalence_0_so * 0.1    ,
-            prevalence_r_var2            = 1       ,    #TEMP
-            prevalence_r_var2_sd         = 0.1    ,           
-            new_prev_r_var2 = new_prevalence_r_so,
-            staff_time_var2         = staff_time_so    ,
-            staff_time_var2_sd      = staff_time_so * 0.1,
-            counts_par_var2         = counts_par_so    ,
-            counts_par_var2_sd      = counts_par_sd_so ,
-            costs_par_var2          = costs_par_so     ,
-            costs_par_var2_sd       = costs_par_sd_so,
-            new_costs_var2 = NULL,
-            countries_var2 = list("india", "kenya", "nigeria", "vietnam"))
-
-
-total_time <- npv_sim_all$total_time
-position <- which( policy_estimates == policy_estimate_so )
-npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 1))
-npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 1))
-#Unit test the simulations for nsims = 100, 1000, 10000 UPDATE
-all_res_100_sims <- c(
-  8.7094550833253,
-  49.2632644048296,
-  49.4694221681446,
-  277.265576489817,
-  175.678254409271,
-  1022.37359604602,
-  49.9034982533997,
-  278.49341938017,
-  1022.26807845879,
-  413.199179925478,
-  0.555375241835319
-)
-
-all_res_1000_sims <- c(
-  8.94904200012673,
-  47.7557079511762,
-  52.2490551593106,
-  277.810659510651,
-  176.29084181961,
-  1051.32849483112,
-  52.6663916192209,
-  279.015364618585,
-  1051.32339750587,
-  407.842773941034,
-  0.548175771426122
-)
-
-all_res_10000_sims <- c(
-  8.79105935822713,
-  47.6994033603414,
-  52.2778377879947,
-  279.54416693675,
-  181.921984084524,
-  1085.22816114431,
-  52.7479120047233,
-  280.883186390767,
-  1085.20816160347,
-  406.388379235971,
-  0.546220939833294
-)
-
-if (FALSE) {
-k <- 0
-for ( i in policy_estimates ) {
-    k <- k + 1
-    to_test <- npv_sim_all[[i]]
-    if (nsims_so == 1e4){
-        unit_test(to_test, all_res_10000_sims[k], main_run_var = TRUE)
-    } else if (nsims_so == 1e3){
-        unit_test(to_test, all_res_1000_sims[k], main_run_var = TRUE)
-    } else if (nsims_so == 1e2){
-        unit_test(to_test, all_res_100_sims[k], main_run_var = TRUE)
-    }
-}
-}
-################
-###### Results/Viz
-################
-library(plotly)
-nsims <- nsims_so
-
-npv_for_text <- paste(round(median(npv_sim),1))
-npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
-
-rescale <- rescale_so
-
-    plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black", "blue") ) +
-      coord_cartesian(xlim = c(-100, 800)) +
-      guides(alpha = "none", colour="none") +
-      labs(y = NULL,
-           x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Lifetime Income Effects of Deworming for Each Treated Children",
-           subtitle = "Distribution of the Net Present Value of Deworming Interventions"
-           ) +
-      annotate("text", x = 2 * median(npv_sim), y = 0.15, label = npv_for_text, size = 4, col = "blue")+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-    if (rescale == TRUE) {
-      plot1 <- suppressMessages(
-        plot1 +
-          coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ),
-                                          max(npv_sim))
-                          )
-        )
-    }
-    print(plot1)
-```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
-
-```r
-    #FUTURE:
-    #ggplotly(plot1)
-    #ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
-# dens <- density(npv_sim)
-# fig <- plot_ly(x=~dens$x, y = ~dens$y, type='scatter', mode='lines', fill='tozeroy')
-# fig <- fig %>%
-#   layout(xaxis=list(title='NPV'), yaxis=list(title='Distribution Density'), title=paste0("Distribution of NPV of ", policy_estimates_text[position]))
-# fig
-#knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
-```
-
-# Sensitivity Analysis (Discuss)
-
-## Sample of a Opaque and Favorable Report
-DO OPAQUE FAVORABLE REPORT (OR ASK A URAP TO DO IT)
-
-
-## Sample of a Opaque and Unfavorable Report
-DO OPAQUE UNFAVORABLE REPORT  (OR ASK A URAP TO DO IT)
 
 
 
