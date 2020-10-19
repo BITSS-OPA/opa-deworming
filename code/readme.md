@@ -23,6 +23,8 @@
 
 - Analytic code chunks are those that contain key analytic steps needed to reproduce the final policy estimate. Each of these chunks is wrapped into a function named `chunk_[name_of_the_chunk]` (e.g. the chunk final-pe wraps all steps into a function called `chunk_final_pe`). This function is called at the end of the same chunk and can be called later on to reproduce the final result without running all the non-analytic chunks.
 
+- Each analytic code chunk calls 'invisible(list2env())' at the bottom. "list2env()" takes a function and takes all outputs and drops them into the global environment. The "invisible" function is used in place of "return" when you want the output assigned to a variable but don't want the output to be returned.
+
 - Summary table code chunks are chunks that put all the equations and inputs into two summary tables after every section. It does so cumulatively.
 
 
