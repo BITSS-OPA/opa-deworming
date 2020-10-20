@@ -257,13 +257,16 @@ In addition to this report, the reader can find all the materials to reproduce t
 
 Parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis, are endemic in many countries across the globe, disproportionately affecting the poor. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake and can thus lead to serious consequences on human health, education outcomes, and long-term economic well being. In particular, evidence indicates that these worms contribute to malnourishment, impairment of mental and physical development, lower school attendance, and decreased wages   [@croke2014long; @miguel2004worms; @baird2016worms].
 
-Mass deworming has demonstrated to be a highly effective public health intervention. Here we provide a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into more policy-relevant outputs. The goal of this analysis is to: 1) provide more transparency and understanding behind existing evidence on the return on investment for mass deworming programs, and 2) allow for policymakers to better understand the value of investing in deworming programs in their own settings.
 
+Evidence from previous mass deworming interventions has demonstrated to be a highly effective public health policy. Here we provide a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into different policy-relevant scenarios. 
+
+
+The goal of this analysis is to: 1) provide more transparency and understanding behind existing policy analyses on the costs and benefits of mass deworming programs, and 2) to update this policy analyses with input from stakeholders closely involved in policy making around deworming. 
 
 The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:     
 
   1. Replicating the original CBA produced by @baird2016worms, which demonstrates the long-run return on investment of a Kenya school-based deworming program    
-  2. an updated version of such analysis by a similar research team [@klps4], and   
+  2. an updated version of such analysis over the same intervention but with additional data [@klps4], and   
   3. a third approach that borrows some components of the previous two approaches and adds data from deworming programs in other geographies outside of the original study geograpy through consulation with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
 
 
@@ -287,11 +290,11 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 \end{equation}
 
 Where:
-- $NPV$: net present value of the deworming treatment
-- $B$: benefits of the deworming treatment
-- $C$: costs of the deworming treatment
-- $CEA$: cost effectiveness ratio of the deworming treatment in absolute terms, another format of our final policy estimate 
-- $RCEA$: relative cost effectiveness ratio of the deworming treatment relative to the benchmark of cash transfers
+- $NPV$: net present value of the deworming treatment  
+- $B$: benefits of the deworming treatment  
+- $C$: costs of the deworming treatment  
+- $CEA$: cost effectiveness ratio of the deworming treatment in absolute terms, another format of our final policy estimate   
+- $RCEA$: relative cost effectiveness ratio of the deworming treatment relative to the benchmark of cash transfers  
 
 
 
@@ -372,10 +375,6 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 </details>
 <br>
 
-<!-- URAP: figure out how to add half a line break, as oppose to one full "<br>"-->
-
-
-
 At a high level all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming. This is likely an under-estimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs can be separated into direct costs of implementing and evaluating deworming programs, and indirect costs, such as additional costs to the education system as a result of increased child attendance, associated with the benefits of deworming.
 
 The main differences in benefits across the three approaches have to do with how to predict the earnings profiles over a lifecycle, and how to account for differences in worm prevalence rates across settings. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections.
@@ -402,7 +401,9 @@ Where:
 - $i$: interest rate on government bonds
 - $\pi$: inflation rate
 
+<!--
 TO DO: after confirming that reproduction works, change all `interest_in` to `interest_exct_in`
+-->
 
 
 ```r
@@ -448,73 +449,8 @@ interest_new_in <- interest_19
 The actual value varies across approaches depending on the time and country chosen. For example approach 1 used the return from government bonds and the inflation rate in Kenya for the year 2016, while approach 3 used the values for the same country for the year 2019. This results in discount rates of 9.85% and 5% for approach 1 and 3 respectively.
 
 
--------
-
-<details><summary>View Summary Table</summary>
 
 
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables2)Summary of equations used until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=\frac{1+i}{1+\pi}-1$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-</tbody>
-</table>
-
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables2)Sources: summary of inputs specified until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-</details>
 
 
 ## Approach 1: @baird2016worms
@@ -837,124 +773,6 @@ Without externalities, the original analysis (@baird2016worms) obtains a present
 
 
 
--------
-
-<details><summary>View Summary Table</summary>
-
-
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables3)Summary of equations used until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=\frac{1+i}{1+\pi}-1$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-</tbody>
-</table>
-
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables3)Sources: summary of inputs specified until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;"> $R=0.68$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
-   <td style="text-align:left;"> $Q(full)=0.75$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
-   <td style="text-align:left;"> $Q(0)=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=3.3$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-
-
-</details>
 
 ### Costs
 
@@ -1149,123 +967,9 @@ Without externalities, the original analysis (@baird2016worms) obtains a present
 
 
 
------------------
-<details><summary>View Summary Table</summary>
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables16)Summary of equations used until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=\frac{1+i}{1+\pi}-1$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-</tbody>
-</table>
 
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables16)Sources: summary of inputs specified until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;"> $R=0.68$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
-   <td style="text-align:left;"> $Q(full)=0.75$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
-   <td style="text-align:left;"> $Q(0)=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
-   <td style="text-align:left;"> $K=116.85$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=3.3$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-</details>
+
+
 
 
 ## Approach 2: @klps4
@@ -1325,129 +1029,7 @@ earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
 <br>
 
 
-----------
 
-<details><summary>View Summary Table</summary>
-
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables17)Summary of equations used until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=\frac{1+i}{1+\pi}-1$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = \mathbf{1}(10 \lt t \leq 50)\alpha^{KLPS}$ </td>
-   <td style="text-align:left;"> $(11)$ </td>
-  </tr>
-</tbody>
-</table>
-
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables17)Sources: summary of inputs specified until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;"> $R=0.68$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
-   <td style="text-align:left;"> $Q(full)=0.75$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
-   <td style="text-align:left;"> $Q(0)=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
-   <td style="text-align:left;"> $K=116.85$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
-   <td style="text-align:left;"> $\alpha^{KLPS}=79.51$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=3.3$ </td>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-</details>
 
 ### Costs
 
@@ -1609,153 +1191,7 @@ Over this nine year period, treated students attended school for an additional 0
 
 The second approach does not report benefits and costs separatedly.[make sure we reference above that this is the case without externalities, and that we discuss that they also estimate effects on consumtion]. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of 499.72 (table A13, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). Following the steps described in this section, this analysis obtains the same result (499.7204653 and 40.7492806546435% respectively without rounding).
 
--------------------
 
-
-<details><summary>View Summary Table</summary>
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables20)Summary of equations used until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=\frac{1+i}{1+\pi}-1$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = \mathbf{1}(10 \lt t \leq 50)\alpha^{KLPS}$ </td>
-   <td style="text-align:left;"> $(11)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
-.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(12)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
-   <td style="text-align:left;"> $(13)$ </td>
-  </tr>
-</tbody>
-</table>
-
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-tables20)Sources: summary of inputs specified until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;"> $R=0.68$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
-   <td style="text-align:left;"> $Q(full)=0.75$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
-   <td style="text-align:left;"> $Q(0)=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
-   <td style="text-align:left;"> $K=116.85$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
-   <td style="text-align:left;"> $\alpha^{KLPS}=79.51$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=3.3$ </td>
-   <td style="text-align:left;"> $r_{16}=0.0985$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $r_{19}=0.05$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $S_2=1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\overline{\Delta \overline{E}_{t}(S1,S2)}=0.02$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
-</details>
 
 
 ## Approach 3: Combination of Previous Approaches and Input From Key Partners
@@ -2120,178 +1556,9 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria", "viet
 
 The unit costs of treatments, although small, vary substantially across regions. When including cost information for all the countries where Evidence action has data (India, Kenya, Nigeria, Vietnam) the unit costs is $0.08 per round of treatment. This final costs is primarily driven by the costs, and large population, of India, with a unit cost of $0.06, the other 3 remaining countries have relatively larger unit costs: $0.54, $0.86, $0.52 for Kenya, Nigeria and Vietnam respectively. 
 
------
 
-<details><summary>View Summary Table</summary>
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-table18)Summary of equations used until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Equation </th>
-   <th style="text-align:left;"> # </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $NPV = B - C$ </td>
-   <td style="text-align:left;"> $(1)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $B=\sum_{t=0}^{50}\left(\frac{1}{1+r}\right)^{t}E_{t}$ </td>
-   <td style="text-align:left;"> $(2)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $r=\frac{1+i}{1+\pi}-1$ </td>
-   <td style="text-align:left;"> $(3)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)$ </td>
-   <td style="text-align:left;"> $(4)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2)$ </td>
-   <td style="text-align:left;"> $(5)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
-                     \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}$ </td>
-   <td style="text-align:left;"> $(6)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se} = \frac{\text{Monthly self-employed profits}}{4.5 \times E[h_{se}|h_{se} \text{&gt;} 0]}$ </td>
-   <td style="text-align:left;"> $(7)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}$ </td>
-   <td style="text-align:left;"> $(8)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $p = R \times Q(full)  + (1 - R) \times Q(0)$ </td>
-   <td style="text-align:left;"> $(9)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}$ </td>
-   <td style="text-align:left;"> $(10)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\Delta W_{t} = \mathbf{1}(10 \lt t \leq 50)\alpha^{KLPS}$ </td>
-   <td style="text-align:left;"> $(11)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \
-.4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]$ </td>
-   <td style="text-align:left;"> $(12)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)$ </td>
-   <td style="text-align:left;"> $(13)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $C = \sum_{i \in Countries } \omega_{i} c_{i}$ </td>
-   <td style="text-align:left;"> $(14)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \
-c_{i} = rac{C_{i}}{N_{i}} \
-C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \
-C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
-   <td style="text-align:left;"> $(15)$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\lambda_{1} = \alpha \lambda^{eff}_{1} + (1 -  \alpha) \times 0$ </td>
-   <td style="text-align:left;"> $(16)$ </td>
-  </tr>
-</tbody>
-</table>
 
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:sum-table18)Sources: summary of inputs specified until this point in the document</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Data </th>
-   <th style="text-align:left;"> Research </th>
-   <th style="text-align:left;"> Guesswork </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> $\pi_{16}=0.02$ </td>
-   <td style="text-align:left;"> $\lambda_1=1.745$ </td>
-   <td style="text-align:left;"> $\delta_{g}=0.3$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{16}=0.1185$ </td>
-   <td style="text-align:left;"> $\lambda_2=10.2$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\pi_{19}=0.04$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_1=0.1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $i_{19}=0.09$ </td>
-   <td style="text-align:left;"> $\hat{\beta}_2=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{ww}=14.59$ </td>
-   <td style="text-align:left;"> $Q(full)=0.75$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $w_{se}=10.3$ </td>
-   <td style="text-align:left;"> $Q(0)=0$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ag}=8.3$ </td>
-   <td style="text-align:left;"> $K=116.85$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{ww}=6.9$ </td>
-   <td style="text-align:left;"> $\alpha^{KLPS}=79.51$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $h_{se}=3.3$ </td>
-   <td style="text-align:left;"> $r_{16}=0.0985$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\overline{{C}_{i}}=0.08$ </td>
-   <td style="text-align:left;"> $r_{19}=0.05$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> $\overline{{N}_{i}}=65798181$ </td>
-   <td style="text-align:left;"> $S_2=1$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\overline{\Delta \overline{E}_{t}(S1,S2)}=0.02$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta=0.92$ </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> $\eta_{r}=0.5665$ </td>
-   <td style="text-align:left;"> $\eta_{r}=0.345$ </td>
-  </tr>
-</tbody>
-</table>
 
-</details>
 
 
 
@@ -2299,7 +1566,7 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}$ </td>
 
 In this document we have presented three different approaches to measuring the welfare effects of deworming  interventions. The first approach was based on the original paper that measured the welfare effects of deworming (@baird2016worms) and proposed four different ways to compute this effect (with and without externalities, and from a societal or fiscal perspective). The second approach, based on more recent data, focused only on direct effects, and relies less on predictive effects over the lifecycle. Results for the second approach are also separated between the societal and fiscal perspective. 
 
-The third and final approach uses similar methodologies, with three main differences. First, the benefits now are scaled to account for the prevalence of worm infections (both in the original study and in prospective settings). Second benefits are also scaled by the length of treatment. Finally, based on feedback from Evidence Action on the relevant costs from the perspective of policy makers, this approach does not take into account the effects of additional schooling costs, and uses more up to date information on treatment costs. 
+The third and final approach uses similar methodologies with three main differences. First, we allow the benefits to be scaled to account for differences in the prevalence of worm infections in other settings.Second, we allow the benefits to be scaled by the length of treatment provided to children within a particular setting. Finally, based on feedback from Evidence Action on the relevant costs from present-day deworming programs, this approach uses more up to date information on treatment costs (though it does not take into account the knock-on effects of additional schooling costs as a result of increased school attendance, which are accounted for in approaches #1 and #2). 
 
 The table below summarises the three different approaches and the different alternatives within each approach. The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3 in the table.
 
