@@ -10,17 +10,19 @@ library(plotly)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
-costs_temp_india <- 1
-costs_temp_kenya <- 2
-costs_temp_nigeria <- 3
-costs_temp_vietnam <- 4
+costs_temp_india   <- 0.0478
+costs_temp_kenya   <- 0.418
+costs_temp_nigeria <- 0.661 
+costs_temp_vietnam <- 0.399
+
 
 prevalence_india <- 0.57
 prevalence_kenya <- 0.35
 prevalence_nigeria <- 0.27
 prevalence_vietnam <- 0.15
 
-nsims <- 1e2
+
+nsims <- 1e3
 
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
 # here() creates conflits with shiny deployment. Use source("all_analysis.R") intead
@@ -61,12 +63,14 @@ shinyUI(
                             p("This visualization is one of three key components of an",
                               tags$a(href="http://www.bitss.org/opa/projects/deworming/","Open Policy Analysis (OPA)"),
                             "on the costs and benefits of
-                            mass deworming interventions in various settings.
-                            Together, these materials create a transparent and
+                            mass deworming interventions in various settings. The other two components correspond to", 
+                            tags$a(href="https://rpubs.com/fhoces/547979", "detailed documentation"),
+                            " of all the analysis, and", 
+                            tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "all the materials"),
+                            "required to reproduce 
+                            the analysis with minimal effort. Together, these materials create a transparent and
                             reproducible analysis to facilitate collaboration and
                             discussion about deworming policy."),
-                            p(tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "Click here"),
-                                     "to visit source code.")
                             )
                  ),
                  mainPanel(
@@ -123,7 +127,7 @@ shinyUI(
                    fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 300px; position:relative;",
                             
                             checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
-                            numericInput("param1", label = h4("Number of simulations"), value = 1e2),
+                            numericInput("param1", label = h4("Number of simulations"), value = 1e3),
                             withMathJax(),
                             useShinyjs(),
                             helpText("Choose your approach to generate the policy estimate"),

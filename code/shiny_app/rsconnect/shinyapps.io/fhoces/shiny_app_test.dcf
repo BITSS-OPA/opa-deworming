@@ -5,8 +5,8 @@ account: fhoces
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1358281
-bundleId: 3760805
+bundleId: 3760998
 url: https://fhoces.shinyapps.io/shiny_app_test/
-when: 1603164500.07171
+when: 1603170326.21287
 asMultiple: FALSE
 asStatic: FALSE
