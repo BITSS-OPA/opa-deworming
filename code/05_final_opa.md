@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "19 October, 2020"
+date: "20 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -230,7 +230,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -396,10 +396,11 @@ r \approx i - \pi
 \tag{3}
 \end{equation}
 
-Where:
-- $r$: real interest rate as the discounting rate
-- $i$: interest rate on government bonds
-- $\pi$: inflation rate
+Where:   
+
+- $r$: real interest rate as the discounting rate  
+- $i$: interest rate on government bonds  
+- $\pi$: inflation rate  
 
 <!--
 TO DO: after confirming that reproduction works, change all `interest_in` to `interest_exct_in`
@@ -1434,13 +1435,13 @@ C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
 \end{equation}
 
-Where:
-- $C$: weighted average of per unit costs in all countries 
-- $c_i$: per unit costs in different countries
-- $\omega_i$: country weights for computing the costs 
-- $N$: the number of all treated individuals 
-- $C_{i,k}$: costs of a country at a specific payer level
--$\delta_g$: ???
+Where:  
+- $C$: weighted average of per unit costs in all countries  
+- $c_i$: per unit costs in different countries  
+- $\omega_i$: country weights for computing the costs   
+- $N$: the number of all treated individuals   
+- $C_{i,k}$: costs of a country at a specific payer level  
+-$\delta_g$: ???  
 
 
 ```r

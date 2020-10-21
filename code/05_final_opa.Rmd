@@ -427,10 +427,11 @@ r \approx i - \pi
 \tag{`r equationIndex`}
 \end{equation}
 
-Where:
-- $r$: real interest rate as the discounting rate
-- $i$: interest rate on government bonds
-- $\pi$: inflation rate
+Where:   
+
+- $r$: real interest rate as the discounting rate  
+- $i$: interest rate on government bonds  
+- $\pi$: inflation rate  
 
 <!--
 TO DO: after confirming that reproduction works, change all `interest_in` to `interest_exct_in`
@@ -1631,13 +1632,13 @@ C_{i} = (1 + \delta_{g})\sum_{k \in payers}C_{i,k} \\
 C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
 \end{equation}
 
-Where:
-- $C$: weighted average of per unit costs in all countries 
-- $c_i$: per unit costs in different countries
-- $\omega_i$: country weights for computing the costs 
-- $N$: the number of all treated individuals 
-- $C_{i,k}$: costs of a country at a specific payer level
--$\delta_g$: ???
+Where:  
+- $C$: weighted average of per unit costs in all countries  
+- $c_i$: per unit costs in different countries  
+- $\omega_i$: country weights for computing the costs   
+- $N$: the number of all treated individuals   
+- $C_{i,k}$: costs of a country at a specific payer level  
+-$\delta_g$: ???  
 
 ```{r eq_3, echo=print_code, eval=TRUE}  
 # - inputs: nothing
