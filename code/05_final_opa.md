@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "20 October, 2020"
+date: "21 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -289,12 +289,13 @@ RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 \tag{1}
 \end{equation}
 
-Where:
-- $NPV$: net present value of the deworming treatment  
+Where:  
+
+- $NPV$: net present value of the deworming treatment   
 - $B$: benefits of the deworming treatment  
 - $C$: costs of the deworming treatment  
 - $CEA$: cost effectiveness ratio of the deworming treatment in absolute terms, another format of our final policy estimate   
-- $RCEA$: relative cost effectiveness ratio of the deworming treatment relative to the benchmark of cash transfers  
+- $RCEA$: relative cost effectiveness ratio of the deworming treatment relative to the benchmark of cash transfers   
 
 
 
@@ -345,9 +346,10 @@ B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 \end{equation}
 
 Where:
-- $E_{t}$: earnings individuals are expected to generate at period t
-- $r$: real interest rate as the discounting rate
-- $t$: period t
+
+- $E_{t}$: earnings individuals are expected to generate at period t  
+- $r$: real interest rate as the discounting rate  
+- $t$: period t  
 
 
 ```r
@@ -476,11 +478,11 @@ Gains in earnings ($\Delta W_{t}$) are the result of multiplying expected earnin
 
 Where[^6]:   
 
- - $w_t$: the earnings in period $t$.   
- - $\lambda_{1}$: the direct effects of deworming on earnings.  
- - $\lambda_{2}$: the indirect effects of deworming on earnings.   
- - $p$: saturation, measures the fraction of the population that is effectively using the treatment.  
- - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group.  
+ - $w_t$: the earnings in period $t$   
+ - $\lambda_{1}$: the direct effects of deworming on earnings  
+ - $\lambda_{2}$: the indirect effects of deworming on earnings   
+ - $p$: saturation, measures the fraction of the population that is effectively using the treatment  
+ - $R$: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group  
 
 [^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
@@ -552,18 +554,19 @@ w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{s
 \tag{7}
 \end{equation}
 
-Where:
-- $w_t$: the weekly earnings in period $t$
-- $w_0$: the initial weekly earnings
-- $g$: per capita GDP growth
-- $Xp$: years of work 
-- $\hat{\beta_1}$: ???
-- $\hat{\beta_2}$: ???
+Where:  
+
+- $w_t$: the weekly earnings in period $t$  
+- $w_0$: the initial weekly earnings  
+- $g$: per capita GDP growth  
+- $Xp$: years of work  
+- $\hat{\beta_1}$: ???  
+- $\hat{\beta_2}$: ???  
 - $ex$: exchange rate 
-- $h$: average worked hours dedicated to each sector
-- $ag$: agriculture 
-- $ww$: working wage
-- $se$: self-employed sectors 
+- $h$: average worked hours dedicated to each sector  
+- $ag$: agriculture  
+- $ww$: working wage  
+- $se$: self-employed sectors  
 
 
 
@@ -652,9 +655,10 @@ The estimated externality effect ($\lambda_{2}$) reflects the additional hours w
 \end{equation}
 
 Where:
-- $\lambda_1$: average impact of deworming on hours worked for both men and women
-- $\lambda_{1,male}$: average impact of deworming on hours worked for men
-- $\lambda_{1, female}$: average impact of deworming on hours worked for women 
+
+- $\lambda_1$: average impact of deworming on hours worked for both men and women  
+- $\lambda_{1,male}$: average impact of deworming on hours worked for men   
+- $\lambda_{1, female}$: average impact of deworming on hours worked for women  
 
 
 
@@ -705,10 +709,11 @@ p = R \times Q(full)  + (1 - R) \times Q(0)
 \end{equation}
 
 Where:
-- $p$: saturation, measures the fraction of the population that is effectively using the treatment
-- $R$: coverage, measures the fraction of the population that is effectively using the treatment
-- $Q(full)$: take-up with full subsidy 
-- $Q(0)$: take-up without subsidy 
+
+- $p$: saturation, measures the fraction of the population that is effectively using the treatment  
+- $R$: coverage, measures the fraction of the population that is effectively using the treatment  
+- $Q(full)$: take-up with full subsidy  
+- $Q(0)$: take-up without subsidy  
 
 
 
@@ -788,12 +793,13 @@ C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \fr
 \end{equation}
 
 Where: 
-- $S_2$: per-capita costs of deworming under the deworming intervention
-- $S_1$: per-capita costs of deworming if the government does not provide any additional resources for deworming 
-- $Q(S_2)$: take-up under a mass deworming intervention
-- $Q(S_1)$: take-up without additional resources from the government 
-- $K$: cost per student to get education 
-- $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance 
+
+- $S_2$: per-capita costs of deworming under the deworming intervention  
+- $S_1$: per-capita costs of deworming if the government does not provide any additional resources for deworming  
+- $Q(S_2)$: take-up under a mass deworming intervention  
+- $Q(S_1)$: take-up without additional resources from the government  
+- $K$: cost per student to get education   
+- $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance  
 
 
 ```r
@@ -996,10 +1002,10 @@ Gains in yearly earnings represent the treatment effect on welfare ($\alpha$), w
 \end{equation}
 
 Where:
-- $\Delta W_t$: gains in earnings from 10, 15, and 20 years after intervention
-- $\alpha^{KLPS2}$: estimated treatment effects 10 years after intervention 
-- $\alpha^{KLPS3}$: estimated treatment effects 15 years after intervention
-- $\alpha^{KLPS4}$: estimated treatment effects 20 years after intervention 
+
+- $\Delta W_t$: gains in earnings from 10, 15, and 20 years after intervention  
+- $\alpha^{KLPS}$: the simple average of the estimated treamtment effects 10, 15, 20 years after intervention respectively  
+
 
 
 
@@ -1060,12 +1066,13 @@ DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\bi
 \end{equation}
 
 Where:
-- $DC$: direct deworming costs
-- $r$: discounting rate, defined as the real interest rate
-- $S_2$: per-capita costs of deworming under the deworming intervention
-- $S_1$: per-capita costs of deworming if the government does not provide any additional resources for deworming 
-- $Q(S_2)$: take-up under a mass deworming intervention
-- $Q(S_1)$: take-up without additional resources from the government 
+
+- $DC$: direct deworming costs   
+- $r$: discounting rate, defined as the real interest rate  
+- $S_2$: per-capita costs of deworming under the deworming intervention  
+- $S_1$: per-capita costs of deworming if the government does not provide any additional resources for deworming  
+- $Q(S_2)$: take-up under a mass deworming intervention  
+- $Q(S_1)$: take-up without additional resources from the government  
 
 
 
@@ -1124,8 +1131,10 @@ K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 \end{equation}
 
 Where:
-- $K$: cost per student to get education 
+
+- $K$: cost per student to get education  
 - $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance  
+
 
 
 
@@ -1226,11 +1235,12 @@ For approach 3, we will modify treatement effects of approaches 1 and 2 (equatio
 \end{equation}
 
 Where:
-- $\lambda_1$: direct effects of deworming on individuals' earnings
-- $\lambda^{eff}_1$: impact of deworming on children who were treated and had a worm infection in the original evaluation
-- $\lambda^r_1$: impact of deworming on children who were treated and had a worm infection in the new region 
-- $\eta$: prevalence rates in the original evaluation 
-- $\eta_r$: prevalence rates in the new region 
+
+- $\lambda_1$: direct effects of deworming on individuals' earnings  
+- $\lambda^{eff}_1$: impact of deworming on children who were treated and had a worm infection in the original evaluation  
+- $\lambda^r_1$: impact of deworming on children who were treated and had a worm infection in the new region  
+- $\eta$: prevalence rates in the original evaluation   
+- $\eta_r$: prevalence rates in the new region   
 
 
 ```r
@@ -1436,6 +1446,7 @@ C_{i,k} = \sum_{l \in items}\sum_{m \in regions}C_{i,k,l,m}
 \end{equation}
 
 Where:  
+
 - $C$: weighted average of per unit costs in all countries  
 - $c_i$: per unit costs in different countries  
 - $\omega_i$: country weights for computing the costs   
