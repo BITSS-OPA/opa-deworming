@@ -103,7 +103,7 @@ shinyUI(
                             numericInput("param37", label = h3("Prevalence in the new region"), value = round(prevalence_r_in,2)),
                             bsPopover(id="param37", title = "For reference:",
                                       content= paste0("Prevalence in India is ", prevalence_india, br(),
-                                                      "Prevalence in Keyna is ", prevalence_kenya, br(),
+                                                      "Prevalence in Kenya is ", prevalence_kenya, br(),
                                                       "Prevalence in Nigeria is ", prevalence_nigeria, br(),
                                                       "Prevalence in Vietnam is ", prevalence_vietnam),
                                       placement ="top", trigger="hover"),
