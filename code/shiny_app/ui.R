@@ -133,7 +133,7 @@ shinyUI(
                             useShinyjs(),
                             selectInput("policy_est", "Policy Estimate:",
                                         choices = policy_estimates_text,
-                                        selected = "A3. All income of A2. Main Policy Estimate"),
+                                        selected = "A3. All income of A2. Main Policy Estimate")
                    ),
                    fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                             tabsetPanel(
