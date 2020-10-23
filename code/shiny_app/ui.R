@@ -48,8 +48,8 @@ shinyUI(
                               means that particular value appeared the most frequently.
                               The blue line indicates that half of all values are
                               on either side of the line.")
-                            ),
-                    fluidRow(p("Under the other two tabs, you can adjust the model's
+                   ),
+                   fluidRow(p("Under the other two tabs, you can adjust the model's
                               assumptions and rerun the simulation to explore the
                               impact on lifetime income effects."),
                             br(),
