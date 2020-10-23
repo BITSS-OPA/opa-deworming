@@ -7,6 +7,7 @@ library(kableExtra)
 library(readxl)
 library(shinyjs)
 library(plotly)
+#library(shinyBS) doesn't seem to work with tabsetPanels
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
@@ -100,6 +101,7 @@ shinyUI(
                                      paste("Unit costs in Nigeria is", costs_temp_nigeria), br(), 
                                      paste("Unit costs in Vietnam is", costs_temp_vietnam)),
                             numericInput("param37", label = h3("Prevalence in the new region"), value = round(prevalence_r_in,2)),
+                            bsTooltip(id="param37", "hello is this working", placement="right", trigger = "hover"),
                             
                             helpText("For reference:", br(),
                                      paste("Prevalence in India is", prevalence_india), br(),
@@ -132,91 +134,138 @@ shinyUI(
                             tabsetPanel(
                               # Begin tabpanel data ----
                               tabPanel("Data",
+                                       a(id="toggleSDs", "Show/hide SDs", href="#"),
                                        sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
                                                    min = 0.001, max = 0.2, value = gov_bonds_so),
-                                       sliderInput("param2_1", label = "SD = ",
-                                                   min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so),
+                                       shinyjs::hidden(
+                                         div(id="SD1",
+                                             sliderInput("param2_1", label = "SD = ", min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so)
+                                       )
+                                       ),
                                        sliderInput("param2_new", label = "Gov Bonds (\\( i \\))"  ,
-                                                   min = 0.001, max = 0.2, value = gov_bonds_new_so),
-                                       sliderInput("param2_1_new", label = "SD = ",
-                                                   min = 0.0000001, max = 0.4 * gov_bonds_new_so, value = 0.1 * gov_bonds_new_so),
+                                       min = 0.001, max = 0.2, value = gov_bonds_new_so),
+                                       shinyjs::hidden(
+                                         div(id="SD2",
+                                             sliderInput("param2_1_new", label = "SD = ", min = 0.0000001, max = 0.4 * gov_bonds_new_so, value = 0.1 * gov_bonds_new_so)
+                                       )
+                                       ),
                                        sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
                                                    min = 0.001, max = 0.2, value = inflation_so),
-                                       sliderInput("param3_1", label = "SD = ",
-                                                   min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so),
+                                       shinyjs::hidden(
+                                         div(id="SD3",
+                                            sliderInput("param3_1", label = "SD = ",min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so)
+                                         )
+                                       ),
                                        sliderInput("param3_new", label = "Inflation (\\( \\pi \\) ) = ",
                                                    min = 0.001, max = 0.2, value = inflation_new_so),
-                                       sliderInput("param3_1_new", label = "SD = ",
-                                                   min = 0.0000001, max = 0.4 * inflation_new_so, value = 0.1 * inflation_new_so),
+                                       shinyjs::hidden(
+                                         div(id="SD4", sliderInput("param3_1_new", label = "SD = ",
+                                                   min = 0.0000001, max = 0.4 * inflation_new_so, value = 0.1 * inflation_new_so)
+                                             )
+                                         ),
                                        numericInput("param4", label = "Agri Wages (\\( w_{ag} \\))", value = wage_ag_so),
+                                       shinyjs::hidden(
+                                         div(id="SD5",
                                        sliderInput("param4_1", label = "SD = ",
-                                                   min = 0.0000001* wage_ag_so, max = 1 * wage_ag_so, value = 0.1 * wage_ag_so),
+                                                   min = 0.0000001* wage_ag_so, max = 1 * wage_ag_so, value = 0.1 * wage_ag_so))),
                                        numericInput("param5", label = "Work-non ag-Wages  (\\( w_{ww} \\))", value = wage_ww_so),
+                                       shinyjs::hidden(
+                                         div(id="SD6",
                                        sliderInput("param5_1", label = "SD = ",
-                                                   min = 0.0000001* wage_ww_so, max = 1 * wage_ww_so, value = 0.1 * wage_ww_so),
+                                                   min = 0.0000001* wage_ww_so, max = 1 * wage_ww_so, value = 0.1 * wage_ww_so))),
                                        numericInput("param6", label = "Profits se = ", value = profits_se_so),
+                                       shinyjs::hidden(
+                                         div(id="SD7",
                                        sliderInput("param6_1", label = "SD = ",
-                                                   min = 0.000001* profits_se_so, max = 1 * profits_se_so, value = 0.1 * profits_se_so),
+                                                   min = 0.000001* profits_se_so, max = 1 * profits_se_so, value = 0.1 * profits_se_so))),
                                        sliderInput("param7", label = "Hours se (>0) = ",
                                                    min = hours_se_cond_so / 2, max = 2 * hours_se_cond_so, value = hours_se_cond_so),
+                                       shinyjs::hidden(
+                                         div(id="SD8",
                                        sliderInput("param7_1", label = "SD = ",
-                                                   min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so),
+                                                   min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so))),
                                        sliderInput("param8", label = "H_ag = ",
                                                    min = hours_ag_so / 2, max = 2 * hours_ag_so, value = hours_ag_so),
+                                       shinyjs::hidden(
+                                         div(id="SD9",
                                        sliderInput("param8_1", label = "SD = ",
-                                                   min = 0.000001* hours_ag_so, max = 1 * hours_ag_so, value = 0.1 * hours_ag_so, round = -4, step = 0.001),
+                                                   min = 0.000001* hours_ag_so, max = 1 * hours_ag_so, value = 0.1 * hours_ag_so, round = -4, step = 0.001))),
                                        sliderInput("param9", label = "H_ww = ",
                                                    min = hours_ww_so / 2, max = 2 * hours_ww_so, value = hours_ww_so),
+                                       hidden(
+                                         div(id="SD10",
                                        sliderInput("param9_1", label = "SD = ",
-                                                   min = 0.000001* hours_ww_so, max = 1 * hours_ww_so, value = 0.1 * hours_ww_so, step = 0.001),
+                                                   min = 0.000001* hours_ww_so, max = 1 * hours_ww_so, value = 0.1 * hours_ww_so, step = 0.001))),
                                        sliderInput("param10", label = "H_se = ",
                                                    min = hours_se_so / 2, max = 2 * hours_se_so, value = hours_se_so),
+                                       hidden(
+                                         div(id="SD11",
                                        sliderInput("param10_1", label = "SD = ",
-                                                   min = 0.000001* hours_se_so, max = 1 * hours_se_so, value = 0.1 * hours_se_so, step = 0.001),
+                                                   min = 0.000001* hours_se_so, max = 1 * hours_se_so, value = 0.1 * hours_se_so, step = 0.001))),
                                        sliderInput("param11", label = "Exchange rate = ",
                                                    min = ex_rate_so / 2, max = 2 * ex_rate_so, value = ex_rate_so),
+                                       hidden(
+                                         div(id="SD12",
                                        sliderInput("param11_1", label = "SD = ",
-                                                   min = 0.000001* ex_rate_so, max = 1 * ex_rate_so, value = 0.1 * ex_rate_so, step = 0.001),
+                                                   min = 0.000001* ex_rate_so, max = 1 * ex_rate_so, value = 0.1 * ex_rate_so, step = 0.001))),
                                        sliderInput("param12", label = "growth = ",
                                                    min = growth_rate_so / 2, max = 2 * growth_rate_so, value = growth_rate_so),
+                                       hidden(
+                                         div(id="SD13",
                                        sliderInput("param12_1", label = "SD = ",
-                                                   min = 0.000001* growth_rate_so, max = 1 * growth_rate_so, value = 0.1 * growth_rate_so, step = 0.00001),
+                                                   min = 0.000001* growth_rate_so, max = 1 * growth_rate_so, value = 0.1 * growth_rate_so, step = 0.00001))),
                                        sliderInput("param13", label = "Coverage (R) = ",
                                                    min = 0, max = 1, value = coverage_so, step = 0.01),
+                                       hidden(
+                                         div(id="SD14",
                                        sliderInput("param13_1", label = "SD = ",
-                                                   min = 0.000001* coverage_so, max = 1 * coverage_so, value = 0.1 * coverage_so, step = 0.000001),
+                                                   min = 0.000001* coverage_so, max = 1 * coverage_so, value = 0.1 * coverage_so, step = 0.000001))),
                                        sliderInput("param15", label = "Tax rate = ",
                                                    min = tax_so / 2, max = 2 * tax_so, value = tax_so, step = 0.00001),
-                                       sliderInput("param15_1", label = "SD = ",
-                                                   min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so, step = 0.000001),
+                                      hidden(
+                                        div(id="SD15",
+                                        sliderInput("param15_1", label = "SD = ",
+                                                   min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so, step = 0.000001))),
                                        sliderInput("param16", label = "Costs of T (local $) = ", step = 0.0001,
                                                    min = unit_cost_local_so / 2, max = 2 * unit_cost_local_so,
                                                    value = unit_cost_local_so, pre = "$", animate =
                                                      animationOptions(interval = 3000, loop = TRUE)),
-                                       sliderInput("param16_1", label = "SD = ",
-                                                   min = 0.000001* unit_cost_local_so, max = 1 * unit_cost_local_so, value = 0.1 * unit_cost_local_so, step = 0.0001),
+                                      hidden(
+                                        div(id="SD16",
+                                        sliderInput("param16_1", label = "SD = ",
+                                                   min = 0.000001* unit_cost_local_so, max = 1 * unit_cost_local_so, value = 0.1 * unit_cost_local_so, step = 0.0001))),
                                        sliderInput("param16_new", label = "Costs of T (local $) = ", step = 0.0001,
                                                    min = unit_cost_2017usdppp_so / 2, max = 2 * unit_cost_2017usdppp_so,
                                                    value = unit_cost_2017usdppp_so, pre = "$", animate =
                                                      animationOptions(interval = 3000, loop = TRUE)),
+                                       hidden(
+                                         div(id="SD17",
                                        sliderInput("param16_1_new", label = "SD = ",
-                                                   min = 0.000001* unit_cost_2017usdppp_so, max = 1 * unit_cost_2017usdppp_so, value = 0.1 * unit_cost_2017usdppp_so, step = 0.0001),
+                                                   min = 0.000001* unit_cost_2017usdppp_so, max = 1 * unit_cost_2017usdppp_so, value = 0.1 * unit_cost_2017usdppp_so, step = 0.0001))),
                                        sliderInput("param17", label = "Years of treatment in orginal study",
                                                    min = years_of_treat_0_so / 2, max = 2 * years_of_treat_0_so, value = years_of_treat_0_so),
+                                       hidden(
+                                         div(id="SD18",
                                        sliderInput("param17_1", label = "SD = ",
-                                                   min = 0.000001* years_of_treat_0_so, max = 1 * years_of_treat_0_so, value = 0.1 * years_of_treat_0_so, step = 0.0001),
+                                                   min = 0.000001* years_of_treat_0_so, max = 1 * years_of_treat_0_so, value = 0.1 * years_of_treat_0_so, step = 0.0001))),
                                        sliderInput("param17_new", label = "Years of treatment in new setting",
                                                    min = years_of_treat_t_so / 2, max = 2 * years_of_treat_t_so, value = years_of_treat_t_so),
+                                       hidden(
+                                         div(id="SD19",
                                        sliderInput("param17_1_new", label = "SD = ",
-                                                   min = 0.000001* years_of_treat_t_so, max = 1 * years_of_treat_t_so, value = 0.1 * years_of_treat_t_so, step = 0.0001),
+                                                   min = 0.000001* years_of_treat_t_so, max = 1 * years_of_treat_t_so, value = 0.1 * years_of_treat_t_so, step = 0.0001))),
                                        sliderInput("param34", label = "Costs adjustments = ",
                                                    min = costs_par_so / 2, max = 20000 * costs_par_so, value = costs_par_so),
-                                       sliderInput("param34_1", label = "SD = ",
-                                                   min = 0.0000001* costs_par_sd_so, max = 10 * costs_par_sd_so, value = costs_par_sd_so),
+                                      hidden(
+                                        div(id="SD20",
+                                        sliderInput("param34_1", label = "SD = ",
+                                                   min = 0.0000001* costs_par_sd_so, max = 10 * costs_par_sd_so, value = costs_par_sd_so))),
                                        sliderInput("param32", label = "Counts adjustment = ",
                                                    min = counts_par_so / 2, max = 2 * counts_par_so, value = counts_par_so),
+                                       hidden(
+                                         div(id="SD21",
                                        sliderInput("param32_1", label = "SD = ",
-                                                   min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so)
+                                                   min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so)))
                               ),
                               # end tabpanel data ----
                               #

@@ -4,6 +4,13 @@ library(shiny)
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
+  ##Testing Show/hide SDs
+  shinyjs::onclick("toggleSDs",
+                   lapply(c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
+                            "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
+                            "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), toggle, anim=TRUE)
+                   )
+  
   reactive.data1 <- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    
