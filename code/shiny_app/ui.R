@@ -234,7 +234,7 @@ shinyUI(
                                        numericInput("param18_1_1", label = ("SD = "), value = 0.17),
                                        numericInput("param18_2", label = ("Avg DW impact for women (\\( \\lambda_{1f} \\)) = "), value = lambda1_so[2]),
                                        numericInput("param18_2_1", label = ("SD = "), value = 0.17),
-                                       sliderInput("param19", label = "Avg indirect DW impact on earnings (\\( \\lambda_{2} \\)) = ",
+                                       sliderInput("param19", label = "Avg indirect DW impact (\\( \\lambda_{2} \\)) = ",
                                                    min = 0, max = 2 * lambda2_so, value = lambda2_so * 1),
                                        sliderInput("param19_1", label = "SD = ",
                                                    min = 0.0000001* lambda2_so, max = 1 * lambda2_so, value = 0.1 * lambda2_so, step = 1e-5),
