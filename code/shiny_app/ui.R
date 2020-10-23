@@ -7,7 +7,7 @@ library(kableExtra)
 library(readxl)
 library(shinyjs)
 library(plotly)
-#library(shinyBS) doesn't seem to work with tabsetPanels
+library(shinyBS) 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
@@ -101,6 +101,12 @@ shinyUI(
                                      paste("Unit costs in Nigeria is", costs_temp_nigeria), br(), 
                                      paste("Unit costs in Vietnam is", costs_temp_vietnam)),
                             numericInput("param37", label = h3("Prevalence in the new region"), value = round(prevalence_r_in,2)),
+                            bsPopover(id="param37", title = "For reference:",
+                                      content= paste0("Prevalence in India is ", prevalence_india, br(),
+                                                      "Prevalence in Keyna is ", prevalence_kenya, br(),
+                                                      "Prevalence in Nigeria is ", prevalence_nigeria, br(),
+                                                      "Prevalence in Vietnam is ", prevalence_vietnam),
+                                      placement ="top", trigger="hover"),
 
                             helpText("For reference:", br(),
                                      paste("Prevalence in India is", prevalence_india), br(),
@@ -127,7 +133,7 @@ shinyUI(
                             useShinyjs(),
                             selectInput("policy_est", "Policy Estimate:",
                                         choices = policy_estimates_text,
-                                        selected = "A3. All income of A2. Main Policy Estimate")
+                                        selected = "A3. All income of A2. Main Policy Estimate"),
                    ),
                    fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                             tabsetPanel(
@@ -143,6 +149,7 @@ shinyUI(
                                                   sliderInput("param2_1", label = "SD = ", min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so))),
                                        sliderInput("param2_new", label = "Gov Bonds (\\( i \\))",
                                                    min = 0.001, max = 0.2, value = gov_bonds_new_so),
+                                       bsPopover(id="param2_new", title="",content="Kenyan interest on sovereign debt - Central Bank of Kenya", placement="top", trigger="hover"),
                                        hidden(div(id="SD2",
                                                   sliderInput("param2_1_new", label = "SD = ", min = 0.0000001, max = 0.4 * gov_bonds_new_so, value = 0.1 * gov_bonds_new_so))),
                                        sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
