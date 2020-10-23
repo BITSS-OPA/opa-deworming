@@ -134,7 +134,10 @@ shinyUI(
                             tabsetPanel(
                               # Begin tabpanel data ----
                               tabPanel("Data",
-                                       a(id="toggleSDs", "Show/hide SDs", href="#"),
+                                       br(),
+                                       a(id="toggleSDs", "Show/hide all SDs", href="#"),
+                                       br(),
+                                       br(),
                                        sliderInput("param2", label = "Gov Bonds (\\( i \\))"  ,
                                                    min = 0.001, max = 0.2, value = gov_bonds_so),
                                        shinyjs::hidden(
