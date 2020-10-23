@@ -4,18 +4,19 @@ library(shiny)
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
-  ##Testing Show/hide SDs
+  #Show/hide SDs code. Not sure where to put this code
   onclick("toggleDataSDs",
-                   lapply(c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
+          lapply(c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
                             "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
                             "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), toggle, anim=TRUE))
   
   onclick("toggleResearchSDs",
-                   lapply(c("SD22", "SD23", "SD24", "SD25", "SD26", "SD27", "SD28",
+          lapply(c("SD22", "SD23", "SD24", "SD25", "SD26", "SD27", "SD28",
                             "SD29", "SD30", "SD31", "SD32"), toggle, anim=TRUE))
   
   onclick("toggleGWSDs",
-          lapply(c("SD34", "SD35", "SD36", "SD37", "SD38"), toggle, anim=TRUE))
+          lapply(c("SD33","SD34", "SD35", "SD36", "SD37", "SD38"), toggle, anim=TRUE))
+  
   
   reactive.data1 <- reactive( {
     sim.data1(
