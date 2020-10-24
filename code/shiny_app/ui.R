@@ -82,13 +82,80 @@ shinyUI(
                tabPanel(
                  "Key Assumptions", #TO DO: repeat all code but with costs and prevalence as reactive only
                  sidebarPanel(
-                   fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 300px; position:relative;",
+                   fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 400px; position:relative;",
                             withMathJax(),
                             useShinyjs(),
-                            helpText("Choose your approach to generate the policy estimate"),
+                            helpText("Choose the indicator to be your policy estimate"),
                             selectInput("policy_est_ka", "Policy Estimates",
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A1. Tax revenue' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(), br(),
+                                       "Benefits: Baird approach with tax included but not externalities", br(),br(),
+                                       "Costs: Baird approach with no externalities"
+                                       )
+                            ),
+                            
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A1. With externalities. Tax' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(), br(),
+                                       "Benefits: Baird approach with both tax and externalities included", br(),br(),
+                                       "Costs: Baird approach with externalities included")
+                            ),
+                            
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A1. All income' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax or externalities", br(),br(),
+                                       "Costs: Baird approach with no externalities")
+                            ),
+                            
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A1. With ext. All income' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax but with externalities", br(),br(),
+                                       "Costs: Baird approach with externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A2. Tax' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) with tax but not externalities", br(),br(),
+                                       "Costs: Hamory approach (KLPS) with no externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A2. All income' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) without tax or externalities", br(),br(),
+                                       "Costs: Hamory approach (KLPS) with no externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A3. All income of A1' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax or externalities but with prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A3. All income of A1, with ext.' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax but with externalities, prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A3. All income of A2. Main Policy Estimate' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) without tax or externalities but with prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'Main Policy Estimate. CEA format' ", 
+                              helpText("Cost effectiveness ratio (CEA) in absolute terms is the final indicator for policy estimate")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'Main Policy Estimate. RCEA format' ",
+                              helpText("Cost effectiveness ratio relative to the benchmark of cash transfers (RCEA) is the final indicator for policy estimate ")
+                            )
+                            
                             
                    ), 
                    fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 600px; position:relative;",
@@ -124,16 +191,81 @@ shinyUI(
                tabPanel(
                  "All Assumptions",
                  sidebarPanel(
-                   fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 300px; position:relative;",
+                   fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 400px; position:relative;",
                             
                             checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
                             numericInput("param1", label = h4("Number of simulations"), value = 1e3),
                             withMathJax(),
                             useShinyjs(),
-                            helpText("Choose your approach to generate the policy estimate"),
                             selectInput("policy_est", "Policy Estimate:",
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A1. Tax revenue' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(), br(),
+                                       "Benefits: Baird approach with tax included but not externalities", br(), br(),
+                                       "Costs: Baird approach with no externalities"
+                              )
+                            ),
+                            
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A1. With externalities. Tax' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(), br(),
+                                       "Benefits: Baird approach with both tax and externalities included", br(),br(),
+                                       "Costs: Baird approach with externalities included")
+                            ),
+                            
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A1. All income' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax or externalities", br(),br(),
+                                       "Costs: Baird approach with no externalities")
+                            ),
+                            
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A1. With ext. All income' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax but with externalities", br(),br(),
+                                       "Costs: Baird approach with externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A2. Tax' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) with tax but not externalities", br(),br(),
+                                       "Costs: Hamory approach (KLPS) with no externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A2. All income' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) without tax or externalities", br(),br(),
+                                       "Costs: Hamory approach (KLPS) with no externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A3. All income of A1' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax or externalities but with prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A3. All income of A1, with ext.' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax but with externalities, prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A3. All income of A2. Main Policy Estimate' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) without tax or externalities but with prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'Main Policy Estimate. CEA format' ", 
+                              helpText("Cost effectiveness ratio (CEA) in absolute terms is the final indicator for policy estimate")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'Main Policy Estimate. RCEA format' ",
+                              helpText("Cost effectiveness ratio relative to the benchmark of cash transfers (RCEA) is the final indicator for policy estimate ")
+                            )
                             
                    ),
                    fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",

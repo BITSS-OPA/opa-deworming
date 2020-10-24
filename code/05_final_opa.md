@@ -1,7 +1,8 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "21 October, 2020"
+  fig_caption: false
+date: "23 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -13,15 +14,16 @@ output:
     toc: yes
     toc_depth: 3
     toc_float: yes
+
 editor_options:
   chunk_output_type: console
 title: "A Unifying Open Policy Analysis for Deworming"
 bibliography: bibliography.bib  
 link-citations: true
+
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
-
 
 
 
@@ -229,10 +231,10 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 ```
 
 
-<div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
-<p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
-</div>
+# Main Policy Estimate Figure {-}
+
+<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" width="100%" style="display: block; margin: auto;" />
+
 
 
 # Open Policy Analysis {-}
@@ -560,8 +562,8 @@ Where:
 - $w_0$: the initial weekly earnings  
 - $g$: per capita GDP growth  
 - $Xp$: years of work  
-- $\hat{\beta_1}$: ???  
-- $\hat{\beta_2}$: ???  
+- $\hat{\beta_1}$: Coefficient estimate for $Xp$  
+- $\hat{\beta_2}$: Coefficient estimate for $Xp^2$  
 - $ex$: exchange rate 
 - $h$: average worked hours dedicated to each sector  
 - $ag$: agriculture  
