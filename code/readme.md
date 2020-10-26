@@ -23,6 +23,8 @@
 
 - Analytic code chunks are those that contain key analytic steps needed to reproduce the final policy estimate. Each of these chunks is wrapped into a function named `chunk_[name_of_the_chunk]` (e.g. the chunk final-pe wraps all steps into a function called `chunk_final_pe`). This function is called at the end of the same chunk and can be called later on to reproduce the final result without running all the non-analytic chunks.
 
+- Each analytic code chunk calls 'invisible(list2env())' at the bottom. "list2env()" takes a function and takes all outputs and drops them into the global environment. The "invisible" function is used in place of "return" when you want the output assigned to a variable but don't want the output to be returned.
+
 - Summary table code chunks are chunks that put all the equations and inputs into two summary tables after every section. It does so cumulatively.
 
 
@@ -103,7 +105,8 @@ In our case we define the function `sim.data1` to complete the Monte Carlo simul
 
 Code chunks with `purl = TRUE` in the curly brackets at the top of the chunk are exported into a R file called `all_analysis.R`. Then our shiny app can call the variables and functions defined in this R file.
 
-## Appendix A: Abbreviations & Variable Definition
+## Appendix A: Abbreviations & Function Definition
+
 #### Abbreviations
 - DD: Dynamic document  
 - W@W: Worms at work  
@@ -113,69 +116,7 @@ Code chunks with `purl = TRUE` in the curly brackets at the top of the chunk are
 - EA: Evidence Action
 
 
-#### Variable Definition
-- NPV: Net Present Value
-- CEA: Cost Effective Ratio
-- RCEA: Relative Cost Effective Ratio
-- B: Benefits
-- C: Costs
-- E<sub>t</sub>: Stream earnings
-- r: real interest rate
-- i: interest rate on government bonds
-- <html>&#960</html>: inflation rate
-- <html>&#916W<sub>t</sub></html>: gains in earnings
-
-  * Baird (Approach 1)：only measures gains in earnings by year 10 and extrapolates into the future
-  * Hamory (Approach 2): measures gains in earnings from 10, 15, and 20 years after intervention and extrapolates into the future
-
-
-- <html>&#955<sub>1</sub></html>: direct effects of deworming on the individual's earnings  
-
-  * Baird (Approach 1) takes the simple average of the impact of deworming on hours worked for men and women:
-    + <html>&#955<sub>1,male</sub></html>: estimated impact of deworming on hours for men
-    + <html>&#955<sub>1,female</sub></html>: estimated impact of deworming on hours for women
-  * EA(Approach 3) decomposes this value into the impact of deworming on children who were treated and had a worm infection and children who were treated and did not have worm infection.
-
-- <html>&#955<sub>1</sub><sup>eff</sup></html>: impact of deworming on children who were treated and had a worm infection in the original evaluation
-
-- <html>&#955<sub>1</sub><sup>r</sup></html>: impact of deworming on children who were treated and had a worm infection in the new region
-
-
-- <html>&#955<sub>2</sub></html>: indirect effects of deworming on individual's earnings
-
-  * Baird repeat this value twice to match the direct impact for men and women.
-- p: saturation, measures the fraction of the population that is effectively using the treatment
-- R: coverage, defined as the fraction, among all neighboring schools (within 6 km), that belongs to the treatment group
-- w<sub>0</sub>: initial weekly wage
-- w<sub>t</sub>: weekly wage at period t
-- g: per capita GDP growth
-- Xp: years of work
-- <html>&#946&#770<sub>1</sub> </html>: ***definition?***
-- <html>&#946&#770<sub>2</sub></html>: ***definition?***
-- h: average worked hours dedicated to each sector
-- ag: agriculture sector
-- ww: working wage sector
-- se: self-employed sector
-- ex: exchange rate
-- Q(full): take-up with full subsidy
-- Q(0): take-up without subsidy
-- Q(S<sub>2</sub>): take-up under a mass deworming intervention
-- S<sub>2</sub>: per-capita cost costs of deworming under said intervention
-- S<sub>1</sub>: per-capita cost costs of deworming if the government does not provide any additional resource for deworming
-- K: cost per student to get education
-- <html>&#916E&#772<sub>t</sub>(S<sub>1</sub>, S<sub>2</sub>)</html>: estimated increase in school attendance
-- DC: Direct deworming costs
-- <html>&#951</html>: prevalence rates in the original evaluation
-- <html>&#951</html>: prevalence rates in the new region
-- <html>&#969<sub>i</sub></html>: country weights for computing the costs in Approach 3
-- N: the number of all treated individuals
-- C<sub>i, k</sub>: costs of a country at a specific payer level
-- <html>&#948<sub>g</sub></html>: ***definition?***
-
-
-
-
-## Appendix B: Function Definition
+#### Appendix B: Function Definition
 
 - `NPV_pe_f`: calculate the NPV formula for policy estimates
 - `CEA_pe_f`: calculate the CEA formula for policy estimates
@@ -198,9 +139,3 @@ Code chunks with `purl = TRUE` in the curly brackets at the top of the chunk are
 - `delta_ed_final_f`: calculates both the direct increase in secondary schooling and the externality effects on secondary schooling
 - `costs1_p1_f`: cleans and aggregates data at country level
 - `costs1_p2_f`: computes weights and per capita costs
-
-
-
-
-##### comments
-- is there a latex formula for delta E only for the direct increase?

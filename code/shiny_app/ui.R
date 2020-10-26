@@ -7,21 +7,23 @@ library(kableExtra)
 library(readxl)
 library(shinyjs)
 library(plotly)
-library(shinyBS) 
+library(shinyBS)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
-costs_temp_india <- 1
-costs_temp_kenya <- 2
-costs_temp_nigeria <- 3
-costs_temp_vietnam <- 4
+costs_temp_india   <- 0.0478
+costs_temp_kenya   <- 0.418
+costs_temp_nigeria <- 0.661
+costs_temp_vietnam <- 0.399
+
 
 prevalence_india <- 0.57
 prevalence_kenya <- 0.35
 prevalence_nigeria <- 0.27
 prevalence_vietnam <- 0.15
 
-nsims <- 1e2
+
+nsims <- 1e3
 
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
 # here() creates conflits with shiny deployment. Use source("all_analysis.R") intead
@@ -41,14 +43,14 @@ shinyUI(
                             br(),
                             h4(strong("Description of Results")),
                             p("We simulate finding the lifetime income effects on
-                              treated children many times, then plot the values 
+                              treated children many times, then plot the values
                               to create this curve. The height of the curve represents
                               how often an outcome appeared, i.e. the highest point
                               means that particular value appeared the most frequently.
                               The blue line indicates that half of all values are
                               on either side of the line.")
-                            ),
-                    fluidRow(p("Under the other two tabs, you can adjust the model's
+                   ),
+                   fluidRow(p("Under the other two tabs, you can adjust the model's
                               assumptions and rerun the simulation to explore the
                               impact on lifetime income effects."),
                             br(),
@@ -57,17 +59,19 @@ shinyUI(
                               tags$a(href="https://www.bitss.org/", "Berkeley Initiative
                                      for Transparency in the Social Sciences"),
                               "and",
-                              tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/", 
+                              tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/",
                                      "Evidence Action.")),
                             p("This visualization is one of three key components of an",
                               tags$a(href="http://www.bitss.org/opa/projects/deworming/","Open Policy Analysis (OPA)"),
                             "on the costs and benefits of
-                            mass deworming interventions in various settings.
-                            Together, these materials create a transparent and
+                            mass deworming interventions in various settings. The other two components correspond to",
+                            tags$a(href="https://rpubs.com/fhoces/547979", "detailed documentation"),
+                            " of all the analysis, and",
+                            tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "all the materials"),
+                            "required to reproduce
+                            the analysis with minimal effort. Together, these materials create a transparent and
                             reproducible analysis to facilitate collaboration and
                             discussion about deworming policy."),
-                            p(tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "Click here"),
-                                     "to visit source code.")
                             )
                  ),
                  mainPanel(
@@ -79,26 +83,95 @@ shinyUI(
                tabPanel(
                  "Key Assumptions", #TO DO: repeat all code but with costs and prevalence as reactive only
                  sidebarPanel(
-                   fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 300px; position:relative;",
+                   fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 400px; position:relative;",
                             withMathJax(),
                             useShinyjs(),
-                            selectInput("policy_est_ka", "Policy Estimate:",
+                            helpText("Choose the indicator to be your policy estimate"),
+                            selectInput("policy_est_ka", "Policy Estimates",
                                         choices = policy_estimates_text,
-                                        selected = "A3. All income of A2. Main Policy Estimate")
-                   ), 
+                                        selected = "A3. All income of A2. Main Policy Estimate"),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A1. Tax revenue' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(), br(),
+                                       "Benefits: Baird approach with tax included but not externalities", br(),br(),
+                                       "Costs: Baird approach with no externalities"
+                                       )
+                            ),
+
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A1. With externalities. Tax' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(), br(),
+                                       "Benefits: Baird approach with both tax and externalities included", br(),br(),
+                                       "Costs: Baird approach with externalities included")
+                            ),
+
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A1. All income' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax or externalities", br(),br(),
+                                       "Costs: Baird approach with no externalities")
+                            ),
+
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A1. With ext. All income' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax but with externalities", br(),br(),
+                                       "Costs: Baird approach with externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A2. Tax' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) with tax but not externalities", br(),br(),
+                                       "Costs: Hamory approach (KLPS) with no externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A2. All income' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) without tax or externalities", br(),br(),
+                                       "Costs: Hamory approach (KLPS) with no externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A3. All income of A1' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax or externalities but with prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A3. All income of A1, with ext.' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax but with externalities, prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A3. All income of A2. Main Policy Estimate' ",
+                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) without tax or externalities but with prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'Main Policy Estimate. CEA format' ",
+                              helpText("Cost effectiveness ratio (CEA) in absolute terms is the final indicator for policy estimate")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'Main Policy Estimate. RCEA format' ",
+                              helpText("Cost effectiveness ratio relative to the benchmark of cash transfers (RCEA) is the final indicator for policy estimate ")
+                            )
+
+
+                   ),
                    fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 400px; max-height: 600px; position:relative;",
-                            numericInput("param35", label = h3("Unit costs in new country"), value = round(costs2_ea_in,2)), 
+                            numericInput("param35", label = h3("Unit costs in new country"), value = round(costs2_ea_in,2)),
 
                             # checkboxGroupInput("param36", "Choose countries:",
                             #                    choiceNames =
                             #                      list("India", "Kenya", "Nigeria", "Vietnam"),
                             #                    choiceValues =
-                            #                      list("india", "kenya", "nigeria", "vietnam"), 
-                            #                    selected = list("india", "kenya", "nigeria", "vietnam")  ), 
+                            #                      list("india", "kenya", "nigeria", "vietnam"),
+                            #                    selected = list("india", "kenya", "nigeria", "vietnam")  ),
                             helpText("For reference:", br(),
                                      paste("Unit costs in India is", costs_temp_india), br(),
-                                     paste("Unit costs in Kenya is", costs_temp_kenya), br(), 
-                                     paste("Unit costs in Nigeria is", costs_temp_nigeria), br(), 
+                                     paste("Unit costs in Kenya is", costs_temp_kenya), br(),
+                                     paste("Unit costs in Nigeria is", costs_temp_nigeria), br(),
                                      paste("Unit costs in Vietnam is", costs_temp_vietnam)),
                             numericInput("param37", label = h3("Prevalence in the new region"), value = round(prevalence_r_in,2)),
                             bsPopover(id="param37", title = "For reference:",
@@ -107,11 +180,10 @@ shinyUI(
                                                       "Prevalence in Nigeria is ", prevalence_nigeria, br(),
                                                       "Prevalence in Vietnam is ", prevalence_vietnam),
                                       placement ="top", trigger="hover"),
-
                             helpText("For reference:", br(),
                                      paste("Prevalence in India is", prevalence_india), br(),
-                                     paste("Prevalence in Kenya is", prevalence_kenya), br(), 
-                                     paste("Prevalence in Nigeria is", prevalence_nigeria), br(), 
+                                     paste("Prevalence in Kenya is", prevalence_kenya), br(),
+                                     paste("Prevalence in Nigeria is", prevalence_nigeria), br(),
                                      paste("Prevalence in Vietnam is", prevalence_vietnam))
                    )
                  ),
@@ -125,15 +197,82 @@ shinyUI(
                tabPanel(
                  "All Assumptions",
                  sidebarPanel(
-                   fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 300px; position:relative;",
-                            actionButton("run", label = "Run Simulation"),
+                   fluidRow(id = "tPanel",style = "max-width: 400px; max-height: 400px; position:relative;",
+
                             checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
-                            numericInput("param1", label = h4("Number of simulations"), value = 1e2),
+                            numericInput("param1", label = h4("Number of simulations"), value = 1e3),
                             withMathJax(),
                             useShinyjs(),
                             selectInput("policy_est", "Policy Estimate:",
                                         choices = policy_estimates_text,
-                                        selected = "A3. All income of A2. Main Policy Estimate")
+                                        selected = "A3. All income of A2. Main Policy Estimate"),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A1. Tax revenue' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(), br(),
+                                       "Benefits: Baird approach with tax included but not externalities", br(), br(),
+                                       "Costs: Baird approach with no externalities"
+                              )
+                            ),
+
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A1. With externalities. Tax' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(), br(),
+                                       "Benefits: Baird approach with both tax and externalities included", br(),br(),
+                                       "Costs: Baird approach with externalities included")
+                            ),
+
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A1. All income' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax or externalities", br(),br(),
+                                       "Costs: Baird approach with no externalities")
+                            ),
+
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A1. With ext. All income' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax but with externalities", br(),br(),
+                                       "Costs: Baird approach with externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A2. Tax' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) with tax but not externalities", br(),br(),
+                                       "Costs: Hamory approach (KLPS) with no externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A2. All income' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) without tax or externalities", br(),br(),
+                                       "Costs: Hamory approach (KLPS) with no externalities")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A3. All income of A1' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax or externalities but with prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A3. All income of A1, with ext.' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Baird approach without tax but with externalities, prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'A3. All income of A2. Main Policy Estimate' ",
+                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
+                                       "Benefits: Hamory approach (KLPS) without tax or externalities but with prevalence and length of treatment considered", br(),br(),
+                                       "Costs: Evidence Action (EA) Approach")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'Main Policy Estimate. CEA format' ",
+                              helpText("Cost effectiveness ratio (CEA) in absolute terms is the final indicator for policy estimate")
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est == 'Main Policy Estimate. RCEA format' ",
+                              helpText("Cost effectiveness ratio relative to the benchmark of cash transfers (RCEA) is the final indicator for policy estimate ")
+                            )
+
                    ),
                    fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 400px; max-height: 400px; position:relative;",
                             tabsetPanel(
@@ -202,10 +341,10 @@ shinyUI(
                                        hidden(div(id="SD15",
                                                   sliderInput("param15_1", label = "SD = ", min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so, step = 0.000001))),
                                        numericInput("param16", label = "Costs of T (local $) = ", value = unit_cost_local_so),
-                                       hidden(div(id="SD16", 
+                                       hidden(div(id="SD16",
                                                   numericInput("param16_1", label = "SD = ", value = 0.1 * unit_cost_local_so))),
                                        numericInput("param16_new", label = "Costs of T (local $) = ", value = unit_cost_2017usdppp_so),
-                                       hidden(div(id="SD17", 
+                                       hidden(div(id="SD17",
                                                   numericInput("param16_1_new", label = "SD = ", value = 0.1 * unit_cost_2017usdppp_so))),
                                        sliderInput("param17", label = "Years of treatment in orginal study",
                                                    min = years_of_treat_0_so / 2, max = 2 * years_of_treat_0_so, value = years_of_treat_0_so),
@@ -308,7 +447,7 @@ shinyUI(
                    fluidRow(id = "output_id1", style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1")
                    ),
-                   fluidRow(id = "output_id2", style = "max-width: 800px; max-height: 300px; position:absolute;top: 700px;",
+                   fluidRow(id = "output_id2", style = "max-width: 800px; max-height: 300px; position:absolute;top: 500px;",
                             checkboxInput("show_eq", label = "Show equations", value = FALSE),
                             uiOutput('eqns', container = div)
                    )
