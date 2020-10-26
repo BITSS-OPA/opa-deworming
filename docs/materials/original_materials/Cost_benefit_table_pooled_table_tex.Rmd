@@ -1,0 +1,542 @@
+---
+title: "Dynamic Document for Fiscal Impacts of Deworming"
+author: ""
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: latex_fragment
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include=F}
+rm(list = ls())
+options(tinytex.verbose = TRUE)
+```
+
+```{r setup, include=FALSE} 
+# Loading required libraries
+list.of.packages <- c("tidyverse", "haven", "here", "kableExtra")
+
+lapply(list.of.packages, library, character.only = TRUE)
+library(rootSolve)
+knitr::opts_knit$set(root.dir = here())
+knitr::opts_chunk$set(echo = F)
+
+print_code <- TRUE
+``` 
+
+```{r parameters}
+
+# TO-DO:
+# add source links to bonds and inflation
+# get rid of gamma in the function
+# edit methodology section
+# get rid of .02. take sum of vector instead of mean and refer to Baird et. al.
+# change code of equations to match new setup
+# insert figures
+# format table
+
+# TIME-VARIANT INPUTS (may need to be updated)
+
+  # Data  
+    gov_bonds_so <- 0.09                   # Interest rate on government bonds - trading economics (updated 10/14) (add links)
+    inflation_so <- 0.04                   # Kenyan inflation rate - World Bank Development Indicators (updated 10/14) (add links)
+    tax_so       <- 0.16575                # ADD INFO!
+    unit_cost_so <- 0.42                   # Unit cost of deworming (in 2018 USD) - from Evidence Action
+  # unit_cost_local_so <- 43.66            #Deworm the World
+    
+  # Research
+    lambda1_2017usdppp_so <- c(79.51465,   # avg treatment effect from klps2-4 pooled (already adjusted for ppp and inflation) - w@w
+                               79.51465,   # avg treatment effect from klps2-4 pooled (already adjusted for ppp and inflation) - w@w 
+                               79.51465)   # avg treatment effect from klps2-4 pooled (already adjusted for ppp and inflation) - w@w
+    consump_2017usdppp_so <- c(0,          # avg treatment effect from klps2 not collected (treat as if zero)
+                               305.108,  # avg treatment effect from klps3-4 pooled (already adjusted for ppp and inflation) - w@w 
+                               305.108)   # avg treatment effect from klps3-4 pooled (already adjusted for ppp and inflation) - w@w
+    wtp_so <- 50*12                        # willingness to pay for deworming medication (2018 KSH)- Health-WTP_2018-01-19.pdf
+    
+  # Guess work   
+    periods_so    <- 50                    #Total number of periods to forecast wages
+    time_to_jm_so <- 10                    #Time from intial period until individual join the labor force
+    teach_sal_so  <- 50000                 #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits - news sources
+                                              # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
+                                              # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
+    teach_sal_so <- 12*teach_sal_so        #Yearly secondary schooling compensation
+    n_students_so <- 45                    #Average pupils per teacher	45
+
+# TIME-INVARIANT INPUTS
+  
+  # Data 
+    years_of_treat_so <- 2.41       # Additional Years of Treatment - Table 1, Panel A
+    
+    ex_rate_2018        <-101.30    # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
+    ex_rate_2009        <- 77.352   # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
+    ex_rate_2007        <- 67.318   # Exchange rate (KES per international $) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
+    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
+    ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
+    ex_rate_2009_ppp_so <- 31.317   # KLPS4_E+_globals.do (originally from the World Bank)
+    ex_rate_2007_ppp_so <- 25.024   # KLPS4_E+_globals.do (originally from the World Bank)
+    
+    cpi_2007_so <- 207.342          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    cpi_2009_so <- 214.537          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    
+  # Research
+    q_full_so   <- 0.75                     #Take up rates with full subsidy. From Miguel and Kremmer (2007)
+    q_zero_so   <- 0                        #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
+    delta_ed_so <- c(-0.00176350949079451,  # (Delta E) Additional direct seconday schooling increase (from Joan)
+                      0.00696052250263997, 
+                      0.0258570306763183,     
+                      0.0239963665555466,  
+                      0.027301406306074,   
+                      0.0234125454594173,
+                      0.0279278879439199,  
+                      0.00647044449446303, 
+                      0.00835739437790601)                                     
+    delta_ed_so <- cbind(delta_ed_so, 1999:2007)
+
+# CALCULATIONS TO CONVERT ALL CURRENCY TO 2017 USD PPP (will need to be updated if monetary inputs are updated)
+    
+  # Adjust for currency: convert all costs to USD PPP **NOTE: 1 international dollar = 1 USD (https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=KE-US)***
+      
+    unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
+    teach_sal_ppp_so <- teach_sal_so/ex_rate_2017_ppp_so
+    wtp_so           <- wtp_so/ex_rate_2018_ppp_so
+    
+  # Adjust for inflation: convert all costs to 2017 USD
+    
+    unit_cost_2017usdppp_so <- unit_cost_ppp_so*cpi_2017_so/cpi_2018_so
+    teach_sal_2017usdppp_so <- teach_sal_ppp_so*cpi_2017_so/cpi_2017_so # redundant, but for the sake of consistency
+    wtp_2017usdppp_so       <- wtp_so*cpi_2017_so/cpi_2018_so
+
+#############
+##### Notes:
+#############
+### Source ---->  Input ----> Model ----> Policy Estimates (output)
+###  (_so)        (_in)       (_mo)        (_pe)
+### values      functions   functions      values
+###             & values    & values 
+### arguments in functions should used "_var" and functions should "_f"
+
+```
+
+```{r model} 
+# add suffix _var to args 
+# - inputs: tax_rev_init_mo, top_tax_base_in  
+# - outputs: total_rev_pe 
+npv_mo_f <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                delta_welfare_var,
+                tax_var = tax_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+  ns <- c(n_male_var, n_female_var)
+  l_index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+############################################################################### 
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * delta_welfare_var
+  }
+  #browser()
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+          apply( ( 1 / (1 + interest_r_var) )^l_index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
+          sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
+############################################################################### 
+  return(res1) 
+}
+```
+
+```{r interest-rate} 
+# - inputs: gov_bonds_so, inflation_so
+# - outputs: interest_in
+interest_in_f <- function(gov_bonds_var = gov_bonds_so , inflation_var = inflation_so) {  
+############################################################################### 
+  interest_in = gov_bonds_var - inflation_var 
+############################################################################### 
+  return(list("interest_in" = interest_in))
+}
+invisible( list2env(interest_in_f(),.GlobalEnv) )
+```
+
+```{r costs}
+# - inputs: 
+# - outputs: 
+costs_f <- function(unit_cost_var = unit_cost_2017usdppp_so,
+                    years_of_treat_var = years_of_treat_so, 
+                    q_full_var = q_full_so){
+############################################################################### 
+    s2_in <- c(rep(unit_cost_var,2), .4*unit_cost_var)
+    q2_in <- q_full_var
+############################################################################### 
+    return(list("s2_in" = s2_in, "q2_in" = q2_in)) 
+} 
+invisible( list2env(costs_f(),.GlobalEnv) )
+
+
+```
+
+```{r ed-costs}
+
+# - inputs: coverage_so, q_full_so, q_zero_so 
+# - outputs: saturation_in 
+ed_costs_in_f <- function(teach_sal_var = teach_sal_2017usdppp_so, 
+                          n_students_var = n_students_so,
+                          delta_ed_var = delta_ed_so[,1]){
+ ###############################################################################    
+    cost_per_student_in <- (teach_sal_var)/ n_students_var
+    delta_ed_in <- delta_ed_var
+############################################################################### 
+    return(list("cost_per_student_in" = cost_per_student_in, "delta_ed_in" = delta_ed_in)) 
+} 
+invisible( list2env(ed_costs_in_f(),.GlobalEnv) )
+```
+
+```{r delta_earnings, eval=TRUE}
+# - inputs: periods_so, lambda1_2017usdppp_so
+# - outputs: 
+delta_welfare_in_f <- function(t_var = 0:periods_so, 
+                               welfarek1_var, 
+                               welfarek2_var, 
+                               welfarek3_var) {
+############################################################################### 
+delta_welfare_in <- 1*(10 <= t_var & t_var < 15) * welfarek1_var + 
+                    1*(15 <= t_var & t_var < 20) * welfarek2_var + 
+                    1*(20 <= t_var & t_var < 25) * welfarek3_var
+############################################################################### 
+  return(delta_welfare_in)
+}
+``` 
+
+```{r delta_earnings_p, eval=TRUE}
+# - inputs: periods_so, lambda1_2017usdppp_so
+# - outputs: 
+delta_welfare_p_in_f <- function(t_var = 0:periods_so, 
+                                  welfarek1_var, 
+                                  welfarek2_var, 
+                                  welfarek3_var) {
+############################################################################### 
+delta_welfare_p_in <- 1*(10 <= t_var & t_var < 15) * welfarek1_var + 
+                      1*(15 <= t_var & t_var < 20) * welfarek2_var + 
+                      1*(20 <= t_var) * welfarek3_var
+############################################################################### 
+  return(delta_welfare_p_in)
+}
+``` 
+
+```{r earnings, eval=TRUE}
+
+delta_earnings_in = delta_welfare_in_f(welfarek1_var = lambda1_2017usdppp_so[1],
+                                       welfarek2_var = lambda1_2017usdppp_so[2],
+                                       welfarek3_var = lambda1_2017usdppp_so[3])
+
+delta_earnings_p_in = delta_welfare_p_in_f(welfarek1_var = lambda1_2017usdppp_so[1],
+                                           welfarek2_var = lambda1_2017usdppp_so[2],
+                                           welfarek3_var = lambda1_2017usdppp_so[3])
+```
+
+```{r consumption, eval=TRUE}
+
+delta_consumption_in = delta_welfare_in_f(welfarek1_var = consump_2017usdppp_so[1],
+                                          welfarek2_var = consump_2017usdppp_so[2],
+                                          welfarek3_var = consump_2017usdppp_so[3])
+
+delta_consumption_p_in = delta_welfare_p_in_f(welfarek1_var = consump_2017usdppp_so[1],
+                                              welfarek2_var = consump_2017usdppp_so[2],
+                                              welfarek3_var = consump_2017usdppp_so[3])
+```
+
+```{r model_cwelfare earnings}
+# welfare function for earnings, 50 year(persist)
+npv_cwelfare_p_mo_f <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                delta_welfare_var,
+                lambda1_male_var = lambda1_2017usdppp_so[1],
+                lambda1_female_var = lambda1_2017usdppp_so[2], 
+                tax_var = tax_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+  ns <- c(n_male_var, n_female_var)
+  l_index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+############################################################################### 
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * (1*(10 <= l_index_t & l_index_t < 15) * delta_welfare_var + 1*(15 <= l_index_t & l_index_t < 20) * delta_welfare_var +1*(20 <= l_index_t) * delta_welfare_var)
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^l_index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
+    sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
+############################################################################### 
+  return(res1) 
+}
+
+# welfare function for earnings, 25 year (die)
+npv_cwelfare_d_mo_f <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                delta_welfare_var,
+                lambda1_male_var = lambda1_2017usdppp_so[1],
+                lambda1_female_var = lambda1_2017usdppp_so[2], 
+                tax_var = tax_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+  ns <- c(n_male_var, n_female_var)
+  l_index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+############################################################################### 
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t * (1*(10 <= l_index_t & l_index_t < 15) * delta_welfare_var + 1*(15 <= l_index_t & l_index_t < 20) * delta_welfare_var + 1*(20 <= l_index_t & l_index_t < 25) * delta_welfare_var)
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^l_index_t * delta_ed_s * cost_of_schooling_var, 2, sum) )
+          ) - sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
+############################################################################### 
+  return(res1) 
+}
+```
+
+```{r model_cwelfare consumption}
+# welfare function for consumption, 15-50 year(persist)
+npv_cwelfare_p_mo_f_c <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                delta_welfare_var,
+                lambda1_male_var = lambda1_2017usdppp_so[1],
+                lambda1_female_var = lambda1_2017usdppp_so[2], 
+                tax_var = tax_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+  ns <- c(n_male_var, n_female_var)
+  l_index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+############################################################################### 
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <-  ( 1 / (1 + interest_r_var) )^l_index_t *(1*(15 <= l_index_t & l_index_t < 20) * delta_welfare_var +1*(20 <= l_index_t) * delta_welfare_var)
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^l_index_t *
+                     delta_ed_s * cost_of_schooling_var, 2, sum) )) - 
+    sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
+############################################################################### 
+  return(res1) 
+}
+
+# welfare function for consumptions, 15-25 year(die)
+npv_cwelfare_d_mo_f_c <- function(interest_r_var = interest_in,
+                n_male_var = 1/2, n_female_var = 1/2, 
+                delta_welfare_var,
+                lambda1_male_var = lambda1_2017usdppp_so[1],
+                lambda1_female_var = lambda1_2017usdppp_so[2], 
+                tax_var = tax_so,
+                cost_of_schooling_var = cost_per_student_in,
+                delta_ed_male_var = delta_ed_so[,1],
+                delta_ed_female_var = delta_ed_so[,1],
+                s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
+                periods_var = periods_so, years_of_treat_var = years_of_treat_so) {
+  ns <- c(n_male_var, n_female_var)
+  l_index_t <- 0:periods_var
+  delta_ed_s <- cbind(delta_ed_male_var, delta_ed_female_var) 
+  delta_ed_s <- rbind(c(0,0), delta_ed_s, matrix(0,41, 2) )
+############################################################################### 
+  benef <- matrix(NA, 51,2)
+  for (i in 1:2){
+  benef[,i] <- ( 1 / (1 + interest_r_var) )^l_index_t *(1*(15 <= l_index_t & l_index_t < 20) * delta_welfare_var + 1*(20 <= l_index_t & l_index_t < 25) * delta_welfare_var)
+  }
+
+  res1 <- sum( ns * ( tax_var * apply(benef, 2, sum) -
+            apply( ( 1 / (1 + interest_r_var) )^l_index_t * delta_ed_s * cost_of_schooling_var, 2, sum) )
+          ) - sum( ( 1 / (1 + interest_r_var) )^(0:2) * (s2_var * q2_var  - s1_var * q1_var) )
+############################################################################### 
+  return(res1) 
+}
+```
+
+```{r table 1 results}
+#Earnings
+#########
+# PANEL A
+#########
+
+e_social_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+e_social_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+e_social_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+e_social_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+
+e_tax_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=10000000, positive = T))$root
+e_tax_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=10000000, positive = T))$root
+e_tax_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=10000000, positive = T))$root
+e_tax_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=10000000, positive = T))$root
+
+#Earnings
+#########
+# PANEL B
+#########
+
+# Net Present Value (2017 USD PPP)
+e_npv_int05_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, tax_var = 1)
+e_npv_int05_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, tax_var = 1)
+e_npv_int10_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = 0.10, tax_var = 1)
+e_npv_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = 0.10, tax_var = 1)
+
+# Net Present Value of tax revenue (2017 USD PPP)
+e_tax_int05_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = .05)
+e_tax_int05_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = .05)
+e_tax_int10_persist <- npv_mo_f(delta_welfare_var = delta_earnings_p_in, interest_r_var = 0.10)
+e_tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_earnings_in, interest_r_var = 0.10)
+
+#Earnings
+#########
+# PANEL C
+#########
+
+e_irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_p_in), .1, maxiter=1000000, positive = T))$root
+#THIS ONE
+e_irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_earnings_in), .1, maxiter=10000000, positive = T))$root
+e_irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_p_in), .1, maxiter=1000000, positive = T))$root
+e_irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_earnings_in), .1, maxiter=1000000, positive = T))$root
+
+#Consumption
+#########
+# PANEL A
+#########
+
+c_social_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f_c(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+c_social_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f_c(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+c_social_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f_c(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+c_social_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f_c(delta_welfare_var = x, tax_var = 1, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+
+c_tax_persist_int10 <- (multiroot(function(x) npv_cwelfare_p_mo_f_c(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+c_tax_persist_int05 <- (multiroot(function(x) npv_cwelfare_p_mo_f_c(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+c_tax_die_int10     <- (multiroot(function(x) npv_cwelfare_d_mo_f_c(delta_welfare_var = x, interest_r_var = 0.10), 4, maxiter=1000000, positive = T))$root
+c_tax_die_int05     <- (multiroot(function(x) npv_cwelfare_d_mo_f_c(delta_welfare_var = x, interest_r_var = 0.05), 4, maxiter=1000000, positive = T))$root
+
+#Consumption
+#########
+# PANEL B
+#########
+
+# Net Present Value (2017 USD PPP)
+c_npv_int05_persist <- npv_mo_f(delta_welfare_var = delta_consumption_p_in, interest_r_var = 0.05, tax_var = 1)
+c_npv_int05_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.05, tax_var = 1)
+c_npv_int10_persist <- npv_mo_f(delta_welfare_var = delta_consumption_p_in, interest_r_var = 0.10, tax_var = 1)
+c_npv_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.10, tax_var = 1)
+
+# Net Present Value of tax revenue (2017 USD PPP)
+c_tax_int05_persist <- npv_mo_f(delta_welfare_var = delta_consumption_p_in, interest_r_var = 0.05)
+c_tax_int05_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.05)
+c_tax_int10_persist <- npv_mo_f(delta_welfare_var = delta_consumption_p_in, interest_r_var = 0.10)
+c_tax_int10_die     <- npv_mo_f(delta_welfare_var = delta_consumption_in,   interest_r_var = 0.10)
+
+#Consumption
+#########
+# PANEL C
+#########
+
+c_irr_social_persist <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_consumption_p_in), .1, maxiter=1000000, positive = T))$root
+c_irr_social_die     <- (multiroot(function(x) npv_mo_f(interest_r_var = x, tax_var = 1, delta_welfare_var = delta_consumption_in), .1, maxiter=1000000, positive = T))$root
+c_irr_tax_persist    <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_consumption_p_in), .1, maxiter=1000000, positive = T))$root
+c_irr_tax_die        <- (multiroot(function(x) npv_mo_f(interest_r_var = x, delta_welfare_var = delta_consumption_in), .1, maxiter=1000000, positive = T))$root
+
+```
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\toprule  
+&  \multicolumn{2}{c}{Consumption}
+&  \multicolumn{2}{c}{Earnings}	                                    
+\\ \cmidrule{2-3} 
+\cmidrule{4-5}
+& 25 years		  & 50 years	                                        & 25 years 	    & 50 years   
+\\
+\midrule
+ \multicolumn{5}{l}{\textit{Panel A: Required Labor Market Gains (Calculated) for Internal Rates of Return (IRR)}} \\ 
+Social IRR of 10\%				           
+& `r round(c_social_die_int10,2)`     
+& `r format(round(c_social_persist_int10,2), nsmall=2)`  
+& `r round(e_social_die_int10,2)`     
+& `r format(round(e_social_persist_int10,2), nsmall=2)` \\
+Social IRR of 5\% 		     		       
+& `r round(c_social_die_int05,2)`     
+& `r format(round(c_social_persist_int05,2), nsmall=2)`   
+& `r round(e_social_die_int05,2)`     
+& `r format(round(e_social_persist_int05,2), nsmall=2)` \\
+Fiscal IRR of 10\%       
+& `r round(c_tax_die_int10,2)`        
+& `r format(round(c_tax_persist_int10,2), nsmall=2)` 	 
+& `r round(e_tax_die_int10,2)`        
+& `r format(round(e_tax_persist_int10,2), nsmall=2)`  \\
+Fiscal IRR of 5\%        
+& `r round(c_tax_die_int05,2)`        
+& `r format(round(c_tax_persist_int05,2), nsmall=2)`
+& `r round(e_tax_die_int05,2)`        
+& `r format(round(e_tax_persist_int05,2), nsmall=2)` 	 \\
+\multicolumn{5}{l}{\textit{Panel B: Net Present Value (NPV) from Observed Labor Market Gains}} \\
+Social NPV for assumed discount rate of 10\%			                 
+& `r format(round(c_npv_int10_die,2),nsmall=2)`	       
+& `r format(round(c_npv_int10_persist,2),nsmall=2)`	
+& `r format(round(e_npv_int10_die,2),nsmall=2)`	       
+& `r format(round(e_npv_int10_persist,2),nsmall=2)`  \\
+Social NPV for assumed discount rate of 5\% 	 	       
+& `r format(round(c_npv_int05_die,2),nsmall=2)`	       
+& `r format(round(c_npv_int05_persist,2),nsmall=2)` 
+& `r format(round(e_npv_int05_die,2),nsmall=2)`	       
+& `r format(round(e_npv_int05_persist,2),nsmall=2)` \\
+Fiscal NPV for assumed discount rate of 10\% 
+& `r format(round(c_tax_int10_die,2),nsmall=2)`	       
+& `r format(round(c_tax_int10_persist,2),nsmall=2)`		 
+& `r format(round(e_tax_int10_die,2),nsmall=2)`	       
+& `r format(round(e_tax_int10_persist,2),nsmall=2)`  \\
+Fiscal NPV for assumed discount rate of 5\%  
+& `r format(round(c_tax_int05_die,2),nsmall=2)`	       
+& `r format(round(c_tax_int05_persist,2),nsmall=2)`  
+& `r format(round(e_tax_int05_die,2),nsmall=2)`	       
+& `r format(round(e_tax_int05_persist,2),nsmall=2)`  \\
+\multicolumn{5}{l}{\textit{Panel C: Internal Rate of Return (IRR) from Observed Labor Market Gains}}  \\ 
+Social IRR 							                   
+& `r round(100*c_irr_social_die,1)`\% 
+& `r round(100*c_irr_social_persist,1)`\%  
+& `r round(100*e_irr_social_die,1)`\% 
+& `r round(100*e_irr_social_persist,1)`\%  \\
+Fiscal IRR						             
+& `r round(100*c_irr_tax_die,1)`\%    
+& `r format(round(100*c_irr_tax_persist,1), nsmall=1)`\%  
+& `r round(100*e_irr_tax_die,1)`\%    
+& `r round(100*e_irr_tax_persist,1)`\%   \\
+\bottomrule
+\end{tabular}
+
+\end{table}
+
