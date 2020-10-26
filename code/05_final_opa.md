@@ -1,7 +1,7 @@
 ---
 pdf_document:
   extra_dependencies: ["xcolor"]
-date: "19 October, 2020"
+date: "26 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
