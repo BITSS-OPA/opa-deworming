@@ -4,6 +4,20 @@ library(shiny)
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
+  #Show/hide SDs code. Not sure where to put this code
+  onclick("toggleDataSDs",
+          lapply(c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
+                            "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
+                            "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), toggle, anim=TRUE))
+  
+  onclick("toggleResearchSDs",
+          lapply(c("SD22", "SD23", "SD24", "SD25", "SD26", "SD27", "SD28",
+                            "SD29", "SD30", "SD31", "SD32"), toggle, anim=TRUE))
+  
+  onclick("toggleGWSDs",
+          lapply(c("SD33","SD34", "SD35", "SD36", "SD37", "SD38"), toggle, anim=TRUE))
+  
+  
   reactive.data1 <- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    
@@ -798,7 +812,7 @@ shinyServer( function(input, output, session) {
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = paste0(policy_estimates_text[position], ". ",
                              "N = ", input$param1, " simulations. Takes ",
-                             round(total_time, 1)," ",attributes(total_time)$unit )  ) 
+                             round(total_time, 1)," ",attributes(total_time)$units )  ) 
       
     print(plot1)  
   }, height = 500, width = 750 
