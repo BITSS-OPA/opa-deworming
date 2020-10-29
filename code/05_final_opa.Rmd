@@ -30,7 +30,7 @@ link-citations: true
 ```{r setup, include=FALSE, purl=TRUE}
 # Loading required libraries
 list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly", 
-                      "bookdown", "rootSolve")
+                      "bookdown", "rootSolve","shinyBS")
 
 # sapply(list.of.packages, function(x) pacman::p_load(get(x)))
 
@@ -638,8 +638,8 @@ Where:
 - $w_0$: the initial weekly earnings  
 - $g$: per capita GDP growth  
 - $Xp$: years of work  
-- $\hat{\beta_1}$: Coefficient estimate for $Xp$  
-- $\hat{\beta_2}$: Coefficient estimate for $Xp^2$  
+- $\hat{\beta_1}$: coefficient estimate for $Xp$  
+- $\hat{\beta_2}$: coefficient estimate for $Xp^2$  
 - $ex$: exchange rate 
 - $h$: average worked hours dedicated to each sector  
 - $ag$: agriculture  
