@@ -90,7 +90,6 @@ shinyServer( function(input, output, session) {
       prevalence_0_var2_sd = as.numeric(input$param30_1), 
       prevalence_r_var2 = as.numeric(input$param31),    
       prevalence_r_var2_sd = as.numeric(input$param31_1),                                                                         
-      new_prev_r_var2 = as.numeric(input$param37), #HERE IS PREV
       counts_par_var2 = as.numeric(input$param32), 
       counts_par_var2_sd = as.numeric(input$param32_1),
       staff_time_var2 = as.numeric(input$param33), 
@@ -98,6 +97,7 @@ shinyServer( function(input, output, session) {
       costs_par_var2 = as.numeric(input$param34), 
       costs_par_var2_sd = as.numeric(input$param34_1), 
       new_costs_var2 = as.numeric(input$param35),
+      new_prev_r_var2 = as.numeric(input$param37),
       countries_var2 = list("india", "kenya", "nigeria", "vietnam"), # = input$param36  to make it interactive
       
       
@@ -765,20 +765,34 @@ shinyServer( function(input, output, session) {
   })
   
   # Define a function that generates policy estimate plots
-  call_plot_f <- function(mainPlot) {
+  call_plot_f <- function(plotType) {
     npv_sim_all <- reactive.data1()
     
     total_time <- npv_sim_all$total_time
-    position <- which( policy_estimates_text == input$policy_est)
-    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-    npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
-    npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
     
     
-    if (mainPlot == TRUE){
+    
+    if (plotType == "main"){
+      position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
+      npv_sim <- npv_sim_all[[ policy_estimates[position] ]] 
       npv_for_text <- paste(round(median(npv_sim), 2))
       npv_for_text2 <- NULL
+      
     } 
+    
+    if (plotType == "ka"){
+      position <- which( policy_estimates_text == input$policy_est_ka)
+      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+      npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
+      npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+    }
+    
+    if (plotType == "all"){
+      position <- which( policy_estimates_text == input$policy_est)
+      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+      npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
+      npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+    }
     
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
@@ -804,9 +818,9 @@ shinyServer( function(input, output, session) {
   output$plot1 <- renderPlot({      
     
     
-    plot1 <- call_plot_f(FALSE)[[1]]
-    position <- call_plot_f(FALSE)[[2]]
-    total_time <- call_plot_f(FALSE)[[3]]
+    plot1 <- call_plot_f("all")[[1]]
+    position <- call_plot_f("all")[[2]]
+    total_time <- call_plot_f("all")[[3]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
@@ -820,8 +834,8 @@ shinyServer( function(input, output, session) {
   
   # Generate Plot with Key Assumptions
   output$plot1_ka <- renderPlot({      
-    plot1 <- call_plot_f(FALSE)[[1]]
-    position <- call_plot_f(FALSE)[[2]]
+    plot1 <- call_plot_f("ka")[[1]]
+    position <- call_plot_f("ka")[[2]]
     
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
@@ -834,8 +848,8 @@ shinyServer( function(input, output, session) {
   
   # Generate Main Policy Estimate Plot 
   output$plot1_main <- renderPlot({      
-    plot1 <- call_plot_f(TRUE)[[1]]
-    position <- call_plot_f(TRUE)[[2]]
+    plot1 <- call_plot_f("main")[[1]]
+    position <- call_plot_f("main")[[2]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
