@@ -101,7 +101,7 @@ chunk_sources <- function(){
     ##### Research
     #############
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
-    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women
+    lambda1_so <- c(3.49, 0.32)            #Hrs per week increase for men and women
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
     lambda1_new_so <- c(79.51465,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
                                79.51465,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
