@@ -28,7 +28,7 @@
 
 ### Beginning
 
-- The code begins with a list of all relevant libraries **(should I list them or is there no need?)**
+- The code begins with a list of all relevant libraries
 - Then, it states the unit costs and the prevalences of 4 countries: India, Kenya, Nigeria, and Vietnam
 - At the top of the SA, it says "Open Policy Analysis for Deworming Interventions: Open Output Component"
     - This is created using 'navbarPage'
@@ -46,7 +46,7 @@
 - shinyUI -> creates a user interface
 - fluidPage -> creates a page
 - navbarPage -> creates a page with a navigation bar at the top
-- tabPanel -> creates a tab panel, takes in a title (i.e. "Main Policy Estimate") and a value **(should I do this explanation for each function, where all inputs are listed?)**
+- tabPanel -> creates a tab panel, takes in a title (i.e. "Main Policy Estimate") and a value
 - sidebarPanel -> creates a sidebar that has input controls
 - tags$a -> creates a link
 - mainPanel -> creates a main panel of output elements
