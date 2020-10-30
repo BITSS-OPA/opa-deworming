@@ -2,7 +2,7 @@
 pdf_document:
   extra_dependencies: ["xcolor"]
   fig_caption: false
-date: "28 October, 2020"
+date: "29 October, 2020"
 output:
   bookdown::html_document2:
     code_folding: hide
@@ -203,7 +203,7 @@ chunk_sources <- function(){
     )
     #https://data.worldbank.org/indicator/SP.POP.TOTL
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "klps4_1_sim",
-    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "a3_mpe_cea_sim", "a3_mpe_rcea_sim"
+    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim"
     policy_estimate_so <- "ea3_sim"
 
     costs_temp_so <- 1
@@ -231,9 +231,12 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 ```
 
 
-# Main Policy Estimate Figure {-}
 
-<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" width="100%" style="display: block; margin: auto;" />
+
+<div class="figure" style="text-align: center">
+<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
+</div>
 
 
 
@@ -278,33 +281,26 @@ We first describe the common elements across all three approaches, and then desc
 
 ## Common structure {-}
 
-This analysis begins by recreating the estimates conducted by Baird et al (2016), in which authors calculate a rate of return for government investment in a school-based deworming program in a worm-endemic area. Children who were dewormed in school proved to have higher income as adults, thus generating additional tax revenue for the government. Authors show that the monetary benefits of deworming more than offset the costs required to deliver school-based programs, resulting in a high return on investment. The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). Another format to present this analysis is as a cost effectiveness ratio, in absolute terms or relative to the benchmark of cash transfers.
+This analysis begins by recreating the estimates conducted by Baird et al (2016), in which authors calculate a rate of return for government investment in a school-based deworming program in a worm-endemic area. Children who were dewormed in school proved to have higher income as adults, thus generating additional tax revenue for the government. Authors show that the monetary benefits of deworming more than offset the costs required to deliver school-based programs, resulting in a high return on investment. The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV). 
 
 <details><summary>Show all the details</summary>
 
 \begin{equation}
 NPV = B - C \\
-CEA = \frac{B \times F_0}{C} \\
-RCEA = \frac{CEA(B,C)}{CEA_{cash}}
 
-\label{eq:1}
-\tag{1}
-\end{equation}
 
 Where:  
 
 - $NPV$: net present value of the deworming treatment   
 - $B$: benefits of the deworming treatment  
 - $C$: costs of the deworming treatment  
-- $CEA$: cost effectiveness ratio of the deworming treatment in absolute terms, another format of our final policy estimate   
-- $RCEA$: relative cost effectiveness ratio of the deworming treatment relative to the benchmark of cash transfers   
 
 
 
 
 ```r
 # - inputs: total per capita benefits, total per capita costs, fudging factor
-# - outputs: Cost-effectiveness ratio & ratio to cash CEA, NPV
+# - outputs: Net Present Value (NPV)
 chunk_final_pe <- function(){
 ###############################################################################
 ###############################################################################  
@@ -312,18 +308,13 @@ chunk_final_pe <- function(){
     NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
         benefits_var - costs_var
     }
-    CEA_pe_f <- function(benefits_var = 1, fudging_var = 0, costs_var = 1) {
-        ( benefits_var * ( 1 + fudging_var ) ) / costs_var
-    }
-    RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
-        CEA_var / CEA_cash_var
-    }
+ 
+    
+    
 
 ###############################################################################
 ###############################################################################  
-    return(list("CEA_pe_f" = CEA_pe_f,
-                "RCEA_pe_f" = RCEA_pe_f,
-                "NPV_pe_f" = NPV_pe_f))
+    return(list("NPV_pe_f" = NPV_pe_f))
 }
 invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
@@ -343,8 +334,8 @@ Benefits are equal to the additional lifetime earnings that individuals are expe
 \begin{equation}
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} E_{t}
 
-\label{eq:2}
-\tag{2}
+\label{eq:1}
+\tag{1}
 \end{equation}
 
 Where:
@@ -396,8 +387,8 @@ All 3 approaches use the real interest rate ($r$) as the discounting rate. This 
 r = \frac{1 + i}{1 + \pi} - 1 \\
 r \approx i - \pi
 
-\label{eq:3}
-\tag{3}
+\label{eq:2}
+\tag{2}
 \end{equation}
 
 Where:   
@@ -474,8 +465,8 @@ Gains in earnings ($\Delta W_{t}$) are the result of multiplying expected earnin
 \begin{equation}
 \Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 
-\label{eq:4}
-\tag{4}
+\label{eq:3}
+\tag{3}
 \end{equation}
 
 Where[^6]:   
@@ -537,23 +528,23 @@ The wages/earnings are determined by:
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50
 
-\label{eq:5}
-\tag{5}
+\label{eq:4}
+\tag{4}
 \end{equation}
 
 \begin{equation}
 w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
 \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}
 
-\label{eq:6}
-\tag{6}
+\label{eq:5}
+\tag{5}
 \end{equation}
 
 \begin{equation}
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
 
-\label{eq:7}
-\tag{7}
+\label{eq:6}
+\tag{6}
 \end{equation}
 
 Where:  
@@ -562,8 +553,8 @@ Where:
 - $w_0$: the initial weekly earnings  
 - $g$: per capita GDP growth  
 - $Xp$: years of work  
-- $\hat{\beta_1}$: Coefficient estimate for $Xp$  
-- $\hat{\beta_2}$: Coefficient estimate for $Xp^2$  
+- $\hat{\beta_1}$: coefficient estimate for $Xp$  
+- $\hat{\beta_2}$: coefficient estimate for $Xp^2$  
 - $ex$: exchange rate 
 - $h$: average worked hours dedicated to each sector  
 - $ag$: agriculture  
@@ -645,15 +636,15 @@ wage_t_in <- wage_t_mo
 
 The estimated impact of deworming on hours worked comes from @baird2016worms and are estimate separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). These two parameters are combined with a simple mean in the analysis.
 
-The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not receive the treatment but still saw reductions in the likelihood of infection due to lower worm prevalence in their community.  Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:8} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study.
+The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not receive the treatment but still saw reductions in the likelihood of infection due to lower worm prevalence in their community.  Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:7} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study.
 
 <details><summary>Show all the details</summary>
 
 \begin{equation}
 \lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}\\
 
-\label{eq:8}
-\tag{8}
+\label{eq:7}
+\tag{7}
 \end{equation}
 
 Where:
@@ -706,8 +697,8 @@ For this setting @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) e
 \begin{equation}
 p = R \times Q(full)  + (1 - R) \times Q(0)
 
-\label{eq:9}
-\tag{9}
+\label{eq:8}
+\tag{8}
 \end{equation}
 
 Where:
@@ -790,8 +781,8 @@ The costs are a combination of direct costs of mass deworming (relative to the s
 \begin{equation}
 C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)
 
-\label{eq:10}
-\tag{10}
+\label{eq:9}
+\tag{9}
 \end{equation}
 
 Where: 
@@ -850,8 +841,8 @@ With complete subsidy, the relevant costs represent the total direct costs of de
 \begin{equation}
 S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional years of treatment} \\
 
-\label{eq:11}
-\tag{11}
+\label{eq:10}
+\tag{10}
 \end{equation}
 
 
@@ -898,8 +889,8 @@ This series does not take into account the externality effects. To incorporate e
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 
-\label{eq:12}
-\tag{12}
+\label{eq:11}
+\tag{11}
 \end{equation}
 
 
@@ -999,8 +990,8 @@ Gains in yearly earnings represent the treatment effect on welfare ($\alpha$), w
 \begin{equation}
 \Delta W_{t} = \mathbf{1}(10 < t \leq 50)\alpha^{KLPS}
 
-\label{eq:13}
-\tag{13}
+\label{eq:12}
+\tag{12}
 \end{equation}
 
 Where:
@@ -1052,8 +1043,8 @@ Similar to approach 1, the direct deworming costs under approach 2 are calculate
 \begin{equation}
 DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
 
-\label{eq:14}
-\tag{14}
+\label{eq:13}
+\tag{13}
 \end{equation}
 
 
@@ -1063,8 +1054,8 @@ Since the analysis is discrete, and we can not sum over a non-integer, we find
 DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \\
 .4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
 
-\label{eq:15}
-\tag{15}
+\label{eq:14}
+\tag{14}
 \end{equation}
 
 Where:
@@ -1128,8 +1119,8 @@ Hence, the cost of schooling each child for an additional year is now $267.88 (U
 \begin{equation}
 K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 
-\label{eq:16}
-\tag{16}
+\label{eq:15}
+\tag{15}
 \end{equation}
 
 Where:
@@ -1232,8 +1223,8 @@ For approach 3, we will modify treatement effects of approaches 1 and 2 (equatio
 \lambda_{1} = \eta \lambda^{eff}_{1} + (1 -  \eta) \times 0 \\
 \lambda^{r}_{1} = \eta_{r}\lambda^{eff}_{1}
 
-\label{eq:17}
-\tag{17}
+\label{eq:16}
+\tag{16}
 \end{equation}
 
 Where:
@@ -1306,8 +1297,8 @@ For approach 3, we will modify treatement effects of approaches 1 and 2 (equatio
 \lambda_{1,t = 1} = \frac{\lambda_{1}}{T_{0}} \\
 \lambda_{1,t} = t \lambda_{1,t = 1} \quad \text{for } t=1, \dots, 6
 
-\label{eq:18}
-\tag{18}
+\label{eq:17}
+\tag{17}
 \end{equation}
 
 
@@ -1429,16 +1420,16 @@ The country weights are computed as the fraction of all treated individuals that
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
 
-\label{eq:19}
-\tag{19}
+\label{eq:18}
+\tag{18}
 \end{equation}
 
 \begin{equation}
 \omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
 c_{i} = \frac{C_{i}}{N_{i}} \\
 
-\label{eq:20}
-\tag{20}
+\label{eq:19}
+\tag{19}
 \end{equation}
 
 
@@ -1598,7 +1589,7 @@ The table below summarises the three different approaches and the different alte
 #       ##     ###    ####    #####
 # 1     2       3     4       5
 #       ##     ###    ####    #####
-# NPV_pe_f, CEA_pe_f, RCEA_pe_f
+# NPV_pe_f
 #  TO DO: review and update this function tree
 # ├──── pv_benef_f
 # │      ├──── earnings1_f
@@ -1871,7 +1862,7 @@ one_run <-
       years_of_treat_var = years_of_treat_0_var1
     )
     unit_test(s2_in, 1.4219, main_run_var = main_run_var1)
-    #--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
+    #--------------- Inputs for NPV_pe_f--------------------
     # Make explicit non-function inputs:
     #Benefits:
     #Baird w/tax and no externalities (no ext)
@@ -2125,8 +2116,8 @@ Let $x$ denote each source used in this analysis.
 \begin{equation}
 x \sim N(\hat{x}, \sigma_{x}) 
 
-\label{eq:21}
-\tag{21}
+\label{eq:20}
+\tag{20}
 \\
 \sigma_{x} =
 \begin{cases}
@@ -2411,8 +2402,7 @@ sim.data1 <- function(nsims = 1e2,
     ea1_sim              <- rep(NA, nsims) #a3_inc_a1_all
     ea2_sim              <- rep(NA, nsims) #a3_inc_a1_all_x
     ea3_sim              <- rep(NA, nsims) #a3_inc_a2_all_mpe
-    a3_mpe_cea_sim    <- rep(NA, nsims) #a3_mpe_cea
-    a3_mpe_rcea_sim   <- rep(NA, nsims) #a3_mpe_rcea
+   
 
     for (i in 1:nsims) {
     # one_run, for the most part, does not include standard deviations   
@@ -2477,12 +2467,7 @@ sim.data1 <- function(nsims = 1e2,
       ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prev_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=EA
       ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
-      #CEA for EA
-      a3_mpe_cea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in,
-                                        costs_var = costs2_ea_in, fudging_var = 0)
-      a3_mpe_rcea_sim[i]  <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in,
-                                                              costs_var = costs2_ea_in, fudging_var = 0),
-                                           CEA_cash_var = 744 )
+      
     }
 
     total_time <- Sys.time() - start_time
@@ -2497,8 +2482,6 @@ sim.data1 <- function(nsims = 1e2,
       "ea1_sim"            = ea1_sim,            
       "ea2_sim"            = ea2_sim,            
       "ea3_sim"            = ea3_sim,            
-      "a3_mpe_cea_sim"  = a3_mpe_cea_sim,  
-      "a3_mpe_rcea_sim" = a3_mpe_rcea_sim,
       "total_time"         = total_time
     ) )
 }
@@ -2512,9 +2495,7 @@ policy_estimates <- c(
   "klps4_2_sim"        ,
   "ea1_sim"            ,
   "ea2_sim"            ,
-  "ea3_sim"            ,
-  "a3_mpe_cea_sim"  ,
-  "a3_mpe_rcea_sim"
+  "ea3_sim"            
 )
 
 policy_estimates_text <- c(
@@ -2526,9 +2507,7 @@ policy_estimates_text <- c(
   "A2. All income",
   "A3. All income of A1",
   "A3. All income of A1, with ext.",
-  "A3. All income of A2. Main Policy Estimate",
-  "Main Policy Estimate. CEA format",
-  "Main Policy Estimate. RCEA format"
+  "A3. All income of A2. Main Policy Estimate"
   )
 
 # c(
@@ -2540,9 +2519,7 @@ policy_estimates_text <- c(
 #   "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
 #   "Total effects, 2016(W@W) B & EA C, no ext",  
 #   "Total effects, 2016(W@W) B & EA C, ext",  
-#   "Total effects, 2019(KLPS4) B & EA C, no ext",
-#   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
-#   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
+#   "Total effects, 2019(KLPS4) B & EA C, no ext")
 ```
 
 </details>

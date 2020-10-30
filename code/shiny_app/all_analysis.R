@@ -163,7 +163,7 @@ chunk_sources <- function(){
     )
     #https://data.worldbank.org/indicator/SP.POP.TOTL
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "klps4_1_sim",
-    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim", "a3_mpe_cea_sim", "a3_mpe_rcea_sim"
+    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim"
     policy_estimate_so <- "ea3_sim"
 
 
@@ -195,7 +195,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 ## ----final-pe, echo=print_code-------------------------------------------------------------------------------------------------------------------------
 # - inputs: total per capita benefits, total per capita costs, fudging factor
-# - outputs: Cost-effectiveness ratio & ratio to cash CEA, NPV
+# - outputs: NPV
 chunk_final_pe <- function(){
 ###############################################################################
 ###############################################################################  
@@ -203,18 +203,11 @@ chunk_final_pe <- function(){
     NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
         benefits_var - costs_var
     }
-    CEA_pe_f <- function(benefits_var = 1, fudging_var = 0, costs_var = 1) {
-        ( benefits_var * ( 1 + fudging_var ) ) / costs_var
-    }
-    RCEA_pe_f <- function(CEA_var = 1, CEA_cash_var = 1){
-        CEA_var / CEA_cash_var
-    }
+  
 
 ###############################################################################
 ###############################################################################  
-    return(list("CEA_pe_f" = CEA_pe_f,
-                "RCEA_pe_f" = RCEA_pe_f,
-                "NPV_pe_f" = NPV_pe_f))
+    return(list("NPV_pe_f" = NPV_pe_f))
 }
 invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
@@ -945,7 +938,7 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria", "viet
 #       ##     ###    ####    #####
 # 1     2       3     4       5
 #       ##     ###    ####    #####
-# NPV_pe_f, CEA_pe_f, RCEA_pe_f
+# NPV_pe_f
 #  TO DO: review and update this function tree
 # ├──── pv_benef_f
 # │      ├──── earnings1_f
@@ -1222,7 +1215,7 @@ one_run <-
       years_of_treat_var = years_of_treat_0_var1
     )
     unit_test(s2_in, 1.4219, main_run_var = main_run_var1)
-    #--------------- Inputs for NPV_pe_f, CEA_pe_f and RCEA_pe_f--------------------
+    #--------------- Inputs for NPV_pe_f--------------------
     # Make explicit non-function inputs:
     #Benefits:
     #Baird w/tax and no externalities (no ext)
@@ -1667,8 +1660,7 @@ sim.data1 <- function(nsims = 1e2,
     ea1_sim              <- rep(NA, nsims) #a3_inc_a1_all
     ea2_sim              <- rep(NA, nsims) #a3_inc_a1_all_x
     ea3_sim              <- rep(NA, nsims) #a3_inc_a2_all_mpe
-    a3_mpe_cea_sim    <- rep(NA, nsims) #a3_mpe_cea
-    a3_mpe_rcea_sim   <- rep(NA, nsims) #a3_mpe_rcea
+
 
     for (i in 1:nsims) {
     # one_run, for the most part, does not include standard deviations   
@@ -1733,12 +1725,7 @@ sim.data1 <- function(nsims = 1e2,
       ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prev_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=EA
       ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
-      #CEA for EA
-      a3_mpe_cea_sim[i]  <- CEA_pe_f(benefits_var = pv_benef_all_nx_in,
-                                        costs_var = costs2_ea_in, fudging_var = 0)
-      a3_mpe_rcea_sim[i]  <- RCEA_pe_f( CEA_var = CEA_pe_f(benefits_var = pv_benef_all_nx_in,
-                                                              costs_var = costs2_ea_in, fudging_var = 0),
-                                           CEA_cash_var = 744 )
+
     }
 
     total_time <- Sys.time() - start_time
@@ -1753,8 +1740,6 @@ sim.data1 <- function(nsims = 1e2,
       "ea1_sim"            = ea1_sim,            
       "ea2_sim"            = ea2_sim,            
       "ea3_sim"            = ea3_sim,            
-      "a3_mpe_cea_sim"  = a3_mpe_cea_sim,  
-      "a3_mpe_rcea_sim" = a3_mpe_rcea_sim,
       "total_time"         = total_time
     ) )
 }
@@ -1768,9 +1753,7 @@ policy_estimates <- c(
   "klps4_2_sim"        ,
   "ea1_sim"            ,
   "ea2_sim"            ,
-  "ea3_sim"            ,
-  "a3_mpe_cea_sim"  ,
-  "a3_mpe_rcea_sim"
+  "ea3_sim"            
 )
 
 policy_estimates_text <- c(
@@ -1782,9 +1765,7 @@ policy_estimates_text <- c(
   "A2. All income",
   "A3. All income of A1",
   "A3. All income of A1, with ext.",
-  "A3. All income of A2. Main Policy Estimate",
-  "Main Policy Estimate. CEA format",
-  "Main Policy Estimate. RCEA format"
+  "A3. All income of A2. Main Policy Estimate"
   )
 
 # c(
@@ -1796,9 +1777,7 @@ policy_estimates_text <- c(
 #   "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
 #   "Total effects, 2016(W@W) B & EA C, no ext",  
 #   "Total effects, 2016(W@W) B & EA C, ext",  
-#   "Total effects, 2019(KLPS4) B & EA C, no ext",
-#   "CEA for total effects, 2019(KLPS4) B & EA C, no ext",
-#   "RCEA to cash for total effects, 2019(KLPS4) B & EA C, no ext")
+#   "Total effects, 2019(KLPS4) B & EA C, no ext")
 
 
 

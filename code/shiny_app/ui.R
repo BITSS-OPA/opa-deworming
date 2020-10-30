@@ -147,14 +147,6 @@ shinyUI(
                               helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
                                        "Benefits: Hamory approach (KLPS) without tax or externalities but with prevalence and length of treatment considered", br(),br(),
                                        "Costs: Evidence Action (EA) Approach")
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'Main Policy Estimate. CEA format' ",
-                              helpText("Cost effectiveness ratio (CEA) in absolute terms is the final indicator for policy estimate")
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'Main Policy Estimate. RCEA format' ",
-                              helpText("Cost effectiveness ratio relative to the benchmark of cash transfers (RCEA) is the final indicator for policy estimate ")
                             )
 
 
@@ -263,14 +255,6 @@ shinyUI(
                               helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
                                        "Benefits: Hamory approach (KLPS) without tax or externalities but with prevalence and length of treatment considered", br(),br(),
                                        "Costs: Evidence Action (EA) Approach")
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est == 'Main Policy Estimate. CEA format' ",
-                              helpText("Cost effectiveness ratio (CEA) in absolute terms is the final indicator for policy estimate")
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est == 'Main Policy Estimate. RCEA format' ",
-                              helpText("Cost effectiveness ratio relative to the benchmark of cash transfers (RCEA) is the final indicator for policy estimate ")
                             )
 
                    ),

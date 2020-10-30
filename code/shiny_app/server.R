@@ -472,108 +472,7 @@ shinyServer( function(input, output, session) {
       
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "Main Policy Estimate. CEA format") {
-      list_hide <- c("param19",
-                     "param19_1",
-                     "param21_1",
-                     "param21_2",
-                     "param22",
-                     "param22_1",
-                     "param23",
-                     "param23_1",
-                     "param24",
-                     "param24_1",
-                     "param26",
-                     "param26_1",
-                     "param27",
-                     "param27_1",
-                     "param29_1",
-                     "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1",  
-                     "param16", 
-                     "param16_1",
-                     "param4",
-                     "param4_1",
-                     "param5",
-                     "param5_1",
-                     "param6",
-                     "param6_1",
-                     "param7",
-                     "param7_1",
-                     "param8",
-                     "param8_1",
-                     "param9",
-                     "param9_1",
-                     "param10",
-                     "param10_1",
-                     "param12",
-                     "param12_1",
-                     "param13",
-                     "param13_1", 
-                     "param18_1",                                         
-                     "param18_1_1",
-                     "param18_2",
-                     "param18_2_1",
-                     "param33",
-                     "param33_1", 
-                     "param15", 
-                     "param15_1")
-      list_show <- list_master[ - which(list_master %in% list_hide)]
-      
-    } else if (input$policy_est == "Main Policy Estimate. RCEA format") {
-      list_hide <- c("param19",
-                     "param19_1",
-                     "param21",
-                     "param21_1",
-                     "param22_1",
-                     "param22_2",
-                     "param23",
-                     "param23_1",
-                     "param24",
-                     "param24_1",
-                     "param26",
-                     "param26_1",
-                     "param27",
-                     "param27_1",
-                     "param29_1",
-                     "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1",  
-                     "param16", 
-                     "param16_1",
-                     "param4",
-                     "param4_1",
-                     "param5",
-                     "param5_1",
-                     "param6",
-                     "param6_1",
-                     "param7",
-                     "param7_1",
-                     "param8",
-                     "param8_1",
-                     "param9",
-                     "param9_1",
-                     "param10",
-                     "param10_1",
-                     "param12",
-                     "param12_1",
-                     "param13",
-                     "param13_1", 
-                     "param18_1",                                         
-                     "param18_1_1",
-                     "param18_2",
-                     "param18_2_1",
-                     "param33",
-                     "param33_1", 
-                     "param15", 
-                     "param15_1")
-      list_show <- list_master[ - which(list_master %in% list_hide)]
-    }
+    } 
     sapply(list_hide, 
            function(x) hideElement(id = x) ) 
     sapply(list_show, 
@@ -741,25 +640,6 @@ shinyServer( function(input, output, session) {
             \\end{equation}
               $$ \n See approach 3 in the documentation component for more details"
         ))
-      }else if (input$policy_est == "Main Policy Estimate. CEA format"){
-        withMathJax(helpText("$$
-                                 \\begin{equation}
-                                 CEA_{deworming} = \\frac{B (1 + F_{0})}{C}
-                                 \\label{eq:10}
-                                 \\tag{10}
-                                 \\end{equation}
-                                 $$ 
-                                 \n Benefits (B) and costs (C) as defined in preferred policy estimate (A3-2020)"))
-      }else if (input$policy_est == "Main Policy Estimate. RCEA format"){
-        withMathJax(helpText(
-          "$$
-                                 \\begin{equation}
-                                 RCEA = \\frac{CEA_{deworming}}{CEA_{cash}}
-                                 \\label{eq:11}
-                                 \\tag{11}
-                                 \\end{equation}
-                                 $$  \n CEA as define in equation 10, CEA_{cash} from SOURCE")
-        )
       }
     } 
   })
