@@ -101,7 +101,7 @@ chunk_sources <- function(){
     ##### Research
     #############
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
-    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women
+    lambda1_so <- c(3.49, 0.32)            #Hrs per week increase for men and women
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
     lambda1_new_so <- c(79.51465,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
                                79.51465,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
@@ -131,7 +131,7 @@ chunk_sources <- function(){
     #############
     periods_so <- 50               #Total number of periods to forecast wages
     time_to_jm_so <- 10            #Time from initial period until individual join the labor force
-    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-quadratic)
                                                     #- see notes(0.1019575, -0.0010413), (0,0)
     teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
     teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
