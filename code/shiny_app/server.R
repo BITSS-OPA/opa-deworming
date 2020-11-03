@@ -503,7 +503,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:1}
+            
             \\tag{1}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
@@ -522,7 +522,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:2}
+            
             \\tag{2}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
@@ -540,7 +540,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:3}
+            
             \\tag{3}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  
@@ -559,7 +559,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:4}
+            
             \\tag{4}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  )
@@ -576,7 +576,7 @@ shinyServer( function(input, output, session) {
                       \\left[\\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       \\right]
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:5}
+            
             \\tag{5}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details'))
@@ -592,7 +592,7 @@ shinyServer( function(input, output, session) {
                       \\left[\\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       \\right]
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:6}
+            
             \\tag{6}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details' ))
@@ -606,7 +606,7 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:7}
+            
             \\tag{7}
             \\end{equation}
              $$ \n See approach 3 in the documentation component for more details'))
@@ -620,7 +620,7 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:8}
+            
             \\tag{8}
             \\end{equation}
             $$ \n See approach 3 in the documentation component for more details"))
@@ -635,7 +635,7 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{Costs (C)}}
-            \\label{eq:9}
+            
             \\tag{9}
             \\end{equation}
               $$ \n See approach 3 in the documentation component for more details"
