@@ -66,12 +66,11 @@
 In order to add a slider, you will want to use the 'sliderInput' function in ui. R. 'sliderInput' is a widget that creates a slider across a range. It has five inputs: inputId, label,
 min, max, and value. Below is an example:
 
-sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ", min = 0.001, max = 0.2, value = inflation_so)
+    sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ", min = 0.001, max = 0.2, value = inflation_so)
 
 Here, 'param3' is the inputID, 'Inflation (π) =' is the label, min is 0.001, max is 0.2, and the value is 'inflation_so'.
 
-To add a new slider, you will first need to figure out what the inputID should be. Firstly, you will need to add the inputID to the server file. Define a variable
-in the function 'sim.data1' in server.R. For the example above this would be "inflation_var2 = as.numeric(input$param3)." 'simdata1' is contained in the 
+To add a new slider, you will first need to figure out what the inputID should be. First, you will need to add the inputID to the server file. Define a variable in the function 'sim.data1' in server.R. For the example above this would be "inflation_var2 = as.numeric(input$param3)." 'simdata1' is contained in the 
 'reactive.data1.' Then, if you don't want the slider to appear for certain inputs of 'policy estimate', insert it in 'else if(input$policy_est == "What policy estimate
 you don't want the slider to appear in"). It goes in the 'list_hide' function within the else if. Once that has been added, that variable, in this case 
 'inflation_var2', should be added to 'simdata1' in all_analysis.R. This deals directly with the original analysis.
