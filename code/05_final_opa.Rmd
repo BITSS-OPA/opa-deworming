@@ -2049,6 +2049,21 @@ one_run <-
       coverage_var = coverage_var1
     )
 
+    # # ###example of condensing earnings1 computation using mapply
+    # # #putting arguments into vector/list
+    # earnings_lambda1_var = list(lambda1_in[1], lambda1_in[1], lambda1_prev_in[1], lambda1_prev_in[1])
+    # earnings_lambda2_var = list(0, lambda2_in[1],0,lambda2_in[1])
+    # 
+    # # #computing earnings1 (above code) using mapply. Result is a matrix where column 1 is earnings_in_no_ext and so forth.
+    # earnings_1f_lapply_result = mapply(earnings1_f,earnings_lambda1_var, earnings_lambda2_var, MoreArgs = list(wage_var = wage_t_in,
+    #                                    saturation_var = saturation_in, coverage_var = coverage_var1))
+    # #checking if mapply worked
+    # all(earnings_1f_lapply_result[,1] == earnings_in_no_ext)
+    # all(earnings_1f_lapply_result[,2] == earnings_in_yes_ext)
+    # all(earnings_1f_lapply_result[,3] == earnings_in_no_ext_prev)
+    # all(earnings_1f_lapply_result[,4] == earnings_in_yes_ext_prev)
+
+
     # earnings2
     earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
                                           lambda1k1_var = lambda1_new_in[1])
@@ -2056,9 +2071,26 @@ one_run <-
     earnings_in_no_ext_prev_new <- earnings2_f(t_var = 0:50,
                                           lambda1k1_var = lambda1_prev_new_in[1])
 
+    # ###example of condensing earnings2 computation using lapply
+    # #putting arguments into vector/list
+    # earnings_2f_test = list(lambda1_new_in[1], lambda1_prev_new_in[1])
+    # #
+    # #computing earnings2_f using lapply
+    # earnings2f_lapply_result = lapply(earnings_2f_test,earnings2_f, t_var = 0:50)
+
+    
     # interest rate NEED TO UPDATE TO EXACT RESULT
     interest_in <- interest_f(gov_bonds_var = gov_bonds_var1,
                               inflation_var = inflation_var1)$interest_in
+    
+    ###example of condensing unit_test using mapply.
+    # #putting arguments into equal length vectors/lists
+    # earnings_inputs_test = list(earnings_in_no_ext, earnings_in_yes_ext, earnings_in_no_ext_prev, earnings_in_yes_ext_prev)
+    # earnings_inputs_test2 = list(31.1421332040266, 167.667817450905, 16.9694876943406, 153.495171941219)
+    # 
+    # #computing unit_test using arguments in lists above
+    # mapply(unit_test, earnings_inputs_test, earnings_inputs_test2, main_run_var = main_run_var1)
+    
     unit_test(earnings_in_no_ext, 31.1421332040266,
               main_run_var = main_run_var1)
     unit_test(earnings_in_yes_ext, 167.667817450905,
@@ -2066,7 +2098,8 @@ one_run <-
     unit_test(earnings_in_no_ext_prev, 16.9694876943406,
               main_run_var = main_run_var1)
     unit_test(earnings_in_yes_ext_prev, 153.495171941219,
-              main_run_var = main_run_var1)    
+              main_run_var = main_run_var1)
+    
     unit_test(interest_in, 0.0985, main_run_var = main_run_var1)
 
     ##-------------- Inputs for costs2_f----------------------------------------
