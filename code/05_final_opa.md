@@ -2,30 +2,34 @@
 pdf_document:
   extra_dependencies: ["xcolor"]
   fig_caption: false
-date: "03 November, 2020"
+date: "<center><div class='mysubtitle'>06 November, 2020</div></center>"
 output:
   bookdown::html_document2:
+    theme: cerulean
+    highlight: tango
     code_folding: hide
     code_download: true
-    collapsed: yes
     keep_md: yes
     number_sections: yes
     smooth_scroll: no
     toc: yes
     toc_depth: 3
     toc_float: yes
-
+    toc_collapsed: no 
+    css: style.css
+    includes: 
+      after_body: footer.html
+  
 editor_options:
   chunk_output_type: console
-title: "A Unifying Open Policy Analysis for Deworming"
+title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
 bibliography: bibliography.bib  
 link-citations: true
-
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
 
-
+ 
 
 
 
@@ -234,7 +238,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -287,6 +291,7 @@ This analysis begins by recreating the estimates conducted by Baird et al (2016)
 
 \begin{equation}
 NPV = B - C \\
+\end{equation}
 
 
 Where:  
@@ -1577,7 +1582,8 @@ The table below summarises the three different approaches and the different alte
 
 
 
-# Main results  
+
+# Main results  {.tabset}
 
 
 ```r
@@ -2067,7 +2073,22 @@ ea3 <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
 unit_test(ea3, 289.751849813911)
 ```
 
+## Results for overall welfare (not only taxes)
 
+- NPV without externalities in @baird2016worms ($\lambda_2 = 0$): 130.6    
+
+- NPV with externalities in @baird2016worms ($\lambda_2 = 10.2$ ): 741.6  
+
+- NPV without externalities in @klps4: 499.7   
+
+- NPV without externalities in EA 2019 ($\lambda_2 = 0$): 77.5    
+
+- NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ): 701.8
+
+- **NPV without ext and benef from @klps4 and EA costs 2019 :** 289.8
+
+
+## View in Table
 
 | Approach    | Benfits                                     | Costs                          |   NPV
 |---------|-------------------------------------------------|--------------------------------|----------|
@@ -2084,21 +2105,7 @@ unit_test(ea3, 289.751849813911)
 
 
 
-
-## Results for overall welfare (not only taxes)
-
-
-- NPV without externalities in @baird2016worms ($\lambda_2 = 0$): 130.6    
-
-- NPV with externalities in @baird2016worms ($\lambda_2 = 10.2$ ): 741.6  
-
-- NPV without externalities in @klps4: 499.7   
-
-- NPV without externalities in EA 2019 ($\lambda_2 = 0$): 77.5    
-
-- NPV with externalities in EA 2019 ($\lambda_2 = 10.2$ ): 701.8
-
-- **NPV without ext and benef from @klps4 and EA costs 2019 :** 289.8
+<br><br>
 
 # Accounting for Uncertainty
 
@@ -2127,7 +2134,7 @@ x \sim N(\hat{x}, \sigma_{x})
 \end{cases}
 \end{equation}
 
-As a default $\delta_{u} = 0.1$
+As a default $\delta_{u} = 0.1
 
 
 ```r
@@ -2524,7 +2531,7 @@ policy_estimates_text <- c(
 
 </details>
 
-
+<br><br>
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
 
@@ -2550,3 +2557,5 @@ policy_estimates_text <- c(
 [^6]: last paragraph of page 9(1645) of @baird2016worms
 
 [^7]: series avalable in file `~/opa-deworming/docs/materials/original_materials/Baird-etal-QJE-2016_fiscal-impact-calculations.xlsx` worksheet`Assumps&Panel A Calcs!A93`
+
+

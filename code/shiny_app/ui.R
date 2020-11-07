@@ -8,6 +8,7 @@ library(readxl)
 library(shinyjs)
 library(plotly)
 library(shinyBS)
+library(shinythemes)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
@@ -31,7 +32,7 @@ nsims <- 1e3
 source("all_analysis.R")
 #fluidPage is something must have
 shinyUI(
-  fluidPage(
+  fluidPage( shinythemes::themeSelector(),
     navbarPage("Open Policy Analysis for Deworming Interventions: Open Output Component",
                tabPanel(
                  "Main Policy Estimate",
