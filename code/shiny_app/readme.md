@@ -61,35 +61,59 @@
 - tabsetPanel -> creates a tabset containing elements from tabPanel
 - uiOutput -> tells Shiny where the controls should be rendered
 
-### How to add a new slider to the UI
-
-In order to add a slider, you will want to use the 'sliderInput' function in ui. R. 'sliderInput' is a widget that creates a slider across a range. It has five inputs: inputId, label,
-min, max, and value. Below is an example:
-
-    sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ", min = 0.001, max = 0.2, value = inflation_so)
-
-Here, 'param3' is the inputID, 'Inflation (π) =' is the label, min is 0.001, max is 0.2, and the value is 'inflation_so'.
-
-To add a new slider, you will first need to figure out what the inputID should be. First, you will need to add the inputID to the server file. Define a variable in the function 'sim.data1' in server.R. For the example above this would be "inflation_var2 = as.numeric(input$param3)." 'simdata1' is contained in the 
-'reactive.data1.' Then, if you don't want the slider to appear for certain inputs of 'policy estimate', insert it in 'else if(input$policy_est == "What policy estimate
-you don't want the slider to appear in"). It goes in the 'list_hide' function within the else if. Once that has been added, that variable, in this case 
-'inflation_var2', should be added to 'simdata1' in all_analysis.R. This deals directly with the original analysis.
-
-If the slider you want to add is already in all_analysis.R, make sure to use the name defined in all_analysis, then add it to server.R, and then ui.R.
-
-To change the value, which is 'inflation.so' in the above example, modify it in the "Data" section of all_analysis.R.
-
-**Should I put the slider add section at the end of both the UI and server walkthrough? Or should I leave it where it is?** <br /> 
-**Hope this analysis makes sense, not sure where the 'all_analysis' function gets the data** <br /> 
-**I am a bit confused about the difference between 'param2' and 'param2_new'?**
-
 ## Your setup to reproduce and modify the server.r file of the deworming OPA
 
 ### The functions
 
+- sim.data -> returns a random sample from some distributions
+- as.numeric -> converts a factor to a numeric factor
+- observeEvent -> **observer reference class object? not sure what that means, though**
+- which -> returns the indices that are True
+- paste -> links vectors together after to character
+- ggplot -> data visualization package
+    - geom_density -> computes and draws density estimate
+    - geom_vline -> annotates the plot with vertical lines
+    - xlim -> sets the min and max boundaries of the plot in the x-direction
+    - guides -> the guide is set scale-by-scale for each scale
+    - annotate- > adds small annotations, i.e. text labels
+    - theme -> sets the theme of the plot by costumizing all non-data components
+
 ### Walkthrough
 
-### Maybe something more about how server.R interacts with ui.R?
+- 'reactive.data1' is an R expression that uses a widget input and outputs a value, and in this case the input is 'sim_data'.
+- 'sim_data' sets variable names by turning the parameters used in ui.R to numeric factors
+- The following section of 'server.R' is 'if' statements that are used to show which parameters to hide for different inputs of 'policy estimate'.
+- Then, the code adds helps text to the SA depending on the input for 'policy estimate'.
+- The next section defines a function that generates policy estimate plots
+    - 'If' statements specify what texts to display and what 'selectInput' to call for each of the three different plots (Main, ka, all)
+    - Then, the code constructs the plot for all three tabs
+        - All have the same axes
+        - All are density plots
+        - All share the same plot structure
+
+### How to add a new slider to the UI
+
+- In order to add a slider, you will want to use the 'sliderInput' function in ui. R. 'sliderInput' is a widget that creates a slider across a range. It has five inputs: inputId, label, min, max, and value. Below is an example:
+
+    `sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ", min = 0.001, max = 0.2, value = inflation_so)`
+
+- Here, 'param3' is the inputID, 'Inflation (π) =' is the label, min is 0.001, max is 0.2, and the value is 'inflation_so'
+
+- To add a new slider, you will first need to figure out what the inputID should be. 
+    - First, you will need to add the inputID to the server file. Define a variable in the function 'sim.data1' in server.R. For the example above this would be "inflation_var2 = as.numeric(input$param3)." 
+    - 'simdata1' is contained in the 'reactive.data1.' 
+- Then, if you don't want the slider to appear for certain inputs of 'policy estimate', insert it in 'else if(input$policy_est == "What policy estimate
+you don't want the slider to appear in"). 
+- It goes in the 'list_hide' function within the else if. Once that has been added, that variable, in this case 'inflation_var2', should be added to 'simdata1' in all_analysis.R. This deals directly with the original analysis.
+
+- If the slider you want to add is already in all_analysis.R, make sure to use the name defined in all_analysis, then add it to server.R, and then ui.R.
+
+- To change the value, which is 'inflation.so' in the above example, modify it in the "Data" section of all_analysis.R.
+
+## The chart below shows the way that the different components of the OPA interact with each other
+
+**I have a chart, need permission to add photos I believe**
+
 
 
         
