@@ -278,9 +278,11 @@ knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
 
 # Executive Summary {-}
 
-This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA contains one open output that best represents the facts to inform policy makers, on report (this one) that clearly explains all the analysis, and one repository that contains all the materials to reproduce the report and final output. 
+This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one open output that best represents the facts to inform policy makers, on report (this document) that clearly explains all the analysis, and one repository that contains all the materials to reproduce the report and final output. 
 
-This report describes three 
+This report describes three approaches two compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combinantion of the previous two with some modification suggested by Evidence Action, a key policy partner in this area. We suggest that this final approach should be used as the available policy estimate to compare costs and benefits of deworming in different settings. 
+
+Our main policy estimate indicates that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of 
 
 
 # Open Policy Analysis {-}
@@ -298,6 +300,7 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 The goal of this report is to provide a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using “dynamic documentation,” so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.  
 
 In addition to this report, the reader can find all the materials to reproduce the findings presented here in [github.org/bitss/opa-deworming](https://github.org/bitss/opa-deworming). The main output presented in Figure  \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report, can also be explored interactively for different assumptions in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
+
 
 
 # Introduction  
@@ -2925,7 +2928,6 @@ for ( i in policy_estimates ) {
 ###### Results/Viz
 ################
 library(plotly)
-
 nsims <- nsims_so
 
 npv_for_text <- paste(round(median(npv_sim),1))
