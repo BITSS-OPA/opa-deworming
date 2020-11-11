@@ -43,6 +43,7 @@ vignettes/*.pdf
 
 # All files in code folder except .R and .rmd
 /code/*
+!/code/footer.html
 !/code/*.Rmd
 !/code/*.R
 !/code/*.png
