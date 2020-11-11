@@ -1,6 +1,6 @@
 # Tutorial on how to reproduce and modify the Shiny App for the Deworming Open Policy Analysis
 
-## Your setup to reproduce and modify the UI of the deworming OPA
+## Your setup to reproduce and modify the `ui.R` of the deworming OPA
 
 - To run the shiny app (SA) you will need to install R and RStudio. The relevant file can be found by running 'ui.R'.
 
@@ -43,7 +43,7 @@
 
 ### The functions
 
-- shinyUI -> creates a user interface
+- `shinyUI` -> creates a user interface
 - fluidPage -> creates a page
 - navbarPage -> creates a page with a navigation bar at the top
 - tabPanel -> creates a tab panel, takes in a title (i.e. "Main Policy Estimate") and a value
