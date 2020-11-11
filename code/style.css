@@ -1,0 +1,71 @@
+/* importing "Julis Sans One" font */
+@import url(http://fonts.googleapis.com/css?family=Julius+Sans+One|Libre+Baskerville:400,400italic);
+
+/* Customizing the configurations that classify as the dynamic document body */
+/* Note this includes the Table of Contents menu on the left */
+body {
+  color: #02253b;
+  background: #fff;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 20px;
+  line-height: 1.9
+}
+
+/* Changing the background color for the HTML summary tab */
+summary {
+  background: rgb(0, 123, 167, 0.5)
+}
+
+/* Changing the background color of the selection banner for Table of Contents (TOC) menu */
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    background-color: rgb(0, 123, 167, 0.5);
+}
+
+/* Customizing the text configurations for first level header (header with only one #) */
+h1 {
+  padding-top: 0;
+  padding-bottom: 5px;
+  border-bottom: none;
+  font-family: 'Julius Sans One', sans-serif;
+  font-size: 34px;
+  font-weight: bold;
+  text-transform: uppercase;
+	}
+/* Customizing the text configurations for second, third level header (header with two and three #'s') */
+h2, h3 {
+  padding-top: 0;
+  padding-bottom: 5px;
+  border-bottom: none;
+  font-family: 'Julius Sans One', sans-serif;
+  font-weight: bold
+}
+
+/* Customizing the text configurations for fourth, fifth, sixth level header (header with four, five, and six #'s')*/
+h4, h5, h6 {
+  padding-top: 0;
+  padding-bottom: 5px;
+  border-bottom: none;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+/* Setting the maximum height for code blocks so that we could have scrollable code blocks*/
+pre[class] {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Customizing the configurations for the title text */
+.mytitle {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font: georgia, sans-serif !important;
+
+}
+
+/* Customizing the configurations for the subtitle (in our case, the date)*/
+.mysubtitle{
+  color: grey;
+  letter-spacing: 2px;
+}

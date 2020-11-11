@@ -41,11 +41,13 @@ vignettes/*.pdf
 **/.DS_Store
 
 
-# All files in code folder except .R and .rmd
+# All files in code folder except .R , .rmd , shiny app folder, style-related CSS and HTML files
 /code/*
 !/code/*.Rmd
 !/code/*.R
 !/code/*.png
 !/code/*.md
 !/code/shiny_app*
+!/code/style.css
+!/code/footer.html
 .Rproj.user
