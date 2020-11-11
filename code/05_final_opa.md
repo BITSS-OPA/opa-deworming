@@ -2,7 +2,7 @@
 pdf_document:
   extra_dependencies: ["xcolor"]
   fig_caption: false
-date: "<center><div class='mysubtitle'>06 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>09 November, 2020</div></center>"
 output:
   bookdown::html_document2:
     theme: cerulean
