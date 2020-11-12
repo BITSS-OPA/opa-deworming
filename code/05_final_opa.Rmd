@@ -302,9 +302,7 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 
   3. [A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app).  
 
-The goal of this report is to provide a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
-
-
+This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, that appear after clicking in the [SANDRA PLEASE INTERT A SHORT SCREENSHOT OF THE "show all details" BUTTOM] contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
 
 
 # Introduction  
@@ -313,13 +311,13 @@ Parasitic worm infections, also known as soil-transmitted helminths (STH) and sc
 
 Evidence from previous mass deworming interventions has demonstrated to be a highly effective public health policy. Here we provide a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into different policy-relevant scenarios.
 
-The goals of this analysis are three. First, to increase the transparency and reproducibility behind existing policy analyses on the costs and benefits of mass deworming programs. Second, to update this policy analyses with input from stakeholders closely involved in policy making around deworming. And third, to illustrate how an open policy analysis framework can be implemented in practice.
+The goals of this OPA are three. First, to increase the transparency and reproducibility behind existing policy analyses on the costs and benefits of mass deworming programs. Second, to update this policy analyses with input from stakeholders closely involved in policy making around deworming. And third, to illustrate how an open policy analysis framework can be implemented in practice.
 
 The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:     
 
-  1. Reproducing the original CBA produced by @baird2016worms, which estimates the net present value of a Kenya school-based deworming program after a 10 year follow-up for four types of policy estimates.     
+  1. Reproducing the original CBA produced by @baird2016worms, which estimates the net present value of a Kenya school-based deworming program after a 10 year follow-up for four different policy estimates.     
   2. Reproducing an updated version of such analysis on the same intervention but with additional follow-up data [@klps4].
-  3. Producing a third approach that, building from the previous two approaches,  that focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was develop in consulation with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
+  3. Producing a new analysis that, building from the previous two approaches, focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was develop in consulation with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
 
 # Methodology  
 
@@ -345,23 +343,20 @@ Where:
 
 
 ```{r final-pe, echo=print_code}
-# - inputs: total per capita benefits, total per capita costs, fudging factor
+# - inputs: total per capita benefits, total per capita costs
 # - outputs: Net Present Value (NPV)
 chunk_final_pe <- function(){
 ###############################################################################
 ###############################################################################  
-
     NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
         benefits_var - costs_var
     }
-
-
-
-
 ###############################################################################
 ###############################################################################  
     return(list("NPV_pe_f" = NPV_pe_f))
 }
+# Excecute the previos function and load the listed objects in to the current R
+# session (global environment)
 invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
