@@ -278,7 +278,9 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
 ```
 
+<div class = "divider"><span></span><span>
 # Executive Summary {-}
+</span><span></span></div>
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://fhoces.shinyapps.io/shiny_app_test/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.org/bitss/opa-deworming) that contains all the materials to reproduce the report and final output.
 
@@ -2922,7 +2924,7 @@ rescale <- rescale_so
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
                        alpha = 1/2, ..scaled..), lwd = 0.8, kernel = "gau", fill = "#007ba7", color = "darkblue", alpha = 0.3) +
-      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black", "darkblue"), lwd = c(0.8, 0.6), linetype = c("solid", "dashed") ) +
+      geom_vline(xintercept = c(0, median(npv_sim)), col=c("#0c2847", "darkblue"), lwd = c(0.8, 0.6), linetype = c("solid", "dashed") ) +
       coord_cartesian(xlim = c(-100, 800)) +
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
@@ -2931,7 +2933,10 @@ rescale <- rescale_so
            subtitle = "Distribution of the Net Present Value of Deworming Interventions"
            ) +
       annotate("text", x = 2 * median(npv_sim), y = 0.15, label = npv_for_text, size = 4, col = "darkblue")+
-      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank())
+      scale_x_continuous(expand = expansion(mult = c(0, 0)), breaks=seq(-1000,2000,500)) + 
+      scale_y_continuous(expand = expansion(mult = c(0, 0))) +
+      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(), axis.line.x = element_line(color = "#0c2847", size = 0.8),  panel.background = element_blank())
+
     if (rescale == TRUE) {
       plot1 <- suppressMessages(
         plot1 +

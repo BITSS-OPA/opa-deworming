@@ -243,7 +243,9 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
+<div class = "divider"><span></span><span>
 # Executive Summary {-}
+</span><span></span></div>
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://fhoces.shinyapps.io/shiny_app_test/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.org/bitss/opa-deworming) that contains all the materials to reproduce the report and final output.
 
