@@ -276,7 +276,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 ```{r main-pe-print, out.width = '100%', fig.align='center', fig.cap = "Main Policy Estimate", echo=FALSE, purl=FALSE}
 # url
 knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
-
+```
 
 # Executive Summary {-}
 

@@ -2,7 +2,7 @@
 pdf_document:
   extra_dependencies: ["xcolor"]
   fig_caption: false
-date: "<center><div class='mysubtitle'>11 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>12 November, 2020</div></center>"
 output:
   bookdown::html_document2:
     theme: cerulean
@@ -243,9 +243,6 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
-<!--RA: ask to set up the ES below as a part of a box-->
-
-
 # Executive Summary {-}
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://fhoces.shinyapps.io/shiny_app_test/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.org/bitss/opa-deworming) that contains all the materials to reproduce the report and final output.
@@ -269,6 +266,8 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
   3. [A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app).  
 
 The goal of this report is to provide a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
+
+
 
 
 # Introduction  
@@ -1885,7 +1884,6 @@ sim.data1 <- function(nsims = 1e2,
     ea2_sim              <- rep(NA, nsims) #a3_inc_a1_all_x
     ea3_sim              <- rep(NA, nsims) #a3_inc_a2_all_mpe
 
-
     for (i in 1:nsims) {
     # one_run, for the most part, does not include standard deviations   
       invisible( list2env(
@@ -2518,7 +2516,7 @@ unit_test(ea3, 289.751849813911)
 
 
 
-
+<br><br>
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
 
