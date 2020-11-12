@@ -9,6 +9,7 @@ library(shinyjs)
 library(plotly)
 library(shinyBS)
 library(shinythemes)
+library(hrbrthemes)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 

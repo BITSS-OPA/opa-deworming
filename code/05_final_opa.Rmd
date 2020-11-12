@@ -34,7 +34,7 @@ link-citations: true
 ```{r setup, include=FALSE, purl=TRUE}
 # Loading required libraries
 list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly", 
-                      "bookdown", "rootSolve","shinyBS", "shinythemes", "hrbrthemes", "ggplot2")
+                      "bookdown", "rootSolve","shinyBS", "shinythemes", "ggplot2")
 
 # sapply(list.of.packages, function(x) pacman::p_load(get(x)))
 
@@ -2928,7 +2928,7 @@ for ( i in policy_estimates ) {
 ################
 library(plotly)
 library(ggplot2)
-library(hrbrthemes)
+
 nsims <- nsims_so
 
 npv_for_text <- paste(round(median(npv_sim),1))
@@ -2948,8 +2948,7 @@ rescale <- rescale_so
            subtitle = "Distribution of the Net Present Value of Deworming Interventions"
            ) +
       annotate("text", x = 2 * median(npv_sim), y = 0.15, label = npv_for_text, size = 4, col = "darkblue")+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank()) +
-      theme_ipsum(plot_title_size = 14, axis_title_size = 12, axis_title_just = "center")
+      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank()) 
     if (rescale == TRUE) {
       plot1 <- suppressMessages(
         plot1 +
