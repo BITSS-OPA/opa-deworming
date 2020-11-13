@@ -237,9 +237,8 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-
 <div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -249,7 +248,7 @@ This report is part of an Open Policy Analysis (OPA) on deworming interventions.
 
 This report describes three approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by Evidence Action, a key policy partner in this area. This third approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates and length of treatment across settings. We suggest that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
 
-Our main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of 289.8 for a setting with average prevalence and average unit costs (among the countries where Evidence Action has data for). Readers intereseted in learning about the predicted value for a specific setting are encourage to use the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) componentent of this OPA.
+Our main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of 289.8 for a setting with average prevalence and average unit costs (among the countries where Evidence Action has data for). Readers interested in learning about the predicted value for a specific setting are encourage to use the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) components of this OPA.
 
 
 
@@ -259,13 +258,14 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 
  This OPA project contains three components, following the OPA principles laid out in the aforementioned paper:
 
-  1. One single output that best represents the factual information requiered by policy makers to inform their position regarding a policy of mass deworming. This output is presented in Figure  \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report. The connection between each component of the analysis and the final output can be explored interactively in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
+  1. One single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. This output is presented in Figure  \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report. The connection between each component of the analysis and the final output can be explored interactively in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
   2. This detailed report that describes how to obtain the policy estimate and describes each component of the analysis.
 
   3. [A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app).  
 
-The goal of this report is to provide a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
+This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, that appear after clicking in the [SANDRA PLEASE INSERT A SHORT SCREENSHOT OF THE "show all details" BUTTON] contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
+
 
 
 
@@ -276,13 +276,16 @@ Parasitic worm infections, also known as soil-transmitted helminths (STH) and sc
 
 Evidence from previous mass deworming interventions has demonstrated to be a highly effective public health policy. Here we provide a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into different policy-relevant scenarios.
 
-The goals of this analysis are three. First, to increase the transparency and reproducibility behind existing policy analyses on the costs and benefits of mass deworming programs. Second, to update this policy analyses with input from stakeholders closely involved in policy making around deworming. And third, to illustrate how an open policy analysis framework can be implemented in practice.
+The goals of this OPA are three. First, to increase the transparency and reproducibility behind existing policy analyses on the costs and benefits of mass deworming programs. Second, to update this policy analyses with input from stakeholders closely involved in policy making around deworming. And third, to illustrate how an open policy analysis framework can be implemented in practice.
 
 The Cost Benefit Analysis (CBA) of deworming is computed using three different approaches:     
 
-  1. Reproducing the original CBA produced by @baird2016worms, which estimates the net present value of a Kenya school-based deworming program after a 10 year follow-up for four types of policy estimates.     
+  1. Reproducing the original CBA produced by @baird2016worms, which estimates the net present value of a Kenya school-based deworming program after a 10 year follow-up for four different policy estimates.     
   2. Reproducing an updated version of such analysis on the same intervention but with additional follow-up data [@klps4].
-  3. Producing a third approach that, building from the previous two approaches,  that focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was develop in consulation with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
+  3. Producing a new analysis that, building from the previous two approaches, focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was developed in consultation with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
+
+
+
 
 # Methodology  
 
@@ -292,7 +295,8 @@ We first describe the common elements across all three approaches, and then desc
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV)[^12].
 
-[^12]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, we restrict the presentation of result to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects. [CONFIRM WITH GRACE]  
+[^12]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, we restrict the presentation of results to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects. [CONFIRM WITH GRACE]  
+
 
 <details><summary>Show all the details</summary>
 
@@ -309,7 +313,7 @@ Where:
 
 
 ```r
-# - inputs: total per capita benefits, total per capita costs, fudging factor
+# - inputs: total per capita benefits, total per capita costs
 # - outputs: Net Present Value (NPV)
 chunk_final_pe <- function(){
 ###############################################################################
@@ -319,13 +323,12 @@ chunk_final_pe <- function(){
         benefits_var - costs_var
     }
 
-
-
-
 ###############################################################################
 ###############################################################################  
     return(list("NPV_pe_f" = NPV_pe_f))
 }
+# Excecute the previos function and load the listed objects in to the current R
+# session (global environment)
 invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
@@ -352,7 +355,7 @@ Where:
 
 - $E_{t}$: earnings individuals are expected to generate at period t  
 - $r$: real interest rate as the discounting rate  
-- $t$: period t. Period 0 represent time of intervention. Individuals are assumed to enter the labor market 9 years after treatment.  
+- $t$: period t. Period 0 represents time of intervention. Individuals are assumed to enter the labor market 9 years after treatment.  
 
 
 ```r
@@ -410,10 +413,6 @@ Where:
 - $i$: interest rate on government bonds  
 - $\pi$: inflation rate  
 
-<!--
-TO DO: after confirming that reproduction works, change all `interest_in` to `interest_exct_in`
--->
-
 
 ```r
 # - inputs: nominal interest rate, inflation rate
@@ -439,17 +438,16 @@ invisible( list2env(chunk_interest(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 
-interest_16 <- as.numeric(
+interest_in <- as.numeric(
   interest_f(gov_bonds_var = gov_bonds_so,
              inflation_var = inflation_so)$interest_in
   )
-interest_in <- interest_16
 
-interest_19 <- as.numeric(
+interest_new_in <- as.numeric(
   interest_f(gov_bonds_var = gov_bonds_new_so,
              inflation_var = inflation_new_so)$interest_in  
   )
-interest_new_in <- interest_19
+interest_new_in <- interest_new_in
 ```
 
 </details>
@@ -1083,7 +1081,7 @@ Where:
 
 
 ```r
-# - inputs: unit_cost_local_so, ex_rate_so, interest_19
+# - inputs: unit_cost_local_so, ex_rate_so, interest_new_in
 # - outputs: s2_f_new
 chunk_unit_costs2_new <- function(){
 ###############################################################################
@@ -1091,7 +1089,7 @@ chunk_unit_costs2_new <- function(){
 
     s2_f_new <- function(unit_cost_local_var = unit_cost_local_so,
                      ex_rate_var = ex_rate_so,
-                     interest_var = interest_19) {
+                     interest_var = interest_new_in) {
       unit_cost <- ( unit_cost_local_var / ex_rate_var )
       sum(( unit_cost * (1 + interest_var)^(-(0:2)) ) * c(1,1,0.4))
     }
@@ -1104,7 +1102,7 @@ invisible( list2env(chunk_unit_costs2_new(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 # New costs are all in dollars so, will compute them using ex rate of 1.
 s2_new_in <- s2_f_new(
-  interest_var = interest_19,
+  interest_var = interest_new_in,
   unit_cost_local_var = unit_cost_2017usdppp_so,
   ex_rate_var = 1
 )
@@ -1376,13 +1374,13 @@ app3_earnings_yes_ext_in <- earnings1_f(
 
 app3_pv_benef_no_ext_in <- pv_benef_f(
   earnings_var = app3_earnings_no_ext_in,
-  interest_r_var = interest_16,
+  interest_r_var = interest_in,
   periods_var = periods_so
 )
 
 app3_pv_benef_yes_ext_in <- pv_benef_f(
   earnings_var = app3_earnings_yes_ext_in,
-  interest_r_var = interest_16,
+  interest_r_var = interest_in,
   periods_var = periods_so
 )
 
