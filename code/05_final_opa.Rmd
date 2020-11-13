@@ -277,7 +277,9 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
 ```
 
+<div class = "divider"><span></span><span>
 # Executive Summary {-}
+</span><span></span></div>
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://fhoces.shinyapps.io/shiny_app_test/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.org/bitss/opa-deworming) that contains all the materials to reproduce the report and final output.
 
@@ -299,10 +301,7 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 
   3. [A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app).  
 
-This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, that appear after clicking in the [SANDRA PLEASE INSERT A SHORT SCREENSHOT OF THE "show all details" BUTTON] contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
-
-
-
+This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, that appear after clicking in the ![screenshot](show_details.png?display = inline-block) contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
 
 
 # Introduction  
@@ -565,7 +564,7 @@ Where[^6]:
 
 
 ```{r earnings1}
-# - inputs: earnings wihtout treatment (wage_in), direct treatment eff 
+# - inputs: earnings wihtout treatment (wage_in), direct treatment eff
 # (lambda1_so), indirect treatment eff (lambda2_so), saturation and coverage (coverage_so)
 # - outputs: earnings (no name specified)
 chunk_earnings1 <- function(){
@@ -746,7 +745,7 @@ Where:
 
 ```{r lambdas}
 # - inputs: direct (lambda1_so), and indirect (lambda2_so) treatment effects by gender
-# - outputs: simple average of direct and indirect treatment eff. 
+# - outputs: simple average of direct and indirect treatment eff.
 chunk_lambdas<- function(){
 ###############################################################################
 ###############################################################################    
@@ -2927,7 +2926,7 @@ rescale <- rescale_so
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
                        alpha = 1/2, ..scaled..), lwd = 0.8, kernel = "gau", fill = "#007ba7", color = "darkblue", alpha = 0.3) +
-      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black", "darkblue"), lwd = c(0.8, 0.6), linetype = c("solid", "dashed") ) +
+      geom_vline(xintercept = c(0, median(npv_sim)), col=c("#0c2847", "darkblue"), lwd = c(0.8, 0.6), linetype = c("solid", "dashed") ) +
       coord_cartesian(xlim = c(-100, 800)) +
       guides(alpha = "none", colour="none") +
       labs(y = NULL,
@@ -2936,7 +2935,10 @@ rescale <- rescale_so
            subtitle = "Distribution of the Net Present Value of Deworming Interventions"
            ) +
       annotate("text", x = 2 * median(npv_sim), y = 0.15, label = npv_for_text, size = 4, col = "darkblue")+
-      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank())
+      scale_x_continuous(expand = expansion(mult = c(0, 0)), breaks=seq(-1000,2000,500)) +
+      scale_y_continuous(expand = expansion(mult = c(0, 0))) +
+      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(), axis.line.x = element_line(color = "#0c2847", size = 0.8),  panel.background = element_blank())
+
     if (rescale == TRUE) {
       plot1 <- suppressMessages(
         plot1 +
