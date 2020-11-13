@@ -701,7 +701,7 @@ lambda2_in <- lambda2_in_f()
 </details>
 <br>
 
-#### Coverage and saturation of the original study [@baird2016worms]
+#### Coverage and saturation of the original study
 
 The coverage ($R$) is defined as the fraction, among all neighboring schools (within 6 km), that were treated within the study. Since the treatment was applied to approximately two thirds of the population, $R$ is set to: $R  = 0.68$[^6].  
 
@@ -1188,11 +1188,9 @@ The second approach does not report benefits and costs separatedly. With all the
 
 ## Approach 3: Combination of Previous Approaches and Input From Key Policy Partners
 
-In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key technical assistance partner in this area: the NGO Evidence Action. Evidence Action provided insights on certain aspects of the analysis that could be updated with present-day data, providing key inputs on the differences in worm prevalence, length of treatment, and costs across various regions.
+In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key policy partner to best identify one clear output to inform policy makers. We worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action provided insights on what are the most relevant costs and benefits from the perspectives of policy makers, and on certain aspects of the analysis that could be updated with present-day data. 
 
-Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length ot treatment. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries.
-
-In the original deworming study conducted in Kenya in 1999, the prevalence rates of worm infections were up to 92% for the relevant population and costs were estimated at $0.49 per treatment. As of 2020, Evidence Action supports deworming interventions in four countries.
+Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length of treatment. Additionally, the relevant costs are constrained to direct costs alone (excluding additional costs on education). Finally this approach uses inputs costs and prevalence that reflect the current settings where Evidence Action is currently supporting deworming interventions. As of 2020, Evidence Action supports deworming interventions in four countries.
 
 ### Benefits   
 
@@ -1206,7 +1204,7 @@ In the original evaluation, the prevalence rates were very high (0.92), hence th
 
 <details><summary>Show all the details</summary>
 
-For approach 3, we will modify treatement effects of approaches 1 and 2 (equation 4 and 13 respectively) by the following:   
+For approach 3, we will modify treatment effects of approaches 1 and 2 (equation 4 and 13 respectively) by the following:   
 
 \begin{equation}
 \lambda_{1} = \eta \lambda^{eff}_{1} + (1 -  \eta) \times 0 \\
@@ -1226,8 +1224,12 @@ Where:
 
 
 ```r
-# - inputs: lambda1_in_f(), prevalence_0_so, prevalence_r_so
-# - outputs: lambda_eff_f
+# - inputs: previously estimated treatment effect (lambda1_in_f), prevalence 
+# rates in the original setting (prevalence_0_so), prevalence in the new setting 
+# (prevalence_r_so), countries included in the analysis (country_sel_so) 
+# and their population (country_sel_pop_so), or single input of new prevalence 
+# (new_prevalence_r_so)
+# - outputs: effective treatment effect (lambda_eff_f)
 chunk_lambdas_eff<- function(){
 ###############################################################################
 ###############################################################################    
@@ -1247,7 +1249,6 @@ chunk_lambdas_eff<- function(){
       } else {
         prevalence_r_final <- other_prev_r  
       }
-
       lambda1_eff_temp <- lambda1_var / prevalence_0_var
       lambda1_eff_in <- lambda1_eff_temp * prevalence_r_final
       return(  
@@ -1256,7 +1257,7 @@ chunk_lambdas_eff<- function(){
               )
     }  
 
-##############################################################################
+###############################################################################
 ###############################################################################  
     return( list("lambda_eff_f" = lambda_eff_f) )
 }
@@ -1284,7 +1285,12 @@ For approach 3, we will modify treatement effects of approaches 1 and 2 (equatio
 
 \begin{equation}
 \lambda_{1,t = 1} = \frac{\lambda_{1}}{T_{0}} \\
-\lambda_{1,t} = t \lambda_{1,t = 1} \quad \text{for } t=1, \dots, 6
+\lambda_{1,t} =
+\begin{cases}
+t \lambda_{1,t = 1} \quad \text{for } t=1, \dots, 6\\
+\\
+6  \lambda_{1,t = 1} \quad \text{for } t > 6\\
+\end{cases}
 
 \label{eq:17}
 \tag{17}
