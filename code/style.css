@@ -56,6 +56,8 @@ pre[class] {
   overflow-y: auto;
 }
 
+img[alt = screenshot]{height: 20px}
+
 /* Customizing the configurations for the title text */
 .mytitle {
   text-transform: uppercase;
