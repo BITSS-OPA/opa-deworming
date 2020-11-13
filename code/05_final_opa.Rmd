@@ -772,13 +772,17 @@ lambda2_in <- lambda2_in_f()
 </details>
 <br>
 
-#### Coverage and saturation of the original study [@baird2016worms]
+#### Coverage and saturation of the original study
 
-The coverage ($R$) is defined as the fraction, among all neighboring schools (within 6 km), that were treated within the study. Since the treatment was applied to approximately two thirds of the population, $R$ is set to: $R  = `r round(coverage_so, 2)`$.  
+The coverage ($R$) is defined as the fraction, among all neighboring schools (within 6 km), that were treated within the study. Since the treatment was applied to approximately two thirds of the population, $R$ is set to: $R  = `r round(coverage_so, 2)`$[^6].  
 
 The saturation of the intervention, $p$, measures the fraction of the population that is effectively using the treatment. It is defined as a weighted average of the treatment take-up under a full subsidy for deworming and the take-up under zero subsidy.   
 
-For this setting @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) estimate that take-up with full subsidy ($Q(full)$) was `r q_full_so`. Miguel and Kremer (2004) (Table 3 and footnote 18) observed minimal to no take-up without subsidy ($Q(0)$), hence it is assigned the value of `r q_zero_so`.  
+
+[^6]: Last paragraph of page 9(1645) of @baird2016worms
+
+
+For this setting @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) estimated that take-up with full subsidy ($Q(full)$) was `r q_full_so`. Miguel and Kremer (2004) (Table 3 and footnote 18) observed minimal to no take-up without subsidy ($Q(0)$), hence it is assigned the value of `r q_zero_so`.  
 
 <details><summary>Show all the details</summary>
 
@@ -798,14 +802,16 @@ Where:
 
 
 ```{r coverage-and-saturation}
-# - inputs: coverage_so, q_full_so, q_zero_so
-# - outputs: saturation_in
+# - inputs: coverage (coverage_so), take-up with full subsidy (q_full_so), and
+# take-up with no subsidy (q_zero_so)
+# - outputs: saturation (saturation_in)
 chunk_coverage <- function(){
 ###############################################################################
 ###############################################################################  
 
-    saturation_in_f <- function(coverage_var = coverage_so,
-                                q_full_var = q_full_so, q_zero_var = q_zero_so){
+  saturation_in_f <- function(coverage_var = coverage_so,
+                              q_full_var = q_full_so,
+                              q_zero_var = q_zero_so){
       saturation_in <- coverage_so * q_full_so + ( 1 - coverage_so ) * q_zero_so
       return(list("saturation_in" = saturation_in))
     }
@@ -818,6 +824,20 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 saturation_in <- saturation_in_f()$saturation_in
+
+# Computing values for inline text: 
+
+# pv_benef
+# ├──── earnings1_f
+# |      ├──── delta_ed_final_f
+# |      ├──── saturation_in_f
+# |      └──── wage_t_mo_f()
+# |      |      └──── wage_0_mo_f()
+# |      |            
+# |      ├──── lambda1_in_f()
+# |      └──── lambda2_in_f() 
+# └──── interest_f()
+
 earnings_no_ext_in <- earnings1_f(
   wage_var = wage_t_in,
   lambda1_var = lambda1_in[1],
@@ -851,14 +871,12 @@ pv_benef_yes_ext_in <- pv_benef_f(
 </details>
 <br>
 
-#### Assessing computational reproducibiliy of original results  
+#### Assessing computational reproducibility of original results  
 
 Without externalities, the original analysis (@baird2016worms) obtains a present value of benefits of `r df_research_so$param[1]` (table `r df_research_so$tablenum[1]`, column `r df_research_so$table_col[1]`, and row `r df_research_so$table_row[1]`). Including externalities, they obtain a present value of benefits of `r df_research_so$param[3]` (table `r df_research_so$tablenum[3]`, column `r df_research_so$table_col[3]`, and row `r df_research_so$table_row[3]`). Following the steps described in this section, this analysis obtains the same result (`r pv_benef_no_ext_in` and `r pv_benef_yes_ext_in` respectively without rounding).  
 
 
-
-
-```{r sum-tables3, purl=FALSE, echo=FALSE, eval=TRUE, , eval=show_summary_tables}
+```{r sum-tables3, purl=FALSE, echo=FALSE, eval=show_summary_tables}
 
 
 table_1[1,3] <- paste0("$R=" , round(coverage_so,2), "$")
@@ -949,26 +967,32 @@ Where:
 - $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance  
 
 ```{r cost2}
-# - inputs: periods_so, delta_ed_final_in, interest (varies by approach),
-#           cost_per_student_in, s2_in, q2_in
-# - outputs: pv_costs_f
+# - inputs: periods (periods_so), additional education (delta_ed_final_in),
+#  discount rate (interest) (varies by approach), cost per student 
+#  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment 
+#  (q2_in)
+# - outputs: present value of all costs (pv_costs_f)
 chunk_cost2 <- function(){
 ###############################################################################
 ###############################################################################  
 
-    pv_costs_f <- function(periods_var = periods_so,
-                        delta_ed_var = delta_ed_final_in,
-                        interest_r_var = NULL,
-                        cost_of_schooling_var = cost_per_student_in,
-                        s1_var = 0, q1_var = 0,
-                        s2_var = s2_in, q2_var = q2_in) {
+  pv_costs_f <- function(
+    periods_var = periods_so,
+    delta_ed_var = delta_ed_final_in,
+    interest_r_var = NULL,
+    cost_of_schooling_var = cost_per_student_in,
+    s1_var = 0,
+    q1_var = 0,
+    s2_var = s2_in,
+    q2_var = q2_in) {
         index_t <- 0:periods_var
+        # Effects over 9 years of education (post treatment)
         delta_ed_s <- c(0, delta_ed_var, rep(0,41))
         (s2_var * q2_var  - s1_var * q1_var) +
           sum( ( 1 / (1 + interest_r_var) )^index_t *
                  delta_ed_s * cost_of_schooling_var)
-
     }
+
 ###############################################################################
 ###############################################################################  
     return(list("pv_costs_f" = pv_costs_f))    # Try to return only functions
@@ -983,7 +1007,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 #### Direct costs: increase in deworming costs
 
-Direct deworming costs ($DC$) are defined as the take-up under a mass deworming ($Q_{2}$) intervention, times the per-capita costs of deworming under the intervention ($S_{2}$). These costs are compared to a status quo scenario where the government does not provide any additional resources for deworming. This analysis assumes that there is no subsidy for deworming under the status quo.    
+Direct deworming costs ($DC$) are defined as the take-up under a mass deworming intervention ($Q_{2}$), times the per-capita costs of deworming under the intervention ($S_{2}$). These costs are compared to a status quo scenario where the government does not provide any additional resources for deworming. This analysis assumes that there is no subsidy for deworming under the status quo.    
 
 ##### Complete subsidy to per capita costs of deworming
 
@@ -999,8 +1023,9 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 \end{equation}
 
 ```{r unit_costs2}
-# - inputs: unit_cost_local_so, ex_rate_so, years_of_treat_0_so
-# - outputs: s2_f
+# - inputs: unit costs in local currency (unit_cost_local_so), exchange rate
+#  (ex_rate_so), years of treatment (years_of_treat_0_so)
+# - outputs: unit costs of treatment (s2_f)
 chunk_unit_costs2 <- function(){
 ###############################################################################
 ###############################################################################  
@@ -1018,7 +1043,6 @@ chunk_unit_costs2 <- function(){
 invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 s2_in <- s2_f()
-
 ```
 
 </details>
@@ -1027,14 +1051,8 @@ s2_in <- s2_f()
 
 #### Indirect costs: additional years of education and its costs for government
 
-As a result of deworming treatment, there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual, who tends to spend more time in school than an untreated counterpart.
+As a result of deworming treatment, there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual. The additional costs on education are computed as follows: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher. Second, the cost per student is multiplied by the estimated increase in school attendance ($\Delta \overline{E}_{t}(S1,S2)$). For this we use a series of estimated effects, including the additional direct increase in secondary schooling from 1999 to 2007 obtained from an additional analysis related to @baird2016worms. This series does not take into account the externality effects. To incorporate externality effects, we would need another series (from the same source) that estimates the additional secondary schooling increase due to the externality in order to add it to the original series.
 
-The additional costs on education are computed as following: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher.
-
-Second, the cost per student is multiplied by the estimated increase in school attendance ($\Delta \overline{E}_{t}(S1,S2)$).
-For this we use a series of estimated effects, including the additional direct increase in secondary schooling from 1999 to 2007 obtained from an additional analysis related to @baird2016worms.
-
-This series does not take into account the externality effects. To incorporate externality effects, we would need another series (from the same source) that estimates the additional secondary schooling increase due to the externality in order to add it to the original series.
 
 
 <details><summary>Show all the details</summary>
@@ -1048,8 +1066,11 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 
 
 ```{r ed-costs}
-# - inputs: teach_sal_so, teach_ben_so, n_students_so, include_ext_so, delta_ed_so, delta_ed_ext_so
-# - outputs: cost_per_student_f, delta_ed_final_f
+# - inputs: teacher salary (teach_sal_so) and benefits (teach_ben_so), number
+# of students (n_students_so), include externalities (include_ext_so), extra ed
+# without ext (delta_ed_so), and extra ed due to ext (delta_ed_ext_so)
+# - outputs: cost per student (cost_per_student_f), and total additional 
+# education (delta_ed_final_f)
 chunk_edcosts <- function(){
 ###############################################################################
 ###############################################################################    
@@ -1083,6 +1104,16 @@ cost_per_student_in <- cost_per_student_f()
 delta_ed_final_no_ext_in <- delta_ed_final_f(include_ext_var = FALSE)
 delta_ed_final_yes_ext_in <- delta_ed_final_f(include_ext_var = TRUE)
 
+# Computing values for inline text: 
+
+# pv_costs_f
+#  ├──── delta_ed_final_f
+#  ├──── interest_f
+#  └──── cost_per_student_f
+#  |      └──── x
+#  ├──── s2_f
+#  └──── lambda2_in_f
+
 pv_cost_no_ext_in <- pv_costs_f(
       periods_var = periods_so,
       delta_ed_var = delta_ed_final_no_ext_in,
@@ -1104,18 +1135,14 @@ pv_cost_yes_ext_in <- pv_costs_f(
       s2_var = s2_in,
       q2_var = q_full_so
     )
-
 ```
 
 </details>
 <br>
 
-#### Assessing computational reproducibiliy of original results  
+#### Assessing computational reproducibility of original results  
 
 Without externalities, the original analysis (@baird2016worms) obtains a present value of costs of `r df_research_so$param[5] + df_research_so$param[6]` (table `r df_research_so$tablenum[5]`, column `r df_research_so$table_col[5]`, and adding rows `r paste0(df_research_so$table_row[5], " and ", df_research_so$table_row[6])`). Including externalities, they obtain a present value of benefits of  `r df_research_so$param[5] + df_research_so$param[6] + df_research_so$param[7]` (table `r df_research_so$tablenum[5]`, column `r df_research_so$table_col[5]`, and adding rows `r paste0(df_research_so$table_row[5], " and ", df_research_so$table_row[6]," and ", df_research_so$table_row[7])`). Following the steps described in this section, this analysis obtains the same result (`r pv_cost_no_ext_in` and `r pv_cost_yes_ext_in` respectively without rounding).  
-
-
-
 
 ```{r, eval=FALSE,echo=FALSE, purl=FALSE}
 # Numbers are reproduced, the only difference is that  Baird et al, presents them in a different way.
@@ -1127,9 +1154,7 @@ Without externalities, the original analysis (@baird2016worms) obtains a present
 # (766.81 * 0.16575 - 10.71 - 13.42 = 102.9688) - 1.07    = 101.8988
 ```
 
-
-
-```{r sum-tables16, purl=FALSE, echo=FALSE, eval=TRUE, eval=show_summary_tables}
+```{r sum-tables16, purl=FALSE, echo=FALSE, eval=show_summary_tables}
 
 table_1[7, 2] <- paste0("$K=" , round(cost_per_student_f(),2), "$")
 
@@ -1146,25 +1171,24 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-
-
 ## Approach 2: @klps4
 
-In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but we use updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in this second approach, the costs also account for discounting of the several rounds of treatment required for effective deworming.  Additionally, the interest rate is updated to current values of return on (Kenyan) government bonds and inflation.
+In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but it uses updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in this second approach, the costs also account for discounting of the several rounds of treatment required for effective deworming.  Additionally, the interest rate is updated to current values of return on (Kenyan) government bonds and inflation.
 
 
 ### Gains in earnings
 
-Gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after the intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference from approach 1, which only measures gains in earnings at year 10 and extrapolates them into the future. To extrapolate earnings after the 20-year measurement, the authors assume that the welfare gains 20 years after the intervention persist through the rest of an individual's working life. Hence the treatment effect over an individual's working life is the sum of the treatment effects over their working lifetime.
+Gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after the intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference from approach 1, which only measures gains in earnings at year 10 and extrapolates them into the future. To extrapolate earnings after the 20-year measurement, the authors assume that the welfare gains disapear 25 years after the intervention. Hence the treatment effect over an individual's working life is the sum of the treatment effects over their working lifetime[^8]. This approach also disregards externality effects and measures the estimated effects directly on earnings (as opposed to approach 1 that measures effects on earnings indirectly through hours worked). The estimated treatment effects that pools years 10, 15, and 20, is `r paste0("$", round(mean(lambda1_new_so),0) )` dollars per person per year.
 
-Gains in yearly earnings represent the treatment effect on welfare ($\alpha$), which implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. @klps4 assumes that the effect on welfare identified 20 years after the intervention persists through one's working life[^8]. This approach also disregards externality effects and measures the estimated effects direcly on earnings (as oppose to approach 1 that measures effects on earnings indirectly through hours worked). The estimated treatment effects that pools years 10, 15, and 20, is `r paste0("$", round(mean(lambda1_new_so),0) )` dollars per person per year.
+Gains in yearly earnings represent the treatment effect on welfare ($\alpha^{pooled}$), which implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
-[^8]: In another specification the authors assume that effects disappear after 25 years. Here we select the more persistent specification. The authors also analyse the welfare effects over consumption, but given that they do not aggregate both outcomes in the welfare effect we only choose one and focus on earning for comparability with the approach 1).
+[^8]: In another specification the authors assume that effects persist through the rest of an individual's working life. Here we select the specification that is most highlighted in the paper (most conservative specification). The authors also analyse the welfare effects over consumption, but given that they do not aggregate both outcomes in the welfare effect we only choose one and focus on earning for comparability with the approach 1).
+
 
 <details><summary>Show all the details</summary>
 
 \begin{equation}
-\Delta W_{t} = \mathbf{1}(10 < t \leq 50)\alpha^{KLPS}
+\Delta W_{t} = \mathbf{1}(10 < t \leq 25)\alpha^{pooled}
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
@@ -1172,20 +1196,19 @@ Gains in yearly earnings represent the treatment effect on welfare ($\alpha$), w
 
 Where:
 
-- $\Delta W_t$: gains in earnings from 10, 15, and 20 years after intervention  
-- $\alpha^{KLPS}$: pooled estimated treamtment effects of 10, 15, 20 years after intervention respectively  
-
+- $\Delta W_t$: gains in earnings from 10, 15, and 20 years after the intervention  
+- $\alpha^{pooled}$: pooled estimated treatment effects of 10, 15, 20 years after the intervention
 
 
 ```{r delta-earnings, eval=TRUE}
-# - inputs: t_var, lambda1_new_so[1], lambda1_new_so[2], lambda1_new_so[3]
-# - outputs: earnings2_f REWRITE
+# - inputs: index for time (t_var), pooled treatment effect (lambda1_new_so[1])
+# - outputs: effect on lifetime earnings (earnings2_f)
 chunk_new_earnings <- function(){
 ###############################################################################
 ###############################################################################  
 
     earnings2_f <- function(t_var = 1,
-                               lambda1k1_var = lambda1_new_so[1]) {
+                            lambda1k1_var = lambda1_new_so[1]) {
         1*(10 <= t_var & t_var < 25) * lambda1k1_var
     }
 
@@ -1195,17 +1218,16 @@ chunk_new_earnings <- function(){
 }
 
 invisible( list2env(chunk_new_earnings(),.GlobalEnv) )
-#####
+##### Execute values of the functions above when needed for the text:
 earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
                                       lambda1k1_var = lambda1_new_so[1])
-
 ```
 
 </details>
 <br>
 
 
-```{r sum-tables17, purl=FALSE, echo=FALSE, eval=TRUE, eval=show_summary_tables}
+```{r sum-tables17, purl=FALSE, echo=FALSE, eval=show_summary_tables}
 
 table_1[8,2] <- paste0("$\\alpha^{KLPS}=" , round(lambda1_new_so[1],2), "$")
 
@@ -1239,7 +1261,7 @@ DC = \sum_{t=0}^{`r round(years_of_treat_0_so,1)-1`} \left( \frac{1}{1 + r}\righ
 \end{equation}
 
 
-Since the analysis is discrete, and we can not sum over a non-integer, we find
+Since the analysis is discrete, and we cannot sum over a non-integer, we find
 
 \begin{equation}
 DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \\
@@ -1260,15 +1282,17 @@ Where:
 
 
 ```{r unit_costs2_new}
-# - inputs: unit_cost_local_so, ex_rate_so, interest_new_in
-# - outputs: s2_f_new
+# - inputs: unit costs (unit_cost_local_so), exchange rate (ex_rate_so),
+#  new interest rate (interest_new_in)
+# - outputs: total unit costs (s2_f_new)
 chunk_unit_costs2_new <- function(){
 ###############################################################################
 ###############################################################################  
 
-    s2_f_new <- function(unit_cost_local_var = unit_cost_local_so,
-                     ex_rate_var = ex_rate_so,
-                     interest_var = interest_new_in) {
+  s2_f_new <- function(
+    unit_cost_local_var = unit_cost_local_so,
+    ex_rate_var = ex_rate_so,
+    interest_var = interest_new_in) {
       unit_cost <- ( unit_cost_local_var / ex_rate_var )
       sum(( unit_cost * (1 + interest_var)^(-(0:2)) ) * c(1,1,0.4))
     }
@@ -1285,12 +1309,7 @@ s2_new_in <- s2_f_new(
   unit_cost_local_var = unit_cost_2017usdppp_so,
   ex_rate_var = 1
 )
-
 q2_in <- q_full_so
-
-
-
-
 ```
 
 </details>
@@ -1301,11 +1320,11 @@ With complete subsidy, the costs of the intervention become the total direct cos
 
 #### Indirect costs: additional years of education and its costs for government  
 
-The indirect cost on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. The cost of additional schooling is given by the product of the annual cost of schooling each child and the number of additional years children attend school as a result of deworming. This analysis assumes that pressure is added to educational institutions for a maximum of nine years, starting at year zero. The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^9], $`r format(round(teach_sal_2017usdppp_so,0), scientific=FALSE)` (also adjusted for PPP), and the same average number of students per teacher (`r n_students_so`).
+The indirect cost on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. The cost of additional schooling is given by the product of the annual cost of schooling each child and the number of additional years children attend school as a result of deworming. This analysis assumes that pressure is added to educational institutions for a maximum of nine years, starting at year zero. The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^9], $`r format(round(teach_sal_2017usdppp_so,0), scientific=FALSE, big.mark = ",")` (also adjusted for PPP), and the same average number of students per teacher (`r n_students_so`).
 
-Hence, the cost of schooling each child for an additional year is now $`r round(teach_sal_2017usdppp_so/n_students_so, 2)` (USD).
+Hence, the cost of schooling each child for an additional year is now $`r round(teach_sal_2017usdppp_so/n_students_so, 1)` (USD).
 
-[^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: @nyanchama2018 and @oduor2017. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is `r n_students_so`, based on **[FIND SOURCE]**.
+[^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: @nyanchama2018 and @oduor2017. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is `r n_students_so`.
 
 
 <details><summary>Show all the details</summary>
@@ -1323,8 +1342,8 @@ Where:
 - $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance  
 
 
-
-```{r ed-costs-new}
+```{r ed-costs-new, purl=FALSE, echo=FALSE}
+library(rootSolve)
 
 delta_ed_in <- delta_ed_so[,1]
 cost_per_student_in_new <- cost_per_student_f(
@@ -1355,29 +1374,27 @@ a2_all_pe <- NPV_pe_f(benefits_var = pv_benef_all_new_in,
 
 get_irr <- function(rate_var) {
   pv_benef_f(
-      earnings_var = earnings_in_no_ext_new,
-    interest_r_var = rate_var,
-    periods_var = periods_so
-  ) - pv_costs_f(
-   periods_var = periods_so,
-   delta_ed_var = delta_ed_in,
-   interest_r_var = rate_var,
-   cost_of_schooling_var = cost_per_student_in_new,
-   s1_var = 0,
-   q1_var = 0,
-   s2_var = s2_f_new(
-     interest_var = rate_var,
-     unit_cost_local_var = unit_cost_2017usdppp_so,
-     ex_rate_var = 1
-   ),
-   q2_var = q_full_so
+     earnings_var = earnings_in_no_ext_new,
+     interest_r_var = rate_var,
+     periods_var = periods_so
+  ) - 
+  pv_costs_f(
+     periods_var = periods_so,
+     delta_ed_var = delta_ed_in,
+     interest_r_var = rate_var,
+     cost_of_schooling_var = cost_per_student_in_new,
+     s1_var = 0,
+     q1_var = 0,
+     s2_var = s2_f_new(
+       interest_var = rate_var,
+       unit_cost_local_var = unit_cost_2017usdppp_so,
+       ex_rate_var = 1
+     ),
+     q2_var = q_full_so
   )
 }
 
-
-library(rootSolve)
 irr_in <- (multiroot(function(x) get_irr(rate_var = x), .1, maxiter=10000000, positive = T))$root
-
 ```
 </details>
 <br>
@@ -1385,7 +1402,7 @@ irr_in <- (multiroot(function(x) get_irr(rate_var = x), .1, maxiter=10000000, po
 Over this nine year period, treated students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average. Then we get an average cost of additional schooling per child over the nine-year period, $`r format(round((cost_per_student_in_new*sum( (1/(1+interest_new_in))^(0:8) * delta_ed_in )),2), nsmall = 2)`.
 
 
-### Assessing computational reproducibiliy of original results  
+### Assessing computational reproducibility of original results  
 
 The second approach does not report benefits and costs separatedly. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of `r df_research_so$param[9]` (table `r df_research_so$tablenum[9]`, column `r df_research_so$table_col[9]`, and row `r df_research_so$table_row[9]`) This result corresponds to a social internal rate of return of `r paste0(df_research_so$param[8], "%")` located as an inline result in the paper - also in `r df_research_so$figure_num[8]` - and in the appendix at table `r df_research_so$tablenum[8]`, column `r df_research_so$table_col[8]`, and row `r df_research_so$table_row[8]`). Following the steps described in this section, this analysis obtains the same result (`r a2_all_pe` and `r paste0(irr_in * 100, "%")` respectively without rounding).
 
@@ -1418,9 +1435,9 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-## Approach 3: Combination of Previous Approaches and Input From Key Partners
+## Approach 3: Combination of Previous Approaches and Input From Key Policy Partners
 
-In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and worked in collaboration with a key technical assistance partner in this area: the NGO Evidence Action. Evidence Action provided insights on certain aspects of the analysis that could be updated with present-day data, providing key inputs on the differences in worm prevalence, length of treatment, and costs across various regions.
+In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and seek feedback from a key policy partner to best identify one clear output to inform policy makers. We worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action provided insights on certain aspects of the analysis that could be updated with present-day data, providing key inputs on the differences in worm prevalence, length of treatment, and costs across various regions.
 
 Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length ot treatment. Additionally, the relevant costs are constrained to direct costs alone, as implementation costs vary across countries.
 
@@ -2987,7 +3004,5 @@ rescale <- rescale_so
 
 [^3]: https://docs.google.com/document/d/1BkQLyLYQmy9O7FISge78PnWy9urMo0k31RwI5tOhJE4/edit
 
-
-[^6]: last paragraph of page 9(1645) of @baird2016worms
 
 [^7]: series avalable in file `~/opa-deworming/docs/materials/original_materials/Baird-etal-QJE-2016_fiscal-impact-calculations.xlsx` worksheet`Assumps&Panel A Calcs!A93`
