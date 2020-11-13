@@ -114,7 +114,9 @@ you don't want the slider to appear in")`.
 
 ## The chart below shows the way that the different components of the OPA interact with each other
 
-<img align="right" width="50%" src="./www/sa_readme_chart.png">
+<img align="center" width="50%" src="./www/sa_readme_chart.png">
+
+**Is more explanation needed? Or is it clear from previous sections of the readme?**
 
 
 
