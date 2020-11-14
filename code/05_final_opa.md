@@ -238,7 +238,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -1216,7 +1216,7 @@ For approach 3, we will modify treatment effects of approaches 1 and 2 (equation
 
 Where:
 
-- $\lambda_1$: direct effects of deworming on individuals' earnings. Here we use the symbol for treatment effect of approach 1, but the same logic applies to the treatment effect of approach 2 ($\alpha^{KLPS}$)
+- $\lambda_1$: direct effects of deworming on individuals' earnings. Here we use the symbol for treatment effect of approach 1, but the same logic applies to the treatment effect of approach 2 ($\alpha^{pooled}$)
 - $\lambda^{eff}_1$: impact of deworming on children who were treated and had a worm infection in the original evaluation  
 - $\lambda^r_1$: impact of deworming on children who were treated and had a worm infection in the new region  
 - $\eta$: prevalence rates in the original evaluation   
@@ -1275,13 +1275,13 @@ Evidence Action provided prevalence survey data for the geographies where they a
 
 #### Adjusting for different length of treatment  
 
-The number of consecutive years over which a population is exposed to deworming treatment determines the intensity of the effects over this population over time. The two approaches reproduced so far hold the length of treatment constant at the levels estimated by the original study (2.4 years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years of treatment, with no additional effects after 6 years of treatment. We assumed a maximum of 6 years of impact in this case based off of the 20 year KLPS follow-up research, which shows a levelling-off of treatment effect after approximately 6 years of deworming (@klps4; Figure A.5 in Appendix, page A-6).
+The number of consecutive years over which a population is exposed to deworming treatment determines the intensity of the effects over this population over time. The two approaches reproduced so far hold the length of treatment constant at the levels estimated by the original study (2.4 years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years of treatment, with no additional effects after 6 years of treatment. We assumed a maximum of 6 years of impact in this case based on the 20 year KLPS follow-up research, which shows a levelling-off of treatment effect after approximately 6 years of deworming (@klps4; Figure A.5 in Appendix, page A-6).
 
-This added analysis factor allows us to take into account differences in the number of years of deworming treatment across different country contexts depending on program dynamics. Although the counterfactual of worm prevalence in the absence of treatment is largely unknown, we know that consistent deworming continues to decrease worm prevalence over time, contributing to controlled worm environments and sustainted benefits. In many deworming programs today, children receive regular treatment throughout a portion (and in some cases for the full term) of their primary schooling. It is worth noting that the assumption of linearity is an imperfect measure for various epidemiological reasons, though we include this variable of time into the equation as an estimate of our best guess at the differences in achieved impact over time, and in part because it helps capture that a new cohort enters primary school--and is therefore eligible for treatment--with each successive year of a deworming program.
+Adding the element of treatment duration allows us to take into account differences in the number of years of deworming treatment across different country contexts depending on program dynamics. Although the counterfactual of worm prevalence in the absence of treatment is largely unknown, we know that consistent deworming continues to decrease worm prevalence over time, contributing to controlled worm environments and sustained benefits. In many deworming programs today, children receive regular treatment throughout a portion (and in some cases for the full term) of their primary schooling. It is worth noting that the assumption of linearity is an imperfect measure for various epidemiological reasons, though we include this variable of time into the equation as an estimate of our best guess at the differences in achieved impact over time, and in part because it helps capture that a new cohort enters primary school--and is therefore eligible for treatment--with each successive year of a deworming program.
 
 <details><summary>Show all the details</summary>
 
-For approach 3, we will modify treatement effects of approaches 1 and 2 (equations 4 and 13 respectively) by the following:   
+For approach 3, we will modify treatment effects of approaches 1 and 2 (equations 4 and 13 respectively) by the following:   
 
 \begin{equation}
 \lambda_{1,t = 1} = \frac{\lambda_{1}}{T_{0}} \\

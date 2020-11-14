@@ -4,6 +4,9 @@ pdf_document:
   fig_caption: false
 date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div></center>"
 output:
+  word_document:
+
+
   bookdown::html_document2:
     theme: cerulean
     highlight: tango
@@ -20,11 +23,14 @@ output:
     includes:
       after_body: footer.html
 
+
+
 editor_options:
   chunk_output_type: console
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
 bibliography: bibliography.bib  
 link-citations: true
+
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
@@ -32,6 +38,7 @@ link-citations: true
 
 
 ```{r setup, include=FALSE, purl=TRUE}
+html_format <- FALSE
 # Loading required libraries
 list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly",
                       "bookdown", "rootSolve","shinyBS", "shinythemes", "ggplot2")
@@ -49,7 +56,7 @@ knitr::opts_knit$set(root.dir = here())
 
 knitr::opts_chunk$set(echo = TRUE)
 
-print_code <- TRUE
+print_code <- html_format
 show_summary_tables <- FALSE
 
 equationIndex <- 0
@@ -70,7 +77,7 @@ knitr::opts_chunk$set(warning = FALSE)
 ```
 
 
-```{r notes, purl=FALSE}
+```{r notes, purl=FALSE, echo=print_code}
 ################
 #####  Notes:
 ################
@@ -108,8 +115,8 @@ knitr::opts_chunk$set(warning = FALSE)
 # Anything under this comment is to create objects that are used in the body of
 # text. Not to be used in the final results (could be deleted). Each of these
 # object should end with the suffix _temp
-# 
-# Use diagrams to represent complex nesting of functions. Example: 
+#
+# Use diagrams to represent complex nesting of functions. Example:
 # # pv_costs_f
 #  ├──── delta_ed_final_f
 #  ├──── interest_f
@@ -572,7 +579,7 @@ Where[^6]:
 [^6]: The original equation separates effects by gender. But the final calculation (behind table 5 in paper) does not separate by gender.
 
 
-```{r earnings1}
+```{r earnings1, echo=print_code}
 # - inputs: earnings wihtout treatment (wage_in), direct treatment eff
 # (lambda1_so), indirect treatment eff (lambda2_so), saturation and coverage (coverage_so)
 # - outputs: earnings (no name specified)
@@ -655,7 +662,7 @@ Where:
 - $se$: self-employed sectors  
 
 
-```{r wage_t}
+```{r wage_t, echo=print_code}
 #inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
@@ -752,7 +759,7 @@ Where:
 - $\lambda_{1, female}$: average impact of deworming on hours worked for women  
 
 
-```{r lambdas}
+```{r lambdas, echo=print_code}
 # - inputs: direct (lambda1_so), and indirect (lambda2_so) treatment effects by gender
 # - outputs: simple average of direct and indirect treatment eff.
 chunk_lambdas<- function(){
@@ -810,7 +817,7 @@ Where:
 - $Q(0)$: take-up without subsidy  
 
 
-```{r coverage-and-saturation}
+```{r coverage-and-saturation, echo = print_code}
 # - inputs: coverage (coverage_so), take-up with full subsidy (q_full_so), and
 # take-up with no subsidy (q_zero_so)
 # - outputs: saturation (saturation_in)
@@ -834,7 +841,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 saturation_in <- saturation_in_f()$saturation_in
 
-# Computing values for inline text: 
+# Computing values for inline text:
 
 # pv_benef
 # ├──── earnings1_f
@@ -844,7 +851,7 @@ saturation_in <- saturation_in_f()$saturation_in
 # |      |      └──── wage_0_mo_f()
 # |      |            
 # |      ├──── lambda1_in_f()
-# |      └──── lambda2_in_f() 
+# |      └──── lambda2_in_f()
 # └──── interest_f()
 
 earnings_no_ext_in <- earnings1_f(
@@ -975,10 +982,10 @@ Where:
 - $K$: cost per student to get education   
 - $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance  
 
-```{r cost2}
+```{r cost2, echo = print_code}
 # - inputs: periods (periods_so), additional education (delta_ed_final_in),
-#  discount rate (interest) (varies by approach), cost per student 
-#  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment 
+#  discount rate (interest) (varies by approach), cost per student
+#  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment
 #  (q2_in)
 # - outputs: present value of all costs (pv_costs_f)
 chunk_cost2 <- function(){
@@ -1031,7 +1038,7 @@ S_{2} = \frac{\text{Cost per person per year (KSH)}	}{ex}\times \text{Additional
 \tag{`r equationIndex`}
 \end{equation}
 
-```{r unit_costs2}
+```{r unit_costs2, echo = print_code}
 # - inputs: unit costs in local currency (unit_cost_local_so), exchange rate
 #  (ex_rate_so), years of treatment (years_of_treat_0_so)
 # - outputs: unit costs of treatment (s2_f)
@@ -1074,11 +1081,11 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 \end{equation}
 
 
-```{r ed-costs}
+```{r ed-costs, echo = print_code}
 # - inputs: teacher salary (teach_sal_so) and benefits (teach_ben_so), number
 # of students (n_students_so), include externalities (include_ext_so), extra ed
 # without ext (delta_ed_so), and extra ed due to ext (delta_ed_ext_so)
-# - outputs: cost per student (cost_per_student_f), and total additional 
+# - outputs: cost per student (cost_per_student_f), and total additional
 # education (delta_ed_final_f)
 chunk_edcosts <- function(){
 ###############################################################################
@@ -1113,7 +1120,7 @@ cost_per_student_in <- cost_per_student_f()
 delta_ed_final_no_ext_in <- delta_ed_final_f(include_ext_var = FALSE)
 delta_ed_final_yes_ext_in <- delta_ed_final_f(include_ext_var = TRUE)
 
-# Computing values for inline text: 
+# Computing values for inline text:
 
 # pv_costs_f
 #  ├──── delta_ed_final_f
@@ -1209,7 +1216,7 @@ Where:
 - $\alpha^{pooled}$: pooled estimated treatment effects of 10, 15, 20 years after the intervention
 
 
-```{r delta-earnings, eval=TRUE}
+```{r delta-earnings, eval=TRUE, echo = print_code}
 # - inputs: index for time (t_var), pooled treatment effect (lambda1_new_so[1])
 # - outputs: effect on lifetime earnings (earnings2_f)
 chunk_new_earnings <- function(){
@@ -1290,7 +1297,7 @@ Where:
 - $Q(S_1)$: take-up without additional resources from the government  
 
 
-```{r unit_costs2_new}
+```{r unit_costs2_new, echo = print_code}
 # - inputs: unit costs (unit_cost_local_so), exchange rate (ex_rate_so),
 #  new interest rate (interest_new_in)
 # - outputs: total unit costs (s2_f_new)
@@ -1386,7 +1393,7 @@ get_irr <- function(rate_var) {
      earnings_var = earnings_in_no_ext_new,
      interest_r_var = rate_var,
      periods_var = periods_so
-  ) - 
+  ) -
   pv_costs_f(
      periods_var = periods_so,
      delta_ed_var = delta_ed_in,
@@ -1446,7 +1453,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 ## Approach 3: Combination of Previous Approaches and Input From Key Policy Partners
 
-In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key policy partner to best identify one clear output to inform policy makers. We worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action provided insights on what are the most relevant costs and benefits from the perspectives of policy makers, and on certain aspects of the analysis that could be updated with present-day data. 
+In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key policy partner to best identify one clear output to inform policy makers. We worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action provided insights on what are the most relevant costs and benefits from the perspectives of policy makers, and on certain aspects of the analysis that could be updated with present-day data.
 
 Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length of treatment. Additionally, the relevant costs are constrained to direct costs alone (excluding additional costs on education). Finally this approach uses inputs costs and prevalence that reflect the current settings where Evidence Action is currently supporting deworming interventions. As of 2020, Evidence Action supports deworming interventions in four countries.
 
@@ -1480,11 +1487,11 @@ Where:
 - $\eta$: prevalence rates in the original evaluation   
 - $\eta_r$: prevalence rates in the new region   
 
-```{r lambdas_eff}
-# - inputs: previously estimated treatment effect (lambda1_in_f), prevalence 
-# rates in the original setting (prevalence_0_so), prevalence in the new setting 
-# (prevalence_r_so), countries included in the analysis (country_sel_so) 
-# and their population (country_sel_pop_so), or single input of new prevalence 
+```{r lambdas_eff, echo = print_code}
+# - inputs: previously estimated treatment effect (lambda1_in_f), prevalence
+# rates in the original setting (prevalence_0_so), prevalence in the new setting
+# (prevalence_r_so), countries included in the analysis (country_sel_so)
+# and their population (country_sel_pop_so), or single input of new prevalence
 # (new_prevalence_r_so)
 # - outputs: effective treatment effect (lambda_eff_f)
 chunk_lambdas_eff<- function(){
@@ -1553,8 +1560,8 @@ t \lambda_{1,t = 1} \quad \text{for } t=1, \dots, 6\\
 \tag{`r equationIndex`}
 \end{equation}
 
-AQUI VOY 
-```{r lambdas_t}
+AQUI VOY
+```{r lambdas_t, echo = print_code}
 # - inputs: treatment effect (lambda1_in_f), length of treatment in original
 # study (years_of_treat_0_so), length of treatment in new setting (years_of_treat_t_so)
 # - outputs: per year treatment effect (lambda1_t1) and total treatment effect
@@ -1714,12 +1721,12 @@ Where:
 
 ```{r eq_3, echo=print_code, eval=TRUE}  
 # - inputs: cost data by payer type at the contry/province level by year (df_costs_so)
-#  crosswalk between country/state and region (df_costs_cw_so), treatment counts 
-#  by country/province and year (df_counts_so); staff time adjusment factor 
-#  (staff_time_so), 
-# - outputs: country level cost and population data (costs1_p1_f) and country 
+#  crosswalk between country/state and region (df_costs_cw_so), treatment counts
+#  by country/province and year (df_counts_so); staff time adjusment factor
+#  (staff_time_so),
+# - outputs: country level cost and population data (costs1_p1_f) and country
 #  weights and per capita costs
-# 
+#
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
@@ -1732,7 +1739,7 @@ chunk_cost1_inp <- function(){
     # Data cleanning:
     # Add country variable
     # anoying message: https://stackoverflow.com/questions/62140483/how-to-interpret-dplyr-message-summarise-regrouping-output-by-x-override
-    
+
     df_counts_temp <- df_costs_cw_var %>%
       right_join(df_counts_var, by = "Country/State") %>%
       mutate(Country = tolower(Country))
@@ -1750,7 +1757,7 @@ chunk_cost1_inp <- function(){
           group_by(Country, Year) %>%
           summarise("total" = sum(`# dewormed`))
     )
-  
+
     ## Costs
     # Data cleaning:
     # Add country variable
@@ -1774,7 +1781,7 @@ chunk_cost1_inp <- function(){
       summarise("costs_by_payer" =
                   sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE))
     )    
-    #sum across payers 
+    #sum across payers
     suppressMessages(            
     country_cost <- costs_by_payer %>%
       group_by(Country) %>%
@@ -1784,7 +1791,7 @@ chunk_cost1_inp <- function(){
     )
     costs_data <- country_cost %>%
        left_join(c_counts, by = "Country")
-    
+
     return( costs_data )
   }
 
@@ -1802,9 +1809,9 @@ chunk_cost1_inp <- function(){
       # create country weight
       c_weights <- country_total_var_temp / sum(country_total_var_temp)
       # create country per capita costs, adjusted by staff time
-      per_cap <- country_cost_var_temp * (1 + staff_time_var) / 
+      per_cap <- country_cost_var_temp * (1 + staff_time_var) /
         country_total_var_temp
-      # replace contry costs with new one if there is a new country 
+      # replace contry costs with new one if there is a new country
       # (only count that new country)
       # (the weighthed sum of this scalar will just be the same number)
       if (!is.null(other_costs)) {
@@ -1903,7 +1910,7 @@ x \sim N(\hat{x}, \sigma_{x})
 
 As a default $\delta_{u} = 0.1$
 
-```{r mc-setup, eval=TRUE}  
+```{r mc-setup, eval=TRUE, echo = print_code}  
 # EXPLAIN
 # This function takes as inputs means and standard deviations of source
 # parameters and simualte draws of each source. When the source is a scalar,
@@ -2315,7 +2322,7 @@ The table below summarises the three different approaches and the different alte
 
 <details><summary>Show all the details</summary>
 
-```{r all-steps}
+```{r all-steps, echo=print_code}
 # Function dependency is depicted as follows:
 # f(g()) =
 # f
@@ -2764,7 +2771,7 @@ earnings_in_no_ext
 invisible( list2env(one_run(),.GlobalEnv) )
 ```
 
-```{r main-results, purl=FALSE}
+```{r main-results, purl=FALSE, echo=print_code}
 #TODO: update unit test values after updating interest rates to exact formula
 #Baird 1: Costs = Baird w/tax and no externalities (no ext);
 #Benef = Baird no ext
