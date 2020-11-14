@@ -33,7 +33,7 @@ nsims <- 1e3
 source("all_analysis.R")
 #fluidPage is something must have
 shinyUI(
-  fluidPage( shinythemes::themeSelector(),
+  fluidPage( theme = shinytheme("cerulean"),
     navbarPage("Open Policy Analysis for Deworming Interventions: Open Output Component",
                tabPanel(
                  "Main Policy Estimate",

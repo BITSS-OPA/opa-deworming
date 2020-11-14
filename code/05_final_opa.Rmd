@@ -1682,7 +1682,7 @@ Under approach 3, and using the same assumptions as above, the benefits will be:
 
 Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. Through Evidence Action's technical assistance, which typically includes financial support for program implementation, they have access to country-level government cost data on what it takes to implement and evaluate school-based deworming programs across different contexts. To estimate the costs in this analysis, we use costs of deworming provided by Evidence Action (detailed below) and follow a similar approach to @givewell, which takes those costs and includes an additional estimate around the amount of government staff time required to run deworming programs. The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions [^10].
 
-[^10]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds **[CONFIRM WITH GRACE]**
+[^10]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds [CONFIRM WITH GRACE]
 
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. These items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence surveys, program management, public mobilization/community sensitization, and training and distribution. Costs can vary by geography due to factors of population size, treatment strategies, age of the program, and costs of "doing business."
 
@@ -2977,53 +2977,61 @@ npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 rescale <- rescale_so
 
-    plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), lwd = 0.8, kernel = "gau", fill = "#007ba7", color = "darkblue", alpha = 0.3) +
-      geom_vline(xintercept = c(0, median(npv_sim)), col=c("#0c2847", "darkblue"), lwd = c(0.8, 0.6), linetype = c("solid", "dashed") ) +
-      coord_cartesian(xlim = c(-100, 800)) +
-      guides(alpha = "none", colour="none") +
-      labs(y = NULL,
-           x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Lifetime Income Effects of Deworming for Each Treated Children",
-           subtitle = "Distribution of the Net Present Value of Deworming Interventions"
-           ) +
-      annotate("text", x = 2 * median(npv_sim), y = 0.15, label = npv_for_text, size = 4, col = "darkblue")+
-      scale_x_continuous(expand = expansion(mult = c(0, 0)), breaks=seq(-1000,2000,500)) +
-      scale_y_continuous(expand = expansion(mult = c(0, 0))) +
-      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(), axis.line.x = element_line(color = "#0c2847", size = 0.8),  panel.background = element_blank(), panel.spacing = unit(1.5, "cm"))
+plot1 <- ggplot() +
+  geom_density(
+    aes(x = npv_sim,
+        alpha = 1 / 2, ..scaled..),
+    lwd = 0.8,
+    kernel = "gau",
+    fill = "#007ba7",
+    color = "darkblue",
+    alpha = 0.3
+  ) +
+  geom_vline(
+    xintercept = c(0, median(npv_sim)),
+    col = c("#0c2847", "darkblue"),
+    lwd = c(0.8, 0.6),
+    linetype = c("solid", "dashed")
+  ) +
+  coord_cartesian(xlim = c(-100, 800)) +
+  guides(alpha = "none", colour="none") +
+  labs(y = NULL,
+       x = "Net Present Value (Benefits -  Costs)" ,
+       title = "Lifetime Income Effects of Deworming for Each Treated Children",
+       subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+       ) +
+  annotate(
+    "text",
+    x = 1.5 * median(npv_sim),
+    y = 0.15,
+    label = npv_for_text,
+    size = 4,
+    col = "darkblue"
+  )+
+  scale_x_continuous(expand = expansion(mult = c(0, 0)),
+                     breaks = seq(-1000, 2000, 500)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0))) +
+  theme(
+    axis.ticks.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.line.x = element_line(color = "#0c2847", size = 0.8),
+    panel.background = element_blank(),
+    panel.spacing = unit(1.5, "cm")
+  )
 
-    if (rescale == TRUE) {
-      plot1 <- suppressMessages(
-        plot1 +
-          coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ),
-                                          max(npv_sim))
-                          )
-        )
-    }
-    print(plot1)
-    #FUTURE:
-    #ggplotly(plot1)
-    #ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
-# dens <- density(npv_sim)
-# fig <- plot_ly(x=~dens$x, y = ~dens$y, type='scatter', mode='lines', fill='tozeroy')
-# fig <- fig %>%
-#   layout(xaxis=list(title='NPV'), yaxis=list(title='Distribution Density'), title=paste0("Distribution of NPV of ", policy_estimates_text[position]))
-# fig
+if (rescale == TRUE) {
+  plot1 <- suppressMessages(
+    plot1 +
+      coord_cartesian(xlim =  c( quantile(npv_sim, 0.01),
+                                 quantile(npv_sim, 0.99) ), 
+                      ylim =  c( 0, 1.2 )
+                      )
+    )
+}
+print(plot1)
+# ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
 # knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 ```
-
-
-<!-- Maybe the section below goes into the paper about the DW OPA-->
-
-## Possible Benefits of OPA for Deworming  
-
-### No Alternative Facts  
-
-### Low cost of adopting this analysis for other settings
-
-### Clear connection from research to policy analysis  
-
 
 # References
 
