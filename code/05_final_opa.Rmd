@@ -108,6 +108,15 @@ knitr::opts_chunk$set(warning = FALSE)
 # Anything under this comment is to create objects that are used in the body of
 # text. Not to be used in the final results (could be deleted). Each of these
 # object should end with the suffix _temp
+# 
+# Use diagrams to represent complex nesting of functions. Example: 
+# # pv_costs_f
+#  ├──── delta_ed_final_f
+#  ├──── interest_f
+#  └──── cost_per_student_f
+#  |      └──── x
+#  ├──── s2_f
+#  └──── lambda2_in_f
 ```
 
 
@@ -1544,10 +1553,12 @@ t \lambda_{1,t = 1} \quad \text{for } t=1, \dots, 6\\
 \tag{`r equationIndex`}
 \end{equation}
 
-
+AQUI VOY 
 ```{r lambdas_t}
-# - inputs: lambda1_in_f(), years_of_treat_0_so, years_of_treat_0_so
-# - outputs: lambda_t_f
+# - inputs: treatment effect (lambda1_in_f), length of treatment in original
+# study (years_of_treat_0_so), length of treatment in new setting (years_of_treat_t_so)
+# - outputs: per year treatment effect (lambda1_t1) and total treatment effect
+# (lambda1_t)
 chunk_lambdas_t<- function(){
 ###############################################################################
 ###############################################################################    
@@ -1568,13 +1579,24 @@ chunk_lambdas_t<- function(){
             )
     }  
 
-##############################################################################
+###############################################################################
 ###############################################################################  
     return( list("lambda_t_f" = lambda_t_f) )
 }
 invisible( list2env(chunk_lambdas_t(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
+
+# # earnings1_f
+#  ├──── delta_ed_final_f
+#  ├──── interest_f
+#  └──── lambda_eff_f
+#  |      └──── lambda_t_f
+#  |            └──── lambda_in_f
+#  ├──── saturation_f
+#  └──── wage_t_f
+#         └──── wage_0_f
+
 lambda1_t_in <- lambda_eff_f(
   lambda1_var = lambda_t_f(
     lambda1_var = lambda1_in_f(),
@@ -1643,16 +1665,15 @@ app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
 Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Both approaches implicitly assume prevalence rates of 100% and do not distinguish between original population and target populuation. Both approaches also set the length of treatment at `r years_of_treat_0_so` years.
 -->
 
-To compute the benefits for this approach, we use data on prevalence and length of treatment for the four countries that Evidence Action has records for. Readers interested in assessing the effects of deworming for a specific value of prevalence and length of treatment are referred to the interactive app (tab on key assumtions) where they can input the values that best reflect their setting. To facilitate comparison with the other two approaches, we present here the results using the same length of treatment assumptions parameters as in approach 1 and 2.  
+To compute the benefits for this approach, we use data on prevalence and length of treatment for the four countries that Evidence Action has records for. Readers interested in assessing the effects of deworming for a specific value of prevalence and length of treatment are referred to the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) (tab on key assumptions) where they can input the values that best reflect their setting. To facilitate comparison with the other two approaches, we present here the results using the same length of treatment assumptions parameters as in approach 1 and 2.  
 
-Under apporach 3, and using the same assumptions as above, the benefits will be the same as in approaches 1 and 2: `r round(app3_pv_benef_no_ext_in, 2)` and `r round(app3_pv_benef_yes_ext_in, 2)` for approach 1 without and with externalities, and `r round(app3_pv_benef_all_new_in, 2)` when using the benefit structure of approach 2.  
+Under approach 3, and using the same assumptions as above, the benefits will be: `r round(app3_pv_benef_no_ext_in, 2)` and `r round(app3_pv_benef_yes_ext_in, 2)` when using benefits of approach 1 without and with externalities, and `r round(app3_pv_benef_all_new_in, 2)` when using the benefit structure of approach 2.  
 
 ### Costs
 
-Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making.
-Through Evidence Action's technical assistance, which typically includes financial support for program implementation, they have access to country-level government cost data on what it takes to implement and evaluate school-based deworming programs across different contexts. To estimate the costs in this analysis, we use costs of deworming provided by Evidence Action (detailed below) and follow a similar approach to @givewell, which takes those costs and includes an additional estimate around the amount of government staff time required to run deworming programs. The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries were Evidence Action currently has data on implementation of deworming interventions [^10].
+Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. Through Evidence Action's technical assistance, which typically includes financial support for program implementation, they have access to country-level government cost data on what it takes to implement and evaluate school-based deworming programs across different contexts. To estimate the costs in this analysis, we use costs of deworming provided by Evidence Action (detailed below) and follow a similar approach to @givewell, which takes those costs and includes an additional estimate around the amount of government staff time required to run deworming programs. The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions [^10].
 
-[^10]: In some settings Evidence Acction provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds **[CONFIRM WITH GRACE]**
+[^10]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds **[CONFIRM WITH GRACE]**
 
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. These items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence surveys, program management, public mobilization/community sensitization, and training and distribution. Costs can vary by geography due to factors of population size, treatment strategies, age of the program, and costs of "doing business."
 
@@ -1692,96 +1713,102 @@ Where:
 - $\delta_g$: additional government staff time required to implement a typical deworming intervention
 
 ```{r eq_3, echo=print_code, eval=TRUE}  
-# - inputs: nothing
-# - outputs: (1) function that computes the country weights used in the final
-# costs (2)  function that computes the weighted sum of country costs
+# - inputs: cost data by payer type at the contry/province level by year (df_costs_so)
+#  crosswalk between country/state and region (df_costs_cw_so), treatment counts 
+#  by country/province and year (df_counts_so); staff time adjusment factor 
+#  (staff_time_so), 
+# - outputs: country level cost and population data (costs1_p1_f) and country 
+#  weights and per capita costs
+# 
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
-    # clean and aggreagate data at country level
-    costs1_p1_f <- function(df_costs_var = df_costs_so,
-                         df_costs_cw_var = df_costs_cw_so,
-                         df_counts_var = df_counts_so) {
-      #anoying message: https://stackoverflow.com/questions/62140483/how-to-interpret-dplyr-message-summarise-regrouping-output-by-x-override
-      ## Counts
-      # Data cleanning:
-      # Add country
+  # clean and aggreagate data at country level
+  costs1_p1_f <- function(
+    df_costs_var = df_costs_so,
+    df_costs_cw_var = df_costs_cw_so,
+    df_counts_var = df_counts_so) {
+    ## Counts
+    # Data cleanning:
+    # Add country variable
+    # anoying message: https://stackoverflow.com/questions/62140483/how-to-interpret-dplyr-message-summarise-regrouping-output-by-x-override
+    
+    df_counts_temp <- df_costs_cw_var %>%
+      right_join(df_counts_var, by = "Country/State") %>%
+      mutate(Country = tolower(Country))
+    # keep only last year on record
+    suppressMessages(            
+        df_counts_last <- df_counts_temp %>%
+          group_by(Country) %>%
+          summarise("last_year" = max(Year)) %>%
+          right_join(df_counts_temp, by = "Country") %>%
+          filter(Year == last_year)          
+    )
+    # compute counts as the sum with-in country-year of treatments
+    suppressMessages(            
+        c_counts <- df_counts_last %>%
+          group_by(Country, Year) %>%
+          summarise("total" = sum(`# dewormed`))
+    )
+  
+    ## Costs
+    # Data cleaning:
+    # Add country variable
+    df_costs_temp <- df_costs_cw_var %>%
+      right_join(df_costs_var, by = "Country/State") %>%
+      select(-Country.y) %>% rename(Country = Country.x) %>%
+      mutate(Country = tolower(Country))
+    # values for last year with cost information
+    suppressMessages(            
+    df_costs_last <- df_costs_temp %>%
+      group_by(Country) %>%
+      summarise("last_year" = max(Year)) %>%
+      right_join(df_costs_temp, by = "Country") %>%
+      filter(Year == last_year)    
+      )      
+     # summing across payers and regions (last equation)
+    suppressMessages(            
+    costs_by_payer <- df_costs_last %>%
+      filter(Payer != "Total") %>%
+      group_by(Country, Payer) %>%
+      summarise("costs_by_payer" =
+                  sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE))
+    )    
+    #sum across payers 
+    suppressMessages(            
+    country_cost <- costs_by_payer %>%
+      group_by(Country) %>%
+      summarise("costs_by_country" =
+                  sum(costs_by_payer) )  
+    # Compute the per capita cost for each country (c_i and w_i)
+    )
+    costs_data <- country_cost %>%
+       left_join(c_counts, by = "Country")
+    
+    return( costs_data )
+  }
 
-  suppressMessages(            
-      df_counts_temp <- df_costs_cw_var %>%
-        right_join(df_counts_var, by = "Country/State") %>%
-        mutate(Country = tolower(Country))
-  )
-      # keep only last year on record
-  suppressMessages(            
-      df_counts_last <- df_counts_temp %>%
-        group_by(Country) %>%
-        summarise("last_year" = max(Year)) %>%
-        right_join(df_counts_temp, by = "Country") %>%
-        filter(Year == last_year)          
-  )
-      # compute counts as the sum with-in country-year of treatments
-  suppressMessages(            
-      c_counts <- df_counts_last %>%
-        group_by(Country, Year) %>%
-        summarise("total" = sum(`# dewormed`))
-  )
-
-      ## Costs
-      # Data cleaning:
-      # Add country
-      df_costs_temp <- df_costs_cw_var %>%
-        right_join(df_costs_var, by = "Country/State") %>%
-        select(-Country.y) %>% rename(Country = Country.x) %>%
-        mutate(Country = tolower(Country))
-      # values for last year with cost information
-  suppressMessages(            
-      df_costs_last <- df_costs_temp %>%
-        group_by(Country) %>%
-        summarise("last_year" = max(Year)) %>%
-        right_join(df_costs_temp, by = "Country") %>%
-        filter(Year == last_year)    
-  )      
-      # summing across payers and regions (last equation)
-  suppressMessages(            
-      costs_by_payer <- df_costs_last %>%
-        filter(Payer != "Total") %>%
-        group_by(Country, Payer) %>%
-        summarise("costs_by_payer" =
-                    sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE))
-  )    
-      #sum across payers and multiply by delta (second to last)
-  suppressMessages(            
-      country_cost <- costs_by_payer %>%
-        group_by(Country) %>%
-        summarise("costs_by_country" =
-                    sum(costs_by_payer) )  
-      # Compute the per capita cost for each country (c_i and w_i)
-  )
-        costs_data <- country_cost %>%
-         left_join(c_counts, by = "Country")
-      return( costs_data )
-    }
-
-    # Compute weights and per capta costs
-    costs1_p2_f <- function(country_total_var = costs_data$total,
+  # Compute weights and per capta costs
+  costs1_p2_f <- function(country_total_var = costs_data$total,
                          country_cost_var = costs_data$costs_by_country,
                          staff_time_var = staff_time_so,
                          country_name_var = costs_data$Country,
                          select_var = list("india", "kenya", "nigeria", "vietnam"),
                          other_costs = NULL) {
       # select countries
+      # SANDRA: REPRODUCE THE FOLLOWING TWO LINES, BUT USING TYDIVERSE SYNTAX
       country_total_var_temp <- country_total_var[country_name_var %in% select_var]
       country_cost_var_temp <- country_cost_var[country_name_var %in% select_var]
       # create country weight
       c_weights <- country_total_var_temp / sum(country_total_var_temp)
       # create country per capita costs, adjusted by staff time
-      per_cap <- country_cost_var_temp * (1 + staff_time_var) / country_total_var_temp
-
-      # replace contry costs with new one if there is a new country (only count that new country)
-      #  (the weighthed sum of this scalar will just be the same number)
+      per_cap <- country_cost_var_temp * (1 + staff_time_var) / 
+        country_total_var_temp
+      # replace contry costs with new one if there is a new country 
+      # (only count that new country)
+      # (the weighthed sum of this scalar will just be the same number)
       if (!is.null(other_costs)) {
-      #if (FALSE) {  
+      # if (FALSE) {  
         per_cap <- other_costs * (1 + staff_time_var)
       }
 
