@@ -254,9 +254,9 @@ chunk_sources <- function(){
       "vietnam" = 9.646211 * 1e7
     )
     #https://data.worldbank.org/indicator/SP.POP.TOTL
-    # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "klps4_1_sim",
-    # "klps4_2_sim", "ea1_sim", "ea2_sim", "ea3_sim"
-    policy_estimate_so <- "ea3_sim"
+    # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "a2_tax_sim",
+    # "a2_all_sim", "a3_inc_a1_all_sim", "a3_inc_a1_all_x_sim", "a3_inc_a2_all_sim"
+    policy_estimate_so <- "a3_inc_a2_all_sim"
 
 
     costs_temp_so <- 1
@@ -1901,7 +1901,7 @@ x \sim N(\hat{x}, \sigma_{x})
 \\
 \sigma_{x} =
 \begin{cases}
-\hat{\sigma_{x}} \quad \text{If $\sigma_{x}$ is available}\\
+\hat{\sigma_{x}} \quad \text{If $\hat{\sigma_{x}}$ is available}\\
 \\
 \delta_{u}\hat{x} \quad \text{otherwise}
 \end{cases}
@@ -1921,10 +1921,33 @@ costs_data <- costs1_p1_f(df_costs_var = df_costs_so,
                           df_costs_cw_var = df_costs_cw_so,
                           df_counts_var = df_counts_so)
 
-sim.data1 <- function(nsims = 1e2,
+
+# Data: source comes from a standard data source. Government statistic or other
+# publicly available statistic
+
+sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
                       main_run_var2,
+                      periods_var2,
+                      costs_data_var2 = costs_data,
                       run_sim_var2,
-                      wage_ag_var2,
+                      countries_var2,
+
+                      ex_rate_var2,                  # "Data" vars
+                      ex_rate_var2_sd,
+                      growth_rate_var2,
+                      growth_rate_var2_sd,
+                      gov_bonds_var2,
+                      gov_bonds_var2_sd,
+                      gov_bonds_new_var2,                                                              
+                      gov_bonds_new_var2_sd,                                                          
+                      inflation_var2,
+                      inflation_var2_sd,
+                      inflation_new_var2,                          
+                      inflation_new_var2_sd,                      
+                      tax_var2,
+                      tax_var2_sd,
+
+                      wage_ag_var2,                  # "Research" vars
                       wage_ag_var2_sd,
                       wage_ww_var2,
                       wage_ww_var2_sd,
@@ -1938,42 +1961,24 @@ sim.data1 <- function(nsims = 1e2,
                       hours_ww_var2_sd,
                       hours_se_var2,
                       hours_se_var2_sd,
-                      ex_rate_var2,
-                      ex_rate_var2_sd,
-                      growth_rate_var2,
-                      growth_rate_var2_sd,
                       coef_exp_var2,         # sd for coef_exp is hard coded
                       lambda1_var2,
                       lambda1_var2_sd,
+                      lambda1_new_var2,
+                      lambda1_new_var2_sd,
+                      lambda2_var2,
+                      lambda2_var2_sd,
                       prevalence_0_var2,
                       prevalence_0_var2_sd,
                       prevalence_r_var2,
                       prevalence_r_var2_sd,
-                      new_prev_r_var2,
-                      lambda2_var2,
-                      lambda2_var2_sd,
+                      new_prev_r_var2, #?
                       coverage_var2,
                       coverage_var2_sd,
                       q_full_var2,
                       q_full_var2_sd,
                       q_zero_var2,
                       q_zero_var2_sd,
-                      lambda1_new_var2,
-                      lambda1_new_var2_sd,
-                      gov_bonds_var2,
-                      gov_bonds_var2_sd,
-                      inflation_var2,
-                      inflation_var2_sd,
-                      gov_bonds_new_var2,                                                              
-                      gov_bonds_new_var2_sd,                                                          
-                      inflation_new_var2,                          
-                      inflation_new_var2_sd,                      
-                      costs_par_var2,
-                      costs_par_var2_sd,
-                      staff_time_var2,
-                      staff_time_var2_sd,
-                      counts_par_var2,
-                      counts_par_var2_sd,
                       delta_ed_var2,
                       delta_ed_var2_sd,
                       delta_ed_ext_var2,
@@ -1988,28 +1993,32 @@ sim.data1 <- function(nsims = 1e2,
                       teach_ben_new_var2_sd,
                       n_students_var2,
                       n_students_var2_sd,
-                      unit_cost_local_var2,
-                      unit_cost_local_var2_sd,
-                      unit_cost_local_new_var2,
-                      unit_cost_local_new_var2_sd,
                       years_of_treat_0_var2,
                       years_of_treat_0_var2_sd,
                       years_of_treat_t_var2,
                       years_of_treat_t_var2_sd,
-                      tax_var2,
-                      tax_var2_sd,
-                      periods_var2,
-                      costs_data_var2 = costs_data,
-                      new_costs_var2,
-                      countries_var2
+                      unit_cost_local_var2,
+                      unit_cost_local_var2_sd,
+                      unit_cost_local_new_var2,
+                      unit_cost_local_new_var2_sd,
+                      costs_par_var2,
+                      costs_par_var2_sd,
+                      counts_par_var2,
+                      counts_par_var2_sd,
+
+                      staff_time_var2,      # Guesswork
+                      staff_time_var2_sd,
+                      
+                      new_costs_var2      # Harmless. DELETE?
                       ) {
     start_time <- Sys.time()
     ################
     ###### Draws
     ################
     set.seed(142857)
-    #draw_vals <- function(all_the_sos){}
     #Defaoult dist: normal, default sd: 0.1* mean
+    #
+    # Sources are separated into: data, research and guess work 
     ## Data
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2,
                                   sd = gov_bonds_var2_sd)
@@ -2033,7 +2042,6 @@ sim.data1 <- function(nsims = 1e2,
     growth_rate_sim <-      rnorm(nsims, growth_rate_var2, growth_rate_var2_sd)
 
     ex_rate_sim <-          rnorm(nsims, ex_rate_var2, ex_rate_var2_sd)
-    # ex_rate_new_sim
     tax_sim <-              rnorm(nsims, tax_var2, tax_var2_sd)
 
     unit_cost_local_sim <-  rnorm(nsims, unit_cost_local_var2,
@@ -2051,7 +2059,7 @@ sim.data1 <- function(nsims = 1e2,
     ## Research
     aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
-    aux2 <- lapply(1:2,function(x) c(lambda1_var2[x], aux1[x] ) )
+    aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], aux1[x] ) )
     lambda1_sim <- sapply(aux2,
                           function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
     lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)
@@ -2164,6 +2172,7 @@ sim.data1 <- function(nsims = 1e2,
     #computing unit cost for each simulation draw
     costs1_df_sim <- NULL
 
+    #building "nsims" simulated data sets (corresponding to costs_data)
     for (aux1_i in 1:nsims){
       costs1_df_sim[[aux1_i]] <- data.frame(
         "Country" = costs_data_var2$Country,
@@ -2176,15 +2185,16 @@ sim.data1 <- function(nsims = 1e2,
     ###### Runs    
     ################
 
+    #Vectors to store the results of each simulation 
     a1_tax_sim           <- rep(NA, nsims) #a1_tax
     a1_x_tax_sim         <- rep(NA, nsims) #a1_x_tax
     a1_all_sim           <- rep(NA, nsims) #a1_all
     a1_x_all_sim         <- rep(NA, nsims) #a1_x_all
-    klps4_1_sim          <- rep(NA, nsims) #a2_tax
-    klps4_2_sim          <- rep(NA, nsims) #a2_all
-    ea1_sim              <- rep(NA, nsims) #a3_inc_a1_all
-    ea2_sim              <- rep(NA, nsims) #a3_inc_a1_all_x
-    ea3_sim              <- rep(NA, nsims) #a3_inc_a2_all_mpe
+    a2_tax_sim           <- rep(NA, nsims) #a2_tax
+    a2_all_sim           <- rep(NA, nsims) #a2_all
+    a3_inc_a1_all_sim    <- rep(NA, nsims) #a3_inc_a1_all
+    a3_inc_a1_all_x_sim  <- rep(NA, nsims) #a3_inc_a1_all_x
+    a3_inc_a2_all_sim    <- rep(NA, nsims) #a3_inc_a2_all_mpe
 
 
     for (i in 1:nsims) {
@@ -2229,7 +2239,7 @@ sim.data1 <- function(nsims = 1e2,
                 tax_var1 = tax_sim[i],
                 periods_var1 = periods_so,
                 df_costs_var1 = costs1_df_sim[[i]],
-                new_costs_var1 = new_costs_var2,
+                new_costs_var1 = new_costs_var2,    # Harmless. DELETE?
                 countries_var1 = countries_var2
                 ),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
@@ -2241,44 +2251,43 @@ sim.data1 <- function(nsims = 1e2,
       # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
       a1_x_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
       #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
-      klps4_1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
+      a2_tax_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
       #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
-      klps4_2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
+      a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
       # EA1: no externality NPV using EAs costs
-      ea1_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
+      a3_inc_a1_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
       # EA2: yes externality NPV using EAs costs
-      ea2_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prev_in, costs_var = costs2_ea_in)
+      a3_inc_a1_all_x_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prev_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=EA
-      ea3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
-
+      a3_inc_a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
     }
 
     total_time <- Sys.time() - start_time
 
     return( list(
-      "a1_tax_sim"        = a1_tax_sim,         
+      "a1_tax_sim"          = a1_tax_sim,         
       "a1_x_tax_sim"        = a1_x_tax_sim,         
-      "a1_all_sim"        = a1_all_sim,         
+      "a1_all_sim"          = a1_all_sim,         
       "a1_x_all_sim"        = a1_x_all_sim,         
-      "klps4_1_sim"        = klps4_1_sim,        
-      "klps4_2_sim"        = klps4_2_sim,        
-      "ea1_sim"            = ea1_sim,            
-      "ea2_sim"            = ea2_sim,            
-      "ea3_sim"            = ea3_sim,            
-      "total_time"         = total_time
+      "a2_tax_sim"          = a2_tax_sim,        
+      "a2_all_sim"          = a2_all_sim,        
+      "a3_inc_a1_all_sim"   = a3_inc_a1_all_sim,            
+      "a3_inc_a1_all_x_sim" = a3_inc_a1_all_x_sim,            
+      "a3_inc_a2_all_sim"   = a3_inc_a2_all_sim,            
+      "total_time"          = total_time
     ) )
 }
 
 policy_estimates <- c(
   "a1_tax_sim",
-  "a1_x_tax_sim"         ,
-  "a1_all_sim"         ,
-  "a1_x_all_sim"         ,
-  "klps4_1_sim"        ,
-  "klps4_2_sim"        ,
-  "ea1_sim"            ,
-  "ea2_sim"            ,
-  "ea3_sim"            
+  "a1_x_tax_sim",
+  "a1_all_sim",
+  "a1_x_all_sim",
+  "a2_tax_sim",
+  "a2_all_sim",
+  "a3_inc_a1_all_sim",
+  "a3_inc_a1_all_x_sim",
+  "a3_inc_a2_all_sim"            
 )
 
 policy_estimates_text <- c(
@@ -2292,18 +2301,6 @@ policy_estimates_text <- c(
   "A3. All income of A1, with ext.",
   "A3. All income of A2. Main Policy Estimate"
   )
-
-# c(
-#   "Fiscal effects, 2016(W@W) B & C, no ext",
-#   "Fiscal effects, 2016(W@W) B & C, yes ext",  
-#   "Total effects, 2016(W@W) B & C, no ext",  
-#   "Total effects, 2016(W@W) B & C, yes ext",  
-#   "Fiscal effects, 2019(KLPS4) B & 2016(W@W) C, no ext",   
-#   "Total effects, 2019(KLPS4) B & 2016(W@W) C, no ext",  
-#   "Total effects, 2016(W@W) B & EA C, no ext",  
-#   "Total effects, 2016(W@W) B & EA C, ext",  
-#   "Total effects, 2019(KLPS4) B & EA C, no ext")
-
 
 ```
 
@@ -2437,7 +2434,7 @@ one_run <-
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
            unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
-           new_costs_var1 = new_costs_so,
+           new_costs_var1 = new_costs_so,    # Harmless. DELETE?
            countries_var1 = country_sel_so,
            years_of_treat_0_var1 = years_of_treat_0_so,
            years_of_treat_t_var1 = years_of_treat_t_so,
