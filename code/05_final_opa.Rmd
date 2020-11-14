@@ -4,10 +4,10 @@ date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div>
 editor_options:
   chunk_output_type: console
 output:
-  html_document:
-    df_print: paged
-    toc: yes
-    toc_depth: '3'
+#  html_document:
+#    df_print: paged
+#    toc: yes
+#    toc_depth: '3'
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -113,8 +113,8 @@ knitr::opts_chunk$set(warning = FALSE)
 # Anything under this comment is to create objects that are used in the body of
 # text. Not to be used in the final results (could be deleted). Each of these
 # object should end with the suffix _temp
-# 
-# Use diagrams to represent complex nesting of functions. Example: 
+#
+# Use diagrams to represent complex nesting of functions. Example:
 # # pv_costs_f
 #  ├──── delta_ed_final_f
 #  ├──── interest_f
@@ -292,7 +292,7 @@ knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
 ```
 
 <div class = "divider"><span></span><span>
-# Executive Summary {-}
+Executive Summary
 </span><span></span></div>
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://fhoces.shinyapps.io/shiny_app_test/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.org/bitss/opa-deworming) that contains all the materials to reproduce the report and final output.
@@ -301,6 +301,9 @@ This report describes three approaches to compute the net present value of mass 
 
 Our main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of `r main_pe_so` for a setting with average prevalence and average unit costs (among the countries where Evidence Action has data for). Readers interested in learning about the predicted value for a specific setting are encourage to use the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) components of this OPA.
 
+<div class = "divider"><span></span><span>
+*
+</span><span></span></div>
 
 
 # Open Policy Analysis {-}
@@ -839,7 +842,7 @@ invisible( list2env(chunk_coverage(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 saturation_in <- saturation_in_f()$saturation_in
 
-# Computing values for inline text: 
+# Computing values for inline text:
 
 # pv_benef
 # ├──── earnings1_f
@@ -849,7 +852,7 @@ saturation_in <- saturation_in_f()$saturation_in
 # |      |      └──── wage_0_mo_f()
 # |      |            
 # |      ├──── lambda1_in_f()
-# |      └──── lambda2_in_f() 
+# |      └──── lambda2_in_f()
 # └──── interest_f()
 
 earnings_no_ext_in <- earnings1_f(
@@ -982,8 +985,8 @@ Where:
 
 ```{r cost2, echo = print_code}
 # - inputs: periods (periods_so), additional education (delta_ed_final_in),
-#  discount rate (interest) (varies by approach), cost per student 
-#  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment 
+#  discount rate (interest) (varies by approach), cost per student
+#  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment
 #  (q2_in)
 # - outputs: present value of all costs (pv_costs_f)
 chunk_cost2 <- function(){
@@ -1083,7 +1086,7 @@ K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 # - inputs: teacher salary (teach_sal_so) and benefits (teach_ben_so), number
 # of students (n_students_so), include externalities (include_ext_so), extra ed
 # without ext (delta_ed_so), and extra ed due to ext (delta_ed_ext_so)
-# - outputs: cost per student (cost_per_student_f), and total additional 
+# - outputs: cost per student (cost_per_student_f), and total additional
 # education (delta_ed_final_f)
 chunk_edcosts <- function(){
 ###############################################################################
@@ -1118,7 +1121,7 @@ cost_per_student_in <- cost_per_student_f()
 delta_ed_final_no_ext_in <- delta_ed_final_f(include_ext_var = FALSE)
 delta_ed_final_yes_ext_in <- delta_ed_final_f(include_ext_var = TRUE)
 
-# Computing values for inline text: 
+# Computing values for inline text:
 
 # pv_costs_f
 #  ├──── delta_ed_final_f
@@ -1391,7 +1394,7 @@ get_irr <- function(rate_var) {
      earnings_var = earnings_in_no_ext_new,
      interest_r_var = rate_var,
      periods_var = periods_so
-  ) - 
+  ) -
   pv_costs_f(
      periods_var = periods_so,
      delta_ed_var = delta_ed_in,
@@ -1451,7 +1454,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 ## Approach 3: Combination of Previous Approaches and Input From Key Policy Partners
 
-In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key policy partner to best identify one clear output to inform policy makers. We worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action provided insights on what are the most relevant costs and benefits from the perspectives of policy makers, and on certain aspects of the analysis that could be updated with present-day data. 
+In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key policy partner to best identify one clear output to inform policy makers. We worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action provided insights on what are the most relevant costs and benefits from the perspectives of policy makers, and on certain aspects of the analysis that could be updated with present-day data.
 
 Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length of treatment. Additionally, the relevant costs are constrained to direct costs alone (excluding additional costs on education). Finally this approach uses inputs costs and prevalence that reflect the current settings where Evidence Action is currently supporting deworming interventions. As of 2020, Evidence Action supports deworming interventions in four countries.
 
@@ -1486,10 +1489,10 @@ Where:
 - $\eta_r$: prevalence rates in the new region   
 
 ```{r lambdas_eff, echo = print_code}
-# - inputs: previously estimated treatment effect (lambda1_in_f), prevalence 
-# rates in the original setting (prevalence_0_so), prevalence in the new setting 
-# (prevalence_r_so), countries included in the analysis (country_sel_so) 
-# and their population (country_sel_pop_so), or single input of new prevalence 
+# - inputs: previously estimated treatment effect (lambda1_in_f), prevalence
+# rates in the original setting (prevalence_0_so), prevalence in the new setting
+# (prevalence_r_so), countries included in the analysis (country_sel_so)
+# and their population (country_sel_pop_so), or single input of new prevalence
 # (new_prevalence_r_so)
 # - outputs: effective treatment effect (lambda_eff_f)
 chunk_lambdas_eff<- function(){
@@ -1719,12 +1722,12 @@ Where:
 
 ```{r eq_3, echo=print_code, eval=TRUE}  
 # - inputs: cost data by payer type at the contry/province level by year (df_costs_so)
-#  crosswalk between country/state and region (df_costs_cw_so), treatment counts 
-#  by country/province and year (df_counts_so); staff time adjusment factor 
-#  (staff_time_so), 
-# - outputs: country level cost and population data (costs1_p1_f) and country 
+#  crosswalk between country/state and region (df_costs_cw_so), treatment counts
+#  by country/province and year (df_counts_so); staff time adjusment factor
+#  (staff_time_so),
+# - outputs: country level cost and population data (costs1_p1_f) and country
 #  weights and per capita costs (costs1_p2_f)
-# 
+#
 chunk_cost1_inp <- function(){
 ###############################################################################
 ###############################################################################  
@@ -1737,7 +1740,7 @@ chunk_cost1_inp <- function(){
     # Data cleanning:
     # Add country variable
     # anoying message: https://stackoverflow.com/questions/62140483/how-to-interpret-dplyr-message-summarise-regrouping-output-by-x-override
-    
+
     df_counts_temp <- df_costs_cw_var %>%
       right_join(df_counts_var, by = "Country/State") %>%
       mutate(Country = tolower(Country))
@@ -1755,7 +1758,7 @@ chunk_cost1_inp <- function(){
           group_by(Country, Year) %>%
           summarise("total" = sum(`# dewormed`))
     )
-  
+
     ## Costs
     # Data cleaning:
     # Add country variable
@@ -1779,7 +1782,7 @@ chunk_cost1_inp <- function(){
       summarise("costs_by_payer" =
                   sum(suppressWarnings( as.numeric(Cost) ), na.rm = TRUE))
     )    
-    #sum across payers 
+    #sum across payers
     suppressMessages(            
     country_cost <- costs_by_payer %>%
       group_by(Country) %>%
@@ -1789,7 +1792,7 @@ chunk_cost1_inp <- function(){
     )
     costs_data <- country_cost %>%
        left_join(c_counts, by = "Country")
-    
+
     return( costs_data )
   }
 
@@ -1798,7 +1801,7 @@ chunk_cost1_inp <- function(){
                          country_cost_var = costs_data$costs_by_country,
                          staff_time_var = staff_time_so,
                          country_name_var = costs_data$Country,
-                         select_var = list("india", "kenya", "nigeria", 
+                         select_var = list("india", "kenya", "nigeria",
                                            "vietnam"),
                          other_costs = NULL) {
       # select countries
@@ -1808,9 +1811,9 @@ chunk_cost1_inp <- function(){
       # create country weight
       c_weights <- country_total_var_temp / sum(country_total_var_temp)
       # create country per capita costs, adjusted by staff time
-      per_cap <- country_cost_var_temp * (1 + staff_time_var) / 
+      per_cap <- country_cost_var_temp * (1 + staff_time_var) /
         country_total_var_temp
-      # replace contry costs with new one if there is a new country 
+      # replace contry costs with new one if there is a new country
       # (only count that new country)
       # (the weighthed sum of this scalar will just be the same number)
       if (!is.null(other_costs)) {
@@ -1829,7 +1832,7 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 costs1_p1_in <- costs1_p1_f()
 costs_data <- costs1_p1_in
-costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria", 
+costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
                                               "vietnam"))
 
 ```
@@ -2990,7 +2993,7 @@ rescale <- rescale_so
       annotate("text", x = 2 * median(npv_sim), y = 0.15, label = npv_for_text, size = 4, col = "darkblue")+
       scale_x_continuous(expand = expansion(mult = c(0, 0)), breaks=seq(-1000,2000,500)) +
       scale_y_continuous(expand = expansion(mult = c(0, 0))) +
-      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(), axis.line.x = element_line(color = "#0c2847", size = 0.8),  panel.background = element_blank())
+      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(), axis.line.x = element_line(color = "#0c2847", size = 0.8),  panel.background = element_blank(), panel.spacing = unit(1.5, "cm"))
 
     if (rescale == TRUE) {
       plot1 <- suppressMessages(
