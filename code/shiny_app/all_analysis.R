@@ -1,8 +1,7 @@
 ## ----setup, include=FALSE, purl=TRUE---------------------------------------------------------------------------------------------------
 html_format <- TRUE
 # Loading required libraries
-list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly",
-                      "bookdown", "rootSolve","shinyBS", "shinythemes", "ggplot2")
+list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl", "shinyBS", "shinythemes", "ggplot2")
 
 # sapply(list.of.packages, function(x) pacman::p_load(get(x)))
 

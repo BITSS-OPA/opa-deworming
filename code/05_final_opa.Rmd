@@ -23,7 +23,7 @@ output:
     toc_collapsed: no
     toc_depth: 3
     toc_float: yes
-  word_document: null
+  word_document: true
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
@@ -38,6 +38,8 @@ bibliography: bibliography.bib
 ```{r setup, include=FALSE, purl=TRUE}
 html_format <- TRUE
 # Loading required libraries
+# before deploying in shinyapps.io, we need to remove the following packages:
+# "plotly", "bookdown", "rootSolve"
 list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly",
                       "bookdown", "rootSolve","shinyBS", "shinythemes", "ggplot2")
 

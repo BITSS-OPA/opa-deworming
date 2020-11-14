@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>13 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>14 November, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -23,7 +23,7 @@ output:
     toc_collapsed: no
     toc_depth: 3
     toc_float: yes
-  word_document: null
+  word_document: true
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
@@ -2538,18 +2538,6 @@ unit_test(ea3, 289.751849813911)
 
 <br><br>
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
-
-
-<!-- Maybe the section below goes into the paper about the DW OPA-->
-
-## Possible Benefits of OPA for Deworming  
-
-### No Alternative Facts  
-
-### Low cost of adopting this analysis for other settings
-
-### Clear connection from research to policy analysis  
-
 
 # References
 
