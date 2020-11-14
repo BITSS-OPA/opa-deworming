@@ -1,36 +1,34 @@
 ---
-pdf_document:
-  extra_dependencies: ["xcolor"]
-  fig_caption: false
+title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
 date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div></center>"
+editor_options:
+  chunk_output_type: console
 output:
-  word_document:
-    
-
+#  html_document:
+#    df_print: paged
+#    toc: yes
+#    toc_depth: '3'
   bookdown::html_document2:
-    theme: cerulean
-    highlight: tango
+    code_download: yes
     code_folding: hide
-    code_download: true
+    css: style.css
+    highlight: tango
+    includes:
+      after_body: footer.html
     keep_md: yes
     number_sections: yes
     smooth_scroll: no
+    theme: cerulean
     toc: yes
+    toc_collapsed: no
     toc_depth: 3
     toc_float: yes
-    toc_collapsed: no
-    css: style.css
-    includes:
-      after_body: footer.html
-      
 
-
-editor_options:
-  chunk_output_type: console
-title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-bibliography: bibliography.bib  
-link-citations: true
-
+link-citations: yes
+pdf_document:
+  extra_dependencies: xcolor
+  fig_caption: no
+bibliography: bibliography.bib
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
@@ -285,7 +283,7 @@ knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
 ```
 
 <div class = "divider"><span></span><span>
-# Executive Summary {-}
+Executive Summary
 </span><span></span></div>
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://fhoces.shinyapps.io/shiny_app_test/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.org/bitss/opa-deworming) that contains all the materials to reproduce the report and final output.
@@ -294,6 +292,9 @@ This report describes three approaches to compute the net present value of mass 
 
 Our main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of `r main_pe_so` for a setting with average prevalence and average unit costs (among the countries where Evidence Action has data for). Readers interested in learning about the predicted value for a specific setting are encourage to use the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) components of this OPA.
 
+<div class = "divider"><span></span><span>
+*
+</span><span></span></div>
 
 
 # Open Policy Analysis {-}
@@ -2967,7 +2968,7 @@ rescale <- rescale_so
       annotate("text", x = 2 * median(npv_sim), y = 0.15, label = npv_for_text, size = 4, col = "darkblue")+
       scale_x_continuous(expand = expansion(mult = c(0, 0)), breaks=seq(-1000,2000,500)) +
       scale_y_continuous(expand = expansion(mult = c(0, 0))) +
-      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(), axis.line.x = element_line(color = "#0c2847", size = 0.8),  panel.background = element_blank())
+      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(), axis.line.x = element_line(color = "#0c2847", size = 0.8),  panel.background = element_blank(), panel.spacing = unit(1.5, "cm"))
 
     if (rescale == TRUE) {
       plot1 <- suppressMessages(
