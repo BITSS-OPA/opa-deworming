@@ -4,8 +4,6 @@ date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div>
 editor_options:
   chunk_output_type: console
 output:
-  word_document:
-
 
   bookdown::html_document2:
     code_download: yes
@@ -22,7 +20,7 @@ output:
     toc_collapsed: no
     toc_depth: 3
     toc_float: yes
-
+  word_document: null
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
@@ -32,10 +30,30 @@ bibliography: bibliography.bib
 \def\blue{\color{blue}}
 \def\red{\color{red}}
 
+```{css toc-content, echo = FALSE, eval = FALSE}
+#TOC {
+  right: 270px;
+  margin: 20px 0px 25px 0px;
+}
+
+.main-container {
+    margin-left: 200px;
+}
+
+.tocify {
+  position: -webkit-sticky;
+  position: sticky; 
+  top: 120px; /*Controls where TOC stops when sticky */
+  width: 100% !important;
+  border: none;
+}
+
+```
+
 
 
 ```{r setup, include=FALSE, purl=TRUE}
-html_format <- TRUE
+html_format <- FALSE
 # Loading required libraries
 # before deploying in shinyapps.io, we need to remove the following packages:
 # "plotly", "bookdown", "rootSolve"
