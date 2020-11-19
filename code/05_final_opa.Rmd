@@ -4,6 +4,7 @@ date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div>
 editor_options:
   chunk_output_type: console
 output:
+
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -19,7 +20,7 @@ output:
     toc_collapsed: no
     toc_depth: 3
     toc_float: yes
-  word_document: true
+  word_document: null
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
@@ -29,10 +30,30 @@ bibliography: bibliography.bib
 \def\blue{\color{blue}}
 \def\red{\color{red}}
 
+```{css toc-content, echo = FALSE， eval = FALSE}
+#TOC {
+  right: 270px;
+  margin: 20px 0px 25px 0px;
+}
+
+.main-container {
+    margin-left: 20px;
+}
+
+.tocify {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 120px; /*Controls where TOC stops when sticky */
+  width: 100% !important;
+  border: none;
+}
+
+```
+
 
 
 ```{r setup, include=FALSE, purl=TRUE}
-html_format <- TRUE
+html_format <- FALSE
 # Loading required libraries
 # before deploying in shinyapps.io, we need to remove the following packages:
 # "plotly", "bookdown", "rootSolve"
@@ -2007,7 +2028,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
 
                       staff_time_var2,      # Guesswork
                       staff_time_var2_sd,
-                      
+
                       new_costs_var2        # Harmless. DELETE?
                       ) {
     start_time <- Sys.time()
@@ -2017,7 +2038,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     set.seed(142857)
     #Default dist: normal, default sd: 0.1* mean
     #
-    # Sources are separated into: data, research and guess work 
+    # Sources are separated into: data, research and guess work
     ## Data
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2,
                                   sd = gov_bonds_var2_sd)
@@ -2177,12 +2198,12 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
 
     ######    
     ######    
-    
+
     ################
     ###### Runs    
     ################
 
-    #Vectors to store the results of each simulation 
+    #Vectors to store the results of each simulation
     a1_tax_sim           <- rep(NA, nsims) #a1_tax
     a1_x_tax_sim         <- rep(NA, nsims) #a1_x_tax
     a1_all_sim           <- rep(NA, nsims) #a1_all
@@ -3021,7 +3042,7 @@ if (rescale == TRUE) {
   plot1 <- suppressMessages(
     plot1 +
       coord_cartesian(xlim =  c( quantile(npv_sim, 0.01),
-                                 quantile(npv_sim, 0.99) ), 
+                                 quantile(npv_sim, 0.99) ),
                       ylim =  c( 0, 1.2 )
                       )
     )
