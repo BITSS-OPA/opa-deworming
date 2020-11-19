@@ -30,14 +30,14 @@ bibliography: bibliography.bib
 \def\blue{\color{blue}}
 \def\red{\color{red}}
 
-```{css toc-content, echo = FALSE, eval = FALSE}
+```{css toc-content, echo = FALSE， eval = FALSE}
 #TOC {
   right: 270px;
   margin: 20px 0px 25px 0px;
 }
 
 .main-container {
-    margin-left: 200px;
+    margin-left: 20px;
 }
 
 .tocify {
