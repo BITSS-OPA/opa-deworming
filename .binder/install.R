@@ -1,11 +1,11 @@
 # packages
 
+install.packages("bookdown")
 install.packages("ggplot2")
 install.packages("gh")
 install.packages("glue")
 install.packages("haven")
 install.packages("here")
-install.packages("hrbrthemes")
 install.packages("kableExtra")
 install.packages("knitr")
 install.packages("plotly")
