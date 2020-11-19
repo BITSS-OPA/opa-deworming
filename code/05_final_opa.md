@@ -1,13 +1,9 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>14 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>19 November, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
-#  html_document:
-#    df_print: paged
-#    toc: yes
-#    toc_depth: '3'
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
