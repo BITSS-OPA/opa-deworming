@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>17 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>18 November, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -30,25 +30,7 @@ bibliography: bibliography.bib
 \def\blue{\color{blue}}
 \def\red{\color{red}}
 
-<style type="text/css">
-#TOC {
-  right: 270px;
-  margin: 20px 0px 25px 0px;
-}
 
-.main-container {
-    margin-left: 200px;
-}
-
-.tocify {
-  position: -webkit-sticky;
-  position: sticky; 
-  top: 120px; /*Controls where TOC stops when sticky */
-  width: 100% !important;
-  border: none;
-}
-
-</style>
 
 
 

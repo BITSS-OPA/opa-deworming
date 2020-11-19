@@ -1,0 +1,21 @@
+install.packages(
+  "ggplot2",
+  "gh",
+  "glue",
+  "haven",
+  "here",
+  "hrbrthemes",
+  "kableExtra",
+  "knitr",
+  "plotly",
+  "readr",
+  "readxl",
+  "rmarkdown",
+  "rootSolve",
+  "rsconnect",
+  "shiny",
+  "shinyBS",
+  "shinyjs",
+  "shinythemes",
+  "tidyverse"
+)
