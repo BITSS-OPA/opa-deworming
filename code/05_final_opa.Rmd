@@ -30,25 +30,7 @@ bibliography: bibliography.bib
 \def\blue{\color{blue}}
 \def\red{\color{red}}
 
-```{css toc-content, echo = FALSE， eval = FALSE}
-#TOC {
-  right: 270px;
-  margin: 20px 0px 25px 0px;
-}
 
-.main-container {
-    margin-left: 20px;
-}
-
-.tocify {
-  position: -webkit-sticky;
-  position: sticky; 
-  top: 120px; /*Controls where TOC stops when sticky */
-  width: 100% !important;
-  border: none;
-}
-
-```
 
 
 
