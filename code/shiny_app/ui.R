@@ -45,7 +45,7 @@ shinyUI(
                             h4(strong("Description of Results")),
                             p("We simulate finding the lifetime income effects on
                               treated children many times, then plot the values
-                              to create this curve. The height of the curve represents
+                              to create this figure. The height of the curve represents
                               how often an outcome appeared, i.e. the highest point
                               means that particular value appeared the most frequently.
                               The blue line indicates that half of all values are
@@ -82,20 +82,20 @@ shinyUI(
                  )
                ),
                tabPanel(
-                 "Key Assumptions", #TO DO: repeat all code but with costs and prevalence as reactive only
+                 "Key Assumptions", 
                  sidebarPanel(
                    fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 400px; position:relative;",
                             withMathJax(),
                             useShinyjs(),
-                            helpText("Choose the indicator to be your policy estimate"),
+                            helpText("The net income effects of deworming have been calculated in differetn ways. Choose among the different approaches: "),
                             selectInput("policy_est_ka", "Policy Estimates",
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A1. Tax revenue' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(), br(),
-                                       "Benefits: Baird approach with tax included but not externalities", br(),br(),
-                                       "Costs: Baird approach with no externalities"
+                              helpText("Approach 1. Welfare measured as additional tax revenue.", br(),
+                                       " - Benefits: tax revenue over predicted effect on earnings. Data from 10 year follow-up. No externalities", br(),
+                                       " - Costs: costs of treatment in Kenya in 1998 plus additional costs due to more schooling"
                                        )
                             ),
 

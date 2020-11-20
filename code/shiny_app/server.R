@@ -705,7 +705,7 @@ shinyServer( function(input, output, session) {
     total_time <- call_plot_f("all")[[3]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = paste0(policy_estimates_text[position], ". ",
                              "N = ", input$param1, " simulations. Takes ",
                              round(total_time, 1)," ",attributes(total_time)$units )  ) 
@@ -721,7 +721,7 @@ shinyServer( function(input, output, session) {
     
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = paste0(policy_estimates_text[position], ". ")
            )
     print(plot1)  
@@ -734,7 +734,7 @@ shinyServer( function(input, output, session) {
     position <- call_plot_f("main")[[2]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = "Distribution of the Net Present Value of Deworming Interventions"
            ) 
     print(plot1)  
