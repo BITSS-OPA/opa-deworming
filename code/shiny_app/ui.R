@@ -34,8 +34,9 @@ source("all_analysis.R")
 shinyUI(
   fluidPage( theme = shinytheme("cerulean"),
     navbarPage("Open Policy Analysis for Deworming Interventions: Open Output Component",
+               # Begin main policy estimate tab ---- 
                tabPanel(
-                 "Main Policy Estimate",
+                "Main Policy Estimate",
                  sidebarPanel(fluidRow(
                    column(12, align= "center",
                    a(img(src="bitss_just_logo_transparent.png", width="20%", height="auto"), href="https://bitss.org"),
@@ -81,86 +82,127 @@ shinyUI(
                    )
                  )
                ),
+               # end of main policy estimate tab ---- 
                tabPanel(
                  "Key Assumptions", 
                  sidebarPanel(
                    fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 400px; position:relative;",
                             withMathJax(),
                             useShinyjs(),
-                            helpText("The net income effects of deworming have been calculated in differetn ways. Choose among the different approaches: "),
+                   # Begin upper left box ----
+                            helpText("The net income effects of deworming have been calculated in different ways. 
+                                     Choose among different approaches: "),
                             selectInput("policy_est_ka", "Policy Estimates",
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A1. Tax revenue' ",
-                              helpText("Approach 1. Welfare measured as additional tax revenue.", br(),
-                                       " - Benefits: tax revenue over predicted effect on earnings. Data from 10 year follow-up. No externalities", br(),
-                                       " - Costs: costs of treatment in Kenya in 1998 plus additional costs due to more schooling"
+                              helpText(
+                                "Approach 1.1. Welfare measured as additional tax revenue.", br(),
+                                " - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10 year follow-up. No externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
                                        )
                             ),
 
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A1. With externalities. Tax' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(), br(),
-                                       "Benefits: Baird approach with both tax and externalities included", br(),br(),
-                                       "Costs: Baird approach with externalities included")
+                              helpText(
+                                "Approach 1.2. Welfare measured as additional tax revenue.", br(),
+                                " - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10 year follow-up. Including externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
-
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A1. All income' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
-                                       "Benefits: Baird approach without tax or externalities", br(),br(),
-                                       "Costs: Baird approach with no externalities")
+                              helpText(
+                                "Approach 1.3. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10 year follow-up. No externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
 
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A1. With ext. All income' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
-                                       "Benefits: Baird approach without tax but with externalities", br(),br(),
-                                       "Costs: Baird approach with externalities")
+                              helpText(
+                                "Approach 1.4. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings. Including externalities.
+                                   Data from 10 year follow-up. Including externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A2. Tax' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
-                                       "Benefits: Hamory approach (KLPS) with tax but not externalities", br(),br(),
-                                       "Costs: Hamory approach (KLPS) with no externalities")
+                              helpText(
+                                "Approach 2.1. Welfare measured as additional tax revenue.", br(),
+                                " - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10, 15 and 20 year follow-up. No externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                                       )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A2. All income' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
-                                       "Benefits: Hamory approach (KLPS) without tax or externalities", br(),br(),
-                                       "Costs: Hamory approach (KLPS) with no externalities")
+                              helpText(
+                                "Approach 2.2. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10, 15 and 20 year follow-up. No externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A3. All income of A1' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
-                                       "Benefits: Baird approach without tax or externalities but with prevalence and length of treatment considered", br(),br(),
-                                       "Costs: Evidence Action (EA) Approach")
+                              helpText(
+                                "Approach 3.1. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10 year follow-up. No externalities. 
+                                Adjusted for prevalence and length of treatment", br(),
+                                " - Costs: current implementation costs in several settings."
+                              )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A3. All income of A1, with ext.' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
-                                       "Benefits: Baird approach without tax but with externalities, prevalence and length of treatment considered", br(),br(),
-                                       "Costs: Evidence Action (EA) Approach")
+                              helpText(
+                                "Approach 3.2. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10 year follow-up. Including externalities. 
+                                Adjusted for prevalence and length of treatment", br(),
+                                " - Costs: current implementation costs in several settings."
+                              )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est_ka == 'A3. All income of A2. Main Policy Estimate' ",
-                              helpText("When we calculate NPV, we make assumptions as below:", br(),br(),
-                                       "Benefits: Hamory approach (KLPS) without tax or externalities but with prevalence and length of treatment considered", br(),br(),
-                                       "Costs: Evidence Action (EA) Approach")
+                              helpText(
+                                "Approach 3.3. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10, 15 and 20 year follow-up. No externalities. 
+                                Adjusted for prevalence and length of treatment", br(),
+                                " - Costs: current implementation costs in several settings."
+                              )
                             )
-
-
-                   ),
-                   fluidRow(id = "tPanel1_ka",style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;",
-                            numericInput("param35", label = h3("Unit costs in new country"), value = round(costs2_ea_in,2)),
-
-                            # checkboxGroupInput("param36", "Choose countries:",
-                            #                    choiceNames =
-                            #                      list("India", "Kenya", "Nigeria", "Vietnam"),
-                            #                    choiceValues =
-                            #                      list("india", "kenya", "nigeria", "vietnam"),
-                            #                    selected = list("india", "kenya", "nigeria", "vietnam")  ),
+                            ),
+                   # end upper left box ----
+                   fluidRow(id = "tPanel1_ka", 
+                            style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;", 
+                            numericInput(
+                              "param35",
+                              label = h3("Unit costs in new country"),
+                              value = round(costs2_ea_in, 2)
+                            ),
+  #AQUI VOY
+                              # checkboxGroupInput("param36", "Choose countries:",
+                              #                    choiceNames =
+                              #                      list("India", "Kenya", "Nigeria", "Vietnam"),
+                              #                    choiceValues =
+                              #                      list("india", "kenya", "nigeria", "vietnam"),
+                              #                    selected = list("india", "kenya", "nigeria", "vietnam")  ),
                             helpText("For reference:", br(),
                                      paste("Unit costs in India is", costs_temp_india), br(),
                                      paste("Unit costs in Kenya is", costs_temp_kenya), br(),
