@@ -65,7 +65,10 @@ shinyUI(
                             p("This visualization is one of three key components of an",
                               tags$a(href="http://www.bitss.org/opa/projects/deworming/","Open Policy Analysis (OPA)"),
                             "on the costs and benefits of
-                            mass deworming interventions in various settings. The other two components correspond to",
+                            mass deworming interventions in various settings. FOR EXAMPLE:" ),
+                            p("- item1"),
+                            p("- item2"),
+                            p("The other two components correspond to",
                             tags$a(href="https://rpubs.com/fhoces/547979", "detailed documentation"),
                             " of all the analysis, and",
                             tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "all the materials"),
