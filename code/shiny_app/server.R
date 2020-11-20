@@ -4,6 +4,20 @@ library(shiny)
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
+  #Show/hide SDs code. Not sure where to put this code
+  onclick("toggleDataSDs",
+          lapply(c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
+                            "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
+                            "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), toggle, anim=TRUE))
+  
+  onclick("toggleResearchSDs",
+          lapply(c("SD22", "SD23", "SD24", "SD25", "SD26", "SD27", "SD28",
+                            "SD29", "SD30", "SD31", "SD32"), toggle, anim=TRUE))
+  
+  onclick("toggleGWSDs",
+          lapply(c("SD33","SD34", "SD35", "SD36", "SD37", "SD38"), toggle, anim=TRUE))
+  
+  
   reactive.data1 <- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    
@@ -76,7 +90,6 @@ shinyServer( function(input, output, session) {
       prevalence_0_var2_sd = as.numeric(input$param30_1), 
       prevalence_r_var2 = as.numeric(input$param31),    
       prevalence_r_var2_sd = as.numeric(input$param31_1),                                                                         
-      new_prev_r_var2 = as.numeric(input$param37), #HERE IS PREV
       counts_par_var2 = as.numeric(input$param32), 
       counts_par_var2_sd = as.numeric(input$param32_1),
       staff_time_var2 = as.numeric(input$param33), 
@@ -84,6 +97,7 @@ shinyServer( function(input, output, session) {
       costs_par_var2 = as.numeric(input$param34), 
       costs_par_var2_sd = as.numeric(input$param34_1), 
       new_costs_var2 = as.numeric(input$param35),
+      new_prev_r_var2 = as.numeric(input$param37),
       countries_var2 = list("india", "kenya", "nigeria", "vietnam"), # = input$param36  to make it interactive
       
       
@@ -458,108 +472,7 @@ shinyServer( function(input, output, session) {
       
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
-    } else if (input$policy_est == "Main Policy Estimate. CEA format") {
-      list_hide <- c("param19",
-                     "param19_1",
-                     "param21_1",
-                     "param21_2",
-                     "param22",
-                     "param22_1",
-                     "param23",
-                     "param23_1",
-                     "param24",
-                     "param24_1",
-                     "param26",
-                     "param26_1",
-                     "param27",
-                     "param27_1",
-                     "param29_1",
-                     "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1",  
-                     "param16", 
-                     "param16_1",
-                     "param4",
-                     "param4_1",
-                     "param5",
-                     "param5_1",
-                     "param6",
-                     "param6_1",
-                     "param7",
-                     "param7_1",
-                     "param8",
-                     "param8_1",
-                     "param9",
-                     "param9_1",
-                     "param10",
-                     "param10_1",
-                     "param12",
-                     "param12_1",
-                     "param13",
-                     "param13_1", 
-                     "param18_1",                                         
-                     "param18_1_1",
-                     "param18_2",
-                     "param18_2_1",
-                     "param33",
-                     "param33_1", 
-                     "param15", 
-                     "param15_1")
-      list_show <- list_master[ - which(list_master %in% list_hide)]
-      
-    } else if (input$policy_est == "Main Policy Estimate. RCEA format") {
-      list_hide <- c("param19",
-                     "param19_1",
-                     "param21",
-                     "param21_1",
-                     "param22_1",
-                     "param22_2",
-                     "param23",
-                     "param23_1",
-                     "param24",
-                     "param24_1",
-                     "param26",
-                     "param26_1",
-                     "param27",
-                     "param27_1",
-                     "param29_1",
-                     "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1",  
-                     "param16", 
-                     "param16_1",
-                     "param4",
-                     "param4_1",
-                     "param5",
-                     "param5_1",
-                     "param6",
-                     "param6_1",
-                     "param7",
-                     "param7_1",
-                     "param8",
-                     "param8_1",
-                     "param9",
-                     "param9_1",
-                     "param10",
-                     "param10_1",
-                     "param12",
-                     "param12_1",
-                     "param13",
-                     "param13_1", 
-                     "param18_1",                                         
-                     "param18_1_1",
-                     "param18_2",
-                     "param18_2_1",
-                     "param33",
-                     "param33_1", 
-                     "param15", 
-                     "param15_1")
-      list_show <- list_master[ - which(list_master %in% list_hide)]
-    }
+    } 
     sapply(list_hide, 
            function(x) hideElement(id = x) ) 
     sapply(list_show, 
@@ -590,7 +503,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:1}
+            
             \\tag{1}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
@@ -609,7 +522,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:2}
+            
             \\tag{2}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
@@ -627,7 +540,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:3}
+            
             \\tag{3}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  
@@ -646,7 +559,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:4}
+            
             \\tag{4}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  )
@@ -663,7 +576,7 @@ shinyServer( function(input, output, session) {
                       \\left[\\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       \\right]
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:5}
+            
             \\tag{5}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details'))
@@ -679,7 +592,7 @@ shinyServer( function(input, output, session) {
                       \\left[\\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       \\right]
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:6}
+            
             \\tag{6}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details' ))
@@ -693,7 +606,7 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:7}
+            
             \\tag{7}
             \\end{equation}
              $$ \n See approach 3 in the documentation component for more details'))
@@ -707,7 +620,7 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:8}
+            
             \\tag{8}
             \\end{equation}
             $$ \n See approach 3 in the documentation component for more details"))
@@ -722,63 +635,60 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{Costs (C)}}
-            \\label{eq:9}
+            
             \\tag{9}
             \\end{equation}
               $$ \n See approach 3 in the documentation component for more details"
         ))
-      }else if (input$policy_est == "Main Policy Estimate. CEA format"){
-        withMathJax(helpText("$$
-                                 \\begin{equation}
-                                 CEA_{deworming} = \\frac{B (1 + F_{0})}{C}
-                                 \\label{eq:10}
-                                 \\tag{10}
-                                 \\end{equation}
-                                 $$ 
-                                 \n Benefits (B) and costs (C) as defined in preferred policy estimate (A3-2020)"))
-      }else if (input$policy_est == "Main Policy Estimate. RCEA format"){
-        withMathJax(helpText(
-          "$$
-                                 \\begin{equation}
-                                 RCEA = \\frac{CEA_{deworming}}{CEA_{cash}}
-                                 \\label{eq:11}
-                                 \\tag{11}
-                                 \\end{equation}
-                                 $$  \n CEA as define in equation 10, CEA_{cash} from SOURCE")
-        )
       }
     } 
   })
   
   # Define a function that generates policy estimate plots
-  call_plot_f <- function(mainPlot) {
+  call_plot_f <- function(plotType) {
     npv_sim_all <- reactive.data1()
     
     total_time <- npv_sim_all$total_time
-    position <- which( policy_estimates_text == input$policy_est)
-    npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-    npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
-    npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
     
     
-    if (mainPlot == TRUE){
+    
+    if (plotType == "main"){
+      position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
+      npv_sim <- npv_sim_all[[ policy_estimates[position] ]] 
       npv_for_text <- paste(round(median(npv_sim), 2))
       npv_for_text2 <- NULL
+      
     } 
+    
+    if (plotType == "ka"){
+      position <- which( policy_estimates_text == input$policy_est_ka)
+      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+      npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
+      npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+    }
+    
+    if (plotType == "all"){
+      position <- which( policy_estimates_text == input$policy_est)
+      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+      npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
+      npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+    }
     
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau", lwd = 1) +
-      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black","blue"),lwd = c(1, 2)) +
+                       alpha = 1/2, ..scaled..), kernel = "gau", lwd = 1, fill = "#007ba7", color = "darkblue", alpha = 0.3) +
+      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black","darkblue"),lwd = c(1, 1), linetype = c("solid", "dashed")) +
       #coord_cartesian(xlim = c(-10,800))) +
       xlim(range(density(npv_sim)$x))+
       guides(alpha = "none", colour="none") +
+      scale_x_continuous(expand = expansion(mult = c(0, 0))) + scale_y_continuous(expand = expansion(mult = c(0, 0))) +
       
-      annotate("text", x = 2.5 * median(npv_sim), y = 0.3, label = npv_for_text, size = 6, color = "blue")+
-      annotate("text", x = 2.5 * median(npv_sim), y = 0.2, label = npv_for_text2, size = 6, color = "blue")+
+      
+      annotate("text", x = 2.5 * median(npv_sim), y = 0.3, label = npv_for_text, size = 6, color = "darkblue")+
+      annotate("text", x = 2.5 * median(npv_sim), y = 0.2, label = npv_for_text2, size = 6, color = "darkblue")+
       theme(axis.ticks = element_blank(), axis.text.x = element_text(size = 18), axis.title.x = element_text(size = 18), axis.text.y = element_blank(),  
             plot.title = element_text(size = 24),
-            plot.subtitle = element_text(size = 20))
+            plot.subtitle = element_text(size = 20),panel.background = element_blank(), axis.line.x = element_line(color = "black", size = 1.5)) 
     if (input$rescale == TRUE) {
       plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
     }
@@ -790,15 +700,15 @@ shinyServer( function(input, output, session) {
   output$plot1 <- renderPlot({      
     
     
-    plot1 <- call_plot_f(FALSE)[[1]]
-    position <- call_plot_f(FALSE)[[2]]
-    total_time <- call_plot_f(FALSE)[[3]]
+    plot1 <- call_plot_f("all")[[1]]
+    position <- call_plot_f("all")[[2]]
+    total_time <- call_plot_f("all")[[3]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = paste0(policy_estimates_text[position], ". ",
                              "N = ", input$param1, " simulations. Takes ",
-                             round(total_time, 1)," ",attributes(total_time)$unit )  ) 
+                             round(total_time, 1)," ",attributes(total_time)$units )  ) 
       
     print(plot1)  
   }, height = 500, width = 750 
@@ -806,8 +716,8 @@ shinyServer( function(input, output, session) {
   
   # Generate Plot with Key Assumptions
   output$plot1_ka <- renderPlot({      
-    plot1 <- call_plot_f(FALSE)[[1]]
-    position <- call_plot_f(FALSE)[[2]]
+    plot1 <- call_plot_f("ka")[[1]]
+    position <- call_plot_f("ka")[[2]]
     
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
@@ -820,8 +730,8 @@ shinyServer( function(input, output, session) {
   
   # Generate Main Policy Estimate Plot 
   output$plot1_main <- renderPlot({      
-    plot1 <- call_plot_f(TRUE)[[1]]
-    position <- call_plot_f(TRUE)[[2]]
+    plot1 <- call_plot_f("main")[[1]]
+    position <- call_plot_f("main")[[2]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Lifetime Income Effects of Deworming for Each Treated Children",
