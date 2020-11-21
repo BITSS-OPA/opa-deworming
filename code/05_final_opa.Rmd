@@ -4,7 +4,6 @@ date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div>
 editor_options:
   chunk_output_type: console
 output:
-
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -18,9 +17,11 @@ output:
     theme: cerulean
     toc: yes
     toc_collapsed: no
-    toc_depth: 3
+    toc_depth:  3
     toc_float: yes
+  
   word_document: null
+  
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
