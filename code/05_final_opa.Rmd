@@ -2929,7 +2929,6 @@ all_res_100_sims <- c(
 296.202699823397
 )
 
-
 all_res_1000_sims <- c(
   8.58299390276434,
   48.9019563903777,
@@ -2999,7 +2998,7 @@ plot1 <- ggplot() +
   guides(alpha = "none", colour="none") +
   labs(y = NULL,
        x = "Net Present Value (Benefits -  Costs)" ,
-       title = "Lifetime Income Effects of Deworming for Each Treated Children",
+       title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
        subtitle = "Distribution of the Net Present Value of Deworming Interventions"
        ) +
   annotate(
