@@ -503,7 +503,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:1}
+            
             \\tag{1}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
@@ -522,7 +522,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:2}
+            
             \\tag{2}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  ) 
@@ -540,7 +540,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:3}
+            
             \\tag{3}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  
@@ -559,7 +559,7 @@ shinyServer( function(input, output, session) {
                       \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:4}
+            
             \\tag{4}
             \\end{equation}
             $$ \n See approach 1 in the documentation component for more details'  )
@@ -576,7 +576,7 @@ shinyServer( function(input, output, session) {
                       \\left[\\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       \\right]
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:5}
+            
             \\tag{5}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details'))
@@ -592,7 +592,7 @@ shinyServer( function(input, output, session) {
                       \\left[\\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
                       \\right]
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:6}
+            
             \\tag{6}
             \\end{equation}
                                  $$ \n See approach 2 in the documentation component for more details' ))
@@ -606,7 +606,7 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:7}
+            
             \\tag{7}
             \\end{equation}
              $$ \n See approach 3 in the documentation component for more details'))
@@ -620,7 +620,7 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{cost of deworming medication}}
-            \\label{eq:8}
+            
             \\tag{8}
             \\end{equation}
             $$ \n See approach 3 in the documentation component for more details"))
@@ -635,7 +635,7 @@ shinyServer( function(input, output, session) {
                       \\underbrace{
                       \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{Costs (C)}}
-            \\label{eq:9}
+            
             \\tag{9}
             \\end{equation}
               $$ \n See approach 3 in the documentation component for more details"
@@ -676,23 +676,19 @@ shinyServer( function(input, output, session) {
     
     plot1 <- ggplot() +
       geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau", lwd = 1) +
-      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black","blue"),lwd = c(1, 2)) +
+                       alpha = 1/2, ..scaled..), kernel = "gau", lwd = 1, fill = "#007ba7", color = "darkblue", alpha = 0.3) +
+      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black","darkblue"),lwd = c(1, 1), linetype = c("solid", "dashed")) +
       #coord_cartesian(xlim = c(-10,800))) +
       xlim(range(density(npv_sim)$x))+
       guides(alpha = "none", colour="none") +
-      
-<<<<<<< Updated upstream
-      annotate("text", x = 2.5 * median(npv_sim), y = 0.3, label = npv_for_text, size = 6, color = "blue")+
-      annotate("text", x = 2.5 * median(npv_sim), y = 0.2, label = npv_for_text2, size = 6, color = "blue")+
-=======
+      scale_x_continuous(expand = expansion(mult = c(0, 0))) + scale_y_continuous(expand = expansion(mult = c(0, 0))) +
       
       annotate("text", x = 1.9 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6, color = "darkblue")+
       annotate("text", x = 1.9 * median(npv_sim), y = 0.15, label = npv_for_text2, size = 6, color = "darkblue")+
->>>>>>> Stashed changes
+
       theme(axis.ticks = element_blank(), axis.text.x = element_text(size = 18), axis.title.x = element_text(size = 18), axis.text.y = element_blank(),  
             plot.title = element_text(size = 24),
-            plot.subtitle = element_text(size = 20))
+            plot.subtitle = element_text(size = 20),panel.background = element_blank(), axis.line.x = element_line(color = "black", size = 1.5)) 
     if (input$rescale == TRUE) {
       plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
     }
@@ -709,7 +705,7 @@ shinyServer( function(input, output, session) {
     total_time <- call_plot_f("all")[[3]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = paste0(policy_estimates_text[position], ". ",
                              "N = ", input$param1, " simulations. Takes ",
                              round(total_time, 1)," ",attributes(total_time)$units )  ) 
@@ -725,7 +721,7 @@ shinyServer( function(input, output, session) {
     
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = paste0(policy_estimates_text[position], ". ")
            )
     print(plot1)  
@@ -738,7 +734,7 @@ shinyServer( function(input, output, session) {
     position <- call_plot_f("main")[[2]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Lifetime Income Effects of Deworming for Each Treated Children",
+           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
            subtitle = "Distribution of the Net Present Value of Deworming Interventions"
            ) 
     print(plot1)  
