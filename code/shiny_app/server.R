@@ -655,7 +655,7 @@ shinyServer( function(input, output, session) {
     if (plotType == "main"){
       position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
       npv_sim <- npv_sim_all[[ policy_estimates[position] ]] 
-      npv_for_text <- paste(round(median(npv_sim), 2))
+      npv_for_text <- paste("Median NPV:", round(median(npv_sim), 2))
       npv_for_text2 <- NULL
       
     } 
@@ -682,8 +682,14 @@ shinyServer( function(input, output, session) {
       xlim(range(density(npv_sim)$x))+
       guides(alpha = "none", colour="none") +
       
+<<<<<<< Updated upstream
       annotate("text", x = 2.5 * median(npv_sim), y = 0.3, label = npv_for_text, size = 6, color = "blue")+
       annotate("text", x = 2.5 * median(npv_sim), y = 0.2, label = npv_for_text2, size = 6, color = "blue")+
+=======
+      
+      annotate("text", x = 1.9 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6, color = "darkblue")+
+      annotate("text", x = 1.9 * median(npv_sim), y = 0.15, label = npv_for_text2, size = 6, color = "darkblue")+
+>>>>>>> Stashed changes
       theme(axis.ticks = element_blank(), axis.text.x = element_text(size = 18), axis.title.x = element_text(size = 18), axis.text.y = element_blank(),  
             plot.title = element_text(size = 24),
             plot.subtitle = element_text(size = 20))
