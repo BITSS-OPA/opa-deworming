@@ -41,6 +41,23 @@ shinyUI(
                    column(12, align= "center",
                    a(img(src="bitss_just_logo_transparent.png", width="20%", height="auto"), href="https://bitss.org"),
                    a(img(src="cega_transparent.png", width="70%", height="auto"), href="https://cega.berkeley.edu"))),
+                   fluidRow(
+                     p(
+                       "This visualization is one of three key components of an",
+                       tags$a(href="http://www.bitss.org/opa/projects/deworming/","Open Policy Analysis (OPA)"),
+                       "on the costs and benefits of
+                              mass deworming interventions in various settings. This components are:",
+                       tags$li(tags$span("  1. One single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. This app. ")),
+                       tags$li(tags$span("  2. [A detailed report](https://rpubs.com/fhoces/547979) that describes how to obtain the policy estimate and describes each component of the analysis.")), 
+                       tags$li(tags$span("  3. [A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app). "))
+                     ),
+                     p("The app is the result of a collaboration between the",
+                       tags$a(href="https://www.bitss.org/", "Berkeley Initiative
+                                     for Transparency in the Social Sciences"),
+                       "and",
+                       tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/",
+                              "Evidence Action."))
+                   ),
                    fluidRow(id = "tPanel_main", style = "max-width: 400px; max-height: 300px; position:relative;",
                             br(),
                             h4(strong("Description of Results")),
@@ -50,33 +67,12 @@ shinyUI(
                               how often an outcome appeared, i.e. the highest point
                               means that particular value appeared the most frequently.
                               The blue line indicates that half of all values are
-                              on either side of the line.")
-                   ),
-                   fluidRow(p("Under the other two tabs, you can adjust the model's
+                              on either side of the line."), br(), 
+                            p("Under the other two tabs, you can adjust the model's
                               assumptions and rerun the simulation to explore the
-                              impact on lifetime income effects."),
-                            br(),
-                            br(),
-                            p("The app is the result of a collaboration between the",
-                              tags$a(href="https://www.bitss.org/", "Berkeley Initiative
-                                     for Transparency in the Social Sciences"),
-                              "and",
-                              tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/",
-                                     "Evidence Action.")),
-                            p("This visualization is one of three key components of an",
-                              tags$a(href="http://www.bitss.org/opa/projects/deworming/","Open Policy Analysis (OPA)"),
-                            "on the costs and benefits of
-                            mass deworming interventions in various settings. For example:",
-                              tags$li(tags$span("item1")),tags$li(tags$span("item2"))),
-                            p("The other two components correspond to",
-                            tags$a(href="https://rpubs.com/fhoces/547979", "detailed documentation"),
-                            " of all the analysis, and",
-                            tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "all the materials"),
-                            "required to reproduce
-                            the analysis with minimal effort. Together, these materials create a transparent and
-                            reproducible analysis to facilitate collaboration and
-                            discussion about deworming policy."),
-                            )
+                              impact on lifetime income effects.")
+                   )
+                   
                  ),
                  mainPanel(
                    fluidRow(id = "output_id1_main", style = "max-width: 800px; max-height: 700px; position:relative;",
