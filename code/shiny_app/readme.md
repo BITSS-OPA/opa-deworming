@@ -108,6 +108,8 @@ The shiny app for the deworming OPA contains three files: `ui.R`, `server.R`, an
 you don't want the slider to appear in")`. 
 - It goes in the `list_hide` function within the else if. Once that has been added, that variable, in this case `inflation_var2`, should be added to `simdata1` in `all_analysis.R`. This deals directly with the original analysis.
 
+- EXPLAIN: `knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")`
+
 - If the slider you want to add is already in `all_analysis.R`, make sure to use the name defined in `all_analysis.R`, then add it to `server.R`, and then `ui.R`.
 
 - To change the value, which is `inflation.so` in the above example, modify it in the "Data" section of `all_analysis.R`.
