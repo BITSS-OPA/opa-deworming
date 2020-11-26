@@ -116,7 +116,7 @@ shinyUI(
                    # Begin upper left box ----
                             helpText("The net income effects of deworming have been calculated in different ways. 
                                      Choose among different approaches: "),
-                            selectInput("policy_est_ka", "Policy Estimates",
+                            selectInput("policy_est_ka", h4("Policy Estimates"),
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
                             conditionalPanel(
@@ -217,7 +217,7 @@ shinyUI(
                             style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;", 
                             numericInput(
                               "param35",
-                              label = h3("Yearly unit costs in new country (in $US"),
+                              label = h4("Yearly unit costs in new country (in $US)"),
                               value = round(costs2_ea_in, 2)
                             ),
                             helpText("For reference:", br(),
@@ -227,7 +227,7 @@ shinyUI(
                                      paste("Unit costs in Vietnam is", round(costs_temp_vietnam,2))),
                             numericInput(
                               "param37",
-                              label = h3("Prevalence in the new region"),
+                              label = h4("Prevalence in the new region"),
                               value = round(prevalence_r_in, 2)
                             ),
                             helpText("For reference:", br(),
@@ -251,7 +251,7 @@ shinyUI(
                    fluidRow(id = "tPanel",style = "max-width: 600px; max-height: 400px; position:relative;",
                             # Begin policy estimate description ----
                             selectInput("policy_est",
-                                        "Policy Estimate:",
+                                        h4("Policy Estimate:"),
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
                             withMathJax(), 
@@ -347,7 +347,7 @@ shinyUI(
                               )
                             ),
                             # end policy estimate description ----
-                            checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
+                            checkboxInput("rescale", label = "Click if want to rescale x-axis. Unclick to fix reference point", value = TRUE),
                             numericInput("param1",
                                          label = h4("Number of simulations"),
                                          value = 1e3)
@@ -502,12 +502,12 @@ shinyUI(
                                 numericInput(
                                   "param29_1",
                                   label = ("\\(\\alpha^{pooled} \\) = "),
-                                  value = lambda1_new_so
+                                  value = round(lambda1_new_so,2)
                                 ),
                                 #need more info for Popover
                                 hidden(div(
                                   id = "SD29",
-                                  numericInput("param29_1_1", label = h3("SD = "), value = lambda1_new_sd_so)
+                                  numericInput("param29_1_1", label = "SD = ", value = lambda1_new_sd_so)
                                 )),
                                 sliderInput(
                                   "param30",
@@ -650,7 +650,7 @@ shinyUI(
                                        )),
                                        numericInput("param5", 
                                                     label = "Work-non ag-Wages  (\\( w_{ww} \\))", 
-                                                    value = wage_ww_so), 
+                                                    value = round(wage_ww_so, 2)), 
                                        bsPopover(
                                          id = "param5",
                                          title = "",
@@ -661,7 +661,7 @@ shinyUI(
                                          id = "SD6",
                                          numericInput("param5_1", 
                                                       label = "SD = ", 
-                                                      value = 0.1 * wage_ww_so)
+                                                      value = round(0.1 * wage_ww_so, 2))
                                        )),
                                        numericInput("param6", 
                                                     label = "Profits se = ", 
@@ -872,7 +872,7 @@ shinyUI(
                                        numericInput(
                                          "param16", 
                                          label = "Costs of T (local $) = ", 
-                                         value = unit_cost_local_so),
+                                         value = round(unit_cost_local_so,2)),
                                        bsPopover(
                                          id = "param16",
                                          title = "",
@@ -889,7 +889,7 @@ shinyUI(
                                        )),
                                        numericInput("param16_new", 
                                                     label = "Costs of T (local $) = ", 
-                                                    value = unit_cost_2017usdppp_so),
+                                                    value = round(unit_cost_2017usdppp_so, 2)),
                                        bsPopover(
                                          id = "param16_new",
                                          title = "",
@@ -991,37 +991,118 @@ shinyUI(
                               ), 
                               # end tabpanel data ----                              
                               # Begin tabpanel GW ----
-                              tabPanel("Guesswork",
-                                       br(),
-                                       a(id="toggleGWSDs", "Show/hide all SDs", href="#"),
-                                       br(),
-                                       br(),
-                                       numericInput("param21_1", label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\)) = "), value = coef_exp_so[1]),
-                                       bsPopover(id="param21_1", title="", content= "Teacher experience coefficient", placement="top"),
-                                       numericInput("param21_2", label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "), value = coef_exp_so[2]),
-                                       bsPopover(id="param21_2", title="", content="Teacher experience coefficient squared", placement="top"),
-                                       numericInput("param22", label = "Teacher salary = ", value = teach_sal_so),
-                                       bsPopover(id="param22", title="", content="Average annual salary for Kenyan secondary school teacher", placement="top"),
-                                       hidden(div(id="SD33",
-                                                  numericInput("param22_1", label = "SD = ", value = 0.1 * teach_sal_so))),
-                                       numericInput("param23", label = "Teacher benefits = ", value = teach_ben_so),
-                                       bsPopover(id="param23", title="", content="Average annual benefits for Kenyan secondary school teacher (in KSH", placement="top"),
-                                       hidden(div(id="SD34",
-                                                  numericInput("param23_1", label = "SD = ", value = 0.1 * teach_ben_so))),
-                                       numericInput("param24", label = "Students per teacher = ", value = n_students_so),
-                                       bsPopover(id="param24", title="", content="Average number for students per teacher", placement="top"),
-                                       hidden(div(id="SD35",
-                                                  numericInput("param24_1", label = "SD = ", value = 0.1 * n_students_so))),
-                                       sliderInput("param31", label = "Prevalence (\\( \\eta \\)) = ",
-                                                   min = 0 , max = 1, value = prevalence_0_so),
-                                       bsPopover(id="param31", title="", content="Prevalence of parasitic worms in population (Miguel & Kremer 2004)", placement = "top"),
-                                       hidden(div(id="SD36",
-                                                  sliderInput("param31_1", label = "SD = ", min = 0.0000001, max = 1 , value = 0.1))),
-                                       sliderInput("param33", label = "Additional costs due to staff time = ",
-                                                   min = staff_time_so / 2, max = 2 * staff_time_so, value = staff_time_so),
-                                       bsPopover(id="param33", title="", content="Increased costs due to additional hours taught", placement = "top"),
-                                       hidden(div(id="SD37",
-                                                  sliderInput("param33_1", label = "SD = ", min = 0.0000001* staff_time_so, max = 1 * staff_time_so, value = 0.1 * staff_time_so)))
+                              tabPanel(
+                                "Guesswork",
+                                br(),
+                                a(id = "toggleGWSDs", "Show/hide all SDs", href =
+                                    "#"),
+                                br(),
+                                br(),
+                                numericInput(
+                                  "param21_1",
+                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\)) = "),
+                                  value = coef_exp_so[1]
+                                ),
+                                bsPopover(
+                                  id = "param21_1",
+                                  title = "",
+                                  content = "Teacher experience coefficient",
+                                  placement = "top"
+                                ),
+                                numericInput(
+                                  "param21_2",
+                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
+                                  value = coef_exp_so[2]
+                                ),
+                                bsPopover(
+                                  id = "param21_2",
+                                  title = "",
+                                  content = "Teacher experience coefficient squared",
+                                  placement = "top"
+                                ),
+                                numericInput("param22", label = "Teacher salary = ", value = teach_sal_so),
+                                bsPopover(
+                                  id = "param22",
+                                  title = "",
+                                  content = "Average annual salary for Kenyan secondary school teacher",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD33",
+                                  numericInput("param22_1", label = "SD = ", value = 0.1 * teach_sal_so)
+                                )),
+                                numericInput("param23", label = "Teacher benefits = ", value = teach_ben_so),
+                                bsPopover(
+                                  id = "param23",
+                                  title = "",
+                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD34",
+                                  numericInput("param23_1", label = "SD = ", value = 0.1 * teach_ben_so)
+                                )),
+                                numericInput("param24", label = "Students per teacher = ", value = n_students_so),
+                                bsPopover(
+                                  id = "param24",
+                                  title = "",
+                                  content = "Average number for students per teacher",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD35",
+                                  numericInput(
+                                    "param24_1",
+                                    label = "SD = ",
+                                    value = 0.1 * n_students_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param31",
+                                  label = "Prevalence (\\( \\eta \\)) = ",
+                                  min = 0 ,
+                                  max = 1,
+                                  value = prevalence_0_so
+                                ),
+                                bsPopover(
+                                  id = "param31",
+                                  title = "",
+                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD36",
+                                  sliderInput(
+                                    "param31_1",
+                                    label = "SD = ",
+                                    min = 0.0000001,
+                                    max = 1 ,
+                                    value = 0.1
+                                  )
+                                )),
+                                sliderInput(
+                                  "param33",
+                                  label = "Additional costs due to staff time = ",
+                                  min = staff_time_so / 2,
+                                  max = 2 * staff_time_so,
+                                  value = staff_time_so
+                                ),
+                                bsPopover(
+                                  id = "param33",
+                                  title = "",
+                                  content = "Increased costs due to additional hours taught",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD37",
+                                  sliderInput(
+                                    "param33_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 * staff_time_so,
+                                    max = 1 * staff_time_so,
+                                    value = 0.1 * staff_time_so
+                                  )
+                                ))
                               )
                               # end tabpanel GW ----
                             )

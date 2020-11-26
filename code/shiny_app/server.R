@@ -591,7 +591,8 @@ shinyServer( function(input, output, session) {
                      \\right]
                             }_{\\text{labor market gains}} - 
                       \\underbrace{
-                      \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                       \\left[\\sum_{t=0}^{t_{treat}} \\left( \\frac{1}{1 + r}\\right)^{t} \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      \\right]
                       }_{\\text{cost of deworming medication}}
             
             \\tag{7}
