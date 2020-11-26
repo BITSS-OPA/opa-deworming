@@ -36,7 +36,7 @@ bibliography: bibliography.bib
 
 
 ```{r setup, include=FALSE, purl=TRUE}
-html_format <- FALSE
+html_format <- TRUE
 # Loading required libraries
 # before deploying in shinyapps.io, we need to remove the following packages:
 # "plotly", "bookdown", "rootSolve"
@@ -49,7 +49,6 @@ new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"
 if(length(new.packages)) install.packages(new.packages, repos= "https://cloud.r-project.org")
 
 lapply(list.of.packages, library, character.only = TRUE)
-
 
 
 knitr::opts_knit$set(root.dir = here())
@@ -2834,7 +2833,9 @@ unit_test(ea3, 289.751849813911)
 
 
 
-<br><br>
+<br>
+
+
 ```{r run-mc, dpi = 400, purl=FALSE, echo=FALSE}
 nsims_so <- 1e4
 
@@ -2926,15 +2927,15 @@ npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 1))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 1))
 #Unit test the simulations for nsims = 100, 1000, 10000 UPDATE
 all_res_100_sims <- c(
-8.03758587733535,
-41.341825374071 ,
-49.8293722611755,
-263.508519692909,
-82.3956863505701,
-502.102285320278,
-33.9371610666112,
-247.43740012228 ,
-296.202699823397
+  8.03758587733535,
+  41.341825374071 ,
+  49.8293722611755,
+  263.508519692909,
+  82.3956863505701,
+  502.102285320278,
+  33.9371610666112,
+  247.43740012228 ,
+  296.202699823397
 )
 
 all_res_1000_sims <- c(
@@ -2956,11 +2957,11 @@ all_res_10000_sims <- c(
   279.314399661486,
   88.5384124672041,
   529.816545889338,
-  33.0454415582851,
-  261.263032790975,
-  308.253062940628
+  33.0418287920955,
+  261.262613543282,
+  308.25164762882  
 )
-
+ 
 if (TRUE) {
 k <- 0
 for ( i in policy_estimates ) {

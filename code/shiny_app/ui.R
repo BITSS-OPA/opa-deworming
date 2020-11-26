@@ -12,16 +12,40 @@ library(shinyBS)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 
-costs_temp_india   <- 0.0478
-costs_temp_kenya   <- 0.418
-costs_temp_nigeria <- 0.661
-costs_temp_vietnam <- 0.399
+costs_temp_india   <-
+  costs1_p2_f(
+    country_total_var = costs_data$total,
+    country_cost_var = costs_data$costs_by_country,
+    staff_time_var = staff_time_so,
+    select_var = list("india")
+  )
+costs_temp_kenya   <-
+  costs1_p2_f(
+    country_total_var = costs_data$total,
+    country_cost_var = costs_data$costs_by_country,
+    staff_time_var = staff_time_so,
+    select_var = list("kenya")
+  )
+costs_temp_nigeria <-
+  costs1_p2_f(
+    country_total_var = costs_data$total,
+    country_cost_var = costs_data$costs_by_country,
+    staff_time_var = staff_time_so,
+    select_var = list("nigeria")
+  )
+costs_temp_vietnam <-
+  costs1_p2_f(
+    country_total_var = costs_data$total,
+    country_cost_var = costs_data$costs_by_country,
+    staff_time_var = staff_time_so,
+    select_var = list("vietnam")
+  )
 
 
-prevalence_india <- 0.57
-prevalence_kenya <- 0.35
-prevalence_nigeria <- 0.27
-prevalence_vietnam <- 0.15
+prevalence_india <- prevalence_r_so["india"]
+prevalence_kenya <- prevalence_r_so["kenya"]
+prevalence_nigeria <- prevalence_r_so["nigeria"]
+prevalence_vietnam <- prevalence_r_so["vietnam"]
 
 
 nsims <- 1e3
@@ -82,6 +106,7 @@ shinyUI(
                  )
                ),
                # end of main policy estimate tab ---- 
+               # Begin of key assumptions tab ----
                tabPanel(
                  "Key Assumptions", 
                  sidebarPanel(
@@ -192,27 +217,24 @@ shinyUI(
                             style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;", 
                             numericInput(
                               "param35",
-                              label = h3("Unit costs in new country"),
+                              label = h3("Yearly unit costs in new country (in $US"),
                               value = round(costs2_ea_in, 2)
                             ),
-  #AQUI VOY
-                              # checkboxGroupInput("param36", "Choose countries:",
-                              #                    choiceNames =
-                              #                      list("India", "Kenya", "Nigeria", "Vietnam"),
-                              #                    choiceValues =
-                              #                      list("india", "kenya", "nigeria", "vietnam"),
-                              #                    selected = list("india", "kenya", "nigeria", "vietnam")  ),
                             helpText("For reference:", br(),
-                                     paste("Unit costs in India is", costs_temp_india), br(),
-                                     paste("Unit costs in Kenya is", costs_temp_kenya), br(),
-                                     paste("Unit costs in Nigeria is", costs_temp_nigeria), br(),
-                                     paste("Unit costs in Vietnam is", costs_temp_vietnam)),
-                            numericInput("param37", label = h3("Prevalence in the new region"), value = round(prevalence_r_in,2)),
+                                     paste("Unit costs in India is", round(costs_temp_india,2)), br(),
+                                     paste("Unit costs in Kenya is", round(costs_temp_kenya,2)), br(),
+                                     paste("Unit costs in Nigeria is", round(costs_temp_nigeria,2)), br(),
+                                     paste("Unit costs in Vietnam is", round(costs_temp_vietnam,2))),
+                            numericInput(
+                              "param37",
+                              label = h3("Prevalence in the new region"),
+                              value = round(prevalence_r_in, 2)
+                            ),
                             helpText("For reference:", br(),
-                                     paste("Prevalence in India is", prevalence_india), br(),
-                                     paste("Prevalence in Kenya is", prevalence_kenya), br(),
-                                     paste("Prevalence in Nigeria is", prevalence_nigeria), br(),
-                                     paste("Prevalence in Vietnam is", prevalence_vietnam))
+                                     paste("Prevalence in India is", round(prevalence_india,2)), br(),
+                                     paste("Prevalence in Kenya is", round(prevalence_kenya,2)), br(),
+                                     paste("Prevalence in Nigeria is", round(prevalence_nigeria,2)), br(),
+                                     paste("Prevalence in Vietnam is", round(prevalence_vietnam,2)))
                    )
                  ),
                  mainPanel(
@@ -221,80 +243,120 @@ shinyUI(
                    )
                  )
                ),
+               # end of key assumptions tab ----
                # Begin All assumptions tab ----
                tabPanel(
                  "All Assumptions",
                  sidebarPanel(
                    fluidRow(id = "tPanel",style = "max-width: 600px; max-height: 400px; position:relative;",
-
-                            checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
-                            numericInput("param1", label = h4("Number of simulations"), value = 1e3),
-                            withMathJax(),
-                            useShinyjs(),
-                            selectInput("policy_est", "Policy Estimate:",
+                            # Begin policy estimate description ----
+                            selectInput("policy_est",
+                                        "Policy Estimate:",
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
+                            withMathJax(), 
+                            useShinyjs(),
                             conditionalPanel(
-                              condition = "input.policy_est == 'A1. Tax revenue' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(), br(),
-                                       "Benefits: Baird approach with tax included but not externalities", br(), br(),
-                                       "Costs: Baird approach with no externalities"
+                              condition = "input.policy_est_ka == 'A1. Tax revenue' ",
+                              helpText(
+                                "Approach 1.1. Welfare measured as additional tax revenue.", br(),
+                                " - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10 year follow-up. No externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
                               )
                             ),
-
                             conditionalPanel(
-                              condition = "input.policy_est == 'A1. With externalities. Tax' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(), br(),
-                                       "Benefits: Baird approach with both tax and externalities included", br(),br(),
-                                       "Costs: Baird approach with externalities included")
-                            ),
-
-                            conditionalPanel(
-                              condition = "input.policy_est == 'A1. All income' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
-                                       "Benefits: Baird approach without tax or externalities", br(),br(),
-                                       "Costs: Baird approach with no externalities")
-                            ),
-
-                            conditionalPanel(
-                              condition = "input.policy_est == 'A1. With ext. All income' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
-                                       "Benefits: Baird approach without tax but with externalities", br(),br(),
-                                       "Costs: Baird approach with externalities")
+                              condition = "input.policy_est_ka == 'A1. With externalities. Tax' ",
+                              helpText(
+                                "Approach 1.2. Welfare measured as additional tax revenue.", br(),
+                                " - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10 year follow-up. Including externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est == 'A2. Tax' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
-                                       "Benefits: Hamory approach (KLPS) with tax but not externalities", br(),br(),
-                                       "Costs: Hamory approach (KLPS) with no externalities")
+                              condition = "input.policy_est_ka == 'A1. All income' ",
+                              helpText(
+                                "Approach 1.3. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10 year follow-up. No externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est == 'A2. All income' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
-                                       "Benefits: Hamory approach (KLPS) without tax or externalities", br(),br(),
-                                       "Costs: Hamory approach (KLPS) with no externalities")
+                              condition = "input.policy_est_ka == 'A1. With ext. All income' ",
+                              helpText(
+                                "Approach 1.4. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings. Including externalities.
+                                   Data from 10 year follow-up. Including externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est == 'A3. All income of A1' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
-                                       "Benefits: Baird approach without tax or externalities but with prevalence and length of treatment considered", br(),br(),
-                                       "Costs: Evidence Action (EA) Approach")
+                              condition = "input.policy_est_ka == 'A2. Tax' ",
+                              helpText(
+                                "Approach 2.1. Welfare measured as additional tax revenue.", br(),
+                                " - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10, 15 and 20 year follow-up. No externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est == 'A3. All income of A1, with ext.' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
-                                       "Benefits: Baird approach without tax but with externalities, prevalence and length of treatment considered", br(),br(),
-                                       "Costs: Evidence Action (EA) Approach")
+                              condition = "input.policy_est_ka == 'A2. All income' ",
+                              helpText(
+                                "Approach 2.2. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10, 15 and 20 year follow-up. No externalities", br(),
+                                " - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling"
+                              )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est == 'A3. All income of A2. Main Policy Estimate' ",
-                              helpText("Our final policy estimate is NPV, and we make assumptions as below:", br(),br(),
-                                       "Benefits: Hamory approach (KLPS) without tax or externalities but with prevalence and length of treatment considered", br(),br(),
-                                       "Costs: Evidence Action (EA) Approach")
-                            )
-
+                              condition = "input.policy_est_ka == 'A3. All income of A1' ",
+                              helpText(
+                                "Approach 3.1. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10 year follow-up. No externalities. 
+                                Adjusted for prevalence and length of treatment", br(),
+                                " - Costs: current implementation costs in several settings."
+                              )
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A3. All income of A1, with ext.' ",
+                              helpText(
+                                "Approach 3.2. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10 year follow-up. Including externalities. 
+                                Adjusted for prevalence and length of treatment", br(),
+                                " - Costs: current implementation costs in several settings."
+                              )
+                            ),
+                            conditionalPanel(
+                              condition = "input.policy_est_ka == 'A3. All income of A2. Main Policy Estimate' ",
+                              helpText(
+                                "Approach 3.3. Welfare measured as additional earnings.", br(),
+                                " - Benefits: predicted additional earnings.
+                                   Data from 10, 15 and 20 year follow-up. No externalities. 
+                                Adjusted for prevalence and length of treatment", br(),
+                                " - Costs: current implementation costs in several settings."
+                              )
+                            ),
+                            # end policy estimate description ----
+                            checkboxInput("rescale", label = "Click if want to rescale x-axis", value = TRUE),
+                            numericInput("param1",
+                                         label = h4("Number of simulations"),
+                                         value = 1e3)
                    ),
-                   fluidRow(id = "tPanel1",style = "overflow-y:scroll; max-width: 600px; max-height: 400px; position:relative;",
+                   fluidRow(id = "tPanel1",
+                            style = "overflow-y:scroll; 
+                                     max-width: 600px; 
+                                     max-height: 400px; 
+                                     position:relative;",
                             tabsetPanel(
                               # Begin tabpanel data ----
                               tabPanel("Data",
@@ -302,107 +364,437 @@ shinyUI(
                                        a(id="toggleDataSDs", "Show/hide all SDs", href="#"),
                                        br(),
                                        br(),
-                                       sliderInput("param2", label = "Gov Bonds (\\( i \\))",
-                                                   min = 0.001, max = 0.2, value = gov_bonds_so),
-                                       bsPopover(id="param2", title="", content="Interest rate on Kenyan government bonds", placement="top"),
-                                       hidden(div(id="SD1",
-                                                  sliderInput("param2_1", label = "SD = ", min = 0.0000001, max = 0.4 * gov_bonds_so, value = 0.1 * gov_bonds_so))),
-                                       sliderInput("param2_new", label = "Gov Bonds (\\( i \\))",
-                                                   min = 0.001, max = 0.2, value = gov_bonds_new_so),
-                                       bsPopover(id="param2_new", title="", content="Interest rate on Kenyan government bonds", placement="top"),
-                                       hidden(div(id="SD2",
-                                                  sliderInput("param2_1_new", label = "SD = ", min = 0.0000001, max = 0.4 * gov_bonds_new_so, value = 0.1 * gov_bonds_new_so))),
-                                       sliderInput("param3", label = "Inflation (\\( \\pi \\) ) = ",
-                                                   min = 0.001, max = 0.2, value = inflation_so),
-                                       bsPopover(id="param3", title="", content="Kenyan inflation rate", placement= "top"),
-                                       hidden(div(id="SD3",
-                                                  sliderInput("param3_1", label = "SD = ", min = 0.0000001, max = 0.4 * inflation_so, value = 0.1 * inflation_so))),
-                                       sliderInput("param3_new", label = "Inflation (\\( \\pi \\) ) = ",
-                                                   min = 0.001, max = 0.2, value = inflation_new_so),
-                                       bsPopover(id="param3_new",title="", content="Kenyan inflation rate", placement="top"),
-                                       hidden(div(id="SD4",
-                                                  sliderInput("param3_1_new", label = "SD = ", min = 0.0000001, max = 0.4 * inflation_new_so, value = 0.1 * inflation_new_so))),
+                                       sliderInput(
+                                         "param2",
+                                         label = "Gov Bonds (\\( i \\))",
+                                         min = 0.001,
+                                         max = 0.2,
+                                         value = gov_bonds_so
+                                       ), 
+                                       bsPopover(
+                                         id = "param2",
+                                         title = "",
+                                         content = "Interest rate on Kenyan government bonds",
+                                         placement = "top"
+                                       ), 
+                                       hidden(div(
+                                         id = "SD1",
+                                         sliderInput(
+                                           "param2_1",
+                                           label = "SD = ",
+                                           min = 0.0000001,
+                                           max = 0.4 * gov_bonds_so,
+                                           value = 0.1 * gov_bonds_so
+                                         )
+                                       )), 
+                                       sliderInput(
+                                         "param2_new",
+                                         label = "Gov Bonds (\\( i \\))",
+                                         min = 0.001,
+                                         max = 0.2,
+                                         value = gov_bonds_new_so
+                                       ), 
+                                       bsPopover(
+                                         id = "param2_new",
+                                         title = "",
+                                         content = "Interest rate on Kenyan government bonds",
+                                         placement = "top"
+                                       ), 
+                                       hidden(div(
+                                         id = "SD2",
+                                         sliderInput(
+                                           "param2_1_new",
+                                           label = "SD = ",
+                                           min = 0.0000001,
+                                           max = 0.4 * gov_bonds_new_so,
+                                           value = 0.1 * gov_bonds_new_so
+                                         )
+                                       )), 
+                                       sliderInput(
+                                         "param3",
+                                         label = "Inflation (\\( \\pi \\) ) = ",
+                                         min = 0.001,
+                                         max = 0.2,
+                                         value = inflation_so
+                                       ), 
+                                       bsPopover(
+                                         id = "param3",
+                                         title = "",
+                                         content = "Kenyan inflation rate",
+                                         placement = "top"
+                                       ), 
+                                       hidden(div(
+                                         id = "SD3",
+                                         sliderInput(
+                                           "param3_1",
+                                           label = "SD = ",
+                                           min = 0.0000001,
+                                           max = 0.4 * inflation_so,
+                                           value = 0.1 * inflation_so
+                                         )
+                                       )), 
+                                       sliderInput(
+                                         "param3_new",
+                                         label = "Inflation (\\( \\pi \\) ) = ",
+                                         min = 0.001,
+                                         max = 0.2,
+                                         value = inflation_new_so
+                                       ),
+                                       bsPopover(
+                                         id = "param3_new",
+                                         title = "",
+                                         content = "Kenyan inflation rate",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD4",
+                                         sliderInput(
+                                           "param3_1_new",
+                                           label = "SD = ",
+                                           min = 0.0000001,
+                                           max = 0.4 * inflation_new_so,
+                                           value = 0.1 * inflation_new_so
+                                         )
+                                       )), 
                                        numericInput("param4", label = "Agri Wages (\\( w_{ag} \\))", value = wage_ag_so),
-                                       bsPopover(id="param4",title="", content="Average hourly wage of an agricultural worker (KSH)", placement="top"),
-                                       hidden(div(id="SD5",
-                                                  numericInput("param4_1", label = "SD = ", value = 0.1 * wage_ag_so))),
+                                       bsPopover(
+                                         id = "param4",
+                                         title = "",
+                                         content = "Average hourly wage of an agricultural worker (KSH)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD5",
+                                         numericInput("param4_1", label = "SD = ", value = 0.1 * wage_ag_so)
+                                       )),
                                        numericInput("param5", label = "Work-non ag-Wages  (\\( w_{ww} \\))", value = wage_ww_so),
-                                       bsPopover(id="param5",title="", content="Average hourly wage of a wage worker", placement="top"),
-                                       hidden(div(id="SD6",
-                                                  numericInput("param5_1", label = "SD = ", value = 0.1 * wage_ww_so))),
+                                       bsPopover(
+                                         id = "param5",
+                                         title = "",
+                                         content = "Average hourly wage of a wage worker",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD6",
+                                         numericInput("param5_1", label = "SD = ", value = 0.1 * wage_ww_so)
+                                       )),
                                        numericInput("param6", label = "Profits se = ", value = profits_se_so),
-                                       bsPopover(id="param6",title="", content="Average monthly self-employed profits (self-reported)"),
-                                       hidden(div(id="SD7",
-                                                  numericInput("param6_1", label = "SD = ", value = 0.1 * profits_se_so))),
-                                       sliderInput("param7", label = "Hours se (>10) = ",
-                                                   min = hours_se_cond_so / 2, max = 2 * hours_se_cond_so, value = hours_se_cond_so),
-                                       bsPopover(id="param7",title="", content="Average weekly hours worked (control group)", placement="top"),
-                                       hidden(div(id="SD8",
-                                                  sliderInput("param7_1", label = "SD = ", min = 0.000001* hours_se_cond_so, max = 1 * hours_se_cond_so, value = 0.1 * hours_se_cond_so))),
-                                       sliderInput("param8", label = "\\(\\ H_{ag} \\) = ",
-                                                   min = hours_ag_so / 2, max = 2 * hours_ag_so, value = hours_ag_so),
-                                       bsPopover(id="param8",title="", content="Average weekly hours worked by agricultural workers (control group)", placement = "top"),
-                                       hidden(div(id="SD9",
-                                                  sliderInput("param8_1", label = "SD = ", min = 0.000001* hours_ag_so, max = 1 * hours_ag_so, value = 0.1 * hours_ag_so, round = -4, step = 0.001))),
-                                       sliderInput("param9", label = "\\(\\ H_{ww} \\) = ",
-                                                   min = hours_ww_so / 2, max = 2 * hours_ww_so, value = hours_ww_so),
-                                       bsPopover(id="param9",title="", content="Average weekly hours worked by wage earners (control group)", placement="top"),
-                                       hidden(div(id="SD10",
-                                                  sliderInput("param9_1", label = "SD = ", min = 0.000001* hours_ww_so, max = 1 * hours_ww_so, value = 0.1 * hours_ww_so, step = 0.001))),
-                                       sliderInput("param10", label = "\\(\\ H_{se} \\) = ",
-                                                   min = hours_se_so / 2, max = 2 * hours_se_so, value = hours_se_so),
-                                       bsPopover(id="param10",title="", content="Average weekly hours worked by self-employed workers (control group - non-agricultural)", placement="top"),
-                                       hidden(div(id="SD11",
-                                                  sliderInput("param10_1", label = "SD = ", min = 0.000001* hours_se_so, max = 1 * hours_se_so, value = 0.1 * hours_se_so, step = 0.001))),
-                                       sliderInput("param11", label = "Exchange rate (\\( ex \\)) = ",
-                                                   min = ex_rate_so / 2, max = 2 * ex_rate_so, value = ex_rate_so),
-                                       bsPopover(id="param11",title="",content="Exchange rate in 1985? (KSH to International Dollar)", placement="top"),
-                                       hidden(div(id="SD12",
-                                                  sliderInput("param11_1", label = "SD = ", min = 0.000001* ex_rate_so, max = 1 * ex_rate_so, value = 0.1 * ex_rate_so, step = 0.001))),
-                                       sliderInput("param12", label = "growth (\\( g \\)) = ",
-                                                   min = growth_rate_so / 2, max = 2 * growth_rate_so, value = growth_rate_so),
-                                       bsPopover(id="param12",title="", content="Kenyan Per Capita GDP Growth Rate (2002-2011)", placement="top"),
-                                       hidden(div(id="SD13",
-                                                  sliderInput("param12_1", label = "SD = ", min = 0.000001* growth_rate_so, max = 1 * growth_rate_so, value = 0.1 * growth_rate_so, step = 0.00001))),
-                                       sliderInput("param13", label = "Coverage (\\( R \\)) = ",
-                                                   min = 0, max = 1, value = coverage_so, step = 0.01),
-                                       bsPopover(id="param13",title="", content="Percent of treated primary schools students", placement="top"),
-                                       hidden(div(id="SD14",
-                                                  sliderInput("param13_1", label = "SD = ", min = 0.000001* coverage_so, max = 1 * coverage_so, value = 0.1 * coverage_so, step = 0.000001))),
-                                       sliderInput("param15", label = "Tax rate = ",
-                                                   min = tax_so / 2, max = 2 * tax_so, value = tax_so, step = 0.00001),
-                                       bsPopover(id="param15",title="", content="Kenyan tax rate in 2013?", placement="top"),
-                                       hidden(div(id="SD15",
-                                                  sliderInput("param15_1", label = "SD = ", min = 0.00001* tax_so, max = 1 * tax_so, value = 0.1 * tax_so, step = 0.000001))),
+                                       bsPopover(id = "param6",
+                                                 title = "",
+                                                 content = "Average monthly self-employed profits (self-reported)"),
+                                       hidden(div(
+                                         id = "SD7",
+                                         numericInput("param6_1", label = "SD = ", value = 0.1 * profits_se_so)
+                                       )),
+                                       sliderInput(
+                                         "param7",
+                                         label = "Hours se (>10) = ",
+                                         min = hours_se_cond_so / 2,
+                                         max = 2 * hours_se_cond_so,
+                                         value = hours_se_cond_so
+                                       ),
+                                       bsPopover(
+                                         id = "param7",
+                                         title = "",
+                                         content = "Average weekly hours worked (control group)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD8",
+                                         sliderInput(
+                                           "param7_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * hours_se_cond_so,
+                                           max = 1 * hours_se_cond_so,
+                                           value = 0.1 * hours_se_cond_so
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param8",
+                                         label = "\\(\\ H_{ag} \\) = ",
+                                         min = hours_ag_so / 2,
+                                         max = 2 * hours_ag_so,
+                                         value = hours_ag_so
+                                       ),
+                                       bsPopover(
+                                         id = "param8",
+                                         title = "",
+                                         content = "Average weekly hours worked by agricultural workers (control group)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD9",
+                                         sliderInput(
+                                           "param8_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * hours_ag_so,
+                                           max = 1 * hours_ag_so,
+                                           value = 0.1 * hours_ag_so,
+                                           round = -4,
+                                           step = 0.001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param9",
+                                         label = "\\(\\ H_{ww} \\) = ",
+                                         min = hours_ww_so / 2,
+                                         max = 2 * hours_ww_so,
+                                         value = hours_ww_so
+                                       ),
+                                       bsPopover(
+                                         id = "param9",
+                                         title = "",
+                                         content = "Average weekly hours worked by wage earners (control group)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD10",
+                                         sliderInput(
+                                           "param9_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * hours_ww_so,
+                                           max = 1 * hours_ww_so,
+                                           value = 0.1 * hours_ww_so,
+                                           step = 0.001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param10",
+                                         label = "\\(\\ H_{se} \\) = ",
+                                         min = hours_se_so / 2,
+                                         max = 2 * hours_se_so,
+                                         value = hours_se_so
+                                       ),
+                                       bsPopover(
+                                         id = "param10",
+                                         title = "",
+                                         content = "Average weekly hours worked by self-employed workers (control group - non-agricultural)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD11",
+                                         sliderInput(
+                                           "param10_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * hours_se_so,
+                                           max = 1 * hours_se_so,
+                                           value = 0.1 * hours_se_so,
+                                           step = 0.001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param11",
+                                         label = "Exchange rate (\\( ex \\)) = ",
+                                         min = ex_rate_so / 2,
+                                         max = 2 * ex_rate_so,
+                                         value = ex_rate_so
+                                       ),
+                                       bsPopover(
+                                         id = "param11",
+                                         title = "",
+                                         content = "Exchange rate in 1985? (KSH to International Dollar)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD12",
+                                         sliderInput(
+                                           "param11_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * ex_rate_so,
+                                           max = 1 * ex_rate_so,
+                                           value = 0.1 * ex_rate_so,
+                                           step = 0.001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param12",
+                                         label = "growth (\\( g \\)) = ",
+                                         min = growth_rate_so / 2,
+                                         max = 2 * growth_rate_so,
+                                         value = growth_rate_so
+                                       ),
+                                       bsPopover(
+                                         id = "param12",
+                                         title = "",
+                                         content = "Kenyan Per Capita GDP Growth Rate (2002-2011)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD13",
+                                         sliderInput(
+                                           "param12_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * growth_rate_so,
+                                           max = 1 * growth_rate_so,
+                                           value = 0.1 * growth_rate_so,
+                                           step = 0.00001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param13",
+                                         label = "Coverage (\\( R \\)) = ",
+                                         min = 0,
+                                         max = 1,
+                                         value = coverage_so,
+                                         step = 0.01
+                                       ),
+                                       bsPopover(
+                                         id = "param13",
+                                         title = "",
+                                         content = "Percent of treated primary schools students",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD14",
+                                         sliderInput(
+                                           "param13_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * coverage_so,
+                                           max = 1 * coverage_so,
+                                           value = 0.1 * coverage_so,
+                                           step = 0.000001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param15",
+                                         label = "Tax rate = ",
+                                         min = tax_so / 2,
+                                         max = 2 * tax_so,
+                                         value = tax_so,
+                                         step = 0.00001
+                                       ),
+                                       bsPopover(
+                                         id = "param15",
+                                         title = "",
+                                         content = "Kenyan tax rate in 2013?",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD15",
+                                         sliderInput(
+                                           "param15_1",
+                                           label = "SD = ",
+                                           min = 0.00001 * tax_so,
+                                           max = 1 * tax_so,
+                                           value = 0.1 * tax_so,
+                                           step = 0.000001
+                                         )
+                                       )),
                                        numericInput("param16", label = "Costs of T (local $) = ", value = unit_cost_local_so),
-                                       bsPopover(id="param16",title="", content="Costs of deworming per capita (KSH)", placement="top"),
-                                       hidden(div(id="SD16",
-                                                  numericInput("param16_1", label = "SD = ", value = 0.1 * unit_cost_local_so))),
+                                       bsPopover(
+                                         id = "param16",
+                                         title = "",
+                                         content = "Costs of deworming per capita (KSH)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD16",
+                                         numericInput(
+                                           "param16_1",
+                                           label = "SD = ",
+                                           value = 0.1 * unit_cost_local_so
+                                         )
+                                       )),
                                        numericInput("param16_new", label = "Costs of T (local $) = ", value = unit_cost_2017usdppp_so),
-                                       bsPopover(id="param16_new",title="", content="Costs of deworming per capita (USD)", placement="top"),
-                                       hidden(div(id="SD17",
-                                                  numericInput("param16_1_new", label = "SD = ", value = 0.1 * unit_cost_2017usdppp_so))),
-                                       sliderInput("param17", label = "Years of treatment in orginal study",
-                                                   min = years_of_treat_0_so / 2, max = 2 * years_of_treat_0_so, value = years_of_treat_0_so),
-                                       bsPopover(id="param17",title="", content="Average years of treatement in Kenya", placement = "top"),
-                                       hidden(div(id="SD18",
-                                                  sliderInput("param17_1", label = "SD = ", min = 0.000001* years_of_treat_0_so, max = 1 * years_of_treat_0_so, value = 0.1 * years_of_treat_0_so, step = 0.0001))),
-                                       sliderInput("param17_new", label = "Years of treatment in new setting",
-                                                   min = years_of_treat_t_so / 2, max = 2 * years_of_treat_t_so, value = years_of_treat_t_so),
-                                       bsPopover(id="param17_new",title="", content="Input years of treatment", placement="top"),
-                                       hidden(div(id="SD19",
-                                                  sliderInput("param17_1_new", label = "SD = ", min = 0.000001* years_of_treat_t_so, max = 1 * years_of_treat_t_so, value = 0.1 * years_of_treat_t_so, step = 0.0001))),
-                                       sliderInput("param34", label = "Costs adjustments = ",
-                                                   min = costs_par_so / 2, max = 20000 * costs_par_so, value = costs_par_so),
+                                       bsPopover(
+                                         id = "param16_new",
+                                         title = "",
+                                         content = "Costs of deworming per capita (USD)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD17",
+                                         numericInput(
+                                           "param16_1_new",
+                                           label = "SD = ",
+                                           value = 0.1 * unit_cost_2017usdppp_so
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param17",
+                                         label = "Years of treatment in orginal study",
+                                         min = years_of_treat_0_so / 2,
+                                         max = 2 * years_of_treat_0_so,
+                                         value = years_of_treat_0_so
+                                       ),
+                                       bsPopover(
+                                         id = "param17",
+                                         title = "",
+                                         content = "Average years of treatement in Kenya",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD18",
+                                         sliderInput(
+                                           "param17_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * years_of_treat_0_so,
+                                           max = 1 * years_of_treat_0_so,
+                                           value = 0.1 * years_of_treat_0_so,
+                                           step = 0.0001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param17_new",
+                                         label = "Years of treatment in new setting",
+                                         min = years_of_treat_t_so / 2,
+                                         max = 2 * years_of_treat_t_so,
+                                         value = years_of_treat_t_so
+                                       ),
+                                       bsPopover(
+                                         id = "param17_new",
+                                         title = "",
+                                         content = "Input years of treatment",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD19",
+                                         sliderInput(
+                                           "param17_1_new",
+                                           label = "SD = ",
+                                           min = 0.000001 * years_of_treat_t_so,
+                                           max = 1 * years_of_treat_t_so,
+                                           value = 0.1 * years_of_treat_t_so,
+                                           step = 0.0001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param34",
+                                         label = "Costs adjustments = ",
+                                         min = costs_par_so / 2,
+                                         max = 20000 * costs_par_so,
+                                         value = costs_par_so
+                                       ),
                                        #need more info for Popover
-                                       hidden(div(id="SD20",
-                                                  sliderInput("param34_1", label = "SD = ", min = 0.0000001* costs_par_sd_so, max = 10 * costs_par_sd_so, value = costs_par_sd_so))),
-                                       sliderInput("param32", label = "Counts adjustment = ",
-                                                   min = counts_par_so / 2, max = 2 * counts_par_so, value = counts_par_so),
+                                       hidden(div(
+                                         id = "SD20",
+                                         sliderInput(
+                                           "param34_1",
+                                           label = "SD = ",
+                                           min = 0.0000001 * costs_par_sd_so,
+                                           max = 10 * costs_par_sd_so,
+                                           value = costs_par_sd_so
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param32",
+                                         label = "Counts adjustment = ",
+                                         min = counts_par_so / 2,
+                                         max = 2 * counts_par_so,
+                                         value = counts_par_so
+                                       ),
                                        #need more info for Popover
-                                       hidden(div(id="SD21",
-                                                  sliderInput("param32_1", label = "SD = ", min = 0.0000001 * counts_par_sd_so, max = 10 * counts_par_sd_so, value = counts_par_sd_so)))
-                              ),
+                                       hidden(div(
+                                         id = "SD21",
+                                         sliderInput(
+                                           "param32_1",
+                                           label = "SD = ",
+                                           min = 0.0000001 * counts_par_sd_so,
+                                           max = 10 * counts_par_sd_so,
+                                           value = counts_par_sd_so
+                                         )
+                                       ))
+                              ), 
                               # end tabpanel data ----
                               #
                               # Begin tabpanel research ----
