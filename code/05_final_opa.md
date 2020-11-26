@@ -2414,7 +2414,7 @@ one_run <-
       interest_r_var = interest_in,
       cost_of_schooling_var = cost_per_student_in,
       s1_var = 0,
-      q1_var = 0,
+      q1_var = q_zero_var1,
       s2_var = s2_in,
       q2_var = q_full_var1
     )
@@ -2427,7 +2427,7 @@ earnings_in_no_ext
       interest_r_var = interest_in,
       cost_of_schooling_var = cost_per_student_in,
       s1_var = 0,
-      q1_var = 0,
+      q1_var = q_zero_var1,
       s2_var = s2_in,
       q2_var = q_full_var1
     )
@@ -2444,7 +2444,7 @@ earnings_in_no_ext
       interest_r_var = interest_in_new,
       cost_of_schooling_var = cost_per_student_in_new,
       s1_var = 0,
-      q1_var = 0,
+      q1_var = q_zero_var1,
       s2_var = s2_new_in,
       q2_var = q_full_var1
     )

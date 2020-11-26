@@ -213,7 +213,9 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new",
                      "param16_new",
-                     "param6_1_new")
+                     "param6_1_new", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. With externalities. Tax") {
@@ -234,7 +236,9 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new",
                      "param16_new",
-                     "param6_1_new")
+                     "param6_1_new", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. All income") {
@@ -261,7 +265,9 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new",
                      "param16_new",
-                     "param6_1_new")
+                     "param6_1_new", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. With ext. All income") {
@@ -282,7 +288,9 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new",
                      "param16_new",
-                     "param6_1_new")
+                     "param6_1_new", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
       
@@ -324,7 +332,9 @@ shinyServer( function(input, output, session) {
                      "param3",
                      "param3_1",
                      "param16",
-                     "param6_1"
+                     "param6_1", 
+                     "param30", 
+                     "param30_1"
       )
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
@@ -368,7 +378,9 @@ shinyServer( function(input, output, session) {
                      "param3",
                      "param3_1",
                      "param16",
-                     "param16_1")
+                     "param16_1", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A3. All income of A1") {
@@ -690,8 +702,8 @@ shinyServer( function(input, output, session) {
         lwd = c(1, 1),
         linetype = c("solid", "dashed")
       ) +
-      #coord_cartesian(xlim = c(-10,800))) +
-      xlim(range(density(npv_sim)$x)) +
+      coord_cartesian(xlim = c(-100,800)) +  # fixing the x axis so we can see shifts in the density
+      #xlim(range(density(npv_sim)$x)) +
       guides(alpha = "none", colour = "none") +
       scale_x_continuous(expand = expansion(mult = c(0, 0))) + 
       scale_y_continuous(expand = expansion(mult = c(0, 0))) +

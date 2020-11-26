@@ -71,10 +71,10 @@ shinyUI(
                        "This visualization is one of three key components of an",
                        tags$a(href="http://www.bitss.org/opa/projects/deworming/","Open Policy Analysis (OPA)"),
                        "on the costs and benefits of
-                              mass deworming interventions in various settings. This components are:",
-                       tags$li(tags$span("  1. This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Additional two other tabs allow reader to modify key assumptions and components and see how this output changes")),
-                       tags$li(tags$span("  2. [A detailed report](https://rpubs.com/fhoces/547979) that describes how to obtain the policy estimate and describes each component of the analysis.")), 
-                       tags$li(tags$span("  3. [A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app). "))
+                       mass deworming interventions in various settings. This components are:",
+                       tags$li(tags$span("This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Additional two other tabs allow reader to modify key assumptions and components and see how this output changes")),
+                       tags$li(tags$span("[A detailed report](https://rpubs.com/fhoces/547979) that describes how to obtain the policy estimate and describes each component of the analysis.")), 
+                       tags$li(tags$span("[A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app). "))
                      ),
                      p("The app is the result of a collaboration between the",
                        tags$a(href="https://www.bitss.org/", "Berkeley Initiative
@@ -257,7 +257,7 @@ shinyUI(
                             withMathJax(), 
                             useShinyjs(),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A1. Tax revenue' ",
+                              condition = "input.policy_est == 'A1. Tax revenue' ",
                               helpText(
                                 "Approach 1.1. Welfare measured as additional tax revenue.", br(),
                                 " - Benefits: tax revenue over predicted effect on earnings.
@@ -267,7 +267,7 @@ shinyUI(
                               )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A1. With externalities. Tax' ",
+                              condition = "input.policy_est == 'A1. With externalities. Tax' ",
                               helpText(
                                 "Approach 1.2. Welfare measured as additional tax revenue.", br(),
                                 " - Benefits: tax revenue over predicted effect on earnings.
@@ -277,7 +277,7 @@ shinyUI(
                               )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A1. All income' ",
+                              condition = "input.policy_est == 'A1. All income' ",
                               helpText(
                                 "Approach 1.3. Welfare measured as additional earnings.", br(),
                                 " - Benefits: predicted additional earnings.
@@ -287,7 +287,7 @@ shinyUI(
                               )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A1. With ext. All income' ",
+                              condition = "input.policy_est == 'A1. With ext. All income' ",
                               helpText(
                                 "Approach 1.4. Welfare measured as additional earnings.", br(),
                                 " - Benefits: predicted additional earnings. Including externalities.
@@ -297,7 +297,7 @@ shinyUI(
                               )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A2. Tax' ",
+                              condition = "input.policy_est == 'A2. Tax' ",
                               helpText(
                                 "Approach 2.1. Welfare measured as additional tax revenue.", br(),
                                 " - Benefits: tax revenue over predicted effect on earnings.
@@ -307,7 +307,7 @@ shinyUI(
                               )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A2. All income' ",
+                              condition = "input.policy_est == 'A2. All income' ",
                               helpText(
                                 "Approach 2.2. Welfare measured as additional earnings.", br(),
                                 " - Benefits: predicted additional earnings.
@@ -317,7 +317,7 @@ shinyUI(
                               )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A3. All income of A1' ",
+                              condition = "input.policy_est == 'A3. All income of A1' ",
                               helpText(
                                 "Approach 3.1. Welfare measured as additional earnings.", br(),
                                 " - Benefits: predicted additional earnings.
@@ -327,7 +327,7 @@ shinyUI(
                               )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A3. All income of A1, with ext.' ",
+                              condition = "input.policy_est == 'A3. All income of A1, with ext.' ",
                               helpText(
                                 "Approach 3.2. Welfare measured as additional earnings.", br(),
                                 " - Benefits: predicted additional earnings.
@@ -337,7 +337,7 @@ shinyUI(
                               )
                             ),
                             conditionalPanel(
-                              condition = "input.policy_est_ka == 'A3. All income of A2. Main Policy Estimate' ",
+                              condition = "input.policy_est == 'A3. All income of A2. Main Policy Estimate' ",
                               helpText(
                                 "Approach 3.3. Welfare measured as additional earnings.", br(),
                                 " - Benefits: predicted additional earnings.
@@ -878,7 +878,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param20",
-                                  label = "Take-up (\\( Q_{full} \\)) = ",
+                                  label = "Take-up (\\( Q(S_{2}) \\)) = ",
                                   min = 0,
                                   max = 1,
                                   value = q_full_so
@@ -902,7 +902,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param28",
-                                  label = "Take-up with no subsidy (\\( Q_{0} \\)) = ",
+                                  label = "Take-up with no subsidy (\\( Q(S_{1}) \\)) = ",
                                   min = 0,
                                   max = 1,
                                   value = q_zero_so
