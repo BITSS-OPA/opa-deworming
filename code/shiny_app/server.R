@@ -6,13 +6,16 @@ shinyServer( function(input, output, session) {
   
   #Show/hide SDs code. Not sure where to put this code
   onclick("toggleDataSDs",
-          lapply(c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
-                            "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
-                            "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), toggle, anim=TRUE))
+          lapply(
+            c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
+              "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
+              "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), 
+            toggle, anim=TRUE)
+          )
   
   onclick("toggleResearchSDs",
-          lapply(c("SD22", "SD23", "SD24", "SD25", "SD26", "SD27", "SD28",
-                            "SD29", "SD30", "SD31", "SD32"), toggle, anim=TRUE))
+          lapply(c("SD22", "SD23", "SD24", "SD25", "SD27", "SD28",
+                   "SD29", "SD30", "SD31", "SD32"), toggle, anim=TRUE))
   
   onclick("toggleGWSDs",
           lapply(c("SD33","SD34", "SD35", "SD36", "SD37", "SD38"), toggle, anim=TRUE))
@@ -81,7 +84,7 @@ shinyServer( function(input, output, session) {
       delta_ed_ext_var2 = as.numeric(input$param27),                                              
       delta_ed_ext_var2_sd = as.numeric(input$param27_1),                                               
       q_zero_var2 = as.numeric(input$param28),                                                
-      q_zero_var2_sd = as.numeric(input$param28_1), 
+      q_zero_var2_sd = 0.001, 
       lambda1_new_var2 = c(as.numeric(input$param29_1), as.numeric(input$param29_2), 
                            as.numeric(input$param29_3)),                   
       lambda1_new_var2_sd = c(as.numeric(input$param29_1_1), as.numeric(input$param29_2_1), 
@@ -159,6 +162,8 @@ shinyServer( function(input, output, session) {
       "param28_1",
       "param26",
       "param26_1",
+      "param28", 
+      "param28_1", 
       "param30",
       "param30_1",
       "param21_1",                                          #Guesswork

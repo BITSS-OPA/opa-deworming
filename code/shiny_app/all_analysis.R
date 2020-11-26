@@ -108,8 +108,10 @@ chunk_sources <- function(){
     ##### Research
     #############
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
-    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women
-    lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
+    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women, table 3, row 1, cols 2 & 3
+    lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
+    lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
+    lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
     lambda1_new_so <- c(79.51465,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
                                79.51465,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
                                79.51465)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
@@ -1076,9 +1078,10 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     tax_sim <-              rnorm(nsims, tax_var2, tax_var2_sd)
 
     ## Research
-    aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
+    aux1 <-0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
-    aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], aux1[x] ) )
+    #aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
+    aux2 <-  lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
     lambda1_sim <- sapply(aux2,
                           function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
     lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)

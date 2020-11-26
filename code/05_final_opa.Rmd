@@ -194,8 +194,10 @@ chunk_sources <- function(){
     ##### Research
     #############
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
-    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women
-    lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
+    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women, table 3, row 1, cols 2 & 3
+    lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
+    lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
+    lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
     lambda1_new_so <- c(79.51465,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
                                79.51465,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
                                79.51465)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
@@ -2041,9 +2043,10 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     tax_sim <-              rnorm(nsims, tax_var2, tax_var2_sd)
 
     ## Research
-    aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
+    aux1 <-0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
-    aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], aux1[x] ) )
+    #aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
+    aux2 <-  lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
     lambda1_sim <- sapply(aux2,
                           function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
     lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)
@@ -2880,9 +2883,9 @@ npv_sim_all <-   sim.data1(
             years_of_treat_t_var2   = years_of_treat_t_so        ,    
             years_of_treat_t_var2_sd= years_of_treat_t_so * 0.1     ,
             lambda1_var2            = lambda1_so,                                          
-            lambda1_var2_sd         = rep(lambda1_so[1], 2) * 0.1 ,                                          
-            lambda2_var2            = lambda2_so        ,                         
-            lambda2_var2_sd         = lambda2_so * 0.1  ,                      
+            lambda1_var2_sd         = lambda1_sd_so   ,                                          
+            lambda2_var2            = lambda2_so      ,                         
+            lambda2_var2_sd         = lambda2_sd_so   ,                      
             q_full_var2             = q_full_so         ,                          
             q_full_var2_sd          = q_full_so * 0.1   ,                         
             coef_exp_var2           = coef_exp_so,                      
@@ -2951,17 +2954,18 @@ all_res_1000_sims <- c(
 )
 
 all_res_10000_sims <- c(
-  8.45275506016516,
-  47.6849708943092,
-  49.8873092218706,
-  279.314399661486,
+  16.900567718018,
+  102.18099496072,
+  100.603980807783,
+  610.154936509093,
   88.5384124672041,
   529.816545889338,
-  33.0418287920955,
-  261.262613543282,
+  59.6152316601907,
+  597.226067436185,
   308.25164762882  
 )
- 
+
+
 if (TRUE) {
 k <- 0
 for ( i in policy_estimates ) {
