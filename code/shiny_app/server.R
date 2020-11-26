@@ -15,7 +15,7 @@ shinyServer( function(input, output, session) {
   
   onclick("toggleResearchSDs",
           lapply(c("SD22", "SD23", "SD24", "SD25", "SD27", "SD28",
-                   "SD29", "SD30", "SD31", "SD32"), toggle, anim=TRUE))
+                   "SD29", "SD32"), toggle, anim=TRUE))
   
   onclick("toggleGWSDs",
           lapply(c("SD33","SD34", "SD35", "SD36", "SD37", "SD38"), toggle, anim=TRUE))
@@ -85,10 +85,8 @@ shinyServer( function(input, output, session) {
       delta_ed_ext_var2_sd = as.numeric(input$param27_1),                                               
       q_zero_var2 = as.numeric(input$param28),                                                
       q_zero_var2_sd = 0.001, 
-      lambda1_new_var2 = c(as.numeric(input$param29_1), as.numeric(input$param29_2), 
-                           as.numeric(input$param29_3)),                   
-      lambda1_new_var2_sd = c(as.numeric(input$param29_1_1), as.numeric(input$param29_2_1), 
-                              as.numeric(input$param29_3_1)),             
+      lambda1_new_var2 = as.numeric(input$param29_1),                   
+      lambda1_new_var2_sd = as.numeric(input$param29_1_1),             
       prevalence_0_var2 = as.numeric(input$param30),    
       prevalence_0_var2_sd = as.numeric(input$param30_1), 
       prevalence_r_var2 = as.numeric(input$param31),    
@@ -186,10 +184,6 @@ shinyServer( function(input, output, session) {
       "param27_1",
       "param29_1",
       "param29_1_1",
-      "param29_2",
-      "param29_2_1",
-      "param29_3",
-      "param29_3_1",
       "param33",
       "param33_1"
     )
@@ -207,10 +201,6 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1", 
                      "param33",
                      "param33_1", 
                      "param2_new",
@@ -230,10 +220,6 @@ shinyServer( function(input, output, session) {
                      "param34_1", 
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1", 
                      "param33",
                      "param33_1", 
                      "param2_new",
@@ -257,10 +243,6 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1", 
                      "param33",
                      "param33_1", 
                      "param15", 
@@ -282,10 +264,6 @@ shinyServer( function(input, output, session) {
                      "param34_1", 
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1", 
                      "param33",
                      "param33_1", 
                      "param2_new",
@@ -403,10 +381,6 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1",  
                      "param16", 
                      "param16_1", 
                      "param2_new",
@@ -427,10 +401,6 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1",  
                      "param16", 
                      "param16_1", 
                      "param2_new",
@@ -585,7 +555,7 @@ shinyServer( function(input, output, session) {
         withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
-                 \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) -
+                 \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) -
                       K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
                       \\right]
                             }_{\\text{net labor market gains}} - 
@@ -601,7 +571,7 @@ shinyServer( function(input, output, session) {
         withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
-                 \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) -
+                 \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) -
                       K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
                       \\right]
                             }_{\\text{net labor market gains}} - 
@@ -646,7 +616,7 @@ shinyServer( function(input, output, session) {
           "$$
             \\begin{equation}
               NPV =  \\underbrace{
-              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) 
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) 
                      \\right]
                             }_{\\text{Benefits (B)}} - 
                       \\underbrace{

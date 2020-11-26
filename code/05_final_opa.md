@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>25 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>26 November, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -162,10 +162,9 @@ chunk_sources <- function(){
     lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
     lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
-    lambda1_new_so <- c(79.51465,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
-                               79.51465,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
-                               79.51465)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
-    lambda1_new_sd_so <- c(76, 76, 76)  # ADD SOURCE
+    lambda1_new_so <- c(79.51465)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
+                             
+    lambda1_new_sd_so <- c(76)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
     delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
@@ -1764,13 +1763,9 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     lambda1_sim <- sapply(aux2,
                           function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
     lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)
-    # New lambdas here
-    aux3 <- lapply(1:3,
-                   function(x) c(lambda1_new_var2[x],
-                                 lambda1_new_var2_sd[x] ) )
-    lambda1_new_sim <- sapply(aux3,
-                              function(x)  rnorm(nsims,
-                                                 mean = x[1], sd = x[2]) )
+    # New lambda here
+    lambda1_new_sim <- rnorm(nsims, lambda1_new_var2,  lambda1_new_var2_sd)
+
     wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
     wage_ww_sim <-          rnorm(nsims, wage_ww_var2, wage_ww_var2_sd)
     profits_se_sim <-       rnorm(nsims, profits_se_var2, profits_se_var2_sd)
@@ -1942,7 +1937,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
                 coverage_var1 = coverage_sim[i],
                 q_full_var1 = q_full_sim[i],
                 q_zero_var1 = q_zero_sim[i],
-                lambda1_new_var1 = lambda1_new_sim[i,],
+                lambda1_new_var1 = lambda1_new_sim[i],
                 gov_bonds_var1 = gov_bonds_sim[i],
                 inflation_var1 = inflation_sim[i],
                 gov_bonds_new_var1 = gov_bonds_new_sim[i],
@@ -2207,7 +2202,7 @@ one_run <-
     unit_test(saturation_in, 0.511, main_run_var = main_run_var1)
 
     ###------------ Inputs for earnings2_f--------------------------------------
-    lambda1_new_in <- lambda1_new_var1[1]
+    lambda1_new_in <- lambda1_new_var1
     unit_test(lambda1_new_in, 79.51465,
               main_run_var = main_run_var1)
     lambda1_t_temp = lambda_t_f(
@@ -2548,6 +2543,19 @@ unit_test(ea3, 289.751849813911)
 
 <br>
 
+
+
+```
+## [1] "Output has change at to_test  to  17.1133848848049"
+## [1] "Output has change at to_test  to  101.74342270096"
+## [1] "Output has change at to_test  to  101.946864892034"
+## [1] "Output has change at to_test  to  609.078551436778"
+## [1] "Output has change at to_test  to  88.5539319200027"
+## [1] "Output has change at to_test  to  529.833220752916"
+## [1] "Output has change at to_test  to  61.1378664449522"
+## [1] "Output has change at to_test  to  596.041251363187"
+## [1] "Output has change at to_test  to  307.697224464304"
+```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 

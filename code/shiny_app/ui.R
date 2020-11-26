@@ -501,33 +501,13 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param29_1",
-                                  label = ("\\(\\lambda_{KLPS1} \\) = "),
-                                  value = lambda1_new_so[1]
+                                  label = ("\\(\\alpha^{pooled} \\) = "),
+                                  value = lambda1_new_so
                                 ),
                                 #need more info for Popover
                                 hidden(div(
                                   id = "SD29",
-                                  numericInput("param29_1_1", label = h3("SD = "), value = lambda1_new_sd_so[1])
-                                )),
-                                numericInput(
-                                  "param29_2",
-                                  label = ("\\(\\lambda_{KLPS2} \\) = "),
-                                  value = lambda1_new_so[2]
-                                ),
-                                
-                                hidden(div(
-                                  id = "SD30",
-                                  numericInput("param29_2_1", label = h3("SD = "), value = lambda1_new_sd_so[2])
-                                )),
-                                numericInput(
-                                  "param29_3",
-                                  label = ("\\(\\lambda_{KLPS3} \\) = "),
-                                  value = lambda1_new_so[3]
-                                ),
-                                #need more info for Popover
-                                hidden(div(
-                                  id = "SD31",
-                                  numericInput("param29_3_1", label = h3("SD = "), value = lambda1_new_sd_so[3])
+                                  numericInput("param29_1_1", label = h3("SD = "), value = lambda1_new_sd_so)
                                 )),
                                 sliderInput(
                                   "param30",
