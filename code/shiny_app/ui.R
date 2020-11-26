@@ -456,7 +456,9 @@ shinyUI(
                                            value = 0.1 * inflation_new_so
                                          )
                                        )), 
-                                       numericInput("param4", label = "Agri Wages (\\( w_{ag} \\))", value = wage_ag_so),
+                                       numericInput("param4", 
+                                                    label = "Agri Wages (\\( w_{ag} \\))", 
+                                                    value = wage_ag_so), 
                                        bsPopover(
                                          id = "param4",
                                          title = "",
@@ -465,9 +467,13 @@ shinyUI(
                                        ),
                                        hidden(div(
                                          id = "SD5",
-                                         numericInput("param4_1", label = "SD = ", value = 0.1 * wage_ag_so)
+                                         numericInput("param4_1", 
+                                                      label = "SD = ", 
+                                                      value = 0.1 * wage_ag_so)
                                        )),
-                                       numericInput("param5", label = "Work-non ag-Wages  (\\( w_{ww} \\))", value = wage_ww_so),
+                                       numericInput("param5", 
+                                                    label = "Work-non ag-Wages  (\\( w_{ww} \\))", 
+                                                    value = wage_ww_so), 
                                        bsPopover(
                                          id = "param5",
                                          title = "",
@@ -476,15 +482,21 @@ shinyUI(
                                        ),
                                        hidden(div(
                                          id = "SD6",
-                                         numericInput("param5_1", label = "SD = ", value = 0.1 * wage_ww_so)
+                                         numericInput("param5_1", 
+                                                      label = "SD = ", 
+                                                      value = 0.1 * wage_ww_so)
                                        )),
-                                       numericInput("param6", label = "Profits se = ", value = profits_se_so),
+                                       numericInput("param6", 
+                                                    label = "Profits se = ", 
+                                                    value = profits_se_so),
                                        bsPopover(id = "param6",
                                                  title = "",
                                                  content = "Average monthly self-employed profits (self-reported)"),
                                        hidden(div(
                                          id = "SD7",
-                                         numericInput("param6_1", label = "SD = ", value = 0.1 * profits_se_so)
+                                         numericInput("param6_1", 
+                                                      label = "SD = ", 
+                                                      value = 0.1 * profits_se_so)
                                        )),
                                        sliderInput(
                                          "param7",
@@ -508,7 +520,7 @@ shinyUI(
                                            max = 1 * hours_se_cond_so,
                                            value = 0.1 * hours_se_cond_so
                                          )
-                                       )),
+                                       )), 
                                        sliderInput(
                                          "param8",
                                          label = "\\(\\ H_{ag} \\) = ",
@@ -680,7 +692,10 @@ shinyUI(
                                            step = 0.000001
                                          )
                                        )),
-                                       numericInput("param16", label = "Costs of T (local $) = ", value = unit_cost_local_so),
+                                       numericInput(
+                                         "param16", 
+                                         label = "Costs of T (local $) = ", 
+                                         value = unit_cost_local_so),
                                        bsPopover(
                                          id = "param16",
                                          title = "",
@@ -695,7 +710,9 @@ shinyUI(
                                            value = 0.1 * unit_cost_local_so
                                          )
                                        )),
-                                       numericInput("param16_new", label = "Costs of T (local $) = ", value = unit_cost_2017usdppp_so),
+                                       numericInput("param16_new", 
+                                                    label = "Costs of T (local $) = ", 
+                                                    value = unit_cost_2017usdppp_so),
                                        bsPopover(
                                          id = "param16_new",
                                          title = "",
@@ -798,62 +815,204 @@ shinyUI(
                               # end tabpanel data ----
                               #
                               # Begin tabpanel research ----
-                              tabPanel("Research",
-                                       br(),
-                                       a(id="toggleResearchSDs", "Show/hide all SDs", href="#"),
-                                       br(),
-                                       br(),
-                                       numericInput("param18_1", label = ("\\( \\lambda_{1m} \\) "), value = lambda1_so[1]),
-                                       bsPopover(id="param18_1", title="", content="Increase in number of hours worked due to treatment (Male)", placement="top"),
-                                       hidden(div(id="SD22",
-                                                  numericInput("param18_1_1", label = h3("SD = "), value = 0.17))),
-                                       numericInput("param18_2", label = ("\\( \\lambda_{1m} \\) = "), value = lambda1_so[2]),
-                                       bsPopover(id="param18_2", title="", content="Increase in number of hours worked due to treatment (Female)", placement="top"),
-                                       hidden(div(id="SD23",
-                                                  numericInput("param18_2_1", label = h3("SD = "), value = 0.17))),
-                                       sliderInput("param19", label = "\\( \\lambda_{2} \\) = ",
-                                                   min = 0, max = 2 * lambda2_so, value = lambda2_so * 1),
-                                       bsPopover(id="param19", title="", content="Increase in number of hours worked due to treatment (Externalities included)", placement="top"),
-                                       hidden(div(id="SD24",
-                                                  sliderInput("param19_1", label = "SD = ", min = 0.0000001* lambda2_so, max = 1 * lambda2_so, value = 0.1 * lambda2_so, step = 1e-5))),
-                                       sliderInput("param20", label = "Take-up (\\( Q_{full} \\)) = ",
-                                                   min = 0, max = 1, value = q_full_so),
-                                       bsPopover(id="param20", title="", content="Take up rate with full subsidy on deworming treatment costs", placement="top"),
-                                       hidden(div(id="SD25",
-                                                  sliderInput("param20_1", label = "SD = ", min = 0.00000001* q_full_so, max = 1 * q_full_so, value = 0.1 * q_full_so, step = 1e-5))),
-                                       sliderInput("param28", label = "Take-up with no subsidy (\\( Q_{0} \\)) = ",
-                                                   min = 0, max = 1, value = q_zero_so),
-                                       bsPopover(id="param28", title="", content="Take up rate without subsidy on deworming treatment costs", placement="top"),
-                                       hidden(div(id="SD26",
-                                                  sliderInput("param28_1", label = "SD = ", min = 0.00000001* q_zero_so, max = 1 * q_zero_so, value = 0.1 * q_zero_so))),
-                                       sliderInput("param26", label = "x * \\(\\Delta{E} \\) = ",
-                                                   min = 0.0000001, max = 4, value = delta_ed_par_so),
-                                       #need more info for Popover
-                                       hidden(div(id="SD27",
-                                                  sliderInput("param26_1", label = "SD = ", min = 0.0000001, max = 4, value = delta_ed_par_so * 0.1))),
-                                       sliderInput("param27", label = "x * \\(\\Delta{E} \\) (ext)  = ",
-                                                   min = 0.0000001, max = 4, value = delta_ed_ext_par_so),
-                                       #need more info for Popover
-                                       hidden(div(id="SD28",
-                                                  sliderInput("param27_1", label = "SD = ", min = 0.0000001, max = 4, value = delta_ed_ext_par_so * 0.1))),
-                                       numericInput("param29_1", label = ("\\(\\lambda_{KLPS1} \\) = "), value = lambda1_new_so[1]),
-                                       #need more info for Popover
-                                       hidden(div(id="SD29",
-                                                  numericInput("param29_1_1", label = h3("SD = "), value = lambda1_new_sd_so[1]))),
-                                       numericInput("param29_2", label = ("\\(\\lambda_{KLPS2} \\) = "), value = lambda1_new_so[2]),
-                                       
-                                       hidden(div(id="SD30",
-                                                  numericInput("param29_2_1", label = h3("SD = "), value = lambda1_new_sd_so[2]))),
-                                       numericInput("param29_3", label = ("\\(\\lambda_{KLPS3} \\) = "), value = lambda1_new_so[3]),
-                                       #need more info for Popover
-                                       hidden(div(id="SD31",
-                                                  numericInput("param29_3_1", label = h3("SD = "), value = lambda1_new_sd_so[3]))),
-                                       sliderInput("param30", label = "Prevalence in original study (\\( \\eta \\)) = ",
-                                                   min = 0, max = 1, value = prevalence_0_so),
-                                       bsPopover(id="param30", title="", content="Prevalence of parasitic worms in population (Miguel & Kremer 2004)", placement = "top"),
-                                       hidden(div(id="SD32",
-                                                  sliderInput("param30_1", label = "SD = ", min = 0.0000001 , max = 1 , value = 0.1)))
-                              ),
+                              tabPanel(
+                                "Research",
+                                br(),
+                                a(id = "toggleResearchSDs", "Show/hide all SDs", href =
+                                    "#"),
+                                br(),
+                                br(),
+                                numericInput(
+                                  "param18_1",
+                                  label = ("\\( \\lambda_{1m} \\) "),
+                                  value = lambda1_so[1]
+                                ),
+                                bsPopover(
+                                  id = "param18_1",
+                                  title = "",
+                                  content = "Increase in number of hours worked due to treatment (Male)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD22",
+                                  numericInput("param18_1_1", label = h3("SD = "), value = 0.17)
+                                )),
+                                numericInput(
+                                  "param18_2",
+                                  label = ("\\( \\lambda_{1m} \\) = "),
+                                  value = lambda1_so[2]
+                                ),
+                                bsPopover(
+                                  id = "param18_2",
+                                  title = "",
+                                  content = "Increase in number of hours worked due to treatment (Female)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD23",
+                                  numericInput("param18_2_1", label = h3("SD = "), value = 0.17)
+                                )),
+                                sliderInput(
+                                  "param19",
+                                  label = "\\( \\lambda_{2} \\) = ",
+                                  min = 0,
+                                  max = 2 * lambda2_so,
+                                  value = lambda2_so * 1
+                                ),
+                                bsPopover(
+                                  id = "param19",
+                                  title = "",
+                                  content = "Increase in number of hours worked due to treatment (Externalities included)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD24",
+                                  sliderInput(
+                                    "param19_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 * lambda2_so,
+                                    max = 1 * lambda2_so,
+                                    value = 0.1 * lambda2_so,
+                                    step = 1e-5
+                                  )
+                                )),
+                                sliderInput(
+                                  "param20",
+                                  label = "Take-up (\\( Q_{full} \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = q_full_so
+                                ),
+                                bsPopover(
+                                  id = "param20",
+                                  title = "",
+                                  content = "Take up rate with full subsidy on deworming treatment costs",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD25",
+                                  sliderInput(
+                                    "param20_1",
+                                    label = "SD = ",
+                                    min = 0.00000001 * q_full_so,
+                                    max = 1 * q_full_so,
+                                    value = 0.1 * q_full_so,
+                                    step = 1e-5
+                                  )
+                                )),
+                                sliderInput(
+                                  "param28",
+                                  label = "Take-up with no subsidy (\\( Q_{0} \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = q_zero_so
+                                ),
+                                bsPopover(
+                                  id = "param28",
+                                  title = "",
+                                  content = "Take up rate without subsidy on deworming treatment costs",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD26",
+                                  sliderInput(
+                                    "param28_1",
+                                    label = "SD = ",
+                                    min = 0.00000001 * q_zero_so,
+                                    max = 1 * q_zero_so,
+                                    value = 0.1 * q_zero_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param26",
+                                  label = "x * \\(\\Delta{E} \\) = ",
+                                  min = 0.0000001,
+                                  max = 4,
+                                  value = delta_ed_par_so
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD27",
+                                  sliderInput(
+                                    "param26_1",
+                                    label = "SD = ",
+                                    min = 0.0000001,
+                                    max = 4,
+                                    value = delta_ed_par_so * 0.1
+                                  )
+                                )),
+                                sliderInput(
+                                  "param27",
+                                  label = "x * \\(\\Delta{E} \\) (ext)  = ",
+                                  min = 0.0000001,
+                                  max = 4,
+                                  value = delta_ed_ext_par_so
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD28",
+                                  sliderInput(
+                                    "param27_1",
+                                    label = "SD = ",
+                                    min = 0.0000001,
+                                    max = 4,
+                                    value = delta_ed_ext_par_so * 0.1
+                                  )
+                                )),
+                                numericInput(
+                                  "param29_1",
+                                  label = ("\\(\\lambda_{KLPS1} \\) = "),
+                                  value = lambda1_new_so[1]
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD29",
+                                  numericInput("param29_1_1", label = h3("SD = "), value = lambda1_new_sd_so[1])
+                                )),
+                                numericInput(
+                                  "param29_2",
+                                  label = ("\\(\\lambda_{KLPS2} \\) = "),
+                                  value = lambda1_new_so[2]
+                                ),
+                                
+                                hidden(div(
+                                  id = "SD30",
+                                  numericInput("param29_2_1", label = h3("SD = "), value = lambda1_new_sd_so[2])
+                                )),
+                                numericInput(
+                                  "param29_3",
+                                  label = ("\\(\\lambda_{KLPS3} \\) = "),
+                                  value = lambda1_new_so[3]
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD31",
+                                  numericInput("param29_3_1", label = h3("SD = "), value = lambda1_new_sd_so[3])
+                                )),
+                                sliderInput(
+                                  "param30",
+                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = prevalence_0_so
+                                ),
+                                bsPopover(
+                                  id = "param30",
+                                  title = "",
+                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD32",
+                                  sliderInput(
+                                    "param30_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 ,
+                                    max = 1 ,
+                                    value = 0.1
+                                  )
+                                ))
+                              ), 
                               # end tabpanel research ----
                               #
                               # Begin tabpanel GW ----

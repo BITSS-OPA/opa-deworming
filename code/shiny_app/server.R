@@ -675,22 +675,59 @@ shinyServer( function(input, output, session) {
     }
     
     plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau", lwd = 1, fill = "#007ba7", color = "darkblue", alpha = 0.3) +
-      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black","darkblue"),lwd = c(1, 1), linetype = c("solid", "dashed")) +
+      geom_density(
+        aes(x = npv_sim,
+            alpha = 1 / 2, ..scaled..),
+        kernel = "gau",
+        lwd = 1,
+        fill = "#007ba7",
+        color = "darkblue",
+        alpha = 0.3
+      ) +
+      geom_vline(
+        xintercept = c(0, median(npv_sim)),
+        col = c("black", "darkblue"),
+        lwd = c(1, 1),
+        linetype = c("solid", "dashed")
+      ) +
       #coord_cartesian(xlim = c(-10,800))) +
-      xlim(range(density(npv_sim)$x))+
-      guides(alpha = "none", colour="none") +
-      scale_x_continuous(expand = expansion(mult = c(0, 0))) + scale_y_continuous(expand = expansion(mult = c(0, 0))) +
-      
-      
-      annotate("text", x = 2.5 * median(npv_sim), y = 0.3, label = npv_for_text, size = 6, color = "darkblue")+
-      annotate("text", x = 2.5 * median(npv_sim), y = 0.2, label = npv_for_text2, size = 6, color = "darkblue")+
-      theme(axis.ticks = element_blank(), axis.text.x = element_text(size = 18), axis.title.x = element_text(size = 18), axis.text.y = element_blank(),  
-            plot.title = element_text(size = 24),
-            plot.subtitle = element_text(size = 20),panel.background = element_blank(), axis.line.x = element_line(color = "black", size = 1.5)) 
+      xlim(range(density(npv_sim)$x)) +
+      guides(alpha = "none", colour = "none") +
+      scale_x_continuous(expand = expansion(mult = c(0, 0))) + 
+      scale_y_continuous(expand = expansion(mult = c(0, 0))) +
+      annotate(
+        "text",
+        x = 2.5 * median(npv_sim),
+        y = 0.3,
+        label = npv_for_text,
+        size = 6,
+        color = "darkblue"
+      ) +
+      annotate(
+        "text",
+        x = 2.5 * median(npv_sim),
+        y = 0.2,
+        label = npv_for_text2,
+        size = 6,
+        color = "darkblue"
+      ) +
+      theme(
+        axis.ticks = element_blank(),
+        axis.text.x = element_text(size = 18),
+        axis.title.x = element_text(size = 18),
+        axis.text.y = element_blank(),
+        plot.title = element_text(size = 24),
+        plot.subtitle = element_text(size = 20),
+        panel.background = element_blank(),
+        axis.line.x = element_line(color = "black", size = 1.5)
+      )
     if (input$rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
+      plot1 <-
+        suppressMessages(plot1 + coord_cartesian(xlim = 1.2 * c(min(c(
+          -1, npv_sim
+        )), max(c(
+          100, npv_sim
+        )))))
     }
     return (list(plot1,position,total_time))
   }
