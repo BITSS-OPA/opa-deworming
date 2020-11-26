@@ -1,10 +1,9 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>20 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>25 November, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
-  
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -18,10 +17,11 @@ output:
     theme: cerulean
     toc: yes
     toc_collapsed: no
-    toc_depth: 3
+    toc_depth:  3
     toc_float: yes
+  
   word_document: null
-  rolldown::scrollama_sidebar: default
+  
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
@@ -46,7 +46,7 @@ bibliography: bibliography.bib
 
 
 <div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -749,6 +749,13 @@ The table below summarises the three different approaches and the different alte
 
 
 <br><br>
+
+```
+## [1] "Output has change at to_test  to  33.0418287920955"
+## [1] "Output has change at to_test  to  261.262613543282"
+## [1] "Output has change at to_test  to  308.25164762882"
+```
+
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
 # References
