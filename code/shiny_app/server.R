@@ -6,13 +6,16 @@ shinyServer( function(input, output, session) {
   
   #Show/hide SDs code. Not sure where to put this code
   onclick("toggleDataSDs",
-          lapply(c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
-                            "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
-                            "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), toggle, anim=TRUE))
+          lapply(
+            c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
+              "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
+              "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), 
+            toggle, anim=TRUE)
+          )
   
   onclick("toggleResearchSDs",
-          lapply(c("SD22", "SD23", "SD24", "SD25", "SD26", "SD27", "SD28",
-                            "SD29", "SD30", "SD31", "SD32"), toggle, anim=TRUE))
+          lapply(c("SD22", "SD23", "SD24", "SD25", "SD27", "SD28",
+                   "SD29", "SD32"), toggle, anim=TRUE))
   
   onclick("toggleGWSDs",
           lapply(c("SD33","SD34", "SD35", "SD36", "SD37", "SD38"), toggle, anim=TRUE))
@@ -81,11 +84,9 @@ shinyServer( function(input, output, session) {
       delta_ed_ext_var2 = as.numeric(input$param27),                                              
       delta_ed_ext_var2_sd = as.numeric(input$param27_1),                                               
       q_zero_var2 = as.numeric(input$param28),                                                
-      q_zero_var2_sd = as.numeric(input$param28_1), 
-      lambda1_new_var2 = c(as.numeric(input$param29_1), as.numeric(input$param29_2), 
-                           as.numeric(input$param29_3)),                   
-      lambda1_new_var2_sd = c(as.numeric(input$param29_1_1), as.numeric(input$param29_2_1), 
-                              as.numeric(input$param29_3_1)),             
+      q_zero_var2_sd = 0.001, 
+      lambda1_new_var2 = as.numeric(input$param29_1),                   
+      lambda1_new_var2_sd = as.numeric(input$param29_1_1),             
       prevalence_0_var2 = as.numeric(input$param30),    
       prevalence_0_var2_sd = as.numeric(input$param30_1), 
       prevalence_r_var2 = as.numeric(input$param31),    
@@ -159,6 +160,8 @@ shinyServer( function(input, output, session) {
       "param28_1",
       "param26",
       "param26_1",
+      "param28", 
+      "param28_1", 
       "param30",
       "param30_1",
       "param21_1",                                          #Guesswork
@@ -181,10 +184,6 @@ shinyServer( function(input, output, session) {
       "param27_1",
       "param29_1",
       "param29_1_1",
-      "param29_2",
-      "param29_2_1",
-      "param29_3",
-      "param29_3_1",
       "param33",
       "param33_1"
     )
@@ -202,10 +201,6 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1", 
                      "param33",
                      "param33_1", 
                      "param2_new",
@@ -213,7 +208,9 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new",
                      "param16_new",
-                     "param6_1_new")
+                     "param6_1_new", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. With externalities. Tax") {
@@ -223,10 +220,6 @@ shinyServer( function(input, output, session) {
                      "param34_1", 
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1", 
                      "param33",
                      "param33_1", 
                      "param2_new",
@@ -234,7 +227,9 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new",
                      "param16_new",
-                     "param6_1_new")
+                     "param6_1_new", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. All income") {
@@ -248,10 +243,6 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1", 
                      "param33",
                      "param33_1", 
                      "param15", 
@@ -261,7 +252,9 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new",
                      "param16_new",
-                     "param6_1_new")
+                     "param6_1_new", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. With ext. All income") {
@@ -271,10 +264,6 @@ shinyServer( function(input, output, session) {
                      "param34_1", 
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1", 
                      "param33",
                      "param33_1", 
                      "param2_new",
@@ -282,7 +271,9 @@ shinyServer( function(input, output, session) {
                      "param3_new",
                      "param3_1_new",
                      "param16_new",
-                     "param6_1_new")
+                     "param6_1_new", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
       
@@ -324,7 +315,9 @@ shinyServer( function(input, output, session) {
                      "param3",
                      "param3_1",
                      "param16",
-                     "param6_1"
+                     "param6_1", 
+                     "param30", 
+                     "param30_1"
       )
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
@@ -368,7 +361,9 @@ shinyServer( function(input, output, session) {
                      "param3",
                      "param3_1",
                      "param16",
-                     "param16_1")
+                     "param16_1", 
+                     "param30", 
+                     "param30_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A3. All income of A1") {
@@ -386,10 +381,6 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1",  
                      "param16", 
                      "param16_1", 
                      "param2_new",
@@ -410,10 +401,6 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param29_1",
                      "param29_1_1",
-                     "param29_2",
-                     "param29_2_1",
-                     "param29_3",
-                     "param29_3_1",  
                      "param16", 
                      "param16_1", 
                      "param2_new",
@@ -568,7 +555,7 @@ shinyServer( function(input, output, session) {
         withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
-                 \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) -
+                 \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) -
                       K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
                       \\right]
                             }_{\\text{net labor market gains}} - 
@@ -584,7 +571,7 @@ shinyServer( function(input, output, session) {
         withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
-                 \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) -
+                 \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) -
                       K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2) 
                       \\right]
                             }_{\\text{net labor market gains}} - 
@@ -604,7 +591,8 @@ shinyServer( function(input, output, session) {
                      \\right]
                             }_{\\text{labor market gains}} - 
                       \\underbrace{
-                      \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                       \\left[\\sum_{t=0}^{t_{treat}} \\left( \\frac{1}{1 + r}\\right)^{t} \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      \\right]
                       }_{\\text{cost of deworming medication}}
             
             \\tag{7}
@@ -629,7 +617,7 @@ shinyServer( function(input, output, session) {
           "$$
             \\begin{equation}
               NPV =  \\underbrace{
-              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha_{1}, \\alpha_{2}, \\alpha_{3}) 
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) 
                      \\right]
                             }_{\\text{Benefits (B)}} - 
                       \\underbrace{
@@ -655,7 +643,7 @@ shinyServer( function(input, output, session) {
     if (plotType == "main"){
       position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
       npv_sim <- npv_sim_all[[ policy_estimates[position] ]] 
-      npv_for_text <- paste("Median NPV:", round(median(npv_sim), 2))
+      npv_for_text <- paste(round(median(npv_sim), 2))
       npv_for_text2 <- NULL
       
     } 
@@ -675,22 +663,59 @@ shinyServer( function(input, output, session) {
     }
     
     plot1 <- ggplot() +
-      geom_density(aes(x = npv_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau", lwd = 1, fill = "#007ba7", color = "darkblue", alpha = 0.3) +
-      geom_vline(xintercept = c(0, median(npv_sim)), col=c("black","darkblue"),lwd = c(1, 1), linetype = c("solid", "dashed")) +
-      #coord_cartesian(xlim = c(-10,800))) +
-      xlim(range(density(npv_sim)$x))+
-      guides(alpha = "none", colour="none") +
-      scale_x_continuous(expand = expansion(mult = c(0, 0))) + scale_y_continuous(expand = expansion(mult = c(0, 0))) +
-      
-      annotate("text", x = 1.9 * median(npv_sim), y = 0.25, label = npv_for_text, size = 6, color = "darkblue")+
-      annotate("text", x = 1.9 * median(npv_sim), y = 0.15, label = npv_for_text2, size = 6, color = "darkblue")+
-
-      theme(axis.ticks = element_blank(), axis.text.x = element_text(size = 18), axis.title.x = element_text(size = 18), axis.text.y = element_blank(),  
-            plot.title = element_text(size = 24),
-            plot.subtitle = element_text(size = 20),panel.background = element_blank(), axis.line.x = element_line(color = "black", size = 1.5)) 
+      geom_density(
+        aes(x = npv_sim,
+            alpha = 1 / 2, ..scaled..),
+        kernel = "gau",
+        lwd = 1,
+        fill = "#007ba7",
+        color = "darkblue",
+        alpha = 0.3
+      ) +
+      geom_vline(
+        xintercept = c(0, median(npv_sim)),
+        col = c("black", "darkblue"),
+        lwd = c(1, 1),
+        linetype = c("solid", "dashed")
+      ) +
+      coord_cartesian(xlim = c(-100,800)) +  # fixing the x axis so we can see shifts in the density
+      #xlim(range(density(npv_sim)$x)) +
+      guides(alpha = "none", colour = "none") +
+      scale_x_continuous(expand = expansion(mult = c(0, 0))) + 
+      scale_y_continuous(expand = expansion(mult = c(0, 0))) +
+      annotate(
+        "text",
+        x = 2.5 * median(npv_sim),
+        y = 0.3,
+        label = npv_for_text,
+        size = 6,
+        color = "darkblue"
+      ) +
+      annotate(
+        "text",
+        x = 2.5 * median(npv_sim),
+        y = 0.2,
+        label = npv_for_text2,
+        size = 6,
+        color = "darkblue"
+      ) +
+      theme(
+        axis.ticks = element_blank(),
+        axis.text.x = element_text(size = 18),
+        axis.title.x = element_text(size = 18),
+        axis.text.y = element_blank(),
+        plot.title = element_text(size = 24),
+        plot.subtitle = element_text(size = 20),
+        panel.background = element_blank(),
+        axis.line.x = element_line(color = "black", size = 1.5)
+      )
     if (input$rescale == TRUE) {
-      plot1 <- suppressMessages( plot1 + coord_cartesian(xlim = 1.2 * c( min( c(-1, npv_sim) ), max( c(100, npv_sim) ))) )
+      plot1 <-
+        suppressMessages(plot1 + coord_cartesian(xlim = 1.2 * c(min(c(
+          -1, npv_sim
+        )), max(c(
+          100, npv_sim
+        )))))
     }
     return (list(plot1,position,total_time))
   }

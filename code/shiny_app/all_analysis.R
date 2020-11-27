@@ -1,4 +1,4 @@
-## ----setup, include=FALSE, purl=TRUE----------------------------------------------------------------------------------------------
+## ----setup, include=FALSE, purl=TRUE-----------------------------------------------------------------------------------------------
 html_format <- TRUE
 # Loading required libraries
 # before deploying in shinyapps.io, we need to remove the following packages:
@@ -12,7 +12,6 @@ new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"
 if(length(new.packages)) install.packages(new.packages, repos= "https://cloud.r-project.org")
 
 lapply(list.of.packages, library, character.only = TRUE)
-
 
 
 knitr::opts_knit$set(root.dir = here())
@@ -41,7 +40,7 @@ knitr::opts_chunk$set(warning = FALSE)
 
 
 
-## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE----------------------------------------------------------
+## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE-----------------------------------------------------------
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
 chunk_sources <- function(){
@@ -109,12 +108,13 @@ chunk_sources <- function(){
     ##### Research
     #############
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
-    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women
-    lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, Panel B
-    lambda1_new_so <- c(79.51465,   # avg treatment effect from klps2 (already adjusted for ppp and inflation) - w@w
-                               79.51465,   # avg treatment effect from klps3 (already adjusted for ppp and inflation) - w@w
-                               79.51465)   # avg treatment effect from klps4 (already adjusted for ppp and inflation) - w@w
-    lambda1_new_sd_so <- c(76, 76, 76)  # ADD SOURCE
+    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women, table 3, row 1, cols 2 & 3
+    lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
+    lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
+    lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
+    lambda1_new_so <- c(79.51465)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
+                             
+    lambda1_new_sd_so <- c(76)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
     q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
     delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
@@ -202,7 +202,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-## ----final-pe, echo=print_code----------------------------------------------------------------------------------------------------
+## ----final-pe, echo=print_code-----------------------------------------------------------------------------------------------------
 # - inputs: total per capita benefits, total per capita costs
 # - outputs: Net Present Value (NPV)
 chunk_final_pe <- function(){
@@ -225,7 +225,7 @@ invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
 
 
-## ----benefits, echo=print_code----------------------------------------------------------------------------------------------------
+## ----benefits, echo=print_code-----------------------------------------------------------------------------------------------------
 # - inputs: stream earnings, discounting rate, number of periods
 # - outputs: function that computes the present value of benefits
 chunk_benefits <- function(){
@@ -252,7 +252,7 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 
 
-## ----interest-rate, echo=print_code-----------------------------------------------------------------------------------------------
+## ----interest-rate, echo=print_code------------------------------------------------------------------------------------------------
 # - inputs: nominal interest rate, inflation rate
 # - outputs: real interest rate. exact and approximate formula
 chunk_interest <- function(){
@@ -290,7 +290,7 @@ interest_new_in <- interest_new_in
 
 
 
-## ----earnings1, echo=print_code---------------------------------------------------------------------------------------------------
+## ----earnings1, echo=print_code----------------------------------------------------------------------------------------------------
 # - inputs: earnings wihtout treatment (wage_in), direct treatment eff
 # (lambda1_so), indirect treatment eff (lambda2_so), saturation and coverage (coverage_so)
 # - outputs: earnings (no name specified)
@@ -316,7 +316,7 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 
 
-## ----wage_t, echo=print_code------------------------------------------------------------------------------------------------------
+## ----wage_t, echo=print_code-------------------------------------------------------------------------------------------------------
 #inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
@@ -388,7 +388,7 @@ wage_t_in <- wage_t_mo
 
 
 
-## ----lambdas, echo=print_code-----------------------------------------------------------------------------------------------------
+## ----lambdas, echo=print_code------------------------------------------------------------------------------------------------------
 # - inputs: direct (lambda1_so), and indirect (lambda2_so) treatment effects by gender
 # - outputs: simple average of direct and indirect treatment eff.
 chunk_lambdas<- function(){
@@ -414,7 +414,7 @@ lambda1_in <- lambda1_in_f()
 lambda2_in <- lambda2_in_f()
 
 
-## ----coverage-and-saturation, echo = print_code-----------------------------------------------------------------------------------
+## ----coverage-and-saturation, echo = print_code------------------------------------------------------------------------------------
 # - inputs: coverage (coverage_so), take-up with full subsidy (q_full_so), and
 # take-up with no subsidy (q_zero_so)
 # - outputs: saturation (saturation_in)
@@ -483,7 +483,7 @@ pv_benef_yes_ext_in <- pv_benef_f(
 
 
 
-## ----cost2, echo = print_code-----------------------------------------------------------------------------------------------------
+## ----cost2, echo = print_code------------------------------------------------------------------------------------------------------
 # - inputs: periods (periods_so), additional education (delta_ed_final_in),
 #  discount rate (interest) (varies by approach), cost per student
 #  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment
@@ -519,7 +519,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:  
 
 
-## ----unit_costs2, echo = print_code-----------------------------------------------------------------------------------------------
+## ----unit_costs2, echo = print_code------------------------------------------------------------------------------------------------
 # - inputs: unit costs in local currency (unit_cost_local_so), exchange rate
 #  (ex_rate_so), years of treatment (years_of_treat_0_so)
 # - outputs: unit costs of treatment (s2_f)
@@ -542,7 +542,7 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 s2_in <- s2_f()
 
 
-## ----ed-costs, echo = print_code--------------------------------------------------------------------------------------------------
+## ----ed-costs, echo = print_code---------------------------------------------------------------------------------------------------
 # - inputs: teacher salary (teach_sal_so) and benefits (teach_ben_so), number
 # of students (n_students_so), include externalities (include_ext_so), extra ed
 # without ext (delta_ed_so), and extra ed due to ext (delta_ed_ext_so)
@@ -618,7 +618,7 @@ pv_cost_yes_ext_in <- pv_costs_f(
 
 
 
-## ----delta-earnings, eval=TRUE, echo = print_code---------------------------------------------------------------------------------
+## ----delta-earnings, eval=TRUE, echo = print_code----------------------------------------------------------------------------------
 # - inputs: index for time (t_var), pooled treatment effect (lambda1_new_so[1])
 # - outputs: effect on lifetime earnings (earnings2_f)
 chunk_new_earnings <- function(){
@@ -643,7 +643,7 @@ earnings_in_no_ext_new <- earnings2_f(t_var = 0:50,
 
 
 
-## ----unit_costs2_new, echo = print_code-------------------------------------------------------------------------------------------
+## ----unit_costs2_new, echo = print_code--------------------------------------------------------------------------------------------
 # - inputs: unit costs (unit_cost_local_so), exchange rate (ex_rate_so),
 #  new interest rate (interest_new_in)
 # - outputs: total unit costs (s2_f_new)
@@ -654,9 +654,13 @@ chunk_unit_costs2_new <- function(){
   s2_f_new <- function(
     unit_cost_local_var = unit_cost_local_so,
     ex_rate_var = ex_rate_so,
-    interest_var = interest_new_in) {
+    interest_var = interest_new_in, 
+    year_of_treat_var = years_of_treat_t_so) {
       unit_cost <- ( unit_cost_local_var / ex_rate_var )
-      sum(( unit_cost * (1 + interest_var)^(-(0:2)) ) * c(1,1,0.4))
+      periods_temp <- floor(year_of_treat_var)
+      part_of_last_year_temp <- round(year_of_treat_var - periods_temp, 1)
+      sum(( unit_cost * (1 + interest_var)^(-(0:periods_temp)) ) * 
+            c(rep(1,periods_temp), part_of_last_year_temp))
     }
 
 ###############################################################################
@@ -669,7 +673,8 @@ invisible( list2env(chunk_unit_costs2_new(),.GlobalEnv) )
 s2_new_in <- s2_f_new(
   interest_var = interest_new_in,
   unit_cost_local_var = unit_cost_2017usdppp_so,
-  ex_rate_var = 1
+  ex_rate_var = 1, 
+  year_of_treat_var = years_of_treat_t_so
 )
 q2_in <- q_full_so
 
@@ -678,7 +683,7 @@ q2_in <- q_full_so
 
 
 
-## ----lambdas_eff, echo = print_code-----------------------------------------------------------------------------------------------
+## ----lambdas_eff, echo = print_code------------------------------------------------------------------------------------------------
 # - inputs: previously estimated treatment effect (lambda1_in_f), prevalence
 # rates in the original setting (prevalence_0_so), prevalence in the new setting
 # (prevalence_r_so), countries included in the analysis (country_sel_so)
@@ -723,7 +728,7 @@ lambda1_r_in <- lambda_eff_f()$lambda1_eff_in
 prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 
 
-## ----lambdas_t, echo = print_code-------------------------------------------------------------------------------------------------
+## ----lambdas_t, echo = print_code--------------------------------------------------------------------------------------------------
 # - inputs: treatment effect (lambda1_in_f), length of treatment in original
 # study (years_of_treat_0_so), length of treatment in new setting (years_of_treat_t_so)
 # - outputs: per year treatment effect (lambda1_t1) and total treatment effect
@@ -828,7 +833,7 @@ app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_in_no_ext_new,
                                 periods_var = periods_so)
 
 
-## ----eq_3, echo=print_code, eval=TRUE---------------------------------------------------------------------------------------------
+## ----eq_3, echo=print_code, eval=TRUE----------------------------------------------------------------------------------------------
 # - inputs: cost data by payer type at the contry/province level by year (df_costs_so)
 #  crosswalk between country/state and region (df_costs_cw_so), treatment counts
 #  by country/province and year (df_counts_so); staff time adjusment factor
@@ -946,7 +951,7 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
 
 
 
-## ----mc-setup, eval=TRUE, echo = print_code---------------------------------------------------------------------------------------
+## ----mc-setup, eval=TRUE, echo = print_code----------------------------------------------------------------------------------------
 # This function takes as inputs means and standard deviations of source
 # parameters and simualte draws of each source. When the source is a scalar,
 # it generates a draw from a noromal dist (mean, sd). When it is a "small"
@@ -1047,7 +1052,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
 
                       staff_time_var2,      # Guesswork
                       staff_time_var2_sd,
-                      
+
                       new_costs_var2        # Harmless. DELETE?
                       ) {
     start_time <- Sys.time()
@@ -1057,7 +1062,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     set.seed(142857)
     #Default dist: normal, default sd: 0.1* mean
     #
-    # Sources are separated into: data, research and guess work 
+    # Sources are separated into: data, research and guess work
     ## Data
     gov_bonds_sim <-        rnorm(n = nsims, mean = gov_bonds_var2,
                                   sd = gov_bonds_var2_sd)
@@ -1072,19 +1077,17 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     tax_sim <-              rnorm(nsims, tax_var2, tax_var2_sd)
 
     ## Research
-    aux1 <- 0.1 * c(lambda1_var2[1], 0.01)
+    aux1 <-0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
-    aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], aux1[x] ) )
+    #aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
+    aux2 <-  lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
     lambda1_sim <- sapply(aux2,
                           function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
     lambda2_sim <-          rnorm(nsims, lambda2_var2,  lambda2_var2_sd)
-    # New lambdas here
-    aux3 <- lapply(1:3,
-                   function(x) c(lambda1_new_var2[x],
-                                 lambda1_new_var2_sd[x] ) )
-    lambda1_new_sim <- sapply(aux3,
-                              function(x)  rnorm(nsims,
-                                                 mean = x[1], sd = x[2]) )
+    # New lambda here
+    lambda1_new_sim <- rnorm(nsims, lambda1_new_var2,  lambda1_new_var2_sd)
+
+
     wage_ag_sim <-          rnorm(nsims, wage_ag_var2, wage_ag_var2_sd)
     wage_ww_sim <-          rnorm(nsims, wage_ww_var2, wage_ww_var2_sd)
     profits_se_sim <-       rnorm(nsims, profits_se_var2, profits_se_var2_sd)
@@ -1217,12 +1220,12 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
 
     ######    
     ######    
-    
+
     ################
     ###### Runs    
     ################
 
-    #Vectors to store the results of each simulation 
+    #Vectors to store the results of each simulation
     a1_tax_sim           <- rep(NA, nsims) #a1_tax
     a1_x_tax_sim         <- rep(NA, nsims) #a1_x_tax
     a1_all_sim           <- rep(NA, nsims) #a1_all
@@ -1257,7 +1260,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
                 coverage_var1 = coverage_sim[i],
                 q_full_var1 = q_full_sim[i],
                 q_zero_var1 = q_zero_sim[i],
-                lambda1_new_var1 = lambda1_new_sim[i,],
+                lambda1_new_var1 = lambda1_new_sim[i],
                 gov_bonds_var1 = gov_bonds_sim[i],
                 inflation_var1 = inflation_sim[i],
                 gov_bonds_new_var1 = gov_bonds_new_sim[i],
@@ -1343,7 +1346,7 @@ policy_estimates_text <- c(
 
 
 
-## ----all-steps, echo=print_code---------------------------------------------------------------------------------------------------
+## ----all-steps, echo=print_code----------------------------------------------------------------------------------------------------
 # Function dependency is depicted as follows:
 # f(g()) =
 # f
@@ -1510,7 +1513,7 @@ one_run <-
 
 
     ###------------ Inputs for earnings2_f--------------------------------------
-    lambda1_new_in <- lambda1_new_var1[1]
+    lambda1_new_in <- lambda1_new_var1
     unit_test(lambda1_new_in, 79.51465,
               main_run_var = main_run_var1)
     lambda1_t_temp = lambda_t_f(
@@ -1701,7 +1704,8 @@ one_run <-
     # s2_ea_in <-- cost1_in (costs1_p2_f) <-- cost_data (costs1_p1_f())
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
                       unit_cost_local_var = cost1_in,
-                      ex_rate_var = 1)
+                      ex_rate_var = 1, 
+                      year_of_treat_var = years_of_treat_t_var1)
     unit_test(s2_ea_in,  0.19634422968991, main_run_var = main_run_var1)
     costs2_ea_in <- pv_costs_f(
       periods_var = periods_var1,
@@ -1721,7 +1725,7 @@ one_run <-
       interest_r_var = interest_in,
       cost_of_schooling_var = cost_per_student_in,
       s1_var = 0,
-      q1_var = 0,
+      q1_var = q_zero_var1,
       s2_var = s2_in,
       q2_var = q_full_var1
     )
@@ -1734,7 +1738,7 @@ earnings_in_no_ext
       interest_r_var = interest_in,
       cost_of_schooling_var = cost_per_student_in,
       s1_var = 0,
-      q1_var = 0,
+      q1_var = q_zero_var1,
       s2_var = s2_in,
       q2_var = q_full_var1
     )
@@ -1742,7 +1746,8 @@ earnings_in_no_ext
 
     s2_new_in <- s2_f_new(interest_var = interest_in_new,
                           unit_cost_local_var = unit_cost_local_new_var1,
-                          ex_rate_var = 1)
+                          ex_rate_var = 1, 
+                          year_of_treat_var = years_of_treat_t_var1)
     # costs2: KLPS4
     costs_k <- pv_costs_f(
       periods_var = periods_var1,
@@ -1750,7 +1755,7 @@ earnings_in_no_ext
       interest_r_var = interest_in_new,
       cost_of_schooling_var = cost_per_student_in_new,
       s1_var = 0,
-      q1_var = 0,
+      q1_var = q_zero_var1,
       s2_var = s2_new_in,
       q2_var = q_full_var1
     )
