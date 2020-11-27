@@ -64,8 +64,8 @@ shinyUI(
                  sidebarPanel(
                    fluidRow(
                      column(12, align= "center",
-                     a(img(src="bitss_just_logo_transparent.png", width="20%", height="auto"), href="https://bitss.org"),
-                     a(img(src="cega_transparent.png", width="70%", height="auto"), href="https://cega.berkeley.edu"))),
+                     tags$a(img(src="bitss_just_logo_transparent.png", width="20%", height="auto"), href="https://bitss.org"),
+                     tags$a(img(src="cega_transparent.png", width="70%", height="auto"), href="https://cega.berkeley.edu"))),
                    fluidRow(
                      p(
                        "This visualization is one of three key components of an",
@@ -73,8 +73,8 @@ shinyUI(
                        "on the costs and benefits of
                        mass deworming interventions in various settings. This components are:",
                        tags$li(tags$span("This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Additional two other tabs allow reader to modify key assumptions and components and see how this output changes")),
-                       tags$li(tags$span("[A detailed report](https://rpubs.com/fhoces/547979) that describes how to obtain the policy estimate and describes each component of the analysis.")), 
-                       tags$li(tags$span("[A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app). "))
+                       tags$li(tags$a(href="https://rpubs.com/fhoces/547979", "A detailed report"),"that describes how to obtain the policy estimate and describes each component of the analysis"), 
+                       tags$li(tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "A repository"),"that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app)."),
                      ),
                      p("The app is the result of a collaboration between the",
                        tags$a(href="https://www.bitss.org/", "Berkeley Initiative
