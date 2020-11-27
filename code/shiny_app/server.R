@@ -685,16 +685,16 @@ shinyServer( function(input, output, session) {
       scale_y_continuous(expand = expansion(mult = c(0, 0))) +
       annotate(
         "text",
-        x = 2.5 * median(npv_sim),
-        y = 0.3,
+        x = 1.75 * median(npv_sim),
+        y = 0.2,
         label = npv_for_text,
         size = 6,
         color = "darkblue"
       ) +
       annotate(
         "text",
-        x = 2.5 * median(npv_sim),
-        y = 0.2,
+        x = 1.75 * median(npv_sim),
+        y = 0.1,
         label = npv_for_text2,
         size = 6,
         color = "darkblue"
