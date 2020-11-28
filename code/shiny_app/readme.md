@@ -1,6 +1,12 @@
 # Tutorial on how to reproduce and modify the Shiny App for the Deworming Open Policy Analysis
 
-The shiny app for the deworming OPA contains three files: `ui.R`, `server.R`, and `all_analysis.R`. The `05_final_opa` file contains the full walkthrough for the analysis, which is then represented in a more code-friendly way in `all_analysis.R`. This data then is passed to `ui.R`, which is the user interface, and `server.R`, which manages the server components of the shiny app. The purpose of the shiny app is to allow the user to experiment with the data to see the changes that those differences make, in order to better understand the analysis. It turns policy analysis, which is often complex and hard to understand, into an easily readable and understandable format.
+The shiny app for the deworming OPA contains three files: `ui.R`, `server.R`, and `all_analysis.R`.
+- `05_final_opa` file contains the full walkthrough for the analysis, which is then represented in a more code-friendly way in `all_analysis.R`
+- The data is `all_analysis.R` is passed to... 
+    - `ui.R`, which is the user interface
+    - `server.R`, which manages the server components of the shiny app
+
+The purpose of the shiny app is to allow the user to experiment with the data to see the changes that those differences make, in order to better understand the analysis. It turns policy analysis, which is often complex and hard to understand, into an easily readable and understandable format.
 
 ## Your setup to reproduce and modify the `ui.R` of the deworming OPA
 
@@ -118,7 +124,6 @@ you don't want the slider to appear in")`.
 
 <img align="center" width="50%" src="./www/sa_readme_chart.png">
 
-**Is more explanation needed? Or is it clear from previous sections of the readme?**
 
 
 
