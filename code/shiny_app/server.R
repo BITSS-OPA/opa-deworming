@@ -642,7 +642,7 @@ shinyServer( function(input, output, session) {
     
     
     if (plotType == "main"){
-      position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
+      position <- which( policy_estimates_text == input$policy_est)
       npv_sim <- npv_sim_all[[ policy_estimates[position] ]] 
       npv_for_text <- paste("Median NPV:", round(median(npv_sim), 2))
       npv_for_text2 <- NULL
@@ -650,7 +650,7 @@ shinyServer( function(input, output, session) {
     } 
     
     if (plotType == "ka"){
-      position <- which( policy_estimates_text == input$policy_est_ka)
+      position <- which( policy_estimates_text == input$policy_est)
       npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
       npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
       npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
