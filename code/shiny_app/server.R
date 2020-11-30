@@ -643,7 +643,7 @@ shinyServer( function(input, output, session) {
     if (plotType == "main"){
       position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
       npv_sim <- npv_sim_all[[ policy_estimates[position] ]] 
-      npv_for_text <- paste(round(median(npv_sim), 2))
+      npv_for_text <- paste("Median NPV:", round(median(npv_sim), 2))
       npv_for_text2 <- NULL
       
     } 
@@ -685,16 +685,16 @@ shinyServer( function(input, output, session) {
       scale_y_continuous(expand = expansion(mult = c(0, 0))) +
       annotate(
         "text",
-        x = 2.5 * median(npv_sim),
-        y = 0.3,
+        x = 1.75 * median(npv_sim),
+        y = 0.2,
         label = npv_for_text,
         size = 6,
         color = "darkblue"
       ) +
       annotate(
         "text",
-        x = 2.5 * median(npv_sim),
-        y = 0.2,
+        x = 1.75 * median(npv_sim),
+        y = 0.1,
         label = npv_for_text2,
         size = 6,
         color = "darkblue"
