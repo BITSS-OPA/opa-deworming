@@ -11,7 +11,7 @@ library(shinyBS)
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
-
+source("all_analysis.R")
 costs_temp_india   <-
   costs1_p2_f(
     country_total_var = costs_data$total,
@@ -53,7 +53,7 @@ nsims <- 1e3
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
 # here() creates conflits with shiny deployment. Use source("all_analysis.R") intead
 # source(here("code", "shiny_app", "all_analysis.R"))
-source("all_analysis.R")
+
 #fluidPage is something must have
 shinyUI(
   fluidPage( theme = shinytheme("cerulean"),
@@ -229,6 +229,16 @@ shinyUI(
                               "param37",
                               label = h4("Prevalence in the new region"),
                               value = round(prevalence_r_in, 2)
+                            ),
+                            helpText("For reference:", br(),
+                                     paste("Prevalence in India is", round(prevalence_india,2)), br(),
+                                     paste("Prevalence in Kenya is", round(prevalence_kenya,2)), br(),
+                                     paste("Prevalence in Nigeria is", round(prevalence_nigeria,2)), br(),
+                                     paste("Prevalence in Vietnam is", round(prevalence_vietnam,2))), 
+                            numericInput(
+                              "param38",
+                              label = h4("Length of treatment (years)"),
+                              value = round(years_of_treat_0_so, 2)
                             ),
                             helpText("For reference:", br(),
                                      paste("Prevalence in India is", round(prevalence_india,2)), br(),
@@ -1059,7 +1069,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param31",
-                                  label = "Prevalence (\\( \\eta \\)) = ",
+                                  label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
                                   min = 0 ,
                                   max = 1,
                                   value = prevalence_0_so
@@ -1067,7 +1077,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param31",
                                   title = "",
-                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
+                                  content = "Prevalence of parasitic worms in new population",
                                   placement = "top"
                                 ),
                                 hidden(div(
