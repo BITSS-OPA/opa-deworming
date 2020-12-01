@@ -12,6 +12,7 @@ library(shinyBS)
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 source("all_analysis.R")
+
 costs_temp_india   <-
   costs1_p2_f(
     country_total_var = costs_data$total,
@@ -61,44 +62,75 @@ shinyUI(
                # Begin main policy estimate tab ---- 
                tabPanel(
                 "Main Policy Estimate",
-                 sidebarPanel(
-                   fluidRow(
-                     column(12, align= "center",
-                     tags$a(img(src="bitss_just_logo_transparent.png", width="20%", height="auto"), href="https://bitss.org"),
-                     tags$a(img(src="cega_transparent.png", width="70%", height="auto"), href="https://cega.berkeley.edu"))),
-                   fluidRow(
-                     p(
-                       "This visualization is one of three key components of an",
-                       tags$a(href="http://www.bitss.org/opa/projects/deworming/","Open Policy Analysis (OPA)"),
-                       "on the costs and benefits of
+                sidebarPanel(
+                  fluidRow(column(
+                    12,
+                    align = "center",
+                    tags$a(
+                      img(
+                        src = "bitss_just_logo_transparent.png",
+                        width = "20%",
+                        height = "auto"
+                      ),
+                      href = "https://bitss.org"
+                    ),
+                    tags$a(
+                      img(
+                        src = "cega_transparent.png",
+                        width = "70%",
+                        height = "auto"
+                      ),
+                      href = "https://cega.berkeley.edu"
+                    )
+                  )),
+                  fluidRow(
+                    p(
+                      "This visualization is one of three key components of an",
+                      tags$a(href = "http://www.bitss.org/opa/projects/deworming/", "Open Policy Analysis (OPA)"),
+                      "on the costs and benefits of
                        mass deworming interventions in various settings. This components are:",
-                       tags$li(tags$span("This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Additional two other tabs allow reader to modify key assumptions and components and see how this output changes")),
-                       tags$li(tags$a(href="https://rpubs.com/fhoces/547979", "A detailed report"),"that describes how to obtain the policy estimate and describes each component of the analysis"), 
-                       tags$li(tags$a(href="https://github.com/BITSS-OPA/opa-deworming", "A repository"),"that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app)."),
-                     ),
-                     p("The app is the result of a collaboration between the",
-                       tags$a(href="https://www.bitss.org/", "Berkeley Initiative
-                                     for Transparency in the Social Sciences"),
-                       "and",
-                       tags$a(href="https://www.evidenceaction.org/dewormtheworld-2/",
-                              "Evidence Action."))
-                   ),
-                   fluidRow(
-                     id = "tPanel_main",
-                     style = "max-width: 400px; max-height: 300px; position:relative;",
-                     br(),
-                     h4(strong("Description of Results")),
-                     p(
-                       "We simulate finding the lifetime income effects on
+                      tags$li(
+                        tags$span(
+                          "This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Additional two other tabs allow reader to modify key assumptions and components and see how this output changes"
+                        )
+                      ),
+                      tags$li(
+                        tags$a(href = "https://rpubs.com/fhoces/547979", "A detailed report"),
+                        "that describes how to obtain the policy estimate and describes each component of the analysis"
+                      ),
+                      tags$li(
+                        tags$a(href = "https://github.com/BITSS-OPA/opa-deworming", "A repository"),
+                        "that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app)."
+                      ),
+                    ),
+                    p(
+                      "The app is the result of a collaboration between the",
+                      tags$a(
+                        href = "https://www.bitss.org/",
+                        "Berkeley Initiative
+                                     for Transparency in the Social Sciences"
+                      ),
+                      "and",
+                      tags$a(href = "https://www.evidenceaction.org/dewormtheworld-2/",
+                             "Evidence Action.")
+                    )
+                  ),
+                  fluidRow(
+                    id = "tPanel_main",
+                    style = "max-width: 400px; max-height: 300px; position:relative;",
+                    br(),
+                    h4(strong("Description of Results")),
+                    p(
+                      "We simulate finding the lifetime income effects on
                               treated children many times, then plot the values
                               to create this figure. The height of the curve represents
                               how often an outcome appeared, i.e. the highest point
                               means that particular value appeared the most frequently.
                               The blue line indicates that half of all values are
                               on either side of the line."
-                     )
-                   )
-                 ),
+                    )
+                  )
+                ),
                  mainPanel(
                    fluidRow(id = "output_id1_main", style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1_main")
@@ -796,7 +828,7 @@ shinyUI(
                                          )
                                        )),
                                        numericInput("param16_new", 
-                                                    label = "Costs of T (local $) = ", 
+                                                    label = "Costs of T ($ US) = ", 
                                                     value = round(unit_cost_2017usdppp_so, 2)),
                                        bsPopover(
                                          id = "param16_new",
