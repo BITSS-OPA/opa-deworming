@@ -1,6 +1,7 @@
 
 library(shiny)
 
+
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
@@ -493,7 +494,7 @@ shinyServer( function(input, output, session) {
             
             \\tag{1}
             \\end{equation}
-            $$ \n See approach 1 in the documentation component for more details'  ) 
+            $$ \n See', a("Approach 1", href='https://rpubs.com/fhoces/547979', target = "_blank"), 'in the documentation component for more details'  ) 
         )
         
       } else if (input$policy_est ==  "A1. With externalities. Tax"){
@@ -512,7 +513,7 @@ shinyServer( function(input, output, session) {
             
             \\tag{2}
             \\end{equation}
-            $$ \n See approach 1 in the documentation component for more details'  ) 
+            $$ \n See' , a("Approach 1", href="05_final_opa.html#21_Approach_1:_Baird_et_al_(2016)", target = "_blank"),  'in the documentation component for more details'  ) 
         )
       } else if (input$policy_est == "A1. All income"){
         withMathJax(
@@ -530,7 +531,7 @@ shinyServer( function(input, output, session) {
             
             \\tag{3}
             \\end{equation}
-            $$ \n See approach 1 in the documentation component for more details'  
+            $$ \n See' , a("Approach 1", href="https://rpubs.com/fhoces/547979", target = "_blank"),  'in the documentation component for more details'  
           )
         )
       } else if (input$policy_est ==  "A1. With ext. All income"){
@@ -549,7 +550,7 @@ shinyServer( function(input, output, session) {
             
             \\tag{4}
             \\end{equation}
-            $$ \n See approach 1 in the documentation component for more details'  )
+            $$ \n See', a("Approach 1", href="https://rpubs.com/fhoces/547979", target = "_blank"),  'in the documentation component for more details'  )
         )
       } else if (input$policy_est == "A2. Tax"){
         withMathJax(helpText('$$
@@ -566,7 +567,7 @@ shinyServer( function(input, output, session) {
             
             \\tag{5}
             \\end{equation}
-                                 $$ \n See approach 2 in the documentation component for more details'))
+                                 $$ \n See' , a("Approach 2", href="https://rpubs.com/fhoces/547979", target = "_blank"),  'in the documentation component for more details'))
       } else if (input$policy_est == "A2. All income"){
         withMathJax(helpText('$$
             \\begin{equation}
@@ -582,7 +583,7 @@ shinyServer( function(input, output, session) {
             
             \\tag{6}
             \\end{equation}
-                                 $$ \n See approach 2 in the documentation component for more details' ))
+                                 $$ \n See' , a("Approach 2", href="https://rpubs.com/fhoces/547979", target = "_blank"),  ' in the documentation component for more details' ))
       } else if (input$policy_est == "A3. All income of A1"){
         withMathJax(helpText('$$   
             \\begin{equation}
@@ -597,9 +598,9 @@ shinyServer( function(input, output, session) {
             
             \\tag{7}
             \\end{equation}
-             $$ \n See approach 3 in the documentation component for more details'))
+             $$ \n See' , a("Approach 3", href="https://rpubs.com/fhoces/547979", target = "_blank"),  ' in the documentation component for more details'))
       } else if (input$policy_est == "A3. All income of A1, with ext."){
-        withMathJax(helpText("$$
+        withMathJax(helpText('$$
             \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}, \\lambda_{2}) 
@@ -611,10 +612,10 @@ shinyServer( function(input, output, session) {
             
             \\tag{8}
             \\end{equation}
-            $$ \n See approach 3 in the documentation component for more details"))
+            $$ \n See' , a("Approach 3", href="https://rpubs.com/fhoces/547979", target = "_blank"),  ' approach 3 in the documentation component for more details'))
       } else if (input$policy_est == "A3. All income of A2. Main Policy Estimate"){
         withMathJax(helpText(
-          "$$
+          '$$
             \\begin{equation}
               NPV =  \\underbrace{
               \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) 
@@ -626,7 +627,7 @@ shinyServer( function(input, output, session) {
             
             \\tag{9}
             \\end{equation}
-              $$ \n See approach 3 in the documentation component for more details"
+              $$ \n See' , a("Approach 3", href="https://rpubs.com/fhoces/547979", target = "_blank"),  ' in the documentation component for more details'
         ))
       }
     } 
@@ -649,7 +650,7 @@ shinyServer( function(input, output, session) {
     } 
     
     if (plotType == "ka"){
-      position <- which( policy_estimates_text == input$policy_est_ka)
+      position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
       npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
       npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
       npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
