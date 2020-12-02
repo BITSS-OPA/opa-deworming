@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>30 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>01 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -252,7 +252,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -1968,9 +1968,9 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
       # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
       a1_x_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
       #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
-      a2_tax_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
+      a2_tax_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_a2)
       #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
-      a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
+      a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_a2)
       # EA1: no externality NPV using EAs costs
       a3_inc_a1_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
       # EA2: yes externality NPV using EAs costs
@@ -2436,7 +2436,7 @@ earnings_in_no_ext
                           ex_rate_var = 1, 
                           year_of_treat_var = years_of_treat_t_var1)
     # costs2: KLPS4
-    costs_k <- pv_costs_f(
+    costs_a2 <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
       interest_r_var = interest_in_new,
@@ -2446,7 +2446,7 @@ earnings_in_no_ext
       s2_var = s2_new_in,
       q2_var = q_full_var1
     )
-    unit_test(costs_k, 32.2977546110344, main_run_var = main_run_var1)
+    unit_test(costs_a2, 32.2977546110344, main_run_var = main_run_var1)
     return( list(
       "wage_0_in" = wage_0_in,
       "wage_t_in" = wage_t_in,
@@ -2480,7 +2480,7 @@ earnings_in_no_ext
       "costs2_ea_in" = costs2_ea_in,
       "costs2_in" = costs2_in,
       "costs2_in_x" = costs2_in_x,
-      "costs_k" = costs_k,
+      "costs_a2" = costs_a2,
       "cost1_in" = cost1_in
     ) )
   }
@@ -2506,10 +2506,10 @@ a1_x_all <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
 unit_test(a1_x_all, 741.618186471615)
 
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
-klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_k)
+klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_a2)
 unit_test(klps4_1, 55.884265345947)
 #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
-klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_k)
+klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_a2)
 unit_test(klps4_2, 499.720465340588)
 
 # EA1: no externality NPV using EAs costs
@@ -2543,19 +2543,6 @@ unit_test(ea3, 289.751849813911)
 
 <br>
 
-
-
-```
-## [1] "Output has change at to_test  to  17.1133848848049"
-## [1] "Output has change at to_test  to  101.74342270096"
-## [1] "Output has change at to_test  to  101.946864892034"
-## [1] "Output has change at to_test  to  609.078551436778"
-## [1] "Output has change at to_test  to  88.5539319200027"
-## [1] "Output has change at to_test  to  529.833220752916"
-## [1] "Output has change at to_test  to  61.1378664449522"
-## [1] "Output has change at to_test  to  596.041251363187"
-## [1] "Output has change at to_test  to  307.697224464304"
-```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 

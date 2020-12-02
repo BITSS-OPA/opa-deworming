@@ -1291,9 +1291,9 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
       # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
       a1_x_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_in_x)
       #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
-      a2_tax_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs2_in)
+      a2_tax_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_a2)
       #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
-      a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs2_in)
+      a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_a2)
       # EA1: no externality NPV using EAs costs
       a3_inc_a1_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
       # EA2: yes externality NPV using EAs costs
@@ -1749,7 +1749,7 @@ earnings_in_no_ext
                           ex_rate_var = 1, 
                           year_of_treat_var = years_of_treat_t_var1)
     # costs2: KLPS4
-    costs_k <- pv_costs_f(
+    costs_a2 <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
       interest_r_var = interest_in_new,
@@ -1759,7 +1759,7 @@ earnings_in_no_ext
       s2_var = s2_new_in,
       q2_var = q_full_var1
     )
-    unit_test(costs_k, 32.2977546110344, main_run_var = main_run_var1)
+    unit_test(costs_a2, 32.2977546110344, main_run_var = main_run_var1)
     return( list(
       "wage_0_in" = wage_0_in,
       "wage_t_in" = wage_t_in,
@@ -1793,7 +1793,7 @@ earnings_in_no_ext
       "costs2_ea_in" = costs2_ea_in,
       "costs2_in" = costs2_in,
       "costs2_in_x" = costs2_in_x,
-      "costs_k" = costs_k,
+      "costs_a2" = costs_a2,
       "cost1_in" = cost1_in
     ) )
   }
