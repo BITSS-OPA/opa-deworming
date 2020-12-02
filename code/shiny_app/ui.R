@@ -123,10 +123,12 @@ shinyUI(
                                      paste("Unit costs in Kenya is", round(costs_temp_kenya,2)), br(),
                                      paste("Unit costs in Nigeria is", round(costs_temp_nigeria,2)), br(),
                                      paste("Unit costs in Vietnam is", round(costs_temp_vietnam,2))),
-                            numericInput(
-                              "param37",
-                              label = h4("Prevalence in the new region"),
-                              value = round(prevalence_r_in, 2)
+                            sliderInput(
+                              "param31_ka",
+                              label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
+                              min = 0 ,
+                              max = 1,
+                              value = prevalence_r_in
                             ),
                             helpText("For reference:", br(),
                                      paste("Prevalence in India is", round(prevalence_india,2)), br(),
@@ -134,7 +136,7 @@ shinyUI(
                                      paste("Prevalence in Nigeria is", round(prevalence_nigeria,2)), br(),
                                      paste("Prevalence in Vietnam is", round(prevalence_vietnam,2))), 
                             numericInput(
-                              "param38",
+                              "param17_new_ka",
                               label = h4("Length of treatment (years)"),
                               value = round(years_of_treat_0_so, 2)
                             ),
@@ -841,7 +843,7 @@ shinyUI(
                                          label = "Years of treatment in new setting",
                                          min = years_of_treat_t_so / 2,
                                          max = 2 * years_of_treat_t_so,
-                                         value = years_of_treat_t_so
+                                         value = round(years_of_treat_t_so,2)
                                        ),
                                        bsPopover(
                                          id = "param17_new",
@@ -970,7 +972,7 @@ shinyUI(
                                   label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
                                   min = 0 ,
                                   max = 1,
-                                  value = prevalence_0_so
+                                  value = prevalence_r_in
                                 ),
                                 bsPopover(
                                   id = "param31",

@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>30 November, 2020</div></center>"
+date: "<center><div class='mysubtitle'>01 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:

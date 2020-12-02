@@ -90,7 +90,8 @@ shinyServer( function(input, output, session) {
       lambda1_new_var2_sd = as.numeric(input$param29_1_1),             
       prevalence_0_var2 = as.numeric(input$param30),    
       prevalence_0_var2_sd = as.numeric(input$param30_1), 
-      prevalence_r_var2 = as.numeric(input$param31),    
+#      prevalence_r_var2 = as.numeric(input$param31),
+      prevalence_r_var2 = 1,
       prevalence_r_var2_sd = as.numeric(input$param31_1),                                                                         
       counts_par_var2 = as.numeric(input$param32), 
       counts_par_var2_sd = as.numeric(input$param32_1),
@@ -99,7 +100,7 @@ shinyServer( function(input, output, session) {
       costs_par_var2 = as.numeric(input$param34), 
       costs_par_var2_sd = as.numeric(input$param34_1), 
       new_costs_var2 = as.numeric(input$param35),
-      new_prev_r_var2 = as.numeric(input$param37),
+      new_prev_r_var2 = as.numeric(input$param31),
       countries_var2 = list("india", "kenya", "nigeria", "vietnam"), # = input$param36  to make it interactive
       
       
@@ -107,8 +108,29 @@ shinyServer( function(input, output, session) {
   } 
   )
   
+# Sync prevalence variable for Key Assumptions and All Assumptions 
   
+  observeEvent(
+    input$param31_ka,
+    updateSliderInput(session, "param31", value = input$param31_ka)
+  )
+
+  observeEvent(
+    input$param31,
+    updateSliderInput(session, "param31_ka", value = input$param31)
+  )
+
+# Sync length of treatment in new environment for Key Assumptions and All Assumptions 
+  observeEvent(
+    input$param17_new_ka,
+    updateNumericInput(session, "param17_new", value = input$param17_new_ka)
+    
+  )
   
+  observeEvent(
+    input$param17_new,
+    updateSliderInput(session, "param17_new_ka", value = input$param17_new)
+  )
   
   
   # Show/hide components of each model 
