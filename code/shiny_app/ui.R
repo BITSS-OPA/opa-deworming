@@ -780,7 +780,32 @@ shinyUI(
                                     max = 10 * counts_par_sd_so,
                                     value = counts_par_sd_so
                                   )
-                                ))
+                                )),
+                                sliderInput(
+                                  "param13",
+                                  label = "Coverage (\\( R \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = coverage_so,
+                                  step = 0.01
+                                ),
+                                bsPopover(
+                                  id = "param13",
+                                  title = "",
+                                  content = "Percent of treated primary schools students",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD14",
+                                  sliderInput(
+                                    "param13_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * coverage_so,
+                                    max = 1 * coverage_so,
+                                    value = 0.1 * coverage_so,
+                                    step = 0.000001
+                                  )
+                                )),
                               ), 
                               # end tabpanel research ----
                               #
@@ -882,7 +907,6 @@ shinyUI(
                                            value = 0.1 * inflation_new_so
                                          )
                                        )), 
-                                       
                                        sliderInput(
                                          "param11",
                                          label = "Exchange rate (\\( ex \\)) = ",
@@ -929,31 +953,6 @@ shinyUI(
                                            max = 1 * growth_rate_so,
                                            value = 0.1 * growth_rate_so,
                                            step = 0.00001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param13",
-                                         label = "Coverage (\\( R \\)) = ",
-                                         min = 0,
-                                         max = 1,
-                                         value = coverage_so,
-                                         step = 0.01
-                                       ),
-                                       bsPopover(
-                                         id = "param13",
-                                         title = "",
-                                         content = "Percent of treated primary schools students",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD14",
-                                         sliderInput(
-                                           "param13_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * coverage_so,
-                                           max = 1 * coverage_so,
-                                           value = 0.1 * coverage_so,
-                                           step = 0.000001
                                          )
                                        )),
                                        sliderInput(
