@@ -11,7 +11,7 @@ library(shinyBS)
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
-
+source("all_analysis.R")
 costs_temp_india   <-
   costs1_p2_f(
     country_total_var = costs_data$total,
@@ -53,7 +53,7 @@ nsims <- 1e3
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
 # here() creates conflits with shiny deployment. Use source("all_analysis.R") intead
 # source(here("code", "shiny_app", "all_analysis.R"))
-source("all_analysis.R")
+
 #fluidPage is something must have
 shinyUI(
   fluidPage( theme = shinytheme("cerulean"),
@@ -110,109 +110,7 @@ shinyUI(
                tabPanel(
                  "Key Assumptions", 
                  sidebarPanel(
-                   fluidRow(id = "tPanel_ka",style = "max-width: 400px; max-height: 400px; position:relative;",
-                            withMathJax(),
-                            useShinyjs(),
-                   # Begin upper left box ----
-                            helpText("The net income effects of deworming have been calculated in different ways. 
-                                     Choose among different approaches: "),
-                            selectInput("policy_est_ka", h4("Policy Estimates"),
-                                        choices = policy_estimates_text,
-                                        selected = "A3. All income of A2. Main Policy Estimate"),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A1. Tax revenue' ",
-                              helpText(
-                                "Approach 1.1. Welfare measured as additional tax revenue.", br(),
-                                " - Benefits: tax revenue over predicted effect on earnings.
-                                   Data from 10 year follow-up. No externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
-                                       )
-                            ),
-
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A1. With externalities. Tax' ",
-                              helpText(
-                                "Approach 1.2. Welfare measured as additional tax revenue.", br(),
-                                " - Benefits: tax revenue over predicted effect on earnings.
-                                   Data from 10 year follow-up. Including externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
-                              )
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A1. All income' ",
-                              helpText(
-                                "Approach 1.3. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
-                                   Data from 10 year follow-up. No externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
-                              )
-                            ),
-
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A1. With ext. All income' ",
-                              helpText(
-                                "Approach 1.4. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings. Including externalities.
-                                   Data from 10 year follow-up. Including externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
-                              )
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A2. Tax' ",
-                              helpText(
-                                "Approach 2.1. Welfare measured as additional tax revenue.", br(),
-                                " - Benefits: tax revenue over predicted effect on earnings.
-                                   Data from 10, 15 and 20 year follow-up. No externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
-                                       )
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A2. All income' ",
-                              helpText(
-                                "Approach 2.2. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
-                                   Data from 10, 15 and 20 year follow-up. No externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
-                              )
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A3. All income of A1' ",
-                              helpText(
-                                "Approach 3.1. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
-                                   Data from 10 year follow-up. No externalities. 
-                                Adjusted for prevalence and length of treatment", br(),
-                                " - Costs: current implementation costs in several settings."
-                              )
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A3. All income of A1, with ext.' ",
-                              helpText(
-                                "Approach 3.2. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
-                                   Data from 10 year follow-up. Including externalities. 
-                                Adjusted for prevalence and length of treatment", br(),
-                                " - Costs: current implementation costs in several settings."
-                              )
-                            ),
-                            conditionalPanel(
-                              condition = "input.policy_est_ka == 'A3. All income of A2. Main Policy Estimate' ",
-                              helpText(
-                                "Approach 3.3. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
-                                   Data from 10, 15 and 20 year follow-up. No externalities. 
-                                Adjusted for prevalence and length of treatment", br(),
-                                " - Costs: current implementation costs in several settings."
-                              )
-                            )
-                            ),
-                   # end upper left box ----
+                   
                    fluidRow(id = "tPanel1_ka", 
                             style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;", 
                             numericInput(
@@ -225,10 +123,22 @@ shinyUI(
                                      paste("Unit costs in Kenya is", round(costs_temp_kenya,2)), br(),
                                      paste("Unit costs in Nigeria is", round(costs_temp_nigeria,2)), br(),
                                      paste("Unit costs in Vietnam is", round(costs_temp_vietnam,2))),
+                            sliderInput(
+                              "param31_ka",
+                              label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
+                              min = 0 ,
+                              max = 1,
+                              value = prevalence_r_in
+                            ),
+                            helpText("For reference:", br(),
+                                     paste("Prevalence in India is", round(prevalence_india,2)), br(),
+                                     paste("Prevalence in Kenya is", round(prevalence_kenya,2)), br(),
+                                     paste("Prevalence in Nigeria is", round(prevalence_nigeria,2)), br(),
+                                     paste("Prevalence in Vietnam is", round(prevalence_vietnam,2))), 
                             numericInput(
-                              "param37",
-                              label = h4("Prevalence in the new region"),
-                              value = round(prevalence_r_in, 2)
+                              "param17_new_ka",
+                              label = h4("Length of treatment (years)"),
+                              value = round(years_of_treat_0_so, 2)
                             ),
                             helpText("For reference:", br(),
                                      paste("Prevalence in India is", round(prevalence_india,2)), br(),
@@ -424,6 +334,226 @@ shinyUI(
                                     max = 5 * lambda2_sd_so,
                                     value = lambda2_sd_so,
                                     step = 1e-2
+                                  )
+                                )),
+                                numericInput("param4", 
+                                             label = "Agri Wages (\\( w_{ag} \\))", 
+                                             value = wage_ag_so), 
+                                bsPopover(
+                                  id = "param4",
+                                  title = "",
+                                  content = "Average hourly wage of an agricultural worker (KSH)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD5",
+                                  numericInput("param4_1", 
+                                               label = "SD = ", 
+                                               value = 0.1 * wage_ag_so)
+                                )),
+                                numericInput("param5", 
+                                             label = "Work-non ag-Wages  (\\( w_{ww} \\))", 
+                                             value = round(wage_ww_so, 2)), 
+                                bsPopover(
+                                  id = "param5",
+                                  title = "",
+                                  content = "Average hourly wage of a wage worker",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD6",
+                                  numericInput("param5_1", 
+                                               label = "SD = ", 
+                                               value = round(0.1 * wage_ww_so, 2))
+                                )),
+                                numericInput("param6", 
+                                             label = "Profits se = ", 
+                                             value = profits_se_so),
+                                bsPopover(id = "param6",
+                                          title = "",
+                                          content = "Average monthly self-employed profits (self-reported)"),
+                                hidden(div(
+                                  id = "SD7",
+                                  numericInput("param6_1", 
+                                               label = "SD = ", 
+                                               value = 0.1 * profits_se_so)
+                                )),
+                                sliderInput(
+                                  "param7",
+                                  label = "Hours se (>10) = ",
+                                  min = hours_se_cond_so / 2,
+                                  max = 2 * hours_se_cond_so,
+                                  value = hours_se_cond_so
+                                ),
+                                bsPopover(
+                                  id = "param7",
+                                  title = "",
+                                  content = "Average weekly hours worked (control group)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD8",
+                                  sliderInput(
+                                    "param7_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * hours_se_cond_so,
+                                    max = 1 * hours_se_cond_so,
+                                    value = 0.1 * hours_se_cond_so
+                                  )
+                                )), 
+                                sliderInput(
+                                  "param8",
+                                  label = "\\(\\ H_{ag} \\) = ",
+                                  min = hours_ag_so / 2,
+                                  max = 2 * hours_ag_so,
+                                  value = hours_ag_so
+                                ),
+                                bsPopover(
+                                  id = "param8",
+                                  title = "",
+                                  content = "Average weekly hours worked by agricultural workers (control group)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD9",
+                                  sliderInput(
+                                    "param8_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * hours_ag_so,
+                                    max = 1 * hours_ag_so,
+                                    value = 0.1 * hours_ag_so,
+                                    round = -4,
+                                    step = 0.001
+                                  )
+                                )),
+                                sliderInput(
+                                  "param9",
+                                  label = "\\(\\ H_{ww} \\) = ",
+                                  min = hours_ww_so / 2,
+                                  max = 2 * hours_ww_so,
+                                  value = hours_ww_so
+                                ),
+                                bsPopover(
+                                  id = "param9",
+                                  title = "",
+                                  content = "Average weekly hours worked by wage earners (control group)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD10",
+                                  sliderInput(
+                                    "param9_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * hours_ww_so,
+                                    max = 1 * hours_ww_so,
+                                    value = 0.1 * hours_ww_so,
+                                    step = 0.001
+                                  )
+                                )),
+                                sliderInput(
+                                  "param10",
+                                  label = "\\(\\ H_{se} \\) = ",
+                                  min = hours_se_so / 2,
+                                  max = 2 * hours_se_so,
+                                  value = hours_se_so
+                                ),
+                                bsPopover(
+                                  id = "param10",
+                                  title = "",
+                                  content = "Average weekly hours worked by self-employed workers (control group - non-agricultural)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD11",
+                                  sliderInput(
+                                    "param10_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * hours_se_so,
+                                    max = 1 * hours_se_so,
+                                    value = 0.1 * hours_se_so,
+                                    step = 0.001
+                                  )
+                                )),
+                                numericInput(
+                                  "param21_1",
+                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\)) = "),
+                                  value = coef_exp_so[1]
+                                ),
+                                bsPopover(
+                                  id = "param21_1",
+                                  title = "",
+                                  content = "Teacher experience coefficient",
+                                  placement = "top"
+                                ),
+                                numericInput(
+                                  "param21_2",
+                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
+                                  value = coef_exp_so[2]
+                                ),
+                                bsPopover(
+                                  id = "param21_2",
+                                  title = "",
+                                  content = "Teacher experience coefficient squared",
+                                  placement = "top"
+                                ),
+                                numericInput("param22", label = "Teacher salary = ", value = teach_sal_so),
+                                bsPopover(
+                                  id = "param22",
+                                  title = "",
+                                  content = "Average annual salary for Kenyan secondary school teacher",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD33",
+                                  numericInput("param22_1", label = "SD = ", value = 0.1 * teach_sal_so)
+                                )),
+                                numericInput("param23", label = "Teacher benefits = ", value = teach_ben_so),
+                                bsPopover(
+                                  id = "param23",
+                                  title = "",
+                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD34",
+                                  numericInput("param23_1", label = "SD = ", value = 0.1 * teach_ben_so)
+                                )),
+                                numericInput("param24", label = "Students per teacher = ", value = n_students_so),
+                                bsPopover(
+                                  id = "param24",
+                                  title = "",
+                                  content = "Average number for students per teacher",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD35",
+                                  numericInput(
+                                    "param24_1",
+                                    label = "SD = ",
+                                    value = 0.1 * n_students_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param31",
+                                  label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
+                                  min = 0 ,
+                                  max = 1,
+                                  value = prevalence_r_in
+                                ),
+                                bsPopover(
+                                  id = "param31",
+                                  title = "",
+                                  content = "Prevalence of parasitic worms in new population",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD36",
+                                  sliderInput(
+                                    "param31_1",
+                                    label = "SD = ",
+                                    min = 0.0000001,
+                                    max = 1 ,
+                                    value = 0.1
                                   )
                                 )),
                                 sliderInput(
@@ -633,144 +763,7 @@ shinyUI(
                                            value = 0.1 * inflation_new_so
                                          )
                                        )), 
-                                       numericInput("param4", 
-                                                    label = "Agri Wages (\\( w_{ag} \\))", 
-                                                    value = wage_ag_so), 
-                                       bsPopover(
-                                         id = "param4",
-                                         title = "",
-                                         content = "Average hourly wage of an agricultural worker (KSH)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD5",
-                                         numericInput("param4_1", 
-                                                      label = "SD = ", 
-                                                      value = 0.1 * wage_ag_so)
-                                       )),
-                                       numericInput("param5", 
-                                                    label = "Work-non ag-Wages  (\\( w_{ww} \\))", 
-                                                    value = round(wage_ww_so, 2)), 
-                                       bsPopover(
-                                         id = "param5",
-                                         title = "",
-                                         content = "Average hourly wage of a wage worker",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD6",
-                                         numericInput("param5_1", 
-                                                      label = "SD = ", 
-                                                      value = round(0.1 * wage_ww_so, 2))
-                                       )),
-                                       numericInput("param6", 
-                                                    label = "Profits se = ", 
-                                                    value = profits_se_so),
-                                       bsPopover(id = "param6",
-                                                 title = "",
-                                                 content = "Average monthly self-employed profits (self-reported)"),
-                                       hidden(div(
-                                         id = "SD7",
-                                         numericInput("param6_1", 
-                                                      label = "SD = ", 
-                                                      value = 0.1 * profits_se_so)
-                                       )),
-                                       sliderInput(
-                                         "param7",
-                                         label = "Hours se (>10) = ",
-                                         min = hours_se_cond_so / 2,
-                                         max = 2 * hours_se_cond_so,
-                                         value = hours_se_cond_so
-                                       ),
-                                       bsPopover(
-                                         id = "param7",
-                                         title = "",
-                                         content = "Average weekly hours worked (control group)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD8",
-                                         sliderInput(
-                                           "param7_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * hours_se_cond_so,
-                                           max = 1 * hours_se_cond_so,
-                                           value = 0.1 * hours_se_cond_so
-                                         )
-                                       )), 
-                                       sliderInput(
-                                         "param8",
-                                         label = "\\(\\ H_{ag} \\) = ",
-                                         min = hours_ag_so / 2,
-                                         max = 2 * hours_ag_so,
-                                         value = hours_ag_so
-                                       ),
-                                       bsPopover(
-                                         id = "param8",
-                                         title = "",
-                                         content = "Average weekly hours worked by agricultural workers (control group)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD9",
-                                         sliderInput(
-                                           "param8_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * hours_ag_so,
-                                           max = 1 * hours_ag_so,
-                                           value = 0.1 * hours_ag_so,
-                                           round = -4,
-                                           step = 0.001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param9",
-                                         label = "\\(\\ H_{ww} \\) = ",
-                                         min = hours_ww_so / 2,
-                                         max = 2 * hours_ww_so,
-                                         value = hours_ww_so
-                                       ),
-                                       bsPopover(
-                                         id = "param9",
-                                         title = "",
-                                         content = "Average weekly hours worked by wage earners (control group)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD10",
-                                         sliderInput(
-                                           "param9_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * hours_ww_so,
-                                           max = 1 * hours_ww_so,
-                                           value = 0.1 * hours_ww_so,
-                                           step = 0.001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param10",
-                                         label = "\\(\\ H_{se} \\) = ",
-                                         min = hours_se_so / 2,
-                                         max = 2 * hours_se_so,
-                                         value = hours_se_so
-                                       ),
-                                       bsPopover(
-                                         id = "param10",
-                                         title = "",
-                                         content = "Average weekly hours worked by self-employed workers (control group - non-agricultural)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD11",
-                                         sliderInput(
-                                           "param10_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * hours_se_so,
-                                           max = 1 * hours_se_so,
-                                           value = 0.1 * hours_se_so,
-                                           step = 0.001
-                                         )
-                                       )),
+                                       
                                        sliderInput(
                                          "param11",
                                          label = "Exchange rate (\\( ex \\)) = ",
@@ -933,7 +926,7 @@ shinyUI(
                                          label = "Years of treatment in new setting",
                                          min = years_of_treat_t_so / 2,
                                          max = 2 * years_of_treat_t_so,
-                                         value = years_of_treat_t_so
+                                         value = round(years_of_treat_t_so,2)
                                        ),
                                        bsPopover(
                                          id = "param17_new",
@@ -998,88 +991,7 @@ shinyUI(
                                     "#"),
                                 br(),
                                 br(),
-                                numericInput(
-                                  "param21_1",
-                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\)) = "),
-                                  value = coef_exp_so[1]
-                                ),
-                                bsPopover(
-                                  id = "param21_1",
-                                  title = "",
-                                  content = "Teacher experience coefficient",
-                                  placement = "top"
-                                ),
-                                numericInput(
-                                  "param21_2",
-                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
-                                  value = coef_exp_so[2]
-                                ),
-                                bsPopover(
-                                  id = "param21_2",
-                                  title = "",
-                                  content = "Teacher experience coefficient squared",
-                                  placement = "top"
-                                ),
-                                numericInput("param22", label = "Teacher salary = ", value = teach_sal_so),
-                                bsPopover(
-                                  id = "param22",
-                                  title = "",
-                                  content = "Average annual salary for Kenyan secondary school teacher",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD33",
-                                  numericInput("param22_1", label = "SD = ", value = 0.1 * teach_sal_so)
-                                )),
-                                numericInput("param23", label = "Teacher benefits = ", value = teach_ben_so),
-                                bsPopover(
-                                  id = "param23",
-                                  title = "",
-                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD34",
-                                  numericInput("param23_1", label = "SD = ", value = 0.1 * teach_ben_so)
-                                )),
-                                numericInput("param24", label = "Students per teacher = ", value = n_students_so),
-                                bsPopover(
-                                  id = "param24",
-                                  title = "",
-                                  content = "Average number for students per teacher",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD35",
-                                  numericInput(
-                                    "param24_1",
-                                    label = "SD = ",
-                                    value = 0.1 * n_students_so
-                                  )
-                                )),
-                                sliderInput(
-                                  "param31",
-                                  label = "Prevalence (\\( \\eta \\)) = ",
-                                  min = 0 ,
-                                  max = 1,
-                                  value = prevalence_0_so
-                                ),
-                                bsPopover(
-                                  id = "param31",
-                                  title = "",
-                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD36",
-                                  sliderInput(
-                                    "param31_1",
-                                    label = "SD = ",
-                                    min = 0.0000001,
-                                    max = 1 ,
-                                    value = 0.1
-                                  )
-                                )),
+                                
                                 sliderInput(
                                   "param33",
                                   label = "Additional costs due to staff time = ",
