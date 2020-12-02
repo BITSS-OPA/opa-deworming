@@ -661,6 +661,125 @@ shinyUI(
                                     max = 1 ,
                                     value = 0.1
                                   )
+                                )),
+                                sliderInput(
+                                  "param17",
+                                  label = "Years of treatment in orginal study",
+                                  min = years_of_treat_0_so / 2,
+                                  max = 2 * years_of_treat_0_so,
+                                  value = years_of_treat_0_so
+                                ),
+                                bsPopover(
+                                  id = "param17",
+                                  title = "",
+                                  content = "Average years of treatement in Kenya",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD18",
+                                  sliderInput(
+                                    "param17_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * years_of_treat_0_so,
+                                    max = 1 * years_of_treat_0_so,
+                                    value = 0.1 * years_of_treat_0_so,
+                                    step = 0.0001
+                                  )
+                                )),
+                                sliderInput(
+                                  "param17_new",
+                                  label = "Years of treatment in new setting",
+                                  min = years_of_treat_t_so / 2,
+                                  max = 2 * years_of_treat_t_so,
+                                  value = round(years_of_treat_t_so,2)
+                                ),
+                                bsPopover(
+                                  id = "param17_new",
+                                  title = "",
+                                  content = "Input years of treatment",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD19",
+                                  sliderInput(
+                                    "param17_1_new",
+                                    label = "SD = ",
+                                    min = 0.000001 * years_of_treat_t_so,
+                                    max = 1 * years_of_treat_t_so,
+                                    value = 0.1 * years_of_treat_t_so,
+                                    step = 0.0001
+                                  )
+                                )),
+                                numericInput(
+                                  "param16", 
+                                  label = "Costs of T (local $) = ", 
+                                  value = round(unit_cost_local_so,2)),
+                                bsPopover(
+                                  id = "param16",
+                                  title = "",
+                                  content = "Costs of deworming per capita (KSH)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD16",
+                                  numericInput(
+                                    "param16_1",
+                                    label = "SD = ",
+                                    value = 0.1 * unit_cost_local_so
+                                  )
+                                )),
+                                numericInput("param16_new", 
+                                             label = "Costs of T (local $) = ", 
+                                             value = round(unit_cost_2017usdppp_so, 2)),
+                                bsPopover(
+                                  id = "param16_new",
+                                  title = "",
+                                  content = "Costs of deworming per capita (USD)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD17",
+                                  numericInput(
+                                    "param16_1_new",
+                                    label = "SD = ",
+                                    value = 0.1 * unit_cost_2017usdppp_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param34",
+                                  label = "Costs adjustments = ",
+                                  min = costs_par_so / 2,
+                                  max = 20000 * costs_par_so,
+                                  value = costs_par_so
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD20",
+                                  sliderInput(
+                                    "param34_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 * costs_par_sd_so,
+                                    max = 10 * costs_par_sd_so,
+                                    value = costs_par_sd_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param32",
+                                  label = "Counts adjustment = ",
+                                  min = counts_par_so / 2,
+                                  max = 2 * counts_par_so,
+                                  value = counts_par_so
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD21",
+                                  sliderInput(
+                                    "param32_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 * counts_par_sd_so,
+                                    max = 10 * counts_par_sd_so,
+                                    value = counts_par_sd_so
+                                  )
                                 ))
                               ), 
                               # end tabpanel research ----
@@ -860,125 +979,6 @@ shinyUI(
                                            max = 1 * tax_so,
                                            value = 0.1 * tax_so,
                                            step = 0.000001
-                                         )
-                                       )),
-                                       numericInput(
-                                         "param16", 
-                                         label = "Costs of T (local $) = ", 
-                                         value = round(unit_cost_local_so,2)),
-                                       bsPopover(
-                                         id = "param16",
-                                         title = "",
-                                         content = "Costs of deworming per capita (KSH)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD16",
-                                         numericInput(
-                                           "param16_1",
-                                           label = "SD = ",
-                                           value = 0.1 * unit_cost_local_so
-                                         )
-                                       )),
-                                       numericInput("param16_new", 
-                                                    label = "Costs of T (local $) = ", 
-                                                    value = round(unit_cost_2017usdppp_so, 2)),
-                                       bsPopover(
-                                         id = "param16_new",
-                                         title = "",
-                                         content = "Costs of deworming per capita (USD)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD17",
-                                         numericInput(
-                                           "param16_1_new",
-                                           label = "SD = ",
-                                           value = 0.1 * unit_cost_2017usdppp_so
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param17",
-                                         label = "Years of treatment in orginal study",
-                                         min = years_of_treat_0_so / 2,
-                                         max = 2 * years_of_treat_0_so,
-                                         value = years_of_treat_0_so
-                                       ),
-                                       bsPopover(
-                                         id = "param17",
-                                         title = "",
-                                         content = "Average years of treatement in Kenya",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD18",
-                                         sliderInput(
-                                           "param17_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * years_of_treat_0_so,
-                                           max = 1 * years_of_treat_0_so,
-                                           value = 0.1 * years_of_treat_0_so,
-                                           step = 0.0001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param17_new",
-                                         label = "Years of treatment in new setting",
-                                         min = years_of_treat_t_so / 2,
-                                         max = 2 * years_of_treat_t_so,
-                                         value = round(years_of_treat_t_so,2)
-                                       ),
-                                       bsPopover(
-                                         id = "param17_new",
-                                         title = "",
-                                         content = "Input years of treatment",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD19",
-                                         sliderInput(
-                                           "param17_1_new",
-                                           label = "SD = ",
-                                           min = 0.000001 * years_of_treat_t_so,
-                                           max = 1 * years_of_treat_t_so,
-                                           value = 0.1 * years_of_treat_t_so,
-                                           step = 0.0001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param34",
-                                         label = "Costs adjustments = ",
-                                         min = costs_par_so / 2,
-                                         max = 20000 * costs_par_so,
-                                         value = costs_par_so
-                                       ),
-                                       #need more info for Popover
-                                       hidden(div(
-                                         id = "SD20",
-                                         sliderInput(
-                                           "param34_1",
-                                           label = "SD = ",
-                                           min = 0.0000001 * costs_par_sd_so,
-                                           max = 10 * costs_par_sd_so,
-                                           value = costs_par_sd_so
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param32",
-                                         label = "Counts adjustment = ",
-                                         min = counts_par_so / 2,
-                                         max = 2 * counts_par_so,
-                                         value = counts_par_so
-                                       ),
-                                       #need more info for Popover
-                                       hidden(div(
-                                         id = "SD21",
-                                         sliderInput(
-                                           "param32_1",
-                                           label = "SD = ",
-                                           min = 0.0000001 * counts_par_sd_so,
-                                           max = 10 * counts_par_sd_so,
-                                           value = counts_par_sd_so
                                          )
                                        ))
                               ), 
