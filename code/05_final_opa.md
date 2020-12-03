@@ -96,7 +96,7 @@ bibliography: bibliography.bib
 chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
-    nsims_so <- 1e4
+    nsims_so <- 1e2
     #############
     ##### Data  
     #############
@@ -163,7 +163,7 @@ chunk_sources <- function(){
     lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
     lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
-    lambda1_new_so <- c(79.51465)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
+    lambda1_new_so <- c(79.51)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
                              
     lambda1_new_sd_so <- c(76)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
@@ -1205,7 +1205,7 @@ Over this nine year period, treated students attended school for an additional 0
 
 ### Assessing computational reproducibility of original results  
 
-The second approach does not report benefits and costs separatedly. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of 499.72 (table A12, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). Following the steps described in this section, this analysis obtains the same result (499.7204653 and 40.7492806546435% respectively without rounding).
+The second approach does not report benefits and costs separatedly. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of 499.72 (table A12, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). Following the steps described in this section, this analysis obtains the same result (499.689353 and 40.7483155643791% respectively without rounding).
 
 
 
@@ -1436,7 +1436,7 @@ Now the benefits are flexible to worm prevalence and lenght of treatment. To fac
 
 To compute the benefits for this approach, we use data on prevalence and length of treatment for the four countries that Evidence Action has records for. Readers interested in assessing the effects of deworming for a specific value of prevalence and length of treatment are referred to the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) (tab on key assumptions) where they can input the values that best reflect their setting. To facilitate comparison with the other two approaches, we present here the results using the same length of treatment assumptions parameters as in approach 1 and 2.  
 
-Under approach 3, and using the same assumptions as above, the benefits will be: 77.61 and 702 when using benefits of approach 1 without and with externalities, and 289.9 when using the benefit structure of approach 2.  
+Under approach 3, and using the same assumptions as above, the benefits will be: 77.61 and 702 when using benefits of approach 1 without and with externalities, and 289.88 when using the benefit structure of approach 2.  
 
 ### Costs
 
@@ -2493,6 +2493,14 @@ earnings_in_no_ext
 invisible( list2env(one_run(),.GlobalEnv) )
 ```
 
+```
+## [1] "Output has change at lambda1_new_in  to  79.51"
+## [1] "Output has change at lambda1_prev_new_in[1]  to  43.3253546806668"
+## [1] "Output has change at pv_benef_tax_new  to  88.1768630910102"
+## [1] "Output has change at pv_benef_all_new  to  531.98710763807"
+## [1] "Output has change at pv_benef_all_prev_new  to  289.882154747346"
+```
+
 
 ```r
 #Baird 1: Costs = Baird w/tax and no externalities (no ext);
@@ -2513,10 +2521,23 @@ unit_test(a1_x_all, 741.618186471615)
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
 klps4_1 <- NPV_pe_f(benefits_var = pv_benef_tax_new, costs_var = costs_a2)
 unit_test(klps4_1, 55.884265345947)
+```
+
+```
+## [1] "Output has change at klps4_1  to  55.8791084799758"
+```
+
+```r
 #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
 klps4_2 <- NPV_pe_f(benefits_var = pv_benef_all_new, costs_var = costs_a2)
 unit_test(klps4_2, 499.720465340588)
+```
 
+```
+## [1] "Output has change at klps4_2  to  499.689353027036"
+```
+
+```r
 # EA1: no externality NPV using EAs costs
 ea1 <- NPV_pe_f(benefits_var = pv_benef_all_nx_prev_in, costs_var = costs2_ea_in)
 unit_test(ea1, 77.4612400741955)
@@ -2526,6 +2547,10 @@ unit_test(ea2, 701.849761243559)
 # EA3: benef= KLPS all and no ext; Costs=EA
 ea3 <- NPV_pe_f(benefits_var = pv_benef_all_prev_new, costs_var = costs2_ea_in)
 unit_test(ea3, 289.751849813911)
+```
+
+```
+## [1] "Output has change at ea3  to  289.734896575078"
 ```
 
 </details>
@@ -2540,7 +2565,7 @@ unit_test(ea3, 289.751849813911)
 | 2.2 | @klps4  all and no ext                              |  Treatment, Education          | 499.7  |
 | 3.1 | 1.3 + prevalence + length of treatment              | Treatment (EA)                 | 77.5      |
 | 3.2 | 1.4 + prevalence + length                           | Treatment (EA)                 | 701.8      |
-| **3.3**    | **2.2 + prevalence + length**                | **Treatment (EA)  **           | **289.8**  |  
+| **3.3**    | **2.2 + prevalence + length**                | **Treatment (EA)  **           | **289.7**  |  
 
 
 
@@ -2551,11 +2576,15 @@ unit_test(ea3, 289.751849813911)
 
 
 ```
-## [1] "Output has change at to_test  to  88.4541986755374"
-## [1] "Output has change at to_test  to  529.634026624537"
-## [1] "Output has change at to_test  to  61.5066655815883"
-## [1] "Output has change at to_test  to  596.125305457549"
-## [1] "Output has change at to_test  to  309.31665802808"
+## [1] "Output has change at to_test  to  14.9048115494379"
+## [1] "Output has change at to_test  to  82.3888590763094"
+## [1] "Output has change at to_test  to  89.4800331516805"
+## [1] "Output has change at to_test  to  506.7145607038"
+## [1] "Output has change at to_test  to  82.8509348096544"
+## [1] "Output has change at to_test  to  502.378664073219"
+## [1] "Output has change at to_test  to  53.7318815100236"
+## [1] "Output has change at to_test  to  501.474535303377"
+## [1] "Output has change at to_test  to  277.235942671747"
 ```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
