@@ -147,21 +147,22 @@ shinyUI(
                    fluidRow(id = "tPanel1_ka", 
                             style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;", 
                             numericInput(
-                              "param35",
+                              "param35_ka",
                               label = h4("Yearly unit costs in new country (in $US)"),
-                              value = round(costs2_ea_in, 2)
+                              value = round(costs2_ea_in, 2), 
+                              min = 0
                             ),
                             helpText("For reference:", br(),
                                      paste("Unit costs in India is", round(costs_temp_india,2)), br(),
                                      paste("Unit costs in Kenya is", round(costs_temp_kenya,2)), br(),
                                      paste("Unit costs in Nigeria is", round(costs_temp_nigeria,2)), br(),
                                      paste("Unit costs in Vietnam is", round(costs_temp_vietnam,2))),
-                            sliderInput(
+                            numericInput(
                               "param31_ka",
-                              label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
+                              label = "Prevalence in new region (\\( \\eta_{new} \\)) = ",
                               min = 0 ,
                               max = 1,
-                              value = prevalence_r_in
+                              value = round(prevalence_r_in, 2)
                             ),
                             helpText("For reference:", br(),
                                      paste("Prevalence in India is", round(prevalence_india,2)), br(),
@@ -171,7 +172,10 @@ shinyUI(
                             numericInput(
                               "param17_new_ka",
                               label = h4("Length of treatment (years)"),
-                              value = round(years_of_treat_0_so, 2)
+                              value = round(years_of_treat_0_so, 2), 
+                              min = 0,
+                              max = 10,
+                              step = 0.1,
                             ),
                             helpText("For reference:", br(),
                                      paste("Prevalence in India is", round(prevalence_india,2)), br(),
@@ -350,7 +354,12 @@ shinyUI(
                                   label = ("\\(\\alpha^{pooled} \\) = "),
                                   value = round(lambda1_new_so,2)
                                 ),
-                                #need more info for Popover
+                                bsPopover(
+                                  id = "param29_1",
+                                  title = "",
+                                  content = "Increase in yearly earnings (pooling 10, 15, 20 year follow-ups)",
+                                  placement = "top"
+                                ),
                                 hidden(div(
                                   id = "SD29",
                                   numericInput("param29_1_1", label = "SD = ", value = lambda1_new_sd_so)
@@ -377,6 +386,29 @@ shinyUI(
                                     max = 5 * lambda2_sd_so,
                                     value = lambda2_sd_so,
                                     step = 1e-2
+                                  )
+                                )),
+                                sliderInput(
+                                  "param30",
+                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = prevalence_0_so
+                                ),
+                                bsPopover(
+                                  id = "param30",
+                                  title = "",
+                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD32",
+                                  sliderInput(
+                                    "param30_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 ,
+                                    max = 1 ,
+                                    value = 0.1
                                   )
                                 )),
                                 numericInput("param4", 
@@ -540,52 +572,6 @@ shinyUI(
                                   placement = "top"
                                 ),
                                 sliderInput(
-                                  "param30",
-                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
-                                  min = 0,
-                                  max = 1,
-                                  value = prevalence_0_so
-                                ),
-                                bsPopover(
-                                  id = "param30",
-                                  title = "",
-                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD32",
-                                  sliderInput(
-                                    "param30_1",
-                                    label = "SD = ",
-                                    min = 0.0000001 ,
-                                    max = 1 ,
-                                    value = 0.1
-                                  )
-                                )),
-                                sliderInput(
-                                  "param31",
-                                  label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
-                                  min = 0 ,
-                                  max = 1,
-                                  value = prevalence_r_in
-                                ),
-                                bsPopover(
-                                  id = "param31",
-                                  title = "",
-                                  content = "Prevalence of parasitic worms in new population",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD36",
-                                  sliderInput(
-                                    "param31_1",
-                                    label = "SD = ",
-                                    min = 0.0000001,
-                                    max = 1 ,
-                                    value = 0.1
-                                  )
-                                )),
-                                sliderInput(
                                   "param13",
                                   label = "Coverage (\\( R \\)) = ",
                                   min = 0,
@@ -722,10 +708,11 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param17",
-                                  label = "Years of treatment in orginal study",
-                                  min = years_of_treat_0_so / 2,
-                                  max = 2 * years_of_treat_0_so,
-                                  value = years_of_treat_0_so
+                                  label = "Years of treatment in orginal study (\\(L_{0}\\))",
+                                  min = 0,
+                                  max = 10,
+                                  step = 0.01,
+                                  value = round(years_of_treat_t_so,2)
                                 ),
                                 bsPopover(
                                   id = "param17",
@@ -741,30 +728,6 @@ shinyUI(
                                     min = 0.000001 * years_of_treat_0_so,
                                     max = 1 * years_of_treat_0_so,
                                     value = 0.1 * years_of_treat_0_so,
-                                    step = 0.0001
-                                  )
-                                )),
-                                sliderInput(
-                                  "param17_new",
-                                  label = "Years of treatment in new setting",
-                                  min = years_of_treat_t_so / 2,
-                                  max = 2 * years_of_treat_t_so,
-                                  value = round(years_of_treat_t_so,2)
-                                ),
-                                bsPopover(
-                                  id = "param17_new",
-                                  title = "",
-                                  content = "Input years of treatment",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD19",
-                                  sliderInput(
-                                    "param17_1_new",
-                                    label = "SD = ",
-                                    min = 0.000001 * years_of_treat_t_so,
-                                    max = 1 * years_of_treat_t_so,
-                                    value = 0.1 * years_of_treat_t_so,
                                     step = 0.0001
                                   )
                                 )),
@@ -848,6 +811,29 @@ shinyUI(
                                        a(id="toggleDataSDs", "Show/hide all SDs", href="#"),
                                        br(),
                                        br(),
+                                       numericInput(
+                                         "param35",
+                                         label = "Yearly unit costs in new country (in $US)",
+                                         value = round(costs2_ea_in, 2), 
+                                         min = 0
+                                       ),
+                                       bsPopover(
+                                         id = "param35",
+                                         title = "",
+                                         content = "Yearly unit costs in new country (in $US)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD39",
+                                         sliderInput(
+                                           "param35_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * costs2_ea_in,
+                                           max = 1 * costs2_ea_in,
+                                           value = 0.1 * costs2_ea_in,
+                                           step = 0.001
+                                         )
+                                       )),
                                        sliderInput(
                                          "param11",
                                          label = "Exchange rate (\\( ex \\)) = ",
@@ -1024,12 +1010,60 @@ shinyUI(
                                     "#"),
                                 br(),
                                 br(),
-                                
+                                sliderInput(
+                                  "param31",
+                                  label = "Prevalence in new region (\\( \\eta_{new} \\)) = ",
+                                  min = 0 ,
+                                  max = 1,
+                                  value = round(prevalence_r_in, 2)
+                                ),
+                                bsPopover(
+                                  id = "param31",
+                                  title = "",
+                                  content = "Prevalence of parasitic worms in new population",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD36",
+                                  sliderInput(
+                                    "param31_1",
+                                    label = "SD = ",
+                                    min = 0.0000001,
+                                    max = 1 ,
+                                    value = 0.1
+                                  )
+                                )),
+                                sliderInput(
+                                  "param17_new",
+                                  label = "Years of treatment in new setting (\\(L_{new} \\))",
+                                  min = 0,
+                                  max = 10,
+                                  step = 0.01,
+                                  value = round(years_of_treat_t_so,2)
+                                ),
+                                bsPopover(
+                                  id = "param17_new",
+                                  title = "",
+                                  content = "Input years of treatment",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD19",
+                                  sliderInput(
+                                    "param17_1_new",
+                                    label = "SD = ",
+                                    min = 0.000001 * years_of_treat_t_so,
+                                    max = 1 * years_of_treat_t_so,
+                                    value = 0.1 * years_of_treat_t_so,
+                                    step = 0.0001
+                                  )
+                                )),
                                 sliderInput(
                                   "param33",
-                                  label = "Additional costs due to staff time = ",
-                                  min = staff_time_so / 2,
-                                  max = 2 * staff_time_so,
+                                  label = "Additional costs due to staff time (\\(\\delta_{g} \\))",
+                                  min = 0,
+                                  max = 2,
+                                  step = 0.01,
                                   value = staff_time_so
                                 ),
                                 bsPopover(
@@ -1043,8 +1077,8 @@ shinyUI(
                                   sliderInput(
                                     "param33_1",
                                     label = "SD = ",
-                                    min = 0.0000001 * staff_time_so,
-                                    max = 1 * staff_time_so,
+                                    min = 0.0000001 ,
+                                    max = 5, 
                                     value = 0.1 * staff_time_so
                                   )
                                 ))

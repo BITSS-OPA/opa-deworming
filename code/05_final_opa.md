@@ -1698,6 +1698,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
                       prevalence_r_var2,
                       prevalence_r_var2_sd,
                       new_prev_r_var2,       # substitudes the prev_r above??
+                      new_prev_r_var2_sd,
                       coverage_var2,
                       coverage_var2_sd,
                       q_full_var2,
@@ -1730,11 +1731,10 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
                       costs_par_var2_sd,
                       counts_par_var2,
                       counts_par_var2_sd,
-
                       staff_time_var2,      # Guesswork
                       staff_time_var2_sd,
-
-                      new_costs_var2        # Harmless. DELETE?
+                      new_costs_var2, 
+                      new_costs_var2_sd
                       ) {
     start_time <- Sys.time()
     ################
@@ -1821,7 +1821,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     # if there is a new entry of prevalence, draw from it. If there is not
     # then leave as null
     if (!is.null(new_prev_r_var2)){
-          new_prev_r_sim <- rnorm(nsims, new_prev_r_var2, new_prev_r_var2 * 0.1)
+          new_prev_r_sim <- rnorm(nsims, new_prev_r_var2, new_prev_r_var2_sd)
           new_prev_r_sim <- ifelse(
             new_prev_r_sim > 1,
             yes = 1,
@@ -1893,7 +1893,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     }
     temp_cost_sim <- rnorm(nsims, 
                            mean = new_costs_var2, 
-                           sd = 0.1 * new_costs_var2)
+                           sd = new_costs_var2_sd)
     ## Guess work
     # drawing samples from staff time
     staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
@@ -1960,7 +1960,8 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
                 tax_var1 = tax_sim[i],
                 periods_var1 = periods_so,
                 df_costs_var1 = costs1_df_sim[[i]],
-                new_costs_var1 = temp_cost_sim[i],    # Harmless. DELETE?
+                new_costs_var1 = temp_cost_sim[i],    
+                staff_time_var1 = staff_time_sim[i],
                 countries_var1 = countries_var2
                 ),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
@@ -2550,9 +2551,9 @@ unit_test(ea3, 289.751849813911)
 
 
 ```
-## [1] "Output has change at to_test  to  61.1359533505249"
-## [1] "Output has change at to_test  to  596.041137484807"
-## [1] "Output has change at to_test  to  307.695924057385"
+## [1] "Output has change at to_test  to  61.1360030018308"
+## [1] "Output has change at to_test  to  596.041150390902"
+## [1] "Output has change at to_test  to  307.696076488625"
 ```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->

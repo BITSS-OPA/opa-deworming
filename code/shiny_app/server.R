@@ -5,21 +5,21 @@ library(shiny)
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
-  #Show/hide SDs code. Not sure where to put this code
+  #Show/hide SDs code.
   onclick("toggleDataSDs",
           lapply(
             c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
               "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
-              "SD15", "SD16", "SD17", "SD18", "SD19", "SD20", "SD21"), 
+              "SD15", "SD16", "SD17", "SD20", "SD21", "SD39"), 
             toggle, anim=TRUE)
           )
   
   onclick("toggleResearchSDs",
           lapply(c("SD22", "SD23", "SD24", "SD25", "SD27", "SD28",
-                   "SD29", "SD32"), toggle, anim=TRUE))
+                   "SD29", "SD32", "SD36", "SD18", "SD35"), toggle, anim=TRUE))
   
   onclick("toggleGWSDs",
-          lapply(c("SD33","SD34", "SD35", "SD36", "SD37", "SD38"), toggle, anim=TRUE))
+          lapply(c("SD33","SD34", "SD36", "SD37", "SD38", "SD19"), toggle, anim=TRUE))
   
   
   reactive.data1 <- reactive( {
@@ -90,7 +90,7 @@ shinyServer( function(input, output, session) {
       lambda1_new_var2_sd = as.numeric(input$param29_1_1),             
       prevalence_0_var2 = as.numeric(input$param30),    
       prevalence_0_var2_sd = as.numeric(input$param30_1), 
-#      prevalence_r_var2 = as.numeric(input$param31),
+#     prevalence_r_var2 = as.numeric(input$param31),
       prevalence_r_var2 = 1,
       prevalence_r_var2_sd = as.numeric(input$param31_1),                                                                         
       counts_par_var2 = as.numeric(input$param32), 
@@ -100,14 +100,31 @@ shinyServer( function(input, output, session) {
       costs_par_var2 = as.numeric(input$param34), 
       costs_par_var2_sd = as.numeric(input$param34_1), 
       new_costs_var2 = as.numeric(input$param35),
+      new_costs_var2_sd = as.numeric(input$param35_1),
       new_prev_r_var2 = as.numeric(input$param31),
-      countries_var2 = list("india", "kenya", "nigeria", "vietnam"), # = input$param36  to make it interactive
+      new_prev_r_var2_sd = as.numeric(input$param31_1),
+      countries_var2 = list("india", "kenya", "nigeria", "vietnam")  # = input$param36  to make it interactive
       
       
     )
   } 
   )
   
+
+# Sync cost variable for Key Assumptions and All Assumptions 
+  
+  observeEvent(
+    input$param35_ka,
+    updateSliderInput(session, "param35", value = input$param35_ka)
+  )
+  
+  observeEvent(
+    input$param35,
+    updateSliderInput(session, "param35_ka", value = input$param35)
+  )
+  
+  
+    
 # Sync prevalence variable for Key Assumptions and All Assumptions 
   
   observeEvent(
@@ -173,6 +190,8 @@ shinyServer( function(input, output, session) {
       "param16_1_new",
       "param17",
       "param17_1",
+      "param17_new",
+      "param17_1_new",
       "param18_1",                                          #Research
       "param18_1_1",
       "param18_2",
@@ -233,7 +252,9 @@ shinyServer( function(input, output, session) {
                      "param16_new",
                      "param6_1_new", 
                      "param30", 
-                     "param30_1")
+                     "param30_1", 
+                     "param28",
+                     "param28_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. With externalities. Tax") {
@@ -252,7 +273,9 @@ shinyServer( function(input, output, session) {
                      "param16_new",
                      "param6_1_new", 
                      "param30", 
-                     "param30_1")
+                     "param30_1", 
+                     "param28",
+                     "param28_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. All income") {
@@ -277,7 +300,9 @@ shinyServer( function(input, output, session) {
                      "param16_new",
                      "param6_1_new", 
                      "param30", 
-                     "param30_1")
+                     "param30_1", 
+                     "param28",
+                     "param28_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A1. With ext. All income") {
@@ -296,7 +321,9 @@ shinyServer( function(input, output, session) {
                      "param16_new",
                      "param6_1_new", 
                      "param30", 
-                     "param30_1")
+                     "param30_1", 
+                     "param28",
+                     "param28_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
       
@@ -340,7 +367,9 @@ shinyServer( function(input, output, session) {
                      "param16",
                      "param6_1", 
                      "param30", 
-                     "param30_1"
+                     "param30_1",
+                     "param28",
+                     "param28_1"
       )
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
@@ -386,7 +415,9 @@ shinyServer( function(input, output, session) {
                      "param16",
                      "param16_1", 
                      "param30", 
-                     "param30_1")
+                     "param30_1", 
+                     "param28",
+                     "param28_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A3. All income of A1") {
@@ -409,7 +440,11 @@ shinyServer( function(input, output, session) {
                      "param2_new",
                      "param2_1_new",
                      "param3_new",
-                     "param3_1_new")
+                     "param3_1_new", 
+                     "param28",
+                     "param28_1",
+                     "param34",
+                     "param34_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
     } else if (input$policy_est == "A3. All income of A1, with ext.") {
       list_hide <- c("param22",
@@ -429,7 +464,13 @@ shinyServer( function(input, output, session) {
                      "param2_new",
                      "param2_1_new",
                      "param3_new",
-                     "param3_1_new")
+                     "param3_1_new", 
+                     "param28",
+                     "param28_1", 
+                     "param34",
+                     "param34_1",
+                     "param16",
+                     "param16_1")
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
     } else if (input$policy_est == "A3. All income of A2. Main Policy Estimate") {
@@ -449,6 +490,8 @@ shinyServer( function(input, output, session) {
                      "param27_1",
                      "param16", 
                      "param16_1",
+                     "param16_new",
+                     "param16_new_sd",
                      "param4",
                      "param4_1",
                      "param5",
@@ -471,14 +514,21 @@ shinyServer( function(input, output, session) {
                      "param18_1_1",
                      "param18_2",
                      "param18_2_1",
-                     "param33",
-                     "param33_1", 
                      "param15", 
                      "param15_1", 
                      "param2",
                      "param2_1",
                      "param3",
-                     "param3_1")
+                     "param3_1", 
+                     "param28",
+                     "param28_1", 
+                     "param34",
+                     "param34_1", 
+                     "param32", 
+                     "param32_1", 
+                     "param11", 
+                     "param11_1", 
+                     "param16_1_new")
       
       list_show <- list_master[ - which(list_master %in% list_hide)]
       
@@ -614,7 +664,7 @@ shinyServer( function(input, output, session) {
                      \\right]
                             }_{\\text{labor market gains}} - 
                       \\underbrace{
-                       \\left[\\sum_{t=0}^{t_{treat}} \\left( \\frac{1}{1 + r}\\right)^{t} \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                       \\left[\\sum_{t=0}^{t_{treat}} \\left( \\frac{1}{1 + r}\\right)^{t}  Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       \\right]
                       }_{\\text{cost of deworming medication}}
             
@@ -629,7 +679,7 @@ shinyServer( function(input, output, session) {
                      \\right]
                             }_{\\text{labor market gains}} - 
                       \\underbrace{
-                      \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{cost of deworming medication}}
             
             \\tag{8}
@@ -640,11 +690,11 @@ shinyServer( function(input, output, session) {
           '$$
             \\begin{equation}
               NPV =  \\underbrace{
-              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) 
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}, \\eta_{new}, L_{new}) 
                      \\right]
                             }_{\\text{Benefits (B)}} - 
                       \\underbrace{
-                      \\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                       Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
                       }_{\\text{Costs (C)}}
             
             \\tag{9}
