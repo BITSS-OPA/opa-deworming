@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>01 December, 2020</div></center>"
+date: "<center><div class='mysubtitle'>02 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -1144,8 +1144,10 @@ chunk_unit_costs2_new <- function(){
       unit_cost <- ( unit_cost_local_var / ex_rate_var )
       periods_temp <- floor(year_of_treat_var)
       part_of_last_year_temp <- round(year_of_treat_var - periods_temp, 1)
-      sum(( unit_cost * (1 + interest_var)^(-(0:periods_temp)) ) * 
-            c(rep(1,periods_temp), part_of_last_year_temp))
+      sum(
+        ( unit_cost * (1 + interest_var)^(-(0:periods_temp)) ) * 
+            c(rep(1,periods_temp), part_of_last_year_temp)
+        )
     }
 
 ###############################################################################
@@ -1167,7 +1169,7 @@ q2_in <- q_full_so
 </details>
 <br>
 
-With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). Most recent (2018) data from Evidence Action reveals this cost to be \$0.42 per year. Adjusting for purchasing power and inflation, we get a per capita cost of \$0.83. Adding all indirect cost over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is $1.07.
+With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). Most recent (2018) data from Evidence Action reveals this cost to be \$0.42 per year. Adjusting for purchasing power and inflation, we get a per capita cost of \$0.83. Adding all indirect cost over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is $1.44.
 
 
 #### Indirect costs: additional years of education and its costs for government  
@@ -1889,7 +1891,9 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
         "costs_by_country" = costs1_all_costs_sim[aux1_i,]
         )
     }
-
+    temp_cost_sim <- rnorm(nsims, 
+                           mean = new_costs_var2, 
+                           sd = 0.1 * new_costs_var2)
     ## Guess work
     # drawing samples from staff time
     staff_time_sim <- rnorm(nsims, staff_time_var2, staff_time_var2_sd)      
@@ -1956,7 +1960,7 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
                 tax_var1 = tax_sim[i],
                 periods_var1 = periods_so,
                 df_costs_var1 = costs1_df_sim[[i]],
-                new_costs_var1 = new_costs_var2,    # Harmless. DELETE?
+                new_costs_var1 = temp_cost_sim[i],    # Harmless. DELETE?
                 countries_var1 = countries_var2
                 ),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
@@ -2378,16 +2382,16 @@ one_run <-
                                    interest_r_var = interest_in_new,
                                    periods_var = periods_var1)
     unit_test(pv_benef_all_prev_new, 289.899107986178, main_run_var = main_run_var1)
-
     #Costs asd
     # costs1: EA costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
                             country_cost_var = df_costs_var1$costs_by_country,
-                              staff_time_var = staff_time_var1,
-                              country_name_var = df_costs_var1$Country,
-                              select_var = countries_var1,
-                              other_costs = new_costs_var1)
-    unit_test(cost1_in,  0.08480686, main_run_var = main_run_var1)
+                            staff_time_var = staff_time_var1,
+                            country_name_var = df_costs_var1$Country,
+                            select_var = countries_var1,
+                            other_costs = new_costs_var1)
+    unit_test(cost1_in,  0.08480686, 
+              main_run_var = main_run_var1)
     # s2_ea_in <-- cost1_in (costs1_p2_f) <-- cost_data (costs1_p1_f())
     s2_ea_in <- s2_f_new(interest_var = interest_in_new,
                       unit_cost_local_var = cost1_in,
@@ -2543,6 +2547,13 @@ unit_test(ea3, 289.751849813911)
 
 <br>
 
+
+
+```
+## [1] "Output has change at to_test  to  61.1359533505249"
+## [1] "Output has change at to_test  to  596.041137484807"
+## [1] "Output has change at to_test  to  307.695924057385"
+```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 

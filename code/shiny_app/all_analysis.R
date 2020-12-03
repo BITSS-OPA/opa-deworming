@@ -3,6 +3,9 @@ html_format <- TRUE
 # Loading required libraries
 # before deploying in shinyapps.io, we need to remove the following packages:
 # "plotly", "bookdown", "rootSolve"
+
+#set to false when deploying in shinyapp.io
+if (TRUE) {
 list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly",
                       "bookdown", "rootSolve","shinyBS", "shinythemes", "ggplot2")
 
@@ -12,7 +15,7 @@ new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"
 if(length(new.packages)) install.packages(new.packages, repos= "https://cloud.r-project.org")
 
 lapply(list.of.packages, library, character.only = TRUE)
-
+}
 
 knitr::opts_knit$set(root.dir = here())
 

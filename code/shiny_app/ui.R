@@ -1,4 +1,3 @@
-
 library(shiny)
 library(tidyverse)
 library(haven)
@@ -8,6 +7,8 @@ library(readxl)
 library(shinyjs)
 #library(plotly)
 library(shinyBS)
+library(shinythemes)
+library(ggplot2)
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
@@ -835,7 +836,7 @@ shinyUI(
                                        bsPopover(
                                          id = "param16_new",
                                          title = "",
-                                         content = "Costs of deworming per capita (USD)",
+                                         content = "Costs of deworming per capita (approach 2)",
                                          placement = "top"
                                        ),
                                        hidden(div(
