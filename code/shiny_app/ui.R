@@ -312,6 +312,16 @@ shinyUI(
                                     label = "SD = ", value = 
                                       lambda1_sd_so[2])
                                 )),
+                                numericInput(
+                                  "param29_1",
+                                  label = ("\\(\\alpha^{pooled} \\) = "),
+                                  value = round(lambda1_new_so,2)
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD29",
+                                  numericInput("param29_1_1", label = "SD = ", value = lambda1_new_sd_so)
+                                )),
                                 sliderInput(
                                   "param19",
                                   label = "\\( \\lambda_{2} \\) = ",
@@ -496,41 +506,27 @@ shinyUI(
                                   content = "Teacher experience coefficient squared",
                                   placement = "top"
                                 ),
-                                numericInput("param22", label = "Teacher salary = ", value = teach_sal_so),
+                                sliderInput(
+                                  "param30",
+                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = prevalence_0_so
+                                ),
                                 bsPopover(
-                                  id = "param22",
+                                  id = "param30",
                                   title = "",
-                                  content = "Average annual salary for Kenyan secondary school teacher",
+                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
                                   placement = "top"
                                 ),
                                 hidden(div(
-                                  id = "SD33",
-                                  numericInput("param22_1", label = "SD = ", value = 0.1 * teach_sal_so)
-                                )),
-                                numericInput("param23", label = "Teacher benefits = ", value = teach_ben_so),
-                                bsPopover(
-                                  id = "param23",
-                                  title = "",
-                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD34",
-                                  numericInput("param23_1", label = "SD = ", value = 0.1 * teach_ben_so)
-                                )),
-                                numericInput("param24", label = "Students per teacher = ", value = n_students_so),
-                                bsPopover(
-                                  id = "param24",
-                                  title = "",
-                                  content = "Average number for students per teacher",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD35",
-                                  numericInput(
-                                    "param24_1",
+                                  id = "SD32",
+                                  sliderInput(
+                                    "param30_1",
                                     label = "SD = ",
-                                    value = 0.1 * n_students_so
+                                    min = 0.0000001 ,
+                                    max = 1 ,
+                                    value = 0.1
                                   )
                                 )),
                                 sliderInput(
@@ -554,6 +550,31 @@ shinyUI(
                                     min = 0.0000001,
                                     max = 1 ,
                                     value = 0.1
+                                  )
+                                )),
+                                sliderInput(
+                                  "param13",
+                                  label = "Coverage (\\( R \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = coverage_so,
+                                  step = 0.01
+                                ),
+                                bsPopover(
+                                  id = "param13",
+                                  title = "",
+                                  content = "Percent of treated primary schools students",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD14",
+                                  sliderInput(
+                                    "param13_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * coverage_so,
+                                    max = 1 * coverage_so,
+                                    value = 0.1 * coverage_so,
+                                    step = 0.000001
                                   )
                                 )),
                                 sliderInput(
@@ -629,37 +650,160 @@ shinyUI(
                                     value = delta_ed_ext_par_so * 0.1
                                   )
                                 )),
-                                numericInput(
-                                  "param29_1",
-                                  label = ("\\(\\alpha^{pooled} \\) = "),
-                                  value = round(lambda1_new_so,2)
-                                ),
-                                #need more info for Popover
-                                hidden(div(
-                                  id = "SD29",
-                                  numericInput("param29_1_1", label = "SD = ", value = lambda1_new_sd_so)
-                                )),
-                                sliderInput(
-                                  "param30",
-                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
-                                  min = 0,
-                                  max = 1,
-                                  value = prevalence_0_so
-                                ),
+                                numericInput("param22", label = "Teacher salary = ", value = teach_sal_so),
                                 bsPopover(
-                                  id = "param30",
+                                  id = "param22",
                                   title = "",
-                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
+                                  content = "Average annual salary for Kenyan secondary school teacher",
                                   placement = "top"
                                 ),
                                 hidden(div(
-                                  id = "SD32",
-                                  sliderInput(
-                                    "param30_1",
+                                  id = "SD33",
+                                  numericInput("param22_1", label = "SD = ", value = 0.1 * teach_sal_so)
+                                )),
+                                numericInput("param23", label = "Teacher benefits = ", value = teach_ben_so),
+                                bsPopover(
+                                  id = "param23",
+                                  title = "",
+                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD34",
+                                  numericInput("param23_1", label = "SD = ", value = 0.1 * teach_ben_so)
+                                )),
+                                numericInput("param24", label = "Students per teacher = ", value = n_students_so),
+                                bsPopover(
+                                  id = "param24",
+                                  title = "",
+                                  content = "Average number for students per teacher",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD35",
+                                  numericInput(
+                                    "param24_1",
                                     label = "SD = ",
-                                    min = 0.0000001 ,
-                                    max = 1 ,
-                                    value = 0.1
+                                    value = 0.1 * n_students_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param17",
+                                  label = "Years of treatment in orginal study",
+                                  min = years_of_treat_0_so / 2,
+                                  max = 2 * years_of_treat_0_so,
+                                  value = years_of_treat_0_so
+                                ),
+                                bsPopover(
+                                  id = "param17",
+                                  title = "",
+                                  content = "Average years of treatement in Kenya",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD18",
+                                  sliderInput(
+                                    "param17_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * years_of_treat_0_so,
+                                    max = 1 * years_of_treat_0_so,
+                                    value = 0.1 * years_of_treat_0_so,
+                                    step = 0.0001
+                                  )
+                                )),
+                                sliderInput(
+                                  "param17_new",
+                                  label = "Years of treatment in new setting",
+                                  min = years_of_treat_t_so / 2,
+                                  max = 2 * years_of_treat_t_so,
+                                  value = round(years_of_treat_t_so,2)
+                                ),
+                                bsPopover(
+                                  id = "param17_new",
+                                  title = "",
+                                  content = "Input years of treatment",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD19",
+                                  sliderInput(
+                                    "param17_1_new",
+                                    label = "SD = ",
+                                    min = 0.000001 * years_of_treat_t_so,
+                                    max = 1 * years_of_treat_t_so,
+                                    value = 0.1 * years_of_treat_t_so,
+                                    step = 0.0001
+                                  )
+                                )),
+                                numericInput(
+                                  "param16", 
+                                  label = "Costs of T (local $) = ", 
+                                  value = round(unit_cost_local_so,2)),
+                                bsPopover(
+                                  id = "param16",
+                                  title = "",
+                                  content = "Costs of deworming per capita (KSH)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD16",
+                                  numericInput(
+                                    "param16_1",
+                                    label = "SD = ",
+                                    value = 0.1 * unit_cost_local_so
+                                  )
+                                )),
+                                numericInput("param16_new", 
+                                             label = "Costs of T (local $) = ", 
+                                             value = round(unit_cost_2017usdppp_so, 2)),
+                                bsPopover(
+                                  id = "param16_new",
+                                  title = "",
+                                  content = "Costs of deworming per capita (USD)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD17",
+                                  numericInput(
+                                    "param16_1_new",
+                                    label = "SD = ",
+                                    value = 0.1 * unit_cost_2017usdppp_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param34",
+                                  label = "Costs adjustments = ",
+                                  min = costs_par_so / 2,
+                                  max = 20000 * costs_par_so,
+                                  value = costs_par_so
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD20",
+                                  sliderInput(
+                                    "param34_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 * costs_par_sd_so,
+                                    max = 10 * costs_par_sd_so,
+                                    value = costs_par_sd_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param32",
+                                  label = "Counts adjustment = ",
+                                  min = counts_par_so / 2,
+                                  max = 2 * counts_par_so,
+                                  value = counts_par_so
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD21",
+                                  sliderInput(
+                                    "param32_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 * counts_par_sd_so,
+                                    max = 10 * counts_par_sd_so,
+                                    value = counts_par_sd_so
                                   )
                                 ))
                               ), 
@@ -671,6 +815,54 @@ shinyUI(
                                        a(id="toggleDataSDs", "Show/hide all SDs", href="#"),
                                        br(),
                                        br(),
+                                       sliderInput(
+                                         "param11",
+                                         label = "Exchange rate (\\( ex \\)) = ",
+                                         min = ex_rate_so / 2,
+                                         max = 2 * ex_rate_so,
+                                         value = ex_rate_so
+                                       ),
+                                       bsPopover(
+                                         id = "param11",
+                                         title = "",
+                                         content = "Exchange rate in 1985? (KSH to International Dollar)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD12",
+                                         sliderInput(
+                                           "param11_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * ex_rate_so,
+                                           max = 1 * ex_rate_so,
+                                           value = 0.1 * ex_rate_so,
+                                           step = 0.001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param12",
+                                         label = "growth (\\( g \\)) = ",
+                                         min = growth_rate_so / 2,
+                                         max = 2 * growth_rate_so,
+                                         value = growth_rate_so
+                                       ),
+                                       bsPopover(
+                                         id = "param12",
+                                         title = "",
+                                         content = "Kenyan Per Capita GDP Growth Rate (2002-2011)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD13",
+                                         sliderInput(
+                                           "param12_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * growth_rate_so,
+                                           max = 1 * growth_rate_so,
+                                           value = 0.1 * growth_rate_so,
+                                           step = 0.00001
+                                         )
+                                       )),
                                        sliderInput(
                                          "param2",
                                          label = "Gov Bonds (\\( i \\))",
@@ -763,80 +955,6 @@ shinyUI(
                                            value = 0.1 * inflation_new_so
                                          )
                                        )), 
-                                       
-                                       sliderInput(
-                                         "param11",
-                                         label = "Exchange rate (\\( ex \\)) = ",
-                                         min = ex_rate_so / 2,
-                                         max = 2 * ex_rate_so,
-                                         value = ex_rate_so
-                                       ),
-                                       bsPopover(
-                                         id = "param11",
-                                         title = "",
-                                         content = "Exchange rate in 1985? (KSH to International Dollar)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD12",
-                                         sliderInput(
-                                           "param11_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * ex_rate_so,
-                                           max = 1 * ex_rate_so,
-                                           value = 0.1 * ex_rate_so,
-                                           step = 0.001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param12",
-                                         label = "growth (\\( g \\)) = ",
-                                         min = growth_rate_so / 2,
-                                         max = 2 * growth_rate_so,
-                                         value = growth_rate_so
-                                       ),
-                                       bsPopover(
-                                         id = "param12",
-                                         title = "",
-                                         content = "Kenyan Per Capita GDP Growth Rate (2002-2011)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD13",
-                                         sliderInput(
-                                           "param12_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * growth_rate_so,
-                                           max = 1 * growth_rate_so,
-                                           value = 0.1 * growth_rate_so,
-                                           step = 0.00001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param13",
-                                         label = "Coverage (\\( R \\)) = ",
-                                         min = 0,
-                                         max = 1,
-                                         value = coverage_so,
-                                         step = 0.01
-                                       ),
-                                       bsPopover(
-                                         id = "param13",
-                                         title = "",
-                                         content = "Percent of treated primary schools students",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD14",
-                                         sliderInput(
-                                           "param13_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * coverage_so,
-                                           max = 1 * coverage_so,
-                                           value = 0.1 * coverage_so,
-                                           step = 0.000001
-                                         )
-                                       )),
                                        sliderInput(
                                          "param15",
                                          label = "Tax rate = ",
@@ -860,125 +978,6 @@ shinyUI(
                                            max = 1 * tax_so,
                                            value = 0.1 * tax_so,
                                            step = 0.000001
-                                         )
-                                       )),
-                                       numericInput(
-                                         "param16", 
-                                         label = "Costs of T (local $) = ", 
-                                         value = round(unit_cost_local_so,2)),
-                                       bsPopover(
-                                         id = "param16",
-                                         title = "",
-                                         content = "Costs of deworming per capita (KSH)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD16",
-                                         numericInput(
-                                           "param16_1",
-                                           label = "SD = ",
-                                           value = 0.1 * unit_cost_local_so
-                                         )
-                                       )),
-                                       numericInput("param16_new", 
-                                                    label = "Costs of T (local $) = ", 
-                                                    value = round(unit_cost_2017usdppp_so, 2)),
-                                       bsPopover(
-                                         id = "param16_new",
-                                         title = "",
-                                         content = "Costs of deworming per capita (USD)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD17",
-                                         numericInput(
-                                           "param16_1_new",
-                                           label = "SD = ",
-                                           value = 0.1 * unit_cost_2017usdppp_so
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param17",
-                                         label = "Years of treatment in orginal study",
-                                         min = years_of_treat_0_so / 2,
-                                         max = 2 * years_of_treat_0_so,
-                                         value = years_of_treat_0_so
-                                       ),
-                                       bsPopover(
-                                         id = "param17",
-                                         title = "",
-                                         content = "Average years of treatement in Kenya",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD18",
-                                         sliderInput(
-                                           "param17_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * years_of_treat_0_so,
-                                           max = 1 * years_of_treat_0_so,
-                                           value = 0.1 * years_of_treat_0_so,
-                                           step = 0.0001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param17_new",
-                                         label = "Years of treatment in new setting",
-                                         min = years_of_treat_t_so / 2,
-                                         max = 2 * years_of_treat_t_so,
-                                         value = round(years_of_treat_t_so,2)
-                                       ),
-                                       bsPopover(
-                                         id = "param17_new",
-                                         title = "",
-                                         content = "Input years of treatment",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD19",
-                                         sliderInput(
-                                           "param17_1_new",
-                                           label = "SD = ",
-                                           min = 0.000001 * years_of_treat_t_so,
-                                           max = 1 * years_of_treat_t_so,
-                                           value = 0.1 * years_of_treat_t_so,
-                                           step = 0.0001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param34",
-                                         label = "Costs adjustments = ",
-                                         min = costs_par_so / 2,
-                                         max = 20000 * costs_par_so,
-                                         value = costs_par_so
-                                       ),
-                                       #need more info for Popover
-                                       hidden(div(
-                                         id = "SD20",
-                                         sliderInput(
-                                           "param34_1",
-                                           label = "SD = ",
-                                           min = 0.0000001 * costs_par_sd_so,
-                                           max = 10 * costs_par_sd_so,
-                                           value = costs_par_sd_so
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param32",
-                                         label = "Counts adjustment = ",
-                                         min = counts_par_so / 2,
-                                         max = 2 * counts_par_so,
-                                         value = counts_par_so
-                                       ),
-                                       #need more info for Popover
-                                       hidden(div(
-                                         id = "SD21",
-                                         sliderInput(
-                                           "param32_1",
-                                           label = "SD = ",
-                                           min = 0.0000001 * counts_par_sd_so,
-                                           max = 10 * counts_par_sd_so,
-                                           value = counts_par_sd_so
                                          )
                                        ))
                               ), 
