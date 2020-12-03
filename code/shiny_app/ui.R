@@ -345,6 +345,16 @@ shinyUI(
                                     label = "SD = ", value = 
                                       lambda1_sd_so[2])
                                 )),
+                                numericInput(
+                                  "param29_1",
+                                  label = ("\\(\\alpha^{pooled} \\) = "),
+                                  value = round(lambda1_new_so,2)
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD29",
+                                  numericInput("param29_1_1", label = "SD = ", value = lambda1_new_sd_so)
+                                )),
                                 sliderInput(
                                   "param19",
                                   label = "\\( \\lambda_{2} \\) = ",
@@ -367,6 +377,237 @@ shinyUI(
                                     max = 5 * lambda2_sd_so,
                                     value = lambda2_sd_so,
                                     step = 1e-2
+                                  )
+                                )),
+                                numericInput("param4", 
+                                             label = "Agri Wages (\\( w_{ag} \\))", 
+                                             value = wage_ag_so), 
+                                bsPopover(
+                                  id = "param4",
+                                  title = "",
+                                  content = "Average hourly wage of an agricultural worker (KSH)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD5",
+                                  numericInput("param4_1", 
+                                               label = "SD = ", 
+                                               value = 0.1 * wage_ag_so)
+                                )),
+                                numericInput("param5", 
+                                             label = "Work-non ag-Wages  (\\( w_{ww} \\))", 
+                                             value = round(wage_ww_so, 2)), 
+                                bsPopover(
+                                  id = "param5",
+                                  title = "",
+                                  content = "Average hourly wage of a wage worker",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD6",
+                                  numericInput("param5_1", 
+                                               label = "SD = ", 
+                                               value = round(0.1 * wage_ww_so, 2))
+                                )),
+                                numericInput("param6", 
+                                             label = "Profits se = ", 
+                                             value = profits_se_so),
+                                bsPopover(id = "param6",
+                                          title = "",
+                                          content = "Average monthly self-employed profits (self-reported)"),
+                                hidden(div(
+                                  id = "SD7",
+                                  numericInput("param6_1", 
+                                               label = "SD = ", 
+                                               value = 0.1 * profits_se_so)
+                                )),
+                                sliderInput(
+                                  "param7",
+                                  label = "Hours se (>10) = ",
+                                  min = hours_se_cond_so / 2,
+                                  max = 2 * hours_se_cond_so,
+                                  value = hours_se_cond_so
+                                ),
+                                bsPopover(
+                                  id = "param7",
+                                  title = "",
+                                  content = "Average weekly hours worked (control group)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD8",
+                                  sliderInput(
+                                    "param7_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * hours_se_cond_so,
+                                    max = 1 * hours_se_cond_so,
+                                    value = 0.1 * hours_se_cond_so
+                                  )
+                                )), 
+                                sliderInput(
+                                  "param8",
+                                  label = "\\(\\ H_{ag} \\) = ",
+                                  min = hours_ag_so / 2,
+                                  max = 2 * hours_ag_so,
+                                  value = hours_ag_so
+                                ),
+                                bsPopover(
+                                  id = "param8",
+                                  title = "",
+                                  content = "Average weekly hours worked by agricultural workers (control group)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD9",
+                                  sliderInput(
+                                    "param8_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * hours_ag_so,
+                                    max = 1 * hours_ag_so,
+                                    value = 0.1 * hours_ag_so,
+                                    round = -4,
+                                    step = 0.001
+                                  )
+                                )),
+                                sliderInput(
+                                  "param9",
+                                  label = "\\(\\ H_{ww} \\) = ",
+                                  min = hours_ww_so / 2,
+                                  max = 2 * hours_ww_so,
+                                  value = hours_ww_so
+                                ),
+                                bsPopover(
+                                  id = "param9",
+                                  title = "",
+                                  content = "Average weekly hours worked by wage earners (control group)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD10",
+                                  sliderInput(
+                                    "param9_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * hours_ww_so,
+                                    max = 1 * hours_ww_so,
+                                    value = 0.1 * hours_ww_so,
+                                    step = 0.001
+                                  )
+                                )),
+                                sliderInput(
+                                  "param10",
+                                  label = "\\(\\ H_{se} \\) = ",
+                                  min = hours_se_so / 2,
+                                  max = 2 * hours_se_so,
+                                  value = hours_se_so
+                                ),
+                                bsPopover(
+                                  id = "param10",
+                                  title = "",
+                                  content = "Average weekly hours worked by self-employed workers (control group - non-agricultural)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD11",
+                                  sliderInput(
+                                    "param10_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * hours_se_so,
+                                    max = 1 * hours_se_so,
+                                    value = 0.1 * hours_se_so,
+                                    step = 0.001
+                                  )
+                                )),
+                                numericInput(
+                                  "param21_1",
+                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\)) = "),
+                                  value = coef_exp_so[1]
+                                ),
+                                bsPopover(
+                                  id = "param21_1",
+                                  title = "",
+                                  content = "Teacher experience coefficient",
+                                  placement = "top"
+                                ),
+                                numericInput(
+                                  "param21_2",
+                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
+                                  value = coef_exp_so[2]
+                                ),
+                                bsPopover(
+                                  id = "param21_2",
+                                  title = "",
+                                  content = "Teacher experience coefficient squared",
+                                  placement = "top"
+                                ),
+                                sliderInput(
+                                  "param30",
+                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = prevalence_0_so
+                                ),
+                                bsPopover(
+                                  id = "param30",
+                                  title = "",
+                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD32",
+                                  sliderInput(
+                                    "param30_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 ,
+                                    max = 1 ,
+                                    value = 0.1
+                                  )
+                                )),
+                                sliderInput(
+                                  "param31",
+                                  label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
+                                  min = 0 ,
+                                  max = 1,
+                                  value = prevalence_r_in
+                                ),
+                                bsPopover(
+                                  id = "param31",
+                                  title = "",
+                                  content = "Prevalence of parasitic worms in new population",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD36",
+                                  sliderInput(
+                                    "param31_1",
+                                    label = "SD = ",
+                                    min = 0.0000001,
+                                    max = 1 ,
+                                    value = 0.1
+                                  )
+                                )),
+                                sliderInput(
+                                  "param13",
+                                  label = "Coverage (\\( R \\)) = ",
+                                  min = 0,
+                                  max = 1,
+                                  value = coverage_so,
+                                  step = 0.01
+                                ),
+                                bsPopover(
+                                  id = "param13",
+                                  title = "",
+                                  content = "Percent of treated primary schools students",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD14",
+                                  sliderInput(
+                                    "param13_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * coverage_so,
+                                    max = 1 * coverage_so,
+                                    value = 0.1 * coverage_so,
+                                    step = 0.000001
                                   )
                                 )),
                                 sliderInput(
@@ -442,37 +683,160 @@ shinyUI(
                                     value = delta_ed_ext_par_so * 0.1
                                   )
                                 )),
-                                numericInput(
-                                  "param29_1",
-                                  label = ("\\(\\alpha^{pooled} \\) = "),
-                                  value = round(lambda1_new_so,2)
-                                ),
-                                #need more info for Popover
-                                hidden(div(
-                                  id = "SD29",
-                                  numericInput("param29_1_1", label = "SD = ", value = lambda1_new_sd_so)
-                                )),
-                                sliderInput(
-                                  "param30",
-                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
-                                  min = 0,
-                                  max = 1,
-                                  value = prevalence_0_so
-                                ),
+                                numericInput("param22", label = "Teacher salary = ", value = teach_sal_so),
                                 bsPopover(
-                                  id = "param30",
+                                  id = "param22",
                                   title = "",
-                                  content = "Prevalence of parasitic worms in population (Miguel & Kremer 2004)",
+                                  content = "Average annual salary for Kenyan secondary school teacher",
                                   placement = "top"
                                 ),
                                 hidden(div(
-                                  id = "SD32",
-                                  sliderInput(
-                                    "param30_1",
+                                  id = "SD33",
+                                  numericInput("param22_1", label = "SD = ", value = 0.1 * teach_sal_so)
+                                )),
+                                numericInput("param23", label = "Teacher benefits = ", value = teach_ben_so),
+                                bsPopover(
+                                  id = "param23",
+                                  title = "",
+                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD34",
+                                  numericInput("param23_1", label = "SD = ", value = 0.1 * teach_ben_so)
+                                )),
+                                numericInput("param24", label = "Students per teacher = ", value = n_students_so),
+                                bsPopover(
+                                  id = "param24",
+                                  title = "",
+                                  content = "Average number for students per teacher",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD35",
+                                  numericInput(
+                                    "param24_1",
                                     label = "SD = ",
-                                    min = 0.0000001 ,
-                                    max = 1 ,
-                                    value = 0.1
+                                    value = 0.1 * n_students_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param17",
+                                  label = "Years of treatment in orginal study",
+                                  min = years_of_treat_0_so / 2,
+                                  max = 2 * years_of_treat_0_so,
+                                  value = years_of_treat_0_so
+                                ),
+                                bsPopover(
+                                  id = "param17",
+                                  title = "",
+                                  content = "Average years of treatement in Kenya",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD18",
+                                  sliderInput(
+                                    "param17_1",
+                                    label = "SD = ",
+                                    min = 0.000001 * years_of_treat_0_so,
+                                    max = 1 * years_of_treat_0_so,
+                                    value = 0.1 * years_of_treat_0_so,
+                                    step = 0.0001
+                                  )
+                                )),
+                                sliderInput(
+                                  "param17_new",
+                                  label = "Years of treatment in new setting",
+                                  min = years_of_treat_t_so / 2,
+                                  max = 2 * years_of_treat_t_so,
+                                  value = round(years_of_treat_t_so,2)
+                                ),
+                                bsPopover(
+                                  id = "param17_new",
+                                  title = "",
+                                  content = "Input years of treatment",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD19",
+                                  sliderInput(
+                                    "param17_1_new",
+                                    label = "SD = ",
+                                    min = 0.000001 * years_of_treat_t_so,
+                                    max = 1 * years_of_treat_t_so,
+                                    value = 0.1 * years_of_treat_t_so,
+                                    step = 0.0001
+                                  )
+                                )),
+                                numericInput(
+                                  "param16", 
+                                  label = "Costs of T (local $) = ", 
+                                  value = round(unit_cost_local_so,2)),
+                                bsPopover(
+                                  id = "param16",
+                                  title = "",
+                                  content = "Costs of deworming per capita (KSH)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD16",
+                                  numericInput(
+                                    "param16_1",
+                                    label = "SD = ",
+                                    value = 0.1 * unit_cost_local_so
+                                  )
+                                )),
+                                numericInput("param16_new", 
+                                             label = "Costs of T (local $) = ", 
+                                             value = round(unit_cost_2017usdppp_so, 2)),
+                                bsPopover(
+                                  id = "param16_new",
+                                  title = "",
+                                  content = "Costs of deworming per capita (USD)",
+                                  placement = "top"
+                                ),
+                                hidden(div(
+                                  id = "SD17",
+                                  numericInput(
+                                    "param16_1_new",
+                                    label = "SD = ",
+                                    value = 0.1 * unit_cost_2017usdppp_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param34",
+                                  label = "Costs adjustments = ",
+                                  min = costs_par_so / 2,
+                                  max = 20000 * costs_par_so,
+                                  value = costs_par_so
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD20",
+                                  sliderInput(
+                                    "param34_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 * costs_par_sd_so,
+                                    max = 10 * costs_par_sd_so,
+                                    value = costs_par_sd_so
+                                  )
+                                )),
+                                sliderInput(
+                                  "param32",
+                                  label = "Counts adjustment = ",
+                                  min = counts_par_so / 2,
+                                  max = 2 * counts_par_so,
+                                  value = counts_par_so
+                                ),
+                                #need more info for Popover
+                                hidden(div(
+                                  id = "SD21",
+                                  sliderInput(
+                                    "param32_1",
+                                    label = "SD = ",
+                                    min = 0.0000001 * counts_par_sd_so,
+                                    max = 10 * counts_par_sd_so,
+                                    value = counts_par_sd_so
                                   )
                                 ))
                               ), 
@@ -484,6 +848,54 @@ shinyUI(
                                        a(id="toggleDataSDs", "Show/hide all SDs", href="#"),
                                        br(),
                                        br(),
+                                       sliderInput(
+                                         "param11",
+                                         label = "Exchange rate (\\( ex \\)) = ",
+                                         min = ex_rate_so / 2,
+                                         max = 2 * ex_rate_so,
+                                         value = ex_rate_so
+                                       ),
+                                       bsPopover(
+                                         id = "param11",
+                                         title = "",
+                                         content = "Exchange rate in 1985? (KSH to International Dollar)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD12",
+                                         sliderInput(
+                                           "param11_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * ex_rate_so,
+                                           max = 1 * ex_rate_so,
+                                           value = 0.1 * ex_rate_so,
+                                           step = 0.001
+                                         )
+                                       )),
+                                       sliderInput(
+                                         "param12",
+                                         label = "growth (\\( g \\)) = ",
+                                         min = growth_rate_so / 2,
+                                         max = 2 * growth_rate_so,
+                                         value = growth_rate_so
+                                       ),
+                                       bsPopover(
+                                         id = "param12",
+                                         title = "",
+                                         content = "Kenyan Per Capita GDP Growth Rate (2002-2011)",
+                                         placement = "top"
+                                       ),
+                                       hidden(div(
+                                         id = "SD13",
+                                         sliderInput(
+                                           "param12_1",
+                                           label = "SD = ",
+                                           min = 0.000001 * growth_rate_so,
+                                           max = 1 * growth_rate_so,
+                                           value = 0.1 * growth_rate_so,
+                                           step = 0.00001
+                                         )
+                                       )),
                                        sliderInput(
                                          "param2",
                                          label = "Gov Bonds (\\( i \\))",
@@ -576,217 +988,6 @@ shinyUI(
                                            value = 0.1 * inflation_new_so
                                          )
                                        )), 
-                                       numericInput("param4", 
-                                                    label = "Agri Wages (\\( w_{ag} \\))", 
-                                                    value = wage_ag_so), 
-                                       bsPopover(
-                                         id = "param4",
-                                         title = "",
-                                         content = "Average hourly wage of an agricultural worker (KSH)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD5",
-                                         numericInput("param4_1", 
-                                                      label = "SD = ", 
-                                                      value = 0.1 * wage_ag_so)
-                                       )),
-                                       numericInput("param5", 
-                                                    label = "Work-non ag-Wages  (\\( w_{ww} \\))", 
-                                                    value = round(wage_ww_so, 2)), 
-                                       bsPopover(
-                                         id = "param5",
-                                         title = "",
-                                         content = "Average hourly wage of a wage worker",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD6",
-                                         numericInput("param5_1", 
-                                                      label = "SD = ", 
-                                                      value = round(0.1 * wage_ww_so, 2))
-                                       )),
-                                       numericInput("param6", 
-                                                    label = "Profits se = ", 
-                                                    value = profits_se_so),
-                                       bsPopover(id = "param6",
-                                                 title = "",
-                                                 content = "Average monthly self-employed profits (self-reported)"),
-                                       hidden(div(
-                                         id = "SD7",
-                                         numericInput("param6_1", 
-                                                      label = "SD = ", 
-                                                      value = 0.1 * profits_se_so)
-                                       )),
-                                       sliderInput(
-                                         "param7",
-                                         label = "Hours se (>10) = ",
-                                         min = hours_se_cond_so / 2,
-                                         max = 2 * hours_se_cond_so,
-                                         value = hours_se_cond_so
-                                       ),
-                                       bsPopover(
-                                         id = "param7",
-                                         title = "",
-                                         content = "Average weekly hours worked (control group)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD8",
-                                         sliderInput(
-                                           "param7_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * hours_se_cond_so,
-                                           max = 1 * hours_se_cond_so,
-                                           value = 0.1 * hours_se_cond_so
-                                         )
-                                       )), 
-                                       sliderInput(
-                                         "param8",
-                                         label = "\\(\\ H_{ag} \\) = ",
-                                         min = hours_ag_so / 2,
-                                         max = 2 * hours_ag_so,
-                                         value = hours_ag_so
-                                       ),
-                                       bsPopover(
-                                         id = "param8",
-                                         title = "",
-                                         content = "Average weekly hours worked by agricultural workers (control group)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD9",
-                                         sliderInput(
-                                           "param8_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * hours_ag_so,
-                                           max = 1 * hours_ag_so,
-                                           value = 0.1 * hours_ag_so,
-                                           round = -4,
-                                           step = 0.001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param9",
-                                         label = "\\(\\ H_{ww} \\) = ",
-                                         min = hours_ww_so / 2,
-                                         max = 2 * hours_ww_so,
-                                         value = hours_ww_so
-                                       ),
-                                       bsPopover(
-                                         id = "param9",
-                                         title = "",
-                                         content = "Average weekly hours worked by wage earners (control group)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD10",
-                                         sliderInput(
-                                           "param9_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * hours_ww_so,
-                                           max = 1 * hours_ww_so,
-                                           value = 0.1 * hours_ww_so,
-                                           step = 0.001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param10",
-                                         label = "\\(\\ H_{se} \\) = ",
-                                         min = hours_se_so / 2,
-                                         max = 2 * hours_se_so,
-                                         value = hours_se_so
-                                       ),
-                                       bsPopover(
-                                         id = "param10",
-                                         title = "",
-                                         content = "Average weekly hours worked by self-employed workers (control group - non-agricultural)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD11",
-                                         sliderInput(
-                                           "param10_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * hours_se_so,
-                                           max = 1 * hours_se_so,
-                                           value = 0.1 * hours_se_so,
-                                           step = 0.001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param11",
-                                         label = "Exchange rate (\\( ex \\)) = ",
-                                         min = ex_rate_so / 2,
-                                         max = 2 * ex_rate_so,
-                                         value = ex_rate_so
-                                       ),
-                                       bsPopover(
-                                         id = "param11",
-                                         title = "",
-                                         content = "Exchange rate in 1985? (KSH to International Dollar)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD12",
-                                         sliderInput(
-                                           "param11_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * ex_rate_so,
-                                           max = 1 * ex_rate_so,
-                                           value = 0.1 * ex_rate_so,
-                                           step = 0.001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param12",
-                                         label = "growth (\\( g \\)) = ",
-                                         min = growth_rate_so / 2,
-                                         max = 2 * growth_rate_so,
-                                         value = growth_rate_so
-                                       ),
-                                       bsPopover(
-                                         id = "param12",
-                                         title = "",
-                                         content = "Kenyan Per Capita GDP Growth Rate (2002-2011)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD13",
-                                         sliderInput(
-                                           "param12_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * growth_rate_so,
-                                           max = 1 * growth_rate_so,
-                                           value = 0.1 * growth_rate_so,
-                                           step = 0.00001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param13",
-                                         label = "Coverage (\\( R \\)) = ",
-                                         min = 0,
-                                         max = 1,
-                                         value = coverage_so,
-                                         step = 0.01
-                                       ),
-                                       bsPopover(
-                                         id = "param13",
-                                         title = "",
-                                         content = "Percent of treated primary schools students",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD14",
-                                         sliderInput(
-                                           "param13_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * coverage_so,
-                                           max = 1 * coverage_so,
-                                           value = 0.1 * coverage_so,
-                                           step = 0.000001
-                                         )
-                                       )),
                                        sliderInput(
                                          "param15",
                                          label = "Tax rate = ",
@@ -811,125 +1012,7 @@ shinyUI(
                                            value = 0.1 * tax_so,
                                            step = 0.000001
                                          )
-                                       )),
-                                       numericInput(
-                                         "param16", 
-                                         label = "Costs of T (local $) = ", 
-                                         value = round(unit_cost_local_so,2)),
-                                       bsPopover(
-                                         id = "param16",
-                                         title = "",
-                                         content = "Costs of deworming per capita (KSH)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD16",
-                                         numericInput(
-                                           "param16_1",
-                                           label = "SD = ",
-                                           value = 0.1 * unit_cost_local_so
-                                         )
-                                       )),
-                                       numericInput("param16_new", 
-                                                    label = "Costs of T ($ US) = ", 
-                                                    value = round(unit_cost_2017usdppp_so, 2)),
-                                       bsPopover(
-                                         id = "param16_new",
-                                         title = "",
-                                         content = "Costs of deworming per capita (approach 2)",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD17",
-                                         numericInput(
-                                           "param16_1_new",
-                                           label = "SD = ",
-                                           value = 0.1 * unit_cost_2017usdppp_so
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param17",
-                                         label = "Years of treatment in orginal study",
-                                         min = years_of_treat_0_so / 2,
-                                         max = 2 * years_of_treat_0_so,
-                                         value = years_of_treat_0_so
-                                       ),
-                                       bsPopover(
-                                         id = "param17",
-                                         title = "",
-                                         content = "Average years of treatement in Kenya",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD18",
-                                         sliderInput(
-                                           "param17_1",
-                                           label = "SD = ",
-                                           min = 0.000001 * years_of_treat_0_so,
-                                           max = 1 * years_of_treat_0_so,
-                                           value = 0.1 * years_of_treat_0_so,
-                                           step = 0.0001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param17_new",
-                                         label = "Years of treatment in new setting",
-                                         min = years_of_treat_t_so / 2,
-                                         max = 2 * years_of_treat_t_so,
-                                         value = round(years_of_treat_t_so,2)
-                                       ),
-                                       bsPopover(
-                                         id = "param17_new",
-                                         title = "",
-                                         content = "Input years of treatment",
-                                         placement = "top"
-                                       ),
-                                       hidden(div(
-                                         id = "SD19",
-                                         sliderInput(
-                                           "param17_1_new",
-                                           label = "SD = ",
-                                           min = 0.000001 * years_of_treat_t_so,
-                                           max = 1 * years_of_treat_t_so,
-                                           value = 0.1 * years_of_treat_t_so,
-                                           step = 0.0001
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param34",
-                                         label = "Costs adjustments = ",
-                                         min = costs_par_so / 2,
-                                         max = 20000 * costs_par_so,
-                                         value = costs_par_so
-                                       ),
-                                       #need more info for Popover
-                                       hidden(div(
-                                         id = "SD20",
-                                         sliderInput(
-                                           "param34_1",
-                                           label = "SD = ",
-                                           min = 0.0000001 * costs_par_sd_so,
-                                           max = 10 * costs_par_sd_so,
-                                           value = costs_par_sd_so
-                                         )
-                                       )),
-                                       sliderInput(
-                                         "param32",
-                                         label = "Counts adjustment = ",
-                                         min = counts_par_so / 2,
-                                         max = 2 * counts_par_so,
-                                         value = counts_par_so
-                                       ),
-                                       #need more info for Popover
-                                       hidden(div(
-                                         id = "SD21",
-                                         sliderInput(
-                                           "param32_1",
-                                           label = "SD = ",
-                                           min = 0.0000001 * counts_par_sd_so,
-                                           max = 10 * counts_par_sd_so,
-                                           value = counts_par_sd_so
-                                         )
+
                                        ))
                               ), 
                               # end tabpanel data ----                              
@@ -941,88 +1024,7 @@ shinyUI(
                                     "#"),
                                 br(),
                                 br(),
-                                numericInput(
-                                  "param21_1",
-                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\)) = "),
-                                  value = coef_exp_so[1]
-                                ),
-                                bsPopover(
-                                  id = "param21_1",
-                                  title = "",
-                                  content = "Teacher experience coefficient",
-                                  placement = "top"
-                                ),
-                                numericInput(
-                                  "param21_2",
-                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
-                                  value = coef_exp_so[2]
-                                ),
-                                bsPopover(
-                                  id = "param21_2",
-                                  title = "",
-                                  content = "Teacher experience coefficient squared",
-                                  placement = "top"
-                                ),
-                                numericInput("param22", label = "Teacher salary = ", value = teach_sal_so),
-                                bsPopover(
-                                  id = "param22",
-                                  title = "",
-                                  content = "Average annual salary for Kenyan secondary school teacher",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD33",
-                                  numericInput("param22_1", label = "SD = ", value = 0.1 * teach_sal_so)
-                                )),
-                                numericInput("param23", label = "Teacher benefits = ", value = teach_ben_so),
-                                bsPopover(
-                                  id = "param23",
-                                  title = "",
-                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD34",
-                                  numericInput("param23_1", label = "SD = ", value = 0.1 * teach_ben_so)
-                                )),
-                                numericInput("param24", label = "Students per teacher = ", value = n_students_so),
-                                bsPopover(
-                                  id = "param24",
-                                  title = "",
-                                  content = "Average number for students per teacher",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD35",
-                                  numericInput(
-                                    "param24_1",
-                                    label = "SD = ",
-                                    value = 0.1 * n_students_so
-                                  )
-                                )),
-                                sliderInput(
-                                  "param31",
-                                  label = "Prevalence in new region (\\( \\eta_{r} \\)) = ",
-                                  min = 0 ,
-                                  max = 1,
-                                  value = prevalence_r_in
-                                ),
-                                bsPopover(
-                                  id = "param31",
-                                  title = "",
-                                  content = "Prevalence of parasitic worms in new population",
-                                  placement = "top"
-                                ),
-                                hidden(div(
-                                  id = "SD36",
-                                  sliderInput(
-                                    "param31_1",
-                                    label = "SD = ",
-                                    min = 0.0000001,
-                                    max = 1 ,
-                                    value = 0.1
-                                  )
-                                )),
+                                
                                 sliderInput(
                                   "param33",
                                   label = "Additional costs due to staff time = ",
