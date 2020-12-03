@@ -1,9 +1,11 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>02 December, 2020</div></center>"
+date: "<center><div class='mysubtitle'>03 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
+  
+  
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -19,9 +21,7 @@ output:
     toc_collapsed: no
     toc_depth:  3
     toc_float: yes
-  
   word_document: null
-  
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
@@ -96,6 +96,7 @@ bibliography: bibliography.bib
 chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
+    nsims_so <- 1e4
     #############
     ##### Data  
     #############
@@ -205,12 +206,11 @@ chunk_sources <- function(){
     staff_time_so <- 0.3           #Added Deworming costs due to government staff time
     run_sim_so <- FALSE
     main_run_so <- TRUE
-    rescale_so <- TRUE
+    rescale_so <- FALSE
     costs_par_so <- 1
     costs_par_sd_so <- 0.1
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
-    nsims_so <- 1e4
     new_costs_so <- NULL
     country_sel_so <- list("india", "kenya", "nigeria", "vietnam")
     country_sel_pop_so <- c(
@@ -1223,7 +1223,7 @@ Under this approach, the benefits from deworming described in Approaches 1 and 2
 
 To account for different prevalence rates ($\eta$), the estimated treatment effect is decomposed in the impact of deworming on children who were treated and had a worm infection, or the effective treatment effect of deworming ($\lambda_{1}^{eff}$), and children who were treated and did not have a worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatment (on the ovearll population), divided by the proportion of the prevalence of infections.
 
-In the original evaluation, the prevalence rates were very high (0.92), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are often implemented in geographies with much lower prevalence rates (though in populations with sufficient infection to justify treatment in accordance with World Health Organization guidelines), hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{r}$).
+In the original evaluation, the prevalence rates were very high (0.92), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are often implemented in geographies with much lower prevalence rates (though in populations with sufficient infection to justify treatment in accordance with World Health Organization guidelines), hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{new}$).
 
 
 <details><summary>Show all the details</summary>
@@ -1232,7 +1232,7 @@ For approach 3, we will modify treatment effects of approaches 1 and 2 (equation
 
 \begin{equation}
 \lambda_{1} = \eta \lambda^{eff}_{1} + (1 -  \eta) \times 0 \\
-\lambda^{r}_{1} = \eta_{r}\lambda^{eff}_{1}
+\lambda^{r}_{1} = \eta_{new}\lambda^{eff}_{1}
 
 \label{eq:16}
 \tag{16}
@@ -1244,7 +1244,7 @@ Where:
 - $\lambda^{eff}_1$: impact of deworming on children who were treated and had a worm infection in the original evaluation  
 - $\lambda^r_1$: impact of deworming on children who were treated and had a worm infection in the new region  
 - $\eta$: prevalence rates in the original evaluation   
-- $\eta_r$: prevalence rates in the new region   
+- $\eta_{new}$: prevalence rates in the new region   
 
 
 ```r
@@ -1308,7 +1308,7 @@ Adding the element of treatment duration allows us to take into account differen
 For approach 3, we will modify treatment effects of approaches 1 and 2 (equations 4 and 13 respectively) by the following:   
 
 \begin{equation}
-\lambda_{1,t = 1} = \frac{\lambda_{1}}{T_{0}} \\
+\lambda_{1,t = 1} = \frac{\lambda_{1}}{L_{0}} \\
 \lambda_{1,t} =
 \begin{cases}
 t \lambda_{1,t = 1} \quad \text{for } t=1, \dots, 6\\
@@ -2551,9 +2551,11 @@ unit_test(ea3, 289.751849813911)
 
 
 ```
-## [1] "Output has change at to_test  to  61.1360030018308"
-## [1] "Output has change at to_test  to  596.041150390902"
-## [1] "Output has change at to_test  to  307.696076488625"
+## [1] "Output has change at to_test  to  88.4541986755374"
+## [1] "Output has change at to_test  to  529.634026624537"
+## [1] "Output has change at to_test  to  61.5066655815883"
+## [1] "Output has change at to_test  to  596.125305457549"
+## [1] "Output has change at to_test  to  309.31665802808"
 ```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->

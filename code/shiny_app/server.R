@@ -751,7 +751,7 @@ shinyServer( function(input, output, session) {
         lwd = c(1, 1),
         linetype = c("solid", "dashed")
       ) +
-      coord_cartesian(xlim = c(-100,800)) +  # fixing the x axis so we can see shifts in the density
+      coord_cartesian(xlim = c(-300,1000),  ylim =  c( 0, 1.2 ))  +  # fixing the x axis so we can see shifts in the density
       #xlim(range(density(npv_sim)$x)) +
       guides(alpha = "none", colour = "none") +
       scale_x_continuous(expand = expansion(mult = c(0, 0))) + 

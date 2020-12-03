@@ -294,10 +294,12 @@ shinyUI(
                               )
                             ),
                             # end policy estimate description ----
-                            checkboxInput("rescale", label = "Click if want to rescale x-axis. Unclick to fix reference point", value = TRUE),
+                            checkboxInput("rescale", 
+                                          label = "Click if want to rescale x-axis. Unclick to fix reference point", 
+                                          value = FALSE), 
                             numericInput("param1",
                                          label = h4("Number of simulations"),
-                                         value = 1e3)
+                                         value = 1e2)
                    ),
                    fluidRow(id = "tPanel1",
                             style = "overflow-y:scroll; 

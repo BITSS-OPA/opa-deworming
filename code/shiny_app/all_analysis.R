@@ -3,7 +3,7 @@ html_format <- TRUE
 # Loading required libraries
 # before deploying in shinyapps.io, we need to remove the following packages:
 # "plotly", "bookdown", "rootSolve"
-if (TRUE) {
+if (FALSE) {
   list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly",
                         "bookdown", "rootSolve","shinyBS", "shinythemes", 
                         "ggplot2")
