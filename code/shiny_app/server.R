@@ -149,7 +149,8 @@ shinyServer( function(input, output, session) {
     updateSliderInput(session, "param17_new_ka", value = input$param17_new)
   )
   
-  
+
+  if (FALSE) {  
   # Show/hide components of each model 
   observeEvent(input$policy_est,{ 
     # all params
@@ -539,7 +540,7 @@ shinyServer( function(input, output, session) {
            function(x) showElement(id = x) ) 
   })
   
-  
+}
   
   hideElement("show_eq")
   #observeEvent(input$run, {

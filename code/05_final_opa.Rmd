@@ -204,7 +204,7 @@ chunk_sources <- function(){
     lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
     lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
-    lambda1_new_so <- c(79.51465)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
+    lambda1_new_so <- c(79.51)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
                              
     lambda1_new_sd_so <- c(76)  # ADD SOURCE
     q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
@@ -2911,7 +2911,7 @@ npv_sim_all <-   sim.data1(
             delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
             q_zero_var2             = q_zero_so            ,                                             
             q_zero_var2_sd          = q_zero_so * 0.1         ,
-            lambda1_new_var2        = lambda1_new_so,                   
+            lambda1_new_var2        = round(lambda1_new_so, 2),    #rounded to match shiny app                   
             lambda1_new_var2_sd     = lambda1_new_sd_so,             
             prevalence_0_var2       = prevalence_0_so ,  
             prevalence_0_var2_sd    = prevalence_0_so * 0.1    ,
