@@ -137,7 +137,7 @@ knitr::opts_chunk$set(warning = FALSE)
 chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
-    nsims_so <- 1e4
+    nsims_so <- 1e2
     #############
     ##### Data  
     #############
@@ -2850,9 +2850,9 @@ unit_test(ea3, 289.751849813911)
 
 npv_sim_all <-   sim.data1(
             nsims = nsims_so,                        
-            gov_bonds_var2          = round(gov_bonds_so,2)             ,                                    
+            gov_bonds_var2          = gov_bonds_so,2            ,                                    
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
-            inflation_var2          = round(inflation_so,2)             ,                                    
+            inflation_var2          = inflation_so             ,                                    
             inflation_var2_sd       = inflation_so * 0.1          ,                                 
             gov_bonds_new_var2      = gov_bonds_new_so      ,          
             gov_bonds_new_var2_sd   = gov_bonds_new_so * 0.1,          
@@ -2884,15 +2884,15 @@ npv_sim_all <-   sim.data1(
             unit_cost_local_var2_sd = unit_cost_local_so * 0.1    ,
             unit_cost_local_new_var2 = unit_cost_2017usdppp_so,
             unit_cost_local_new_var2_sd = unit_cost_2017usdppp_so * 0.1  ,  
-            years_of_treat_0_var2   = round(years_of_treat_0_so,2)        ,    
+            years_of_treat_0_var2   = years_of_treat_0_so        ,    
             years_of_treat_0_var2_sd= years_of_treat_0_so * 0.1     ,
-            years_of_treat_t_var2   = round(years_of_treat_t_so,2)        ,    
+            years_of_treat_t_var2   = years_of_treat_t_so        ,    
             years_of_treat_t_var2_sd= years_of_treat_t_so * 0.1     ,
             lambda1_var2            = lambda1_so,                                          
             lambda1_var2_sd         = lambda1_sd_so   ,                                          
             lambda2_var2            = lambda2_so      ,                         
             lambda2_var2_sd         = lambda2_sd_so   ,                      
-            q_full_var2             = round(q_full_so, 2)         ,                          
+            q_full_var2             = q_full_so         ,                          
             q_full_var2_sd          = q_full_so * 0.1   ,                         
             coef_exp_var2           = coef_exp_so,                      
             teach_sal_var2          = teach_sal_so         ,                                          
@@ -2911,21 +2911,21 @@ npv_sim_all <-   sim.data1(
             delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
             q_zero_var2             = q_zero_so            ,                                             
             q_zero_var2_sd          = q_zero_so * 0.1         ,
-            lambda1_new_var2        = round(lambda1_new_so,2),                   
+            lambda1_new_var2        = lambda1_new_so,                   
             lambda1_new_var2_sd     = lambda1_new_sd_so,             
-            prevalence_0_var2       = round(prevalence_0_so,2) ,  
+            prevalence_0_var2       = prevalence_0_so ,  
             prevalence_0_var2_sd    = prevalence_0_so * 0.1    ,
             prevalence_r_var2       = 1       ,    #TEMP
             prevalence_r_var2_sd    = 0.1    ,           
-            new_prev_r_var2         = round(prevalence_r_in,2),
+            new_prev_r_var2         = prevalence_r_in,
             new_prev_r_var2_sd      = new_prevalence_r_so * 0.1,
-            staff_time_var2         = round(staff_time_so,2)    ,
+            staff_time_var2         = staff_time_so    ,
             staff_time_var2_sd      = staff_time_so * 0.1,
             counts_par_var2         = counts_par_so    ,
             counts_par_var2_sd      = counts_par_sd_so ,
             costs_par_var2          = costs_par_so     ,
             costs_par_var2_sd       = costs_par_sd_so,
-            new_costs_var2          = round(costs2_ea_in,2),
+            new_costs_var2          = costs2_ea_in,
             new_costs_var2_sd       = costs2_ea_in * 0.1,
             countries_var2          = list("india", "kenya", "nigeria", "vietnam")
             )
@@ -2936,7 +2936,7 @@ position <- which( policy_estimates == policy_estimate_so )
 npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
 npv_for_text <- paste("Median NPV:\n ", round(median(npv_sim), 1))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 1))
-#Unit test the simulations for nsims = 100, 1000, 10000 UPDATE
+#Unit test the simulations for <- = 100, 1000, 10000 UPDATE
 all_res_100_sims <- c(
   8.03758587733535,
   41.341825374071 ,
