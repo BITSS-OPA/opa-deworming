@@ -77,7 +77,9 @@ colorize = function(x, color){
 }
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
-
+knitr::opts_chunk$set(fig.width=12, fig.height=8)
+#options(knitr.duplicate.label = "allow") # workaround for purl error
+#knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 ```
 
 
@@ -275,7 +277,6 @@ chunk_sources <- function(){
 ###############################################################################    
 }
 invisible( list2env(chunk_sources(),.GlobalEnv) )
-
 #############
 ##### Notes:
 #############
@@ -389,7 +390,6 @@ chunk_final_pe <- function(){
 invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-
 ```
 
 
@@ -439,7 +439,6 @@ chunk_benefits <- function(){
 invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-
 ```
 </details>
 <br>
@@ -552,7 +551,6 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equa
 
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-
 ```
 
 
@@ -739,7 +737,6 @@ invisible( list2env(chunk_wages(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 wage_0_in <- wage_0_mo
 wage_t_in <- wage_t_mo
-
 ```
 
 </details>
@@ -889,7 +886,6 @@ pv_benef_yes_ext_in <- pv_benef_f(
   interest_r_var = interest_in,
   periods_var = periods_so
 )
-
 ```
 
 </details>
@@ -901,8 +897,6 @@ Without externalities, the original analysis (@baird2016worms) obtains a present
 
 
 ```{r sum-tables3, purl=FALSE, echo=FALSE, eval=show_summary_tables}
-
-
 table_1[1,3] <- paste0("$R=" , round(coverage_so,2), "$")
 table_1[1,2] <- paste0("$\\lambda_1=" , lambda1_in_f(lambda1_var = lambda1_so)[1], "$")
 table_1[2,2] <- paste0("$\\lambda_2=" , lambda2_so, "$")
@@ -1440,7 +1434,6 @@ The second approach does not report benefits and costs separatedly. With all the
 
 
 ```{r sum-tables20, purl=FALSE, echo=FALSE, eval=show_summary_tables}
-
 table_1[9,2] <- paste0("$r_{16}=", interest_in, "$")
 
 table_1 <- rbind(table_1, c("", paste0("$r_{19}=", interest_new_in, "$"), ""))
@@ -1848,7 +1841,6 @@ invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 costs_data <- costs1_p1_f()
 costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
                                               "vietnam"))
-
 ```
 
 </details>
@@ -1857,7 +1849,6 @@ The unit costs of treatments, although small, vary substantially across regions.
 
 
 ```{r sum-table18, purl=FALSE, echo=FALSE, eval=show_summary_tables}
-
 table_1[1,3] <- paste0("$\\delta_{g}=", staff_time_so, "$")
 table_1[10,1] <- paste0("$\\overline{{C}_{i}}=", round(costs1_p2_f(country_total_var = costs_data$total,
                          country_cost_var = costs_data$costs_by_country,
@@ -2318,7 +2309,6 @@ policy_estimates_text <- c(
   "A3. All income of A1, with ext.",
   "A3. All income of A2. Main Policy Estimate"
   )
-
 ```
 
 </details>
@@ -2843,14 +2833,360 @@ unit_test(ea3, 289.751849813911)
 
 
 <br>
+```{r generate-plot-function, purl = TRUE, echo = FALSE}
+# I wrote two functions here: generate_data_f, generate_plot_f
+
+# generate_data_f: function to generate "npv_sim_all", all the variables with suffix "_var3" serve as intermediary variables and will later on take either the original input sources (DD) or shiny app inputs.
+
+# generate_plot_f: function to generate the plots. It takes in the data generated from generate_data_f, policy estimate text, and rescale variable. These are also intermediary variables so that we can use the same function for both DD and shiny app. 
+
+chunk_generate <- function() {
+  generate_data_f <- function(nsims_var3,                   # "Setup" vars
+                          main_run_var3,
+                          periods_var3,
+                          costs_data_var3 = costs_data,
+                          run_sim_var3,
+                          countries_var3,
+                          
+                          ex_rate_var3,                  # "Data" vars
+                          ex_rate_var3_sd,
+                          growth_rate_var3,
+                          growth_rate_var3_sd,
+                          gov_bonds_var3,
+                          gov_bonds_var3_sd,
+                          gov_bonds_new_var3,                                                              
+                          gov_bonds_new_var3_sd,                                                          
+                          inflation_var3,
+                          inflation_var3_sd,
+                          inflation_new_var3,                          
+                          inflation_new_var3_sd,                      
+                          tax_var3,
+                          tax_var3_sd,
+                          
+                          lambda1_var3,                  # "Research" vars
+                          lambda1_var3_sd,
+                          lambda1_new_var3,
+                          lambda1_new_var3_sd,
+                          lambda2_var3,
+                          lambda2_var3_sd,
+                          wage_ag_var3,                 
+                          wage_ag_var3_sd,
+                          wage_ww_var3,
+                          wage_ww_var3_sd,
+                          profits_se_var3,
+                          profits_se_var3_sd,
+                          hours_se_cond_var3,
+                          hours_se_cond_var3_sd,
+                          hours_ag_var3,
+                          hours_ag_var3_sd,
+                          hours_ww_var3,
+                          hours_ww_var3_sd,
+                          hours_se_var3,
+                          hours_se_var3_sd,
+                          coef_exp_var3,         # sd for coef_exp is hard coded
+                          prevalence_0_var3,
+                          prevalence_0_var3_sd,
+                          prevalence_r_var3,
+                          prevalence_r_var3_sd,
+                          new_prev_r_var3,       # substitudes the prev_r above??
+                          new_prev_r_var3_sd,
+                          coverage_var3,
+                          coverage_var3_sd,
+                          q_full_var3,
+                          q_full_var3_sd,
+                          q_zero_var3,
+                          q_zero_var3_sd,
+                          delta_ed_var3,
+                          delta_ed_var3_sd,
+                          delta_ed_ext_var3,
+                          delta_ed_ext_var3_sd,
+                          teach_sal_var3,
+                          teach_sal_var3_sd,
+                          teach_ben_var3,
+                          teach_ben_var3_sd,
+                          teach_sal_new_var3,
+                          teach_sal_new_var3_sd,
+                          teach_ben_new_var3,
+                          teach_ben_new_var3_sd,
+                          n_students_var3,
+                          n_students_var3_sd,
+                          years_of_treat_0_var3,
+                          years_of_treat_0_var3_sd,
+                          years_of_treat_t_var3,
+                          years_of_treat_t_var3_sd,
+                          unit_cost_local_var3,
+                          unit_cost_local_var3_sd,
+                          unit_cost_local_new_var3,
+                          unit_cost_local_new_var3_sd,
+                          costs_par_var3,
+                          costs_par_var3_sd,
+                          counts_par_var3,
+                          counts_par_var3_sd,
+                          staff_time_var3,      # Guesswork
+                          staff_time_var3_sd,
+                          new_costs_var3, 
+                          new_costs_var3_sd
+  
+  
+){
+  npv_sim_all <-   sim.data1(
+    nsims = nsims_var3,                        
+    gov_bonds_var2          = gov_bonds_var3            ,                                    
+    gov_bonds_var2_sd       = gov_bonds_var3_sd          ,                                 
+    inflation_var2          = inflation_var3             ,                                    
+    inflation_var2_sd       = inflation_var3_sd         ,                                 
+    gov_bonds_new_var2      = gov_bonds_new_var3      ,          
+    gov_bonds_new_var2_sd   = gov_bonds_new_var3_sd,          
+    inflation_new_var2      = inflation_new_var3      ,        
+    inflation_new_var2_sd   = inflation_new_var3_sd,          
+    wage_ag_var2            = wage_ag_var3               ,                                      
+    wage_ag_var2_sd         = wage_ag_var3_sd            ,                                   
+    wage_ww_var2            = wage_ww_var3               ,                                      
+    wage_ww_var2_sd         = wage_ww_var3_sd            ,                                   
+    profits_se_var2         = profits_se_var3            ,                                   
+    profits_se_var2_sd      = profits_se_var3_sd         ,                                
+    hours_se_cond_var2      = hours_se_cond_var3         ,                                
+    hours_se_cond_var2_sd   = hours_se_cond_var3_sd      ,                             
+    hours_ag_var2           = hours_ag_var3              ,                                     
+    hours_ag_var2_sd        = hours_ag_var3_sd           ,                                  
+    hours_ww_var2           = hours_ww_var3              ,                                     
+    hours_ww_var2_sd        = hours_ww_var3_sd           ,                                  
+    hours_se_var2           = hours_se_var3              ,                                     
+    hours_se_var2_sd        = hours_se_var3_sd           ,                                  
+    ex_rate_var2            = ex_rate_var3               ,                                      
+    ex_rate_var2_sd         = ex_rate_var3_sd            ,                                   
+    growth_rate_var2        = growth_rate_var3           ,                                  
+    growth_rate_var2_sd     = growth_rate_var3_sd        ,
+    coverage_var2           = coverage_var3              ,
+    coverage_var2_sd        = coverage_var3_sd           ,  
+    tax_var2                = tax_var3                   ,                                             
+    tax_var2_sd             = tax_var3_sd                ,                                        
+    unit_cost_local_var2    = unit_cost_local_var3       ,                                     
+    unit_cost_local_var2_sd = unit_cost_local_var3_sd    ,
+    unit_cost_local_new_var2 = unit_cost_local_new_var3,
+    unit_cost_local_new_var2_sd = unit_cost_local_new_var3_sd  ,  
+    years_of_treat_0_var2   = years_of_treat_0_var3        ,    
+    years_of_treat_0_var2_sd= years_of_treat_0_var3_sd     ,
+    years_of_treat_t_var2   = years_of_treat_t_var3        ,    
+    years_of_treat_t_var2_sd= years_of_treat_t_var3_sd     ,
+    lambda1_var2            = lambda1_var3,                                          
+    lambda1_var2_sd         = lambda1_var3_sd   ,                                          
+    lambda2_var2            = lambda2_var3      ,                         
+    lambda2_var2_sd         = lambda2_var3_sd   ,                      
+    q_full_var2             = q_full_var3         ,                          
+    q_full_var2_sd          = q_full_var3_sd   ,                         
+    coef_exp_var2           = coef_exp_var3,                      
+    teach_sal_var2          = teach_sal_var3         ,                                          
+    teach_sal_var2_sd       = teach_sal_var3_sd      ,                                       
+    teach_ben_var2          = teach_ben_var3         ,                                          
+    teach_ben_var2_sd       = teach_ben_var3_sd      ,                                       
+    teach_sal_new_var2      = teach_sal_new_var3         ,          #add to app                                
+    teach_sal_new_var2_sd   = teach_sal_new_var3_sd      ,       #add to app                                
+    teach_ben_new_var2      = teach_ben_new_var3         ,          #add to app                               
+    teach_ben_new_var2_sd   = teach_ben_new_var3_sd      ,                     #add to app
+    n_students_var2         = n_students_var3        ,                                         
+    n_students_var2_sd      = n_students_var3_sd     ,                                      
+    delta_ed_var2           = delta_ed_var3          ,                                           
+    delta_ed_var2_sd        = delta_ed_var3_sd       ,                                            
+    delta_ed_ext_var2       = delta_ed_ext_var3      ,                                           
+    delta_ed_ext_var2_sd    = delta_ed_ext_var3_sd   ,                                              
+    q_zero_var2             = q_zero_var3            ,                                             
+    q_zero_var2_sd          = q_zero_var3_sd         ,
+    lambda1_new_var2        = lambda1_new_var3,                     
+    lambda1_new_var2_sd     = lambda1_new_var3_sd,             
+    prevalence_0_var2       = prevalence_0_var3 ,  
+    prevalence_0_var2_sd    = prevalence_0_var3_sd    ,
+    prevalence_r_var2       = 1       ,    #TEMP
+    prevalence_r_var2_sd    = 0.1    ,           
+    new_prev_r_var2         = new_prev_r_var3,
+    new_prev_r_var2_sd      = new_prev_r_var3_sd,
+    staff_time_var2         = staff_time_var3    ,
+    staff_time_var2_sd      = staff_time_var3_sd,
+    counts_par_var2         = counts_par_var3    ,
+    counts_par_var2_sd      = counts_par_var3_sd ,
+    costs_par_var2          = costs_par_var3     ,
+    costs_par_var2_sd       = costs_par_var3_sd,
+    new_costs_var2          = new_costs_var3,
+    new_costs_var2_sd       = new_costs_var3_sd,
+    countries_var2          = countries_var3
+  )
+  
+
+  return (npv_sim_all)
+  
+}
 
 
-```{r run-mc, dpi = 400, purl=FALSE, echo=FALSE}
+generate_plot_f <- function(npv_sim_all, policy_estimates_text_selected, rescale){
+  total_time <- npv_sim_all$total_time
+  position <- which( policy_estimates_text == policy_estimates_text_selected)
+  npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
+  npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
+  npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+  plot1 <- ggplot() +
+    geom_density(
+      aes(x = npv_sim,
+          alpha = 1 / 2, ..scaled..),
+      kernel = "gau",
+      lwd = 1,
+      fill = "#007ba7",
+      color = "darkblue",
+      alpha = 0.3
+    ) +
+    geom_vline(
+      xintercept = c(0, median(npv_sim)),
+      col = c("black", "darkblue"),
+      lwd = c(1, 1),
+      linetype = c("solid", "dashed")
+    ) +
+    coord_cartesian(xlim = c(-300,1000),  ylim =  c( 0, 1.2 ))  +  # fixing the x axis so we can see shifts in the density
+    #xlim(range(density(npv_sim)$x)) +
+    guides(alpha = "none", colour = "none") +
+    scale_x_continuous(expand = expansion(mult = c(0, 0))) + 
+    scale_y_continuous(expand = expansion(mult = c(0, 0))) +
+    annotate(
+      "text",
+      x = 1.75 * median(npv_sim),
+      y = 0.2,
+      label = npv_for_text,
+      size = 6,
+      color = "darkblue"
+    ) +
+    annotate(
+      "text",
+      x = 1.75 * median(npv_sim),
+      y = 0.1,
+      label = npv_for_text2,
+      size = 6,
+      color = "darkblue"
+    ) +
+    theme(
+      axis.ticks = element_blank(),
+      axis.text.x = element_text(size = 18),
+      axis.title.x = element_text(size = 18),
+      axis.text.y = element_blank(),
+      plot.title = element_text(size = 24),
+      plot.subtitle = element_text(size = 20),
+      panel.background = element_blank(),
+      axis.line.x = element_line(color = "black", size = 1.5)
+    )
+  
+  if (rescale == TRUE) {
+    plot1 <-
+      suppressMessages(plot1 + coord_cartesian(xlim = 1.2 * c(min(c(
+        -1, npv_sim
+      )), max(c(
+        100, npv_sim
+      )))))
+  }
+  return (list(plot1,position,total_time))
+}
+return(list("generate_data_f" = generate_data_f, 
+                "generate_plot_f" = generate_plot_f))
+
+}
+invisible( list2env(chunk_generate(),.GlobalEnv) )
+```
+
+```{r alternative-run-mc, dpi = 400, purl = FALSE, echo = FALSE}
+npv_sim_all <- generate_data_f(
+            nsims_var3 = nsims_so,                        
+            gov_bonds_var3          = round(gov_bonds_so,2)            ,   #rounded to match shiny app                                   
+            gov_bonds_var3_sd       = gov_bonds_so * 0.1          ,                                 
+            inflation_var3          = inflation_so             ,                                    
+            inflation_var3_sd       = inflation_so * 0.1          ,                                 
+            gov_bonds_new_var3      = gov_bonds_new_so      ,          
+            gov_bonds_new_var3_sd   = gov_bonds_new_so * 0.1,          
+            inflation_new_var3      = inflation_new_so      ,        
+            inflation_new_var3_sd   = inflation_new_so * 0.1,          
+            wage_ag_var3            = wage_ag_so               ,                                      
+            wage_ag_var3_sd         = wage_ag_so * 0.1            ,                                   
+            wage_ww_var3            = wage_ww_so               ,                                      
+            wage_ww_var3_sd         = wage_ww_so * 0.1            ,                                   
+            profits_se_var3         = profits_se_so            ,                                   
+            profits_se_var3_sd      = profits_se_so * 0.1         ,                                
+            hours_se_cond_var3      = hours_se_cond_so         ,                                
+            hours_se_cond_var3_sd   = hours_se_cond_so * 0.1      ,                             
+            hours_ag_var3           = hours_ag_so              ,                                     
+            hours_ag_var3_sd        = hours_ag_so * 0.1           ,                                  
+            hours_ww_var3           = hours_ww_so              ,                                     
+            hours_ww_var3_sd        = hours_ww_so * 0.1           ,                                  
+            hours_se_var3           = hours_se_so              ,                                     
+            hours_se_var3_sd        = hours_se_so * 0.1           ,                                  
+            ex_rate_var3            = ex_rate_so               ,                                      
+            ex_rate_var3_sd         = ex_rate_so * 0.1            ,                                   
+            growth_rate_var3        = growth_rate_so           ,                                  
+            growth_rate_var3_sd     = growth_rate_so * 0.1        ,
+            coverage_var3           = coverage_so              ,
+            coverage_var3_sd        = coverage_so * 0.1           ,  
+            tax_var3                = tax_so                   ,                                             
+            tax_var3_sd             = tax_so * 0.1                ,                                        
+            unit_cost_local_var3    = unit_cost_local_so       ,                                     
+            unit_cost_local_var3_sd = unit_cost_local_so * 0.1    ,
+            unit_cost_local_new_var3 = unit_cost_2017usdppp_so,
+            unit_cost_local_new_var3_sd = unit_cost_2017usdppp_so * 0.1  ,  
+            years_of_treat_0_var3   = years_of_treat_0_so        ,    
+            years_of_treat_0_var3_sd= years_of_treat_0_so * 0.1     ,
+            years_of_treat_t_var3   = years_of_treat_t_so        ,    
+            years_of_treat_t_var3_sd= years_of_treat_t_so * 0.1     ,
+            lambda1_var3            = lambda1_so,                                          
+            lambda1_var3_sd         = lambda1_sd_so   ,                                          
+            lambda2_var3            = lambda2_so      ,                         
+            lambda2_var3_sd         = lambda2_sd_so   ,                      
+            q_full_var3             = q_full_so         ,                          
+            q_full_var3_sd          = q_full_so * 0.1   ,                         
+            coef_exp_var3           = coef_exp_so,                      
+            teach_sal_var3          = teach_sal_so         ,                                          
+            teach_sal_var3_sd       = teach_sal_so * 0.1      ,                                       
+            teach_ben_var3          = teach_ben_so         ,                                          
+            teach_ben_var3_sd       = teach_ben_so * 0.1      ,                                       
+            teach_sal_new_var3      = teach_sal_new_so         ,          #add to app                                
+            teach_sal_new_var3_sd   = teach_sal_new_so * 0.1      ,       #add to app                                
+            teach_ben_new_var3      = teach_ben_new_so         ,          #add to app                               
+            teach_ben_new_var3_sd   = 0.000001      ,                     #add to app
+            n_students_var3         = n_students_so        ,                                         
+            n_students_var3_sd      = n_students_so * 0.1     ,                                      
+            delta_ed_var3           = delta_ed_par_so          ,                                           
+            delta_ed_var3_sd        = delta_ed_par_so * 0.1       ,                                            
+            delta_ed_ext_var3       = delta_ed_ext_par_so      ,                                           
+            delta_ed_ext_var3_sd    = delta_ed_ext_par_so * 0.1   ,                                              
+            q_zero_var3             = q_zero_so            ,                                             
+            q_zero_var3_sd          = q_zero_so * 0.1         ,
+            lambda1_new_var3        = lambda1_new_so,                       
+            lambda1_new_var3_sd     = lambda1_new_sd_so,             
+            prevalence_0_var3       = prevalence_0_so ,  
+            prevalence_0_var3_sd    = 0.1    ,   # changed to match shiny app
+            prevalence_r_var3       = 1       ,    #TEMP
+            prevalence_r_var3_sd    = 0.1    ,           
+            new_prev_r_var3         = round(prevalence_r_in,2), # changed to match shiny app
+            new_prev_r_var3_sd      = 0.1, 
+            staff_time_var3         = staff_time_so    ,
+            staff_time_var3_sd      = staff_time_so * 0.1,
+            counts_par_var3         = counts_par_so    ,
+            counts_par_var3_sd      = counts_par_sd_so ,
+            costs_par_var3          = costs_par_so     ,
+            costs_par_var3_sd       = costs_par_sd_so,
+            new_costs_var3          = round(costs2_ea_in,2),  #rounded to match shiny app 
+            new_costs_var3_sd       = round(costs2_ea_in,2) * 0.1,  #rounded to match shiny app 
+            countries_var3          = list("india", "kenya", "nigeria", "vietnam")
+  
+)
+
+plot1 <- generate_plot_f(npv_sim_all, "A3. All income of A2. Main Policy Estimate", rescale_so)[[1]] + 
+      labs(y = NULL,
+       x = "Net Present Value (Benefits -  Costs)" ,
+       title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
+       subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+       )
+print(plot1)
+```
+
+```{r run-mc, dpi = 400, purl=FALSE, echo=FALSE, eval = FALSE}
 
 
 npv_sim_all <-   sim.data1(
             nsims = nsims_so,                        
-            gov_bonds_var2          = gov_bonds_so,2            ,                                    
+            gov_bonds_var2          = gov_bonds_so            ,                                    
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
             inflation_var2          = inflation_so             ,                                    
             inflation_var2_sd       = inflation_so * 0.1          ,                                 
@@ -2911,13 +3247,13 @@ npv_sim_all <-   sim.data1(
             delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
             q_zero_var2             = q_zero_so            ,                                             
             q_zero_var2_sd          = q_zero_so * 0.1         ,
-            lambda1_new_var2        = round(lambda1_new_so, 2),    #rounded to match shiny app                   
+            lambda1_new_var2        = lambda1_new_so,    #rounded to match shiny app                   
             lambda1_new_var2_sd     = lambda1_new_sd_so,             
             prevalence_0_var2       = prevalence_0_so ,  
             prevalence_0_var2_sd    = prevalence_0_so * 0.1    ,
             prevalence_r_var2       = 1       ,    #TEMP
             prevalence_r_var2_sd    = 0.1    ,           
-            new_prev_r_var2         = prevalence_r_in,
+            new_prev_r_var2         = new_prevalence_r_so,
             new_prev_r_var2_sd      = new_prevalence_r_so * 0.1,
             staff_time_var2         = staff_time_so    ,
             staff_time_var2_sd      = staff_time_so * 0.1,
@@ -3054,7 +3390,7 @@ if (rescale == TRUE) {
 }
 print(plot1)
 # ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
-# knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
+
 ```
 
 # References

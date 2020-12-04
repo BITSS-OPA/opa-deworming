@@ -233,7 +233,6 @@ chunk_sources <- function(){
 ###############################################################################    
 }
 invisible( list2env(chunk_sources(),.GlobalEnv) )
-
 #############
 ##### Notes:
 #############
@@ -252,7 +251,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -2574,20 +2573,9 @@ unit_test(ea3, 289.751849813911)
 <br>
 
 
+![](05_final_opa_files/figure-html/alternative-run-mc-1.png)<!-- -->
 
-```
-## [1] "Output has change at to_test  to  14.9048115494379"
-## [1] "Output has change at to_test  to  82.3888590763094"
-## [1] "Output has change at to_test  to  89.4800331516805"
-## [1] "Output has change at to_test  to  506.7145607038"
-## [1] "Output has change at to_test  to  82.8509348096544"
-## [1] "Output has change at to_test  to  502.378664073219"
-## [1] "Output has change at to_test  to  53.7318815100236"
-## [1] "Output has change at to_test  to  501.474535303377"
-## [1] "Output has change at to_test  to  277.235942671747"
-```
 
-![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
 # References
 

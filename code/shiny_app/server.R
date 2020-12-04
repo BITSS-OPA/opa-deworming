@@ -1,7 +1,6 @@
 
 library(shiny)
 
-
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
@@ -22,7 +21,9 @@ shinyServer( function(input, output, session) {
           lapply(c("SD33","SD34", "SD36", "SD37", "SD38", "SD19"), toggle, anim=TRUE))
   
   
-  reactive.data1 <- reactive( {
+  # Old Simulation Data Generation 
+  if(FALSE){
+  reactive.data_og <- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    
       gov_bonds_var2     = as.numeric(input$param2),                                           
@@ -110,6 +111,95 @@ shinyServer( function(input, output, session) {
   } 
   )
   
+  }
+  
+  # Using the new generate plot function
+  reactive.data1 <- reactive( {
+    generate_data_f( nsims_var3 = as.numeric(input$param1),                                                    
+                                  gov_bonds_var3     = as.numeric(input$param2),                                           
+                                  gov_bonds_var3_sd  = as.numeric(input$param2_1),                                      
+                                  inflation_var3     = as.numeric(input$param3),                                           
+                                  inflation_var3_sd  = as.numeric(input$param3_1),    
+                                  gov_bonds_new_var3    = as.numeric(input$param2_new),       
+                                  gov_bonds_new_var3_sd = as.numeric(input$param2_1_new),                                                            
+                                  inflation_new_var3    = as.numeric(input$param3_new),                                
+                                  inflation_new_var3_sd = as.numeric(input$param3_1_new), 
+                                  wage_ag_var3 = as.numeric(input$param4),                                             
+                                  wage_ag_var3_sd = as.numeric(input$param4_1),                                        
+                                  wage_ww_var3 = as.numeric(input$param5),                                             
+                                  wage_ww_var3_sd = as.numeric(input$param5_1),                                        
+                                  profits_se_var3 = as.numeric(input$param6),                                          
+                                  profits_se_var3_sd = as.numeric(input$param6_1),                                     
+                                  hours_se_cond_var3 = as.numeric(input$param7),                                       
+                                  hours_se_cond_var3_sd = as.numeric(input$param7_1),                                  
+                                  hours_ag_var3 = as.numeric(input$param8),                                            
+                                  hours_ag_var3_sd = as.numeric(input$param8_1),                                       
+                                  hours_ww_var3 = as.numeric(input$param9),                                            
+                                  hours_ww_var3_sd = as.numeric(input$param9_1),                                       
+                                  hours_se_var3 = as.numeric(input$param10),                                           
+                                  hours_se_var3_sd = as.numeric(input$param10_1),                                      
+                                  ex_rate_var3 = as.numeric(input$param11),                                            
+                                  ex_rate_var3_sd = as.numeric(input$param11_1),                                       
+                                  growth_rate_var3 = as.numeric(input$param12),                                        
+                                  growth_rate_var3_sd = as.numeric(input$param12_1),  
+                                  coverage_var3 = as.numeric(input$param13), 
+                                  coverage_var3_sd = as.numeric(input$param13_1),
+                                  tax_var3 = as.numeric(input$param15),                                                 
+                                  tax_var3_sd = as.numeric(input$param15_1),                                            
+                                  unit_cost_local_var3 = as.numeric(input$param16),                                           
+                                  unit_cost_local_var3_sd = as.numeric(input$param16_1), 
+                                  unit_cost_local_new_var3 = as.numeric(input$param16_new),                                           
+                                  unit_cost_local_new_var3_sd = as.numeric(input$param16_1_new), 
+                                  years_of_treat_0_var3   = as.numeric(input$param17)        ,    
+                                  years_of_treat_0_var3_sd= as.numeric(input$param17_1)     ,
+                                  years_of_treat_t_var3   = as.numeric(input$param17_new)   ,    
+                                  years_of_treat_t_var3_sd= as.numeric(input$param17_1_new)     ,
+                                  lambda1_var3 = c(as.numeric(input$param18_1), as.numeric(input$param18_2)),                                          
+                                  lambda1_var3_sd = c(as.numeric(input$param18_1_1), as.numeric(input$param18_2_1)),                                     
+                                  lambda2_var3 = as.numeric(input$param19),                                             
+                                  lambda2_var3_sd = as.numeric(input$param19_1),                                        
+                                  q_full_var3 = as.numeric(input$param20),                                              
+                                  q_full_var3_sd = as.numeric(input$param20_1),                                           
+                                  coef_exp_var3 = c(as.numeric(input$param21_1), as.numeric(input$param21_2)),                      
+                                  teach_sal_var3    = as.numeric(input$param22),                                             
+                                  teach_sal_var3_sd = as.numeric(input$param22_1),                                        
+                                  teach_ben_var3    = as.numeric(input$param23),                                             
+                                  teach_ben_var3_sd = as.numeric(input$param23_1),  
+                                  teach_sal_new_var3     = (50000 * 12 / 49.773),         # TEMP
+                                  teach_sal_new_var3_sd  = (50000 * 12 / 49.773) * 0.1,      
+                                  teach_ben_new_var3     = 0,     # change to 0 to match DD
+                                  teach_ben_new_var3_sd  = 0.000001  ,  # change to 0.000001 to match DD    
+                                  n_students_var3 = as.numeric(input$param24),                                            
+                                  n_students_var3_sd = as.numeric(input$param24_1),                                       
+                                  delta_ed_var3 = as.numeric(input$param26),                                              
+                                  delta_ed_var3_sd = as.numeric(input$param26_1),                                             
+                                  delta_ed_ext_var3 = as.numeric(input$param27),                                              
+                                  delta_ed_ext_var3_sd = as.numeric(input$param27_1),                                               
+                                  q_zero_var3 = as.numeric(input$param28),                                                
+                                  q_zero_var3_sd = 0.00,  # change to 0 to match DD
+                                  lambda1_new_var3 = as.numeric(input$param29_1),                   
+                                  lambda1_new_var3_sd = as.numeric(input$param29_1_1),             
+                                  prevalence_0_var3 = as.numeric(input$param30),    
+                                  prevalence_0_var3_sd = as.numeric(input$param30_1), 
+                                  #     prevalence_r_var3 = as.numeric(input$param31),
+                                  prevalence_r_var3 = 1,
+                                  prevalence_r_var3_sd = as.numeric(input$param31_1),                                                                         
+                                  counts_par_var3 = as.numeric(input$param32), 
+                                  counts_par_var3_sd = as.numeric(input$param32_1),
+                                  staff_time_var3 = as.numeric(input$param33), 
+                                  staff_time_var3_sd = as.numeric(input$param33_1), 
+                                  costs_par_var3 = as.numeric(input$param34), 
+                                  costs_par_var3_sd = as.numeric(input$param34_1), 
+                                  new_costs_var3 = as.numeric(input$param35),
+                                  new_costs_var3_sd = as.numeric(input$param35_1),
+                                  new_prev_r_var3 = as.numeric(input$param31),
+                                  new_prev_r_var3_sd = as.numeric(input$param31_1),
+                                  countries_var3 = list("india", "kenya", "nigeria", "vietnam")
+      
+    )
+  }
+    
+  )
 
 # Sync cost variable for Key Assumptions and All Assumptions 
   
@@ -150,7 +240,7 @@ shinyServer( function(input, output, session) {
   )
   
 
-  if (FALSE) {  
+ 
   # Show/hide components of each model 
   observeEvent(input$policy_est,{ 
     # all params
@@ -540,7 +630,6 @@ shinyServer( function(input, output, session) {
            function(x) showElement(id = x) ) 
   })
   
-}
   
   hideElement("show_eq")
   #observeEvent(input$run, {
@@ -705,8 +794,9 @@ shinyServer( function(input, output, session) {
       }
     } 
   })
-  
-  # Define a function that generates policy estimate plots
+
+  # Define a function that generates policy estimate plots. No longer used.
+  if (FALSE){
   call_plot_f <- function(plotType) {
     npv_sim_all <- reactive.data1()
     
@@ -793,15 +883,17 @@ shinyServer( function(input, output, session) {
     }
     return (list(plot1,position,total_time))
   }
+  }
+  
   
   
   # Generate Plot with All Asumptions
   output$plot1 <- renderPlot({      
+    npv_sim_all <- reactive.data1()
+    plot1 <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[1]]
     
-    
-    plot1 <- call_plot_f("all")[[1]]
-    position <- call_plot_f("all")[[2]]
-    total_time <- call_plot_f("all")[[3]]
+    position <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[2]]
+    total_time <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[3]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
@@ -815,8 +907,11 @@ shinyServer( function(input, output, session) {
   
   # Generate Plot with Key Assumptions
   output$plot1_ka <- renderPlot({      
-    plot1 <- call_plot_f("ka")[[1]]
-    position <- call_plot_f("ka")[[2]]
+    npv_sim_all <- reactive.data1()
+    output_plot <- generate_plot_f(npv_sim_all, "A3. All income of A2. Main Policy Estimate", input$rescale)
+    plot1 <- output_plot[[1]]
+    
+    position <- output_plot[[2]]
     
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
@@ -828,9 +923,13 @@ shinyServer( function(input, output, session) {
   )
   
   # Generate Main Policy Estimate Plot 
-  output$plot1_main <- renderPlot({      
-    plot1 <- call_plot_f("main")[[1]]
-    position <- call_plot_f("main")[[2]]
+  output$plot1_main <- renderPlot({    
+    npv_sim_all <- reactive.data1()
+    output_plot <- generate_plot_f(npv_sim_all, "A3. All income of A2. Main Policy Estimate", input$rescale)
+    plot1 <- output_plot[[1]]
+    
+    position <- output_plot[[2]]
+   
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
