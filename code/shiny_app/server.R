@@ -86,7 +86,7 @@ shinyServer( function(input, output, session) {
       delta_ed_ext_var2 = as.numeric(input$param27),                                              
       delta_ed_ext_var2_sd = as.numeric(input$param27_1),                                               
       q_zero_var2 = as.numeric(input$param28),                                                
-      q_zero_var2_sd = 0.00,                                            # change to 0 to match DD
+      q_zero_var2_sd = 0.001,                                            # change to 0.001 to match DD
       lambda1_new_var2 = as.numeric(input$param29_1),                   
       lambda1_new_var2_sd = as.numeric(input$param29_1_1),             
       prevalence_0_var2 = as.numeric(input$param30),    
