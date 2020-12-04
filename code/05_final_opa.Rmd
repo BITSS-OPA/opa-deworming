@@ -2913,7 +2913,7 @@ invisible( list2env(chunk_generate_plot(),.GlobalEnv) )
 
 npv_sim_all <-   sim.data1(
             nsims = nsims_so,                        
-            gov_bonds_var2          = round(gov_bonds_so,2)            ,     #rounded to match shiny app                                
+            gov_bonds_var2          = round(gov_bonds_so,2)             ,    #asd gov_bonds_so, NO CHANGE                              
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
             inflation_var2          = inflation_so             ,                                    
             inflation_var2_sd       = inflation_so * 0.1          ,                                 
@@ -2973,23 +2973,25 @@ npv_sim_all <-   sim.data1(
             delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
             delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
             q_zero_var2             = q_zero_so            ,                                             
-            q_zero_var2_sd          = q_zero_so * 0.1         ,
-            lambda1_new_var2        = lambda1_new_so,                   
+
+            q_zero_var2_sd          = 0.001, #q_zero_so * 0.1     BIG CHANGE    , 
+            lambda1_new_var2        = round(lambda1_new_so, 2),    #rounded to match shiny app                   
             lambda1_new_var2_sd     = lambda1_new_sd_so,             
-            prevalence_0_var2       = prevalence_0_so ,  
-            prevalence_0_var2_sd    = 0.1    ,                      # changed to match shiny app
-            prevalence_r_var2       = 1       ,                     # TEMP
+            prevalence_0_var2       = prevalence_0_so       ,  
+            prevalence_0_var2_sd    = 0.1    ,
+            prevalence_r_var2       = 1       ,    #TEMP
             prevalence_r_var2_sd    = 0.1    ,           
-            new_prev_r_var2         = round(prevalence_r_in,2),     # changed to match shiny app
-            new_prev_r_var2_sd      = 0.1,                          # changed to match shiny appp
+            new_prev_r_var2         = round(prevalence_r_in,2), #asd #new_prevalence_r_so,  BIG CHANGE
+            new_prev_r_var2_sd      = 0.1,                      #asd #new_prevalence_r_so * 0.1,
             staff_time_var2         = staff_time_so    ,
             staff_time_var2_sd      = staff_time_so * 0.1,
             counts_par_var2         = counts_par_so    ,
             counts_par_var2_sd      = counts_par_sd_so ,
             costs_par_var2          = costs_par_so     ,
             costs_par_var2_sd       = costs_par_sd_so,
-            new_costs_var2          = round(costs2_ea_in,2),        # rounded to match shiny app 
-            new_costs_var2_sd       = round(costs2_ea_in,2) * 0.1,  # rounded to match shiny app 
+
+            new_costs_var2          = round(costs2_ea_in,2),       #costs2_ea_in, NO CHANGE
+            new_costs_var2_sd       = round(costs2_ea_in,2) * 0.1, #costs2_ea_in * 0.1,
             countries_var2          = list("india", "kenya", "nigeria", "vietnam")
             )
 
@@ -3054,6 +3056,7 @@ for ( i in policy_estimates ) {
 ###### Results/Viz
 ################
 library(plotly)
+
 plot1 <- generate_plot_f(npv_sim_all, "A3. All income of A2. Main Policy Estimate", rescale_so)[[1]] + 
       labs(y = NULL,
        x = "Net Present Value (Benefits -  Costs)" ,
