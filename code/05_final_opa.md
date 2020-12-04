@@ -233,7 +233,6 @@ chunk_sources <- function(){
 ###############################################################################    
 }
 invisible( list2env(chunk_sources(),.GlobalEnv) )
-
 #############
 ##### Notes:
 #############
@@ -252,7 +251,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -2575,7 +2574,9 @@ unit_test(ea3, 289.751849813911)
 
 
 
+
 ```
+
 ## [1] "Output has change at to_test  to  14.7205517819967"
 ## [1] "Output has change at to_test  to  82.5111035304941"
 ## [1] "Output has change at to_test  to  87.3430564776532"
@@ -2585,6 +2586,7 @@ unit_test(ea3, 289.751849813911)
 ## [1] "Output has change at to_test  to  53.6300783751025"
 ## [1] "Output has change at to_test  to  504.096715938887"
 ## [1] "Output has change at to_test  to  284.689861862284"
+
 ```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->

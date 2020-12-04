@@ -1,7 +1,6 @@
 
 library(shiny)
 
-
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
@@ -22,7 +21,9 @@ shinyServer( function(input, output, session) {
           lapply(c("SD33","SD34", "SD36", "SD37", "SD38", "SD19"), toggle, anim=TRUE))
   
   
-  reactive.data1 <- reactive( {
+# Generate reactive simulated data for plotting 
+
+  reactive.data1<- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    
       gov_bonds_var2     = as.numeric(input$param2),                                           
@@ -74,10 +75,10 @@ shinyServer( function(input, output, session) {
       teach_sal_var2_sd = as.numeric(input$param22_1),                                        
       teach_ben_var2    = as.numeric(input$param23),                                             
       teach_ben_var2_sd = as.numeric(input$param23_1),  
-      teach_sal_new_var2     = as.numeric(input$param22),         # TEMP
-      teach_sal_new_var2_sd  = as.numeric(input$param22_1),      
-      teach_ben_new_var2     = 0,     
-      teach_ben_new_var2_sd  = 0.01,      
+      teach_sal_new_var2     = (50000 * 12 / 49.773),                   # change to match DD     
+      teach_sal_new_var2_sd  = (50000 * 12 / 49.773) * 0.1,             # change to match DD
+      teach_ben_new_var2     = 0,                                       # change to 0 to match DD
+      teach_ben_new_var2_sd  = 0.000001  ,                              # change to 0.000001 to match DD      
       n_students_var2 = as.numeric(input$param24),                                            
       n_students_var2_sd = as.numeric(input$param24_1),                                       
       delta_ed_var2 = as.numeric(input$param26),                                              
@@ -85,7 +86,7 @@ shinyServer( function(input, output, session) {
       delta_ed_ext_var2 = as.numeric(input$param27),                                              
       delta_ed_ext_var2_sd = as.numeric(input$param27_1),                                               
       q_zero_var2 = as.numeric(input$param28),                                                
-      q_zero_var2_sd = 0.001, 
+      q_zero_var2_sd = 0.00,                                            # change to 0 to match DD
       lambda1_new_var2 = as.numeric(input$param29_1),                   
       lambda1_new_var2_sd = as.numeric(input$param29_1_1),             
       prevalence_0_var2 = as.numeric(input$param30),    
@@ -109,7 +110,8 @@ shinyServer( function(input, output, session) {
     )
   } 
   )
-  
+
+
 
 # Sync cost variable for Key Assumptions and All Assumptions 
   
@@ -150,7 +152,7 @@ shinyServer( function(input, output, session) {
   )
   
 
-  if (FALSE) {  
+ 
   # Show/hide components of each model 
   observeEvent(input$policy_est,{ 
     # all params
@@ -540,7 +542,6 @@ shinyServer( function(input, output, session) {
            function(x) showElement(id = x) ) 
   })
   
-}
   
   hideElement("show_eq")
   #observeEvent(input$run, {
@@ -705,103 +706,15 @@ shinyServer( function(input, output, session) {
       }
     } 
   })
-  
-  # Define a function that generates policy estimate plots
-  call_plot_f <- function(plotType) {
-    npv_sim_all <- reactive.data1()
-    
-    total_time <- npv_sim_all$total_time
-    
-    
-    
-    if (plotType == "main"){
-      position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]] 
-      npv_for_text <- paste("Median NPV:", round(median(npv_sim), 2))
-      npv_for_text2 <- NULL
-      
-    } 
-    
-    if (plotType == "ka"){
-      position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-      npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
-      npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
-    }
-    
-    if (plotType == "all"){
-      position <- which( policy_estimates_text == input$policy_est)
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-      npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
-      npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
-    }
-    
-    plot1 <- ggplot() +
-      geom_density(
-        aes(x = npv_sim,
-            alpha = 1 / 2, ..scaled..),
-        kernel = "gau",
-        lwd = 1,
-        fill = "#007ba7",
-        color = "darkblue",
-        alpha = 0.3
-      ) +
-      geom_vline(
-        xintercept = c(0, median(npv_sim)),
-        col = c("black", "darkblue"),
-        lwd = c(1, 1),
-        linetype = c("solid", "dashed")
-      ) +
-      coord_cartesian(xlim = c(-300,1000),  ylim =  c( 0, 1.2 ))  +  # fixing the x axis so we can see shifts in the density
-      #xlim(range(density(npv_sim)$x)) +
-      guides(alpha = "none", colour = "none") +
-      scale_x_continuous(expand = expansion(mult = c(0, 0))) + 
-      scale_y_continuous(expand = expansion(mult = c(0, 0))) +
-      annotate(
-        "text",
-        x = 1.75 * median(npv_sim),
-        y = 0.2,
-        label = npv_for_text,
-        size = 6,
-        color = "darkblue"
-      ) +
-      annotate(
-        "text",
-        x = 1.75 * median(npv_sim),
-        y = 0.1,
-        label = npv_for_text2,
-        size = 6,
-        color = "darkblue"
-      ) +
-      theme(
-        axis.ticks = element_blank(),
-        axis.text.x = element_text(size = 18),
-        axis.title.x = element_text(size = 18),
-        axis.text.y = element_blank(),
-        plot.title = element_text(size = 24),
-        plot.subtitle = element_text(size = 20),
-        panel.background = element_blank(),
-        axis.line.x = element_line(color = "black", size = 1.5)
-      )
-    if (input$rescale == TRUE) {
-      plot1 <-
-        suppressMessages(plot1 + coord_cartesian(xlim = 1.2 * c(min(c(
-          -1, npv_sim
-        )), max(c(
-          100, npv_sim
-        )))))
-    }
-    return (list(plot1,position,total_time))
-  }
-  
+
   
   # Generate Plot with All Asumptions
   output$plot1 <- renderPlot({      
+    npv_sim_all <- reactive.data1()
+    plot1 <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[1]]
     
-    
-    plot1 <- call_plot_f("all")[[1]]
-    position <- call_plot_f("all")[[2]]
-    total_time <- call_plot_f("all")[[3]]
+    position <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[2]]
+    total_time <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[3]]
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
@@ -815,8 +728,11 @@ shinyServer( function(input, output, session) {
   
   # Generate Plot with Key Assumptions
   output$plot1_ka <- renderPlot({      
-    plot1 <- call_plot_f("ka")[[1]]
-    position <- call_plot_f("ka")[[2]]
+    npv_sim_all <- reactive.data1()
+    output_plot <- generate_plot_f(npv_sim_all, "A3. All income of A2. Main Policy Estimate", input$rescale)
+    plot1 <- output_plot[[1]]
+    
+    position <- output_plot[[2]]
     
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
@@ -828,9 +744,13 @@ shinyServer( function(input, output, session) {
   )
   
   # Generate Main Policy Estimate Plot 
-  output$plot1_main <- renderPlot({      
-    plot1 <- call_plot_f("main")[[1]]
-    position <- call_plot_f("main")[[2]]
+  output$plot1_main <- renderPlot({    
+    npv_sim_all <- reactive.data1()
+    output_plot <- generate_plot_f(npv_sim_all, "A3. All income of A2. Main Policy Estimate", input$rescale)
+    plot1 <- output_plot[[1]]
+    
+    position <- output_plot[[2]]
+   
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
@@ -839,5 +759,4 @@ shinyServer( function(input, output, session) {
     print(plot1)  
   }, height = 500, width = 750 
   )
-  #  })
 })

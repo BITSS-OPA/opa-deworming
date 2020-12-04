@@ -889,7 +889,7 @@ shinyUI(
                                          label = "Gov Bonds (\\( i \\))",
                                          min = 0.001,
                                          max = 0.2,
-                                         value = gov_bonds_so
+                                         value = round(gov_bonds_so,2)
                                        ), 
                                        bsPopover(
                                          id = "param2",
