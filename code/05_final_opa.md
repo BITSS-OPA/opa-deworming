@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>03 December, 2020</div></center>"
+date: "<center><div class='mysubtitle'>04 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -2573,9 +2573,21 @@ unit_test(ea3, 289.751849813911)
 <br>
 
 
-![](05_final_opa_files/figure-html/alternative-run-mc-1.png)<!-- -->
 
 
+```
+## [1] "Output has change at to_test  to  14.7290797071955"
+## [1] "Output has change at to_test  to  85.2651363543902"
+## [1] "Output has change at to_test  to  86.4096539079162"
+## [1] "Output has change at to_test  to  508.198917164006"
+## [1] "Output has change at to_test  to  81.917596389172"
+## [1] "Output has change at to_test  to  501.593081787624"
+## [1] "Output has change at to_test  to  56.5036967155821"
+## [1] "Output has change at to_test  to  504.350384572614"
+## [1] "Output has change at to_test  to  301.737397694245"
+```
+
+![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
 # References
 

@@ -21,9 +21,9 @@ shinyServer( function(input, output, session) {
           lapply(c("SD33","SD34", "SD36", "SD37", "SD38", "SD19"), toggle, anim=TRUE))
   
   
-  # Old Simulation Data Generation 
-  if(FALSE){
-  reactive.data_og <- reactive( {
+# Generate reactive simulated data for plotting 
+
+  reactive.data1<- reactive( {
     sim.data1(
       nsims = as.numeric(input$param1),                                                    
       gov_bonds_var2     = as.numeric(input$param2),                                           
@@ -75,10 +75,10 @@ shinyServer( function(input, output, session) {
       teach_sal_var2_sd = as.numeric(input$param22_1),                                        
       teach_ben_var2    = as.numeric(input$param23),                                             
       teach_ben_var2_sd = as.numeric(input$param23_1),  
-      teach_sal_new_var2     = as.numeric(input$param22),         # TEMP
-      teach_sal_new_var2_sd  = as.numeric(input$param22_1),      
-      teach_ben_new_var2     = as.numeric(input$param23),     
-      teach_ben_new_var2_sd  = as.numeric(input$param23_1),      
+      teach_sal_new_var2     = (50000 * 12 / 49.773),                   # change to match DD     
+      teach_sal_new_var2_sd  = (50000 * 12 / 49.773) * 0.1,             # change to match DD
+      teach_ben_new_var2     = 0,                                       # change to 0 to match DD
+      teach_ben_new_var2_sd  = 0.000001  ,                              # change to 0.000001 to match DD      
       n_students_var2 = as.numeric(input$param24),                                            
       n_students_var2_sd = as.numeric(input$param24_1),                                       
       delta_ed_var2 = as.numeric(input$param26),                                              
@@ -86,7 +86,7 @@ shinyServer( function(input, output, session) {
       delta_ed_ext_var2 = as.numeric(input$param27),                                              
       delta_ed_ext_var2_sd = as.numeric(input$param27_1),                                               
       q_zero_var2 = as.numeric(input$param28),                                                
-      q_zero_var2_sd = 0.001, 
+      q_zero_var2_sd = 0.00,                                            # change to 0 to match DD
       lambda1_new_var2 = as.numeric(input$param29_1),                   
       lambda1_new_var2_sd = as.numeric(input$param29_1_1),             
       prevalence_0_var2 = as.numeric(input$param30),    
@@ -110,96 +110,8 @@ shinyServer( function(input, output, session) {
     )
   } 
   )
-  
-  }
-  
-  # Using the new generate plot function
-  reactive.data1 <- reactive( {
-    generate_data_f( nsims_var3 = as.numeric(input$param1),                                                    
-                                  gov_bonds_var3     = as.numeric(input$param2),                                           
-                                  gov_bonds_var3_sd  = as.numeric(input$param2_1),                                      
-                                  inflation_var3     = as.numeric(input$param3),                                           
-                                  inflation_var3_sd  = as.numeric(input$param3_1),    
-                                  gov_bonds_new_var3    = as.numeric(input$param2_new),       
-                                  gov_bonds_new_var3_sd = as.numeric(input$param2_1_new),                                                            
-                                  inflation_new_var3    = as.numeric(input$param3_new),                                
-                                  inflation_new_var3_sd = as.numeric(input$param3_1_new), 
-                                  wage_ag_var3 = as.numeric(input$param4),                                             
-                                  wage_ag_var3_sd = as.numeric(input$param4_1),                                        
-                                  wage_ww_var3 = as.numeric(input$param5),                                             
-                                  wage_ww_var3_sd = as.numeric(input$param5_1),                                        
-                                  profits_se_var3 = as.numeric(input$param6),                                          
-                                  profits_se_var3_sd = as.numeric(input$param6_1),                                     
-                                  hours_se_cond_var3 = as.numeric(input$param7),                                       
-                                  hours_se_cond_var3_sd = as.numeric(input$param7_1),                                  
-                                  hours_ag_var3 = as.numeric(input$param8),                                            
-                                  hours_ag_var3_sd = as.numeric(input$param8_1),                                       
-                                  hours_ww_var3 = as.numeric(input$param9),                                            
-                                  hours_ww_var3_sd = as.numeric(input$param9_1),                                       
-                                  hours_se_var3 = as.numeric(input$param10),                                           
-                                  hours_se_var3_sd = as.numeric(input$param10_1),                                      
-                                  ex_rate_var3 = as.numeric(input$param11),                                            
-                                  ex_rate_var3_sd = as.numeric(input$param11_1),                                       
-                                  growth_rate_var3 = as.numeric(input$param12),                                        
-                                  growth_rate_var3_sd = as.numeric(input$param12_1),  
-                                  coverage_var3 = as.numeric(input$param13), 
-                                  coverage_var3_sd = as.numeric(input$param13_1),
-                                  tax_var3 = as.numeric(input$param15),                                                 
-                                  tax_var3_sd = as.numeric(input$param15_1),                                            
-                                  unit_cost_local_var3 = as.numeric(input$param16),                                           
-                                  unit_cost_local_var3_sd = as.numeric(input$param16_1), 
-                                  unit_cost_local_new_var3 = as.numeric(input$param16_new),                                           
-                                  unit_cost_local_new_var3_sd = as.numeric(input$param16_1_new), 
-                                  years_of_treat_0_var3   = as.numeric(input$param17)        ,    
-                                  years_of_treat_0_var3_sd= as.numeric(input$param17_1)     ,
-                                  years_of_treat_t_var3   = as.numeric(input$param17_new)   ,    
-                                  years_of_treat_t_var3_sd= as.numeric(input$param17_1_new)     ,
-                                  lambda1_var3 = c(as.numeric(input$param18_1), as.numeric(input$param18_2)),                                          
-                                  lambda1_var3_sd = c(as.numeric(input$param18_1_1), as.numeric(input$param18_2_1)),                                     
-                                  lambda2_var3 = as.numeric(input$param19),                                             
-                                  lambda2_var3_sd = as.numeric(input$param19_1),                                        
-                                  q_full_var3 = as.numeric(input$param20),                                              
-                                  q_full_var3_sd = as.numeric(input$param20_1),                                           
-                                  coef_exp_var3 = c(as.numeric(input$param21_1), as.numeric(input$param21_2)),                      
-                                  teach_sal_var3    = as.numeric(input$param22),                                             
-                                  teach_sal_var3_sd = as.numeric(input$param22_1),                                        
-                                  teach_ben_var3    = as.numeric(input$param23),                                             
-                                  teach_ben_var3_sd = as.numeric(input$param23_1),  
-                                  teach_sal_new_var3     = (50000 * 12 / 49.773),         # TEMP
-                                  teach_sal_new_var3_sd  = (50000 * 12 / 49.773) * 0.1,      
-                                  teach_ben_new_var3     = 0,     # change to 0 to match DD
-                                  teach_ben_new_var3_sd  = 0.000001  ,  # change to 0.000001 to match DD    
-                                  n_students_var3 = as.numeric(input$param24),                                            
-                                  n_students_var3_sd = as.numeric(input$param24_1),                                       
-                                  delta_ed_var3 = as.numeric(input$param26),                                              
-                                  delta_ed_var3_sd = as.numeric(input$param26_1),                                             
-                                  delta_ed_ext_var3 = as.numeric(input$param27),                                              
-                                  delta_ed_ext_var3_sd = as.numeric(input$param27_1),                                               
-                                  q_zero_var3 = as.numeric(input$param28),                                                
-                                  q_zero_var3_sd = 0.00,  # change to 0 to match DD
-                                  lambda1_new_var3 = as.numeric(input$param29_1),                   
-                                  lambda1_new_var3_sd = as.numeric(input$param29_1_1),             
-                                  prevalence_0_var3 = as.numeric(input$param30),    
-                                  prevalence_0_var3_sd = as.numeric(input$param30_1), 
-                                  #     prevalence_r_var3 = as.numeric(input$param31),
-                                  prevalence_r_var3 = 1,
-                                  prevalence_r_var3_sd = as.numeric(input$param31_1),                                                                         
-                                  counts_par_var3 = as.numeric(input$param32), 
-                                  counts_par_var3_sd = as.numeric(input$param32_1),
-                                  staff_time_var3 = as.numeric(input$param33), 
-                                  staff_time_var3_sd = as.numeric(input$param33_1), 
-                                  costs_par_var3 = as.numeric(input$param34), 
-                                  costs_par_var3_sd = as.numeric(input$param34_1), 
-                                  new_costs_var3 = as.numeric(input$param35),
-                                  new_costs_var3_sd = as.numeric(input$param35_1),
-                                  new_prev_r_var3 = as.numeric(input$param31),
-                                  new_prev_r_var3_sd = as.numeric(input$param31_1),
-                                  countries_var3 = list("india", "kenya", "nigeria", "vietnam")
-      
-    )
-  }
-    
-  )
+
+
 
 # Sync cost variable for Key Assumptions and All Assumptions 
   
@@ -795,97 +707,6 @@ shinyServer( function(input, output, session) {
     } 
   })
 
-  # Define a function that generates policy estimate plots. No longer used.
-  if (FALSE){
-  call_plot_f <- function(plotType) {
-    npv_sim_all <- reactive.data1()
-    
-    total_time <- npv_sim_all$total_time
-    
-    
-    
-    if (plotType == "main"){
-      position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]] 
-      npv_for_text <- paste("Median NPV:", round(median(npv_sim), 2))
-      npv_for_text2 <- NULL
-      
-    } 
-    
-    if (plotType == "ka"){
-      position <- which( policy_estimates_text == "A3. All income of A2. Main Policy Estimate")
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-      npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
-      npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
-    }
-    
-    if (plotType == "all"){
-      position <- which( policy_estimates_text == input$policy_est)
-      npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
-      npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
-      npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
-    }
-    
-    plot1 <- ggplot() +
-      geom_density(
-        aes(x = npv_sim,
-            alpha = 1 / 2, ..scaled..),
-        kernel = "gau",
-        lwd = 1,
-        fill = "#007ba7",
-        color = "darkblue",
-        alpha = 0.3
-      ) +
-      geom_vline(
-        xintercept = c(0, median(npv_sim)),
-        col = c("black", "darkblue"),
-        lwd = c(1, 1),
-        linetype = c("solid", "dashed")
-      ) +
-      coord_cartesian(xlim = c(-300,1000),  ylim =  c( 0, 1.2 ))  +  # fixing the x axis so we can see shifts in the density
-      #xlim(range(density(npv_sim)$x)) +
-      guides(alpha = "none", colour = "none") +
-      scale_x_continuous(expand = expansion(mult = c(0, 0))) + 
-      scale_y_continuous(expand = expansion(mult = c(0, 0))) +
-      annotate(
-        "text",
-        x = 1.75 * median(npv_sim),
-        y = 0.2,
-        label = npv_for_text,
-        size = 6,
-        color = "darkblue"
-      ) +
-      annotate(
-        "text",
-        x = 1.75 * median(npv_sim),
-        y = 0.1,
-        label = npv_for_text2,
-        size = 6,
-        color = "darkblue"
-      ) +
-      theme(
-        axis.ticks = element_blank(),
-        axis.text.x = element_text(size = 18),
-        axis.title.x = element_text(size = 18),
-        axis.text.y = element_blank(),
-        plot.title = element_text(size = 24),
-        plot.subtitle = element_text(size = 20),
-        panel.background = element_blank(),
-        axis.line.x = element_line(color = "black", size = 1.5)
-      )
-    if (input$rescale == TRUE) {
-      plot1 <-
-        suppressMessages(plot1 + coord_cartesian(xlim = 1.2 * c(min(c(
-          -1, npv_sim
-        )), max(c(
-          100, npv_sim
-        )))))
-    }
-    return (list(plot1,position,total_time))
-  }
-  }
-  
-  
   
   # Generate Plot with All Asumptions
   output$plot1 <- renderPlot({      
@@ -938,5 +759,4 @@ shinyServer( function(input, output, session) {
     print(plot1)  
   }, height = 500, width = 750 
   )
-  #  })
 })
