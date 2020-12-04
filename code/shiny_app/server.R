@@ -76,8 +76,8 @@ shinyServer( function(input, output, session) {
       teach_ben_var2_sd = as.numeric(input$param23_1),  
       teach_sal_new_var2     = as.numeric(input$param22),         # TEMP
       teach_sal_new_var2_sd  = as.numeric(input$param22_1),      
-      teach_ben_new_var2     = as.numeric(input$param23),     
-      teach_ben_new_var2_sd  = as.numeric(input$param23_1),      
+      teach_ben_new_var2     = 0,     
+      teach_ben_new_var2_sd  = 0.01,      
       n_students_var2 = as.numeric(input$param24),                                            
       n_students_var2_sd = as.numeric(input$param24_1),                                       
       delta_ed_var2 = as.numeric(input$param26),                                              
