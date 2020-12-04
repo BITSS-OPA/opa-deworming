@@ -124,6 +124,9 @@ you don't want the slider to appear in")`.
 
 <img align="center" width="50%" src="./www/sa_readme_chart.png">
 
+The line, `knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")` converts the R markdown in `05_final_opa.Rmd` to R script in `all_analysis.R`.
+This means that when data is updated or added in `05_final_opa.Rmd`, it will update the `all_analysis.R` file.
+
 
 
 
