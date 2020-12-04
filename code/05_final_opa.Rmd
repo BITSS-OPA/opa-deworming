@@ -2850,7 +2850,7 @@ unit_test(ea3, 289.751849813911)
 
 npv_sim_all <-   sim.data1(
             nsims = nsims_so,                        
-            gov_bonds_var2          = gov_bonds_so             ,                                    
+            gov_bonds_var2          = round(gov_bonds_so,2)             ,    #asd gov_bonds_so, NO CHANGE                              
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
             inflation_var2          = inflation_so             ,                                    
             inflation_var2_sd       = inflation_so * 0.1          ,                                 
@@ -2910,23 +2910,23 @@ npv_sim_all <-   sim.data1(
             delta_ed_ext_var2       = delta_ed_ext_par_so      ,                                           
             delta_ed_ext_var2_sd    = delta_ed_ext_par_so * 0.1   ,                                              
             q_zero_var2             = q_zero_so            ,                                             
-            q_zero_var2_sd          = q_zero_so * 0.1         ,
+            q_zero_var2_sd          = 0.001, #q_zero_so * 0.1     BIG CHANGE    , 
             lambda1_new_var2        = round(lambda1_new_so, 2),    #rounded to match shiny app                   
             lambda1_new_var2_sd     = lambda1_new_sd_so,             
             prevalence_0_var2       = prevalence_0_so       ,  
-            prevalence_0_var2_sd    = prevalence_0_so * 0.1    ,
+            prevalence_0_var2_sd    = 0.1    ,
             prevalence_r_var2       = 1       ,    #TEMP
             prevalence_r_var2_sd    = 0.1    ,           
-            new_prev_r_var2         = new_prevalence_r_so,
-            new_prev_r_var2_sd      = new_prevalence_r_so * 0.1,
+            new_prev_r_var2         = round(prevalence_r_in,2), #asd #new_prevalence_r_so,  BIG CHANGE
+            new_prev_r_var2_sd      = 0.1,                      #asd #new_prevalence_r_so * 0.1,
             staff_time_var2         = staff_time_so    ,
             staff_time_var2_sd      = staff_time_so * 0.1,
             counts_par_var2         = counts_par_so    ,
             counts_par_var2_sd      = counts_par_sd_so ,
             costs_par_var2          = costs_par_so     ,
             costs_par_var2_sd       = costs_par_sd_so,
-            new_costs_var2          = costs2_ea_in,
-            new_costs_var2_sd       = costs2_ea_in * 0.1,
+            new_costs_var2          = round(costs2_ea_in,2),       #costs2_ea_in, NO CHANGE
+            new_costs_var2_sd       = round(costs2_ea_in,2) * 0.1, #costs2_ea_in * 0.1,
             countries_var2          = list("india", "kenya", "nigeria", "vietnam")
             )
 
@@ -2996,7 +2996,7 @@ for ( i in policy_estimates ) {
 library(plotly)
 nsims <- nsims_so
 
-npv_for_text <- paste(round(median(npv_sim),1))
+npv_for_text <- paste(round(median(npv_sim),2))
 npv_for_text2 <- paste("SD NPV:\n ", round(sd(npv_sim), 2))
 
 rescale <- rescale_so
