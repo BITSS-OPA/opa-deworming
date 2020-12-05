@@ -96,7 +96,7 @@ bibliography: bibliography.bib
 chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
-    nsims_so <- 1e2
+    nsims_so <- 1e4
     #############
     ##### Data  
     #############
@@ -251,7 +251,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -2576,15 +2576,15 @@ unit_test(ea3, 289.751849813911)
 
 
 ```
-## [1] "Output has change at to_test  to  14.2248452760151"
-## [1] "Output has change at to_test  to  79.8016545928756"
-## [1] "Output has change at to_test  to  84.357155872339"
-## [1] "Output has change at to_test  to  486.083039678352"
-## [1] "Output has change at to_test  to  81.5768236427251"
-## [1] "Output has change at to_test  to  501.172065961785"
-## [1] "Output has change at to_test  to  51.8130029715531"
-## [1] "Output has change at to_test  to  487.495953505001"
-## [1] "Output has change at to_test  to  284.689861862284"
+## [1] "Output has change at to_test  to  16.3448846176049"
+## [1] "Output has change at to_test  to  98.4998163478081"
+## [1] "Output has change at to_test  to  97.3722791517634"
+## [1] "Output has change at to_test  to  589.106217588064"
+## [1] "Output has change at to_test  to  88.4112263458075"
+## [1] "Output has change at to_test  to  529.590693951035"
+## [1] "Output has change at to_test  to  61.5651494107666"
+## [1] "Output has change at to_test  to  576.71872724837"
+## [1] "Output has change at to_test  to  317.236967266291"
 ```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
