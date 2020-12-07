@@ -49,6 +49,10 @@ prevalence_kenya <- prevalence_r_so["kenya"]
 prevalence_nigeria <- prevalence_r_so["nigeria"]
 prevalence_vietnam <- prevalence_r_so["vietnam"]
 
+length_temp_india <- 1
+length_temp_kenya <- 1
+length_temp_nigeria <- 1
+length_temp_vietnam <- 1
 
 nsims <- 1e3
 
@@ -152,23 +156,13 @@ shinyUI(
                               value = round(costs2_ea_in, 2), 
                               min = 0
                             ),
-                            helpText("For reference:", br(),
-                                     paste("Unit costs in India is", round(costs_temp_india,2)), br(),
-                                     paste("Unit costs in Kenya is", round(costs_temp_kenya,2)), br(),
-                                     paste("Unit costs in Nigeria is", round(costs_temp_nigeria,2)), br(),
-                                     paste("Unit costs in Vietnam is", round(costs_temp_vietnam,2))),
                             numericInput(
                               "param31_ka",
-                              label = "Prevalence in new region (\\( \\eta_{new} \\)) = ",
+                              label = h4("Prevalence in new region (\\( \\eta_{new} \\))"),
                               min = 0 ,
                               max = 1,
                               value = round(prevalence_r_in, 2)
                             ),
-                            helpText("For reference:", br(),
-                                     paste("Prevalence in India is", round(prevalence_india,2)), br(),
-                                     paste("Prevalence in Kenya is", round(prevalence_kenya,2)), br(),
-                                     paste("Prevalence in Nigeria is", round(prevalence_nigeria,2)), br(),
-                                     paste("Prevalence in Vietnam is", round(prevalence_vietnam,2))), 
                             numericInput(
                               "param17_new_ka",
                               label = h4("Length of treatment (years)"),
@@ -177,12 +171,66 @@ shinyUI(
                               max = 10,
                               step = 0.1,
                             ),
-                            helpText("For reference:", br(),
-                                     paste("Prevalence in India is", round(prevalence_india,2)), br(),
-                                     paste("Prevalence in Kenya is", round(prevalence_kenya,2)), br(),
-                                     paste("Prevalence in Nigeria is", round(prevalence_nigeria,2)), br(),
-                                     paste("Prevalence in Vietnam is", round(prevalence_vietnam,2)))
-                   )
+                            
+                            helpText('For reference:'),
+                            helpText(HTML(paste('
+                                          <html>
+                                          <head>
+                                          <style>
+                                          table, th, td {
+                                            border: 1px solid black;
+                                            border-collapse: collapse;
+                                          }
+                                          th, td {
+                                            padding: 5px;
+                                          }
+                                          th {
+                                            text-align: left;
+                                          }
+                                          </style>
+                                          </head>
+                                          <body>
+                                          
+                                          <table style="width:100%">
+                                            <tr>
+                                              <th>Country</th>
+                                              <th>Unit Costs</th> 
+                                              <th>Prevalence</th>
+                                              <th>Length of Treatment</th>
+                                            </tr>
+                                            <tr>
+                                              <th>India</th>
+                                              <td><var>', round(costs_temp_india,2),'</var></td>
+                                              <td><var>',round(prevalence_india,2),'</var></td>
+                                              <td><var>', round(length_temp_india,2),'</var></td>
+                                            </tr>
+                                            <tr>
+                                              <th>Kenya</th>
+                                              <td><var>',round(costs_temp_kenya,2),'</var></td>
+                                              <td><var>',round(prevalence_kenya,2),'</var></td>
+                                              <td><var>',round(length_temp_kenya,2),'</var></td>
+                                              
+                                            </tr>
+                                            <tr>
+                                              <th>Nigeria</th>
+                                              <td><var>',round(costs_temp_nigeria,2),'</var></td>
+                                              <td><var>',round(prevalence_nigeria,2),'</var></td>
+                                              <td><var>',round(length_temp_nigeria,2),'</var></td>
+                                            </tr>
+                                            <tr>
+                                              <th>Vietnam</th>
+                                              <td><var>',round(costs_temp_vietnam,2),'</var></td>
+                                              <td><var>',round(prevalence_vietnam,2),'</var></td>
+                                              <td><var>', round(length_temp_vietnam,2),'</var></td>
+                                            </tr>
+                                          </table>
+                                          
+                                          </body>
+                                          </html>
+                                          '
+                            )))
+                   ),
+                   
                  ),
                  mainPanel(
                    fluidRow(id = "output_id1_ka", style = "max-width: 800px; max-height: 700px; position:relative;",
