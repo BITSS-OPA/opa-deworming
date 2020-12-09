@@ -4,6 +4,7 @@ library(shiny)
 shinyServer( function(input, output, session) {
   #Dynamic UI
   
+  
   #Show/hide SDs code.
   onclick("toggleDataSDs",
           lapply(
@@ -110,26 +111,32 @@ shinyServer( function(input, output, session) {
     )
   } 
   )
-
+  # Export Input Parameter Values
   output$downloadParams <- downloadHandler(
-    filename = function() {
-      "export.txt"
-    },
+    filename = "export.txt",
     content = function(file) {
-      inputsList <- names(reactiveValuesToList(input))
-      exportVars <- paste0(inputsList, "=", sapply(inputsList, function(inpt) input[[inpt]]))
+      inputList <- names(reactiveValuesToList(input))
+      inputLabel <- inputMaster[inputList]
+      exportVars <- paste0(inputLabel, " = ", sapply(inputList, function(inpt) input[[inpt]]))
       write(exportVars, file)
     })
-
-  output$downloadPlot <- downloadHandler(
-    filename = 'test.png',
-    content = function(file) {
-      device <- function(..., width, height) {
-        grDevices::png(..., width = width, height = height,
-                       res = 300, units = "in")
-      }
-      ggsave(file, plot = plotInputAll(), device = device, width = 7, height = 5)
-    })
+  
+  # Export All Assumption Plot
+  output$downloadPlotAll <- downloadHandler(filename = function() {
+    "plotAll.png"
+  },
+  content = function(file) {
+    file.copy("./code/shiny_app/www/plotAll.png", file, overwrite=TRUE)
+  })
+  
+  # Export Key Assumption Plot
+  output$downloadPlotKA <- downloadHandler(filename = function() {
+    "plotKA.png"
+  },
+  content = function(file) {
+    file.copy("./code/shiny_app/www/plotKA.png", file, overwrite=TRUE)
+  })
+  
   # Sync cost variable for Key Assumptions and All Assumptions 
   
   observeEvent(
@@ -747,13 +754,14 @@ shinyServer( function(input, output, session) {
     
     
   }
-  output$plot1 <- renderPlot({      
+  output$plot1 <- renderPlot({  
+    ggsave("plotAll.png", plotInputAll(), path= "./code/shiny_app/www")
     print(plotInputAll())
   }, height = 500, width = 750 
   )
   
   # Generate Plot with Key Assumptions
-  output$plot1_ka <- renderPlot({      
+  plotInputKA <- function(){
     npv_sim_all <- reactive.data1()
     output_plot <- generate_plot_f(npv_sim_all, "A3. All income of A2. Main Policy Estimate", input$rescale)
     plot1 <- output_plot[[1]]
@@ -761,11 +769,14 @@ shinyServer( function(input, output, session) {
     position <- output_plot[[2]]
     
     plot1 <- plot1 + labs(y = NULL,
-           x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-           subtitle = paste0(policy_estimates_text[position], ". ")
-           )
-    print(plot1)  
+                          x = "Net Present Value (Benefits -  Costs)" ,
+                          title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
+                          subtitle = paste0(policy_estimates_text[position], ". ")
+    )
+  }
+  output$plot1_ka <- renderPlot({      
+    ggsave("plotKA.png", plotInputKA(), path= "./code/shiny_app/www")
+    print(plotInputKA())  
   }, height = 500, width = 750 
   )
   
@@ -785,4 +796,102 @@ shinyServer( function(input, output, session) {
     print(plot1)  
   }, height = 500, width = 750 
   )
+  
+  # Master List of Input ID & Label
+  
+  inputMaster <- c(# ---- Key Assumptions
+                   "param35_ka" = "Yearly unit costs in new country (in $US)",
+                   "param31_ka" = "Prevalence in new region",
+                   "param17_new_ka" = "Length of treatment (years)",
+                   "resetKA" = "Reset Button for Key Assumptions",
+                   # ---- All Assumptions
+                   "rescale" = "Rescale Checkbox Status",
+                   "policy_est" = "Policy Estimate Assumption",
+                   "param1" = "Number of simulations",
+                   # ---- research tab
+                   
+                   "param18_1" = "Increase in number of hours worked due to treatment (Male)",
+                   "param18_1_1" = "SD of Increase in number of hours worked due to treatment (Male)",
+                   "param18_2" = "Increase in number of hours worked due to treatment (Female)",
+                   "param18_2_1" = "SD of Increase in number of hours worked due to treatment (Female)",
+                   "param29_1" = "Increase in yearly earnings (pooling 10, 15, 20 year follow-ups)",
+                   "param29_1_1" = "SD of Increase in yearly earnings (pooling 10, 15, 20 year follow-ups)",
+                   "param19" = "Increase in number of hours worked due to treatment (Externalities included)",
+                   "param19_1" = "SD of Increase in number of hours worked due to treatment (Externalities included)",
+                   "param30" = "Prevalence in original study",
+                   "param30_1" = "SD of Prevalence in original study",
+                   "param4" = "Agricultural Wages",
+                   "param4_1" = "SD of Agricultural Wages",
+                   "param5" = "Wages of a Wage Worker",
+                   "param5_1" = "SD of Wages of a Wage Worker",
+                   "param6" = "Average monthly self-employed profits (Profits SE)",
+                   "param6_1" = "SD of Profits SE",
+                   "param7" = "Weekly hours worked by self-employed workers(>10)",
+                   "param7_1" = "SD of Weekly hours worked by self-employed workers(>10)",
+                   "param8" = "Weekly hours worked by agricultural workers",
+                   "param8_1" = "SD of Weekly hours worked by agricultural workers",
+                   "param9" = "Weekly hours worked by wage earners",
+                   "param9_1" = "SD of Weekly hours worked by wage earners", 
+                   "param10" = "Weekly hours worked by self-employed workers (no condition)",
+                   "param10_1" = "SD of Weekly hours worked by self-employed workers (no condition)",
+                   "param21_1" = "Coefficients of Teacher Experience, Xp (beta_1)",
+                   "param21_2" = "Coefficients of Teacher Experience Squared, Xp ^2 (beta_2)",
+                   "param13" = "Coverage(R)",
+                   "param13_1" = "SD of Coverage(R)",
+                   "param20" = "Take up (Q(S_2))",
+                   "param20_1" = "SD of Take up (Q(S_2))",
+                   "param28" = "Take-up with no subsidy ( Q(S_1) )",
+                   "param26" = "x * Delta{E}",
+                   "param26_1" = "SD of x * Delta{E}",
+                   "param27" = "x * Delta{E}  (ext)",
+                   "param27_1" = "SD of x * Delta{E}  (ext)",
+                   "param22" = "Teacher salary",
+                   "param22_1" = "SD of Teacher salary",
+                   "param23" = "Teacher Benefits",
+                   "param23_1" = "SD of Teacher Benefits",
+                   "param24" = "Students per teacher",
+                   "param24_1" = "SD of Students per teacher",
+                   "param17" = "Years of treatment in orginal study",
+                   "param17_1" = "SD of Years of treatment in orginal study",
+                   "param16" = "Costs of Treatment (local $)",
+                   "param16_1" = "SD of Costs of Treatment (local $)",
+                   "param16_new" = "Costs of Treatment (US $)", 
+                   "param16_1_new" = "SD of Costs of Treatment (US $)",
+                   "param34" = "Costs adjustment",
+                   "param34_1" = "SD of Costs adjustment",
+                   "param32" = "Counts adjustment",
+                   "param32_1" = "SD of Counts adjustment",
+                   #---- data tab
+                   "param35" = "Yearly unit costs in new country (in $US)",
+                   "param35_1" = "SD of Yearly unit costs in new country (in $US)",
+                   "param11" = "Exchange rate",
+                   "param11_1" = "SD of Exchange rate",
+                   "param12" = "GDP Growth Rate",
+                   "param12_1" = "SD of GDP Growth Rate",
+                   "param2" = "Government Bonds",
+                   "param2_1" = "SD of Government Bonds",
+                   "param2_new" = "Government Bonds",
+                   "param2_1_new" = "SD of Government Bonds",
+                   "param3" = "Inflation Rate",
+                   "param3_1" = "SD of Inflation Rate",
+                   "param3_new" = "Inflation Rate",
+                   "param3_1_new" = "SD of Inflation Rate",
+                   "param15" = "Tax rate",
+                   "param15_1" = "SD of Tax rate",
+                   # ---- GW tab
+                   "param31" = "Prevalence in new region",
+                   "param31_1" = "SD of Prevalence in new region",
+                   "param17_new" = "Years of Treatment in New Setting",
+                   "param17_1_new" = "SD of Years of Treatment in New Setting",
+                   "param33" = "Additional costs due to staff time",
+                   "param33_1" = "SD of Additional costs due to staff time",
+                   # ---- Buttons for All Assumption tab
+                   "resetAll" = "Reset Button for All Assumptions",
+                   "show_eq" = "Show Equation Checkbox Status"
+                   
+                   
+                   
+                   )
+                  
+  
 })

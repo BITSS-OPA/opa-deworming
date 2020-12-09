@@ -230,6 +230,7 @@ shinyUI(
                                           '
                             ))),
                             actionButton("resetKA", "Reset Inputs"),
+                            downloadButton("downloadPlotKA", "Save Plot")
                             
                             
                             
@@ -1147,7 +1148,7 @@ shinyUI(
                             style = "position:relative",
                             actionButton("resetAll", "Reset Inputs"),
                             downloadButton("downloadParams", "Output Parameters"),
-                            downloadButton("downloadPlot", "Save Plot"))
+                            downloadButton("downloadPlotAll", "Save Plot"))
                  )),
                  mainPanel(
                    fluidRow(id = "output_id1", style = "max-width: 800px; max-height: 700px; position:relative;",
