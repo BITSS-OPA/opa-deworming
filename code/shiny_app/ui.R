@@ -147,7 +147,7 @@ shinyUI(
                tabPanel(
                  "Key Assumptions", 
                  sidebarPanel(
-                   
+                   div( id = "KA",
                    fluidRow(id = "tPanel1_ka", 
                             style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;", 
                             numericInput(
@@ -228,7 +228,12 @@ shinyUI(
                                           </body>
                                           </html>
                                           '
-                            )))
+                            ))),
+                            actionButton("resetKA", "Reset Inputs"),
+                            
+                            
+                            
+                   )
                    ),
                    
                  ),
@@ -243,6 +248,7 @@ shinyUI(
                tabPanel(
                  "All Assumptions",
                  sidebarPanel(
+                   div(id = "All",
                    fluidRow(id = "tPanel",style = "max-width: 600px; max-height: 400px; position:relative;",
                             # Begin policy estimate description ----
                             selectInput("policy_est",
@@ -352,7 +358,7 @@ shinyUI(
                    fluidRow(id = "tPanel1",
                             style = "overflow-y:scroll; 
                                      max-width: 600px; 
-                                     max-height: 400px; 
+                                     max-height: 300px; 
                                      position:relative;",
                             tabsetPanel(
                               # Begin tabpanel research ----
@@ -852,6 +858,7 @@ shinyUI(
                                     value = counts_par_sd_so
                                   )
                                 ))
+                                
                               ), 
                               # end tabpanel research ----
                               #
@@ -1135,8 +1142,13 @@ shinyUI(
                               )
                               # end tabpanel GW ----
                             )
-                   )
-                 ),
+                   ),
+                   fluidRow(id = "buttonAll", 
+                            style = "position:relative",
+                            actionButton("resetAll", "Reset Inputs"),
+                            downloadButton("downloadParams", "Output Parameters"),
+                            downloadButton("downloadPlot", "Save Plot"))
+                 )),
                  mainPanel(
                    fluidRow(id = "output_id1", style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1")

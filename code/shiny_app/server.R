@@ -111,9 +111,26 @@ shinyServer( function(input, output, session) {
   } 
   )
 
+  output$downloadParams <- downloadHandler(
+    filename = function() {
+      "export.txt"
+    },
+    content = function(file) {
+      inputsList <- names(reactiveValuesToList(input))
+      exportVars <- paste0(inputsList, "=", sapply(inputsList, function(inpt) input[[inpt]]))
+      write(exportVars, file)
+    })
 
-
-# Sync cost variable for Key Assumptions and All Assumptions 
+  output$downloadPlot <- downloadHandler(
+    filename = 'test.png',
+    content = function(file) {
+      device <- function(..., width, height) {
+        grDevices::png(..., width = width, height = height,
+                       res = 300, units = "in")
+      }
+      ggsave(file, plot = plotInputAll(), device = device, width = 7, height = 5)
+    })
+  # Sync cost variable for Key Assumptions and All Assumptions 
   
   observeEvent(
     input$param35_ka,
@@ -127,7 +144,7 @@ shinyServer( function(input, output, session) {
   
   
     
-# Sync prevalence variable for Key Assumptions and All Assumptions 
+  # Sync prevalence variable for Key Assumptions and All Assumptions 
   
   observeEvent(
     input$param31_ka,
@@ -139,7 +156,8 @@ shinyServer( function(input, output, session) {
     updateSliderInput(session, "param31_ka", value = input$param31)
   )
 
-# Sync length of treatment in new environment for Key Assumptions and All Assumptions 
+  # Sync length of treatment in new environment for Key Assumptions and All Assumptions 
+  
   observeEvent(
     input$param17_new_ka,
     updateNumericInput(session, "param17_new", value = input$param17_new_ka)
@@ -151,7 +169,11 @@ shinyServer( function(input, output, session) {
     updateSliderInput(session, "param17_new_ka", value = input$param17_new)
   )
   
-
+  # Reset all inputs from Key Assumption tab
+  observeEvent(input$resetKA, {reset("KA")})
+  
+  # Reset all inputs from All Assumption tab
+  observeEvent(input$resetAll, {reset("All")})
  
   # Show/hide components of each model 
   observeEvent(input$policy_est,{ 
@@ -709,20 +731,24 @@ shinyServer( function(input, output, session) {
 
   
   # Generate Plot with All Asumptions
-  output$plot1 <- renderPlot({      
+  plotInputAll <- function(){
     npv_sim_all <- reactive.data1()
     plot1 <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[1]]
     
     position <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[2]]
     total_time <- generate_plot_f(npv_sim_all, input$policy_est, input$rescale)[[3]]
     plot1 <- plot1 + labs(y = NULL,
-           x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-           subtitle = paste0(policy_estimates_text[position], ". ",
-                             "N = ", input$param1, " simulations. Takes ",
-                             round(total_time, 1)," ",attributes(total_time)$units )  ) 
-      
-    print(plot1)  
+                          x = "Net Present Value (Benefits -  Costs)" ,
+                          title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
+                          subtitle = paste0(policy_estimates_text[position], ". ",
+                                            "N = ", input$param1, " simulations. Takes ",
+                                            round(total_time, 1)," ",attributes(total_time)$units )  ) 
+    
+    
+    
+  }
+  output$plot1 <- renderPlot({      
+    print(plotInputAll())
   }, height = 500, width = 750 
   )
   
