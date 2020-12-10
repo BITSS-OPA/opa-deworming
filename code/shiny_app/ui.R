@@ -62,7 +62,19 @@ nsims <- 1e3
 
 #fluidPage is something must have
 shinyUI(
-  fluidPage( theme = shinytheme("cerulean"),
+  fluidPage( 
+    
+    tags$head(
+      tags$style(HTML(
+        "
+        .main-container{
+        margin-right = 0px !important;
+        max-width: 98% !important;
+        }
+        "
+      ))
+    ),
+    theme = shinytheme("cerulean"),
     navbarPage("Open Policy Analysis for Deworming Interventions: Open Output Component",
                # Begin main policy estimate tab ---- 
                tabPanel(
@@ -89,6 +101,7 @@ shinyUI(
                     )
                   )),
                   fluidRow(
+                    style = "width: 100%; height: 100%; max-width: 400px; max-width: 700px;",
                     p(
                       "This visualization is one of three key components of an",
                       tags$a(href = "http://www.bitss.org/opa/projects/deworming/", "Open Policy Analysis (OPA)"),
@@ -137,7 +150,8 @@ shinyUI(
                   )
                 ),
                  mainPanel(
-                   fluidRow(id = "output_id1_main", style = "max-width: 800px; max-height: 700px; position:relative;",
+                   fluidRow(id = "output_id1_main", style = "width: 100%; height: 100%; position: relative",
+                            #style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1_main")
                    )
                  )
@@ -149,7 +163,8 @@ shinyUI(
                  sidebarPanel(
                    div( id = "KA",
                    fluidRow(id = "tPanel1_ka", 
-                            style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;", 
+                            style = "overflow-y: scroll; width: 100%; height: 100%; position:relative;",
+                            #style = "overflow-y:scroll; max-width: 600px; max-height: 600px; position:relative;", 
                             numericInput(
                               "param35_ka",
                               label = h4("Yearly unit costs in new country (in $US)"),
@@ -239,7 +254,8 @@ shinyUI(
                    
                  ),
                  mainPanel(
-                   fluidRow(id = "output_id1_ka", style = "max-width: 800px; max-height: 700px; position:relative;",
+                   fluidRow(id = "output_id1_ka", style = "width: 100%; height: 100%; position: relative",
+                            #style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1_ka")
                    )
                  )
@@ -250,7 +266,9 @@ shinyUI(
                  "All Assumptions",
                  sidebarPanel(
                    div(id = "All",
-                   fluidRow(id = "tPanel",style = "max-width: 600px; max-height: 400px; position:relative;",
+                   fluidRow(id = "tPanel",
+                            style = "width: 100%; max-height: 70%; position: relative",
+                            #style = "max-width: 600px; max-height: 400px; position:relative;",
                             # Begin policy estimate description ----
                             selectInput("policy_est",
                                         h4("Policy Estimate:"),
@@ -357,10 +375,11 @@ shinyUI(
                                          value = 1e2)
                    ),
                    fluidRow(id = "tPanel1",
-                            style = "overflow-y:scroll; 
-                                     max-width: 600px; 
-                                     max-height: 300px; 
-                                     position:relative;",
+                            style = "overflow-y: scroll; width: 100%; max-height: 300px; position: relative",
+                            # style = "overflow-y:scroll; 
+                            #          max-width: 600px; 
+                            #          max-height: 300px; 
+                            #          position:relative;",
                             tabsetPanel(
                               # Begin tabpanel research ----
                               tabPanel(
@@ -1151,15 +1170,20 @@ shinyUI(
                             downloadButton("downloadPlotAll", "Save Plot"))
                  )),
                  mainPanel(
-                   fluidRow(id = "output_id1", style = "max-width: 800px; max-height: 700px; position:relative;",
+                   fluidRow(id = "output_id1", style = "width: 100%; height: 100%; position:relative;",
+                            #style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1")
                    ),
-                   fluidRow(id = "output_id2", style = "max-width: 800px; max-height: 300px; position:absolute;top: 500px;",
+                   fluidRow(id = "output_id2", style = "width: 100%; height: auto; position: absolute; top: 600px",
+                            #style = "max-width: 800px; max-height: 300px; position:absolute;top: 500px;",
                             checkboxInput("show_eq", label = "Show equations", value = FALSE),
                             uiOutput('eqns', container = div)
                    )
                  )
                )
     )
+    
   )
+  
+  
 )
