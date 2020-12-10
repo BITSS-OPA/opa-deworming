@@ -757,7 +757,7 @@ shinyServer( function(input, output, session) {
   output$plot1 <- renderPlot({  
     ggsave("plotAll.png", plotInputAll(), path= "./code/shiny_app/www")
     print(plotInputAll())
-  }, height = 550#, width = 750 
+  }, height = 550
   )
   
   # Generate Plot with Key Assumptions
@@ -777,7 +777,7 @@ shinyServer( function(input, output, session) {
   output$plot1_ka <- renderPlot({      
     ggsave("plotKA.png", plotInputKA(), path= "./code/shiny_app/www")
     print(plotInputKA())  
-  }, height = 550 #, width = 750 
+  }, height = 550  
   )
   
   # Generate Main Policy Estimate Plot 
@@ -794,7 +794,7 @@ shinyServer( function(input, output, session) {
            subtitle = "Distribution of the Net Present Value of Deworming Interventions"
            ) 
     print(plot1)  
-  }, height = 550#, width = 750 
+  }, height = 550
   )
   
   # Master List of Input ID & Label
