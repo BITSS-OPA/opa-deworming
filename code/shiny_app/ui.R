@@ -1174,7 +1174,7 @@ shinyUI(
                             #style = "max-width: 800px; max-height: 700px; position:relative;",
                             plotOutput("plot1")
                    ),
-                   fluidRow(id = "output_id2", style = "width: 100%; height: auto; position: absolute; top: 600px",
+                   fluidRow(id = "output_id2", style = "width: 100%; height: auto; position: absolute; top: 550px",
                             #style = "max-width: 800px; max-height: 300px; position:absolute;top: 500px;",
                             checkboxInput("show_eq", label = "Show equations", value = FALSE),
                             uiOutput('eqns', container = div)
