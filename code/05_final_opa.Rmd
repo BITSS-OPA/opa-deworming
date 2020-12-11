@@ -4,8 +4,6 @@ date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div>
 editor_options:
   chunk_output_type: console
 output:
-  
-  
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -19,8 +17,12 @@ output:
     theme: cerulean
     toc: yes
     toc_collapsed: no
-    toc_depth:  3
+    toc_depth: 3
     toc_float: yes
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '3'
   word_document: null
 link-citations: yes
 pdf_document:
@@ -3030,17 +3032,16 @@ all_res_1000_sims <- c(
 )
 
 all_res_10000_sims <- c(
-  17.1133848848049,
-  101.74342270096 ,
-  101.946864892034,
-  609.078551436778,
-  88.4543499891907,
-  529.634698575251,
-  61.1378664449522,
-  596.041251363187,
-  307.697224464304 
+  16.3448846176049,
+  98.4998163478081,
+  97.3722791517634,
+  589.106217588064,
+  88.4112263458075,
+  529.590693951035,
+  61.5651494107666,
+  576.71872724837 ,
+  317.236967266291 
 )
-
 
 
 
@@ -3074,7 +3075,7 @@ plot1 <- generate_plot_f(
     subtitle = "Distribution of the Net Present Value of Deworming Interventions"
   )
 print(plot1)
-# ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
+#ggsave(here("code", "main_pe.png"))
 
 ```
 

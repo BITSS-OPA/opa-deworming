@@ -4,8 +4,6 @@ date: "<center><div class='mysubtitle'>11 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
-  
-  
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -19,8 +17,12 @@ output:
     theme: cerulean
     toc: yes
     toc_collapsed: no
-    toc_depth:  3
+    toc_depth: 3
     toc_float: yes
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '3'
   word_document: null
 link-citations: yes
 pdf_document:
@@ -2574,19 +2576,6 @@ unit_test(ea3, 289.751849813911)
 <br>
 
 
-
-
-```
-## [1] "Output has change at to_test  to  16.3448846176049"
-## [1] "Output has change at to_test  to  98.4998163478081"
-## [1] "Output has change at to_test  to  97.3722791517634"
-## [1] "Output has change at to_test  to  589.106217588064"
-## [1] "Output has change at to_test  to  88.4112263458075"
-## [1] "Output has change at to_test  to  529.590693951035"
-## [1] "Output has change at to_test  to  61.5651494107666"
-## [1] "Output has change at to_test  to  576.71872724837"
-## [1] "Output has change at to_test  to  317.236967266291"
-```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
