@@ -139,47 +139,37 @@ knitr::opts_chunk$set(fig.width=12, fig.height=8)
 chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
+  
+    #############
+    ##### Setup
+    #############  
     nsims_so <- 1e4
+    rescale_so <- FALSE
+    policy_estimate_so <- "a3_inc_a2_all_sim"
+    run_sim_so <- FALSE
+    main_run_so <- TRUE
+    periods_so <- 50               #Total number of periods to forecast wages
+    costs_temp_so <- 1
+    main_pe_so <- 289.8
+    
+    
     #############
     ##### Data  
     #############
-    gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
-    inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
-    gov_bonds_new_so <- 0.09
-    inflation_new_so <- 0.04
-
-    wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
-    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B (Source data took the log, here we recover it)
-    profits_se_so <- 1766          #Control group monthly self-employed profits -
-                                   #Table 4, Panel C, Column 5, Row 1
-                                   #FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
-    hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
-    hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 3, Panel B
-    hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 3, Panel B
-    hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 3, Panel B
+    # ATTENTION!
+    # costs2_ea_in
     ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
-
     ex_rate_2018        <- 101.30  # Exchange rate (KES per international $)
                                     # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
     ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
-    cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
-    cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
-
     growth_rate_so <- 1.52/100     #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
-    coverage_so  <- 0.681333333    # (R) Fraction of treated primary school students within 6 km - from W@W - see note
+    gov_bonds_so <- 	0.1185	     #Kenyan interest on sovereign debt - Central Bank of Kenya
+    gov_bonds_new_so <- 0.09
+    inflation_so <-  0.02          #Kenyan inflation rate - World Bank Development Indicators
+    inflation_new_so <- 0.04
     tax_so <- 0.16575              #ADD INFO!
-    unit_cost_local_so <- 43.66    #Deworm the World
-
-    unit_cost_so <- 0.42           # Unit cost of deworming (in 2018 USD) - from Evidence Action
-    #CALCULATIONS TO CONVERT ALL CURRENCY TO 2017 USD PPP
-    unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
-    # Adjust for inflation: convert all costs to 2017 USD
-    # Move this calculations into the body of the document (and outside of the sources chunk)
-    unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
-
-    years_of_treat_0_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
-    years_of_treat_t_so <- 2.41      #Years of Treatment in new setting
+    
     # costs data
     df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Costs")
@@ -197,63 +187,6 @@ chunk_sources <- function(){
     df_prevalence_so <- read_excel("data/prevalence_data.xlsx",
                            sheet = "Sheet1")
     # prevalence_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
-
-    #############
-    ##### Research
-    #############
-    df_research_so <- read_csv("rawdata/research/research_params.csv")   
-    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women, table 3, row 1, cols 2 & 3
-    lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
-    lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
-    lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
-    lambda1_new_so <- c(79.51)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
-                             
-    lambda1_new_sd_so <- c(76)  # ADD SOURCE
-    q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
-    q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
-    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
-                        0.0239963665555466, 0.027301406306074, 0.0234125454594173,
-                       0.0279278879439199, 0.00647044449446303, 0.00835739437790601)                                     
-    delta_ed_so <- cbind(delta_ed_so, 1999:2007)
-    delta_ed_ext_so <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545585,  #Additional externality secondary schooling increase (from Joan)
-                           0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
-                           0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
-    delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)    
-    delta_ed_par_so <- 1
-    delta_ed_ext_par_so <- 1
-    include_ext_so <- TRUE
-
-    #This is are the parameters labeled eta in the doc
-    prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
-    prevalence_r_so <- c("india" = 0.5665, "kenya" = 0.345, "nigeria" = 0.27, "vietnam" = 0.145)  #0.5665   0.5013121
-    # based on https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
-    new_prevalence_r_so <- NULL
-    #############
-    ##### Guess work   
-    #############
-    periods_so <- 50               #Total number of periods to forecast wages
-    time_to_jm_so <- 10            #Time from initial period until individual join the labor force
-    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)
-                                                    #- see notes(0.1019575, -0.0010413), (0,0)
-    teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
-    teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
-    teach_sal_new_so <- (50000 * 12 / 49.773)
-    teach_ben_new_so <- 0
-                                  #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
-                                  #news sources * 12 / ex_rate_2017_ppp_so
-                                  # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
-                                  # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
-    teach_sal_2017usdppp_so <- teach_sal_new_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
-
-    n_students_so <- 45            #Average pupils per teacher	45
-    staff_time_so <- 0.3           #Added Deworming costs due to government staff time
-    run_sim_so <- FALSE
-    main_run_so <- TRUE
-    rescale_so <- FALSE
-    costs_par_so <- 1
-    costs_par_sd_so <- 0.1
-    counts_par_so <- 1
-    counts_par_sd_so <- 0.1
     new_costs_so <- NULL
     country_sel_so <- list("india", "kenya", "nigeria", "vietnam")
     country_sel_pop_so <- c(
@@ -265,11 +198,91 @@ chunk_sources <- function(){
     #https://data.worldbank.org/indicator/SP.POP.TOTL
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "a2_tax_sim",
     # "a2_all_sim", "a3_inc_a1_all_sim", "a3_inc_a1_all_x_sim", "a3_inc_a2_all_sim"
-    policy_estimate_so <- "a3_inc_a2_all_sim"
+    
 
-
-    costs_temp_so <- 1
-    main_pe_so <- 289.8
+    
+    
+    #############
+    ##### Research
+    #############
+    df_research_so <- read_csv("rawdata/research/research_params.csv")   
+    lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women, table 3, row 1, cols 2 & 3
+    lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
+    lambda1_new_so <- c(79.51)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
+    lambda1_new_sd_so <- c(76)  # ADD SOURCE
+    lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
+    lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
+    #This is are the parameters labeled eta in the doc
+    prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
+    wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
+    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B (Source data took the log, here we recover it)
+    profits_se_so <- 1766          #Control group monthly self-employed profits -
+                                   #Table 4, Panel C, Column 5, Row 1
+                                   #FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
+    hours_se_cond_so <- 38.1       #Control group weekly self-employed hours, conditional on hrs >0 - Table D13, Panel D
+    hours_ag_so <- 8.3             #Control group hrs per week, agriculture - Table 3, Panel B
+    hours_ww_so <- 6.9             #Control group hrs per week, working for wages - Table 3, Panel B
+    hours_se_so <- 3.3             #Control group hrs per week, self-employment - Table 3, Panel B
+    coef_exp_so <- c(0.1019575, -0.0010413)         #Years of experience coefficients (1-linear, 2-cuadratic)
+                                                    #- see notes(0.1019575, -0.0010413), (0,0)
+    coverage_so  <- 0.681333333    # (R) Fraction of treated primary school students within 6 km - from W@W - see note
+    q_full_so <- 0.75              #Take up rates with full subsidy. From Miguel and Kremmer (2007)
+    q_zero_so <- 0                 #Take up rates with zero subsidy. From Miguel and Kremmer (2007)
+    delta_ed_so <- c(-0.00176350949079451, 0.00696052250263997, 0.0258570306763183,     # (Delta E) Additional direct secondary schooling increase (from Joan)
+                        0.0239963665555466, 0.027301406306074, 0.0234125454594173,
+                       0.0279278879439199, 0.00647044449446303, 0.00835739437790601)                                     
+    delta_ed_so <- cbind(delta_ed_so, 1999:2007)
+    delta_ed_par_so <- 1
+    delta_ed_ext_par_so <- 1
+    delta_ed_ext_so <- c(-0.0110126908021048,	0.0140448546741008,	-0.0034636291545585,  #Additional externality secondary schooling increase (from Joan)
+                           0.0112940214439477,	0.0571608179771775,	-0.0560546793186931,
+                           0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
+    delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007) 
+    include_ext_so <- TRUE
+    teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
+    teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
+    teach_sal_new_so <- (50000 * 12 / 49.773)
+    teach_ben_new_so <- 0
+                                  #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
+                                  #news sources * 12 / ex_rate_2017_ppp_so
+                                  # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
+                                  # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
+    cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    teach_sal_2017usdppp_so <- teach_sal_new_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
+    
+    n_students_so <- 45            #Average pupils per teacher	45
+    #ATTENTION!
+    years_of_treat_0_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
+    unit_cost_local_so <- 43.66    #Deworm the World
+    unit_cost_so <- 0.42           # Unit cost of deworming (in 2018 USD) - from Evidence Action
+    #CALCULATIONS TO CONVERT ALL CURRENCY TO 2017 USD PPP
+    unit_cost_ppp_so <- unit_cost_so*ex_rate_2018/ex_rate_2018_ppp_so
+    unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
+    # Adjust for inflation: convert all costs to 2017 USD
+    # Move this calculations into the body of the document (and outside of the sources chunk)
+    costs_par_so <- 1
+    costs_par_sd_so <- 0.1
+    counts_par_so <- 1
+    counts_par_sd_so <- 0.1
+    
+    
+  
+    
+    
+    
+    #############
+    ##### Guess work   
+    #############
+    # ATTENTION!
+    # prevalence_r_in
+    prevalence_r_so <- c("india" = 0.5665, "kenya" = 0.345, "nigeria" = 0.27, "vietnam" = 0.145)  #0.5665   0.5013121
+    # based on https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
+    new_prevalence_r_so <- NULL
+    years_of_treat_t_so <- 2.41      #Years of Treatment in new setting
+    staff_time_so <- 0.3           #Added Deworming costs due to government staff time
+    time_to_jm_so <- 10            #Time from initial period until individual join the labor force
+    
 
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
