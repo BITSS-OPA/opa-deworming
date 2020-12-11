@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>04 December, 2020</div></center>"
+date: "<center><div class='mysubtitle'>11 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -96,7 +96,12 @@ bibliography: bibliography.bib
 chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
+    
+    #############
+    ##### Setup  
+    #############
     nsims_so <- 1e4
+   
     #############
     ##### Data  
     #############
@@ -251,7 +256,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -434,7 +439,7 @@ Where:
 # - outputs: real interest rate. exact and approximate formula
 chunk_interest <- function(){
 ###############################################################################
-###############################################################################   
+###############################################################################  
 
     interest_f <- function(gov_bonds_var = gov_bonds_so ,
                            inflation_var = inflation_so) {  
@@ -933,8 +938,6 @@ s2_in <- s2_f()
 #### Indirect costs: additional years of education and its costs for government
 
 As a result of deworming treatment, there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual. The additional costs on education are computed as follows: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher. Second, the cost per student is multiplied by the estimated increase in school attendance ($\Delta \overline{E}_{t}(S1,S2)$). For this we use a series of estimated effects, including the additional direct increase in secondary schooling from 1999 to 2007 obtained from an additional analysis related to @baird2016worms. This series does not take into account the externality effects. To incorporate externality effects, we would need another series (from the same source) that estimates the additional secondary schooling increase due to the externality in order to add it to the original series.
-
-
 
 <details><summary>Show all the details</summary>
 
@@ -1565,7 +1568,6 @@ chunk_cost1_inp <- function(){
                                            "vietnam"),
                          other_costs = NULL) {
       # select countries
-      # SANDRA: REPRODUCE THE FOLLOWING TWO LINES, BUT USING TYDIVERSE SYNTAX
       country_total_var_temp <- country_total_var[country_name_var %in% select_var]
       country_cost_var_temp <- country_cost_var[country_name_var %in% select_var]
       # create country weight
@@ -1759,7 +1761,6 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     ## Research
     aux1 <-0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
-    #aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
     aux2 <-  lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
     lambda1_sim <- sapply(aux2,
                           function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
@@ -2152,7 +2153,7 @@ one_run <-
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
            unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
-           new_costs_var1 = new_costs_so,    # Harmless. DELETE?
+           new_costs_var1 = new_costs_so,    
            countries_var1 = country_sel_so,
            years_of_treat_0_var1 = years_of_treat_0_so,
            years_of_treat_t_var1 = years_of_treat_t_so,
