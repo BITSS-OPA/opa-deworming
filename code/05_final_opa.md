@@ -1561,7 +1561,7 @@ chunk_cost1_inp <- function(){
     return( costs_data )
   }
 
-  # Compute weights and per capita costs
+  # Compute weights and per capta costs
   costs1_p2_f <- function(country_total_var = costs_data$total,
                          country_cost_var = costs_data$costs_by_country,
                          staff_time_var = staff_time_so,

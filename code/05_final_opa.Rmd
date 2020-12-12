@@ -4,8 +4,6 @@ date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div>
 editor_options:
   chunk_output_type: console
 output:
-  
-  
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -19,8 +17,12 @@ output:
     theme: cerulean
     toc: yes
     toc_collapsed: no
-    toc_depth:  3
+    toc_depth: 3
     toc_float: yes
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '3'
   word_document: null
 link-citations: yes
 pdf_document:
@@ -139,7 +141,12 @@ knitr::opts_chunk$set(fig.width=12, fig.height=8)
 chunk_sources <- function(){
 ###############################################################################
 ###############################################################################  
-    nsims_so <- 1e2
+    
+    #############
+    ##### Setup  
+    #############
+    nsims_so <- 1e4
+   
     #############
     ##### Data  
     #############
@@ -475,7 +482,7 @@ Where:
 # - outputs: real interest rate. exact and approximate formula
 chunk_interest <- function(){
 ###############################################################################
-###############################################################################   
+###############################################################################  
 
     interest_f <- function(gov_bonds_var = gov_bonds_so ,
                            inflation_var = inflation_so) {  
@@ -1070,8 +1077,6 @@ s2_in <- s2_f()
 #### Indirect costs: additional years of education and its costs for government
 
 As a result of deworming treatment, there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual. The additional costs on education are computed as follows: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher. Second, the cost per student is multiplied by the estimated increase in school attendance ($\Delta \overline{E}_{t}(S1,S2)$). For this we use a series of estimated effects, including the additional direct increase in secondary schooling from 1999 to 2007 obtained from an additional analysis related to @baird2016worms. This series does not take into account the externality effects. To incorporate externality effects, we would need another series (from the same source) that estimates the additional secondary schooling increase due to the externality in order to add it to the original series.
-
-
 
 <details><summary>Show all the details</summary>
 
@@ -1813,7 +1818,6 @@ chunk_cost1_inp <- function(){
                                            "vietnam"),
                          other_costs = NULL) {
       # select countries
-      # SANDRA: REPRODUCE THE FOLLOWING TWO LINES, BUT USING TYDIVERSE SYNTAX
       country_total_var_temp <- country_total_var[country_name_var %in% select_var]
       country_cost_var_temp <- country_cost_var[country_name_var %in% select_var]
       # create country weight
@@ -2042,7 +2046,6 @@ sim.data1 <- function(nsims = 1e2,                   # "Setup" vars
     ## Research
     aux1 <-0.1 * c(lambda1_var2[1], 0.01)
     # Each list is a pair mean, sd.
-    #aux2 <- lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
     aux2 <-  lapply(1:2, function(x) c(lambda1_var2[x], c(1.42, 1.36)[x] ) )
     lambda1_sim <- sapply(aux2,
                           function(x)  rnorm(nsims, mean = x[1], sd = x[2]) )
@@ -2436,7 +2439,7 @@ one_run <-
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
            unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
-           new_costs_var1 = new_costs_so,    # Harmless. DELETE?
+           new_costs_var1 = new_costs_so,    
            countries_var1 = country_sel_so,
            years_of_treat_0_var1 = years_of_treat_0_so,
            years_of_treat_t_var1 = years_of_treat_t_so,
@@ -2834,10 +2837,14 @@ unit_test(ea3, 289.751849813911)
 
 <br>
 ```{r generate-plot-function, purl = TRUE, echo = FALSE}
-# generate_plot_f: function to generate plots for both Dynamic Document and shiny app. It takes in the simulated data, policy estimate text, and rescale variable. These are intermediary variables to exclude the interactivity of shiny app from the plot generation process.  
-
+# generate_plot_f: function to generate plots for both Dynamic Document and 
+# shiny app. It takes in the simulated data, policy estimate text, and rescale 
+# variable. These are intermediary variables to exclude the interactivity of 
+# shiny app from the plot generation process.  
 chunk_generate_plot <- function() {
-  generate_plot_f <- function(npv_sim_all, policy_estimates_text_selected, rescale){
+################################################################################
+################################################################################
+generate_plot_f <- function(npv_sim_all, policy_estimates_text_selected, rescale){
     total_time <- npv_sim_all$total_time
     position <- which( policy_estimates_text == policy_estimates_text_selected)
     npv_sim <- npv_sim_all[[ policy_estimates[position] ]]    
@@ -2901,19 +2908,20 @@ chunk_generate_plot <- function() {
     }
     return (list(plot1,position,total_time))
 }
+################################################################################
+################################################################################
 return(list("generate_plot_f" = generate_plot_f))
-
 }
+
 invisible( list2env(chunk_generate_plot(),.GlobalEnv) )
 ```
 
 
 ```{r run-mc, dpi = 400, purl=FALSE, echo=FALSE}
 
-
 npv_sim_all <-   sim.data1(
             nsims = nsims_so,                        
-            gov_bonds_var2          = round(gov_bonds_so,2)             ,    #asd gov_bonds_so, NO CHANGE                              
+            gov_bonds_var2          = round(gov_bonds_so,2)             ,                             
             gov_bonds_var2_sd       = gov_bonds_so * 0.1          ,                                 
             inflation_var2          = inflation_so             ,                                    
             inflation_var2_sd       = inflation_so * 0.1          ,                                 
@@ -3024,17 +3032,16 @@ all_res_1000_sims <- c(
 )
 
 all_res_10000_sims <- c(
-  17.1133848848049,
-  101.74342270096 ,
-  101.946864892034,
-  609.078551436778,
-  88.4543499891907,
-  529.634698575251,
-  61.1378664449522,
-  596.041251363187,
-  307.697224464304 
+  16.3448846176049,
+  98.4998163478081,
+  97.3722791517634,
+  589.106217588064,
+  88.4112263458075,
+  529.590693951035,
+  61.5651494107666,
+  576.71872724837 ,
+  317.236967266291 
 )
-
 
 
 
@@ -3057,14 +3064,18 @@ for ( i in policy_estimates ) {
 ################
 library(plotly)
 
-plot1 <- generate_plot_f(npv_sim_all, "A3. All income of A2. Main Policy Estimate", rescale_so)[[1]] + 
-      labs(y = NULL,
-       x = "Net Present Value (Benefits -  Costs)" ,
-       title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-       subtitle = "Distribution of the Net Present Value of Deworming Interventions"
-       )
+plot1 <- generate_plot_f(
+  npv_sim_all, 
+  "A3. All income of A2. Main Policy Estimate", 
+  rescale_so)[[1]] + 
+  labs(
+    y = NULL,
+    x = "Net Present Value (Benefits -  Costs)" ,
+    title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
+    subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+  )
 print(plot1)
-# ggsave(here("code", "main_pe.png"), width =9/1.5, height = 6/1.5, dpi = 300, units = "in")
+#ggsave(here("code", "main_pe.png"))
 
 ```
 
