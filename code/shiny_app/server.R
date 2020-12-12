@@ -121,6 +121,9 @@ shinyServer( function(input, output, session) {
       write(exportVars, file)
     })
   
+  
+  #temp
+  if (FALSE) {
   # Export All Assumption Plot
   output$downloadPlotAll <- downloadHandler(filename = function() {
     "plotAll.png"
@@ -136,7 +139,7 @@ shinyServer( function(input, output, session) {
   content = function(file) {
     file.copy("./code/shiny_app/www/plotKA.png", file, overwrite=TRUE)
   })
-  
+  }
   # Sync cost variable for Key Assumptions and All Assumptions 
   
   observeEvent(
@@ -755,7 +758,8 @@ shinyServer( function(input, output, session) {
     
   }
   output$plot1 <- renderPlot({  
-    ggsave("plotAll.png", plotInputAll(), path= "./code/shiny_app/www")
+   #TEMP
+   # ggsave("plotAll.png", plotInputAll(), path= "./code/shiny_app/www")
     print(plotInputAll())
   }, height = 550
   )
@@ -774,8 +778,10 @@ shinyServer( function(input, output, session) {
                           subtitle = paste0(policy_estimates_text[position], ". ")
     )
   }
+  
   output$plot1_ka <- renderPlot({      
-    ggsave("plotKA.png", plotInputKA(), path= "./code/shiny_app/www")
+   # TEMP
+   # ggsave("plotKA.png", plotInputKA(), path= "./code/shiny_app/www")
     print(plotInputKA())  
   }, height = 550  
   )
