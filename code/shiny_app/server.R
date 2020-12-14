@@ -25,7 +25,7 @@ shinyServer( function(input, output, session) {
 # Generate reactive simulated data for plotting 
 
   reactive.data1<- reactive( {
-    sim.data1(
+    sim_data1_f(
       nsims = as.numeric(input$param1),                                                    
       gov_bonds_var2     = as.numeric(input$param2),                                           
       gov_bonds_var2_sd  = as.numeric(input$param2_1),                                      
