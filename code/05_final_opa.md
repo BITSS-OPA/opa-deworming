@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>15 December, 2020</div></center>"
+date: "<center><div class='mysubtitle'>16 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -1562,17 +1562,17 @@ chunk_cost1_inp <- function(){
                   sum(costs_by_payer) )  
     # Compute the per capita cost for each country (c_i and w_i)
     )
-    costs_data <- country_cost %>%
+    costs_data_in <- country_cost %>%
        left_join(c_counts, by = "Country")
 
-    return( costs_data )
+    return( costs_data_in )
   }
 
   # Compute weights and per capta costs
-  costs1_p2_f <- function(country_total_var = costs_data$total,
-                         country_cost_var = costs_data$costs_by_country,
+  costs1_p2_f <- function(country_total_var = costs_data_in$total,
+                         country_cost_var = costs_data_in$costs_by_country,
                          staff_time_var = staff_time_so,
-                         country_name_var = costs_data$Country,
+                         country_name_var = costs_data_in$Country,
                          select_var = list("india", "kenya", "nigeria",
                                            "vietnam"),
                          other_costs_var = NULL) {
@@ -1602,7 +1602,7 @@ chunk_cost1_inp <- function(){
 invisible( list2env(chunk_cost1_inp(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-costs_data <- costs1_p1_f()
+costs_data_in <- costs1_p1_f()
 costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
                                               "vietnam"))
 ```
@@ -1651,7 +1651,7 @@ As a default $\delta_{u} = 0.1$
 
 
 #begin by cleaning up the cost data once
-costs_data <- costs1_p1_f(df_costs_var = df_costs_so,
+costs_data_in <- costs1_p1_f(df_costs_var = df_costs_so,
                           df_costs_cw_var = df_costs_cw_so,
                           df_counts_var = df_counts_so)
 
@@ -1664,7 +1664,7 @@ costs_data <- costs1_p1_f(df_costs_var = df_costs_so,
 sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
                       main_run_var2,
                       periods_var2,
-                      costs_data_var2 = costs_data,
+                      costs_data_var2 = costs_data_in,
                       run_sim_var2,
                       countries_var2,
 
@@ -1894,7 +1894,7 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     #computing unit cost for each simulation draw
     costs1_df_sim <- NULL
 
-    #building "nsims_var2" simulated data sets (corresponding to costs_data)
+    #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
     for (aux1_i in 1:nsims_var2){
       costs1_df_sim[[aux1_i]] <- data.frame(
         "Country" = costs_data_var2$Country,
@@ -2156,7 +2156,7 @@ one_run_f <-
            inflation_var1 = inflation_so,                                        
            gov_bonds_new_var1 = gov_bonds_new_so,                                                     
            inflation_new_var1 = inflation_new_so,                                       
-           df_costs_var1 = costs_data,                                        
+           df_costs_var1 = costs_data_in,                                        
            staff_time_var1 = staff_time_so,                                        
            delta_ed_var1 = delta_ed_so,                                        
            delta_ed_ext_var1 = delta_ed_ext_so,                                        
@@ -2482,7 +2482,7 @@ earnings_no_ext_in
       "earnings_no_ext_new_in" = earnings_no_ext_new_in,
       "earnings_no_ext_prevl_new_in" = earnings_no_ext_prevl_new_in,
       "interest_in" = interest_in,
-      "costs1_country_in" = costs_data,
+      "costs1_country_in" = costs_data_in,
       "delta_ed_final_in" = delta_ed_final_in,
       "delta_ed_final_x_in" = delta_ed_final_x_in,
       "cost_per_student_in" = cost_per_student_in,
