@@ -571,8 +571,6 @@ shinyServer( function(input, output, session) {
   ################
   output$eqns <- renderUI({
     #if (input$run == TRUE) {showElement("show_eq")}
-    showElement("show_eq")
-    if (input$show_eq == TRUE) {
       if (input$policy_est == "A1. Tax revenue" ) {
         withMathJax(
           helpText('$$
@@ -725,8 +723,8 @@ shinyServer( function(input, output, session) {
               $$ \n See' , a("Approach 3", href="https://rpubs.com/fhoces/547979", target = "_blank"),  ' in the documentation component for more details'
         ))
       }
-    }
-  })
+    })
+
 
 
   # Generate Plot with All Asumptions

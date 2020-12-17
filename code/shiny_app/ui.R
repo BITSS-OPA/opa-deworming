@@ -1171,7 +1171,6 @@ shinyUI(
                             plotOutput("plot1")
                    ),
                    fluidRow(id = "output_id2", style = "width: 100%; height: auto; position: absolute; top: 550px",
-                            checkboxInput("show_eq", label = "Show equations", value = FALSE),
                             uiOutput('eqns', container = div)
                    )
                  )
