@@ -242,8 +242,8 @@ shinyUI(
                                           </html>
                                           '
                             ))),
-                            actionButton("resetKA", "Reset Inputs")#,
-                            #downloadButton("downloadPlotKA", "Save Plot")
+                            actionButton("resetKA", "Reset Inputs"),
+                            downloadButton("downloadPlotKA", "Save Plot")
                             
                             
                             
@@ -499,7 +499,7 @@ shinyUI(
                                                value = 0.1 * wage_ag_so)
                                 )),
                                 numericInput("param5", 
-                                             label = "Work-non ag-Wages  (\\( w_{ww} \\))", 
+                                             label = "Wages in Non-ag Jobs  (\\( w_{ww} \\))", 
                                              value = round(wage_ww_so, 2)), 
                                 bsPopover(
                                   id = "param5",
@@ -822,7 +822,7 @@ shinyUI(
                                   )
                                 )),
                                 numericInput("param16_new", 
-                                             label = "Costs of T (local $) = ", 
+                                             label = "Costs of T (USD) = ", 
                                              value = round(unit_cost_2017usdppp_so, 2)),
                                 bsPopover(
                                   id = "param16_new",
@@ -957,7 +957,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param2",
-                                         label = "Gov Bonds (\\( i \\))",
+                                         label = "Gov Bonds (2016) (\\( i \\))",
                                          min = 0.001,
                                          max = 0.2,
                                          value = round(gov_bonds_so,2)
@@ -980,7 +980,7 @@ shinyUI(
                                        )), 
                                        sliderInput(
                                          "param2_new",
-                                         label = "Gov Bonds (\\( i \\))",
+                                         label = "Gov Bonds (2019) (\\( i \\))",
                                          min = 0.001,
                                          max = 0.2,
                                          value = gov_bonds_new_so
@@ -1003,7 +1003,7 @@ shinyUI(
                                        )), 
                                        sliderInput(
                                          "param3",
-                                         label = "Inflation (\\( \\pi \\) ) = ",
+                                         label = "Inflation (2016) (\\( \\pi \\) ) = ",
                                          min = 0.001,
                                          max = 0.2,
                                          value = inflation_so
@@ -1026,7 +1026,7 @@ shinyUI(
                                        )), 
                                        sliderInput(
                                          "param3_new",
-                                         label = "Inflation (\\( \\pi \\) ) = ",
+                                         label = "Inflation (2019) (\\( \\pi \\) ) = ",
                                          min = 0.001,
                                          max = 0.2,
                                          value = inflation_new_so
@@ -1162,8 +1162,8 @@ shinyUI(
                    fluidRow(id = "buttonAll", 
                             style = "position:relative",
                             actionButton("resetAll", "Reset Inputs"),
-                            downloadButton("downloadParams", "Output Parameters") #,
-                            #downloadButton("downloadPlotAll", "Save Plot") 
+                            downloadButton("downloadParams", "Output Parameters"),
+                            downloadButton("downloadPlotAll", "Save Plot") 
                             )
                  )),
                  mainPanel(
