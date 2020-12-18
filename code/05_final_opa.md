@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>16 December, 2020</div></center>"
+date: "<center><div class='mysubtitle'>17 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -111,7 +111,6 @@ chunk_sources <- function(){
     costs_temp_so <- 1
     main_pe_so <- 289.8
 
-
     #############
     ##### Data  
     #############
@@ -157,9 +156,6 @@ chunk_sources <- function(){
     #https://data.worldbank.org/indicator/SP.POP.TOTL
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "a2_tax_sim",
     # "a2_all_sim", "a3_inc_a1_all_sim", "a3_inc_a1_all_x_sim", "a3_inc_a2_all_sim"
-
-
-
 
     #############
     ##### Research
@@ -225,11 +221,6 @@ chunk_sources <- function(){
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
 
-
-
-
-
-
     #############
     ##### Guess work   
     #############
@@ -241,7 +232,6 @@ chunk_sources <- function(){
     years_of_treat_t_so <- 2.41      #Years of Treatment in new setting
     staff_time_so <- 0.3           #Added Deworming costs due to government staff time
     time_to_jm_so <- 10            #Time from initial period until individual join the labor force
-
 
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )

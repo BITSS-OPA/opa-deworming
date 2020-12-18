@@ -66,6 +66,31 @@ img[alt = screenshot]{height: 20px}
 
 }
 
+/* Set TOC width to be fixed */
+
+#TOC {
+  width: 280px;
+}
+
+
+/* Increases spacing between TOC headers*/
+.tocify ul, .tocify li {
+    line-height: 20px !important;
+}
+
+/* Add a logo over TOC */
+#TOC::before {
+  content: "";
+  display: block;
+  height: 80px;
+  margin: 20px 5px 20px 15px ;
+  background-image: url("./shiny_app/www/bitss_just_logo_transparent.png"), url("./shiny_app/www/cega_transparent.png");
+  background-size: contain;
+  background-position: left, right;
+  background-repeat: no-repeat;
+}
+
+
 /* Customizing the configurations for the subtitle (in our case, the date)*/
 .mysubtitle{
   color: grey;
