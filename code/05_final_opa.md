@@ -1,6 +1,6 @@
 ---
-title: "<center><div class= 'mytitle'>A Unifying Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>17 December, 2020</div></center>"
+title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
+date: "<center><div class='mysubtitle'>18 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -257,7 +257,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 <div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
 <p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
 </div>
 
@@ -269,7 +269,7 @@ This report is part of an Open Policy Analysis (OPA) on deworming interventions.
 
 This report describes three approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by Evidence Action, a key policy partner in this area. This third approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates and length of treatment across settings. We suggest that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
 
-Our main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of 289.8 for a setting with average prevalence and average unit costs (among the countries where Evidence Action has data for). Readers interested in learning about the predicted value for a specific setting are encourage to use the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) components of this OPA.
+The  main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of 289.8 for a setting with average prevalence and average unit costs (among the countries where Evidence Action has data for). Readers interested in learning about the predicted value for a specific setting are encourage to use the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) components of this OPA.
 
 <div class = "divider"><span></span><span>
 *
@@ -1302,7 +1302,7 @@ Evidence Action provided prevalence survey data for the geographies where they a
 
 The number of consecutive years over which a population is exposed to deworming treatment determines the intensity of the effects over this population over time. The two approaches reproduced so far hold the length of treatment constant at the levels estimated by the original study (2.4 years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years of treatment, with no additional effects after 6 years of treatment. We assumed a maximum of 6 years of impact in this case based on the 20 year KLPS follow-up research, which shows a levelling-off of treatment effect after approximately 6 years of deworming (@klps4; Figure A.5 in Appendix, page A-6).
 
-Adding the element of treatment duration allows us to take into account differences in the number of years of deworming treatment across different country contexts depending on program dynamics. Although the counterfactual of worm prevalence in the absence of treatment is largely unknown, we know that consistent deworming continues to decrease worm prevalence over time, contributing to controlled worm environments and sustained benefits. In many deworming programs today, children receive regular treatment throughout a portion (and in some cases for the full term) of their primary schooling. It is worth noting that the assumption of linearity is an imperfect measure for various epidemiological reasons, though we include this variable of time into the equation as an estimate of our best guess at the differences in achieved impact over time, and in part because it helps capture that a new cohort enters primary school--and is therefore eligible for treatment--with each successive year of a deworming program.
+Adding the element of treatment duration allows us to take into account differences in the number of years of deworming treatment across different country contexts depending on program dynamics. Although the counterfactual of worm prevalence in the absence of treatment is largely unknown, we know that consistent deworming continues to decrease worm prevalence over time, contributing to controlled worm environments and sustained benefits. In many deworming programs today, children receive regular treatment throughout a portion (and in some cases for the full term) of their primary schooling. It is worth noting that the assumption of linearity is an imperfect measure for various epidemiological reasons, though we include this variable of time into the equation as an estimate of the best guess at the differences in achieved impact over time, and in part because it helps capture that a new cohort enters primary school--and is therefore eligible for treatment--with each successive year of a deworming program.
 
 <details><summary>Show all the details</summary>
 
@@ -1435,7 +1435,7 @@ app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
 Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Both approaches implicitly assume prevalence rates of 100% and do not distinguish between original population and target populuation. Both approaches also set the length of treatment at 2.41 years.
 -->
 
-To compute the benefits for this approach, we use data on prevalence and length of treatment for the four countries that Evidence Action has records for. Readers interested in assessing the effects of deworming for a specific value of prevalence and length of treatment are referred to the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) (tab on key assumptions) where they can input the values that best reflect their setting. To facilitate comparison with the other two approaches, we present here the results using the same length of treatment assumptions parameters as in approach 1 and 2.  
+To compute the benefits for this approach, this paper uses data on prevalence and length of treatment for the four countries that Evidence Action has records for. Readers interested in assessing the effects of deworming for a specific value of prevalence and length of treatment are referred to the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) (tab on key assumptions) where they can input the values that best reflect their setting. To facilitate comparison with the other two approaches, this paper presents here the results using the same length of treatment assumptions parameters as in approach 1 and 2.  
 
 Under approach 3, and using the same assumptions as above, the benefits will be: 77.61 and 702 when using benefits of approach 1 without and with externalities, and 289.88 when using the benefit structure of approach 2.  
 
