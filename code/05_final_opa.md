@@ -256,10 +256,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-<div class="figure" style="text-align: center">
-<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" alt="Main Policy Estimate" width="100%" />
-<p class="caption">(\#fig:main-pe-print)Main Policy Estimate</p>
-</div>
+<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
