@@ -130,7 +130,9 @@ shinyUI(
                       ),
                       "and",
                       tags$a(href = "https://www.evidenceaction.org/dewormtheworld-2/",
-                             "Evidence Action.")
+                             "Evidence Action."),
+                      "See a full contributors list",
+                      tags$a(href = "https://github.com/BITSS-OPA/opa-deworming/blob/master/readme.md", "here.")
                     )
                   ),
                   fluidRow(
