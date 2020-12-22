@@ -3084,10 +3084,8 @@ plot1 <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimat
       labs(y = NULL,
        x = "Net Present Value (Benefits -  Costs)" ,
        title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-       subtitle = "Distribution of the Net Present Value of Deworming Interventions"#,
-       #caption = "Figure 1. Main Policy Estimate"
-       ) #+
-      #theme(plot.caption = element_text(hjust = 0.5, size = 18, vjust = -0.3, family = "serif"))
+       subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+       ) 
 print(plot1)
 #ggsave(here("code", "main_pe.png"))
 
