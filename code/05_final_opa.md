@@ -2533,21 +2533,15 @@ unit_test_f(ea3_pe, 289.751849813911)
 
 </details>
 
-| Approach    | Benefits                                     | Costs                          |   NPV
-|---------|-------------------------------------------------|--------------------------------|----------|
-| 1.1 | @baird2016worms w/tax and no externalities (no ext) |  Treatment, Education          | 11.8   |
-| 1.2 | @baird2016worms w/t and ext                         |    Treatment, Education (w/ext)| 101.9 |
-| 1.3 | @baird2016worms  all and no ext                     |  Treatment, Education          | 130.6   |
-| 1.4 | @baird2016worms all and ext                         |  Treatment, Education (w/ext)  | 741.6 |
-| 2.1 | @klps4  w/t and no ext                              |  Treatment, Education          | 55.9  |
-| 2.2 | @klps4  all and no ext                              |  Treatment, Education          | 499.7  |
-| 3.1 | 1.3 + prevalence + length of treatment              | Treatment (EA)                 | 77.5      |
-| 3.2 | 1.4 + prevalence + length                           | Treatment (EA)                 | 701.8      |
-| **3.3**    | **2.2 + prevalence + length**                | **Treatment (EA)  **           | **289.8**  |  
 
-
-
-
+| Approach | Benefits                               | Costs                        | Social NPV (all)          | Fiscal NPV (tax)          |
+|----------|----------------------------------------|------------------------------|---------------------------|---------------------------|
+| 1.1      | @baird2016worms with no externalities  | Treatment, Education         | 130.6   | 11.8   |
+| 1.2      | @baird2016worms with externalities     | Treatment, Education (w/ext) | 741.6 | 101.9 |
+| 2.1      | @klps4 with no externalities           | Treatment, Education         | 499.7  | 55.9  |
+| 3.1      | 1.3 + prevalence + length of treatment | Treatment (EA)               | 77.5      | -                         |
+| 3.2      | 1.4 + prevalence + length              | Treatment (EA)               | 701.8      | -                         |
+| **3.3**  | **2.2 + prevalence + length**          | **Treatment (EA)**           | **289.8**  | **-**                     |
 
 <br>
 
