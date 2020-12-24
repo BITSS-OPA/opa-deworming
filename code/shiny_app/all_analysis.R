@@ -1,7 +1,7 @@
 ## ----setup, include=FALSE, purl=TRUE-------------------------------------
 html_format <- TRUE
 # Loading required libraries
-# before deploying in shinyapps.io, we need to remove the following packages:
+# before deploying in shinyapps.io, need to remove the following packages:
 # "plotly", "bookdown", "rootSolve"
 if (TRUE) {
   list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly",
@@ -122,14 +122,14 @@ chunk_sources <- function(){
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women, table 3, row 1, cols 2 & 3
     lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
-    lambda1_new_so <- c(79.51)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
+    lambda1_new_so <- c(79.51465)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
     lambda1_new_sd_so <- c(76)  # ADD SOURCE
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
     lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
     #This is are the parameters labeled eta in the doc
     prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
-    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B (Source data took the log, here we recover it)
+    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B (Source data took the log, here the log is recovered)
     profits_se_so <- 1766          #Control group monthly self-employed profits -
                                    #Table 4, Panel C, Column 5, Row 1
                                    #FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
@@ -1856,7 +1856,7 @@ chunk_generate_plot <- function() {
         lwd = c(1, 1),
         linetype = c("solid", "dashed")
       ) +
-      coord_cartesian(xlim = c(-300,1000),  ylim =  c( 0, 1.2 ))  +  # fixing the x axis so we can see shifts in the density
+      coord_cartesian(xlim = c(-300,1000),  ylim =  c( 0, 1.2 ))  +  # fixing the x axis so shifts in the density can be seen
       #xlim(range(density(npv_sim)$x)) +
       guides(alpha = "none", colour = "none") +
       scale_x_continuous(expand = expansion(mult = c(0, 0))) +

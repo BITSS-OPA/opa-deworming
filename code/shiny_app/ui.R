@@ -16,29 +16,29 @@ source("all_analysis.R")
 
 costs_temp_india   <-
   costs1_p2_f(
-    country_total_var = costs_data$total,
-    country_cost_var = costs_data$costs_by_country,
+    country_total_var = costs_data_in$total,
+    country_cost_var = costs_data_in$costs_by_country,
     staff_time_var = staff_time_so,
     select_var = list("india")
   )
 costs_temp_kenya   <-
   costs1_p2_f(
-    country_total_var = costs_data$total,
-    country_cost_var = costs_data$costs_by_country,
+    country_total_var = costs_data_in$total,
+    country_cost_var = costs_data_in$costs_by_country,
     staff_time_var = staff_time_so,
     select_var = list("kenya")
   )
 costs_temp_nigeria <-
   costs1_p2_f(
-    country_total_var = costs_data$total,
-    country_cost_var = costs_data$costs_by_country,
+    country_total_var = costs_data_in$total,
+    country_cost_var = costs_data_in$costs_by_country,
     staff_time_var = staff_time_so,
     select_var = list("nigeria")
   )
 costs_temp_vietnam <-
   costs1_p2_f(
-    country_total_var = costs_data$total,
-    country_cost_var = costs_data$costs_by_country,
+    country_total_var = costs_data_in$total,
+    country_cost_var = costs_data_in$costs_by_country,
     staff_time_var = staff_time_so,
     select_var = list("vietnam")
   )

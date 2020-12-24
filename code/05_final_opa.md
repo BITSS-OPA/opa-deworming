@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>21 December, 2020</div></center>"
+date: "<center><div class='mysubtitle'>23 December, 2020</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -163,14 +163,14 @@ chunk_sources <- function(){
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women, table 3, row 1, cols 2 & 3
     lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
-    lambda1_new_so <- c(79.51)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
+    lambda1_new_so <- c(79.51465)   # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
     lambda1_new_sd_so <- c(76)  # ADD SOURCE
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
     lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
     #This is are the parameters labeled eta in the doc
     prevalence_0_so <- 0.92 # 0.92 doi: https://doi.org/10.1111/j.1468-0262.2004.00481.x  location: table 2, row 6, column 1
     wage_ag_so <- 	11.84	         #Mean hourly wage rate (KSH) - Suri 2011
-    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B (Source data took the log, here we recover it)
+    wage_ww_so <- 	14.5850933     #Control group hourly wage, ww (cond >=10 hrs per week) - Table 4, Panel B (Source data took the log, here the log is recovered)
     profits_se_so <- 1766          #Control group monthly self-employed profits -
                                    #Table 4, Panel C, Column 5, Row 1
                                    #FIX: MOST REFERENCES FROM TABLE 4 ARE TABLE 3
@@ -264,7 +264,7 @@ Executive Summary
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://fhoces.shinyapps.io/shiny_app_test/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.org/bitss/opa-deworming) that contains all the materials to reproduce the report and final output.
 
-This report describes three approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by Evidence Action, a key policy partner in this area. This third approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates and length of treatment across settings. We suggest that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
+This report describes three approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by Evidence Action, a key policy partner in this area. This third approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates and length of treatment across settings. The report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
 
 The  main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of 289.8 for a setting with average prevalence and average unit costs (among the countries where Evidence Action has data for). Readers interested in learning about the predicted value for a specific setting are encourage to use the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) components of this OPA.
 
@@ -292,7 +292,7 @@ This report provides a complete description of the analysis behind the results p
 
 Parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis, are endemic in many countries across the globe, disproportionately affecting the poor. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake and can thus lead to serious consequences on human health, education outcomes, and long-term economic well being. In particular, evidence indicates that these worms contribute to malnourishment, impairment of mental and physical development, lower school attendance, and decreased wages [@croke2014long; @miguel2004worms; @baird2016worms].
 
-Evidence from previous mass deworming interventions has demonstrated to be a highly effective public health policy. Here we provide a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into different policy-relevant scenarios.
+Evidence from previous mass deworming interventions has demonstrated to be a highly effective public health policy. Here the report provides a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into different policy-relevant scenarios.
 
 The goals of this OPA are three. First, to increase the transparency and reproducibility behind existing policy analyses on the costs and benefits of mass deworming programs. Second, to update this policy analyses with input from stakeholders closely involved in policy making around deworming. And third, to illustrate how an open policy analysis framework can be implemented in practice.
 
@@ -307,13 +307,13 @@ The Cost Benefit Analysis (CBA) of deworming is computed using three different a
 
 # Methodology  
 
-We first describe the common elements across all three approaches, and then describe each approach in detail.
+The report first describes the common elements across all three approaches, and then describe each approach in detail.
 
 ## Common structure {-}
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV)[^12].
 
-[^12]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, we restrict the presentation of results to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects. [CONFIRM WITH GRACE]  
+[^12]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, the report restricts the presentation of results to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects. [CONFIRM WITH GRACE]  
 
 
 <details><summary>Show all the details</summary>
@@ -670,7 +670,7 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 
 The estimated impact of deworming on hours worked comes from @baird2016worms and are estimated separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). These two parameters are combined with a simple mean in the analysis.
 
-The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not receive the treatment but still saw reductions in the likelihood of infection due to lower worm prevalence in their community.  Note that this parameter is not estimated by gender, so we repeat its value two times. All the components to the equation \\ref{eq:7} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study.
+The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not receive the treatment but still saw reductions in the likelihood of infection due to lower worm prevalence in their community.  Note that this parameter is not estimated by gender, so the report repeats its value two times. All the components to the equation \\ref{eq:7} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study.
 
 <details><summary>Show all the details</summary>
 
@@ -933,7 +933,7 @@ s2_in <- s2_f()
 
 #### Indirect costs: additional years of education and its costs for government
 
-As a result of deworming treatment, there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual. The additional costs on education are computed as follows: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher. Second, the cost per student is multiplied by the estimated increase in school attendance ($\Delta \overline{E}_{t}(S1,S2)$). For this we use a series of estimated effects, including the additional direct increase in secondary schooling from 1999 to 2007 obtained from an additional analysis related to @baird2016worms. This series does not take into account the externality effects. To incorporate externality effects, we would need another series (from the same source) that estimates the additional secondary schooling increase due to the externality in order to add it to the original series.
+As a result of deworming treatment, there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual. The additional costs on education are computed as follows: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher. Second, the cost per student is multiplied by the estimated increase in school attendance ($\Delta \overline{E}_{t}(S1,S2)$). For this the report uses a series of estimated effects, including the additional direct increase in secondary schooling from 1999 to 2007 obtained from an additional analysis related to @baird2016worms. This series does not take into account the externality effects. To incorporate externality effects, the report would need another series (from the same source) that estimates the additional secondary schooling increase due to the externality in order to add it to the original series.
 
 <details><summary>Show all the details</summary>
 
@@ -1040,7 +1040,7 @@ Gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after the intervent
 
 Gains in yearly earnings represent the treatment effect on welfare ($\alpha^{pooled}$), which implicitly takes into consideration the life cycle profile of wages, economywide growth, etc.
 
-[^8]: In another specification the authors assume that effects persist through the rest of an individual's working life. Here we select the specification that is most highlighted in the paper (most conservative specification). The authors also analyse the welfare effects over consumption, but given that they do not aggregate both outcomes in the welfare effect we only choose one and focus on earning for comparability with the approach 1).
+[^8]: In another specification the authors assume that effects persist through the rest of an individual's working life. Here the report selects the specification that is most highlighted in the paper (most conservative specification). The authors also analyse the welfare effects over consumption, but given that they do not aggregate both outcomes in the welfare effect the report only chooses one and focus on earning for comparability with the approach 1).
 
 
 <details><summary>Show all the details</summary>
@@ -1105,7 +1105,7 @@ DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{
 \end{equation}
 
 
-Since the analysis is discrete, and we cannot sum over a non-integer, we find
+Since the analysis is discrete and cannot sum over a non-integer, the following is found:
 
 \begin{equation}
 DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \\
@@ -1167,7 +1167,7 @@ q2_in <- q_full_so
 </details>
 <br>
 
-With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). Most recent (2018) data from Evidence Action reveals this cost to be \$0.42 per year. Adjusting for purchasing power and inflation, we get a per capita cost of \$0.83. Adding all indirect cost over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is $1.44.
+With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). Most recent (2018) data from Evidence Action reveals this cost to be \$0.42 per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$0.83. Adding all indirect cost over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is $1.44.
 
 
 #### Indirect costs: additional years of education and its costs for government  
@@ -1176,7 +1176,7 @@ The indirect cost on the education system is calculated similarly to approach 1:
 
 Hence, the cost of schooling each child for an additional year is now $267.9 (USD).
 
-[^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: @nyanchama2018 and @oduor2017. Since compensation for teachers in rural villages where the treatment was administered is below the national average, we are overestimating the costs for a conservative analysis. The average number of students per teacher is 45.
+[^9]: Based on the upper tier of monthly teacher salaries reported by two Kenyan news sources: @nyanchama2018 and @oduor2017. Since compensation for teachers in rural villages where the treatment was administered is below the national average, the report is overestimating the costs for a conservative analysis. The average number of students per teacher is 45.
 
 
 <details><summary>Show all the details</summary>
@@ -1198,19 +1198,19 @@ Where:
 </details>
 <br>
 
-Over this nine year period, treated students attended school for an additional 0.15 years on average. Then we get an average cost of additional schooling per child over the nine-year period, $32.40.
+Over this nine year period, treated students attended school for an additional 0.15 years on average. Then the report gets an average cost of additional schooling per child over the nine-year period, $32.40.
 
 
 ### Assessing computational reproducibility of original results  
 
-The second approach does not report benefits and costs separatedly. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of 499.72 (table A12, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). Following the steps described in this section, this analysis obtains the same result (499.689353 and 40.7483155643791% respectively without rounding).
+The second approach does not report benefits and costs separatedly. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of 499.72 (table A12, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). Following the steps described in this section, this analysis obtains the same result (499.7204653 and 40.7492806546435% respectively without rounding).
 
 
 
 
 ## Approach 3: Combination of Previous Approaches and Input From Key Policy Partners
 
-In this third and final approach, we borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key policy partner to best identify one clear output to inform policy makers. We worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action provided insights on what are the most relevant costs and benefits from the perspectives of policy makers, and on certain aspects of the analysis that could be updated with present-day data.
+In this third and final approach, the report borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key policy partner to best identify one clear output to inform policy makers. BITSS worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action provided insights on what are the most relevant costs and benefits from the perspectives of policy makers, and on certain aspects of the analysis that could be updated with present-day data.
 
 Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in prevalence rates, and length of treatment. Additionally, the relevant costs are constrained to direct costs alone (excluding additional costs on education). Finally this approach uses inputs costs and prevalence that reflect the current settings where Evidence Action is currently supporting deworming interventions. As of 2020, Evidence Action supports deworming interventions in four countries.
 
@@ -1221,12 +1221,12 @@ Under this approach, the benefits from deworming described in Approaches 1 and 2
 
 To account for different prevalence rates ($\eta$), the estimated treatment effect is decomposed in the impact of deworming on children who were treated and had a worm infection, or the effective treatment effect of deworming ($\lambda_{1}^{eff}$), and children who were treated and did not have a worm infection. By construction, the effect on this last group should be zero. Hence the effective treatment of deworming on infected populations will be equal to the estimated treatment (on the ovearll population), divided by the proportion of the prevalence of infections.
 
-In the original evaluation, the prevalence rates were very high (0.92), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are often implemented in geographies with much lower prevalence rates (though in populations with sufficient infection to justify treatment in accordance with World Health Organization guidelines), hence to obtain the expected effect over the new region, we need to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{new}$).
+In the original evaluation, the prevalence rates were very high (0.92), hence the effect on the infected population was similar to that of the overall population. Currently deworming interventions are often implemented in geographies with much lower prevalence rates (though in populations with sufficient infection to justify treatment in accordance with World Health Organization guidelines), hence to obtain the expected effect over the new region, the report needs to multiply the effect on the infected population by the prevalence rate in the new region ($\eta_{new}$).
 
 
 <details><summary>Show all the details</summary>
 
-For approach 3, we will modify treatment effects of approaches 1 and 2 (equation 4 and 13 respectively) by the following:   
+For approach 3, the report will modify treatment effects of approaches 1 and 2 (equation 4 and 13 respectively) by the following:   
 
 \begin{equation}
 \lambda_{1} = \eta \lambda^{eff}_{1} + (1 -  \eta) \times 0 \\
@@ -1238,7 +1238,7 @@ For approach 3, we will modify treatment effects of approaches 1 and 2 (equation
 
 Where:
 
-- $\lambda_1$: direct effects of deworming on individuals' earnings. Here we use the symbol for treatment effect of approach 1, but the same logic applies to the treatment effect of approach 2 ($\alpha^{pooled}$)
+- $\lambda_1$: direct effects of deworming on individuals' earnings. Here the report uses the symbol for treatment effect of approach 1, but the same logic applies to the treatment effect of approach 2 ($\alpha^{pooled}$)
 - $\lambda^{eff}_1$: impact of deworming on children who were treated and had a worm infection in the original evaluation  
 - $\lambda^r_1$: impact of deworming on children who were treated and had a worm infection in the new region  
 - $\eta$: prevalence rates in the original evaluation   
@@ -1297,13 +1297,13 @@ Evidence Action provided prevalence survey data for the geographies where they a
 
 #### Adjusting for different length of treatment  
 
-The number of consecutive years over which a population is exposed to deworming treatment determines the intensity of the effects over this population over time. The two approaches reproduced so far hold the length of treatment constant at the levels estimated by the original study (2.4 years). In this third approach we allow for the years of treatment to vary affecting both benefits and costs. We assume that the effects are linear in the number of years of treatment, with no additional effects after 6 years of treatment. We assumed a maximum of 6 years of impact in this case based on the 20 year KLPS follow-up research, which shows a levelling-off of treatment effect after approximately 6 years of deworming (@klps4; Figure A.5 in Appendix, page A-6).
+The number of consecutive years over which a population is exposed to deworming treatment determines the intensity of the effects over this population over time. The two approaches reproduced so far hold the length of treatment constant at the levels estimated by the original study (2.4 years). In this third approach the report allows for the years of treatment to vary affecting both benefits and costs. The report assumes that the effects are linear in the number of years of treatment, with no additional effects after 6 years of treatment. The report assumed a maximum of 6 years of impact in this case based on the 20 year KLPS follow-up research, which shows a levelling-off of treatment effect after approximately 6 years of deworming (@klps4; Figure A.5 in Appendix, page A-6).
 
-Adding the element of treatment duration allows us to take into account differences in the number of years of deworming treatment across different country contexts depending on program dynamics. Although the counterfactual of worm prevalence in the absence of treatment is largely unknown, we know that consistent deworming continues to decrease worm prevalence over time, contributing to controlled worm environments and sustained benefits. In many deworming programs today, children receive regular treatment throughout a portion (and in some cases for the full term) of their primary schooling. It is worth noting that the assumption of linearity is an imperfect measure for various epidemiological reasons, though we include this variable of time into the equation as an estimate of the best guess at the differences in achieved impact over time, and in part because it helps capture that a new cohort enters primary school--and is therefore eligible for treatment--with each successive year of a deworming program.
+Adding the element of treatment duration allows us to take into account differences in the number of years of deworming treatment across different country contexts depending on program dynamics. Although the counterfactual of worm prevalence in the absence of treatment is largely unknown, it is known that consistent deworming continues to decrease worm prevalence over time, contributing to controlled worm environments and sustained benefits. In many deworming programs today, children receive regular treatment throughout a portion (and in some cases for the full term) of their primary schooling. It is worth noting that the assumption of linearity is an imperfect measure for various epidemiological reasons, though the report includes this variable of time into the equation as an estimate of the best guess at the differences in achieved impact over time, and in part because it helps capture that a new cohort enters primary school--and is therefore eligible for treatment--with each successive year of a deworming program.
 
 <details><summary>Show all the details</summary>
 
-For approach 3, we will modify treatment effects of approaches 1 and 2 (equations 4 and 13 respectively) by the following:   
+For approach 3, treatment effects of approaches 1 and 2 (equations 4 and 13 respectively) will be modified by the following:   
 
 \begin{equation}
 \lambda_{1,t = 1} = \frac{\lambda_{1}}{L_{0}} \\
@@ -1429,16 +1429,16 @@ app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
 </details>
 
 <!--
-Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, we present here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Both approaches implicitly assume prevalence rates of 100% and do not distinguish between original population and target populuation. Both approaches also set the length of treatment at 2.41 years.
+Now the benefits are flexible to worm prevalence and lenght of treatment. To facilitate comparison with the other two approaches, the report presents here the results using the same prevalence and length of treatment assumptions parameters as in approach 1 and 2. Both approaches implicitly assume prevalence rates of 100% and do not distinguish between original population and target populuation. Both approaches also set the length of treatment at 2.41 years.
 -->
 
 To compute the benefits for this approach, this paper uses data on prevalence and length of treatment for the four countries that Evidence Action has records for. Readers interested in assessing the effects of deworming for a specific value of prevalence and length of treatment are referred to the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) (tab on key assumptions) where they can input the values that best reflect their setting. To facilitate comparison with the other two approaches, this paper presents here the results using the same length of treatment assumptions parameters as in approach 1 and 2.  
 
-Under approach 3, and using the same assumptions as above, the benefits will be: 77.61 and 702 when using benefits of approach 1 without and with externalities, and 289.88 when using the benefit structure of approach 2.  
+Under approach 3, and using the same assumptions as above, the benefits will be: 77.61 and 702 when using benefits of approach 1 without and with externalities, and 289.9 when using the benefit structure of approach 2.  
 
 ### Costs
 
-Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. Through Evidence Action's technical assistance, which typically includes financial support for program implementation, they have access to country-level government cost data on what it takes to implement and evaluate school-based deworming programs across different contexts. To estimate the costs in this analysis, we use costs of deworming provided by Evidence Action (detailed below) and follow a similar approach to @givewell, which takes those costs and includes an additional estimate around the amount of government staff time required to run deworming programs. The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions [^10].
+Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. Through Evidence Action's technical assistance, which typically includes financial support for program implementation, they have access to country-level government cost data on what it takes to implement and evaluate school-based deworming programs across different contexts. To estimate the costs in this analysis, the report uses costs of deworming provided by Evidence Action (detailed below) and follow a similar approach to @givewell, which takes those costs and includes an additional estimate around the amount of government staff time required to run deworming programs. The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions [^10].
 
 [^10]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds [CONFIRM WITH GRACE]
 
@@ -1603,9 +1603,9 @@ The unit costs of treatments, although small, vary substantially across regions.
 
 ## Accounting for Uncertainty
 
-This open policy analysis has aimed to make all the analysis presented so far highly reproducible. One direct result of this novel approach is that now it is possible to thoroughly assess how the final policy estimates change when any of the underlying sources of the analysis changes. In this OPA we have identified each source used in the analysis behind benefits and costs of Deworming interventions. Each of these sources in turn is measured with some uncertainty (either in prediction of future values or estimation of past ones). Traditional policy analysis assumes that each of these sources has no uncertainty, and in some cases incorporates uncertainty or performed sensitivity analysis for a few parameters of interest. By following the open policy analysis principles we now can allow for each source to vary and explore the overall uncertainty of the final policy estimate.
+This open policy analysis has aimed to make all the analysis presented so far highly reproducible. One direct result of this novel approach is that now it is possible to thoroughly assess how the final policy estimates change when any of the underlying sources of the analysis changes. This report has identified each source used in the analysis behind benefits and costs of Deworming interventions. Each of these sources in turn is measured with some uncertainty (either in prediction of future values or estimation of past ones). Traditional policy analysis assumes that each of these sources has no uncertainty, and in some cases incorporates uncertainty or performed sensitivity analysis for a few parameters of interest. By following the open policy analysis principles the report now can allow for each source to vary and explore the overall uncertainty of the final policy estimate.
 
-Our approach consists in assuming that each source used in the analysis can be represented as a random draw from a normal distribution. The mean corresponds to the measured value. The standard deviation corresponds to the estimated standard error when available, and to a fraction of the mean when not available. As a default analysis we suggest to set it these standard deviations to 10% of the mean. This choice is arbitrary, but unlike the default arbitrary choice of setting the standard deviations to zero, it makes explicit the uncertainty and it can be modified in the app.
+Our approach consists in assuming that each source used in the analysis can be represented as a random draw from a normal distribution. The mean corresponds to the measured value. The standard deviation corresponds to the estimated standard error when available, and to a fraction of the mean when not available. As a default analysis, these standard deviations are suggested to be set to 10% of the mean. This choice is arbitrary, but unlike the default arbitrary choice of setting the standard deviations to zero, it makes explicit the uncertainty and it can be modified in the app.
 
 
 <details><summary>Show all the details</summary>
@@ -2027,9 +2027,9 @@ policy_estimates_text <- c(
 
 # Main Results  
 
-In this document we have presented three different approaches to measuring the welfare effects of deworming  interventions. The first approach was based on the original paper that measured the welfare effects of deworming (@baird2016worms) and proposed four different ways to compute this effect (with and without externalities, and from a societal or fiscal perspective). The second approach, based on more recent data, focused only on direct effects, and relies less on predictive effects over the lifecycle. Results for the second approach are also separated between the societal and fiscal perspective.   
+In this document the report has presented three different approaches to measuring the welfare effects of deworming  interventions. The first approach was based on the original paper that measured the welfare effects of deworming (@baird2016worms) and proposed four different ways to compute this effect (with and without externalities, and from a societal or fiscal perspective). The second approach, based on more recent data, focused only on direct effects, and relies less on predictive effects over the lifecycle. Results for the second approach are also separated between the societal and fiscal perspective.   
 
-The third and final approach uses similar methodologies with three main differences. First, we allow the benefits to be scaled to account for differences in the prevalence of worm infections in settings different from the original study. Second, we allow the benefits to be scaled by the length of treatment provided to children within a particular setting. Finally, based on feedback from Evidence Action on the relevant costs from present-day deworming programs, this approach uses more up to date information on treatment costs and it does not take into account the knock-on effects of additional schooling costs as a result of increased school attendance, which are accounted for in approaches #1 and #2[^11].
+The third and final approach uses similar methodologies with three main differences. First, the report allows the benefits to be scaled to account for differences in the prevalence of worm infections in settings different from the original study. Second, the report allows the benefits to be scaled by the length of treatment provided to children within a particular setting. Finally, based on feedback from Evidence Action on the relevant costs from present-day deworming programs, this approach uses more up to date information on treatment costs and it does not take into account the knock-on effects of additional schooling costs as a result of increased school attendance, which are accounted for in approaches #1 and #2[^11].
 
 [^11]: Evidence Action suggests that the added costs on education will not be considered as costs from a policy makers perspective. Those costs corresponds to another intervention on itself (education) and incorporating its costs would also require to incorporate its benefits. [CONFIRM WITH GRACE]
 
@@ -2490,17 +2490,7 @@ earnings_no_ext_in
   }
 
 invisible( list2env(one_run_f(),.GlobalEnv) )
-```
 
-```
-## [1] "Output has changed at lambda1_new_in  to  79.51"
-## [1] "Output has changed at lambda1_prevl_new_in[1]  to  43.3253546806668"
-## [1] "Output has changed at pv_benef_tax_new_in  to  88.1768630910102"
-## [1] "Output has changed at pv_benef_all_new_in  to  531.98710763807"
-## [1] "Output has changed at pv_benef_all_prevl_new_in  to  289.882154747346"
-```
-
-```r
 #  return( sapply( ls(pattern= "_in\\b"), function(x) get(x)) )
 
 #}
@@ -2526,23 +2516,10 @@ unit_test_f(a1_x_all_pe, 741.618186471615)
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
 klps4_1_pe <- NPV_pe_f(benefits_var = pv_benef_tax_new_in, costs_var = costs_a2_in)
 unit_test_f(klps4_1_pe, 55.884265345947)
-```
-
-```
-## [1] "Output has changed at klps4_1_pe  to  55.8791084799758"
-```
-
-```r
 #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
 klps4_2_pe <- NPV_pe_f(benefits_var = pv_benef_all_new_in, costs_var = costs_a2_in)
 unit_test_f(klps4_2_pe, 499.720465340588)
-```
 
-```
-## [1] "Output has changed at klps4_2_pe  to  499.689353027036"
-```
-
-```r
 # EA1: no externality NPV using EAs costs
 ea1_pe <- NPV_pe_f(benefits_var = pv_benef_all_nx_prevl_in, costs_var = costs2_ea_in)
 unit_test_f(ea1_pe, 77.4612400741955)
@@ -2552,10 +2529,6 @@ unit_test_f(ea2_pe, 701.849761243559)
 # EA3: benef= KLPS all and no ext; Costs=EA
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
-```
-
-```
-## [1] "Output has changed at ea3_pe  to  289.734896575078"
 ```
 
 </details>
@@ -2570,7 +2543,7 @@ unit_test_f(ea3_pe, 289.751849813911)
 | 2.2 | @klps4  all and no ext                              |  Treatment, Education          | 499.7  |
 | 3.1 | 1.3 + prevalence + length of treatment              | Treatment (EA)                 | 77.5      |
 | 3.2 | 1.4 + prevalence + length                           | Treatment (EA)                 | 701.8      |
-| **3.3**    | **2.2 + prevalence + length**                | **Treatment (EA)  **           | **289.7**  |  
+| **3.3**    | **2.2 + prevalence + length**                | **Treatment (EA)  **           | **289.8**  |  
 
 
 
