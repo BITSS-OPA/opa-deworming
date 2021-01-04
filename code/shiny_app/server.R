@@ -729,10 +729,10 @@ shinyServer( function(input, output, session) {
   # Generate Plot with All Asumptions
   plotInputAll <- function(){
     npv_all_sim <- reactive.data1()
-    plot1 <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale)[[1]]
+    plot1 <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale, TRUE)[[1]]
 
-    position <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale)[[2]]
-    total_time_sim <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale)[[3]]
+    position <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale, TRUE)[[2]]
+    total_time_sim <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale, TRUE)[[3]]
     plot1 <- plot1 + labs(y = NULL,
                           x = "Net Present Value (Benefits -  Costs)" ,
                           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
@@ -753,7 +753,7 @@ shinyServer( function(input, output, session) {
   # Generate Plot with Key Assumptions
   plotInputKA <- function(){
     npv_all_sim <- reactive.data1()
-    output_plot <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimate", input$rescale)
+    output_plot <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimate", input$rescale, TRUE)
     plot1 <- output_plot[[1]]
 
     position <- output_plot[[2]]
