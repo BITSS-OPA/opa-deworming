@@ -122,8 +122,7 @@ shinyServer( function(input, output, session) {
     })
 
 
-  #temp
-  if (FALSE) {
+
   # Export All Assumption Plot
   output$downloadPlotAll <- downloadHandler(filename = function() {
     "plotAll.png"
@@ -139,7 +138,7 @@ shinyServer( function(input, output, session) {
   content = function(file) {
     ggsave(file, plotInputKA(), height = 8, width = 12)
   })
-  }
+
   # Sync cost variable for Key Assumptions and All Assumptions
 
   observeEvent(
@@ -724,7 +723,7 @@ shinyServer( function(input, output, session) {
         ))
       }
     })
-
+  #})
 
 
   # Generate Plot with All Asumptions
@@ -745,8 +744,9 @@ shinyServer( function(input, output, session) {
 
   }
   output$plot1 <- renderPlot({
-
-    print(plotInputAll())
+    input$updateAll
+    
+    isolate({print(plotInputAll())})
   }, height = 550
   )
 
@@ -765,12 +765,16 @@ shinyServer( function(input, output, session) {
     )
   }
 
+  
   output$plot1_ka <- renderPlot({
-
-    print(plotInputKA())
+    
+    input$updateKA
+    isolate(print(plotInputKA()))
 
   }, height = 550
   )
+  
+
 
   # Generate Main Policy Estimate Plot
   output$plot1_main <- renderPlot({
@@ -796,10 +800,13 @@ shinyServer( function(input, output, session) {
                    "param_ka_prevl_r" = "Prevalence in new region",
                    "param_ka_years_of_treat_t" = "Length of treatment (years)",
                    "resetKA" = "Reset Button for Key Assumptions",
+                   "updateKA" = "Update Button for Key Assumptions",
                    # ---- All Assumptions
                    "rescale" = "Rescale Checkbox Status",
                    "policy_est" = "Policy Estimate Assumption",
                    "param_num_of_sim" = "Number of simulations",
+                   "resetAll" = "Reset Button for All Assumptions",
+                   "updateAll" = "Update Button for All Assumptions",
                    # ---- research tab
 
                    "param_lambda1_male" = "Increase in number of hours worked due to treatment (Male)",

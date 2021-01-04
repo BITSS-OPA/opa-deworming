@@ -16,29 +16,29 @@ source("all_analysis.R")
 
 costs_temp_india   <-
   costs1_p2_f(
-    country_total_var = costs_data$total,
-    country_cost_var = costs_data$costs_by_country,
+    country_total_var = costs_data_in$total,
+    country_cost_var = costs_data_in$costs_by_country,
     staff_time_var = staff_time_so,
     select_var = list("india")
   )
 costs_temp_kenya   <-
   costs1_p2_f(
-    country_total_var = costs_data$total,
-    country_cost_var = costs_data$costs_by_country,
+    country_total_var = costs_data_in$total,
+    country_cost_var = costs_data_in$costs_by_country,
     staff_time_var = staff_time_so,
     select_var = list("kenya")
   )
 costs_temp_nigeria <-
   costs1_p2_f(
-    country_total_var = costs_data$total,
-    country_cost_var = costs_data$costs_by_country,
+    country_total_var = costs_data_in$total,
+    country_cost_var = costs_data_in$costs_by_country,
     staff_time_var = staff_time_so,
     select_var = list("nigeria")
   )
 costs_temp_vietnam <-
   costs1_p2_f(
-    country_total_var = costs_data$total,
-    country_cost_var = costs_data$costs_by_country,
+    country_total_var = costs_data_in$total,
+    country_cost_var = costs_data_in$costs_by_country,
     staff_time_var = staff_time_so,
     select_var = list("vietnam")
   )
@@ -130,7 +130,9 @@ shinyUI(
                       ),
                       "and",
                       tags$a(href = "https://www.evidenceaction.org/dewormtheworld-2/",
-                             "Evidence Action.")
+                             "Evidence Action."),
+                      "See a full contributors list",
+                      tags$a(href = "https://github.com/BITSS-OPA/opa-deworming/blob/master/readme.md", "here.")
                     )
                   ),
                   fluidRow(
@@ -242,6 +244,7 @@ shinyUI(
                                           </html>
                                           '
                             ))),
+                            actionButton("updateKA", "Update Plot", class = "btn-primary"),
                             actionButton("resetKA", "Reset Inputs"),
                             downloadButton("downloadPlotKA", "Save Plot")
 
@@ -264,7 +267,7 @@ shinyUI(
                  sidebarPanel(
                    div(id = "All",
                    fluidRow(id = "tPanel",
-                            style = "width: 100%; max-height: 100%; position: relative",
+                            style = "width: 100%; max-height: 100%; position: relative;",
                             # Begin policy estimate description ----
                             selectInput("policy_est",
                                         h4("Policy Estimate:"),
@@ -364,14 +367,14 @@ shinyUI(
                             ),
                             # end policy estimate description ----
                             checkboxInput("rescale",
-                                          label = "Click if want to rescale x-axis. Unclick to fix reference point",
+                                          label = "Click to rescale x-axis. Unclick to fix reference point",
                                           value = FALSE),
                             numericInput("param_num_of_sim",
                                          label = h4("Number of simulations"),
                                          value = 1e2)
                    ),
                    fluidRow(id = "tPanel1",
-                            style = "overflow-y: scroll; width: 100%; max-height: 300px; position: relative",
+                            style = "overflow-y: scroll; width: 100%; max-height: 250px; position: relative",
                             # style = "overflow-y:scroll;
                             #          max-width: 600px;
                             #          max-height: 300px;
@@ -1159,9 +1162,14 @@ shinyUI(
                               # end tabpanel GW ----
                             )
                    ),
-                   fluidRow(id = "buttonAll",
-                            style = "position:relative",
-                            actionButton("resetAll", "Reset Inputs"),
+                   fluidRow(id = "buttonUpdate",
+                            style = "position:relative; padding-top:10px",
+                            actionButton("updateAll", "Update Plot", class="btn-primary"),
+                            actionButton("resetAll", "Reset Inputs")
+                            
+                            ),
+                   fluidRow(id = "buttonDownload",
+                            style = "position:relative; padding-top:10px;",
                             downloadButton("downloadParams", "Output Parameters"),
                             downloadButton("downloadPlotAll", "Save Plot")
                             )

@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -41,14 +41,18 @@ Major contributions to this project will be acknowledged below. This OPA employs
  - Katherine Hoeberling – Funding acquisition, Project administration
  - Grace Hollister –
  - Orianna Jia – Writing (original draft), Writing (reviewing and editing)
+ - Keanu Lim –
+ - Charles Love – 
+ - Teng Aleksandra Ma – 
  - Edward Miguel – Conceptualization, Funding acquisition, Supervision
  - Grace Morgan – Writing (original draft), Writing (reviewing and editing)
  - Emma Ng – Visualization, Writing (original draft), Writing (reviewing and editing)
  - Ryan Scholes – Visualization, Writing (original draft), Writing (reviewing and editing)
+ - Jiayu Shi – 
  
 This list of contributors to this repository (also available at [this page](https://github.com/BITSS-OPA/opa-deworming/graphs/contributors)) is ordered by each individual's number of commits, which may not perfectly reflect their intellectual contribution to this project:
 
-```{r deworming-contributors, echo=FALSE, results="asis", message=FALSE}
+```{r deworming-contributors, echo=FALSE, results="asis", message=FALSE, warning = FALSE}
 # adapted from Hadley Wickham's scripts to credit contributors to R for Data Science
 ## contributors.R (https://github.com/hadley/r4ds/blob/master/contributors.R)
 ## index.Rmd (https://github.com/hadley/r4ds/blob/master/index.rmd)

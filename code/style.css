@@ -61,10 +61,19 @@ img[alt = screenshot]{height: 20px}
 /* Customizing the configurations for the title text */
 .mytitle {
   text-transform: uppercase;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
   font: georgia, sans-serif !important;
-
+  font-size: 30px;
+  font-weight: bold;
 }
+
+
+/* Customizing the configurations for the subtitle (in our case, the date)*/
+.mysubtitle{
+  color: grey;
+  letter-spacing: 1px;
+}
+
 
 /* Set TOC width to be fixed */
 
@@ -91,11 +100,7 @@ img[alt = screenshot]{height: 20px}
 }
 
 
-/* Customizing the configurations for the subtitle (in our case, the date)*/
-.mysubtitle{
-  color: grey;
-  letter-spacing: 2px;
-}
+/* Add divider for Executive Summary */
 
 .divider {								/* minor cosmetics */
          display: table;
