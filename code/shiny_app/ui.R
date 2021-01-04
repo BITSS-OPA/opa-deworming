@@ -42,17 +42,20 @@ costs_temp_vietnam <-
     staff_time_var = staff_time_so,
     select_var = list("vietnam")
   )
+costs_temp_original <- 1
 
 
 prevalence_india <- prevalence_r_so["india"]
 prevalence_kenya <- prevalence_r_so["kenya"]
 prevalence_nigeria <- prevalence_r_so["nigeria"]
 prevalence_vietnam <- prevalence_r_so["vietnam"]
+prevalence_original <- 1
 
 length_temp_india <- 1
 length_temp_kenya <- 1
 length_temp_nigeria <- 1
 length_temp_vietnam <- 1
+length_temp_original <- 1
 
 nsims <- 1e3
 
@@ -194,7 +197,7 @@ shinyUI(
                               label = h4("Length of treatment (years)"),
                               value = round(years_of_treat_t_so, 2),
                               min = 0,
-                              max = 10,
+                              max = 6,
                               step = 0.1,
                             ),
 
@@ -248,6 +251,12 @@ shinyUI(
                                               <td><var>',round(costs_temp_vietnam,2),'</var></td>
                                               <td><var>',round(prevalence_vietnam,2),'</var></td>
                                               <td><var>', round(length_temp_vietnam,2),'</var></td>
+                                            </tr>
+                                            <tr>
+                                              <th>Original Study</th>
+                                              <td><var>', round(costs_temp_original,2),'</var></td>
+                                              <td><var>', round(prevalence_original,2),'</var></td>
+                                              <td><var>', round(length_temp_original,2),'</var></td>
                                             </tr>
                                           </table>
 
@@ -796,7 +805,7 @@ shinyUI(
                                   "param_years_of_treat_0",
                                   label = "Years of treatment in orginal study (\\(L_{0}\\))",
                                   min = 0,
-                                  max = 10,
+                                  max = 6,
                                   step = 0.01,
                                   value = round(years_of_treat_0_so,2)
                                 ),
@@ -1124,7 +1133,7 @@ shinyUI(
                                   "param_years_of_treat_t",
                                   label = "Years of treatment in new setting (\\(L_{new} \\))",
                                   min = 0,
-                                  max = 10,
+                                  max = 6,
                                   step = 0.01,
                                   value = round(years_of_treat_t_so,2)
                                 ),
