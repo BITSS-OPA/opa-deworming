@@ -80,6 +80,7 @@ shinyUI(
                tabPanel(
                 "Main Policy Estimate",
                 sidebarPanel(
+                  style = "width: 100%; max-height: 700px; overflow-y: scroll;",
                   fluidRow(column(
                     12,
                     align = "center",
@@ -101,7 +102,7 @@ shinyUI(
                     )
                   )),
                   fluidRow(
-                    style = "width: 100%; height: 100%; max-width: 400px; max-width: 700px;",
+                    style = "width: 100%; height: 100%; max-width: 400px;",
                     p(
                       "This visualization is one of three key components of an",
                       tags$a(href = "http://www.bitss.org/opa/projects/deworming/", "Open Policy Analysis (OPA)"),
@@ -130,9 +131,19 @@ shinyUI(
                       ),
                       "and",
                       tags$a(href = "https://www.evidenceaction.org/dewormtheworld-2/",
-                             "Evidence Action."),
+                             "Evidence Action.")
+                     
+                      
+                    ),
+                    p(
                       "See a full contributors list",
-                      tags$a(href = "https://github.com/BITSS-OPA/opa-deworming/blob/master/readme.md", "here.")
+                      tags$a(href = "https://github.com/BITSS-OPA/opa-deworming/blob/master/readme.md", "here."), 
+                      br(),
+                      "See the dynamic document of this shiny app",
+                      tags$a(href = "https://rpubs.com/fhoces/547979", "here."),
+                      br(),
+                      "See more OPA projects done by BITSS",
+                      tags$a(href = "https://www.bitss.org/opa/projects/", "here.")
                     )
                   ),
                   fluidRow(
@@ -278,91 +289,91 @@ shinyUI(
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. Tax revenue' ",
                               helpText(
-                                "Approach 1.1. Welfare measured as additional tax revenue.", br(),
-                                " - Benefits: tax revenue over predicted effect on earnings.
-                                   Data from 10 year follow-up. No externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
+                               HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 1.1.</a> Welfare measured as additional tax revenue.<br>
+                                 - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10 year follow-up. No externalities. <br>
+                                 - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling</p>")
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. With externalities. Tax' ",
                               helpText(
-                                "Approach 1.2. Welfare measured as additional tax revenue.", br(),
-                                " - Benefits: tax revenue over predicted effect on earnings.
-                                   Data from 10 year follow-up. Including externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
+                                HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 1.2.</a> Welfare measured as additional tax revenue. <br>
+                                 - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10 year follow-up. Including externalities. <br>
+                                 - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling</p>")
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. All income' ",
                               helpText(
-                                "Approach 1.3. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
-                                   Data from 10 year follow-up. No externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
+                                HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 1.3.</a> Welfare measured as additional earnings.<br>
+                                 - Benefits: predicted additional earnings.
+                                   Data from 10 year follow-up. No externalities. <br>
+                                 - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling</p>")
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. With ext. All income' ",
                               helpText(
-                                "Approach 1.4. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings. Including externalities.
-                                   Data from 10 year follow-up. Including externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
+                                HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 1.4.</a> Welfare measured as additional earnings.<br>
+                                 - Benefits: predicted additional earnings. Including externalities.
+                                   Data from 10 year follow-up. Including externalities. <br>
+                                 - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling</p>")
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A2. Tax' ",
                               helpText(
-                                "Approach 2.1. Welfare measured as additional tax revenue.", br(),
-                                " - Benefits: tax revenue over predicted effect on earnings.
-                                   Data from 10, 15 and 20 year follow-up. No externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
+                                HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 2.1.</a> Welfare measured as additional tax revenue.<br>
+                                 - Benefits: tax revenue over predicted effect on earnings.
+                                   Data from 10, 15 and 20 year follow-up. No externalities.<br>
+                                 - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling</p>")
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A2. All income' ",
                               helpText(
-                                "Approach 2.2. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
-                                   Data from 10, 15 and 20 year follow-up. No externalities", br(),
-                                " - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling"
+                                HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 2.2.</a> Welfare measured as additional earnings.<br>
+                                 - Benefits: predicted additional earnings.
+                                   Data from 10, 15 and 20 year follow-up. No externalities.<br>
+                                 - Costs: costs of treatment in Kenya in 1998 plus additional
+                                   costs due to more schooling</p>")
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A1' ",
                               helpText(
-                                "Approach 3.1. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
+                                HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 3.1.</a> Welfare measured as additional earnings.<br>
+                                 - Benefits: predicted additional earnings.
                                    Data from 10 year follow-up. No externalities.
-                                Adjusted for prevalence and length of treatment", br(),
-                                " - Costs: current implementation costs in several settings."
+                                Adjusted for prevalence and length of treatment. <br>
+                                 - Costs: current implementation costs in several settings.</p>")
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A1, with ext.' ",
                               helpText(
-                                "Approach 3.2. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
+                                HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 3.2.</a> Welfare measured as additional earnings.<br>
+                                 - Benefits: predicted additional earnings.
                                    Data from 10 year follow-up. Including externalities.
-                                Adjusted for prevalence and length of treatment", br(),
-                                " - Costs: current implementation costs in several settings."
+                                Adjusted for prevalence and length of treatment.<br>
+                                 - Costs: current implementation costs in several settings.</p>")
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A2. Main Policy Estimate' ",
                               helpText(
-                                "Approach 3.3. Welfare measured as additional earnings.", br(),
-                                " - Benefits: predicted additional earnings.
+                                HTML("<p><a href = 'https://rpubs.com/fhoces/547979'>Approach 3.3.</a> Welfare measured as additional earnings.<br>
+                                 - Benefits: predicted additional earnings.
                                    Data from 10, 15 and 20 year follow-up. No externalities.
-                                Adjusted for prevalence and length of treatment", br(),
-                                " - Costs: current implementation costs in several settings."
+                                Adjusted for prevalence and length of treatment.<br>
+                                 - Costs: current implementation costs in several settings.</p>")
                               )
                             ),
                             # end policy estimate description ----
