@@ -392,10 +392,15 @@ shinyUI(
                             numericInput("param_num_of_sim",
                                          label = h4("Number of simulations"),
                                          value = 1e4),
-                            helpText("For faster computations, change the input to 100. ")
+                            bsPopover(
+                              id = "param_num_of_sim",
+                              title = "",
+                              content = "For faster computations, change the input to 100.",
+                              placement = "top"
+                            )
                    ),
                    fluidRow(id = "tPanel1",
-                            style = "overflow-y: scroll; width: 100%; max-height: 230px; position: relative",
+                            style = "overflow-y: scroll; width: 100%; max-height: 250px; position: relative",
                             tabsetPanel(
                               # Begin tabpanel research ----
                               tabPanel(
