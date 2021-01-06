@@ -51,4 +51,5 @@ vignettes/*.pdf
 !/code/shiny_app*
 !/code/style.css
 !/code/footer.html
+!/code/docs/*
 .Rproj.user
