@@ -335,7 +335,7 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 
  This OPA project contains three components, following the OPA principles laid out in the aforementioned paper:
 
-  1. One single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. This output is presented in Figure  \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report. The connection between each component of the analysis and the final output can be explored interactively in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
+  1. One single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. This output is presented in Figure 1, and described in the [results section](#policy-estimate) of this report. The connection between each component of the analysis and the final output can be explored interactively in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
   2. This detailed report that describes how to obtain the policy estimate and describes each component of the analysis.
 
@@ -3082,7 +3082,7 @@ plot1 <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimat
        x = "Net Present Value (Benefits -  Costs)" ,
        title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
        subtitle = "Distribution of the Net Present Value of Deworming Interventions"
-       )
+       ) 
 print(plot1)
 #ggsave(here("code", "main_pe.png"))
 
