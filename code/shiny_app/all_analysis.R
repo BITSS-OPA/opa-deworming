@@ -41,8 +41,8 @@ colorize_f = function(x, color){
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(fig.width=12, fig.height=8)
-options(knitr.duplicate.label = "allow") # workaround for purl error
-knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
+#options(knitr.duplicate.label = "allow") # workaround for purl error
+#knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 
 
 
@@ -1834,12 +1834,15 @@ invisible( list2env(one_run_f(),.GlobalEnv) )
 chunk_generate_plot <- function() {
   generate_plot_f <- function(npv_all_sim,
                               policy_estimates_text_selected,
-                              rescale){
+                              rescale, SD = FALSE){
     total_time_sim <- npv_all_sim$total_time_sim
     position <- which( policy_estimates_text == policy_estimates_text_selected)
     npv_sim <- npv_all_sim[[ policy_estimates_varnames[position] ]]    
     npv_for_text <- paste("Median NPV: ", round(median(npv_sim), 2))
+    npv_for_text2 <- NULL
+    if (SD){
     npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+    }
     plot1 <- ggplot() +
       geom_density(
         aes(x = npv_sim,
@@ -1863,7 +1866,7 @@ chunk_generate_plot <- function() {
       scale_y_continuous(expand = expansion(mult = c(0, 0))) +
       annotate(
         "text",
-        x = 1.75 * median(npv_sim),
+        x = 1 * median(npv_sim),
         y = 0.2,
         label = npv_for_text,
         size = 6,
@@ -1871,7 +1874,7 @@ chunk_generate_plot <- function() {
       ) +
       annotate(
         "text",
-        x = 1.75 * median(npv_sim),
+        x = 1 * median(npv_sim),
         y = 0.1,
         label = npv_for_text2,
         size = 6,
