@@ -8,7 +8,7 @@ Open in RStudio:
 [![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS-OPA/opa-deworming/master?urlpath=rstudio)
 
 Go straight to the Shiny app:
-[![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS-OPA/opa-deworming/master?urlpath=shiny/code/shiny_app)
+[![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS-OPA/opa-deworming/master?urlpath=shiny/code/shiny_app/)
 
 This repository and its accompanying dynamic document and Shiny app are
 three key components of an Open Policy Analysis (OPA) on the costs and

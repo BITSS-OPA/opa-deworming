@@ -391,7 +391,7 @@ shinyUI(
                                           value = FALSE),
                             numericInput("param_num_of_sim",
                                          label = h4("Number of simulations"),
-                                         value = 1e4),
+                                         value = 1e2),
                             bsPopover(
                               id = "param_num_of_sim",
                               title = "",
