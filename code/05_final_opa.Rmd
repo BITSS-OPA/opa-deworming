@@ -30,10 +30,10 @@ pdf_document:
   fig_caption: no
 bibliography: bibliography.bib
 knit: (function(input_file, encoding) {
-  out_dir <- 'docs';
+  
   rmarkdown::render(input_file,
  encoding=encoding,
- output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+ output_file=file.path(dirname(input_file),'index.html'))})
 
 ---
 \def\blue{\color{blue}}
