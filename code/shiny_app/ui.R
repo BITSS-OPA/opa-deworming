@@ -57,7 +57,7 @@ length_temp_nigeria <- 1
 length_temp_vietnam <- 1
 length_temp_original <- 1
 
-nsims <- 1e3
+nsims <- 1e4
 
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
 # here() creates conflits with shiny deployment. Use source("all_analysis.R") intead
@@ -391,7 +391,7 @@ shinyUI(
                                           value = FALSE),
                             numericInput("param_num_of_sim",
                                          label = h4("Number of simulations"),
-                                         value = 1e2),
+                                         value = 1e4),
                             bsPopover(
                               id = "param_num_of_sim",
                               title = "",
