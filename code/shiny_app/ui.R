@@ -42,14 +42,14 @@ costs_temp_vietnam <-
     staff_time_var = staff_time_so,
     select_var = list("vietnam")
   )
-costs_temp_original <- 1
+costs_temp_original <- 0.42
 
 
 prevalence_india <- prevalence_r_so["india"]
 prevalence_kenya <- prevalence_r_so["kenya"]
 prevalence_nigeria <- prevalence_r_so["nigeria"]
 prevalence_vietnam <- prevalence_r_so["vietnam"]
-prevalence_original <- 1
+prevalence_original <- 0.92
 
 length_temp_india <- 1
 length_temp_kenya <- 1
@@ -225,38 +225,38 @@ shinyUI(
                                               <th>Country</th>
                                               <th>Unit Costs</th>
                                               <th>Prevalence</th>
-                                              <th>Length of Treatment</th>
+<!--                                          <th>Length of Treatment</th> -->
                                             </tr>
                                             <tr>
                                               <th>India</th>
                                               <td><var>', round(costs_temp_india,2),'</var></td>
                                               <td><var>',round(prevalence_india,2),'</var></td>
-                                              <td><var>', round(length_temp_india,2),'</var></td>
+<!--                                          <td><var>', round(length_temp_india,2),'</var></td> -->
                                             </tr>
                                             <tr>
                                               <th>Kenya</th>
                                               <td><var>',round(costs_temp_kenya,2),'</var></td>
                                               <td><var>',round(prevalence_kenya,2),'</var></td>
-                                              <td><var>',round(length_temp_kenya,2),'</var></td>
+<!--                                          <td><var>',round(length_temp_kenya,2),'</var></td> -->
 
                                             </tr>
                                             <tr>
                                               <th>Nigeria</th>
                                               <td><var>',round(costs_temp_nigeria,2),'</var></td>
                                               <td><var>',round(prevalence_nigeria,2),'</var></td>
-                                              <td><var>',round(length_temp_nigeria,2),'</var></td>
+<!--                                          <td><var>',round(length_temp_nigeria,2),'</var></td> -->
                                             </tr>
                                             <tr>
                                               <th>Vietnam</th>
                                               <td><var>',round(costs_temp_vietnam,2),'</var></td>
                                               <td><var>',round(prevalence_vietnam,2),'</var></td>
-                                              <td><var>', round(length_temp_vietnam,2),'</var></td>
+<!--                                          <td><var>', round(length_temp_vietnam,2),'</var></td> -->
                                             </tr>
                                             <tr>
                                               <th>Original Study</th>
                                               <td><var>', round(costs_temp_original,2),'</var></td>
                                               <td><var>', round(prevalence_original,2),'</var></td>
-                                              <td><var>', round(length_temp_original,2),'</var></td>
+<!--                                          <td><var>', round(length_temp_original,2),'</var></td> -->
                                             </tr>
                                           </table>
 

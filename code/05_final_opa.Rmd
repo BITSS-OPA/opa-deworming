@@ -1,6 +1,7 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
 date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+author: "BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)"
 editor_options:
   chunk_output_type: console
 output:
@@ -3084,7 +3085,7 @@ plot1 <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimat
        subtitle = "Distribution of the Net Present Value of Deworming Interventions"
        )
 print(plot1)
-#ggsave(here("code", "main_pe.png"))
+ggsave(here("code", "main_pe.png"))
 
 ```
 
