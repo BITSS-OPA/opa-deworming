@@ -41,7 +41,6 @@ knit: (function(input_file, encoding) {
 
 
 
-## Proof of update
 
 ```{r setup, include=FALSE, purl=TRUE}
 html_format <- TRUE
