@@ -47,6 +47,7 @@ vignettes/*.pdf
 !/code/*.Rmd
 !/code/*.R
 !/code/*.png
+!/code/*.svg
 !/code/*.md
 !/code/shiny_app*
 !/code/style.css
