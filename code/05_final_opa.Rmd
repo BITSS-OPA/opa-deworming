@@ -1,7 +1,7 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
 date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
-author: "BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)"
+author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -32,10 +32,12 @@ pdf_document:
 bibliography: bibliography.bib
 
 knit: (function(input_file, encoding) {
-  
-  rmarkdown::render(input_file,
- encoding=encoding,
- output_file=file.path("..", 'index.html'))})
+  # Knit to index.html for GitHub Pages
+  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
+ 
+ # Knit to 05_final_opa.html
+#  rmarkdown::render(input_file, encoding = encoding, output_file = "05_final_opa.html")
+ })
 
 ---
 \def\blue{\color{blue}}

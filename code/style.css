@@ -74,7 +74,11 @@ img[alt = screenshot]{height: 20px}
   letter-spacing: 1px;
 }
 
-
+/* Customizing the configurations for contributors */
+.contributors{
+  color: grey;
+  letter-spacing: 0.8px;
+}
 /* Set TOC width to be fixed */
 
 #TOC {

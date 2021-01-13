@@ -1,7 +1,7 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>07 January, 2021<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
-author: "BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)"
+date: "<center><div class='mysubtitle'>13 January, 2021<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -30,10 +30,19 @@ pdf_document:
   extra_dependencies: xcolor
   fig_caption: no
 bibliography: bibliography.bib
+
+knit: (function(input_file, encoding) {
+  
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path("..", 'index.html'));
+  rmarkdown::render(input_file, encoding = encoding,
+  output_file = "05_final_opa.html")
+ })
+
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
-
 
 
 
@@ -257,7 +266,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -2563,6 +2572,11 @@ unit_test_f(ea3_pe, 289.751849813911)
 <br>
 
 
+
+
+```
+## [1] "Output has changed at to_test  to  4.82110704697217"
+```
 
 ![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 

@@ -5,6 +5,8 @@ account: aleksandrama
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3390396
-bundleId: 3977422
+bundleId: 4092872
 url: https://aleksandrama.shinyapps.io/shiny_app/
-when: 1607728619.40047
+when: 1610579304.52974
+asMultiple: FALSE
+asStatic: FALSE
