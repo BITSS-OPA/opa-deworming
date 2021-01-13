@@ -52,4 +52,7 @@ vignettes/*.pdf
 !/code/shiny_app*
 !/code/style.css
 !/code/footer.html
+!/.nojekyll
+!/index.html
+!/index_files*
 .Rproj.user
