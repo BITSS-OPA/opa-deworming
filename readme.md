@@ -16,7 +16,7 @@ benefits of mass deworming interventions in various settings. Together,
 these materials create a transparent and reproducible analysis to
 facilitate collaboration and discussion about deworming policy.
 
-<img align="right" width="50%" src="./code/OPA_layers.png">
+<img align="right" width="50%" src="./code/OPA_layers2.svg">
 
 1 - [An interactive plot](https://fhoces.shinyapps.io/shiny_app_test/),
 which summarizes the interactions between all key parameters for a given
