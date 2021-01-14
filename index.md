@@ -31,15 +31,12 @@ pdf_document:
   fig_caption: no
 bibliography: bibliography.bib
 
-knit: (function(input_file, encoding) {
+knit: 
+  (function(input_file, encoding) {
   
-  rmarkdown::render(input_file,
- encoding=encoding,
- output_file=file.path("..", 'index.html'));
-  rmarkdown::render(input_file, encoding = encoding,
-  output_file = "05_final_opa.html")
- })
-
+  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
+  rmarkdown::render(input_file, encoding=encoding, output_file='05_final_opa.html');
+  })
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
