@@ -24,9 +24,9 @@ set of assumptions. Materials can be found in:
 [`code/shiny_app`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/shiny_app).
 
 2 - Open policy report in the form of a [dynamic
-document](https://rpubs.com/fhoces/547979) \[replace with link to
-deworming doc\], which details all data, code, and assumptions included
-in the analysis. Materials can be found in:
+document](https://bitss-opa.github.io/opa-deworming/) \[replace with
+link to deworming doc\], which details all data, code, and assumptions
+included in the analysis. Materials can be found in:
 [`code/dynamic_doc`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/05_final_opa.Rmd).
 
 3 - This Github repository, which stores all data, code, and materials
