@@ -21,7 +21,7 @@ This repository and its accompanying dynamic document and Shiny app are three ke
 
 1 - [An interactive plot](https://fhoces.shinyapps.io/shiny_app_test/), which summarizes the interactions between all key parameters for a given set of assumptions. Materials can be found in: [`code/shiny_app`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/shiny_app).
 
-2 - Open policy report in the form of a [dynamic document](https://rpubs.com/fhoces/547979) [replace with link to deworming doc], which details all data, code, and assumptions included in the analysis. Materials can be found in: [`code/dynamic_doc`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/05_final_opa.Rmd).
+2 - Open policy report in the form of a [dynamic document](https://bitss-opa.github.io/opa-deworming/) [replace with link to deworming doc], which details all data, code, and assumptions included in the analysis. Materials can be found in: [`code/dynamic_doc`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/05_final_opa.Rmd).
 
 3 - This Github repository, which stores all data, code, and materials necessary to replicate the analysis in full with minimal effort.  
 
