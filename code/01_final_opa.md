@@ -1,6 +1,7 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>06 January, 2021<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>15 January, 2021<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
 output:
@@ -29,16 +30,18 @@ pdf_document:
   extra_dependencies: xcolor
   fig_caption: no
 bibliography: bibliography.bib
-knit: (function(input_file, encoding) {
-  
-  rmarkdown::render(input_file,
- encoding=encoding,
- output_file=file.path(dirname(input_file),'index.html'))})
 
+knit: 
+  # render to index.html for GitHub pages
+  # render to 05_final_opa.html to knit locally
+  # YAML does not support commenting inside the function
+  (function(input_file, encoding) {
+  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html')); 
+  rmarkdown::render(input_file, encoding=encoding, output_file='05_final_opa.html'); 
+  })
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
-
 
 
 
@@ -262,7 +265,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -285,13 +288,13 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 
  This OPA project contains three components, following the OPA principles laid out in the aforementioned paper:
 
-  1. One single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. This output is presented in Figure  \@ref(fig:main-pe-print), and described in the [results section](#policy-estimate) of this report. The connection between each component of the analysis and the final output can be explored interactively in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
+  1. One single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. This output is presented in Figure 1, and described in the [results section](#policy-estimate) of this report. The connection between each component of the analysis and the final output can be explored interactively in [this web app](https://fhoces.shinyapps.io/shiny_app_test/).
 
   2. This detailed report that describes how to obtain the policy estimate and describes each component of the analysis.
 
   3. [A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app).  
 
-This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, that appear after clicking in the ![screenshot](show_details.png?display = inline-block) contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
+This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, that appear after clicking in the ![screenshot](images/show_details.png?display = inline-block) contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
 
 
 # Introduction  
@@ -319,7 +322,12 @@ The report first describes the common elements across all three approaches, and 
 
 The starting point is a comparison of a stream of benefits and costs over the lifetime of the recipients of deworming. The final policy estimate is the discounted sum of all costs and benefits, known as the Net Present Value (NPV)[^12].
 
-[^12]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, the report restricts the presentation of results to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects. [CONFIRM WITH GRACE]  
+[^12]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, the report restricts the presentation of results to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects. 
+
+<!--
+[CONFIRM WITH GRACE ABOVE]
+--> 
+
 
 
 <details><summary>Show all the details</summary>
@@ -1446,8 +1454,10 @@ Under approach 3, and using the same assumptions as above, the benefits will be:
 
 Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. Through Evidence Action's technical assistance, which typically includes financial support for program implementation, they have access to country-level government cost data on what it takes to implement and evaluate school-based deworming programs across different contexts. To estimate the costs in this analysis, the report uses costs of deworming provided by Evidence Action (detailed below) and follow a similar approach to @givewell, which takes those costs and includes an additional estimate around the amount of government staff time required to run deworming programs. The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions [^10].
 
-[^10]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds [CONFIRM WITH GRACE]
-
+[^10]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds 
+<!--
+[CONFIRM WITH GRACE ABOVE]
+--> 
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. These items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence surveys, program management, public mobilization/community sensitization, and training and distribution. Costs can vary by geography due to factors of population size, treatment strategies, age of the program, and costs of "doing business."
 
 The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country is obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across country regions faced by three different payers: Evidence Action, country governments, and other partners.  
@@ -1601,7 +1611,11 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
 
 </details>
 
-The unit costs of treatments, although small, vary substantially across regions. When including cost information for all the countries where Evidence action has data (India, Kenya, Nigeria, Vietnam) the unit costs is $0.08 per round of treatment [CONFIRM WITH GRACE, HARMONIZE WITH FOOTNOTE]. This final cost is primarily driven by the cost, and large population, of India, with a unit cost of $0.06, the other 3 remaining countries have relatively larger unit costs: $0.54, $0.86, $0.52 for Kenya, Nigeria and Vietnam respectively.
+The unit costs of treatments, although small, vary substantially across regions. When including cost information for all the countries where Evidence action has data (India, Kenya, Nigeria, Vietnam) the unit costs is $0.08 per round of treatment. This final cost is primarily driven by the cost, and large population, of India, with a unit cost of $0.06, the other 3 remaining countries have relatively larger unit costs: $0.54, $0.86, $0.52 for Kenya, Nigeria and Vietnam respectively.
+
+<!--
+[CONFIRM WITH GRACE ABOVE, and harmonize footnote (rigth after "per round of treatment.)]
+--> 
 
 
 
@@ -2037,7 +2051,12 @@ In this document the report has presented three different approaches to measurin
 
 The third and final approach uses similar methodologies with three main differences. First, the report allows the benefits to be scaled to account for differences in the prevalence of worm infections in settings different from the original study. Second, the report allows the benefits to be scaled by the length of treatment provided to children within a particular setting. Finally, based on feedback from Evidence Action on the relevant costs from present-day deworming programs, this approach uses more up to date information on treatment costs and it does not take into account the knock-on effects of additional schooling costs as a result of increased school attendance, which are accounted for in approaches #1 and #2[^11].
 
-[^11]: Evidence Action suggests that the added costs on education will not be considered as costs from a policy makers perspective. Those costs corresponds to another intervention on itself (education) and incorporating its costs would also require to incorporate its benefits. [CONFIRM WITH GRACE]
+[^11]: Evidence Action suggests that the added costs on education will not be considered as costs from a policy makers perspective. Those costs corresponds to another intervention on itself (education) and incorporating its costs would also require to incorporate its benefits. 
+<!--
+[CONFIRM WITH GRACE ABOVE]
+--> 
+
+
 
 The table below summarises the three different approaches and the different alternatives within each approach. The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research (@klps4): approach 3.3 in the table (in bold).
 
@@ -2558,7 +2577,7 @@ unit_test_f(ea3_pe, 289.751849813911)
 ## [1] "Output has changed at to_test  to  4.82110704697217"
 ```
 
-![](C:\Users\Aleksandra Ma\OneDrive\Documents\BITSS\opa-deworming\code\index_files/figure-html/run-mc-1.png)<!-- -->
+![](05_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
 # References
 

@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>13 January, 2021<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>15 January, 2021<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -32,10 +32,12 @@ pdf_document:
 bibliography: bibliography.bib
 
 knit: 
+  # render to index.html for GitHub pages
+  # render to 05_final_opa.html to knit locally
+  # YAML does not support commenting inside the function
   (function(input_file, encoding) {
-  
-  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
-  rmarkdown::render(input_file, encoding=encoding, output_file='05_final_opa.html');
+  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html')); 
+  rmarkdown::render(input_file, encoding=encoding, output_file='05_final_opa.html'); 
   })
 ---
 \def\blue{\color{blue}}
@@ -263,7 +265,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -292,7 +294,7 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 
   3. [A repository](https://github.org/bitss/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app).  
 
-This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, that appear after clicking in the ![screenshot](show_details.png?display = inline-block) contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
+This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, that appear after clicking in the ![screenshot](images/show_details.png?display = inline-block) contains equations that show how each piece of the analysis was carried out. And the third and final layer displays the code used to operationalize each equation. All this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
 
 
 # Introduction  

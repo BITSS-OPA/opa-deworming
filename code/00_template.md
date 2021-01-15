@@ -1,6 +1,6 @@
 ---
 title: "Template"
-date: "16 October, 2020"
+date: "15 January, 2021"
 output:
   html_document:
     code_folding: hide
@@ -61,14 +61,14 @@ editor_options:
 ##########################################  
 #    return( )                         # A list with all the objects
 #}                                     # generated inside the function
-# The following line executes the the code chunk and deposits on the its results
-# into the current R enviornmen:
+# The following line executes the code chunk and deposits its results
+# into the current R enviornment:
 #invisible( list2env(chunk_name_of_chunk(),.GlobalEnv) )
 #
 ##### Execute values of the functions above when needed for the text:
 # Anything under this comment is to create objects that are used in the body of
 # text. Not to be used in the final results (could be deleted). Each of these
-# object should end with the sufix _temp
+# object should end with the suffix _temp
 ```
 
 
@@ -226,7 +226,7 @@ This is the formula used to calculate component 2[^2]
 
 \begin{equation}
 q =  \text{input} \times \alpha_0 (1 + g)^{X}(1 + \hat{\beta_1} X + \hat{\beta_2} X^2)
-\label{eq:4}
+\label{eq:}
 \tag{4}
 \end{equation}
 
@@ -259,9 +259,11 @@ This is the formula used to calculate component 3[^3]
 
 \begin{equation}
 k = R \times X  + (1 - R) \times X
-\label{eq:4}
-\tag{4}
+\label{eq:5}
+\tag{5}
 \end{equation}
+
+
 
 
 ```r
@@ -364,6 +366,8 @@ kable(results_table, caption = "Table Caption") %>%
 ```
 
 
+
+
 # Monte Carlo Simulations  
 
 ```r
@@ -449,47 +453,21 @@ result1_sim_all <- sim.data1(nsims = nsims_so,
                              
                              )
 
-total_time <- result1_sim_all$total_time
-position <- which( policy_estimates == policy_estimate_so )
-result1_sim <- result1_sim_all[[ policy_estimates[position] ]]    
-result1_for_text <- paste("Median Result1:\n ", round(median(result1_sim), 1))
-result1_for_text2 <- paste("SD Result1:\n ", round(sd(result1_sim), 1))
+
 
 ################
 ###### Results/Viz
 ################
-
-
-
 library(plotly)
-nsims <- nsims_so
-result1_for_text <- paste(round(median(result1_sim),1))
-result1_for_text2 <- paste("SD NPV:\n ", round(sd(result1_sim), 2))
 
-rescale <- rescale_so
 
-    plot1 <- ggplot() +
-      geom_density(aes(x = result1_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(result1_sim)), col=c("black", "blue") ) +
-      coord_cartesian(xlim = c(-100, 800)) +
-      guides(alpha = "none", colour="none") +
+plot1 <- generate_plot_f(result1_sim_all, policy_estimate_so, rescale_so)[[1]] +
       labs(y = NULL,
-           x = "Main Estimate" ,
-           title = "Project Title",
-           subtitle = "Distribution of Key Indicator"
-           ) +
-      annotate("text", x = 2 * median(result1_sim), y = 0.15, label = result1_for_text, size = 4, col = "blue")+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-    if (rescale == TRUE) {
-      plot1 <- suppressMessages(
-        plot1 +
-          coord_cartesian(xlim = 1.2 * c( min( c(-1, result1_sim) ),
-                                          max(result1_sim))
-                          )
-        )
-    }
-    print(plot1)
+       x = "Main Estimate" ,
+       title = "Project Title",
+       subtitle = "Distribution of Key Indicator"
+       ) 
+print(plot1)
 ```
 
 # Sensitivity Analysis  

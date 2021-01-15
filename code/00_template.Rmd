@@ -376,6 +376,89 @@ kable(results_table, caption = "Table Caption") %>%
 ```
 
 
+```{r generate-plot-function, purl = TRUE, echo = FALSE}
+# generate_plot_f: function to generate plots for both Dynamic Document and
+# shiny app. It takes in the simulated data, policy estimate text, and rescale
+# variable. These are intermediary variables to exclude the interactivity of
+# shiny app from the plot generation process.  
+chunk_generate_plot <- function() {
+  generate_plot_f <- function(result1_sim_all,
+                              policy_estimates_text_selected,
+                              rescale, SD = FALSE){
+    total_time_sim <- result1_sim_all$total_time_sim
+    position <- which( policy_estimates_text == policy_estimates_text_selected)
+    result1_sim <- result1_sim_all[[ policy_estimates_varnames[position] ]]    
+    result1_for_text <- paste("Median NPV: ", round(median(result1_sim), 2))
+    result1_for_text2 <- NULL
+    if (SD){
+    result1_for_text2 <- paste("SD NPV: ", round(sd(result1_sim), 2))
+    }
+    plot1 <- ggplot() +
+      geom_density(
+        aes(x = result1_sim,
+            alpha = 1 / 2, ..scaled..),
+        kernel = "gau",
+        lwd = 1,
+        fill = "#007ba7",
+        color = "darkblue",
+        alpha = 0.3
+      ) +
+      geom_vline(
+        xintercept = c(0, median(result1_sim)),
+        col = c("black", "darkblue"),
+        lwd = c(1, 1),
+        linetype = c("solid", "dashed")
+      ) +
+      coord_cartesian(xlim = c(-300,1000),  ylim =  c( 0, 1.2 ))  +  # fixing the x axis so shifts in the density can be seen
+      #xlim(range(density(result1_sim)$x)) +
+      guides(alpha = "none", colour = "none") +
+      scale_x_continuous(expand = expansion(mult = c(0, 0))) +
+      scale_y_continuous(expand = expansion(mult = c(0, 0))) +
+      annotate(
+        "text",
+        x = 1 * median(result1_sim),
+        y = 0.2,
+        label = result1_for_text,
+        size = 6,
+        color = "darkblue"
+      ) +
+      annotate(
+        "text",
+        x = 1 * median(result1_sim),
+        y = 0.1,
+        label = result1_for_text2,
+        size = 6,
+        color = "darkblue"
+      ) +
+      theme(
+        axis.ticks = element_blank(),
+        axis.text.x = element_text(size = 18),
+        axis.title.x = element_text(size = 18),
+        axis.text.y = element_blank(),
+        plot.title = element_text(size = 24),
+        plot.subtitle = element_text(size = 20),
+        panel.background = element_blank(),
+        axis.line.x = element_line(color = "black", size = 1.5)
+      )
+
+    if (rescale == TRUE) {
+      plot1 <-
+        suppressMessages(plot1 + coord_cartesian(xlim = 1.2 * c(min(c(
+          -1, result1_sim
+        )), max(c(
+          100, result1_sim
+        )))))
+    }
+    return (list(plot1,position,total_time_sim))
+}
+################################################################################
+################################################################################
+return(list("generate_plot_f" = generate_plot_f))
+}
+
+invisible( list2env(chunk_generate_plot(),.GlobalEnv) )
+```
+
 # Monte Carlo Simulations  
 ```{r mc-setup,  echo=print_code, eval = FALSE}
 
@@ -461,47 +544,22 @@ result1_sim_all <- sim.data1(nsims = nsims_so,
                              
                              )
 
-total_time <- result1_sim_all$total_time
-position <- which( policy_estimates == policy_estimate_so )
-result1_sim <- result1_sim_all[[ policy_estimates[position] ]]    
-result1_for_text <- paste("Median Result1:\n ", round(median(result1_sim), 1))
-result1_for_text2 <- paste("SD Result1:\n ", round(sd(result1_sim), 1))
+
 
 ################
 ###### Results/Viz
 ################
-
-
-
 library(plotly)
-nsims <- nsims_so
-result1_for_text <- paste(round(median(result1_sim),1))
-result1_for_text2 <- paste("SD NPV:\n ", round(sd(result1_sim), 2))
 
-rescale <- rescale_so
 
-    plot1 <- ggplot() +
-      geom_density(aes(x = result1_sim,
-                       alpha = 1/2, ..scaled..), kernel = "gau") +
-      geom_vline(xintercept = c(0, median(result1_sim)), col=c("black", "blue") ) +
-      coord_cartesian(xlim = c(-100, 800)) +
-      guides(alpha = "none", colour="none") +
+plot1 <- generate_plot_f(result1_sim_all, policy_estimate_so, rescale_so)[[1]] +
       labs(y = NULL,
-           x = "Main Estimate" ,
-           title = "Project Title",
-           subtitle = "Distribution of Key Indicator"
-           ) +
-      annotate("text", x = 2 * median(result1_sim), y = 0.15, label = result1_for_text, size = 4, col = "blue")+
-      theme(axis.ticks = element_blank(), axis.text.y = element_blank())
-    if (rescale == TRUE) {
-      plot1 <- suppressMessages(
-        plot1 +
-          coord_cartesian(xlim = 1.2 * c( min( c(-1, result1_sim) ),
-                                          max(result1_sim))
-                          )
-        )
-    }
-    print(plot1)
+       x = "Main Estimate" ,
+       title = "Project Title",
+       subtitle = "Distribution of Key Indicator"
+       ) 
+print(plot1)
+
 ```
 
 # Sensitivity Analysis  
