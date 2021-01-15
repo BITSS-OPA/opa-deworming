@@ -1,7 +1,7 @@
 
 # Case Study on Open Policy Analysis For Cost Effectiveness Analysis of Deworming Interventions
 
-<img width="200" src="./code/BITSS_logo_horizontal.png"><img width="200" src="./code/CEGA_logo.png">
+<img width="200" src="./code/images/BITSS_logo_horizontal.png"><img width="200" src="./code/images/CEGA_logo.png">
 <br>
 
 Open in RStudio:
