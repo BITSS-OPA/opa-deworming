@@ -43,6 +43,7 @@ vignettes/*.pdf
 
 # All files in code folder except .R , .rmd , shiny app folder, style-related CSS and HTML files
 /code/*
+!/code/images*
 !/code/footer.html
 !/code/*.Rmd
 !/code/*.R
