@@ -1,5 +1,7 @@
 ---
 output: github_document
+
+
 ---
 
 ```{r setup, include=FALSE, message = FALSE}
@@ -34,47 +36,28 @@ Major contributions to this project will be acknowledged below. This OPA employs
 ## List of Contributors:  
 *(in alphabetical order)*
 
-```{r levels-of-computational-reproducibility, echo = FALSE, eval=FALSE}
-lcr_levels <- data.frame(levels = c("L1: No materials", "L2: Only code","L3: Partial analysis data & code", "L4: All analysis data & code","L5: Reproducible from analysis", "L6: Some cleaning code","L7: All cleaning code", "L8: Some raw data", "L9: All raw data", "L10: Reproducible from raw data"))
-availability <- data.frame(col1 = c("--",rep("✔", 9)),
-                         col2 = c("--",rep("✔", 9)),
-                         col3 = c("--", "--", rep("✔", 8)),
-                         col4 = c("--", "--", "--", rep("✔", 7)),
-                         col5 = c(rep("--", 4), rep("✔", 6)),
-                         col6 = c(rep("--", 5), rep("✔", 5)),
-                         col7 = c(rep("--", 6), rep("✔", 4)),
-                         col8 = c(rep("--", 7), "✔", "✔", "✔"),
-                         col9 = c(rep("--", 8), "✔", "✔"),
-                         col10 = c(rep("--", 9),"✔"))
-assign_lcr_score <- cbind(lcr_levels, availability)
-
-kable(assign_lcr_score,
-      col.names = c(" ", rep(c("P", "C","P", "C", " "), 2)),
-      caption = 'Levels of Computational Reproducibility \\\n (P denotes "partial", C denotes "complete")') %>%
-    add_header_above(c(" ","Analysis Code" = 2, "Analysis Data" = 2,
-                       "CRA", "Cleaning Code" = 2, "Raw Data" = 2, "CRR")) %>%
-    add_header_above(c(" ","Availability of materials, and reproducibility" = 10)) %>%
-        #add horizontal line to separate sections
-    row_spec(c(1, 5), extra_css = "border-bottom: 1px solid") %>%
-    footnote(alphabet = c("**Computationally Reproducible from Analytic data (CRA):** The output can be reproduced with minimal effort starting from the *analytic* datasets.",
-                         "**Computationally Reproducible from Raw data (CRR):** The output can be reproduced with minimal effort from the *raw* datasets."))
-```
 
 
- - Sophia Bai – Visualization, Writing (original draft), Writing (reviewing and editing)
- - Aleksandar Bogdanoski – Funding acquisition, Project administration
- - Fernando Hoces de la Guardia – Conceptualization, Funding acquisition, Supervision, Visualization, Writing (original draft), Writing (reviewing and editing)
- - Katherine Hoeberling – Funding acquisition, Project administration
- - Grace Hollister –
- - Orianna Jia – Writing (original draft), Writing (reviewing and editing)
- - Keanu Lim –
- - Charles Love – 
- - Teng Aleksandra Ma – 
- - Edward Miguel – Conceptualization, Funding acquisition, Supervision
- - Grace Morgan – Writing (original draft), Writing (reviewing and editing)
- - Emma Ng – Visualization, Writing (original draft), Writing (reviewing and editing)
- - Ryan Scholes – Visualization, Writing (original draft), Writing (reviewing and editing)
- - Jiayu Shi – 
+
+| Name                         | Conceptualization | Writing (Original Draft) | Writing (Reviewing and Editing) | Visualization | Funding Acquisition | Project Administration | Supervision |
+|------------------------------|-------------------|--------------------------|---------------------------------|---------------|---------------------|------------------------|-------------|
+| Sophia Bai                   | --                | &#9745;                  | &#9745;                         | &#9745;       | --                  | --                     | --          |
+| Aleksandar Bogdanoski        | --                | --                       | --                              | --            | &#9745;             | &#9745;                | --          |
+| Fernando Hoces de la Guardia | &#9745;           | &#9745;                  | &#9745;                         | &#9745;       | &#9745;             | --                     | &#9745;     |
+| Katherine Hoeberling         | --                | --                       | --                              | --            | &#9745;             | &#9745;                | --          |
+| Grace Hollister              | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+| Orianna Jia                  | --                | &#9745;                  | &#9745;                         | --            | --                  | --                     | --          |
+| Keanu Lim                    | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+| Charles Love                 | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+| Teng Aleksandra Ma           | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+| Edward Miguel                | &#9745;           | --                       | --                              | --            | &#9745;             | --                     | &#9745;     |
+| Grace Morgan                 | --                | &#9745;                  | &#9745;                         | --            | --                  | --                     | --          |
+| Emma Ng                      | --                | &#9745;                  | &#9745;                         | &#9745;       | --                  | --                     | --          |
+| Ryan Scholes                 | --                | &#9745;                  | &#9745;                         | &#9745;       | --                  | --                     | --          |
+| Jiayu Shi                    | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+
+
+
  
 This list of contributors to this repository (also available at [this page](https://github.com/BITSS-OPA/opa-deworming/graphs/contributors)) is ordered by each individual's number of commits, which may not perfectly reflect their intellectual contribution to this project:
 

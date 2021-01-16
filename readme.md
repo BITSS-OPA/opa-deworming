@@ -54,6 +54,23 @@ spelling and grammar.
 
 *(in alphabetical order)*
 
+| Name                         | Conceptualization | Writing (Original Draft) | Writing (Reviewing and Editing) | Visualization | Funding Acquisition | Project Administration | Supervision |
+| ---------------------------- | ----------------- | ------------------------ | ------------------------------- | ------------- | ------------------- | ---------------------- | ----------- |
+| Sophia Bai                   | –                 | ☑                        | ☑                               | ☑             | –                   | –                      | –           |
+| Aleksandar Bogdanoski        | –                 | –                        | –                               | –             | ☑                   | ☑                      | –           |
+| Fernando Hoces de la Guardia | ☑                 | ☑                        | ☑                               | ☑             | ☑                   | –                      | ☑           |
+| Katherine Hoeberling         | –                 | –                        | –                               | –             | ☑                   | ☑                      | –           |
+| Grace Hollister              | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+| Orianna Jia                  | –                 | ☑                        | ☑                               | –             | –                   | –                      | –           |
+| Keanu Lim                    | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+| Charles Love                 | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+| Teng Aleksandra Ma           | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+| Edward Miguel                | ☑                 | –                        | –                               | –             | ☑                   | –                      | ☑           |
+| Grace Morgan                 | –                 | ☑                        | ☑                               | –             | –                   | –                      | –           |
+| Emma Ng                      | –                 | ☑                        | ☑                               | ☑             | –                   | –                      | –           |
+| Ryan Scholes                 | –                 | ☑                        | ☑                               | ☑             | –                   | –                      | –           |
+| Jiayu Shi                    | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
+
   - Sophia Bai – Visualization, Writing (original draft), Writing
     (reviewing and editing)
   - Aleksandar Bogdanoski – Funding acquisition, Project administration
