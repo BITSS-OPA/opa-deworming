@@ -69,13 +69,17 @@ This part mainly renders the results of policy estimates derived using different
 
 ##### Code chunk: all-steps
 
-We first define a `unit_test` function that tests whether our computed result is the same as a hardcoded value , allowing for a very small computing error of 0.0001. The goal is to inform the programmers which variables change values and which ones don't. After making sure the change is what we want, we can then update the hardcoded values and use the unit test function to monitor changes in variable values. We use this unit test function for all variables defined in Part 2 so that we know the computed result is the expected result.
+We first define a `unit_test_f` function that tests whether our computed result is the same as a hardcoded value , allowing for a very small computing error of 0.0001. The goal is to inform the programmers which variables change values and which ones don't. After making sure the change is what we want, we can then update the hardcoded values and use the unit test function to monitor changes in variable values. We use this unit test function for all variables defined in Part 2 so that we know the computed result is the expected result.
 
 Then we import the source data (all the variables with the suffix `_so`) to reproduce key components such as wages and gains in earnings using the formulas provided above. In the end we return a list of labelled objects so that we can call them later.
 
 ##### Code chunk: main-results
 
-This code chunk is divided into two parts. The first part calculates the final policy estimate using the functions we defined previously. It includes all approaches that we used to get the policy estimates and all the policy estimate formats: Net Present Value (NPV), Cost Effective Ratio (CEA), and Relative Cost Effective Ratio (RCEA). Then it tracks the variable value changes using `unit_test` function. The second part renders the NPV results into a summary table.
+This code chunk is divided into two parts. The first part calculates the final policy estimate using the functions we defined previously. It includes all approaches that we used to get the policy estimates and all the policy estimate formats: Net Present Value (NPV), Cost Effective Ratio (CEA), and Relative Cost Effective Ratio (RCEA). Then it tracks the variable value changes using `unit_test_f` function. The second part renders the NPV results into a summary table.
+
+#### Code chunk: generate-plot-function
+
+This code chunk defines a function that both the DD and the shiny app calls to generate plots for distribution of policy estimates with simulated data.
 
 #### Part 4: Accounting for Uncertainty
 
@@ -84,16 +88,16 @@ In this part we use Monte Carlo simulation to account for the uncertainty from o
 
 ##### Code chunk: mc-setup
 
-In our case we define the function `sim.data1` to complete the Monte Carlo simulation process for us:
+In our case we define the function `sim_data1_f` to complete the Monte Carlo simulation process for us:
 * For most of the source variables (with the suffix `_so`), draw *n* samples from a normal distribution with the mean set to the original source data and standard deviation to be 10% of the mean.
 * Use these *n* generated sample source variables to calculate *n* estimates for each of the 11 approaches.
 * Store the final result in a list of 12 vectors. The first 11 are the *n* policy estimates we got from the Monte Carlo simulation, and the last one is the total time it took to run the simulation.
 
 ##### Code chunk: run-mc
 
-* Here we run `sim.data1` and get the list of vectors with *n* policy estimates for each of the 11 approaches.  
+* Here we run `sim_data1_f` and get the list of vectors with *n* policy estimates for each of the 11 approaches.  
 
-* We use the unit test function to test whether we get the expected simulation results. As you might notice, `unit_test` checks for the standard deviation of the simulation result of each policy estimate because the simulation result is a vector of numbers. Standard deviation reflects homogeneity of data better than mean.
+* We use the unit test function to test whether we get the expected simulation results. As you might notice, `unit_test_f` checks for the standard deviation of the simulation result of each policy estimate because the simulation result is a vector of numbers. Standard deviation reflects homogeneity of data better than mean.
 
 * Then we plot the *n* policy estimates for the approach that estimates **NPV without externality, with benefit from Hamory et al and costs from Evidence Action in 2019** to get the distribution of life income effects of deworming for each treated child.
 
