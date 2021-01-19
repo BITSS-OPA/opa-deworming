@@ -24,9 +24,9 @@ set of assumptions. Materials can be found in:
 [`code/shiny_app`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/shiny_app).
 
 2 - Open policy report in the form of a [dynamic
-document](https://bitss-opa.github.io/opa-deworming/) \[replace with
-link to deworming doc\], which details all data, code, and assumptions
-included in the analysis. Materials can be found in:
+document](https://bitss-opa.github.io/opa-deworming/), which details all
+data, code, and assumptions included in the analysis. Materials can be
+found in:
 [`code/dynamic_doc`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/05_final_opa.Rmd).
 
 3 - This Github repository, which stores all data, code, and materials
@@ -70,28 +70,6 @@ spelling and grammar.
 | Emma Ng                      | –                 | ☑                        | ☑                               | ☑             | –                   | –                      | –           |
 | Ryan Scholes                 | –                 | ☑                        | ☑                               | ☑             | –                   | –                      | –           |
 | Jiayu Shi                    | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
-
-  - Sophia Bai – Visualization, Writing (original draft), Writing
-    (reviewing and editing)
-  - Aleksandar Bogdanoski – Funding acquisition, Project administration
-  - Fernando Hoces de la Guardia – Conceptualization, Funding
-    acquisition, Supervision, Visualization, Writing (original draft),
-    Writing (reviewing and editing)
-  - Katherine Hoeberling – Funding acquisition, Project administration
-  - Grace Hollister –
-  - Orianna Jia – Writing (original draft), Writing (reviewing and
-    editing)
-  - Keanu Lim –
-  - Charles Love –
-  - Teng Aleksandra Ma –
-  - Edward Miguel – Conceptualization, Funding acquisition, Supervision
-  - Grace Morgan – Writing (original draft), Writing (reviewing and
-    editing)
-  - Emma Ng – Visualization, Writing (original draft), Writing
-    (reviewing and editing)
-  - Ryan Scholes – Visualization, Writing (original draft), Writing
-    (reviewing and editing)
-  - Jiayu Shi –
 
 This list of contributors to this repository (also available at [this
 page](https://github.com/BITSS-OPA/opa-deworming/graphs/contributors))
