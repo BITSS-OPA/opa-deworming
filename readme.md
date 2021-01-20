@@ -21,13 +21,6 @@ set of assumptions. Materials can be found in:
 2 - This Github repository, which stores all data, code, and materials
 necessary to replicate the analysis in full with minimal effort.
 
-This case study complies with the highest levels of the [Open Policy
-Analysis (OPA)
-Guidelines](https://www.bitss.org/opa/community-standards/). We also
-look to demonstrate tools, ideas, and practices through which OPA can be
-implemented in practice. This exercise, and future case studies, in turn
-will inform the Guidelines.
-
 To learn more about BITSS and our OPA initiative [click
 here](https://www.bitss.org/opa/). If you would like to collaborate with
 BITSS to develop a demonstration of a OPA in your organization please
