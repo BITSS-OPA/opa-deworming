@@ -1,5 +1,5 @@
 
-# Policy Analysis For Cost Effectiveness Analysis of Deworming Interventions (Advocate Analysts)
+# Policy Analysis For Cost Effectiveness Analysis of Deworming Interventions (Advocate Analysts with No Open Analysis)
 
 Open in RStudio:
 [![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS-OPA/opa-deworming/master?urlpath=rstudio)
