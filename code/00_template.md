@@ -1,23 +1,45 @@
 ---
-title: "Template"
-date: "15 January, 2021"
+title: "<center><div class= 'mytitle'>Template</div></center>"
+date: "<center><div class='mysubtitle'>21 January, 2021</div></center>"
+author: "<center><div class = 'contributors'>Contributors</div></center>"
 output:
-  html_document:
+  bookdown::html_document2:
+    code_download: yes
     code_folding: hide
-    code_download: true
-    collapsed: yes
+    css: style.css
+    highlight: tango
+    includes:
+      after_body: footer.html
     keep_md: yes
     number_sections: yes
     smooth_scroll: no
+    theme: cerulean
     toc: yes
-    toc_depth: 2
+    toc_collapsed: no
+    toc_depth: 3
     toc_float: yes
-  word_document: default
-  pdf_document: default
-editor_options:
-  chunk_output_type: console
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '3'
+  word_document: null
+link-citations: yes
+pdf_document:
+  extra_dependencies: xcolor
+  fig_caption: no
+bibliography: bibliography.bib
+
+knit: 
+  # render to index.html for GitHub pages
+  # render to 05_final_opa.html to knit locally
+  # YAML does not support commenting inside the function
+  (function(input_file, encoding) {
+  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html')); 
+  rmarkdown::render(input_file, encoding=encoding, output_file='00_template.html'); 
+  })
 ---
 \def\blue{\color{blue}}
+\def\red{\color{red}}
 
 
 
@@ -78,19 +100,29 @@ editor_options:
 # - outputs: all sources coming from data, research and guesswork
 chunk_sources <- function(){
 ###############################################################################
-###############################################################################  
+###############################################################################
+  
+    #############
+    ##### Setup
+    #############  
+    nsims_so <- 1e4
+    policy_estimate_so <- "Main Equation"
+    rescale_so <- TRUE
     #############
     ##### Data  
     #############
-  
+    
   # Create objects for data extracted from various sources
-  
+    
+    r_input1_so <- 0.1
+    r_input2_so <- 0.2
     #############
     ##### Research
     #############
   
   # Create objects for parameters extracted from research papers 
-  
+    q_input1_so <- 0.5
+    q_input2_so <- 0.8
     #############
     ##### Guess work   
     #############
@@ -103,8 +135,24 @@ chunk_sources <- function(){
     #############
   
   # Notes for the objects defined above, including sources, explanations, etc. 
-  
+    k_input1_so <- 3
+    k_input2_so <- 4
+    
+    #return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
+    return (
+      list("nsims_so" = nsims_so,
+           "policy_estimate_so" = policy_estimate_so,
+           "rescale_so" = rescale_so,
+           "r_input1_so" = r_input1_so,
+           "r_input2_so" = r_input2_so,
+           "q_input1_so" = q_input1_so,
+           "q_input2_so" = q_input2_so,
+           "k_input1_so" = k_input1_so,
+           "k_input2_so" = k_input2_so
+           )
+    )
 }
+invisible(list2env(chunk_sources(),.GlobalEnv) )
 ```
 
 # Introduction
@@ -145,20 +193,41 @@ Introduce the starting point and the final policy estimate. Include alternative 
 
 ### Main Equation (the model)
 
+Explanation for the main equation 
+
+<details><summary>Show all the details</summary>
 \begin{equation}
-y = f(x)
+y = r + q - k
 \label{eq:1}
 \tag{1}
 \end{equation}
 
+Where: 
+
+- $y$: one-liner to define y
+- $r$: one-liner to define r
+- $k$: one-liner to define k
+
+</details>
+
+
+
 ### Alternative Equation
 
+Explanation for the alternative equation 
+
+<details><summary>Show all the details</summary>
 \begin{equation}
-y = g(x)
+y = r + q + k
 \label{eq:2}
 \tag{2}
 \end{equation}
 
+Where:
+
+- $y$: one-liner to define y
+- $r$: one-liner to define r
+- $k$: one-liner to define k
 
 
 ```r
@@ -168,11 +237,20 @@ chunk_test <- function(){
 ############################################################################### 
 ###############################################################################  
   
-    mainequation_f <- function(something_var = something_default) {
-        something_var
+    # random equation to use as our main equation to get the final result
+    mainequation_f <- function(r_final_var = 1,
+                               q_final_var = 1,
+                               k_final_var = 1) {
+        return (r_final_var + q_final_var - k_final_var)
     }
     
-    alternative_f <- function(something_var = something_default)
+    # random equation to use as our alternative equation to get the final result
+    alternative_f <- function( r_final_var = 1,
+                               q_final_var = 1,
+                               k_final_var = 1){
+      return (r_final_var + q_final_var + k_final_var)
+      
+    }
     
 ############################################################################### 
 ###############################################################################  
@@ -185,17 +263,28 @@ mainequation_in <- mainequation_f()
 alternative_in <- alternative_f()
 ```
 
+
+</details>
+
 ## Sub Common Components:
 
 ### Component 1 ("$r$")
 
 This is the formula used to calculate component 1[^1]
 
+<details><summary>Show all the details</summary>
 \begin{equation}
 r = X \times \lambda_1  + (1 - X) \times \lambda_2
 \label{eq:3}
 \tag{3}
 \end{equation}
+
+Where: 
+
+- $r$: one-liner for r
+- $X$: one-liner for X
+- $\lambda_1$: one-liner for $\lambda_1$
+- $\lambda_2$: one-liner for $\lambda_2$
 
 
 ```r
@@ -206,8 +295,8 @@ chunk_r <- function(){
 ###############################################################################  
 
     r_function_f <- function(r_input1_var = r_input1_so , r_input2_var = r_input2_so) {  
-        r_value = r_input1_var - r_input2_var
-        return(list("r_value" = r_value))
+        r_input1_var - r_input2_var
+        
     }
 
 ###############################################################################
@@ -216,19 +305,29 @@ chunk_r <- function(){
 }
 
 invisible( list2env(chunk_r(),.GlobalEnv) )
-r_parameter <- as.numeric( r_function_f() )
 ```
+</details>
 
 ## Approach 1: Source Name (source link)
 ### Component 2 ("$q$")
 
 This is the formula used to calculate component 2[^2]
 
+<details><summary>Show all the details</summary>
 \begin{equation}
 q =  \text{input} \times \alpha_0 (1 + g)^{X}(1 + \hat{\beta_1} X + \hat{\beta_2} X^2)
 \label{eq:}
 \tag{4}
 \end{equation}
+
+Where: 
+
+- $q$: one-liner to define q
+- $\alpha_0$: one-liner to define $\alpha_0$
+- $g$: one-liner to define g
+- $\hat{\beta_1}$: one-liner to define $\hat{\beta_1}$
+- $\hat{\beta_2}$: one-liner to define $\hat{\beta_2}$
+
 
 
 ```r
@@ -239,8 +338,8 @@ chunk_q <- function(){
 ###############################################################################  
 
     q_function_f <- function(q_input1_var = q_input1_so , q_input2_var = q_input2_so) {  
-        r_value = (q_input1_var * q_input2_var)^2
-        return(list("q_value" = q_value))
+        (q_input1_var * q_input2_var)^2
+        
     }
 
 ###############################################################################
@@ -249,20 +348,25 @@ chunk_q <- function(){
 }
 
 invisible( list2env(chunk_q(),.GlobalEnv) )
-q_parameter <- as.numeric( q_function_f() )
 ```
+</details>
 
 ## Approach 2: Source Name (source link)
 ### Component 3 ("$k$")
 
 This is the formula used to calculate component 3[^3]
 
+<details><summary>Show all the details</summary>
 \begin{equation}
 k = R \times X  + (1 - R) \times X
 \label{eq:5}
 \tag{5}
 \end{equation}
 
+Where:
+
+- $k$: one-liner to define k
+- $R$: one-liner to define R
 
 
 
@@ -274,8 +378,8 @@ chunk_k <- function(){
 ###############################################################################  
 
     k_function_f <- function(k_input1_var = k_input1_so , k_input2_var = k_input2_so) {  
-        k_value = (k_input1_var * k_input2_var)^2
-        return(list("k_value" = k_value))
+        (k_input1_var * k_input2_var)^2
+        
     }
 
 ###############################################################################
@@ -284,9 +388,9 @@ chunk_k <- function(){
 }
 
 invisible( list2env(chunk_k(),.GlobalEnv) )
-k_parameter <- as.numeric( k_function_f() )
 ```
 
+</details>
 ## Summary of All Approaches 
 
 
@@ -301,11 +405,11 @@ Bolded row is the assumptions and the approach we use to generate the main polic
 
 
 # Main results
-
+<details><summary>Show all the details</summary>
 
 ```r
 #unit test function
-unit_test <- function(to_test_var, original_var, main_run_var = TRUE){
+unit_test_f <- function(to_test_var, original_var, main_run_var = TRUE){
     if (main_run_var == TRUE) {
         if (length(to_test_var) > 1) {
             fails_test <- ( abs(sd(to_test_var) - original_var) > 0.0001 )
@@ -335,7 +439,7 @@ one_run <-
     q_in <- q_function_f(q_input1_var = q_input1_var1,
                          q_input2_var = q_input2_var1)
     k_in <- k_function_f(k_input1_var = k_input1_var1,
-                         k_input2_var - k_input2_var1)
+                         k_input2_var = k_input2_var1)
     return (list("r_in" = r_in,
                  "q_in" = q_in,
                  "k_in" = k_in))
@@ -344,13 +448,17 @@ one_run <-
 invisible(list2env(one_run(), .GlobalEnv))
 ```
 
-
+</details>
 
 ```r
 # - perform the calculations to achieve final results
 
-result1 <- mainequation_f(something_var = something_default)
-result2 <- alternative_f(something_var = something_default)
+result1 <- mainequation_f(r_final_var = r_in,
+                          q_final_var = q_in,
+                          k_final_var = k_in)
+result2 <- alternative_f(r_final_var = r_in,
+                          q_final_var = q_in,
+                          k_final_var = k_in)
 #...
 
 results_table <- data.frame("results1" =   c("results", NA,
@@ -365,13 +473,45 @@ kable(results_table, caption = "Table Caption") %>%
   kable_styling("striped", full_width = F)
 ```
 
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>(\#tab:main-results)Table Caption</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:left;"> results1 </th>
+   <th style="text-align:left;"> results2 </th>
+   <th style="text-align:left;"> results3 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> situation1 </td>
+   <td style="text-align:left;"> results </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> results </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> situation2 </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> results </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> situation3 </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> results </td>
+  </tr>
+</tbody>
+</table>
+
 
 
 
 # Monte Carlo Simulations  
 
 ```r
-sim.data1 <- function(nsims = 1e2,
+sim_data1_f <- function(nsims = 1e2,
                       r_input1_var2,
                       r_input1_var2_sd,
                       r_input2_var2,
@@ -396,7 +536,9 @@ sim.data1 <- function(nsims = 1e2,
   k1_sim <- rnorm(n = nsims, mean = k_input1_var2, sd= k_input1_var2_sd)
   k2_sim <- rnorm(n = nsims, mean = k_input2_var2, sd= k_input2_var2_sd)
   
-                      }
+  
+  
+                      
 
     ################
     ###### Runs    
@@ -415,15 +557,21 @@ sim.data1 <- function(nsims = 1e2,
               k_input2_var1 = k2_sim[i]
               ), .GlobalEnv))
     
-    result1_sim[i] <- mainequation_f(something_var = something_default)
-    result2_sim[i] <- alternative_f(something_var = something_default)
-    
+    result1_sim[i] <- mainequation_f(r_final_var = r_in,
+                          q_final_var = q_in,
+                          k_final_var = k_in)
+    result2_sim[i] <- alternative_f(r_final_var = r_in,
+                          q_final_var = q_in,
+                          k_final_var = k_in)
+  }
     total_time <- Sys.time() - start_time
     return(list("result1_sim" = result1_sim,
                 "result2_sim" = result2_sim))
-  }
+  
+  
+}
 
-policy_estimates <- c(
+policy_estimates_varnames <- c(
   "result1_sim",
   "result2_sim"
 )
@@ -437,7 +585,7 @@ policy_estimates_text <- c(
 
 ```r
 # Run Monte Carlo simulation for our main model
-result1_sim_all <- sim.data1(nsims = nsims_so, 
+result1_sim_all <- sim_data1_f(nsims = nsims_so, 
                       r_input1_var2 = r_input1_so,
                       r_input1_var2_sd = r_input1_so * 0.1,
                       r_input2_var2 = r_input2_so,
@@ -449,7 +597,7 @@ result1_sim_all <- sim.data1(nsims = nsims_so,
                       k_input1_var2 = k_input1_so,
                       k_input1_var2_sd = k_input1_so * 0.1,
                       k_input2_var2 = k_input2_so,
-                      k_input2_var2_sd = k_input2_so * 0.1,
+                      k_input2_var2_sd = k_input2_so * 0.1
                              
                              )
 
@@ -458,6 +606,8 @@ result1_sim_all <- sim.data1(nsims = nsims_so,
 ################
 ###### Results/Viz
 ################
+
+
 library(plotly)
 
 
@@ -470,9 +620,10 @@ plot1 <- generate_plot_f(result1_sim_all, policy_estimate_so, rescale_so)[[1]] +
 print(plot1)
 ```
 
-# Sensitivity Analysis  
+![](00_template_files/figure-html/mc-run-1.png)<!-- -->
 
-# Conclusions
+
+
 
 # References
 

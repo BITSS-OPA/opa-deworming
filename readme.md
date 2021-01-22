@@ -1,5 +1,5 @@
 
-# Case Study on Open Policy Analysis For Cost Effectiveness Analysis of Deworming Interventions
+# Project on Open Policy Analysis For Cost Effectiveness Analysis of Deworming Interventions
 
 <img width="200" src="./code/images/BITSS_logo_horizontal.png"><img width="200" src="./code/images/CEGA_logo.png">
 <br>
@@ -8,7 +8,7 @@ Open in RStudio:
 [![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS-OPA/opa-deworming/master?urlpath=rstudio)
 
 Go straight to the Shiny app:
-[![Binder](http://mybinder.org/badge_logo.svg)](https://fhoces.shinyapps.io/shiny_app_test/)
+[here](https://fhoces.shinyapps.io/shiny_app_test/)
 
 This repository and its accompanying dynamic document and Shiny app are
 three key components of an Open Policy Analysis (OPA) on the costs and
@@ -27,12 +27,12 @@ set of assumptions. Materials can be found in:
 document](https://bitss-opa.github.io/opa-deworming/), which details all
 data, code, and assumptions included in the analysis. Materials can be
 found in:
-[`code/dynamic_doc`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/05_final_opa.Rmd).
+[`code/dynamic_doc`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/01_final_opa.Rmd).
 
 3 - This Github repository, which stores all data, code, and materials
 necessary to replicate the analysis in full with minimal effort.
 
-This case study complies with the highest levels of the [Open Policy
+This project complies with the highest levels of the [Open Policy
 Analysis (OPA)
 Guidelines](https://www.bitss.org/opa/community-standards/). We also
 look to demonstrate tools, ideas, and practices through which OPA can be
