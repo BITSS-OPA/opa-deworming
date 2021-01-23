@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Template</div></center>"
-date: "<center><div class='mysubtitle'>21 January, 2021</div></center>"
+date: "<center><div class='mysubtitle'>22 January, 2021</div></center>"
 author: "<center><div class = 'contributors'>Contributors</div></center>"
 output:
   bookdown::html_document2:

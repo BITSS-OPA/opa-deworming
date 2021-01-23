@@ -5,7 +5,7 @@ author: "<center><div class = 'contributors'>BITSS Team. Full list of contributo
 editor_options:
   chunk_output_type: console
 output:
-  word_document:
+  
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -25,7 +25,7 @@ output:
     df_print: paged
     toc: yes
     toc_depth: '3'
-  
+  word_document: null
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
@@ -35,10 +35,11 @@ knit:
   # render to index.html for GitHub pages
   # render to 01_final_opa.html to knit locally
   # YAML does not support commenting inside the function
-  # (function(input_file, encoding) {
-  # })
-  # rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
-  # rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
+  (function(input_file, encoding) {
+  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
+  rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
+  })
+  
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
@@ -47,7 +48,7 @@ knit:
 
 
 ```{r setup, include=FALSE, purl=TRUE}
-html_format <- FALSE
+html_format <- TRUE
 # Loading required libraries
 # before deploying in shinyapps.io, need to remove the following packages:
 # "plotly", "bookdown", "rootSolve"

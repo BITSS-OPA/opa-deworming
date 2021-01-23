@@ -1,10 +1,11 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>15 January, 2021<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>22 January, 2021<br><img height = '80px' src = './shiny_app/www/bitss_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
 output:
+  #word_document:
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -24,20 +25,21 @@ output:
     df_print: paged
     toc: yes
     toc_depth: '3'
-  word_document: null
+  
 link-citations: yes
 pdf_document:
   extra_dependencies: xcolor
   fig_caption: no
 bibliography: bibliography.bib
-knit: 
+knit:
   # render to index.html for GitHub pages
-  # render to 05_final_opa.html to knit locally
+  # render to 01_final_opa.html to knit locally
   # YAML does not support commenting inside the function
-  # (function(input_file, encoding) {
-  # })
-  # rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html')); 
-  # rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html'); 
+  (function(input_file, encoding) {
+  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
+  rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
+  })
+  
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
@@ -264,7 +266,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="C:/Users/Aleksandra Ma/OneDrive/Documents/BITSS/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -1451,7 +1453,7 @@ Under approach 3, and using the same assumptions as above, the benefits will be:
 Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. Through Evidence Action's technical assistance, which typically includes financial support for program implementation, they have access to country-level government cost data on what it takes to implement and evaluate school-based deworming programs across different contexts. To estimate the costs in this analysis, the report uses costs of deworming provided by Evidence Action (detailed below) and follow a similar approach to @givewell, which takes those costs and includes an additional estimate around the amount of government staff time required to run deworming programs. The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions [^10].
 
 [^10]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds [CONFIRM WITH GRACE ABOVE]
- 
+
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. These items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence surveys, program management, public mobilization/community sensitization, and training and distribution. Costs can vary by geography due to factors of population size, treatment strategies, age of the program, and costs of "doing business."
 
 The country weights are computed as the fraction of all treated individuals that correspond to a given country. The per capita cost of each country is obtained by dividing the country's total costs by the total number of treated individuals in a given period. Total costs for a country represent the total cost across country regions faced by three different payers: Evidence Action, country governments, and other partners.  
@@ -2043,7 +2045,7 @@ In this document the report has presented three different approaches to measurin
 The third and final approach uses similar methodologies with three main differences. First, the report allows the benefits to be scaled to account for differences in the prevalence of worm infections in settings different from the original study. Second, the report allows the benefits to be scaled by the length of treatment provided to children within a particular setting. Finally, based on feedback from Evidence Action on the relevant costs from present-day deworming programs, this approach uses more up to date information on treatment costs and it does not take into account the knock-on effects of additional schooling costs as a result of increased school attendance, which are accounted for in approaches #1 and #2[^11].
 
 [^11]: Evidence Action suggests that the added costs on education will not be considered as costs from a policy makers perspective. Those costs corresponds to another intervention on itself (education) and incorporating its costs would also require to incorporate its benefits. [CONFIRM WITH GRACE ABOVE]
- 
+
 
 
 
@@ -2560,6 +2562,11 @@ unit_test_f(ea3_pe, 289.751849813911)
 <br>
 
 
+
+
+```
+## [1] "Output has changed at to_test  to  4.82110704697217"
+```
 
 ![](01_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
