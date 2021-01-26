@@ -91,7 +91,7 @@ knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(fig.width=12, fig.height=8)
 #options(knitr.duplicate.label = "allow") # workaround for purl error
-#knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")
+#knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 
 # (function(input_file, encoding) {
 #   output_dir <- ;
