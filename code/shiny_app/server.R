@@ -8,18 +8,19 @@ shinyServer( function(input, output, session) {
   #Show/hide SDs code.
   onclick("toggleDataSDs",
           lapply(
-            c("SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7",
-              "SD8", "SD9", "SD10", "SD11", "SD12", "SD13", "SD14",
-              "SD15", "SD16", "SD17", "SD20", "SD21", "SD39"),
+            c("SD1", "SD2", "SD3", "SD4","SD12", "SD13",
+              "SD15","SD39"),
             toggle, anim=TRUE)
           )
 
   onclick("toggleResearchSDs",
-          lapply(c("SD22", "SD23", "SD24", "SD25", "SD27", "SD28",
-                   "SD29", "SD32", "SD36", "SD18", "SD35"), toggle, anim=TRUE))
+          lapply(c("SD5", "SD6", "SD7","SD8", "SD9", "SD10","SD11","SD14",
+                   "SD16","SD17","SD18", "SD20", "SD21","SD22",
+                   "SD23", "SD24", "SD25", "SD27", "SD28",
+                   "SD29", "SD32","SD33","SD34", "SD35", "SD36"), toggle, anim=TRUE))
 
   onclick("toggleGWSDs",
-          lapply(c("SD33","SD34", "SD36", "SD37", "SD38", "SD19"), toggle, anim=TRUE))
+          lapply(c("SD36","SD19","SD37"), toggle, anim=TRUE))
 
 
 # Generate reactive simulated data for plotting
