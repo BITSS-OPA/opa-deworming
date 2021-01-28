@@ -657,6 +657,14 @@ shinyUI(
                                   content = "Teacher experience coefficient",
                                   placement = "top"
                                 ),
+                                hidden(div(
+                                  id = "SD40",
+                                  numericInput(
+                                    "param_coef_exp1_sd",
+                                    label = "SD = ",
+                                    value = 0.1 * coef_exp_so[1]
+                                  )
+                                )),
                                 numericInput(
                                   "param_coef_exp2",
                                   label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
@@ -668,6 +676,14 @@ shinyUI(
                                   content = "Teacher experience coefficient squared",
                                   placement = "top"
                                 ),
+                                hidden(div(
+                                  id = "SD41",
+                                  numericInput(
+                                    "param_coef_exp2_sd",
+                                    label = "SD = ",
+                                    value = 0.1 * coef_exp_so[2]
+                                  )
+                                )),
                                 sliderInput(
                                   "param_coverage",
                                   label = "Coverage (\\( R \\)) = ",

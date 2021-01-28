@@ -17,7 +17,7 @@ shinyServer( function(input, output, session) {
           lapply(c("SD5", "SD6", "SD7","SD8", "SD9", "SD10","SD11","SD14",
                    "SD16","SD17","SD18", "SD20", "SD21","SD22",
                    "SD23", "SD24", "SD25", "SD27", "SD28",
-                   "SD29", "SD32","SD33","SD34", "SD35", "SD36"), toggle, anim=TRUE))
+                   "SD29", "SD32","SD33","SD34", "SD35", "SD36", "SD40", "SD41"), toggle, anim=TRUE))
 
   onclick("toggleGWSDs",
           lapply(c("SD36","SD19","SD37"), toggle, anim=TRUE))
@@ -240,7 +240,9 @@ shinyServer( function(input, output, session) {
       "param_prevl_0",
       "param_prevl_0_sd",
       "param_coef_exp1",                                          #Guesswork
+      "param_coef_exp1_sd",
       "param_coef_exp2",
+      "param_coef_exp2_sd",
       "param_teach_sal",
       "param_teach_sal_sd",
       "param_teach_ben",
@@ -502,7 +504,9 @@ shinyServer( function(input, output, session) {
       list_hide <- c("param_lambda2",
                      "param_lambda2_sd",
                      "param_coef_exp1",
+                     "param_coef_exp1_sd",
                      "param_coef_exp2",
+                     "param_coef_exp2_sd",
                      "param_teach_sal",
                      "param_teach_sal_sd",
                      "param_teach_ben",
@@ -835,7 +839,9 @@ shinyServer( function(input, output, session) {
                    "param_hours_se" = "Weekly hours worked by self-employed workers (no condition)",
                    "param_hours_se_sd" = "SD of Weekly hours worked by self-employed workers (no condition)",
                    "param_coef_exp1" = "Coefficients of Teacher Experience, Xp (beta_1)",
+                   "param_coef_exp1_sd" = "SD of Coefficients of Teacher Experience, Xp (beta_1)",
                    "param_coef_exp2" = "Coefficients of Teacher Experience Squared, Xp ^2 (beta_2)",
+                   "param_coef_exp2_sd" = "SD of Coefficients of Teacher Experience Squared, Xp ^2 (beta_2)",
                    "param_coverage" = "Coverage(R)",
                    "param_coverage_sd" = "SD of Coverage(R)",
                    "param_q_full" = "Take up (Q(S_2))",
