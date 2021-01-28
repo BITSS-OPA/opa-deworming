@@ -36,24 +36,30 @@ Major contributions to this project will be acknowledged below. This OPA employs
 ## List of Contributors:    
 *(in alphabetical order)*  
 
-  
-| Name | Conceptualization | Writing <br> (Original Draft) | Writing  <br>  (Reviewing and Editing)   | Visualization | Funding   <br> Acquisition   | Project <br> Administration | Supervision |Communications |    
-|------------------------------|-------------------|-----------------|-------------------------|---------------|--------------|-----------------|-------------|---------------|  
+<!--  
+| Name                         | Conceptualization | Writing <br> 
+                                                     (Original Draft)| Writing  <br>  
+                                                                     (Reviewing and Editing)   | Visualization | Funding   <br> 
+                                                                                                                Acquisition   | Project <br> 
+                                                                                                                                 Administration | Supervision |Communications |    
+-->
+| Name  | Conceptualization | Writing <br> (Original Draft)| Writing  <br> (Reviewing and Editing)   | Visualization | Funding   <br> Acquisition   | Project <br> Administration | Supervision |Communications |   |------------------------------|-------------------|-----------------|-------------------------|---------------|--------------|-----------------|-------------|---------------|  
 | Sophia Bai                   | --                | --              | S                       | S             | --           | --              | --          |--             |  
-| Aleksandar Bogdanoski        | --                | S               | L                       | --            | S            | CL              | --          |S              |  
-| Fernando Hoces de la Guardia | L                 | L               | S                       | L             | --           | S               | --          |S              |  
-| Katherine Hoeberling         | --                | S               | CL                      | --            | CL           | L               | --          |S              |  
-| Grace Hollister              | S                 | S               | --                      | S             | --           | --              | CL          |S              |  
+| Aleksandar Bogdanoski        | --                | S               | L                       | --            | S            | CL              | --          | S             |  
+| Carson Christiano            | --                | --              | --                      | --            | CL           | S               | --          | S             |  
+| Fernando Hoces de la Guardia | L                 | L               | S                       | L             | --           | S               | --          | S             |  
+| Katherine Hoeberling         | --                | S               | CL                      | --            | CL           | L               | --          | S             |  
+| Grace Hollister              | S                 | S               | --                      | S             | --           | --              | CL          | S             |  
 | Orianna Jia                  | --                | --              | S                       | --            | --           | --              | --          |--             |  
 | Michelle Layvant             | --                | --              | S                       | --            | --           | --              | --          |--             |  
 | Keanu Lim                    | --                | --              | --                      | S             | --           | --              | --          |--             |  
 | Charles Love                 | --                | --              | --                      | S             | --           | --              | --          |--             |  
 | Teng Aleksandra Ma           | --                | --              | S                       | CL            | --           | --              | --          |--             |  
-| Dustin Marshall              | --                | --              | S                       | --            | --           | --              | --          |S              |  
+| Dustin Marshall              | --                | --              | S                       | --            | --           | --              | --          | S             |  
 | Edward Miguel                | CL                | S               | --                      | S             | L            | --              | L           |--             |  
-| Grace Morgan                 | --                | S               | S                       | --            | --           | --              | --          |S              |  
+| Grace Morgan                 | --                | S               | S                       | --            | --           | --              | --          | S             |  
 | Emma Ng                      | --                | S               | S                       | S             | --           | --              | --          |--             |  
-| Lauren Russel                | --                | --              | S                       | --            | --           | --              | --          |L              |  
+| Lauren Russel                | --                | --              | S                       | --            | --           | --              | --          | L             |  
 | Ryan Scholes                 | --                | --              | --                      | S             | --           | --              | --          |--             |  
 | Jiayu Shi                    | --                | --              | --                      | S             | --           | --              | --          |--             |    
 
