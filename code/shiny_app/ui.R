@@ -155,8 +155,8 @@ shinyUI(
                     br(),
                     h4(strong("Description of Results")),
                     p(
-                      "We simulate finding the lifetime income effects on
-                              treated children many times, then plot the values
+                      "We simulate finding the lifetime income effects (net of interventions costs)
+                      on treated children many times, then plot the values
                               to create this figure. The height of the curve represents
                               how often an outcome appeared, i.e. the highest point
                               means that particular value appeared the most frequently.
@@ -181,9 +181,9 @@ shinyUI(
                             style = "overflow-y: scroll; width: 100%; height: 100%; position:relative;",
                             numericInput(
                               "param_ka_costs2_ea",
-                              label = h4("Yearly unit costs in new country (in $US)"),
+                              label = h4("Yearly unit costs in new country (in 2018 $US)"),
                               value = round(costs2_ea_in, 2),
-                              min = 0
+                              min = 0, step = 0.1
                             ),
                             numericInput(
                               "param_ka_prevl_r",
@@ -290,7 +290,7 @@ shinyUI(
                             style = "width: 100%; max-height: 100%; position: relative;",
                             # Begin policy estimate description ----
                             selectInput("policy_est",
-                                        h4("Policy Estimate:"),
+                                        h4("Choose Your Policy Estimate:"),
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
                             withMathJax(),
@@ -934,7 +934,7 @@ shinyUI(
                                        bsPopover(
                                          id = "param_costs2_ea",
                                          title = "",
-                                         content = "Yearly unit costs in new country (in $US)",
+                                         content = "Yearly unit costs in new country (in 2018 $US)",
                                          placement = "top"
                                        ),
                                        hidden(div(
