@@ -3102,7 +3102,7 @@ library(plotly)
 plot1 <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimate", rescale_so)[[1]] +
       labs(y = NULL,
        x = "Net Present Value (Benefits -  Costs)" ,
-       title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
+       title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
        subtitle = "Distribution of the Net Present Value of Deworming Interventions"
        )
 print(plot1)
