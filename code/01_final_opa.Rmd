@@ -35,10 +35,10 @@ knit:
   # render to index.html for GitHub pages
   # render to 01_final_opa.html to knit locally
   # YAML does not support commenting inside the function
-  (function(input_file, encoding) {
-  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
-  rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
-  })
+  #(function(input_file, encoding) {
+  #rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
+  #rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
+  #})
   
 ---
 \def\blue{\color{blue}}
@@ -3081,21 +3081,22 @@ all_res_10000_sims <- c(
 )
 
 
-
 if (TRUE) {
-k <- 0
-for ( i in policy_estimates_varnames ) {
-    k <- k + 1
-    to_test <- npv_all_sim[[i]]
-    if (nsims_so == 1e4){
-        unit_test_f(to_test, all_res_10000_sims[k], main_run_var = TRUE)
-    } else if (nsims_so == 1e3){
-        unit_test_f(to_test, all_res_1000_sims[k], main_run_var = TRUE)
-    } else if (nsims_so == 1e2){
-        unit_test_f(to_test, all_res_100_sims[k], main_run_var = TRUE)
+    k <- 0
+    for ( i in policy_estimates_varnames ) {
+        k <- k + 1
+        to_test <- npv_all_sim[[i]]
+        if (nsims_so == 1e4){
+            unit_test_f(to_test, all_res_10000_sims[k], main_run_var = TRUE)
+        } else if (nsims_so == 1e3){
+            unit_test_f(to_test, all_res_1000_sims[k], main_run_var = TRUE)
+        } else if (nsims_so == 1e2){
+            unit_test_f(to_test, all_res_100_sims[k], main_run_var = TRUE)
+        }
     }
 }
-}
+
+
 ################
 ###### Results/Viz
 ################
@@ -3108,7 +3109,7 @@ plot1 <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimat
        subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
        )
 print(plot1)
-ggsave(here("code/images", "main_pe.png"))
+#ggsave(here("code/images", "main_pe.png"))
 
 ```
 

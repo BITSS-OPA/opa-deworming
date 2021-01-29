@@ -35,10 +35,10 @@ knit:
   # render to index.html for GitHub pages
   # render to 01_final_opa.html to knit locally
   # YAML does not support commenting inside the function
-  (function(input_file, encoding) {
-  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
-  rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
-  })
+  #(function(input_file, encoding) {
+  #rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
+  #rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
+  #})
   
 ---
 \def\blue{\color{blue}}
@@ -2563,11 +2563,6 @@ unit_test_f(ea3_pe, 289.751849813911)
 <br>
 
 
-
-
-```
-## [1] "Output has changed at to_test  to  4.82110704697217"
-```
 
 ![](01_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 
