@@ -293,6 +293,10 @@ shinyUI(
                                         h4("Choose Your Policy Estimate:"),
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
+                            bsPopover(id="policy_est",
+                                      title= "",
+                                      content="In addition to the main policy estimate you can select all the others approaches described in the documentation",
+                                      placement="top"),
                             withMathJax(),
                             useShinyjs(),
                             conditionalPanel(
