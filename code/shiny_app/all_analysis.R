@@ -1880,8 +1880,8 @@ chunk_generate_plot <- function() {
       ) +
       annotate(
         "text",
-        x = 1 * median(npv_sim),
-        y = 0.1,
+        x = 1.35 * median(npv_sim),
+        y = 1,
         label = npv_for_text2,
         size = 6,
         color = "darkblue"
