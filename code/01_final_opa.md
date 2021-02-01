@@ -36,10 +36,10 @@ knit:
   # render to 01_final_opa.html to knit locally
   # YAML does not support commenting inside the function
   #(function(input_file, encoding) {
-  #rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
-  #rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
   #})
   
+  #rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
+  #rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
@@ -266,7 +266,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="/Users/ellashi/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
