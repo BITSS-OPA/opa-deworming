@@ -15,13 +15,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Open in RStudio: [![Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BITSS-OPA/opa-deworming/master?urlpath=rstudio)
 
-Go straight to the Shiny app: [here](https://fhoces.shinyapps.io/shiny_app_test/) 
+Go straight to the Shiny app: [here](https://bitss-opa.shinyapps.io/dw-app/) 
 
 This repository and its accompanying dynamic document and Shiny app are three key components of an Open Policy Analysis (OPA) on the costs and benefits of mass deworming interventions in various settings. Together, these materials create a transparent and reproducible analysis to facilitate collaboration and discussion about deworming policy.
 
 <img align="right" width="50%" src="./code/images/OPA_layers2.svg">
 
-1 - [An interactive plot](https://fhoces.shinyapps.io/shiny_app_test/), which summarizes the interactions between all key parameters for a given set of assumptions. Materials can be found in: [`code/shiny_app`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/shiny_app).
+1 - [An interactive plot](https://bitss-opa.shinyapps.io/dw-app/), which summarizes the interactions between all key parameters for a given set of assumptions. Materials can be found in: [`code/shiny_app`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/shiny_app).
 
 2 - Open policy report in the form of a [dynamic document](https://bitss-opa.github.io/opa-deworming/), which details all data, code, and assumptions included in the analysis. Materials can be found in: [`code/dynamic_doc`](https://github.com/BITSS-OPA/opa-deworming/tree/master/code/01_final_opa.Rmd).
 
@@ -42,8 +42,10 @@ Major contributions to this project will be acknowledged below. This OPA employs
                                                                      (Reviewing and Editing)   | Visualization | Funding   <br> 
                                                                                                                 Acquisition   | Project <br> 
                                                                                                                                  Administration | Supervision |Communications |    
--->
-| Name  | Conceptualization | Writing <br> (Original Draft)| Writing  <br> (Reviewing and Editing)   | Visualization | Funding   <br> Acquisition   | Project <br> Administration | Supervision |Communications |   |------------------------------|-------------------|-----------------|-------------------------|---------------|--------------|-----------------|-------------|---------------|  
+-->  
+
+| Name                         | Conceptualization | Writing <br> (Original Draft)| Writing  <br> (Reviewing and Editing)   | Visualization | Funding   <br> Acquisition   | Project <br> Administration | Supervision | Communications |   
+|------------------------------|-------------------|-----------------|-------------------------|---------------|--------------|-----------------|-------------|---------------|  
 | Sophia Bai                   | --                | --              | S                       | S             | --           | --              | --          |--             |  
 | Aleksandar Bogdanoski        | --                | S               | L                       | --            | S            | CL              | --          | S             |  
 | Carson Christiano            | --                | --              | --                      | --            | CL           | S               | --          | S             |  
@@ -61,7 +63,9 @@ Major contributions to this project will be acknowledged below. This OPA employs
 | Emma Ng                      | --                | S               | S                       | S             | --           | --              | --          |--             |  
 | Lauren Russel                | --                | --              | S                       | --            | --           | --              | --          | L             |  
 | Ryan Scholes                 | --                | --              | --                      | S             | --           | --              | --          |--             |  
-| Jiayu Shi                    | --                | --              | --                      | S             | --           | --              | --          |--             |    
+| Jiayu Shi                    | --                | --              | --                      | S             | --           | --              | --          |--             |      
+
+
 
 
 *Note*: For multiperson tasks, credit is assing with E for equal credit, L and CL for leading and Co-leading, and S for surpporting.  
