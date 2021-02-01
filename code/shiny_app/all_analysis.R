@@ -1847,7 +1847,7 @@ chunk_generate_plot <- function() {
     npv_for_text <- paste("Median \n NPV: ", round(median(npv_sim), 2))
     npv_for_text2 <- NULL
     if (SD){
-        npv_for_text2 <- paste("SD NPV: ", round(sd(npv_sim), 2))
+        npv_for_text2 <- paste("SD: ", round(sd(npv_sim), 2))
     }
     plot1 <- ggplot() +
       geom_density(
