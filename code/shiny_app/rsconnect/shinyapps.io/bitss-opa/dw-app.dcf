@@ -1,0 +1,12 @@
+name: dw-app
+title: dw-app
+username:
+account: bitss-opa
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3541899
+bundleId: 4156818
+url: https://bitss-opa.shinyapps.io/dw-app/
+when: 1611910427.37074
+asMultiple: FALSE
+asStatic: FALSE

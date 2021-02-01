@@ -29,34 +29,42 @@ This repository and its accompanying dynamic document and Shiny app are three ke
 
 This project complies with the highest levels of the [Open Policy Analysis (OPA) Guidelines](https://www.bitss.org/opa/community-standards/). We also look to demonstrate tools, ideas, and practices through which OPA can be implemented in practice. This exercise, and future case studies, in turn will inform the Guidelines.
 
-To learn more about BITSS and our OPA initiative [click here](https://www.bitss.org/opa/). If you would like to collaborate with BITSS to develop a demonstration of a OPA in your organization please email Aleks Bogdanoski (abogdanoski@berkeley.edu).  
+To learn more about BITSS and our OPA initiative [click here](https://www.bitss.org/opa/). If you would like to collaborate with BITSS to develop a demonstration of a OPA in your organization please email Aleks Bogdanoski (openpolicy@berkeley.edu).  
 
 Major contributions to this project will be acknowledged below. This OPA employs the Contributor Roles Taxonomy ([CRediT](https://casrai.org/credit/)). Major contributions are defined as any pushed revisions to language or source code beyond corrections of spelling and grammar.  
 
-## List of Contributors:  
-*(in alphabetical order)*
+## List of Contributors:    
+*(in alphabetical order)*  
+
+<!--  
+| Name                         | Conceptualization | Writing <br> 
+                                                     (Original Draft)| Writing  <br>  
+                                                                     (Reviewing and Editing)   | Visualization | Funding   <br> 
+                                                                                                                Acquisition   | Project <br> 
+                                                                                                                                 Administration | Supervision |Communications |    
+-->
+| Name  | Conceptualization | Writing <br> (Original Draft)| Writing  <br> (Reviewing and Editing)   | Visualization | Funding   <br> Acquisition   | Project <br> Administration | Supervision |Communications |   |------------------------------|-------------------|-----------------|-------------------------|---------------|--------------|-----------------|-------------|---------------|  
+| Sophia Bai                   | --                | --              | S                       | S             | --           | --              | --          |--             |  
+| Aleksandar Bogdanoski        | --                | S               | L                       | --            | S            | CL              | --          | S             |  
+| Carson Christiano            | --                | --              | --                      | --            | CL           | S               | --          | S             |  
+| Fernando Hoces de la Guardia | L                 | L               | S                       | L             | --           | S               | --          | S             |  
+| Katherine Hoeberling         | --                | S               | CL                      | --            | CL           | L               | --          | S             |  
+| Grace Hollister              | S                 | S               | --                      | S             | --           | --              | CL          | S             |  
+| Orianna Jia                  | --                | --              | S                       | --            | --           | --              | --          |--             |  
+| Michelle Layvant             | --                | --              | S                       | --            | --           | --              | --          |--             |  
+| Keanu Lim                    | --                | --              | --                      | S             | --           | --              | --          |--             |  
+| Charles Love                 | --                | --              | --                      | S             | --           | --              | --          |--             |  
+| Teng Aleksandra Ma           | --                | --              | S                       | CL            | --           | --              | --          |--             |  
+| Dustin Marshall              | --                | --              | S                       | --            | --           | --              | --          | S             |  
+| Edward Miguel                | CL                | S               | --                      | S             | L            | --              | L           |--             |  
+| Grace Morgan                 | --                | S               | S                       | --            | --           | --              | --          | S             |  
+| Emma Ng                      | --                | S               | S                       | S             | --           | --              | --          |--             |  
+| Lauren Russel                | --                | --              | S                       | --            | --           | --              | --          | L             |  
+| Ryan Scholes                 | --                | --              | --                      | S             | --           | --              | --          |--             |  
+| Jiayu Shi                    | --                | --              | --                      | S             | --           | --              | --          |--             |    
 
 
-
-
-| Name                         | Conceptualization | Writing (Original Draft) | Writing (Reviewing and Editing) | Visualization | Funding Acquisition | Project Administration | Supervision |
-|------------------------------|-------------------|--------------------------|---------------------------------|---------------|---------------------|------------------------|-------------|
-| Sophia Bai                   | --                | &#9745;                  | &#9745;                         | &#9745;       | --                  | --                     | --          |
-| Aleksandar Bogdanoski        | --                | --                       | --                              | --            | &#9745;             | &#9745;                | --          |
-| Fernando Hoces de la Guardia | &#9745;           | &#9745;                  | &#9745;                         | &#9745;       | &#9745;             | --                     | &#9745;     |
-| Katherine Hoeberling         | --                | --                       | --                              | --            | &#9745;             | &#9745;                | --          |
-| Grace Hollister              | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
-| Orianna Jia                  | --                | &#9745;                  | &#9745;                         | --            | --                  | --                     | --          |
-| Keanu Lim                    | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
-| Charles Love                 | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
-| Teng Aleksandra Ma           | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
-| Edward Miguel                | &#9745;           | --                       | --                              | --            | &#9745;             | --                     | &#9745;     |
-| Grace Morgan                 | --                | &#9745;                  | &#9745;                         | --            | --                  | --                     | --          |
-| Emma Ng                      | --                | &#9745;                  | &#9745;                         | &#9745;       | --                  | --                     | --          |
-| Ryan Scholes                 | --                | &#9745;                  | &#9745;                         | &#9745;       | --                  | --                     | --          |
-| Jiayu Shi                    | fill              | fill                     | fill                            | fill          | fill                | fill                   | fill        |
-
-
+*Note*: For multiperson tasks, credit is assing with E for equal credit, L and CL for leading and Co-leading, and S for surpporting.  
 
  
 This list of contributors to this repository (also available at [this page](https://github.com/BITSS-OPA/opa-deworming/graphs/contributors)) is ordered by each individual's number of commits, which may not perfectly reflect their intellectual contribution to this project:

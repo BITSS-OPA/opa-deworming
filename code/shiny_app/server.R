@@ -745,7 +745,7 @@ shinyServer( function(input, output, session) {
   }
   output$plot1 <- renderPlot({
     input$updateAll
-    
+
     isolate({print(plotInputAll())})
   }, height = 550
   )
@@ -761,19 +761,19 @@ shinyServer( function(input, output, session) {
     plot1 <- plot1 + labs(y = NULL,
                           x = "Net Present Value (Benefits -  Costs)" ,
                           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-                          subtitle = paste0(policy_estimates_text[position], ". ")
+                          subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
     )
   }
 
-  
+
   output$plot1_ka <- renderPlot({
-    
+
     input$updateKA
     isolate(print(plotInputKA()))
 
   }, height = 550
   )
-  
+
 
 
   # Generate Main Policy Estimate Plot
@@ -787,7 +787,7 @@ shinyServer( function(input, output, session) {
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
            title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-           subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+           subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
            )
     print(plot1)
   }, height = 550
