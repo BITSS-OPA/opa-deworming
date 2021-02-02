@@ -49,7 +49,7 @@ list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly",
                         "ggplot2")
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages, repos= "http://cran.cnr.berkeley.edu/")
+if(length(new.packages)) install.packages(new.packages, repos= "https://cran.rstudio.com")
 
 lapply(list.of.packages, library, character.only = TRUE)
 
