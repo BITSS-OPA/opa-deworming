@@ -36,8 +36,10 @@ knit:
   # render to 01_final_opa.html to knit locally
   # YAML does not support commenting inside the function
   (function(input_file, encoding) {
-  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
+    rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'))
   })
+      # rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html')
+
   
   #rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
   #rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
