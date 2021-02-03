@@ -35,12 +35,7 @@ knit:
   # render to index.html for GitHub pages
   # render to 01_final_opa.html to knit locally
   # YAML does not support commenting inside the function
-  #(function(input_file, encoding) {
-  #  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'))
-  #})
-      # rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html')
-
-  
+  # rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html')
   #rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
   #rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
 ---
@@ -48,9 +43,9 @@ knit:
 \def\red{\color{red}}
 
 
-
-
 ```{r setup, include=FALSE, purl=TRUE}
+
+
 html_format <- TRUE
 # Loading required libraries
 # before deploying in shinyapps.io, need to remove the following packages:
@@ -93,14 +88,23 @@ colorize_f = function(x, color){
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(fig.width=12, fig.height=8)
-#options(knitr.duplicate.label = "allow") # workaround for purl error
-#knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 
-# (function(input_file, encoding) {
-#   output_dir <- ;
-#   rmarkdown::render(input_file,
-#  encoding=encoding,
-#  output_file=file.path(dirname(input_file), output_dir,'index.html'))})
+
+
+#KEANU please review
+#
+# Run this thing to get the index.html file
+rmarkdown::render("01_final_opa.Rmd", encoding=encoding, output_file=file.path("..", 'index.html'))
+
+# generate the all_analysis.R file that goes into the shiny app. try to eval to false the package isntall
+options(knitr.duplicate.label = "allow") # workaround for purl error
+knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")
+
+# Add something to save the final figure here. 
+
+
+# Add something to autmatically call final policy estimate (call a saved version of ea3_pe)
+
 ```
 
 
@@ -3112,7 +3116,7 @@ plot1 <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimat
        subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
        )
 print(plot1)
-#ggsave(here("code/images", "main_pe.png"))
+ggsave(here("code/images", "main_pe.png"))
 
 ```
 
