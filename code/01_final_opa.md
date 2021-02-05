@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>03 February, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>04 February, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -35,17 +35,14 @@ knit:
   # render to index.html for GitHub pages
   # render to 01_final_opa.html to knit locally
   # YAML does not support commenting inside the function
-  #(function(input_file, encoding) {
-  #  rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'))
-  #})
-      # rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html')
-
-  
+  # rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html')
   #rmarkdown::render(input_file, encoding=encoding, output_file=file.path("..", 'index.html'));
   #rmarkdown::render(input_file, encoding=encoding, output_file='01_final_opa.html');
 ---
 \def\blue{\color{blue}}
 \def\red{\color{red}}
+
+
 
 
 
@@ -122,7 +119,7 @@ chunk_sources <- function(){
     main_run_so <- TRUE
     periods_so <- 50               #Total number of periods to forecast wages
     costs_temp_so <- 1
-    main_pe_so <- 289.8
+    main_pe_so <- previous_ea3_pe
 
     #############
     ##### Data  
@@ -269,7 +266,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="C:/Users/keanu/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -2549,6 +2546,8 @@ unit_test_f(ea2_pe, 701.849761243559)
 # EA3: benef= KLPS all and no ext; Costs=EA
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
+
+write.csv(ea3_pe, 'ea3_pe')
 ```
 
 </details>

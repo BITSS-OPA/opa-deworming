@@ -1,3 +1,11 @@
+## ---- include=FALSE, purl=TRUE------------------------------------------------
+# Add something to autmatically call final policy estimate (call a saved version of ea3_pe)
+setwd(here())
+previous_ea3_pe <- round(read.csv('ea3_pe')[,2], digits=1)
+
+
+
+
 ## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE------
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
@@ -15,7 +23,7 @@ chunk_sources <- function(){
     main_run_so <- TRUE
     periods_so <- 50               #Total number of periods to forecast wages
     costs_temp_so <- 1
-    main_pe_so <- round(read.csv('../opa-deworming/ea3_pe')[,2], digits=1)
+    main_pe_so <- previous_ea3_pe
 
 
     #############

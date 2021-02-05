@@ -108,9 +108,12 @@ knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 
 # Add something to save the final figure here. 
 
+```
 
+```{r, include=FALSE, purl=TRUE}
 # Add something to autmatically call final policy estimate (call a saved version of ea3_pe)
-
+setwd(here())
+previous_ea3_pe <- round(read.csv('ea3_pe')[,2], digits=1)
 ```
 
 
@@ -181,7 +184,7 @@ chunk_sources <- function(){
     main_run_so <- TRUE
     periods_so <- 50               #Total number of periods to forecast wages
     costs_temp_so <- 1
-    main_pe_so <- round(read.csv('../opa-deworming/ea3_pe')[,2], digits=1)
+    main_pe_so <- previous_ea3_pe
 
 
     #############

@@ -59,3 +59,5 @@ docs/DS_Store
 !/index_files*
 .Rproj.user
 index.md
+code/01_final_opa.md
+code/images/main_pe.png
