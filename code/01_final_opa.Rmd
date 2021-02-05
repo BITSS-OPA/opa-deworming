@@ -375,7 +375,7 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 
   3. [A repository](https://github.com/BITSS-OPA/opa-deworming) that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app).  
 
-This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, which appears after clicking in the ![screenshot](images/show_details.png?display = inline-block) contains equations that show how each piece of the analysis was carried out. The third and final layer displays the code used to operationalize each equation. All of this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
+This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, which appears after clicking on the ![screenshot](images/show_details.png?display = inline-block) contains equations that show how each piece of the analysis was carried out. The third and final layer displays the code used to operationalize each equation. All of this information is contained in this document using dynamic documentation [@xie2015dynamic], so interested readers can access the source file of the report and reproduce the entire document in their own computing environments.
 
 
 # Introduction  
@@ -560,7 +560,7 @@ interest_new_in <- as.numeric(
 </details>
 <br>
 
-The actual value varies across approaches depending on the time and country chosen. For example approach 1 uses the return from government bonds and the inflation rate in Kenya for the year 2016, while approaches 2 and 3 uses the values for the same country for the year 2019. This results in discount rates of `r paste(round(100 * interest_in,2), "%", sep="")` and `r paste(round(100 * interest_new_in,2), "%", sep="")` for approach 1 and, 2 and 3 respectively.
+The actual value varies across approaches depending on the time and country chosen. For example approach 1 uses the return from government bonds and the inflation rate in Kenya for the year 2016, while approaches 2 and 3 use the values for the same country for the year 2019. This results in discount rates of `r paste(round(100 * interest_in,2), "%", sep="")` and `r paste(round(100 * interest_new_in,2), "%", sep="")` for approach 1 and, 2 and 3 respectively.
 
 
 
@@ -797,7 +797,7 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 
 The estimated impact of deworming on hours worked comes from @baird2016worms and are estimated separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). These two parameters are combined with a simple mean in the analysis.
 
-The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not receive the treatment but still saw reductions in the likelihood of infection due to lower worm prevalence in their community.  Note that this parameter is not estimated by gender, so the report repeats its value two times. All the components to the equation \\ref{eq:`r equationIndex + 1`} come from @baird2016worms. The externalities effects are adjusted by the coverage and saturation of the original study.
+The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not receive the treatment but still saw reductions in the likelihood of infection due to lower worm prevalence in their community.  Note that this parameter is not estimated by gender, so the report repeats its value two times. All the components of the equation \\ref{eq:`r equationIndex + 1`} come from @baird2016worms. The externality effects are adjusted by the coverage and saturation of the original study.
 
 <details><summary>Show all the details</summary>
 
