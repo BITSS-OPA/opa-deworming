@@ -854,7 +854,7 @@ The saturation of the intervention, $p$, measures the fraction of the population
 [^6]: Last paragraph of page 9(1645) of @baird2016worms
 
 
-For this setting @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) estimated that take-up with full subsidy ($Q(full)$) was `r q_full_so`. Miguel and Kremer (2004) (Table 3 and footnote 18) observed minimal to no take-up without subsidy ($Q(0)$), hence it is assigned the value of `r q_zero_so`.  
+For this setting @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) estimated that take-up with full subsidy ($Q(full)$) was `r q_full_so`. @miguel2004worms (Table 3 and footnote 18) observed minimal to no take-up without subsidy ($Q(0)$), hence it is assigned the value of `r q_zero_so`.  
 
 <details><summary>Show all the details</summary>
 
