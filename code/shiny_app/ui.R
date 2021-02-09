@@ -133,7 +133,7 @@ shinyUI(
                                      for Transparency in the Social Sciences"
                       ),
                       "and",
-                      tags$a(href = "https://www.evidenceaction.org/dewormtheworld-2/",
+                      tags$a(href = "https://www.evidenceaction.org/dewormtheworld/",
                              "Evidence Action.")
                      
                       
