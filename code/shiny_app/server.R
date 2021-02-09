@@ -735,7 +735,7 @@ shinyServer( function(input, output, session) {
     total_time_sim <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale, TRUE)[[3]]
     plot1 <- plot1 + labs(y = NULL,
                           x = "Net Present Value (Benefits -  Costs)" ,
-                          title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
+                          title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
                           subtitle = paste0(policy_estimates_text[position], ". ",
                                             "N = ", input$param_num_of_sim, " simulations. Takes ",
                                             round(total_time_sim, 1)," ",attributes(total_time_sim)$units )  )
@@ -745,7 +745,7 @@ shinyServer( function(input, output, session) {
   }
   output$plot1 <- renderPlot({
     input$updateAll
-    
+
     isolate({print(plotInputAll())})
   }, height = 550
   )
@@ -760,20 +760,20 @@ shinyServer( function(input, output, session) {
 
     plot1 <- plot1 + labs(y = NULL,
                           x = "Net Present Value (Benefits -  Costs)" ,
-                          title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-                          subtitle = paste0(policy_estimates_text[position], ". ")
+                          title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
+                          subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
     )
   }
 
-  
+
   output$plot1_ka <- renderPlot({
-    
+
     input$updateKA
     isolate(print(plotInputKA()))
 
   }, height = 550
   )
-  
+
 
 
   # Generate Main Policy Estimate Plot
@@ -786,8 +786,8 @@ shinyServer( function(input, output, session) {
 
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-           subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+           title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
+           subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
            )
     print(plot1)
   }, height = 550

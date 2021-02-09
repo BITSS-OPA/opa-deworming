@@ -133,7 +133,7 @@ shinyUI(
                                      for Transparency in the Social Sciences"
                       ),
                       "and",
-                      tags$a(href = "https://www.evidenceaction.org/dewormtheworld-2/",
+                      tags$a(href = "https://www.evidenceaction.org/dewormtheworld/",
                              "Evidence Action.")
                      
                       
@@ -141,9 +141,6 @@ shinyUI(
                     p(
                       "See a full contributors list",
                       tags$a(href = "https://github.com/BITSS-OPA/opa-deworming/blob/master/readme.md", "here."), 
-                      br(),
-                      "See the dynamic document of this shiny app",
-                      tags$a(href = "https://bitss-opa.github.io/opa-deworming/", "here."),
                       br(),
                       "See more OPA projects done by BITSS",
                       tags$a(href = "https://www.bitss.org/opa/projects/", "here.")
@@ -155,8 +152,8 @@ shinyUI(
                     br(),
                     h4(strong("Description of Results")),
                     p(
-                      "We simulate finding the lifetime income effects on
-                              treated children many times, then plot the values
+                      "We simulate finding the lifetime income effects (net of interventions costs)
+                      on treated children many times, then plot the values
                               to create this figure. The height of the curve represents
                               how often an outcome appeared, i.e. the highest point
                               means that particular value appeared the most frequently.
@@ -181,16 +178,17 @@ shinyUI(
                             style = "overflow-y: scroll; width: 100%; height: 100%; position:relative;",
                             numericInput(
                               "param_ka_costs2_ea",
-                              label = h4("Yearly unit costs in new country (in $US)"),
+                              label = h4("Yearly unit costs in new country (in 2018 $US)"),
                               value = round(costs2_ea_in, 2),
-                              min = 0
+                              min = 0, step = 0.1
                             ),
                             numericInput(
                               "param_ka_prevl_r",
                               label = h4("Prevalence in new region (\\( \\eta_{new} \\))"),
                               min = 0 ,
                               max = 1,
-                              value = round(prevalence_r_in, 2)
+                              value = round(prevalence_r_in, 2), 
+                              step = 0.1
                             ),
                             numericInput(
                               "param_ka_years_of_treat_t",
@@ -223,37 +221,37 @@ shinyUI(
                                           <table style="width:100%">
                                             <tr>
                                               <th>Country</th>
-                                              <th>Unit Costs</th>
-                                              <th>Prevalence</th>
+                                              <th>Unit Costs ($USD)</th>
+                                              <th>Prevalence (%) </th>
 <!--                                          <th>Length of Treatment</th> -->
                                             </tr>
                                             <tr>
-                                              <th>India</th>
+                                              <th>India (2018)</th>
                                               <td><var>', round(costs_temp_india,2),'</var></td>
                                               <td><var>',round(prevalence_india,2),'</var></td>
 <!--                                          <td><var>', round(length_temp_india,2),'</var></td> -->
                                             </tr>
                                             <tr>
-                                              <th>Kenya</th>
+                                              <th>Kenya (2018)</th>
                                               <td><var>',round(costs_temp_kenya,2),'</var></td>
                                               <td><var>',round(prevalence_kenya,2),'</var></td>
 <!--                                          <td><var>',round(length_temp_kenya,2),'</var></td> -->
 
                                             </tr>
                                             <tr>
-                                              <th>Nigeria</th>
+                                              <th>Nigeria (2018)</th>
                                               <td><var>',round(costs_temp_nigeria,2),'</var></td>
                                               <td><var>',round(prevalence_nigeria,2),'</var></td>
 <!--                                          <td><var>',round(length_temp_nigeria,2),'</var></td> -->
                                             </tr>
                                             <tr>
-                                              <th>Vietnam</th>
+                                              <th>Vietnam (2018)</th>
                                               <td><var>',round(costs_temp_vietnam,2),'</var></td>
                                               <td><var>',round(prevalence_vietnam,2),'</var></td>
 <!--                                          <td><var>', round(length_temp_vietnam,2),'</var></td> -->
                                             </tr>
                                             <tr>
-                                              <th>Original Study</th>
+                                              <th>Original Study (1999)</th>
                                               <td><var>', round(costs_temp_original,2),'</var></td>
                                               <td><var>', round(prevalence_original,2),'</var></td>
 <!--                                          <td><var>', round(length_temp_original,2),'</var></td> -->
@@ -290,9 +288,13 @@ shinyUI(
                             style = "width: 100%; max-height: 100%; position: relative;",
                             # Begin policy estimate description ----
                             selectInput("policy_est",
-                                        h4("Policy Estimate:"),
+                                        h4("Choose Your Policy Estimate:"),
                                         choices = policy_estimates_text,
                                         selected = "A3. All income of A2. Main Policy Estimate"),
+                            bsPopover(id="policy_est",
+                                      title= "",
+                                      content="In addition to the main policy estimate you can select all the others approaches described in the documentation",
+                                      placement="top"),
                             withMathJax(),
                             useShinyjs(),
                             conditionalPanel(
@@ -406,8 +408,14 @@ shinyUI(
                               tabPanel(
                                 "Research",
                                 br(),
-                                a(id = "toggleResearchSDs", "Show/hide all SDs", href =
+                                a(id = "toggleResearchSDs", "Show/hide all standard deviations (SD)", href =
                                     "#"),
+                                bsPopover(
+                                  id = "toggleResearchSDs",
+                                  title = "",
+                                  content = "See section 2.4 in the documentation for how standard deviations are used",
+                                  placement = "top"
+                                ),
                                 br(),
                                 br(),
                                 numericInput(
@@ -657,6 +665,14 @@ shinyUI(
                                   content = "Teacher experience coefficient",
                                   placement = "top"
                                 ),
+                                hidden(div(
+                                  id = "SD40",
+                                  numericInput(
+                                    "param_coef_exp1_sd",
+                                    label = "SD = ",
+                                    value = 0.1 * coef_exp_so[1]
+                                  )
+                                )),
                                 numericInput(
                                   "param_coef_exp2",
                                   label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
@@ -668,6 +684,14 @@ shinyUI(
                                   content = "Teacher experience coefficient squared",
                                   placement = "top"
                                 ),
+                                hidden(div(
+                                  id = "SD41",
+                                  numericInput(
+                                    "param_coef_exp2_sd",
+                                    label = "SD = ",
+                                    value = 0.1 * coef_exp_so[2]
+                                  )
+                                )),
                                 sliderInput(
                                   "param_coverage",
                                   label = "Coverage (\\( R \\)) = ",
@@ -814,7 +838,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param_years_of_treat_0",
                                   title = "",
-                                  content = "Average years of treatement in Kenya",
+                                  content = "Difference in years of treatment between treatment and control group in original",
                                   placement = "top"
                                 ),
                                 hidden(div(
@@ -835,7 +859,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param_unit_cost_local",
                                   title = "",
-                                  content = "Costs of deworming per capita (KSH)",
+                                  content = "Costs of deworming per capita (KSH) per children per year",
                                   placement = "top"
                                 ),
                                 hidden(div(
@@ -852,7 +876,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param_unit_cost_2017usdppp",
                                   title = "",
-                                  content = "Costs of deworming per capita (USD)",
+                                  content = "Costs of deworming per capita (USD) per children per year",
                                   placement = "top"
                                 ),
                                 hidden(div(
@@ -906,7 +930,7 @@ shinyUI(
                               # Begin tabpanel data ----
                               tabPanel("Data",
                                        br(),
-                                       a(id="toggleDataSDs", "Show/hide all SDs", href="#"),
+                                       a(id="toggleDataSDs", "Show/hide all standard deviations (SD)", href="#"),
                                        br(),
                                        br(),
                                        numericInput(
@@ -918,7 +942,7 @@ shinyUI(
                                        bsPopover(
                                          id = "param_costs2_ea",
                                          title = "",
-                                         content = "Yearly unit costs in new country (in $US)",
+                                         content = "Yearly unit costs in new country (in 2018 $US)",
                                          placement = "top"
                                        ),
                                        hidden(div(
@@ -942,7 +966,7 @@ shinyUI(
                                        bsPopover(
                                          id = "param_ex_rate",
                                          title = "",
-                                         content = "Exchange rate in 1985? (KSH to International Dollar)",
+                                         content = "Original value: exchange rate in 1998 (KSH to USD)",
                                          placement = "top"
                                        ),
                                        hidden(div(
@@ -1104,7 +1128,7 @@ shinyUI(
                               tabPanel(
                                 "Guesswork",
                                 br(),
-                                a(id = "toggleGWSDs", "Show/hide all SDs", href =
+                                a(id = "toggleGWSDs", "Show/hide all standard deviations (SD)", href =
                                     "#"),
                                 br(),
                                 br(),
