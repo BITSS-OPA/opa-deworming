@@ -336,7 +336,7 @@ Executive Summary
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://fhoces.shinyapps.io/shiny_app_test/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.org/bitss/opa-deworming) that contains all the materials to reproduce the report and final output.
 
-This report describes three approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by Evidence Action, a key policy partner in this area. This third approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates and length of treatment across settings. Though these are modeled estimates and should be interpreted with caution, this report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
+This report describes three approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by Evidence Action, a key policy partner in this area that provides technical support to government-run deworming programs. This third approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates and length of treatment across settings. Though these are modeled estimates and should be interpreted with caution, this report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
 
 The  main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of stream of benefits and costs from today's perspective) of `r main_pe_so` for a setting with average prevalence and average unit costs (among the countries where Evidence Action has data for). Readers interested in learning about the predicted value for a specific setting are encourage to use the [interactive app](https://fhoces.shinyapps.io/shiny_app_test/) components of this OPA.
 
@@ -372,7 +372,7 @@ The Cost Benefit Analysis (CBA) of deworming is computed using three different a
 
   1. Reproducing the original CBA produced by @baird2016worms, which estimates the net present value of a Kenya school-based deworming program after a 10 year follow-up for four different policy estimates.     
   2. Reproducing an updated version of such analysis on the same intervention but with additional follow-up data [@klps4].
-  3. Producing a new analysis that, building from the previous two approaches, focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was developed in consultation with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action (EA)[^1].
+  3. Producing a new analysis that, building from the previous two approaches, focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was developed in consultation with a key stakeholder in this area, the non-governmental organization (NGO) Evidence Action[^1].
 
 
 
@@ -480,7 +480,7 @@ At a high level all three approaches focus on the same type of benefits: the inc
 
 The main differences in benefits across the three approaches have to do with how to predict the earnings profiles over a lifecycle, and how to account for differences in worm prevalence rates and length of treatment across settings. Approaches 1 and 2 use different earning profiles, and approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections and length of treatment.
 
-The main differences in costs between scenarios have to do with a) whether indirect costs are included, and b) how to compute the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) where the study was originally conducted, while the third approach does not include indirect costs and use unit costs of various countries from data provided by Evidence Action.
+The main differences in costs between scenarios have to do with a) whether indirect costs are included, and b) how to compute the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) where the study was originally conducted, while the third approach does not include indirect costs and use unit costs of various countries from data provided by Evidence Action (see section 2.2.2.2 for the definition of indirect costs in this context).
 
 
 ### The discounting rate  {-}
@@ -2290,11 +2290,11 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
       a2_tax_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_tax_new_in, costs_var = costs_a2_in)
       #KLPS4_2:benefits = KLPS4 all and no ext; Costs =	Baird no ext
       a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_new_in, costs_var = costs_a2_in)
-      # EA1: no externality NPV using EAs costs
+      # EA1: no externality NPV using Evidence Action's costs
       a3_inc_a1_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_nx_prevl_in, costs_var = costs2_ea_in)
-      # EA2: yes externality NPV using EAs costs
+      # EA2: yes externality NPV using Evidence Action's costs
       a3_inc_a1_all_x_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prevl_in, costs_var = costs2_ea_in)
-      # EA3: benef= KLPS all and no ext; Costs=EA
+      # EA3: benef= KLPS all and no ext; Costs=Evidence Action
       a3_inc_a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
     }
 
@@ -2707,7 +2707,7 @@ one_run_f <-
                                    periods_var = periods_var1)
     unit_test_f(pv_benef_all_prevl_new_in, 289.899107986178, main_run_var = main_run_var1)
     #Costs asd
-    # costs1: EA costs no externalities
+    # costs1: Evidence Action's costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
                             country_cost_var = df_costs_var1$costs_by_country,
                             staff_time_var = staff_time_var1,
@@ -2843,13 +2843,13 @@ unit_test_f(klps4_1_pe, 55.884265345947)
 klps4_2_pe <- NPV_pe_f(benefits_var = pv_benef_all_new_in, costs_var = costs_a2_in)
 unit_test_f(klps4_2_pe, 499.720465340588)
 
-# EA1: no externality NPV using EAs costs
+# EA1: no externality NPV using Evidence Action's costs
 ea1_pe <- NPV_pe_f(benefits_var = pv_benef_all_nx_prevl_in, costs_var = costs2_ea_in)
 unit_test_f(ea1_pe, 77.4612400741955)
-# EA2: yes externality NPV using EAs costs
+# EA2: yes externality NPV using Evidence Action's costs
 ea2_pe <- NPV_pe_f(benefits_var = pv_benef_all_yx_prevl_in, costs_var = costs2_ea_in)
 unit_test_f(ea2_pe, 701.849761243559)
-# EA3: benef= KLPS all and no ext; Costs=EA
+# EA3: benef= KLPS all and no ext; Costs=Evidence Action
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
 ```
