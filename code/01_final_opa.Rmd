@@ -113,7 +113,7 @@ knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 ```{r, include=FALSE, purl=TRUE}
 # Add something to autmatically call final policy estimate (call a saved version of ea3_pe)
 setwd(here())
-previous_ea3_pe <- round(read.csv('ea3_pe')[,2], digits=1)
+previous_ea3_pe <- round(read.csv(paste(getwd(),'/data','/ea3_pe', sep=''))[,2], digits=1)
 ```
 
 
@@ -2870,7 +2870,8 @@ unit_test_f(ea2_pe, 701.849761243559)
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
 
-write.csv(ea3_pe, 'ea3_pe')
+ea3_save_path = paste(getwd(),'/data','/ea3_pe', sep='')
+write.csv(ea3_pe, file = ea3_save_path)
 ```
 
 </details>

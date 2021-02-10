@@ -1,7 +1,7 @@
 ## ---- include=FALSE, purl=TRUE------------------------------------------------
 # Add something to autmatically call final policy estimate (call a saved version of ea3_pe)
 setwd(here())
-previous_ea3_pe <- round(read.csv('ea3_pe')[,2], digits=1)
+previous_ea3_pe <- round(read.csv(paste(getwd(),'/data','/ea3_pe', sep=''))[,2], digits=1)
 
 
 
