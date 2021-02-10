@@ -1384,7 +1384,7 @@ q2_in <- q_full_so
 </details>
 <br>
 
-With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). The original study (@baird2016worms) identifies the unit cost to be \$`r unit_cost_so` per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$`r round(unit_cost_2017usdppp_so,2)`. Adding all indirect cost over an average `r round(years_of_treat_0_so,1)` years of treatment, the average cost of deworming each child over the entire treatment period is $`r format(round(s2_new_in * q2_in,2), nsmall = 2)`.
+With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). The original study (@baird2016worms) identifies the unit cost to be \$`r unit_cost_so` per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$`r round(unit_cost_2017usdppp_so,2)`. Adding all indirect cost over an average `r round(years_of_treat_0_so,1)` years of treatment, the average cost of deworming each child over the entire treatment period is \$`r format(round(s2_new_in,2), nsmall = 2)`  and after accounting for a take up rate of is `r format(round(q2_in,2), nsmall = 2)`  results on an average cost of \$`r format(round(s2_new_in * q2_in,2), nsmall = 2)`.
 
 
 #### Indirect costs: additional years of education and its costs for government  
