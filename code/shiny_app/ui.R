@@ -110,10 +110,10 @@ shinyUI(
                       "This visualization is one of three key components of an",
                       tags$a(href = "http://www.bitss.org/opa/projects/deworming/", "Open Policy Analysis (OPA)"),
                       "on the costs and benefits of
-                       mass deworming interventions in various settings. This components are:",
+                       mass deworming interventions in various settings. These components are:",
                       tags$li(
                         tags$span(
-                          "This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Additional two other tabs allow reader to modify key assumptions and components and see how this output changes"
+                          "This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Two additional tabs allow the reader to modify key assumptions and components and see how this output changes"
                         )
                       ),
                       tags$li(
@@ -152,7 +152,7 @@ shinyUI(
                     br(),
                     h4(strong("Description of Results")),
                     p(
-                      "We simulate finding the lifetime income effects (net of interventions costs)
+                      "We simulate finding the lifetime income effects (net of intervention costs)
                       on treated children many times, then plot the values
                               to create this figure. The height of the curve represents
                               how often an outcome appeared, i.e. the highest point
@@ -293,7 +293,7 @@ shinyUI(
                                         selected = "A3. All income of A2. Main Policy Estimate"),
                             bsPopover(id="policy_est",
                                       title= "",
-                                      content="In addition to the main policy estimate you can select all the others approaches described in the documentation",
+                                      content="In addition to the main policy estimate you can select all the other approaches described in the documentation",
                                       placement="top"),
                             withMathJax(),
                             useShinyjs(),
@@ -703,7 +703,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param_coverage",
                                   title = "",
-                                  content = "Percent of treated primary schools students",
+                                  content = "Percent of treated primary school students",
                                   placement = "top"
                                 ),
                                 hidden(div(
@@ -805,7 +805,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param_teach_ben",
                                   title = "",
-                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
+                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH)",
                                   placement = "top"
                                 ),
                                 hidden(div(
@@ -829,7 +829,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_years_of_treat_0",
-                                  label = "Years of treatment in orginal study (\\(L_{0}\\))",
+                                  label = "Years of treatment in original study (\\(L_{0}\\))",
                                   min = 0,
                                   max = 6,
                                   step = 0.01,
