@@ -23,4 +23,4 @@ dw_dd,https://bitss-opa.github.io/opa-deworming/,Deworming dynamic document,"Rep
 bitss_opa,https://www.bitss.org/opa/,Information about OPA,"Repo, Dynamic doc","Read Me, Footnote",
 cega_home,https://cega.berkeley.edu,CEGA home page,App,Main Policy Estimates Tab,
 givewell_estimates,https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857,Original GiveWell estimates for deworming cost per child,Dynamic doc,References,
-binder_link,https://mybinder.org/v2/gh/BITSS-OPA/opa-deworming/master?urlpath=rstudio,Link to binder deployable,Repo,Read Me,
+binder,https://mybinder.org/v2/gh/BITSS-OPA/opa-deworming/master?urlpath=rstudio,Link to binder deployable,Repo,Read Me,
