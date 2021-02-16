@@ -562,12 +562,167 @@ shinyServer( function(input, output, session) {
            function(x) showElement(id = x) )
   })
 
-  hideElement(id = "policy_est")
+
   hideElement("show_eq")
   #observeEvent(input$run, {
   ################
   ###### Results/Viz
   ################
+  output$eqns <- renderUI({
+    #if (input$run == TRUE) {showElement("show_eq")}
+      if (input$policy_est == "A1. Tax revenue" ) {
+        withMathJax(
+          helpText('$$
+              \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}) -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2)
+                      \\right]
+                            }_{\\text{net labor market gains}} -
+                      \\underbrace{
+                      \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+
+                      }_{\\text{cost of deworming medication}}
+
+            \\tag{1}
+            \\end{equation}
+            $$ \n See', a("Approach 1", href='https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)', target = "_blank"), 'in the documentation component for more details'  )
+        )
+
+      } else if (input$policy_est ==  "A1. With externalities. Tax"){
+        withMathJax(
+          helpText('$$
+              \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}, \\lambda_{2}) -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2)
+                      \\right]
+                            }_{\\text{net labor market gains}} -
+                      \\underbrace{
+                      \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+
+                      }_{\\text{cost of deworming medication}}
+
+            \\tag{2}
+            \\end{equation}
+            $$ \n See' , a("Approach 1", href="05_final_opa.html#21_Approach_1:_Baird_et_al_(2016)", target = "_blank"),  'in the documentation component for more details'  )
+        )
+      } else if (input$policy_est == "A1. All income"){
+        withMathJax(
+          helpText('$$
+              \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}) -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2)
+                      \\right]
+                            }_{\\text{net labor market gains}} -
+                      \\underbrace{
+                      \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+
+                      }_{\\text{cost of deworming medication}}
+
+            \\tag{3}
+            \\end{equation}
+            $$ \n See' , a("Approach 1", href="https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)", target = "_blank"),  'in the documentation component for more details'
+          )
+        )
+      } else if (input$policy_est ==  "A1. With ext. All income"){
+        withMathJax(
+          helpText('$$
+              \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}, \\lambda_{2}) -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2)
+                      \\right]
+                            }_{\\text{net labor market gains}} -
+                      \\underbrace{
+                      \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+
+                      }_{\\text{cost of deworming medication}}
+
+            \\tag{4}
+            \\end{equation}
+            $$ \n See', a("Approach 1", href="https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)", target = "_blank"),  'in the documentation component for more details'  )
+        )
+      } else if (input$policy_est == "A2. Tax"){
+        withMathJax(helpText('$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+                 \\left[ \\tau \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2)
+                      \\right]
+                            }_{\\text{net labor market gains}} -
+                      \\underbrace{
+                      \\left[\\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+
+            \\tag{5}
+            \\end{equation}
+                                 $$ \n See' , a("Approach 2", href="https://bitss-opa.github.io/opa-deworming/#22_Approach_2:_Hamory_et_al_(2020)", target = "_blank"),  'in the documentation component for more details'))
+      } else if (input$policy_est == "A2. All income"){
+        withMathJax(helpText('$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+                 \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}) -
+                      K \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta \\overline{E}_t(S1,S2)
+                      \\right]
+                            }_{\\text{net labor market gains}} -
+                      \\underbrace{
+                      \\left[\\sum_{t=0}^{1.4} \\left( \\frac{1}{1 + r}\\right)^{t} \\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \\big]
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+
+            \\tag{6}
+            \\end{equation}
+                                 $$ \n See' , a("Approach 2", href="https://bitss-opa.github.io/opa-deworming/#22_Approach_2:_Hamory_et_al_(2020)", target = "_blank"),  ' in the documentation component for more details' ))
+      } else if (input$policy_est == "A3. All income of A1"){
+        withMathJax(helpText('$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1})
+                     \\right]
+                            }_{\\text{labor market gains}} -
+                      \\underbrace{
+                       \\left[\\sum_{t=0}^{t_{treat}} \\left( \\frac{1}{1 + r}\\right)^{t}  Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      \\right]
+                      }_{\\text{cost of deworming medication}}
+
+            \\tag{7}
+            \\end{equation}
+             $$ \n See' , a("Approach 3", href="https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners", target = "_blank"),  ' in the documentation component for more details'))
+      } else if (input$policy_est == "A3. All income of A1, with ext."){
+        withMathJax(helpText('$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\lambda_{1}, \\lambda_{2})
+                     \\right]
+                            }_{\\text{labor market gains}} -
+                      \\underbrace{
+                      Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      }_{\\text{cost of deworming medication}}
+
+            \\tag{8}
+            \\end{equation}
+            $$ \n See' , a("Approach 3", href="https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners", target = "_blank"),  ' in the documentation component for more details'))
+      } else if (input$policy_est == "A3. All income of A2. Main Policy Estimate"){
+        withMathJax(helpText(
+          '$$
+            \\begin{equation}
+              NPV =  \\underbrace{
+              \\left[ \\sum_{t=0}^{50} \\left( \\frac{1}{1 + r}\\right)^{t} \\Delta W_t(\\alpha^{pooled}, \\eta_{new}, L_{new})
+                     \\right]
+                            }_{\\text{Benefits (B)}} -
+                      \\underbrace{
+                       Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      }_{\\text{Costs (C)}}
+
+            \\tag{9}
+            \\end{equation}
+              $$ \n See' , a("Approach 3", href="https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners", target = "_blank"),  ' in the documentation component for more details'
+        ))
+      }
+    })
   #})
 
 
@@ -580,15 +735,17 @@ shinyServer( function(input, output, session) {
     total_time_sim <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale, TRUE)[[3]]
     plot1 <- plot1 + labs(y = NULL,
                           x = "Net Present Value (Benefits -  Costs)" ,
-                          title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-                          subtitle = "Distribution of the Net Present Value of Deworming Interventions")
+                          title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
+                          subtitle = paste0(policy_estimates_text[position], ". ",
+                                            "N = ", input$param_num_of_sim, " simulations. Takes ",
+                                            round(total_time_sim, 1)," ",attributes(total_time_sim)$units )  )
 
 
 
   }
   output$plot1 <- renderPlot({
     input$updateAll
-    
+
     isolate({print(plotInputAll())})
   }, height = 550
   )
@@ -596,41 +753,41 @@ shinyServer( function(input, output, session) {
   # Generate Plot with Key Assumptions
   plotInputKA <- function(){
     npv_all_sim <- reactive.data1()
-    output_plot <- generate_plot_f(npv_all_sim, "A3. All income of A1", input$rescale, TRUE)
+    output_plot <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimate", input$rescale, TRUE)
     plot1 <- output_plot[[1]]
 
     position <- output_plot[[2]]
 
     plot1 <- plot1 + labs(y = NULL,
                           x = "Net Present Value (Benefits -  Costs)" ,
-                          title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-                          subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+                          title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
+                          subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
     )
   }
 
-  
+
   output$plot1_ka <- renderPlot({
-    
+
     input$updateKA
     isolate(print(plotInputKA()))
 
   }, height = 550
   )
-  
+
 
 
   # Generate Main Policy Estimate Plot
   output$plot1_main <- renderPlot({
     npv_all_sim <- reactive.data1()
-    output_plot <- generate_plot_f(npv_all_sim, "A3. All income of A1", input$rescale)
+    output_plot <- generate_plot_f(npv_all_sim, "A3. All income of A2. Main Policy Estimate", input$rescale)
     plot1 <- output_plot[[1]]
 
     position <- output_plot[[2]]
 
     plot1 <- plot1 + labs(y = NULL,
            x = "Net Present Value (Benefits -  Costs)" ,
-           title = "Net Lifetime Income Effects of Deworming for Each Treated Children",
-           subtitle = "Distribution of the Net Present Value of Deworming Interventions"
+           title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
+           subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
            )
     print(plot1)
   }, height = 550

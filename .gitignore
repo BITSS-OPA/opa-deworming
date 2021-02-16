@@ -40,7 +40,7 @@ vignettes/*.pdf
 */.DS_Store
 **/.DS_Store
 *.DS_Store
-
+docs/DS_Store
 
 
 # All files in code folder except .R , .rmd , shiny app folder, style-related CSS and HTML files
