@@ -10,6 +10,11 @@ library(shinyBS)
 library(shinythemes)
 library(ggplot2)
 
+# get links
+setwd(getwd())
+links <- read.csv("links.csv")
+rownames(links) <- links$name
+
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 source("all_analysis.R")
@@ -93,7 +98,7 @@ shinyUI(
                         width = "20%",
                         height = "auto"
                       ),
-                      href = "https://bitss.org"
+                      href = links['bitss_home','url']
                     ),
                     tags$a(
                       img(
@@ -101,14 +106,14 @@ shinyUI(
                         width = "70%",
                         height = "auto"
                       ),
-                      href = "https://cega.berkeley.edu"
+                      href = links['cega_home','url']
                     )
                   )),
                   fluidRow(
                     style = "width: 100%; height: 100%; max-width: 400px;",
                     p(
                       "This visualization is one of three key components of an",
-                      tags$a(href = "http://www.bitss.org/opa/projects/deworming/", "Open Policy Analysis (OPA)"),
+                      tags$a(href = links['dw_info','url'], "Open Policy Analysis (OPA)"),
                       "on the costs and benefits of
                        mass deworming interventions in various settings. These components are:",
                       tags$li(
@@ -117,33 +122,33 @@ shinyUI(
                         )
                       ),
                       tags$li(
-                        tags$a(href = "https://bitss-opa.github.io/opa-deworming/", "A detailed report"),
+                        tags$a(href = links['dw_dd','url'], "A detailed report"),
                         "that describes how to obtain the policy estimate and describes each component of the analysis"
                       ),
                       tags$li(
-                        tags$a(href = "https://github.com/BITSS-OPA/opa-deworming", "A repository"),
+                        tags$a(href = links['dw_repo','url'], "A repository"),
                         "that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app)."
                       ),
                     ),
                     p(
                       "The app is the result of a collaboration between the",
                       tags$a(
-                        href = "https://www.bitss.org/",
+                        href = links['bitss_home','url'],
                         "Berkeley Initiative
                                      for Transparency in the Social Sciences"
                       ),
                       "and",
-                      tags$a(href = "https://www.evidenceaction.org/dewormtheworld/",
+                      tags$a(href = links['ev_action_dw','url'],
                              "Evidence Action.")
                      
                       
                     ),
                     p(
                       "See a full contributors list",
-                      tags$a(href = "https://github.com/BITSS-OPA/opa-deworming/blob/master/readme.md", "here."), 
+                      tags$a(href = links['readme','url'], "here."), 
                       br(),
                       "See more OPA projects done by BITSS",
-                      tags$a(href = "https://www.bitss.org/opa/projects/", "here.")
+                      tags$a(href =links['bitss_projects','url'], "here.")
                     )
                   ),
                   fluidRow(
@@ -300,91 +305,91 @@ shinyUI(
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. Tax revenue' ",
                               helpText(
-                               HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)'>Approach 1.1.</a> Welfare measured as additional tax revenue.<br>
+                               HTML(paste("<p><a href = '",links['approach1','url'],"'>Approach 1.1.</a> Welfare measured as additional tax revenue.<br>
                                  - Benefits: tax revenue over predicted effect on earnings.
                                    Data from 10 year follow-up. No externalities. <br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. With externalities. Tax' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)'>Approach 1.2.</a> Welfare measured as additional tax revenue. <br>
+                                HTML(paste("<p><a href = '",links['approach1','url'],"'>Approach 1.1.</a> Welfare measured as additional tax revenue.<br>
                                  - Benefits: tax revenue over predicted effect on earnings.
-                                   Data from 10 year follow-up. Including externalities. <br>
+                                   Data from 10 year follow-up. No externalities. <br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. All income' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)'>Approach 1.3.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach1','url'],"'>Approach 1.3.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10 year follow-up. No externalities. <br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. With ext. All income' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)'>Approach 1.4.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach1','url'],"'>Approach 1.4.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings. Including externalities.
                                    Data from 10 year follow-up. Including externalities. <br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A2. Tax' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#22_Approach_2:_Hamory_et_al_(2020)'>Approach 2.1.</a> Welfare measured as additional tax revenue.<br>
+                                HTML(paste("<p><a href = '",links['approach2','url'],"'>Approach 2.1.</a> Welfare measured as additional tax revenue.<br>
                                  - Benefits: tax revenue over predicted effect on earnings.
                                    Data from 10, 15 and 20 year follow-up. No externalities.<br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A2. All income' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#22_Approach_2:_Hamory_et_al_(2020)'>Approach 2.2.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach2','url'],"'>Approach 2.2.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10, 15 and 20 year follow-up. No externalities.<br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A1' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners'>Approach 3.1.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach3','url'],"'>Approach 3.1.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10 year follow-up. No externalities.
                                 Adjusted for prevalence and length of treatment. <br>
-                                 - Costs: current implementation costs in several settings.</p>")
+                                 - Costs: current implementation costs in several settings.</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A1, with ext.' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners'>Approach 3.2.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach3','url'],"'>Approach 3.2.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10 year follow-up. Including externalities.
                                 Adjusted for prevalence and length of treatment.<br>
-                                 - Costs: current implementation costs in several settings.</p>")
+                                 - Costs: current implementation costs in several settings.</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A2. Main Policy Estimate' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners'>Approach 3.3.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach3','url'],"'>Approach 3.3.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10, 15 and 20 year follow-up. No externalities.
                                 Adjusted for prevalence and length of treatment.<br>
-                                 - Costs: current implementation costs in several settings.</p>")
+                                 - Costs: current implementation costs in several settings.</p>"))
                               )
                             ),
                             # end policy estimate description ----
