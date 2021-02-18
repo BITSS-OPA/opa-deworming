@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>16 February, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>18 February, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -44,13 +44,6 @@ knit:
 
 
 
-
-
-```r
-# get links
-links <- read.csv("..\\links.csv")
-rownames(links) <- links$name
-```
 
 
 
@@ -281,7 +274,7 @@ Executive Summary
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. An OPA is a policy analysis that emphasizes high levels of transparency and reproducibility. It contains one [open output](https://bitss-opa.shinyapps.io/dw-app/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [one repository](https://github.com/BITSS-OPA/opa-deworming) that contains all the materials to reproduce the report and final output.
 
-This report describes three approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by [Evidence Action](https://www.evidenceaction.org/), a key technical assistance partner in this area that provides technical support to government-run deworming programs. This third approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates and length of treatment across settings. Though these are modeled estimates and should be interpreted with caution, this report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
+This report describes three approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by [Evidence Action](https://www.evidenceaction.org), a key technical assistance partner in this area that provides technical support to government-run deworming programs. This third approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates and length of treatment across settings. Though these are modeled estimates and should be interpreted with caution, this report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
 
 Our main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of the stream of benefits and costs from today's perspective) of 289.8 for a setting with average prevalence and average unit costs (among the countries for which Evidence Action has data). Readers interested in learning about the predicted value for a specific setting are encouraged to use the [interactive app](https://bitss-opa.shinyapps.io/dw-app/) components of this OPA.
 
@@ -319,7 +312,7 @@ The Cost Benefit Analysis (CBA) of deworming is computed using three different a
 
   1. Reproducing the original CBA produced by @baird2016worms, which estimates the net present value of a Kenya school-based deworming program after a 10 year follow-up of four different policy estimates.     
   2. Reproducing an updated version of such analysis on the same intervention but with additional follow-up data [@klps4].
-  3. Producing a new analysis that, building from the previous two approaches, focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was developed in consultation with a key stakeholder in this area, the non-governmental organization (NGO) [Evidence Action](https://www.evidenceaction.org/)[^1].
+  3. Producing a new analysis that, building from the previous two approaches, focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was developed in consultation with a key stakeholder in this area, the non-governmental organization (NGO) [Evidence Action](https://www.evidenceaction.org)[^1].
 
 
 
@@ -2582,7 +2575,7 @@ write.csv(ea3_pe, file = ea3_save_path)
 [^1]: EA's version of the analysis follows a similar structure to the cost effectiveness analysis performed by the charity evaluator GiveWell [@givewell].
 
 
-[^5]:`F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]` Original [here](https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857), editable version [here](https://docs.google.com/spreadsheets/d/1hmijmJBeCJAKI1dT8n5iOLAAxfzWrKYJM_KfouFYI2w/edit#gid=509033857)
+[^5]:`F1 = GiveWell's estimates of Deworm the World's cost per child dewormed per year [2018]` Original [here](https://docs.google.com/spreadsheets/d/1jzS693Y-ZAIloQejlzSc3e3t7iPHyor1qt7HBjSVXhQ/edit#gid=509033857), with option to make a copy
 `F2 = 2019 GiveWell Cost-effectiveness Analysis — Version 3`  
 `F3 = 2018 Worm Intensity Workbook — Version 1` Sheets are named the first time and numbered thereafter.
 

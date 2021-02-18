@@ -67,14 +67,15 @@ if (TRUE) {
   lapply(list.of.packages, library, character.only = TRUE)
 }
 
+setwd('../')
+print(getwd())
 
-
-```
-
-```{r}
 # get links
-links <- read.csv("..\\links.csv")
+links <- read.csv("links.csv")
 rownames(links) <- links$name
+
+setwd(here())
+
 ```
 
 ```{r, include = FALSE, purl=FALSE}
