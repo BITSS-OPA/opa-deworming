@@ -70,7 +70,7 @@ Major contributions to this project will be acknowledged below. This OPA employs
 
 
 
-*Note*: For multiperson tasks, credit is assing with E for equal credit, L and CL for leading and Co-leading, and S for surpporting.  
+*Note*: For multiperson tasks, credit is assing with E for equal credit, L and CL for leading and Co-leading, and S for supporting.  
 
  
 This list of contributors to this repository (also available at [this page](`r links['dw_contributions', 'url']`)) is ordered by each individual's number of commits, which may not perfectly reflect their intellectual contribution to this project:
