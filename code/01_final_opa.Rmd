@@ -67,21 +67,14 @@ if (TRUE) {
   lapply(list.of.packages, library, character.only = TRUE)
 }
 
-setwd('../')
-print(getwd())
+
+setwd(here())
 
 # get links
 links <- read.csv("links.csv")
 rownames(links) <- links$name
 
-setwd(here())
-
-```
-
-```{r, include = FALSE, purl=FALSE}
-
 knitr::opts_knit$set(root.dir = here())
-
 knitr::opts_chunk$set(echo = TRUE)
 
 
