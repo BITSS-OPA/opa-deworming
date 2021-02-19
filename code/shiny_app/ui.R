@@ -138,7 +138,7 @@ shinyUI(
                                      for Transparency in the Social Sciences"
                       ),
                       "and",
-                      tags$a(href = links['ev_action_dw','url'],
+                      tags$a(href = links['ev_action','url'],
                              "Evidence Action.")
                      
                       
