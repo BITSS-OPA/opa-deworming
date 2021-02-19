@@ -183,7 +183,7 @@ shinyUI(
                             style = "overflow-y: scroll; width: 100%; height: 100%; position:relative;",
                             numericInput(
                               "param_ka_costs2_ea",
-                              label = h4("Yearly unit costs in new country (in 2018 $US)"),
+                              label = h4("Yearly unit costs in new country (in 2018 USD)"),
                               value = round(costs2_ea_in, 2),
                               min = 0, step = 0.1
                             ),
@@ -226,7 +226,7 @@ shinyUI(
                                           <table style="width:100%">
                                             <tr>
                                               <th>Country</th>
-                                              <th>Unit Costs ($USD)</th>
+                                              <th>Unit Costs (USD)</th>
                                               <th>Prevalence (%) </th>
 <!--                                          <th>Length of Treatment</th> -->
                                             </tr>
@@ -940,14 +940,14 @@ shinyUI(
                                        br(),
                                        numericInput(
                                          "param_costs2_ea",
-                                         label = "Yearly unit costs in new country (in $US)",
+                                         label = "Yearly unit costs in new country (in USD)",
                                          value = round(costs2_ea_in, 2),
                                          min = 0
                                        ),
                                        bsPopover(
                                          id = "param_costs2_ea",
                                          title = "",
-                                         content = "Yearly unit costs in new country (in 2018 $US)",
+                                         content = "Yearly unit costs in new country (in 2018 USD)",
                                          placement = "top"
                                        ),
                                        hidden(div(
