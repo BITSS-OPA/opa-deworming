@@ -118,12 +118,12 @@ shinyUI(
                        mass deworming interventions in various settings. These components are:",
                       tags$li(
                         tags$span(
-                          "This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Two additional tabs allow the reader to modify key assumptions and components and see how this output changes"
+                          "This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Two additional tabs allow the reader to modify key assumptions and components and see how this output changes."
                         )
                       ),
                       tags$li(
                         tags$a(href = links['dw_dd','url'], "A detailed report"),
-                        "that describes how to obtain the policy estimate and describes each component of the analysis"
+                        "that describes how to obtain the policy estimate and describes each component of the analysis."
                       ),
                       tags$li(
                         tags$a(href = links['dw_repo','url'], "A repository"),
@@ -138,7 +138,7 @@ shinyUI(
                                      for Transparency in the Social Sciences"
                       ),
                       "and",
-                      tags$a(href = links['ev_action_dw','url'],
+                      tags$a(href = links['ev_action','url'],
                              "Evidence Action.")
                      
                       
@@ -183,7 +183,7 @@ shinyUI(
                             style = "overflow-y: scroll; width: 100%; height: 100%; position:relative;",
                             numericInput(
                               "param_ka_costs2_ea",
-                              label = h4("Yearly unit costs in new country (in 2018 $US)"),
+                              label = h4("Yearly unit costs in new country (in 2018 USD)"),
                               value = round(costs2_ea_in, 2),
                               min = 0, step = 0.1
                             ),
@@ -226,7 +226,7 @@ shinyUI(
                                           <table style="width:100%">
                                             <tr>
                                               <th>Country</th>
-                                              <th>Unit Costs ($USD)</th>
+                                              <th>Unit Costs (USD)</th>
                                               <th>Prevalence (%) </th>
 <!--                                          <th>Length of Treatment</th> -->
                                             </tr>
@@ -425,7 +425,7 @@ shinyUI(
                                 br(),
                                 numericInput(
                                   "param_lambda1_male",
-                                  label = ("\\( \\lambda_{1m} \\) "),
+                                  label = ("\\( \\lambda_{1m} \\)"),
                                   value = lambda1_so[1]
                                 ),
                                 bsPopover(
@@ -443,7 +443,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_lambda1_female",
-                                  label = ("\\( \\lambda_{1f} \\) = "),
+                                  label = ("\\( \\lambda_{1f} \\)"),
                                   value = lambda1_so[2]
                                 ),
                                 bsPopover(
@@ -461,7 +461,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_lambda1_new",
-                                  label = ("\\(\\alpha^{pooled} \\) = "),
+                                  label = ("\\(\\alpha^{pooled} \\)"),
                                   value = round(lambda1_new_so,2)
                                 ),
                                 bsPopover(
@@ -476,7 +476,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_lambda2",
-                                  label = "\\( \\lambda_{2} \\) = ",
+                                  label = "\\( \\lambda_{2} \\)",
                                   min = 0,
                                   max = 2 * lambda2_so,
                                   value = lambda2_so * 1
@@ -500,7 +500,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_prevl_0",
-                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
+                                  label = "Prevalence in original study (\\( \\eta \\))",
                                   min = 0,
                                   max = 1,
                                   value = prevalence_0_so
@@ -552,7 +552,7 @@ shinyUI(
                                                value = round(0.1 * wage_ww_so, 2))
                                 )),
                                 numericInput("param_profits_se",
-                                             label = "Profits se = ",
+                                             label = "Profits se",
                                              value = profits_se_so),
                                 bsPopover(id = "param_profits_se",
                                           title = "",
@@ -565,7 +565,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_hours_se_cond",
-                                  label = "Hours se (>10) = ",
+                                  label = "Hours se (>10)",
                                   min = hours_se_cond_so / 2,
                                   max = 2 * hours_se_cond_so,
                                   value = hours_se_cond_so
@@ -588,7 +588,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_hours_ag",
-                                  label = "\\(\\ H_{ag} \\) = ",
+                                  label = "\\(\\ H_{ag} \\)",
                                   min = hours_ag_so / 2,
                                   max = 2 * hours_ag_so,
                                   value = hours_ag_so
@@ -613,7 +613,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_hours_ww",
-                                  label = "\\(\\ H_{ww} \\) = ",
+                                  label = "\\(\\ H_{ww} \\)",
                                   min = hours_ww_so / 2,
                                   max = 2 * hours_ww_so,
                                   value = hours_ww_so
@@ -637,7 +637,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_hours_se",
-                                  label = "\\(\\ H_{se} \\) = ",
+                                  label = "\\(\\ H_{se} \\)",
                                   min = hours_se_so / 2,
                                   max = 2 * hours_se_so,
                                   value = hours_se_so
@@ -661,7 +661,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_coef_exp1",
-                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\)) = "),
+                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\))"),
                                   value = coef_exp_so[1]
                                 ),
                                 bsPopover(
@@ -680,7 +680,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_coef_exp2",
-                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
+                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\))"),
                                   value = coef_exp_so[2]
                                 ),
                                 bsPopover(
@@ -699,7 +699,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_coverage",
-                                  label = "Coverage (\\( R \\)) = ",
+                                  label = "Coverage (\\( R \\))",
                                   min = 0,
                                   max = 1,
                                   value = coverage_so,
@@ -724,7 +724,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_q_full",
-                                  label = "Take-up (\\( Q(S_{2}) \\)) = ",
+                                  label = "Take-up (\\( Q(S_{2}) \\))",
                                   min = 0,
                                   max = 1,
                                   value = q_full_so
@@ -748,7 +748,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_q_zero",
-                                  label = "Take-up with no subsidy (\\( Q(S_{1}) \\)) = ",
+                                  label = "Take-up with no subsidy (\\( Q(S_{1}) \\))",
                                   min = 0,
                                   max = 1,
                                   value = q_zero_so
@@ -761,7 +761,7 @@ shinyUI(
                                 ),
                                 sliderInput(
                                   "param_delta_ed_par",
-                                  label = "x * \\(\\Delta{E} \\) = ",
+                                  label = "x * \\(\\Delta{E} \\)",
                                   min = 0.0000001,
                                   max = 4,
                                   value = delta_ed_par_so
@@ -779,7 +779,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_delta_ed__ext_par",
-                                  label = "x * \\(\\Delta{E} \\) (ext)  = ",
+                                  label = "x * \\(\\Delta{E} \\) (ext)",
                                   min = 0.0000001,
                                   max = 4,
                                   value = delta_ed_ext_par_so
@@ -795,7 +795,7 @@ shinyUI(
                                     value = delta_ed_ext_par_so * 0.1
                                   )
                                 )),
-                                numericInput("param_teach_sal", label = "Teacher salary = ", value = teach_sal_so),
+                                numericInput("param_teach_sal", label = "Teacher salary", value = teach_sal_so),
                                 bsPopover(
                                   id = "param_teach_sal",
                                   title = "",
@@ -806,7 +806,7 @@ shinyUI(
                                   id = "SD33",
                                   numericInput("param_teach_sal_sd", label = "SD = ", value = 0.1 * teach_sal_so)
                                 )),
-                                numericInput("param_teach_ben", label = "Teacher benefits = ", value = teach_ben_so),
+                                numericInput("param_teach_ben", label = "Teacher benefits", value = teach_ben_so),
                                 bsPopover(
                                   id = "param_teach_ben",
                                   title = "",
@@ -817,7 +817,7 @@ shinyUI(
                                   id = "SD34",
                                   numericInput("param_teach_ben_sd", label = "SD = ", value = 0.1 * teach_ben_so)
                                 )),
-                                numericInput("param_n_students", label = "Students per teacher = ", value = n_students_so),
+                                numericInput("param_n_students", label = "Students per teacher", value = n_students_so),
                                 bsPopover(
                                   id = "param_n_students",
                                   title = "",
@@ -859,7 +859,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_unit_cost_local",
-                                  label = "Costs of T (local $) = ",
+                                  label = "Costs of T (local $)",
                                   value = round(unit_cost_local_so,2)),
                                 bsPopover(
                                   id = "param_unit_cost_local",
@@ -876,7 +876,7 @@ shinyUI(
                                   )
                                 )),
                                 numericInput("param_unit_cost_2017usdppp",
-                                             label = "Costs of T (USD) = ",
+                                             label = "Costs of T (USD)",
                                              value = round(unit_cost_2017usdppp_so, 2)),
                                 bsPopover(
                                   id = "param_unit_cost_2017usdppp",
@@ -912,7 +912,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_counts_par",
-                                  label = "Counts adjustment = ",
+                                  label = "Counts adjustment",
                                   min = counts_par_so / 2,
                                   max = 2 * counts_par_so,
                                   value = counts_par_so
@@ -940,14 +940,14 @@ shinyUI(
                                        br(),
                                        numericInput(
                                          "param_costs2_ea",
-                                         label = "Yearly unit costs in new country (in $US)",
+                                         label = "Yearly unit costs in new country (in USD)",
                                          value = round(costs2_ea_in, 2),
                                          min = 0
                                        ),
                                        bsPopover(
                                          id = "param_costs2_ea",
                                          title = "",
-                                         content = "Yearly unit costs in new country (in 2018 $US)",
+                                         content = "Yearly unit costs in new country (in 2018 USD)",
                                          placement = "top"
                                        ),
                                        hidden(div(
@@ -963,7 +963,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_ex_rate",
-                                         label = "Exchange rate (\\( ex \\)) = ",
+                                         label = "Exchange rate (\\( ex \\))",
                                          min = ex_rate_so / 2,
                                          max = 2 * ex_rate_so,
                                          value = ex_rate_so
@@ -987,7 +987,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_growth_rate",
-                                         label = "growth (\\( g \\)) = ",
+                                         label = "Growth (\\( g \\))",
                                          min = growth_rate_so / 2,
                                          max = 2 * growth_rate_so,
                                          value = growth_rate_so
@@ -1057,7 +1057,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_inflation16",
-                                         label = "Inflation (2016) (\\( \\pi \\) ) = ",
+                                         label = "Inflation (2016) (\\( \\pi \\))",
                                          min = 0.001,
                                          max = 0.2,
                                          value = inflation_so
@@ -1080,7 +1080,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_inflation19",
-                                         label = "Inflation (2019) (\\( \\pi \\) ) = ",
+                                         label = "Inflation (2019) (\\( \\pi \\))",
                                          min = 0.001,
                                          max = 0.2,
                                          value = inflation_new_so
@@ -1103,7 +1103,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_tax",
-                                         label = "Tax rate = ",
+                                         label = "Tax rate",
                                          min = tax_so / 2,
                                          max = 2 * tax_so,
                                          value = tax_so,
@@ -1139,7 +1139,7 @@ shinyUI(
                                 br(),
                                 sliderInput(
                                   "param_prevl_r",
-                                  label = "Prevalence in new region (\\( \\eta_{new} \\)) = ",
+                                  label = "Prevalence in new region (\\( \\eta_{new} \\))",
                                   min = 0 ,
                                   max = 1,
                                   value = round(prevalence_r_in, 2)
