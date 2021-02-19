@@ -47,8 +47,6 @@ knit:
 
 
 
-
-
 ```r
 ################
 #####  Notes:
@@ -117,13 +115,11 @@ chunk_sources <- function(){
     main_run_so <- TRUE
     periods_so <- 50               #Total number of periods to forecast wages
     costs_temp_so <- 1
-    main_pe_so <- previous_ea3_pe
+    main_pe_so <- round(read.csv(paste(getwd(),'/data','/ea3_pe', sep=''))[,2], digits=1)
 
     #############
     ##### Data  
     #############
-    # ATTENTION!
-    # costs2_ea_in
     ex_rate_so <- 74               #Exchange Rate - Central Bank of Kenya 74 , 85
     ex_rate_2018_so        <- 101.30  # Exchange rate (KES per international $)
                                     # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
