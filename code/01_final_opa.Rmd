@@ -1062,7 +1062,7 @@ Direct deworming costs ($DC$) are defined as the take-up under a mass deworming 
 
 ##### Complete subsidy to per capita costs of deworming
 
-With complete subsidy, the relevant costs represent the total direct costs of deworming in USD. The take-up with full subsidy ($Q_2$) comes from a previous study [@kremer2007illusion] and takes the value of `r q_full_so`.
+With complete subsidy, the relevant costs represent the total direct costs of deworming in USD. The take-up with full subsidy ($Q_2$) comes from @kremer2007illusion and takes the value of `r q_full_so`.
 
 <details><summary>Show all the details</summary>
 
@@ -1191,7 +1191,7 @@ pv_cost_yes_ext_in <- pv_costs_f(
 
 #### Assessing computational reproducibility of original results  
 
-Without externalities, the original analysis (@baird2016worms) obtains a present value of costs of `r df_research_so$param[5] + df_research_so$param[6]` (table `r df_research_so$tablenum[5]`, column `r df_research_so$table_col[5]`, and adding rows `r paste0(df_research_so$table_row[5], " and ", df_research_so$table_row[6])`). Including externalities, they obtain a present value of benefits of  `r df_research_so$param[5] + df_research_so$param[6] + df_research_so$param[7]` (table `r df_research_so$tablenum[5]`, column `r df_research_so$table_col[5]`, and adding rows `r paste0(df_research_so$table_row[5], " and ", df_research_so$table_row[6]," and ", df_research_so$table_row[7])`). Following the steps described in this section, this analysis obtains the same result (`r pv_cost_no_ext_in` and `r pv_cost_yes_ext_in` respectively without rounding).  
+Without externalities, the original analysis (@baird2016worms) obtains a present value of costs of `r df_research_so$param[5] + df_research_so$param[6]` (table `r df_research_so$tablenum[5]`, column `r df_research_so$table_col[5]`, and adding rows `r paste0(df_research_so$table_row[5], " and ", df_research_so$table_row[6])`). Including externalities, they obtain a present value of benefits of  `r df_research_so$param[5] + df_research_so$param[6] + df_research_so$param[7]` (table `r df_research_so$tablenum[5]`, column `r df_research_so$table_col[5]`, and adding rows `r paste0(df_research_so$table_row[5], " and ", df_research_so$table_row[6]," and ", df_research_so$table_row[7])`). Following the steps described in this section, this analysis obtains the same result (`r pv_cost_no_ext_in` and `r pv_cost_yes_ext_in`, respectively, without rounding).  
 
 ```{r, eval=FALSE,echo=FALSE, purl=FALSE}
 # Numbers are reproduced, the only difference is that  Baird et al, presents them in a different way.
@@ -1222,16 +1222,16 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 ## Approach 2: @klps4
 
-In this second approach, benefits follow the same principle as in approach 1 (increase in lifetime earnings), but it uses updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in this second approach, the costs also account for discounting of the several rounds of treatment required for effective deworming.  Additionally, the interest rate is updated to current values of return on (Kenyan) government bonds and inflation.
+@klps4 follow the same principle as in @baird2016worms (increase in lifetime earnings), however, using updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention.  Costs are fairly similar to approach 1, with the addition that in this second approach, the costs also account for the discounting of the several rounds of treatment required for effective deworming.  Additionally, the interest rate is updated to current values of return on Kenyan government bonds and inflation.
 
 
 ### Gains in earnings
 
-Gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after the intervention are used to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference from approach 1, which only measures gains in earnings at year 10 and extrapolates them into the future. To extrapolate earnings after the 20-year measurement, the authors assume that the welfare gains disappear 25 years after the intervention. Hence the treatment effect over an individual's working life is the sum of the treatment effects over their working lifetime[^8]. This approach also disregards externality effects and measures the estimated effects directly on earnings (as opposed to approach 1 that measures effects on earnings indirectly through hours worked). The estimated treatment effects that pools years 10, 15, and 20, is `r paste0("$", round(mean(lambda1_new_so),0) )` dollars per person per year.
+This analysis uses gains in earnings ($\Delta W_{t}$) from 10, 15, and 20 years after the intervention to measure the effect of multiple rounds of deworming on welfare over time. This is an important difference from approach 1, which only measures gains in earnings at year 10 and extrapolates them into the future. To extrapolate earnings after the 20-year measurement, the authors assume that the welfare gains disappear 25 years after the intervention. Hence the treatment effect over an individual's working life is the sum of the treatment effects over their working lifetime[^8]. This approach also disregards externality effects and measures the estimated effects directly on earnings (as opposed to approach 1 that measures effects on earnings indirectly through hours worked). The estimated treatment effects that pools years 10, 15, and 20, is `r paste0("$", round(mean(lambda1_new_so),0) )` dollars per person per year.
 
-Gains in yearly earnings represent the treatment effect on welfare ($\alpha^{pooled}$), which implicitly takes into consideration the life cycle profile of wages, economywide growth, etc. This estimation approach is an important strength, and it is preferred because it uses additional data and it requires fewer parametric assumptions than approach 2.1.
+Gains in yearly earnings represent the treatment effect on welfare ($\alpha^{pooled}$), which implicitly takes into consideration the lifecycle profile of wages, economywide growth, etc. This estimation approach is an important strength, and it is preferred because it uses additional data and it requires fewer parametric assumptions than approach 2.1.
 
-[^8]: In another specification the authors assume that effects persist through the rest of an individual's working life. Here the report selects the specification that is most highlighted in the paper (most conservative specification). The authors also analyse the welfare effects over consumption, but given that they do not aggregate both outcomes in the welfare effect the report only chooses one and focuses on earning for comparability with approach 1).
+[^8]: In another specification, the authors assume that effects persist through the rest of an individual's working life. Here the report selects the specification that is most highlighted in the paper (most conservative specification). The authors also analyse the welfare effects over consumption, but given that they do not aggregate both outcomes in the welfare effect the report only chooses one and focuses on earning for comparability with approach 1).
 
 
 <details><summary>Show all the details</summary>
@@ -1297,7 +1297,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 #### Direct costs: increase in deworming costs
 
-Similar to approach 1, the direct deworming costs under approach 2 are calculated by comparing the costs under a complete subsidy to the costs under the status quo of no subsidy. The two main differences with the previous cost estimates are 1) now the direct costs are summed and discounted over the treatment period, and 2) cost data has been updated after gathering more recent figures from Evidence Action.
+Similar to approach 1, the direct deworming costs under approach 2 are calculated by comparing the costs under a complete subsidy to the costs under the status quo of no subsidy. The two main differences with the previous cost estimates are that the direct costs are summed and discounted over the treatment period, and that the cost data has been updated after gathering more recent figures from Evidence Action.
 
 
 <details><summary>Show all the details</summary>
@@ -1371,7 +1371,7 @@ q2_in <- q_full_so
 </details>
 <br>
 
-With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). The original study (@baird2016worms) identifies the unit cost to be \$`r unit_cost_so` per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$`r round(unit_cost_2017usdppp_so,2)`. Adding all indirect cost over an average `r round(years_of_treat_0_so,1)` years of treatment, the average cost of deworming each child over the entire treatment period is \$`r format(round(s2_new_in,2), nsmall = 2)`,  and after accounting for a take-up rate of `r format(round(q2_in,2), nsmall = 2)`  results in an average cost of \$`r format(round(s2_new_in * q2_in,2), nsmall = 2)`.
+With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). The original study (@baird2016worms) identifies the unit cost to be \$`r unit_cost_so` per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$`r round(unit_cost_2017usdppp_so,2)`. Adding all indirect costs over an average `r round(years_of_treat_0_so,1)` years of treatment, the average cost of deworming each child over the entire treatment period is \$`r format(round(s2_new_in,2), nsmall = 2)`,  and after accounting for a take-up rate of `r format(round(q2_in,2), nsmall = 2)`  results in an average cost of \$`r format(round(s2_new_in * q2_in,2), nsmall = 2)`.
 
 
 #### Indirect costs: additional years of education and its costs for government  
@@ -1395,7 +1395,7 @@ K \sum_{t=0}^{`r dim(delta_ed_so)[1]-1`} \left( \frac{1}{1 + r}\right)^{t} \Delt
 Where:
 
 - $K$: cost per student to get education  
-- $\Delta \overline{E}_{t}(S1, S2)$: estimated increase in school attendance  
+- $\Delta \overline{E}_{t}(S1, S2)$: the estimated increase in school attendance  
 
 
 ```{r ed-costs-new, purl=FALSE, echo=FALSE}
@@ -1456,12 +1456,12 @@ irr_in <- (multiroot(function(x) get_irr(rate_var = x), .1, maxiter=10000000, po
 </details>
 <br>
 
-Over this nine year period, treated students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average. Then the report gets an average cost of additional schooling per child over the nine-year period, $`r format(round((cost_per_student_new_in*sum( (1/(1+interest_new_in))^(0:8) * delta_ed_in )),2), nsmall = 2)`.
+Over this nine-year period, treated students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average. Thus the average cost of additional schooling per child over the nine-year period is $`r format(round((cost_per_student_new_in*sum( (1/(1+interest_new_in))^(0:8) * delta_ed_in )),2), nsmall = 2)`.
 
 
 ### Assessing computational reproducibility of original results  
 
-The second approach does not report benefits and costs separately. With all these elements the main result from the original analysis that is comparable with the results discussed here is a NPV of `r df_research_so$param[9]` (table `r df_research_so$tablenum[9]`, column `r df_research_so$table_col[9]`, and row `r df_research_so$table_row[9]`) This result corresponds to a social internal rate of return of `r paste0(df_research_so$param[8], "%")` located as an inline result in the paper - also in `r df_research_so$figure_num[8]` - and in the appendix at table `r df_research_so$tablenum[8]`, column `r df_research_so$table_col[8]`, and row `r df_research_so$table_row[8]`). Following the steps described in this section, this analysis obtains the same result (`r a2_all_pe` and `r paste0(irr_in * 100, "%")` respectively without rounding).
+The second approach does not report benefits and costs separately. With all these elements the main result from the original analysis that is comparable with the results discussed here is the NPV of `r df_research_so$param[9]` (table `r df_research_so$tablenum[9]`, column `r df_research_so$table_col[9]`, and row `r df_research_so$table_row[9]`) This result corresponds to a social internal rate of return of `r paste0(df_research_so$param[8], "%")` (located as an inline result in the paper - also in `r df_research_so$figure_num[8]` - and in the appendix at table `r df_research_so$tablenum[8]`, column `r df_research_so$table_col[8]`, and row `r df_research_so$table_row[8]`). Following the steps described in this section, this analysis obtains the same result (`r a2_all_pe` and `r paste0(irr_in * 100, "%")`, respectively, without rounding).
 
 
 ```{r sum-tables20, purl=FALSE, echo=FALSE, eval=show_summary_tables}
