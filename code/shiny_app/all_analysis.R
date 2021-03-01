@@ -16,7 +16,7 @@ chunk_sources <- function(){
     #############
     ##### Setup
     #############  
-    nsims_so <- 1e4
+    nsims_so <- 1e3
     rescale_so <- FALSE
     policy_estimate_so <- "a3_inc_a2_all_sim"
     run_sim_so <- FALSE
