@@ -63,7 +63,7 @@ spelling and grammar.
 -->
 
 | Name                         | Conceptualization | Writing <br> (Original Draft) | Writing <br> (Reviewing and Editing) | Visualization | Funding <br> Acquisition | Project <br> Administration | Supervision | Communications |
-| ---------------------------- | ----------------- | ----------------------------- | ------------------------------------ | ------------- | ------------------------ | --------------------------- | ----------- | -------------- |
+|------------------------------|-------------------|-------------------------------|--------------------------------------|---------------|--------------------------|-----------------------------|-------------|----------------|
 | Sophia Bai                   | –                 | –                             | S                                    | S             | –                        | –                           | –           | –              |
 | Aleksandar Bogdanoski        | –                 | S                             | L                                    | –             | S                        | CL                          | –           | S              |
 | Carson Christiano            | –                 | –                             | –                                    | –             | CL                       | S                           | –           | S              |

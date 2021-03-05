@@ -10,6 +10,11 @@ library(shinyBS)
 library(shinythemes)
 library(ggplot2)
 
+# get links
+setwd(getwd())
+links <- read.csv("links.csv")
+rownames(links) <- links$name
+
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
 source("all_analysis.R")
@@ -93,7 +98,7 @@ shinyUI(
                         width = "20%",
                         height = "auto"
                       ),
-                      href = "https://bitss.org"
+                      href = links['bitss_home','url']
                     ),
                     tags$a(
                       img(
@@ -101,49 +106,49 @@ shinyUI(
                         width = "70%",
                         height = "auto"
                       ),
-                      href = "https://cega.berkeley.edu"
+                      href = links['cega_home','url']
                     )
                   )),
                   fluidRow(
                     style = "width: 100%; height: 100%; max-width: 400px;",
                     p(
                       "This visualization is one of three key components of an",
-                      tags$a(href = "http://www.bitss.org/opa/projects/deworming/", "Open Policy Analysis (OPA)"),
+                      tags$a(href = links['dw_info','url'], "Open Policy Analysis (OPA)"),
                       "on the costs and benefits of
-                       mass deworming interventions in various settings. This components are:",
+                       mass deworming interventions in various settings. These components are:",
                       tags$li(
                         tags$span(
-                          "This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Additional two other tabs allow reader to modify key assumptions and components and see how this output changes"
+                          "This app, which presents a single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. Two additional tabs allow the reader to modify key assumptions and components and see how this output changes."
                         )
                       ),
                       tags$li(
-                        tags$a(href = "https://bitss-opa.github.io/opa-deworming/", "A detailed report"),
-                        "that describes how to obtain the policy estimate and describes each component of the analysis"
+                        tags$a(href = links['dw_dd','url'], "A detailed report"),
+                        "that describes how to obtain the policy estimate and describes each component of the analysis."
                       ),
                       tags$li(
-                        tags$a(href = "https://github.com/BITSS-OPA/opa-deworming", "A repository"),
+                        tags$a(href = links['dw_repo','url'], "A repository"),
                         "that contains all the materials needed to reproduce the analysis with minimal effort (report and interactive app)."
                       ),
                     ),
                     p(
                       "The app is the result of a collaboration between the",
                       tags$a(
-                        href = "https://www.bitss.org/",
+                        href = links['bitss_home','url'],
                         "Berkeley Initiative
                                      for Transparency in the Social Sciences"
                       ),
                       "and",
-                      tags$a(href = "https://www.evidenceaction.org/dewormtheworld/",
+                      tags$a(href = links['ev_action','url'],
                              "Evidence Action.")
                      
                       
                     ),
                     p(
                       "See a full contributors list",
-                      tags$a(href = "https://github.com/BITSS-OPA/opa-deworming/blob/master/readme.md", "here."), 
+                      tags$a(href = links['readme','url'], "here."), 
                       br(),
                       "See more OPA projects done by BITSS",
-                      tags$a(href = "https://www.bitss.org/opa/projects/", "here.")
+                      tags$a(href =links['bitss_projects','url'], "here.")
                     )
                   ),
                   fluidRow(
@@ -152,7 +157,7 @@ shinyUI(
                     br(),
                     h4(strong("Description of Results")),
                     p(
-                      "We simulate finding the lifetime income effects (net of interventions costs)
+                      "We simulate finding the lifetime income effects (net of intervention costs)
                       on treated children many times, then plot the values
                               to create this figure. The height of the curve represents
                               how often an outcome appeared, i.e. the highest point
@@ -178,7 +183,7 @@ shinyUI(
                             style = "overflow-y: scroll; width: 100%; height: 100%; position:relative;",
                             numericInput(
                               "param_ka_costs2_ea",
-                              label = h4("Yearly unit costs in new country (in 2018 $US)"),
+                              label = h4("Yearly unit costs in new country (in 2018 USD)"),
                               value = round(costs2_ea_in, 2),
                               min = 0, step = 0.1
                             ),
@@ -221,7 +226,7 @@ shinyUI(
                                           <table style="width:100%">
                                             <tr>
                                               <th>Country</th>
-                                              <th>Unit Costs ($USD)</th>
+                                              <th>Unit Costs (USD)</th>
                                               <th>Prevalence (%) </th>
 <!--                                          <th>Length of Treatment</th> -->
                                             </tr>
@@ -293,98 +298,98 @@ shinyUI(
                                         selected = "A3. All income of A2. Main Policy Estimate"),
                             bsPopover(id="policy_est",
                                       title= "",
-                                      content="In addition to the main policy estimate you can select all the others approaches described in the documentation",
+                                      content="In addition to the main policy estimate you can select all the other approaches described in the documentation",
                                       placement="top"),
                             withMathJax(),
                             useShinyjs(),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. Tax revenue' ",
                               helpText(
-                               HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)'>Approach 1.1.</a> Welfare measured as additional tax revenue.<br>
+                               HTML(paste("<p><a href = '",links['approach1','url'],"'>Approach 1.1.</a> Welfare measured as additional tax revenue.<br>
                                  - Benefits: tax revenue over predicted effect on earnings.
                                    Data from 10 year follow-up. No externalities. <br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. With externalities. Tax' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)'>Approach 1.2.</a> Welfare measured as additional tax revenue. <br>
+                                HTML(paste("<p><a href = '",links['approach1','url'],"'>Approach 1.1.</a> Welfare measured as additional tax revenue.<br>
                                  - Benefits: tax revenue over predicted effect on earnings.
-                                   Data from 10 year follow-up. Including externalities. <br>
+                                   Data from 10 year follow-up. No externalities. <br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. All income' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)'>Approach 1.3.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach1','url'],"'>Approach 1.3.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10 year follow-up. No externalities. <br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A1. With ext. All income' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016)'>Approach 1.4.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach1','url'],"'>Approach 1.4.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings. Including externalities.
                                    Data from 10 year follow-up. Including externalities. <br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A2. Tax' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#22_Approach_2:_Hamory_et_al_(2020)'>Approach 2.1.</a> Welfare measured as additional tax revenue.<br>
+                                HTML(paste("<p><a href = '",links['approach2','url'],"'>Approach 2.1.</a> Welfare measured as additional tax revenue.<br>
                                  - Benefits: tax revenue over predicted effect on earnings.
                                    Data from 10, 15 and 20 year follow-up. No externalities.<br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A2. All income' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#22_Approach_2:_Hamory_et_al_(2020)'>Approach 2.2.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach2','url'],"'>Approach 2.2.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10, 15 and 20 year follow-up. No externalities.<br>
                                  - Costs: costs of treatment in Kenya in 1998 plus additional
-                                   costs due to more schooling</p>")
+                                   costs due to more schooling</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A1' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners'>Approach 3.1.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach3','url'],"'>Approach 3.1.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10 year follow-up. No externalities.
                                 Adjusted for prevalence and length of treatment. <br>
-                                 - Costs: current implementation costs in several settings.</p>")
+                                 - Costs: current implementation costs in several settings.</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A1, with ext.' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners'>Approach 3.2.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach3','url'],"'>Approach 3.2.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10 year follow-up. Including externalities.
                                 Adjusted for prevalence and length of treatment.<br>
-                                 - Costs: current implementation costs in several settings.</p>")
+                                 - Costs: current implementation costs in several settings.</p>"))
                               )
                             ),
                             conditionalPanel(
                               condition = "input.policy_est == 'A3. All income of A2. Main Policy Estimate' ",
                               helpText(
-                                HTML("<p><a href = 'https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners'>Approach 3.3.</a> Welfare measured as additional earnings.<br>
+                                HTML(paste("<p><a href = '",links['approach3','url'],"'>Approach 3.3.</a> Welfare measured as additional earnings.<br>
                                  - Benefits: predicted additional earnings.
                                    Data from 10, 15 and 20 year follow-up. No externalities.
                                 Adjusted for prevalence and length of treatment.<br>
-                                 - Costs: current implementation costs in several settings.</p>")
+                                 - Costs: current implementation costs in several settings.</p>"))
                               )
                             ),
                             # end policy estimate description ----
@@ -420,7 +425,7 @@ shinyUI(
                                 br(),
                                 numericInput(
                                   "param_lambda1_male",
-                                  label = ("\\( \\lambda_{1m} \\) "),
+                                  label = ("\\( \\lambda_{1m} \\)"),
                                   value = lambda1_so[1]
                                 ),
                                 bsPopover(
@@ -438,7 +443,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_lambda1_female",
-                                  label = ("\\( \\lambda_{1f} \\) = "),
+                                  label = ("\\( \\lambda_{1f} \\)"),
                                   value = lambda1_so[2]
                                 ),
                                 bsPopover(
@@ -456,7 +461,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_lambda1_new",
-                                  label = ("\\(\\alpha^{pooled} \\) = "),
+                                  label = ("\\(\\alpha^{pooled} \\)"),
                                   value = round(lambda1_new_so,2)
                                 ),
                                 bsPopover(
@@ -471,7 +476,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_lambda2",
-                                  label = "\\( \\lambda_{2} \\) = ",
+                                  label = "\\( \\lambda_{2} \\)",
                                   min = 0,
                                   max = 2 * lambda2_so,
                                   value = lambda2_so * 1
@@ -495,7 +500,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_prevl_0",
-                                  label = "Prevalence in original study (\\( \\eta \\)) = ",
+                                  label = "Prevalence in original study (\\( \\eta \\))",
                                   min = 0,
                                   max = 1,
                                   value = prevalence_0_so
@@ -547,7 +552,7 @@ shinyUI(
                                                value = round(0.1 * wage_ww_so, 2))
                                 )),
                                 numericInput("param_profits_se",
-                                             label = "Profits se = ",
+                                             label = "Profits se",
                                              value = profits_se_so),
                                 bsPopover(id = "param_profits_se",
                                           title = "",
@@ -560,7 +565,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_hours_se_cond",
-                                  label = "Hours se (>10) = ",
+                                  label = "Hours se (>10)",
                                   min = hours_se_cond_so / 2,
                                   max = 2 * hours_se_cond_so,
                                   value = hours_se_cond_so
@@ -583,7 +588,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_hours_ag",
-                                  label = "\\(\\ H_{ag} \\) = ",
+                                  label = "\\(\\ H_{ag} \\)",
                                   min = hours_ag_so / 2,
                                   max = 2 * hours_ag_so,
                                   value = hours_ag_so
@@ -608,7 +613,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_hours_ww",
-                                  label = "\\(\\ H_{ww} \\) = ",
+                                  label = "\\(\\ H_{ww} \\)",
                                   min = hours_ww_so / 2,
                                   max = 2 * hours_ww_so,
                                   value = hours_ww_so
@@ -632,7 +637,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_hours_se",
-                                  label = "\\(\\ H_{se} \\) = ",
+                                  label = "\\(\\ H_{se} \\)",
                                   min = hours_se_so / 2,
                                   max = 2 * hours_se_so,
                                   value = hours_se_so
@@ -656,7 +661,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_coef_exp1",
-                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\)) = "),
+                                  label = ("Coefficients of \\(X_{p} \\) (\\( \\beta_{1} \\))"),
                                   value = coef_exp_so[1]
                                 ),
                                 bsPopover(
@@ -675,7 +680,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_coef_exp2",
-                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\)) = "),
+                                  label = ("Coefficients of \\(X^{2}p \\) (\\( \\beta_{2} \\))"),
                                   value = coef_exp_so[2]
                                 ),
                                 bsPopover(
@@ -694,7 +699,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_coverage",
-                                  label = "Coverage (\\( R \\)) = ",
+                                  label = "Coverage (\\( R \\))",
                                   min = 0,
                                   max = 1,
                                   value = coverage_so,
@@ -703,7 +708,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param_coverage",
                                   title = "",
-                                  content = "Percent of treated primary schools students",
+                                  content = "Percent of treated primary school students",
                                   placement = "top"
                                 ),
                                 hidden(div(
@@ -719,7 +724,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_q_full",
-                                  label = "Take-up (\\( Q(S_{2}) \\)) = ",
+                                  label = "Take-up (\\( Q(S_{2}) \\))",
                                   min = 0,
                                   max = 1,
                                   value = q_full_so
@@ -743,7 +748,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_q_zero",
-                                  label = "Take-up with no subsidy (\\( Q(S_{1}) \\)) = ",
+                                  label = "Take-up with no subsidy (\\( Q(S_{1}) \\))",
                                   min = 0,
                                   max = 1,
                                   value = q_zero_so
@@ -756,7 +761,7 @@ shinyUI(
                                 ),
                                 sliderInput(
                                   "param_delta_ed_par",
-                                  label = "x * \\(\\Delta{E} \\) = ",
+                                  label = "x * \\(\\Delta{E} \\)",
                                   min = 0.0000001,
                                   max = 4,
                                   value = delta_ed_par_so
@@ -774,7 +779,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_delta_ed__ext_par",
-                                  label = "x * \\(\\Delta{E} \\) (ext)  = ",
+                                  label = "x * \\(\\Delta{E} \\) (ext)",
                                   min = 0.0000001,
                                   max = 4,
                                   value = delta_ed_ext_par_so
@@ -790,7 +795,7 @@ shinyUI(
                                     value = delta_ed_ext_par_so * 0.1
                                   )
                                 )),
-                                numericInput("param_teach_sal", label = "Teacher salary = ", value = teach_sal_so),
+                                numericInput("param_teach_sal", label = "Teacher salary", value = teach_sal_so),
                                 bsPopover(
                                   id = "param_teach_sal",
                                   title = "",
@@ -801,18 +806,18 @@ shinyUI(
                                   id = "SD33",
                                   numericInput("param_teach_sal_sd", label = "SD = ", value = 0.1 * teach_sal_so)
                                 )),
-                                numericInput("param_teach_ben", label = "Teacher benefits = ", value = teach_ben_so),
+                                numericInput("param_teach_ben", label = "Teacher benefits", value = teach_ben_so),
                                 bsPopover(
                                   id = "param_teach_ben",
                                   title = "",
-                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH",
+                                  content = "Average annual benefits for Kenyan secondary school teacher (in KSH)",
                                   placement = "top"
                                 ),
                                 hidden(div(
                                   id = "SD34",
                                   numericInput("param_teach_ben_sd", label = "SD = ", value = 0.1 * teach_ben_so)
                                 )),
-                                numericInput("param_n_students", label = "Students per teacher = ", value = n_students_so),
+                                numericInput("param_n_students", label = "Students per teacher", value = n_students_so),
                                 bsPopover(
                                   id = "param_n_students",
                                   title = "",
@@ -829,7 +834,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_years_of_treat_0",
-                                  label = "Years of treatment in orginal study (\\(L_{0}\\))",
+                                  label = "Years of treatment in original study (\\(L_{0}\\))",
                                   min = 0,
                                   max = 6,
                                   step = 0.01,
@@ -854,7 +859,7 @@ shinyUI(
                                 )),
                                 numericInput(
                                   "param_unit_cost_local",
-                                  label = "Costs of T (local $) = ",
+                                  label = "Costs of T (local $)",
                                   value = round(unit_cost_local_so,2)),
                                 bsPopover(
                                   id = "param_unit_cost_local",
@@ -871,7 +876,7 @@ shinyUI(
                                   )
                                 )),
                                 numericInput("param_unit_cost_2017usdppp",
-                                             label = "Costs of T (USD) = ",
+                                             label = "Costs of T (USD)",
                                              value = round(unit_cost_2017usdppp_so, 2)),
                                 bsPopover(
                                   id = "param_unit_cost_2017usdppp",
@@ -907,7 +912,7 @@ shinyUI(
                                 )),
                                 sliderInput(
                                   "param_counts_par",
-                                  label = "Counts adjustment = ",
+                                  label = "Counts adjustment",
                                   min = counts_par_so / 2,
                                   max = 2 * counts_par_so,
                                   value = counts_par_so
@@ -935,14 +940,14 @@ shinyUI(
                                        br(),
                                        numericInput(
                                          "param_costs2_ea",
-                                         label = "Yearly unit costs in new country (in $US)",
+                                         label = "Yearly unit costs in new country (in USD)",
                                          value = round(costs2_ea_in, 2),
                                          min = 0
                                        ),
                                        bsPopover(
                                          id = "param_costs2_ea",
                                          title = "",
-                                         content = "Yearly unit costs in new country (in 2018 $US)",
+                                         content = "Yearly unit costs in new country (in 2018 USD)",
                                          placement = "top"
                                        ),
                                        hidden(div(
@@ -958,7 +963,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_ex_rate",
-                                         label = "Exchange rate (\\( ex \\)) = ",
+                                         label = "Exchange rate (\\( ex \\))",
                                          min = ex_rate_so / 2,
                                          max = 2 * ex_rate_so,
                                          value = ex_rate_so
@@ -982,7 +987,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_growth_rate",
-                                         label = "growth (\\( g \\)) = ",
+                                         label = "Growth (\\( g \\))",
                                          min = growth_rate_so / 2,
                                          max = 2 * growth_rate_so,
                                          value = growth_rate_so
@@ -1052,7 +1057,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_inflation16",
-                                         label = "Inflation (2016) (\\( \\pi \\) ) = ",
+                                         label = "Inflation (2016) (\\( \\pi \\))",
                                          min = 0.001,
                                          max = 0.2,
                                          value = inflation_so
@@ -1075,7 +1080,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_inflation19",
-                                         label = "Inflation (2019) (\\( \\pi \\) ) = ",
+                                         label = "Inflation (2019) (\\( \\pi \\))",
                                          min = 0.001,
                                          max = 0.2,
                                          value = inflation_new_so
@@ -1098,7 +1103,7 @@ shinyUI(
                                        )),
                                        sliderInput(
                                          "param_tax",
-                                         label = "Tax rate = ",
+                                         label = "Tax rate",
                                          min = tax_so / 2,
                                          max = 2 * tax_so,
                                          value = tax_so,
@@ -1134,7 +1139,7 @@ shinyUI(
                                 br(),
                                 sliderInput(
                                   "param_prevl_r",
-                                  label = "Prevalence in new region (\\( \\eta_{new} \\)) = ",
+                                  label = "Prevalence in new region (\\( \\eta_{new} \\))",
                                   min = 0 ,
                                   max = 1,
                                   value = round(prevalence_r_in, 2)

@@ -1,0 +1,23 @@
+name,url,description
+dw_info,http://www.bitss.org/opa/projects/deworming/,Deworming project info
+dw_repo,https://github.com/BITSS-OPA/opa-deworming,Deworming GitHub repo.
+ev_action,https://www.evidenceaction.org/dewormtheworld,Evidence Action deworming information.
+bitss_projects,https://www.bitss.org/opa/projects/,BITSS projects page
+approach1,https://bitss-opa.github.io/opa-deworming/#21_Approach_1:_Baird_et_al_(2016),Approach 1
+approach2,https://bitss-opa.github.io/opa-deworming/#22_Approach_2:_Hamory_et_al_(2020),Approach 2
+approaches,https://rpubs.com/fhoces/547979,Approaches.
+approach3,https://bitss-opa.github.io/opa-deworming/#23_Approach_3:_Combination_of_Previous_Approaches_and_Input_From_Key_Policy_Partners,Approach 3
+bitss_home,https://www.bitss.org/,BITSS home page.
+readme,https://github.com/BITSS-OPA/opa-deworming/blob/master/readme.md,Repo Readme
+dw_repo_bitss,https://github.org/bitss/opa-deworming,Deworming repo
+results,https://bitss-opa.github.io/opa-deworming/#policy-estimate,Skip to result section.
+cega_cti,https://cega.berkeley.edu/initiative/cost-transparency-initiative/,Cost tranparency intitiative
+shiny_app,https://bitss-opa.shinyapps.io/dw-app/,Deworming Shiny app
+shiny_code,https://github.com/BITSS-OPA/opa-deworming/tree/master/code/shiny_app,Code for deworming Shiny app
+dw_dd_code,https://github.com/BITSS-OPA/opa-deworming/tree/master/code/01_final_opa.Rmd,Code for deworming dynamic document
+opa_guidelines,https://www.bitss.org/opa/community-standards/,OPA guidelines
+contributor_taxonomy,https://casrai.org/credit/,Contributor roles taxonomy description
+dw_contributions,https://github.com/BITSS-OPA/opa-deworming/graphs/contributors,Deworming repo contributions
+dw_dd,https://bitss-opa.github.io/opa-deworming/,Deworming dynamic document
+bitss_opa,https://www.bitss.org/opa/,Information about OPA
+cega_home,https://cega.berkeley.edu,CEGA home page
