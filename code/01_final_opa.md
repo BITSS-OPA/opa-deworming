@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>19 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>20 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -2654,6 +2654,13 @@ write.csv(ea3_pe, file = './data/ea3_pe')
 <br>
 
 
+
+
+```
+## [1] "Output has changed at to_test  to  61.5674092451073"
+## [1] "Output has changed at to_test  to  576.718928864022"
+## [1] "Output has changed at to_test  to  317.238631941147"
+```
 
 ![](01_final_opa_files/figure-html/run-mc-1.png)<!-- -->
 

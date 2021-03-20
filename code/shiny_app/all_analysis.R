@@ -1,4 +1,4 @@
-## ----setup, include=FALSE, purl=TRUE----------------------------------------------------------------------------------------------------------
+## ----setup, include=FALSE, purl=TRUE-----------------------------------------------------------------------------------------------------------
 
 #With purl set to false, this chunk should be omitted from the all_analysis.R file -Keanu
 
@@ -64,7 +64,7 @@ knitr::opts_chunk$set(fig.width=12, fig.height=8)
 
 
 
-## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE----------------------------------------------------------------------
+## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE-----------------------------------------------------------------------
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
 chunk_sources <- function(){
@@ -229,7 +229,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-## ----final-pe, echo=print_code----------------------------------------------------------------------------------------------------------------
+## ----final-pe, echo=print_code-----------------------------------------------------------------------------------------------------------------
 # - inputs: total per capita benefits, total per capita costs
 # - outputs: Net Present Value (NPV)
 chunk_final_pe <- function(){
@@ -251,7 +251,7 @@ invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 
 
-## ----benefits, echo=print_code----------------------------------------------------------------------------------------------------------------
+## ----benefits, echo=print_code-----------------------------------------------------------------------------------------------------------------
 # - inputs: stream earnings, discounting rate, number of periods
 # - outputs: function that computes the present value of benefits
 chunk_benefits <- function(){
@@ -277,7 +277,7 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 
 
-## ----interest-rate, echo=print_code-----------------------------------------------------------------------------------------------------------
+## ----interest-rate, echo=print_code------------------------------------------------------------------------------------------------------------
 # - inputs: nominal interest rate, inflation rate
 # - outputs: real interest rate. exact and approximate formula
 chunk_interest <- function(){
@@ -315,7 +315,7 @@ interest_new_in <- as.numeric(
 
 
 
-## ----earnings1, echo=print_code---------------------------------------------------------------------------------------------------------------
+## ----earnings1, echo=print_code----------------------------------------------------------------------------------------------------------------
 # - inputs: earnings wihtout treatment (wage_in), direct treatment eff
 # (lambda1_so), indirect treatment eff (lambda2_so), saturation and coverage (coverage_so)
 # - outputs: earnings (no name specified)
@@ -341,7 +341,7 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 
 
-## ----wage_t, echo=print_code------------------------------------------------------------------------------------------------------------------
+## ----wage_t, echo=print_code-------------------------------------------------------------------------------------------------------------------
 #inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
@@ -412,7 +412,7 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 
 
 
-## ----lambdas, echo=print_code-----------------------------------------------------------------------------------------------------------------
+## ----lambdas, echo=print_code------------------------------------------------------------------------------------------------------------------
 # - inputs: direct (lambda1_so), and indirect (lambda2_so) treatment effects by gender
 # - outputs: simple average of direct and indirect treatment eff.
 chunk_lambdas<- function(){
@@ -438,7 +438,7 @@ lambda1_in <- lambda1_in_f()
 lambda2_in <- lambda2_in_f()
 
 
-## ----coverage-and-saturation, echo = print_code-----------------------------------------------------------------------------------------------
+## ----coverage-and-saturation, echo = print_code------------------------------------------------------------------------------------------------
 # - inputs: coverage (coverage_so), take-up with full subsidy (q_full_so), and
 # take-up with no subsidy (q_zero_so)
 # - outputs: saturation (saturation_in)
@@ -506,7 +506,7 @@ pv_benef_yes_ext_in <- pv_benef_f(
 
 
 
-## ----cost2, echo = print_code-----------------------------------------------------------------------------------------------------------------
+## ----cost2, echo = print_code------------------------------------------------------------------------------------------------------------------
 # - inputs: periods (periods_so), additional education (delta_ed_final_in),
 #  discount rate (interest) (varies by approach), cost per student
 #  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment
@@ -542,7 +542,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:  
 
 
-## ----unit_costs2, echo = print_code-----------------------------------------------------------------------------------------------------------
+## ----unit_costs2, echo = print_code------------------------------------------------------------------------------------------------------------
 # - inputs: unit costs in local currency (unit_cost_local_so), exchange rate
 #  (ex_rate_so), years of treatment (years_of_treat_0_so)
 # - outputs: unit costs of treatment (s2_f)
@@ -565,7 +565,7 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 s2_in <- s2_f()
 
 
-## ----ed-costs, echo = print_code--------------------------------------------------------------------------------------------------------------
+## ----ed-costs, echo = print_code---------------------------------------------------------------------------------------------------------------
 # - inputs: teacher salary (teach_sal_so) and benefits (teach_ben_so), number
 # of students (n_students_so), include externalities (include_ext_so), extra ed
 # without ext (delta_ed_so), and extra ed due to ext (delta_ed_ext_so)
@@ -641,7 +641,7 @@ pv_cost_yes_ext_in <- pv_costs_f(
 
 
 
-## ----delta-earnings, eval=TRUE, echo = print_code---------------------------------------------------------------------------------------------
+## ----delta-earnings, eval=TRUE, echo = print_code----------------------------------------------------------------------------------------------
 # - inputs: index for time (t_var), pooled treatment effect (lambda1_new_so[1])
 # - outputs: effect on lifetime earnings (earnings_app2_f)
 chunk_new_earnings <- function(){
@@ -666,7 +666,7 @@ earnings_no_ext_new_in <- earnings_app2_f(t_var = 0:50,
 
 
 
-## ----unit_costs2_new, echo = print_code-------------------------------------------------------------------------------------------------------
+## ----unit_costs2_new, echo = print_code--------------------------------------------------------------------------------------------------------
 # - inputs: unit costs (unit_cost_local_so), exchange rate (ex_rate_so),
 #  new interest rate (interest_new_in)
 # - outputs: total unit costs (s2_new_f)
@@ -708,7 +708,7 @@ q2_in <- q_full_so
 
 
 
-## ----lambdas_eff, echo = print_code-----------------------------------------------------------------------------------------------------------
+## ----lambdas_eff, echo = print_code------------------------------------------------------------------------------------------------------------
 # - inputs: previously estimated treatment effect (lambda1_in_f), prevalence
 # rates in the original setting (prevalence_0_so), prevalence in the new setting
 # (prevalence_r_so), countries included in the analysis (country_sel_so)
@@ -753,7 +753,7 @@ lambda1_r_in <- lambda_eff_f()$lambda1_eff_in
 prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 
 
-## ----lambdas_t, echo = print_code-------------------------------------------------------------------------------------------------------------
+## ----lambdas_t, echo = print_code--------------------------------------------------------------------------------------------------------------
 # - inputs: treatment effect (lambda1_in_f), length of treatment in original
 # study (years_of_treat_0_so), length of treatment in new setting (years_of_treat_t_so)
 # - outputs: per year treatment effect (lambda1_t1) and total treatment effect
@@ -858,7 +858,7 @@ app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
                                 periods_var = periods_so)
 
 
-## ----eq_3, echo=print_code, eval=TRUE---------------------------------------------------------------------------------------------------------
+## ----eq_3, echo=print_code, eval=TRUE----------------------------------------------------------------------------------------------------------
 # - inputs: cost data by payer type at the contry/province level by year (df_costs_so)
 #  crosswalk between country/state and region (df_costs_cw_so), treatment counts
 #  by country/province and year (df_counts_so); staff time adjusment factor
@@ -974,7 +974,7 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
 
 
 
-## ----mc-setup, eval=TRUE, echo = print_code---------------------------------------------------------------------------------------------------
+## ----mc-setup, eval=TRUE, echo = print_code----------------------------------------------------------------------------------------------------
 # This function takes as inputs means and standard deviations of source
 # parameters and simualte draws of each source. When the source is a scalar,
 # it generates a draw from a noromal dist (mean, sd). When it is a "small"
@@ -1370,7 +1370,7 @@ policy_estimates_text <- c(
   )
 
 
-## ----all-steps, echo=print_code---------------------------------------------------------------------------------------------------------------
+## ----all-steps, echo=print_code----------------------------------------------------------------------------------------------------------------
 # TODO: Wrap this code chunk in chunk_xxxfunction
 
 #chunk_runvalues <- function(){
@@ -1834,7 +1834,7 @@ invisible( list2env(one_run_f(),.GlobalEnv) )
 
 
 
-## ----generate-plot-function, purl = TRUE, echo = FALSE----------------------------------------------------------------------------------------
+## ----generate-plot-function, purl = TRUE, echo = FALSE-----------------------------------------------------------------------------------------
 # generate_plot_f: function to generate plots for both Dynamic Document and
 # shiny app. It takes in the simulated data, policy estimate text, and rescale
 # variable. These are intermediary variables to exclude the interactivity of

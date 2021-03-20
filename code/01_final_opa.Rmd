@@ -3129,8 +3129,8 @@ npv_all_sim <-   sim_data1_f(
             costs_par_var2          = costs_par_so     ,
             costs_par_sd_var2       = costs_par_sd_so,
 
-            new_costs_var2          = round(costs2_ea_in,2),       #costs2_ea_in, NO CHANGE
-            new_costs_sd_var2       = round(costs2_ea_in,2) * 0.1, #costs2_ea_in * 0.1,
+            new_costs_var2          = round(cost1_in,2),       #costs2_ea_in, NO CHANGE
+            new_costs_sd_var2       = round(cost1_in,2) * 0.1, #costs2_ea_in * 0.1,
             countries_var2          = list("india", "kenya", "nigeria", "vietnam")
             )
 

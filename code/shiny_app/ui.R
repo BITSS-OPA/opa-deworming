@@ -184,7 +184,7 @@ shinyUI(
                             numericInput(
                               "param_ka_costs2_ea",
                               label = h4("Yearly unit costs in new country (in 2018 USD)"),
-                              value = round(costs2_ea_in, 2),
+                              value = round(cost1_in, 2),
                               min = 0, step = 0.1
                             ),
                             numericInput(
@@ -941,7 +941,7 @@ shinyUI(
                                        numericInput(
                                          "param_costs2_ea",
                                          label = "Yearly unit costs in new country (in USD)",
-                                         value = round(costs2_ea_in, 2),
+                                         value = round(cost1_in, 2),
                                          min = 0
                                        ),
                                        bsPopover(
@@ -955,9 +955,9 @@ shinyUI(
                                          sliderInput(
                                            "param_costs2_ea_sd",
                                            label = "SD = ",
-                                           min = 0.000001 * costs2_ea_in,
-                                           max = 1 * costs2_ea_in,
-                                           value = 0.1 * costs2_ea_in,
+                                           min = 0.000001 * cost1_in,
+                                           max = 1 * cost1_in,
+                                           value = 0.1 * cost1_in,
                                            step = 0.001
                                          )
                                        )),
