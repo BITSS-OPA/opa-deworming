@@ -699,7 +699,8 @@ shinyServer( function(input, output, session) {
                      \\right]
                             }_{\\text{labor market gains}} -
                       \\underbrace{
-                      Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      \\left[\\sum_{t=0}^{t_{treat}} \\left( \\frac{1}{1 + r}\\right)^{t}  Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      \\right]
                       }_{\\text{cost of deworming medication}}
 
             \\tag{8}
@@ -714,7 +715,8 @@ shinyServer( function(input, output, session) {
                      \\right]
                             }_{\\text{Benefits (B)}} -
                       \\underbrace{
-                       Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                       \\left[\\sum_{t=0}^{t_{treat}} \\left( \\frac{1}{1 + r}\\right)^{t}  Q(S_{2})\\sum_{i \\in Countries } \\omega_{i} c_{i}(\\delta_{g})\\
+                      \\right]
                       }_{\\text{Costs (C)}}
 
             \\tag{9}
