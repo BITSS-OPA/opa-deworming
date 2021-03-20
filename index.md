@@ -2655,13 +2655,6 @@ write.csv(ea3_pe, file = './data/ea3_pe')
 
 
 
-
-```
-## [1] "Output has changed at to_test  to  61.5674092451073"
-## [1] "Output has changed at to_test  to  576.718928864022"
-## [1] "Output has changed at to_test  to  317.238631941147"
-```
-
 ![](../index_files/figure-html/run-mc-1.png)<!-- -->
 
 # References
