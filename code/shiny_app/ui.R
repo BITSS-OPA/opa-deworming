@@ -11,13 +11,13 @@ library(shinythemes)
 library(ggplot2)
 
 # get links
-setwd(getwd())
+setwd(here())
 links <- read.csv("links.csv")
 rownames(links) <- links$name
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
-source("all_analysis.R")
+source(here("code", "shiny_app", "all_analysis.R"))
 
 costs_temp_india   <-
   costs1_p2_f(
@@ -110,7 +110,7 @@ shinyUI(
                     )
                   )),
                   fluidRow(
-                    style = "width: 100%; height: 100%; max-width: 400px;",
+                    style = "width: 100%; height: 100%;",
                     p(
                       "This visualization is one of three key components of an",
                       tags$a(href = links['dw_info','url'], "Open Policy Analysis (OPA)"),
