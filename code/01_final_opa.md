@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>20 February, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>22 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -115,7 +115,7 @@ chunk_sources <- function(){
     main_run_so <- TRUE
     periods_so <- 50               #Total number of periods to forecast wages
     costs_temp_so <- 1
-    main_pe_so <- round(read.csv(paste(getwd(),'/data','/ea3_pe', sep=''))[,2], digits=1)
+    main_pe_so <- round(read.csv(here('data','ea3_pe'))[,2], digits=1)
 
     #############
     ##### Data  
@@ -260,7 +260,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="C:/Users/thepe/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -322,9 +322,6 @@ The starting point is a comparison of a stream of benefits and costs over the li
 
 [^12]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, the report restricts the presentation of results to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects.
 
-
-
-
 <details><summary>Show all the details</summary>
 
 \begin{equation}
@@ -363,7 +360,6 @@ invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
 
 </details>
-<br>
 
 The benefits are equal to the additional lifetime earnings that individuals are expected to generate due to the deworming treatment. These additional earnings are computed as a discounted sum over the recipient's working lifetime.  
 
@@ -1210,7 +1206,7 @@ Over this nine-year period, treated students attended school for an additional 0
 
 ### Assessing computational reproducibility of original results  
 
-The second approach does not report benefits and costs separately. With all these elements the main result from the original analysis that is comparable with the results discussed here is the NPV of 499.72 (table A12, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% (located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). Following the steps described in this section, this analysis obtains the same result (499.7204653 and 40.7492806546435% respectively without rounding).
+The second approach does not report benefits and costs separately. With all these elements the main result from the original analysis that is comparable with the results discussed here is the NPV of 499.72 (table A12, column 3, and row 6) This result corresponds to a social internal rate of return of 40.7% (located as an inline result in the paper - also in Figure 1 - and in the appendix at table A12, column 3, and row 9). Following the steps described in this section, this analysis obtains the same result (499.7204653 and 40.7492806546435%, respectively, without rounding).
 
 
 
@@ -2540,7 +2536,7 @@ unit_test_f(ea2_pe, 701.849761243559)
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
 
-ea3_save_path = paste(getwd(),'/data','/ea3_pe', sep='')
+ea3_save_path = here('data','ea3_pe')
 write.csv(ea3_pe, file = ea3_save_path)
 ```
 

@@ -176,7 +176,7 @@ chunk_sources <- function(){
     main_run_so <- TRUE
     periods_so <- 50               #Total number of periods to forecast wages
     costs_temp_so <- 1
-    main_pe_so <- round(read.csv(paste(getwd(),'/data','/ea3_pe', sep=''))[,2], digits=1)
+    main_pe_so <- round(read.csv(here('data','ea3_pe'))[,2], digits=1)
 
 
 
@@ -389,9 +389,6 @@ The starting point is a comparison of a stream of benefits and costs over the li
 
 [^12]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, the report restricts the presentation of results to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects.
 
-
-
-
 <details><summary>Show all the details</summary>
 
 \begin{equation}
@@ -429,7 +426,6 @@ invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
 
 </details>
-<br>
 
 The benefits are equal to the additional lifetime earnings that individuals are expected to generate due to the deworming treatment. These additional earnings are computed as a discounted sum over the recipient's working lifetime.  
 
@@ -475,8 +471,8 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
 ```
+
 </details>
-<br>
 
 At a high level, all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming interventions. This is likely an underestimate of the benefits as it does not quantify the non-pecuniary effects of improved health.  The costs include direct costs of implementing deworming programs and indirect costs, such as the additional costs to the education system resulting from increased school attendance.
 
@@ -542,7 +538,6 @@ interest_new_in <- as.numeric(
 ```
 
 </details>
-<br>
 
 The actual value varies across approaches depending on the time and country chosen. For example, Approach 1 uses the return from government bonds and the inflation rate in Kenya for 2016, while approaches 2 and 3 use the same country's value for 2019. This results in discount rates of `r paste(round(100 * interest_in,2), "%", sep="")` for approaches 1 and `r paste(round(100 * interest_new_in,2), "%", sep="")`  for approaches 2 and 3.
 
@@ -647,8 +642,6 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
 </details>
-<br>
-
 #### Earnings over time
 
 Wages in year $t$ correspond to the initial weekly wages ($w_0$) adjusted by an economy-wide increase in salaries and by an increase in salaries due to additional experience at the individual level. The economy-wide wage adjustment is assumed to be equal to the per capita GDP growth ($g$) applied to the total number of years of work ($Xp$). The lifecycle path for wages increases at decreasing rates (wages typically increase with more years of work, then decline later in worklife). It is assumed that individuals enter the labor force 10 years after the treatment period. Weekly wages are multiplied by 52 weeks to obtain the annual rate.
@@ -773,7 +766,6 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 ```
 
 </details>
-<br>
 
 #### Deworming effects: direct and externalities
 
@@ -824,7 +816,6 @@ lambda2_in <- lambda2_in_f()
 ```
 
 </details>
-<br>
 
 #### Coverage and saturation of the original study
 
@@ -922,7 +913,6 @@ pv_benef_yes_ext_in <- pv_benef_f(
 ```
 
 </details>
-<br>
 
 #### Assessing computational reproducibility of original results  
 
@@ -1054,7 +1044,6 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ```
 
 </details>
-<br>
 
 #### Direct costs: increase in deworming costs
 
@@ -1097,7 +1086,6 @@ s2_in <- s2_f()
 ```
 
 </details>
-<br>
 
 
 #### Indirect costs: additional years of education and its costs for government
@@ -1187,7 +1175,6 @@ pv_cost_yes_ext_in <- pv_costs_f(
 ```
 
 </details>
-<br>
 
 #### Assessing computational reproducibility of original results  
 
@@ -1273,7 +1260,6 @@ earnings_no_ext_new_in <- earnings_app2_f(t_var = 0:50,
 ```
 
 </details>
-<br>
 
 
 ```{r sum-tables17, purl=FALSE, echo=FALSE, eval=show_summary_tables}
@@ -1369,7 +1355,6 @@ q2_in <- q_full_so
 ```
 
 </details>
-<br>
 
 With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). The original study (@baird2016worms) identifies the unit cost to be \$`r unit_cost_so` per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$`r round(unit_cost_2017usdppp_so,2)`. Adding all indirect costs over an average `r round(years_of_treat_0_so,1)` years of treatment, the average cost of deworming each child over the entire treatment period is \$`r format(round(s2_new_in,2), nsmall = 2)`,  and after accounting for a take-up rate of `r format(round(q2_in,2), nsmall = 2)`  results in an average cost of \$`r format(round(s2_new_in * q2_in,2), nsmall = 2)`.
 
@@ -1454,7 +1439,6 @@ get_irr <- function(rate_var) {
 irr_in <- (multiroot(function(x) get_irr(rate_var = x), .1, maxiter=10000000, positive = T))$root
 ```
 </details>
-<br>
 
 Over this nine-year period, treated students attended school for an additional `r round(sum(delta_ed_so[,1]),2)` years on average. Thus the average cost of additional schooling per child over the nine-year period is $`r format(round((cost_per_student_new_in*sum( (1/(1+interest_new_in))^(0:8) * delta_ed_in )),2), nsmall = 2)`.
 
@@ -1573,7 +1557,6 @@ prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 ```
 
 </details>
-<br>
 
 Evidence Action provided prevalence survey data for the geographies where they are involved. In order to be most analogous with the baseline prevalence estimate used in the original study, the prevalence estimates used are 1) the earliest point estimates available from before, or close to the time of, Evidence Action's involvement in that geography, and 2) are representative of any STH infection.      
 
@@ -2852,7 +2835,7 @@ unit_test_f(ea2_pe, 701.849761243559)
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
 
-ea3_save_path = paste(getwd(),'/data','/ea3_pe', sep='')
+ea3_save_path = here('data','ea3_pe')
 write.csv(ea3_pe, file = ea3_save_path)
 ```
 
