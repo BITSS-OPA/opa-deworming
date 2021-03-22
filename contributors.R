@@ -6,6 +6,7 @@
 library(tidyverse)
 library(gh)
 library(glue)
+library(here)
 
 #JSON format info on contributors to deworming repo
 deworming_json <- gh::gh("/repos/:owner/:repo/contributors",
@@ -39,4 +40,5 @@ names_with_links <- deworming_contribs_all %>%
     desc = ifelse(is.na(name), link, glue::glue("{name} ({link})")) #if no name is provided, show link only
   )
 
-write_csv(names_with_links, "contributors.csv")
+
+write_csv(names_with_links, here("contributors.csv"))
