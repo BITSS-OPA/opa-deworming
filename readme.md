@@ -84,7 +84,7 @@ spelling and grammar.
 | Jiayu Shi                    | –                 | –                             | –                                    | S             | –                        | –                           | –           | –              |
 
 *Note*: For multiperson tasks, credit is assing with E for equal credit,
-L and CL for leading and Co-leading, and S for surpporting.
+L and CL for leading and Co-leading, and S for supporting.
 
 This list of contributors to this repository (also available at [this
 page](https://github.com/BITSS-OPA/opa-deworming/graphs/contributors))
