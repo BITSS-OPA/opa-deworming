@@ -97,7 +97,10 @@ Emma Ng ([@em-ng21](https://github.com/em-ng21)),
 [@keanulim123](https://github.com/keanulim123),
 [@Gracemorgan7](https://github.com/Gracemorgan7),
 [@charleslove3](https://github.com/charleslove3),
-[@ella-sjy](https://github.com/ella-sjy),
+[@ella-sjy](https://github.com/ella-sjy), Peter Zhang
+([@petezh](https://github.com/petezh)),
 [@scholesy](https://github.com/scholesy), Sophia Bai
 ([@sophiabai2022](https://github.com/sophiabai2022)),
-[@oriajia](https://github.com/oriajia)
+[@oriajia](https://github.com/oriajia),
+[@mtsandra](https://github.com/mtsandra),
+[@laurenpeterson1](https://github.com/laurenpeterson1)

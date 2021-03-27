@@ -102,7 +102,6 @@ knitr::opts_chunk$set(fig.width=12, fig.height=8)
 #options(knitr.duplicate.label = "allow") # workaround for purl error
 #knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")
 
-#1) Uncomment and run this line to knit this Rmd file into an index.html file for viewing in an internal or external browser
 #rmarkdown::render("code/01_final_opa.Rmd", encoding=encoding, output_file=file.path("..", 'index.html'))
 
 # Add something to save the final figure here.
@@ -326,9 +325,9 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 knitr::include_graphics(path = paste0(here(),"/code/images/main_pe.png"))
 ```
 
-::: {.divider}
+<div class = "divider"><span></span><span>
 Executive Summary
-:::
+</span><span></span></div>
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. OPA is an approach to policy analysis wherein data, code, materials, and clear accounts of methodological decisions are made freely available to facilitate collaboration, discussion, and reuse. This OPA contains an [interactive graph](`r links['shiny_app', 'url']`) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [a repository](`r links['dw_repo', 'url']`) that contains all the materials to reproduce the report and final output.
 
@@ -336,9 +335,9 @@ This report describes three approaches to compute the net present value of mass 
 
 The main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of a stream of benefits and costs from today's perspective) of USD \$`r main_pe_so` (in 2018 dollars) per children for a setting with average prevalence and average unit costs (among the countries for which Evidence Action has data). We encourage readers interested in learning about the predicted value for a specific setting to use the [interactive app](`r links['shiny_app', 'url']`).
 
-::: {.divider}
-<span> \* </span>
-:::
+<div class = "divider"><span></span><span>
+*
+</span><span></span></div>
 
 # Open Policy Analysis {.unnumbered}
 
