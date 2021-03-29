@@ -610,9 +610,7 @@ Show all the details
 \tag{`r equationIndex`}
 \end{equation}
 ```
-Where[^4]:
-
-[^4]: Last paragraph of page 9(1645) of @baird2016worms
+Where:
 
 -   $w_t$: the earnings in period $t$\
 -   $\lambda_{1}$: the direct effects of deworming on earnings\

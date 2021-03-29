@@ -447,7 +447,11 @@ shinyServer( function(input, output, session) {
       list_show <- list_master[ - which(list_master %in% list_hide)]
 
     } else if (input$policy_est == "A3. All income of A1") {
-      list_hide <- c("param_lambda2",
+      list_hide <- c("param_counts_par",
+                     "param_counts_par_sd",
+                     "param_costs_par",
+                     "param_costs_par_sd",
+                     "param_lambda2",
                      "param_lambda2_new",
                      "param_teach_sal",
                      "param_teach_sal_sd",
@@ -467,12 +471,14 @@ shinyServer( function(input, output, session) {
                      "param_gov_bonds19_sd",
                      "param_inflation19",
                      "param_inflation19_sd",
-                     "param_q_zero",
-                     "param_costs_par",
-                     "param_costs_par_sd")
+                     "param_q_zero")
       list_show <- list_master[ - which(list_master %in% list_hide)]
     } else if (input$policy_est == "A3. All income of A1, with ext.") {
-      list_hide <- c("param_teach_sal",
+      list_hide <- c("param_counts_par",
+                     "param_counts_par_sd",
+                     "param_costs_par",
+                     "param_costs_par_sd",
+                     "param_teach_sal",
                      "param_teach_sal_sd",
                      "param_teach_ben",
                      "param_teach_ben_sd",
@@ -491,8 +497,6 @@ shinyServer( function(input, output, session) {
                      "param_inflation19",
                      "param_inflation19_sd",
                      "param_q_zero",
-                     "param_costs_par",
-                     "param_costs_par_sd",
                      "param_unit_cost_local",
                      "param_unit_cost_local_sd")
       list_show <- list_master[ - which(list_master %in% list_hide)]

@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>20 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>22 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -407,8 +407,6 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 </details>
 
-<br>
-
 At a high level, all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming interventions. This is likely an underestimate of the benefits as it does not quantify the non-pecuniary effects of improved health. The costs include direct costs of implementing deworming programs and indirect costs, such as the additional costs to the education system resulting from increased school attendance.
 
 The main differences in benefits across the three approaches have to do with how to predict the earnings profiles over a lifetime, and how to account for differences in worm prevalence rates and the length of treatment across settings. Approaches 1 and 2 use different earning profiles; Approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections and length of treatment.
@@ -480,8 +478,6 @@ interest_new_in <- as.numeric(
 
 </details>
 
-<br>
-
 The actual value varies across approaches depending on the time and country chosen. For example, Approach 1 uses the return from government bonds and the inflation rate in Kenya for 2016, while approaches 2 and 3 use the same country's value for 2019. This results in discount rates of 9.85% for approaches 1 and 5% for approaches 2 and 3.
 
 
@@ -512,9 +508,7 @@ Show all the details
 \tag{3}
 \end{equation}
 ```
-Where[^4]:
-
-[^4]: Last paragraph of page 9(1645) of @baird2016worms
+Where:
 
 -   $w_t$: the earnings in period $t$\
 -   $\lambda_{1}$: the direct effects of deworming on earnings\
@@ -550,8 +544,6 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 ```
 
 </details>
-
-<br>
 
 #### Earnings over time
 
@@ -685,8 +677,6 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 
 </details>
 
-<br>
-
 #### Deworming effects: direct and externalities
 
 The estimated impact of deworming on hours worked comes from @baird2016worms and are estimated separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). These two parameters are combined with a simple mean in the analysis.
@@ -743,8 +733,6 @@ lambda2_in <- lambda2_in_f()
 ```
 
 </details>
-
-<br>
 
 #### Coverage and saturation of the original study
 
@@ -924,8 +912,6 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 </details>
 
-<br>
-
 #### Direct costs: increase in deworming costs
 
 Direct deworming costs ($DC$) are defined as the take-up under a mass deworming intervention ($Q_{2}$), times the per-capita costs of deworming under the intervention ($S_{2}$). These costs are compared to a status quo scenario where the government does not provide any additional resources for deworming. This analysis assumes that there is no subsidy for deworming under the status quo.
@@ -1072,8 +1058,6 @@ pv_cost_yes_ext_in <- pv_costs_f(
 ```
 
 </details>
-
-<br>
 
 #### Assessing computational reproducibility of original results
 
@@ -1229,8 +1213,6 @@ q2_in <- q_full_so
 
 </details>
 
-<br>
-
 With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). The original study (@baird2016worms) identifies the unit cost to be \$0.42 per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$0.83. Adding all indirect costs over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is \$1.92, and after accounting for a take-up rate of 0.75 results in an average cost of \$1.44.
 
 #### Indirect costs: additional years of education and its costs for government
@@ -1364,8 +1346,6 @@ prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 ```
 
 </details>
-
-<br>
 
 Evidence Action provided prevalence survey data for the geographies where they are involved. In order to be most analogous with the baseline prevalence estimate used in the original study, the prevalence estimates used are 1) the earliest point estimates available from before, or close to the time of, Evidence Action's involvement in that geography, and 2) are representative of any STH infection.
 
