@@ -69,10 +69,9 @@ if (TRUE) {
   lapply(list.of.packages, library, character.only = TRUE)
 }
 
-setwd(here())
 
 # get links
-links <- read.csv("links.csv")
+links <- read.csv(here("links.csv"))
 rownames(links) <- links$name
 
 knitr::opts_knit$set(root.dir = here())

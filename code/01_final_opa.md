@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>22 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>29 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -260,9 +260,9 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 <img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
-::: {.divider}
+<div class = "divider"><span></span><span>
 Executive Summary
-:::
+</span><span></span></div>
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. OPA is an approach to policy analysis wherein data, code, materials, and clear accounts of methodological decisions are made freely available to facilitate collaboration, discussion, and reuse. This OPA contains an [interactive graph](https://bitss-opa.shinyapps.io/dw-app/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [a repository](https://github.com/BITSS-OPA/opa-deworming) that contains all the materials to reproduce the report and final output.
 
@@ -270,9 +270,9 @@ This report describes three approaches to compute the net present value of mass 
 
 The main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of a stream of benefits and costs from today's perspective) of USD \$289.8 (in 2018 dollars) per children for a setting with average prevalence and average unit costs (among the countries for which Evidence Action has data). We encourage readers interested in learning about the predicted value for a specific setting to use the [interactive app](https://bitss-opa.shinyapps.io/dw-app/).
 
-::: {.divider}
-<span> \* </span>
-:::
+<div class = "divider"><span></span><span>
+*
+</span><span></span></div>
 
 # Open Policy Analysis {.unnumbered}
 
