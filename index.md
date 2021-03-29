@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>20 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>29 March, 2021 <img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -115,7 +115,7 @@ chunk_sources <- function(){
     main_run_so <- TRUE
     periods_so <- 50               #Total number of periods to forecast wages
     costs_temp_so <- 1
-    main_pe_so <- round(read.csv(paste(getwd(),'/data','/ea3_pe', sep=''))[,2], digits=1)
+    main_pe_so <- round(read.csv(here('data','ea3_pe'))[,2], digits=1)
 
     #############
     ##### Data  
@@ -258,11 +258,11 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="C:/Users/thepe/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
-::: {.divider}
+<div class = "divider"><span></span><span>
 Executive Summary
-:::
+</span><span></span></div>
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. OPA is an approach to policy analysis wherein data, code, materials, and clear accounts of methodological decisions are made freely available to facilitate collaboration, discussion, and reuse. This OPA contains an [interactive graph](https://bitss-opa.shinyapps.io/dw-app/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [a repository](https://github.com/BITSS-OPA/opa-deworming) that contains all the materials to reproduce the report and final output.
 
@@ -270,9 +270,9 @@ This report describes three approaches to compute the net present value of mass 
 
 The main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of a stream of benefits and costs from today's perspective) of USD \$289.8 (in 2018 dollars) per children for a setting with average prevalence and average unit costs (among the countries for which Evidence Action has data). We encourage readers interested in learning about the predicted value for a specific setting to use the [interactive app](https://bitss-opa.shinyapps.io/dw-app/).
 
-::: {.divider}
-<span> \* </span>
-:::
+<div class = "divider"><span></span><span>
+*
+</span><span></span></div>
 
 # Open Policy Analysis {.unnumbered}
 
@@ -316,13 +316,7 @@ The starting point is a comparison of a stream of benefits and costs over the li
 
 [^3]: Approaches 1 and 2 also present results in the format of internal rates of return (IRR). Following the principle of open output, the report restricts the presentation of results to just one format. NPV was chosen over IRR in consultation with Evidence Action to clearly communicate the scale of the welfare effects.
 
-<details>
-
-<summary>
-
-Show all the details
-
-</summary>
+<details><summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -360,17 +354,11 @@ invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 
 </details>
 
-<br>
-
 The benefits are equal to the additional lifetime earnings that individuals are expected to generate due to the deworming treatment. These additional earnings are computed as a discounted sum over the recipient's working lifetime.
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -415,8 +403,6 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 </details>
 
-<br>
-
 At a high level, all three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming interventions. This is likely an underestimate of the benefits as it does not quantify the non-pecuniary effects of improved health. The costs include direct costs of implementing deworming programs and indirect costs, such as the additional costs to the education system resulting from increased school attendance.
 
 The main differences in benefits across the three approaches have to do with how to predict the earnings profiles over a lifetime, and how to account for differences in worm prevalence rates and the length of treatment across settings. Approaches 1 and 2 use different earning profiles; Approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections and length of treatment.
@@ -429,11 +415,7 @@ All three approaches use the real interest rate ($r$) as the discounting rate, w
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -488,8 +470,6 @@ interest_new_in <- as.numeric(
 
 </details>
 
-<br>
-
 The actual value varies across approaches depending on the time and country chosen. For example, Approach 1 uses the return from government bonds and the inflation rate in Kenya for 2016, while approaches 2 and 3 use the same country's value for 2019. This results in discount rates of 9.85% for approaches 1 and 5% for approaches 2 and 3.
 
 
@@ -506,11 +486,7 @@ Gains in earnings ($\Delta W_{t}$) result from multiplying expected earnings in 
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -559,8 +535,6 @@ invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 
 </details>
 
-<br>
-
 #### Earnings over time
 
 Wages in year $t$ correspond to the initial weekly wages ($w_0$) adjusted by an economy-wide increase in salaries and by an increase in salaries due to additional experience at the individual level. The economy-wide wage adjustment is assumed to be equal to the per capita GDP growth ($g$) applied to the total number of years of work ($Xp$). The lifecycle path for wages increases at decreasing rates (wages typically increase with more years of work, then decline later in worklife). It is assumed that individuals enter the labor force 10 years after the treatment period. Weekly wages are multiplied by 52 weeks to obtain the annual rate.
@@ -573,11 +547,7 @@ The monthly self-employed profits and self-employed hours for the control group,
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 The wages/earnings are determined by:
 
@@ -693,8 +663,6 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 
 </details>
 
-<br>
-
 #### Deworming effects: direct and externalities
 
 The estimated impact of deworming on hours worked comes from @baird2016worms and are estimated separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). These two parameters are combined with a simple mean in the analysis.
@@ -703,11 +671,7 @@ The estimated externality effect ($\lambda_{2}$) reflects the additional hours w
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -752,8 +716,6 @@ lambda2_in <- lambda2_in_f()
 
 </details>
 
-<br>
-
 #### Coverage and saturation of the original study
 
 The coverage ($R$) is defined as the fraction, among all neighboring schools (within a 6 km radius) treated within the study. Since the treatment was applied to approximately two-thirds of the population, $R = 0.68$[^5].
@@ -766,11 +728,7 @@ For this setting, @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) 
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -856,7 +814,7 @@ pv_benef_yes_ext_in <- pv_benef_f(
 
 </details>
 
-<br>
+ 
 
 #### Assessing computational reproducibility of original results
 
@@ -870,11 +828,7 @@ The costs are a combination of direct costs of mass deworming (relative to the s
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -932,8 +886,6 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 
 </details>
 
-<br>
-
 #### Direct costs: increase in deworming costs
 
 Direct deworming costs ($DC$) are defined as the take-up under a mass deworming intervention ($Q_{2}$), times the per-capita costs of deworming under the intervention ($S_{2}$). These costs are compared to a status quo scenario where the government does not provide any additional resources for deworming. This analysis assumes that there is no subsidy for deworming under the status quo.
@@ -944,11 +896,7 @@ With complete subsidy, the relevant costs represent the total direct costs of de
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -984,7 +932,7 @@ s2_in <- s2_f()
 
 </details>
 
-<br>
+ 
 
 #### Indirect costs: additional years of education and its costs for government
 
@@ -992,11 +940,7 @@ As a result of deworming treatment, there is an estimated increase in school att
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1081,8 +1025,6 @@ pv_cost_yes_ext_in <- pv_costs_f(
 
 </details>
 
-<br>
-
 #### Assessing computational reproducibility of original results
 
 Without externalities, the original analysis (@baird2016worms) obtains a present value of costs of 11.78 (table 5, column 3, and adding rows 6 and 3). Including externalities, they obtain a present value of benefits of 25.2 (table 5, column 3, and adding rows 6 and 3 and 7). Following the steps described in this section, this analysis obtains the same result (11.7761881 and 25.1962131, respectively, without rounding).
@@ -1105,11 +1047,7 @@ Gains in yearly earnings represent the treatment effect on welfare ($\alpha^{poo
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1150,7 +1088,7 @@ earnings_no_ext_new_in <- earnings_app2_f(t_var = 0:50,
 
 </details>
 
-<br>
+ 
 
 
 
@@ -1162,11 +1100,7 @@ Similar to approach 1, the direct deworming costs under approach 2 are calculate
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1237,8 +1171,6 @@ q2_in <- q_full_so
 
 </details>
 
-<br>
-
 With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). The original study (@baird2016worms) identifies the unit cost to be \$0.42 per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$0.83. Adding all indirect costs over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is \$1.92, and after accounting for a take-up rate of 0.75 results in an average cost of \$1.44.
 
 #### Indirect costs: additional years of education and its costs for government
@@ -1251,11 +1183,7 @@ Hence, the cost of schooling each child for an additional year is now \$267.9 (U
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1274,7 +1202,7 @@ Where:
 
 </details>
 
-<br>
+ 
 
 Over this nine-year period, treated students attended school for an additional 0.15 years on average. Thus the average cost of additional schooling per child over the nine-year period is \$32.40.
 
@@ -1300,11 +1228,7 @@ In the original evaluation, the prevalence rates were very high (0.92), hence th
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 For approach 3, the report will modify the treatment effects of approaches 1 and 2 (equation 4 and 13, respectively) by the following:
 
@@ -1373,8 +1297,6 @@ prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 
 </details>
 
-<br>
-
 Evidence Action provided prevalence survey data for the geographies where they are involved. In order to be most analogous with the baseline prevalence estimate used in the original study, the prevalence estimates used are 1) the earliest point estimates available from before, or close to the time of, Evidence Action's involvement in that geography, and 2) are representative of any STH infection.
 
 #### Adjusting for different length of treatment
@@ -1385,11 +1307,7 @@ Adding the element of treatment duration allows us to consider differences in th
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 For approach 3, treatment effects of approaches 1 and 2 (equations 4 and 13 respectively) will be modified by the following:
 
@@ -1536,11 +1454,7 @@ The country weights are computed as the fraction of all treated individuals that
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1703,11 +1617,7 @@ Our approach consists in assuming that each source used in the analysis can be r
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 Let $x$ denote each source used in this analysis.
 
@@ -2137,11 +2047,7 @@ The table below summarises the three different approaches and the different alte
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 
 ```r
@@ -2636,8 +2542,8 @@ unit_test_f(ea2_pe, 701.849761243559)
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
 
-ea3_save_path = paste(getwd(),'/data','/ea3_pe', sep='')
-write.csv(ea3_pe, file = './data/ea3_pe')
+ea3_save_path = here('data','ea3_pe')
+write.csv(ea3_pe, file = ea3_save_path)
 ```
 
 </details>
@@ -2651,7 +2557,7 @@ write.csv(ea3_pe, file = './data/ea3_pe')
 | 3.2      | 1.2 + prevalence + length              | Treatment (EA)                          | 701.8      | \-                        |
 | **3.3**  | **2.1 + prevalence + length**          | **Treatment (EA)**                      | **289.8**  | **-**                     |
 
-<br>
+ 
 
 
 
