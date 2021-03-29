@@ -82,6 +82,7 @@ spelling and grammar.
 | Lauren Russel                | –                 | –                             | S                                    | –             | –                        | –                           | –           | L              |
 | Ryan Scholes                 | –                 | –                             | –                                    | S             | –                        | –                           | –           | –              |
 | Jiayu Shi                    | –                 | –                             | –                                    | S             | –                        | –                           | –           | –              |
+| Peter Zhang                  | –                 | –                             | –                                    | S             | –                        | –                           | –           | –              |
 
 *Note*: For multiperson tasks, credit is assing with E for equal credit,
 L and CL for leading and Co-leading, and S for supporting.
@@ -93,14 +94,13 @@ perfectly reflect their intellectual contribution to this project:
 
 Fernando Hoces de la Guardia ([@fhoces](https://github.com/fhoces)),
 Teng Aleksandra Ma ([@AleksandraMaa](https://github.com/AleksandraMaa)),
-Emma Ng ([@em-ng21](https://github.com/em-ng21)),
-[@keanulim123](https://github.com/keanulim123),
-[@Gracemorgan7](https://github.com/Gracemorgan7),
-[@charleslove3](https://github.com/charleslove3),
-[@ella-sjy](https://github.com/ella-sjy), Peter Zhang
-([@petezh](https://github.com/petezh)),
-[@scholesy](https://github.com/scholesy), Sophia Bai
-([@sophiabai2022](https://github.com/sophiabai2022)),
-[@oriajia](https://github.com/oriajia),
-[@mtsandra](https://github.com/mtsandra),
-[@laurenpeterson1](https://github.com/laurenpeterson1)
+Emma Ng ([@em-ng21](https://github.com/em-ng21)), Keanu Lim
+([@keanulim123](https://github.com/keanulim123)), Grace Morgan
+([@Gracemorgan7](https://github.com/Gracemorgan7)), Charles Love
+([@charleslove3](https://github.com/charleslove3)), Ella Shi
+([@ella-sjy](https://github.com/ella-sjy)), Peter Zhang
+([@petezh](https://github.com/petezh)), Ryan Scholes
+([@scholesy](https://github.com/scholesy)), Sophia Bai
+([@sophiabai2022](https://github.com/sophiabai2022)), Orianna Jia
+([@oriajia](https://github.com/oriajia)), Lauren Peterson
+([@laurenpeterson1](https://github.com/laurenpeterson1))
