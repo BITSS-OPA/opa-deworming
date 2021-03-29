@@ -69,10 +69,9 @@ if (TRUE) {
   lapply(list.of.packages, library, character.only = TRUE)
 }
 
-setwd(here())
 
 # get links
-links <- read.csv("links.csv")
+links <- read.csv(here("links.csv"))
 rownames(links) <- links$name
 
 knitr::opts_knit$set(root.dir = here())
@@ -597,9 +596,7 @@ Gains in earnings ($\Delta W_{t}$) result from multiplying expected earnings in 
 \tag{`r equationIndex`}
 \end{equation}
 ```
-Where[^4]:
-
-[^4]: Last paragraph of page 9(1645) of @baird2016worms
+Where:
 
 -   $w_t$: the earnings in period $t$\
 -   $\lambda_{1}$: the direct effects of deworming on earnings\

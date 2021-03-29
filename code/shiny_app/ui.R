@@ -766,7 +766,12 @@ shinyUI(
                                   max = 4,
                                   value = delta_ed_par_so
                                 ),
-                                #need more info for Popover
+                                bsPopover(
+                                  id = "param_delta_ed_par",
+                                  title = "",
+                                  content = "Scale of effect on additional education (without externalities)", 
+                                  placement = "top"
+                                ),
                                 hidden(div(
                                   id = "SD27",
                                   sliderInput(
@@ -784,7 +789,12 @@ shinyUI(
                                   max = 4,
                                   value = delta_ed_ext_par_so
                                 ),
-                                #need more info for Popover
+                                bsPopover(
+                                  id = "param_delta_ed__ext_par",
+                                  title = "",
+                                  content = "Scale of effect on additional education (with externalities)", 
+                                  placement = "top"
+                                ),
                                 hidden(div(
                                   id = "SD28",
                                   sliderInput(
@@ -892,14 +902,13 @@ shinyUI(
                                     value = 0.1 * unit_cost_2017usdppp_so
                                   )
                                 )),
-                                sliderInput(
+                                sliderInput(#ASD
                                   "param_costs_par",
                                   label = "Costs adjustments = ",
                                   min = costs_par_so / 2,
                                   max = 20000 * costs_par_so,
                                   value = costs_par_so
                                 ),
-                                #need more info for Popover
                                 hidden(div(
                                   id = "SD20",
                                   sliderInput(
@@ -917,7 +926,6 @@ shinyUI(
                                   max = 2 * counts_par_so,
                                   value = counts_par_so
                                 ),
-                                #need more info for Popover
                                 hidden(div(
                                   id = "SD21",
                                   sliderInput(

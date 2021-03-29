@@ -258,7 +258,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-<img src="C:/Users/thepe/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -508,9 +508,7 @@ Show all the details
 \tag{3}
 \end{equation}
 ```
-Where[^4]:
-
-[^4]: Last paragraph of page 9(1645) of @baird2016worms
+Where:
 
 -   $w_t$: the earnings in period $t$\
 -   $\lambda_{1}$: the direct effects of deworming on earnings\
