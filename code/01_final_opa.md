@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>29 March, 2021<br><img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>31 March, 2021 <img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -358,11 +358,7 @@ The benefits are equal to the additional lifetime earnings that individuals are 
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -419,11 +415,7 @@ All three approaches use the real interest rate ($r$) as the discounting rate, w
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -494,11 +486,7 @@ Gains in earnings ($\Delta W_{t}$) result from multiplying expected earnings in 
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -557,11 +545,7 @@ The monthly self-employed profits and self-employed hours for the control group,
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 The wages/earnings are determined by:
 
@@ -685,11 +669,7 @@ The estimated externality effect ($\lambda_{2}$) reflects the additional hours w
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -746,11 +726,7 @@ For this setting, @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) 
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -836,7 +812,7 @@ pv_benef_yes_ext_in <- pv_benef_f(
 
 </details>
 
-<br>
+ 
 
 #### Assessing computational reproducibility of original results
 
@@ -850,11 +826,7 @@ The costs are a combination of direct costs of mass deworming (relative to the s
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -922,11 +894,7 @@ With complete subsidy, the relevant costs represent the total direct costs of de
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -962,7 +930,7 @@ s2_in <- s2_f()
 
 </details>
 
-<br>
+ 
 
 #### Indirect costs: additional years of education and its costs for government
 
@@ -970,11 +938,7 @@ As a result of deworming treatment, there is an estimated increase in school att
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1081,11 +1045,7 @@ Gains in yearly earnings represent the treatment effect on welfare ($\alpha^{poo
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1126,7 +1086,7 @@ earnings_no_ext_new_in <- earnings_app2_f(t_var = 0:50,
 
 </details>
 
-<br>
+ 
 
 
 
@@ -1138,11 +1098,7 @@ Similar to approach 1, the direct deworming costs under approach 2 are calculate
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1225,11 +1181,7 @@ Hence, the cost of schooling each child for an additional year is now \$267.9 (U
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1248,7 +1200,7 @@ Where:
 
 </details>
 
-<br>
+ 
 
 Over this nine-year period, treated students attended school for an additional 0.15 years on average. Thus the average cost of additional schooling per child over the nine-year period is \$32.40.
 
@@ -1274,11 +1226,7 @@ In the original evaluation, the prevalence rates were very high (0.92), hence th
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 For approach 3, the report will modify the treatment effects of approaches 1 and 2 (equation 4 and 13, respectively) by the following:
 
@@ -1357,11 +1305,7 @@ Adding the element of treatment duration allows us to consider differences in th
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 For approach 3, treatment effects of approaches 1 and 2 (equations 4 and 13 respectively) will be modified by the following:
 
@@ -1508,11 +1452,7 @@ The country weights are computed as the fraction of all treated individuals that
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
@@ -1675,11 +1615,7 @@ Our approach consists in assuming that each source used in the analysis can be r
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 Let $x$ denote each source used in this analysis.
 
@@ -2109,11 +2045,7 @@ The table below summarises the three different approaches and the different alte
 
 <details>
 
-<summary>
-
-Show all the details
-
-</summary>
+<summary>Show all the details</summary>
 
 
 ```r
@@ -2623,7 +2555,7 @@ write.csv(ea3_pe, file = ea3_save_path)
 | 3.2      | 1.2 + prevalence + length              | Treatment (EA)                          | 701.8      | \-                        |
 | **3.3**  | **2.1 + prevalence + length**          | **Treatment (EA)**                      | **289.8**  | **-**                     |
 
-<br>
+ 
 
 
 

@@ -17,7 +17,7 @@ rownames(links) <- links$name
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
-source(here("code", "shiny_app", "all_analysis.R"))
+source(here("all_analysis.R"))
 
 costs_temp_india   <-
   costs1_p2_f(
