@@ -21,7 +21,7 @@ Go straight to the Shiny app: [here](`r links['shiny_app', 'url']`)
 
 This repository and its accompanying dynamic document and Shiny app are three key components of an Open Policy Analysis (OPA) on the costs and benefits of mass deworming interventions in various settings. Together, these materials create a transparent and reproducible analysis to facilitate collaboration and discussion about deworming policy.
 
-<img align="right" width="50%" src="./code/images/OPA_layers2.svg">
+<img align="right" width="50%" src="./code/images/OPA_layers.png">
 
 1 - [An interactive plot](`r links['shiny_app', 'url']`), which summarizes the interactions between all key parameters for a given set of assumptions. Materials can be found in: [`code/shiny_app`](`r links['shiny_code', 'url']`).
 

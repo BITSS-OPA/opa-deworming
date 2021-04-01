@@ -1343,10 +1343,14 @@ chunk_unit_costs2_new <- function(){
       unit_cost <- ( unit_cost_local_var / ex_rate_var )
       periods_temp <- floor(year_of_treat_var)
       part_of_last_year_temp <- round(year_of_treat_var - periods_temp, 1)
+      if (periods_temp < 1) {
+        0
+      } else {
       sum(
         ( unit_cost * (1 + interest_var)^(-(0:periods_temp)) ) *
             c(rep(1,periods_temp), part_of_last_year_temp)
         )
+      }
     }
 
 ###############################################################################
