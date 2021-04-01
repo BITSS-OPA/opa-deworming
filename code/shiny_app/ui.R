@@ -110,7 +110,7 @@ shinyUI(
                     ),
                     tags$a(
                       img(
-                        src = "OPA_layers_output.png",
+                        src = "OPA_layers.png",
                         width = "20%",
                         height = "auto"
                       ),

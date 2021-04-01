@@ -1,7 +1,7 @@
 
 # Project on Open Policy Analysis For Cost Effectiveness Analysis of Deworming Interventions
 
-<img width="200" src="./code/images/BITSS_logo_horizontal.png"><img width="200" src="./code/images/CEGA_logo.png"><img height='80' src='./code/shiny_app/www/OPA_layers_materials.png'>
+<img width="200" src="./code/images/BITSS_logo_horizontal.png"><img width="200" src="./code/images/CEGA_logo.png"><img height='80' src='./code/shiny_app/www/OPA_layers.png'>
 </div>
 </center>
 
@@ -19,7 +19,7 @@ benefits of mass deworming interventions in various settings. Together,
 these materials create a transparent and reproducible analysis to
 facilitate collaboration and discussion about deworming policy.
 
-<img align="right" width="50%" src="./code/images/OPA_layers.png">
+<img align="right" width="50%" src="./code/images/OPA_layers_materials.png">
 
 1 - [An interactive plot](https://bitss-opa.shinyapps.io/dw-app/), which
 summarizes the interactions between all key parameters for a given set
