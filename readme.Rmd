@@ -6,7 +6,7 @@ output: github_document
 
 ```{r setup, include=FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-links <- read.csv("links.csv")
+links <- read.csv("code/shiny_app/links.csv")
 rownames(links) <- links$name
 ```
 
