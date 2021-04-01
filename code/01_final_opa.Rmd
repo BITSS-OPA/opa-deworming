@@ -319,6 +319,8 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
+*Note: This is Version 1.0 of the OPA. Please kindly report any errors in the dynamic document [here](`r links['issues', 'url']`).*
+
 ```{r main-pe-print, out.width = '100%', fig.align='center', echo=FALSE, purl=FALSE}
 # url
 knitr::include_graphics(path = paste0(here(),"/code/images/main_pe.png"))

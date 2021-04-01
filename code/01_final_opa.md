@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>31 March, 2021 <img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>01 April, 2021 <img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -258,7 +258,9 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+*Note: This is the Version 1.0 of the OPA. Please kindly report any errors in the dynamic document [here](https://github.com/BITSS-OPA/opa-deworming/blob/master/issue_template.md).*
+
+<img src="C:/Users/thepe/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
