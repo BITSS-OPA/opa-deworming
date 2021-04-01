@@ -103,6 +103,17 @@ img[alt = screenshot]{height: 20px}
   background-repeat: no-repeat;
 }
 
+/* Add OPA layer after TOC */
+#TOC::after {
+  content: "";
+  display: block;
+  height: 80px;
+  margin: 20px 5px 20px 15px ;
+  background-image: url("./shiny_app/www/OPA_layers_details.png");
+  background-size: contain;
+  background-position: left, right;
+  background-repeat: no-repeat;
+}
 
 /* Add divider for Executive Summary */
 

@@ -17,7 +17,7 @@ rownames(links) <- links$name
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
-source(here("all_analysis.R"))
+source(here("code", "shiny_app", "all_analysis.R"))
 
 costs_temp_india   <-
   costs1_p2_f(
@@ -107,7 +107,20 @@ shinyUI(
                         height = "auto"
                       ),
                       href = links['cega_home','url']
-                    )
+                    ),
+                    
+                    fluidRow(column(
+                      6,
+                      align = "center",
+                      tags$a(
+                        img(
+                          src = "OPA_layers_output.png",
+                          width = "70%",
+                          height = "auto"
+                        )
+                      )
+                      
+                    ))
                   )),
                   fluidRow(
                     style = "width: 100%; height: 100%;",
@@ -179,6 +192,20 @@ shinyUI(
                  "Key Assumptions",
                  sidebarPanel(
                    div( id = "KA",
+                        
+                        fluidRow(column(
+                          6,
+                          align = "center",
+                          tags$a(
+                            img(
+                              src = "OPA_layers_assumptions.png",
+                              width = "70%",
+                              height = "auto"
+                            )
+                          )
+                          
+                        )),
+                        
                    fluidRow(id = "tPanel1_ka",
                             style = "overflow-y: scroll; width: 100%; height: 100%; position:relative;",
                             numericInput(
@@ -289,6 +316,19 @@ shinyUI(
                  "All Assumptions",
                  sidebarPanel(
                    div(id = "All",
+                       
+                       fluidRow(column(
+                         6,
+                         align = "center",
+                         tags$a(
+                           img(
+                             src = "OPA_layers_assumptions.png",
+                             width = "70%",
+                             height = "auto"
+                           )
+                         )
+                         
+                       )),
                    fluidRow(id = "tPanel",
                             style = "width: 100%; max-height: 100%; position: relative;",
                             # Begin policy estimate description ----
@@ -1231,7 +1271,21 @@ shinyUI(
                             style = "position:relative; padding-top:10px;",
                             downloadButton("downloadParams", "Output Parameters"),
                             downloadButton("downloadPlotAll", "Save Plot")
-                            )
+                            ),
+                   
+                   fluidRow(column(
+                     10,
+                     align = "center",
+                     tags$a(
+                       img(
+                         src = "OPA_layers_assumptions.png",
+                         width = "70%",
+                         height = "auto"
+                       )
+                     )
+                     
+                   ))
+                   
                  )),
                  mainPanel(
                    fluidRow(id = "output_id1", style = "width: 100%; height: 100%; position:relative;",
