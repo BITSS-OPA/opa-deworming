@@ -191,7 +191,8 @@ shinyUI(
                  sidebarPanel(
                    div( id = "KA",
                         
-                        fluidRow(column(
+                        fluidRow(column(3),
+                                 column(
                           6,
                           align = "center",
                           tags$a(
@@ -315,7 +316,8 @@ shinyUI(
                  sidebarPanel(
                    div(id = "All",
                        
-                       fluidRow(column(
+                       fluidRow(column(3),
+                                column(
                          6,
                          align = "center",
                          tags$a(
@@ -1269,20 +1271,7 @@ shinyUI(
                             style = "position:relative; padding-top:10px;",
                             downloadButton("downloadParams", "Output Parameters"),
                             downloadButton("downloadPlotAll", "Save Plot")
-                            ),
-                   
-                   fluidRow(column(
-                     10,
-                     align = "center",
-                     tags$a(
-                       img(
-                         src = "OPA_layers_assumptions.png",
-                         width = "70%",
-                         height = "auto"
-                       )
-                     )
-                     
-                   ))
+                            )
                    
                  )),
                  mainPanel(
