@@ -84,7 +84,7 @@ spelling and grammar.
 | Emma Ng                      | –                 | S                             | S                                    | S             | –                        | –                           | –           | –              |
 | Lauren Russel                | –                 | –                             | S                                    | –             | –                        | –                           | –           | L              |
 | Ryan Scholes                 | –                 | –                             | –                                    | S             | –                        | –                           | –           | –              |
-| Jiayu Shi                    | –                 | –                             | –                                    | S             | –                        | –                           | –           | –              |
+| Jiayu Shi                    | –                 | –                             | –                                    | S             | –                        | –                           | –           | S              |
 | Peter Zhang                  | –                 | –                             | –                                    | S             | –                        | –                           | –           | –              |
 
 *Note*: For multiperson tasks, credit is assing with E for equal credit,
