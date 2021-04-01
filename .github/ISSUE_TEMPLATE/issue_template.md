@@ -42,4 +42,5 @@ Optional.
 
 #### Email
 
-If you would prefer, you may also send an email to fhoces@berkeley.edu. Your email should include the above information, especially the **reproduction steps**.
+If you would prefer, you may also send an email. Your email should include the above information, especially the **reproduction steps**.
+
