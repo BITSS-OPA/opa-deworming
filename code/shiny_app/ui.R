@@ -161,7 +161,10 @@ shinyUI(
                       tags$a(href = links['readme','url'], "here."), 
                       br(),
                       "See more OPA projects done by BITSS",
-                      tags$a(href =links['bitss_projects','url'], "here.")
+                      tags$a(href =links['bitss_projects','url'], "here."),
+                      br(),
+                      "This is Version 1.0 of the OPA. Please kindly report any errors in the application",
+                      tags$a(href =links['issues','url'], "here.")
                     )
                   ),
                   fluidRow(
