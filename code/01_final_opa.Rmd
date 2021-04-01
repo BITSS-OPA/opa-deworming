@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')` <img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')` <br><img height = '60px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='60px' src='./shiny_app/www/CEGA_logo.png'><img height = '60px' src = './shiny_app/www/OPA_layers_output.png'></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -319,7 +319,6 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-*Note: This is Version 1.0 of the OPA. Please kindly report any errors in the dynamic document [here](`r links['issues', 'url']`).*
 
 ```{r main-pe-print, out.width = '100%', fig.align='center', echo=FALSE, purl=FALSE}
 # url
@@ -355,6 +354,9 @@ This OPA project contains three components, following the OPA principles laid ou
 3.  [A repository](`r links['dw_repo', 'url']`) that contains all the materials needed to reproduce, or update the interactive app, the open policy report, and the overall analysis.
 
 This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, which appears after clicking in the ![screenshot](images/show_details.png?display%20=%20inline-block) contains equations that show how each piece of the analysis was carried out. The third and final layer displays the code used to operationalize each equation. This information is contained within this document using dynamic documentation [@xie2015dynamic], so interested readers can access the report's source file and easily reproduce the entire document in their own computing environments.
+
+> *Note: This is Version 1.0 of the OPA. Please kindly report any errors in the dynamic document [here](`r links['issues', 'url']`).*
+
 
 # Introduction
 
