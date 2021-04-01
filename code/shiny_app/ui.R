@@ -12,7 +12,9 @@ library(ggplot2)
 
 # get links
 setwd(here())
-links <- read.csv("links.csv")
+# change to the following when deploying:
+# links <- read.csv("links.csv")
+links <- read.csv("code/shiny_app/links.csv")
 rownames(links) <- links$name
 
 # not sure if this makes a difference
@@ -110,11 +112,11 @@ shinyUI(
                     ),
                     tags$a(
                       img(
-                        src = "OPA_layers_output.png",
+                        src = "OPA_layers.png",
                         width = "20%",
                         height = "auto"
                       ),
-                      href = links['bitss_opa','url']
+                      href = links['dw_info','url']
                     )                    
                   )),
                   fluidRow(
@@ -200,7 +202,7 @@ shinyUI(
                           align = "center",
                           tags$a(
                             img(
-                              src = "OPA_layers_assumptions.png",
+                              src = "OPA_layers_output.png",
                               width = "70%",
                               height = "auto"
                             )

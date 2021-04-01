@@ -24,7 +24,7 @@ if (TRUE) {
 
 
 # get links
-links <- read.csv(here("links.csv"))
+links <- read.csv(here("code/shiny_app/links.csv"))
 rownames(links) <- links$name
 
 knitr::opts_knit$set(root.dir = here())
