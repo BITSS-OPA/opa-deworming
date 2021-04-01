@@ -95,7 +95,7 @@ shinyUI(
                     tags$a(
                       img(
                         src = "bitss_just_logo_transparent.png",
-                        width = "20%",
+                        width = "10%",
                         height = "auto"
                       ),
                       href = links['bitss_home','url']
@@ -103,24 +103,19 @@ shinyUI(
                     tags$a(
                       img(
                         src = "cega_transparent.png",
-                        width = "70%",
+                        width = "40%",
                         height = "auto"
                       ),
                       href = links['cega_home','url']
                     ),
-                    
-                    fluidRow(column(
-                      6,
-                      align = "center",
-                      tags$a(
-                        img(
-                          src = "OPA_layers_output.png",
-                          width = "70%",
-                          height = "auto"
-                        )
-                      )
-                      
-                    ))
+                    tags$a(
+                      img(
+                        src = "OPA_layers_output.png",
+                        width = "20%",
+                        height = "auto"
+                      ),
+                      href = links['bitss_opa','url']
+                    )                    
                   )),
                   fluidRow(
                     style = "width: 100%; height: 100%;",
