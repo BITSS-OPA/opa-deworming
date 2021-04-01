@@ -174,7 +174,10 @@ shinyUI(
                               how often an outcome appeared, i.e. the highest point
                               means that particular value appeared the most frequently.
                               The blue line indicates that half of all values are
-                              on either side of the line."
+                              on either side of the line.", 
+                      br(),br(),
+                      "*This is Version 1.0 of the OPA. Please kindly report any errors in the application*",
+                      tags$a(href =links['issues','url'], "here.")
                     )
                   )
                 ),
