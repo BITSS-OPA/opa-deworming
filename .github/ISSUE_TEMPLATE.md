@@ -7,7 +7,7 @@ Thank you for helping us identify bugs in the Deworming Open Policy Analysis. Be
 * [ ] Is there no explanation in the **code documentation** (e.g. for deployment)?
 * [ ] Are there no existing, **similar issues**?
 
-Then, copy paste the following template into a [new issue](https://github.com/BITSS-OPA/opa-deworming/issues/new/choose):
+If all of the above are true, please delete the checklist and fill out the following template:
 
 ---
 
@@ -42,5 +42,4 @@ Optional.
 
 #### Email
 
-If you would prefer, you may also send an email. Your email should include the above information, especially the **reproduction steps**.
-
+If you would prefer, you may also send an email to [openpolicy@berkeley.edu](mailto:openpolicy@berkeley.edu). Your email should include the above information, especially the **reproduction steps**.
