@@ -24,8 +24,9 @@ if (FALSE) {
 
 setwd(here())
 
-# get links
-links <- read.csv("links.csv")
+# change to the following when deploying:
+# links <- read.csv("links.csv")
+links <- read.csv("code/shiny_app/links.csv")
 rownames(links) <- links$name
 
 knitr::opts_knit$set(root.dir = here())

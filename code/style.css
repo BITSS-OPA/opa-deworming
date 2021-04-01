@@ -111,7 +111,7 @@ img[alt = screenshot]{height: 20px}
   margin: 20px 5px 20px 15px ;
   background-image: url("./shiny_app/www/OPA_layers_details.png");
   background-size: contain;
-  background-position: right;
+  background-position: center;
   background-repeat: no-repeat;
 }
 

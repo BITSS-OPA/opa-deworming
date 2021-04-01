@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>01 April, 2021 <img height = '80px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='80px' src='./shiny_app/www/CEGA_logo.png'></div></center>"
+date: "<center><div class='mysubtitle'>01 April, 2021 <br><img height = '60px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='60px' src='./shiny_app/www/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './shiny_app/www/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -258,7 +258,6 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-*Note: This is Version 1.0 of the OPA. Please kindly report any errors in the dynamic document [here](https://github.com/BITSS-OPA/opa-deworming/blob/master/issue_template.md).*
 
 <img src="C:/Users/thepe/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
@@ -291,6 +290,9 @@ This OPA project contains three components, following the OPA principles laid ou
 3.  [A repository](https://github.com/BITSS-OPA/opa-deworming) that contains all the materials needed to reproduce, or update the interactive app, the open policy report, and the overall analysis.
 
 This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, which appears after clicking in the ![screenshot](images/show_details.png?display%20=%20inline-block) contains equations that show how each piece of the analysis was carried out. The third and final layer displays the code used to operationalize each equation. This information is contained within this document using dynamic documentation [@xie2015dynamic], so interested readers can access the report's source file and easily reproduce the entire document in their own computing environments.
+
+> *Note: This is Version 1.0 of the OPA. Please kindly report any errors in the dynamic document [here](https://github.com/BITSS-OPA/opa-deworming/issues/new/choose).*
+
 
 # Introduction
 
@@ -1147,10 +1149,14 @@ chunk_unit_costs2_new <- function(){
       unit_cost <- ( unit_cost_local_var / ex_rate_var )
       periods_temp <- floor(year_of_treat_var)
       part_of_last_year_temp <- round(year_of_treat_var - periods_temp, 1)
+      if (periods_temp < 1) {
+        0
+      } else {
       sum(
         ( unit_cost * (1 + interest_var)^(-(0:periods_temp)) ) *
             c(rep(1,periods_temp), part_of_last_year_temp)
         )
+      }
     }
 
 ###############################################################################
