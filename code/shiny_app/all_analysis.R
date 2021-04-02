@@ -6,7 +6,7 @@ html_format <- TRUE
 # Loading required libraries
 # before deploying in shinyapps.io, need to remove the following packages:
 # "plotly", "bookdown", "rootSolve"
-if (TRUE) {
+if (FALSE) {
   list.of.packages <- c("tidyverse", "here", "kableExtra", "readxl","plotly",
                         "bookdown", "rootSolve","shinyBS", "shinythemes",
                         "ggplot2")
@@ -24,7 +24,7 @@ if (TRUE) {
 
 
 # get links
-links <- read.csv(here("code/shiny_app/links.csv"))
+links <- read.csv(here("links.csv"))
 rownames(links) <- links$name
 
 knitr::opts_knit$set(root.dir = here())

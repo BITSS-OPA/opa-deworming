@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>01 April, 2021 <br><img height = '60px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='60px' src='./shiny_app/www/CEGA_logo.png'><img height = '60px' src = './shiny_app/www/OPA_layers.png'></div></center>"
+date: "<center><div class='mysubtitle'>01 April, 2021 <br><img height = '60px' src = './shiny_app/www/BITSS_logo_horizontal.png'><img height='60px' src='./shiny_app/www/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './shiny_app/www/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -149,7 +149,7 @@ chunk_sources <- function(){
     df_prevalence_so <- read_excel("data/prevalence_data.xlsx",
                            sheet = "Sheet1")
     # prevalence_0_so <- c("hookworm" = 0.77, "roundworm" = 0.42, "whipworm" =0.55, "Schisto mansoni" = 0.22) # from Draft Cost-Effectiveness Model.xlsx ADD ORIGINAL SOURCE
-    prevalence_r_so <- c("india" = 0.5665, "kenya" = 0.345, 
+    prevalence_r_so <- c("india" = 0.5665, "kenya" = 0.345,
                          "nigeria" = 0.27, "vietnam" = 0.145)  #0.5665   0.5013121
     # based on https://docs.google.com/spreadsheets/d/1drKdU-kRjlRtwXq6nCqFC6gcoQ-eOaLfT9MWHSMZ0MA/edit?usp=sharing
     years_of_treat_t_so <- 2.41      #Years of Treatment in new setting
@@ -816,7 +816,7 @@ pv_benef_yes_ext_in <- pv_benef_f(
 
 </details>
 
- 
+
 
 #### Assessing computational reproducibility of original results
 
@@ -934,7 +934,7 @@ s2_in <- s2_f()
 
 </details>
 
- 
+
 
 #### Indirect costs: additional years of education and its costs for government
 
@@ -1090,7 +1090,7 @@ earnings_no_ext_new_in <- earnings_app2_f(t_var = 0:50,
 
 </details>
 
- 
+
 
 
 
@@ -1208,7 +1208,7 @@ Where:
 
 </details>
 
- 
+
 
 Over this nine-year period, treated students attended school for an additional 0.15 years on average. Thus the average cost of additional schooling per child over the nine-year period is \$32.40.
 
@@ -2563,7 +2563,7 @@ write.csv(ea3_pe, file = ea3_save_path)
 | 3.2      | 1.2 + prevalence + length              | Treatment (EA)                          | 701.8      | \-                        |
 | **3.3**  | **2.1 + prevalence + length**          | **Treatment (EA)**                      | **289.8**  | **-**                     |
 
- 
+
 
 
 

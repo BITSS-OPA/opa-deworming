@@ -14,12 +14,14 @@ library(ggplot2)
 setwd(here())
 # change to the following when deploying:
 # links <- read.csv("links.csv")
-links <- read.csv("code/shiny_app/links.csv")
+links <- read.csv("links.csv")
 rownames(links) <- links$name
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
-source(here("code", "shiny_app", "all_analysis.R"))
+#source(here("code", "shiny_app", "all_analysis.R"))
+source(here("all_analysis.R"))
+
 
 costs_temp_india   <-
   costs1_p2_f(
@@ -158,15 +160,12 @@ shinyUI(
                       tags$a(href = links['readme','url'], "here."), 
                       br(),
                       "See more OPA projects done by BITSS",
-                      tags$a(href =links['bitss_projects','url'], "here."),
-                      br(),
-                      "This is Version 1.0 of the OPA. Please kindly report any errors in the application",
-                      tags$a(href =links['issues','url'], "here.")
+                      tags$a(href =links['bitss_projects','url'], "here.")
                     )
                   ),
                   fluidRow(
                     id = "tPanel_main",
-                    style = "max-width: 400px; max-height: 300px; position:relative;",
+                    style = "max-width: 100%; max-height: 300px; position:relative;",
                     br(),
                     h4(strong("Description of Results")),
                     p(
@@ -178,7 +177,7 @@ shinyUI(
                               The blue line indicates that half of all values are
                               on either side of the line.", 
                       br(),br(),
-                      "*This is Version 1.0 of the OPA. Please kindly report any errors in the application*",
+                      "Note: this is Version 1.0 of the OPA. Please kindly report any errors in the application",
                       tags$a(href =links['issues','url'], "here.")
                     )
                   )
