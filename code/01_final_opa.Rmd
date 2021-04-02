@@ -71,7 +71,11 @@ if (TRUE) {
 
 
 # get links
-links <- read.csv(here("code/shiny_app/links.csv"))
+if (file.exists("code/shiny_app/links.csv")){
+  links <- read.csv("code/shiny_app/links.csv")
+} else{
+  links <- read.csv("links.csv")
+}
 rownames(links) <- links$name
 
 knitr::opts_knit$set(root.dir = here())

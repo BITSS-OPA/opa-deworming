@@ -14,7 +14,11 @@ library(ggplot2)
 setwd(here())
 # change to the following when deploying:
 # links <- read.csv("links.csv")
-links <- read.csv("links.csv")
+if (file.exists("code/shiny_app/links.csv")){
+  links <- read.csv("code/shiny_app/links.csv")
+} else{
+  links <- read.csv("links.csv")
+}
 rownames(links) <- links$name
 
 # not sure if this makes a difference
@@ -118,8 +122,8 @@ shinyUI(
                         width = "20%",
                         height = "auto"
                       ),
-                      href = links['dw_info','url']
-                    )                    
+                      href = links['dw_info`','url']
+                    )
                   )),
                   fluidRow(
                     style = "width: 100%; height: 100%;",
@@ -152,12 +156,12 @@ shinyUI(
                       "and",
                       tags$a(href = links['ev_action','url'],
                              "Evidence Action.")
-                     
-                      
+
+
                     ),
                     p(
                       "See a full contributors list",
-                      tags$a(href = links['readme','url'], "here."), 
+                      tags$a(href = links['readme','url'], "here."),
                       br(),
                       "See more OPA projects done by BITSS",
                       tags$a(href =links['bitss_projects','url'], "here.")
@@ -175,7 +179,7 @@ shinyUI(
                               how often an outcome appeared, i.e. the highest point
                               means that particular value appeared the most frequently.
                               The blue line indicates that half of all values are
-                              on either side of the line.", 
+                              on either side of the line.",
                       br(),br(),
                       "Note: this is Version 1.0 of the OPA. Please kindly report any errors in the application",
                       tags$a(href =links['issues','url'], "here.")
@@ -194,7 +198,7 @@ shinyUI(
                  "Key Assumptions",
                  sidebarPanel(
                    div( id = "KA",
-                        
+
                         fluidRow(column(3),
                                  column(
                           6,
@@ -206,9 +210,9 @@ shinyUI(
                               height = "auto"
                             )
                           )
-                          
+
                         )),
-                        
+
                    fluidRow(id = "tPanel1_ka",
                             style = "overflow-y: scroll; width: 100%; height: 100%; position:relative;",
                             numericInput(
@@ -222,7 +226,7 @@ shinyUI(
                               label = h4("Prevalence in new region (\\( \\eta_{new} \\))"),
                               min = 0 ,
                               max = 1,
-                              value = round(prevalence_r_in, 2), 
+                              value = round(prevalence_r_in, 2),
                               step = 0.1
                             ),
                             numericInput(
@@ -319,7 +323,7 @@ shinyUI(
                  "All Assumptions",
                  sidebarPanel(
                    div(id = "All",
-                       
+
                        fluidRow(column(3),
                                 column(
                          6,
@@ -331,7 +335,7 @@ shinyUI(
                              height = "auto"
                            )
                          )
-                         
+
                        )),
                    fluidRow(id = "tPanel",
                             style = "width: 100%; max-height: 100%; position: relative;",
@@ -813,7 +817,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param_delta_ed_par",
                                   title = "",
-                                  content = "Scale of effect on additional education (without externalities)", 
+                                  content = "Scale of effect on additional education (without externalities)",
                                   placement = "top"
                                 ),
                                 hidden(div(
@@ -836,7 +840,7 @@ shinyUI(
                                 bsPopover(
                                   id = "param_delta_ed__ext_par",
                                   title = "",
-                                  content = "Scale of effect on additional education (with externalities)", 
+                                  content = "Scale of effect on additional education (with externalities)",
                                   placement = "top"
                                 ),
                                 hidden(div(
@@ -1269,14 +1273,14 @@ shinyUI(
                             style = "position:relative; padding-top:10px",
                             actionButton("updateAll", "Update Plot", class="btn-primary"),
                             actionButton("resetAll", "Reset Inputs")
-                            
+
                             ),
                    fluidRow(id = "buttonDownload",
                             style = "position:relative; padding-top:10px;",
                             downloadButton("downloadParams", "Output Parameters"),
                             downloadButton("downloadPlotAll", "Save Plot")
                             )
-                   
+
                  )),
                  mainPanel(
                    fluidRow(id = "output_id1", style = "width: 100%; height: 100%; position:relative;",
