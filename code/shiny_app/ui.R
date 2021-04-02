@@ -14,7 +14,11 @@ library(ggplot2)
 setwd(here())
 # change to the following when deploying:
 # links <- read.csv("links.csv")
-links <- read.csv("code/shiny_app/links.csv")
+if (file.exists("code/shiny_app/links.csv")){
+  links <- read.csv("code/shiny_app/links.csv")
+} else{
+  links <- read.csv("links.csv")
+}
 rownames(links) <- links$name
 
 # not sure if this makes a difference
@@ -116,7 +120,7 @@ shinyUI(
                         width = "20%",
                         height = "auto"
                       ),
-                      href = links['dw_info','url']
+                      href = links['dw_info`','url']
                     )                    
                   )),
                   fluidRow(
