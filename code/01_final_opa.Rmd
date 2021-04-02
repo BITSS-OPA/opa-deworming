@@ -69,7 +69,7 @@ if (TRUE) {
   lapply(list.of.packages, library, character.only = TRUE)
 }
 
-
+setwd(here())
 # get links
 if (file.exists("code/shiny_app/links.csv")){
   links <- read.csv("code/shiny_app/links.csv")
