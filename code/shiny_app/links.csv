@@ -1,4 +1,4 @@
-name,url,description,,omponent,location
+name,url,description,,component,location
 dw_info,http://www.bitss.org/opa/projects/deworming/,Deworming project info,App,Main Policy Estimates Tab,
 dw_repo,https://github.com/BITSS-OPA/opa-deworming,Deworming GitHub repo.,"App, Dynamic doc","Main Policy Estimates Tab, executive summary",
 ev_action_dw,https://www.evidenceaction.org/dewormtheworld,Evidence Action deworming information.,,App,Main Policy Estimates Tab
