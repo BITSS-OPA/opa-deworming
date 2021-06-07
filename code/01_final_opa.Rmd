@@ -103,8 +103,8 @@ knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(fig.width=12, fig.height=8)
 
 #2) generate the all_analysis.R file that goes into the shiny app. try to eval to false the package install
-options(knitr.duplicate.label = "allow") # workaround for purl error
-knitr::purl("code/01_final_opa.Rmd", "all_analysis.R")
+#options(knitr.duplicate.label = "allow") # workaround for purl error
+#knitr::purl("code/01_final_opa.Rmd", "all_analysis.R")
 
 #rmarkdown::render("code/01_final_opa.Rmd", encoding=encoding, output_file=file.path("..", 'index.html'))
 
@@ -512,7 +512,7 @@ chunk_interest <- function(){
     interest_f <- function(gov_bonds_var = gov_bonds_so ,
                            inflation_var = inflation_so) {  
         interest_exct_in <- (1 + gov_bonds_var) / (1 + inflation_var) - 1
-        interest_in = 2*gov_bonds_var - inflation_var
+        interest_in = gov_bonds_var - inflation_var
         return(list("interest_in" = interest_in,
                     "interest_exct_in" = interest_exct_in))
     }
@@ -1066,7 +1066,7 @@ With complete subsidy, the relevant costs represent the total direct costs of de
 
 ```{=tex}
 \begin{equation}
-S_{2} = \frac{\text{Cost per person per year (KSH)} }{ex}\times \text{Additional years of treatment} \\
+S_{2} = \frac{c_{kenya}}{ex}\times L_0 \\
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
@@ -1074,8 +1074,9 @@ S_{2} = \frac{\text{Cost per person per year (KSH)} }{ex}\times \text{Additional
 ```
 Where:
 
--   $ex$: exchange rate
-
+-   $c_{kenya}$: cost per person per year for the deworming intervention in Kenya (KSH)\
+-   $ex$: exchange rate\
+-   $L_0$: additional years of deworming treatment\
 ```{r unit_costs2, echo = print_code}
 # - inputs: unit costs in local currency (unit_cost_local_so), exchange rate
 #  (ex_rate_so), years of treatment (years_of_treat_0_so)
@@ -1751,9 +1752,7 @@ C = \sum_{i \in Countries } \omega_{i} c_{i}
 ```
 ```{=tex}
 \begin{equation}
-\omega_{i} = \frac{N_{i}}{\sum_{j}N_{j}} \\
 \omega_{i} = \frac{N_{i}}{\sum_{i}N_{i}} \\
-\omega_{i} = \frac{N_{i}}{\sum_{i}N_{i}} \quad \text{for } i = India, Kenya, Nigeria, or Vietnam\\
 
 c_{i} = \frac{C_{i}}{N_{i}} \\
 `r equationIndex <- equationIndex + 1`
