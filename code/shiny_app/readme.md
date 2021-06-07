@@ -1,7 +1,7 @@
 # Tutorial on how to reproduce and modify the Shiny App for the Deworming Open Policy Analysis
 
 The shiny app for the deworming OPA contains three files: `ui.R`, `server.R`, and `all_analysis.R`.
-- `05_final_opa` file contains the full walkthrough for the analysis, which is then represented in a more code-friendly way in `all_analysis.R`
+- `01_final_opa` file contains the full walkthrough for the analysis, which is then represented in a more code-friendly way in `all_analysis.R`
 - The data is `all_analysis.R` is passed to... 
     - `ui.R`, which is the user interface
     - `server.R`, which manages the server components of the shiny app
@@ -22,7 +22,7 @@ The purpose of the shiny app is to allow the user to experiment with the data to
             - Gov Bonds (and SD)
             - Inflation (and SD) 
             - Exchange rate (and SD)
-            - Costs of T (and SD)
+            - Costs of treatment (and SD)
             - Years of treatment in original study (and SD)
             - Years of treatment in new setting (and SD)
             - Costs adjustments (and SD)
@@ -45,7 +45,7 @@ The purpose of the shiny app is to allow the user to experiment with the data to
 ### The tabs
 
 - All three tabs are created using `tabPanel`.
-  - Then, use sidebarPanel, which creates the panel on the left side of the screen. For tab titled "Main Policy Estimate", this only consists of text and links.
+  - Then, use `sidebarPanel`, which creates the panel on the left side of the screen. For tab titled "Main Policy Estimate", this only consists of text and links.
     - `fluidrow` creates rows, such as "Unit costs in new country" in "Key Assumptions".
   - `mainPanel` creates the graph seen on the right
 
@@ -74,10 +74,7 @@ The purpose of the shiny app is to allow the user to experiment with the data to
 ### The functions
 
 - `sim.data` -> returns a random sample from some distributions
-- `as.numeric` -> converts a factor to a numeric factor
-- `observeEvent` -> chooses which slider inputs to show and which sliders to not show
-- `which` -> returns the indices that are True
-- `paste` -> links vectors together after to character
+- `observeEvent` -> chooses which slider inputs to show and which sliders not to show
 - `ggplot` -> data visualization package
     - `geom_density` -> computes and draws density estimate
     - `geom_vline` -> annotates the plot with vertical lines
@@ -114,7 +111,7 @@ The purpose of the shiny app is to allow the user to experiment with the data to
 you don't want the slider to appear in")`. 
 - It goes in the `list_hide` function within the else if. Once that has been added, that variable, in this case `inflation_var2`, should be added to `simdata1` in `all_analysis.R`. This deals directly with the original analysis.
 
-- EXPLAIN: `knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")`
+- EXPLAIN: `knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")`
 
 - If the slider you want to add is already in `all_analysis.R`, make sure to use the name defined in `all_analysis.R`, then add it to `server.R`, and then `ui.R`.
 
@@ -122,10 +119,10 @@ you don't want the slider to appear in")`.
 
 ## The chart below shows the way that the different components of the OPA interact with each other
 
-<img align="center" width="50%" src="./www/sa_readme_chart.png">
+<img align="center" width="50%" src="./www/sa_readme_chart_sk.png">
 
-The line, `knitr::purl("code/05_final_opa.Rmd", "code/shiny_app/all_analysis.R")` converts the R markdown in `05_final_opa.Rmd` to R script in `all_analysis.R`.
-This means that when data is updated or added in `05_final_opa.Rmd`, it will update the `all_analysis.R` file.
+The line, `knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")` converts the R markdown in `01_final_opa.Rmd` to R script in `all_analysis.R`.
+This means that when data is updated or added in `01_final_opa.Rmd`, it will update the `all_analysis.R` file.
 
 
 
