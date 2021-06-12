@@ -12,16 +12,11 @@ library(ggplot2)
 
 # get links
 setwd(here())
-if (file.exists("code/shiny_app/links.csv")){
-  links <- read.csv("code/shiny_app/links.csv")
-} else{
-  links <- read.csv("links.csv")
-}
+links <- read.csv("links.csv")
 rownames(links) <- links$name
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
-#source(here("code", "shiny_app", "all_analysis.R"))
 source(here("all_analysis.R"))
 
 
