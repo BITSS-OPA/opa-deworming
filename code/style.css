@@ -97,7 +97,7 @@ img[alt = screenshot]{height: 20px}
   display: block;
   height: 80px;
   margin: 20px 5px 20px 15px ;
-  background-image: url("./shiny_app/www/bitss_just_logo_transparent.png"), url("./shiny_app/www/cega_transparent.png");
+  background-image: url("./images/bitss_just_logo_transparent.png"), url("./images/cega_transparent.png");
   background-size: contain;
   background-position: left, right;
   background-repeat: no-repeat;
@@ -109,7 +109,7 @@ img[alt = screenshot]{height: 20px}
   display: block;
   height: 80px;
   margin: 20px 5px 20px 15px ;
-  background-image: url("./shiny_app/www/OPA_layers_details.png");
+  background-image: url("./images/OPA_layers_details.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

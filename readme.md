@@ -1,7 +1,7 @@
 
 # Project on Open Policy Analysis For Cost Effectiveness Analysis of Deworming Interventions
 
-<img width="200" src="./code/images/BITSS_logo_horizontal.png"><img width="200" src="./code/images/CEGA_logo.png"><img height='80' src='./code/shiny_app/www/OPA_layers.png'>
+<img width="200" src="./code/images/BITSS_logo_horizontal.png"><img width="200" src="./code/images/CEGA_logo.png"><img height='80' src='./www/OPA_layers.png'>
 </div>
 
 <br>

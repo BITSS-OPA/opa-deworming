@@ -740,7 +740,7 @@ shinyServer( function(input, output, session) {
     position <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale, TRUE)[[2]]
     total_time_sim <- generate_plot_f(npv_all_sim, input$policy_est, input$rescale, TRUE)[[3]]
     plot1 <- plot1 + labs(y = NULL,
-                          x = "Net Present Value (Benefits -  Costs)" ,
+                          x = "Net Present Value (Benefits - Costs) (USD as of 2018)" ,
                           title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
                           subtitle = paste0(policy_estimates_text[position], ". ",
                                             "N = ", input$param_num_of_sim, " simulations. Takes ",
@@ -765,7 +765,7 @@ shinyServer( function(input, output, session) {
     position <- output_plot[[2]]
 
     plot1 <- plot1 + labs(y = NULL,
-                          x = "Net Present Value (Benefits -  Costs)" ,
+                          x = "Net Present Value (Benefits - Costs) (USD as of 2018)" ,
                           title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
                           subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
     )
@@ -791,7 +791,7 @@ shinyServer( function(input, output, session) {
     position <- output_plot[[2]]
 
     plot1 <- plot1 + labs(y = NULL,
-           x = "Net Present Value (Benefits -  Costs)" ,
+           x = "Net Present Value (Benefits - Costs)  (USD as of 2018)" ,
            title = "Net Lifetime Income Effects of Deworming for Each Child Treated",
            subtitle = "Distribution of the Net Present Value (NPV) of Deworming Interventions"
            )

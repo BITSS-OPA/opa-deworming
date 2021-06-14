@@ -124,6 +124,41 @@ you don't want the slider to appear in")`.
 The line, `knitr::purl("code/01_final_opa.Rmd", "code/shiny_app/all_analysis.R")` converts the R markdown in `01_final_opa.Rmd` to R script in `all_analysis.R`.
 This means that when data is updated or added in `01_final_opa.Rmd`, it will update the `all_analysis.R` file.
 
+## Your setup to deploy and publish the Shiny App for the Deworming Open Policy Analysis
+
+One effective way to publicly share and show your shiny app (SA) for the deworming OPA is using **shinyapps.io**, an online hosting service RStudio provides. You can deploy and publish your SA by following the steps below.
+
+1. Create a shinyapps.io account and connect it with your RStudio.
+2. Make sure your codes can work in the shinyapps.io cloud.
+
+### 1. Create a shinyapps.io account and connect it with your RStudio
+
+*Please skip this step if you already have a shinyapps.io account.
+
+- In `ui.R`, click the icon to the right to "Run App" and select "Manage Accounts".
+- In "Publishing" option, click "Connect..." to the right to "Publishing Accounts".
+- Select "ShinyApps.io" and click the "Get started here" link.
+- After signing up with shinyapps.io, following the instruction of RStudio, get, copy and paste the token. Finally, click "Connect Account".
+
+  <img align="center" width="50%" src="./www/sa_readme_deployment1.png">
+
+### 2. Make sure your codes can work in the shinyapps.io cloud
+
+- Put the folders containing the related files in your local environment.
+- In Line 9 in `all_analysis.R`, turn "TRUE" into "FALSE" in the `if` function.
+
+  <img align="center" width="50%" src="./www/sa_readme_deployment2.png">
+
+- In Lines 55 and 56 in `all_analysis.R`, inactivate functions by putting "#" at the beginning.
+
+  <img align="center" width="50%" src="./www/sa_readme_deployment3.png">
+
+- Then, in `ui.R`, click the icon to the right to "Run App" and select "Other Destination...". After making sure that all the boxes of the related files are checked, click "Publish".
+
+  <img align="center" width="50%" src="./www/sa_readme_deployment4.png">
+
+
+If you have an error when deploying, please check "Logs" of the application through your shinyapps.io Dashboard to figure out the cause of the error.
 
 
 
