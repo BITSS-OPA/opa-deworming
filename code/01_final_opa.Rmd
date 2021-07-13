@@ -100,7 +100,7 @@ knitr::opts_chunk$set(fig.width=12, fig.height=8)
 
 #2) generate the all_analysis.R file that goes into the shiny app. try to eval to false the package install
 options(knitr.duplicate.label = "allow") # workaround for purl error
-knitr::purl("code/01_final_opa.Rmd", "all_analysis.R")
+knitr::purl("code/01_final_opa.Rmd", "code/all_analysis.R")
 
 #rmarkdown::render("code/01_final_opa.Rmd", encoding=encoding, output_file=file.path("..", 'index.html'))
 

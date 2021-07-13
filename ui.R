@@ -17,7 +17,7 @@ rownames(links) <- links$name
 
 # not sure if this makes a difference
 knitr::opts_knit$set(root.dir = here())
-source(here("all_analysis.R"))
+source(here("code","all_analysis.R"))
 
 
 costs_temp_india   <-
@@ -66,7 +66,7 @@ length_temp_original <- 1
 nsims <- 1e4
 
 # Before each deployment: copy and paste 'data' and 'rawdata' folders into 'shiny_app\'
-# here() creates conflits with shiny deployment. Use source("all_analysis.R") intead
+# here() creates conflicts with shiny deployment. Use source("all_analysis.R") instead
 # source(here("code", "shiny_app", "all_analysis.R"))
 
 #fluidPage is something must have
