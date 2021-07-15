@@ -298,6 +298,15 @@ chunk_sources <- function(){
     staff_time_so <- 0.3           #Added Deworming costs due to government staff time
     time_to_jm_so <- 10            #Time from initial period until individual join the labor force
 
+    #############
+    ##### Intergenerational Benefits   
+    #############
+    cp_daly_so <- 27.42 # PSI https://www.psi.org/wp-content/uploads/2020/02/Net-Cost-Per-DALY-2015.pdf
+    lambda1_mort_so <- 0.016 # The Treatment Effects. should be aligned with the new paper
+    yll_pc_so <- 11870264.06/5993267/0.016/65 # (YLL of age 0-64 in Kenya in 2019)/(Estimated Saved Population of age 0-4 = The Treatment Effects * The Population of age 0-4 in Kenya in 2019)/(65 years) GBD and KNBS http://housingfinanceafrica.org/app/uploads/VOLUME-III-KPHC-2019.pdf
+    fert_yr_so <- c(0.003093735, 0.014040798, 0.027129678, 0.043074314, 0.076867422, 0.103521141, 0.140883944, 0.166823724, 0.215847529, 0.249640637, 0.261301639, 0.263205477, 0.268916988, 0.234647920, 0.193001484, 0.161826152, 0.135648392, 0.120179716, 0.081151056, 0.081864995, 0.077819341, 0.067586216, 0.057591072)
+    periods_chldb_so <- 22
+
 
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
@@ -582,7 +591,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 In this first approach, the effect on earnings over the entire lifetime is predicted by extrapolating the effects on hours worked by individuals in the original treatment group, ten years after the intervention.
 
-Two types of results are presented: the total effect on earnings projected over a lifetime and the estimated fiscal effect due to the government collecting additional taxes on higher earnings. The effects are calculated in two scenarios: with and without externalities over the population of children who did not receive deworming interventions. In the original deworming study conducted in Kenya, there is evidence of epidemiological externalities for children who remained untreated but who attended treatment schools, as well as for children living near treatment schools. Externality effects may not be as relevant for current-day deworming programs since most programs are national programs that target all school-aged children (and in some cases, preschool-aged children) in at-risk areas.
+Two types of results are presented: the total effect on earnings projected over a lifetime and the estimated fiscal effect due to the government collecting additional taxes on higher earnings. The effects are calculated in two scenarios: with and without externalities over the population of children who did not receive deworming interventions. In the original deworming study conducted in Kenya, there is evidence of epidemiological externalities for children who remained untreated but who attended treatment schools, as well as for children living near treatment schools. Externality effects may not as relevant for current-day deworming programs since most programs are national programs that target all school-aged children (and in some cases, preschool-aged children) in at-risk areas.
 
 ### Gains in earnings
 
@@ -1500,7 +1509,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 In this third and final approach, the report borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key technical assistance partner to best identify one clear output to inform policy makers. BITSS worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. For this report, Evidence Action provided insights on the updated costs and benefits across different country contexts to offer a broader perspective helpful for policy makers.
 
-Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in baseline prevalence rates and length of treatment. Besides, the benefits include intergenerational effects of under 5 mortality reduction of children of dewormed children as indirect benefits. Additionally, the relevant costs are constrained to direct costs alone (excluding additional costs on education). Finally, this approach uses inputs costs and prevalence that reflect the current settings where Evidence Action is supporting deworming interventions. As of 2020, Evidence Action supports deworming interventions in four countries.
+Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in baseline prevalence rates and length of treatment. Additionally, the relevant costs are constrained to direct costs alone (excluding additional costs on education). Finally, this approach uses inputs costs and prevalence that reflect the current settings where Evidence Action is supporting deworming interventions. As of 2020, Evidence Action supports deworming interventions in four countries.
 
 ### Benefits
 
@@ -1722,51 +1731,6 @@ Now the benefits are flexible to worm prevalence and lenght of treatment. To fac
 ```
 To compute the benefits for this approach, we use data on prevalence and length of treatment from the four countries for which Evidence Action has records. Readers interested in assessing the effects of deworming for a specific value of prevalence and length of treatment are referred to the [interactive app](`r links['shiny_app', 'url']`) (tab on key assumptions) where they can input the values that best reflect their setting. To facilitate comparison with the other two approaches, we present here the results using the same length of treatment assumptions parameters as in approach 1 and 2.
 
-#### Indirect benefits: Including intergenerational effects of child mortality rate reduction
-
-In addition to the benefits of deworming to the treated students, we extrapolate the intergenerational benefits to the children of the dewormed children based on the under-five mortality rate reduction, the disability-adjusted life year (DALY) averted by the mortality rate reduction, and the cost per DALY averted. 
-
-To capture the present value of the benefits of the second generation of each dewormed student, this approach assumes the following points: No pair of treated male and female students become in a relationship. The gains start 15 years after deworming intervention, when the ages of treated students roughly reach the mean age of childbearing, 28.7 years old (United Nations, 2019). To be conservative, this benefit is only gained in the first child of the treated student.
-
-<details>
-
-<summary>Show all the details</summary>
-
-```{=tex}
-\begin{equation}
-fr\sum_{t=15}^{19}{H_t\left(\frac{1}{1+r}\right)^t}
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-```
-Where:
-
--   $fr$: fertility rates at age 25-29 (births per 1,000 women)
--   $H_t$: intergenerational benefits to the child of the dewormed student
-
-The DALY averted is calculated by multiplying the reduced mortality rate of under-five children and the years of life lost due to premature mortality (YLL) cited from the Global Burden of Disease (GBD) 2019 study. This report uses $27.42 as the cost per DALY averted in Kenya (PSI, 2020). 
-
-To calculate the intergenerational benefits, we set age categories corresponding to those of the GBD 2019; that is, “under 1 year old” and “1 to 4 years old”. It is assumed that the mortality rate reduction influences only YLL out of DALY.
-
-```{=tex}
-\begin{equation}
-H_t={CD\times R}_{ac}\times{YLL}_{ac}
-`r equationIndex <- equationIndex + 1`
-\label{eq:`r equationIndex`}
-\tag{`r equationIndex`}
-\end{equation}
-```
-
-Where:
-
--   $CD$: Cost per DALY averted cited from PSI (2020) (or calculated by 1) health expenditure per capita and Age-standardized rate (ASR) DALY per capita, 2) Willingness-to-pay, or 3) cause-specific cost per DALY and percentage of each cause to the overall DALYs of under 5 children)
--   $R$: intergenerational benefits to the child of the dewormed student
--   $YLL$: the years of life lost due to premature mortality
--   $ac$: age category. This comprises the children under 1 year old and those between age 1 and 4.
-
-</details>
-
 Under approach 3, and using the same assumptions as above, the net present value of benefits is: `r round(app3_pv_benef_no_ext_in, 2)` and `r round(app3_pv_benef_yes_ext_in, 2)` when using benefits of approach 1 without and with externalities. The net present value of benefits is `r round(app3_pv_benef_all_new_in, 2)` when using the benefit structure of approach 2.
 
 ### Costs
@@ -1971,6 +1935,92 @@ knitr::kable(table_2, col.names = c("Equation", "#"), caption = "Summary of equa
 knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = "Sources: summary of inputs specified until this point in the document") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
+
+</details>
+
+## Approach 4: Combination of Previous Approaches and Intergenerational Benefits of Child Mortality Rate Reduction
+
+In this fourth approach, the report adds intergenerational effects of under 5 mortality reduction of children of dewormed students as benefits to the third approach. 
+
+### Intergenerational Benefits
+
+In addition to the health and socioeconomic benefits of deworming to the treated students, we extrapolate the intergenerational benefits to the children of the dewormed students (who are adults now). The theory of change is that the improved health and socioeconomic status of dewormed students also improve their children’s health, which can be measured as mortality rate reduction (Figure: Theory of Change) ![theory of change](images/ToC.png) 
+
+The benefits are calculated as a monetized value of years of life saved per dewormed individual ($IB$). The calculation is conducted as the discounted sum of fertility rates in t years after the deworming ($fr_{t}$) times the treatment effects on the under 5 mortality reduction of children of the dewormed cohort ($γ_{t}$), the average annual value of saved life per child of the dewormed population ($H$), and the monetary value of health benefits ($M$). This approach assumes that the benefits are added for a maximum of 22 years after the deworming intervention, which is analyzed in **XXX(2021)**.
+
+The fertility rate ($fr_{t}$) signifies the number of children born per dewormed individual t years after the deworming intervention. This number is normalized by the distribution of the childbirth from 1998 to 2020 and the total number of children one dewormed individual bears during the period after the intervention (**XXX(2021). table XXX, column XXX, row XXX**: 1998 as t = 0). The treatment effects on the under 5 mortality reduction of children of the dewormed cohort ($γ_{t}$) are the difference between the mortality rate of under 5 children of the control group and that of the treatment group (**XXX(2021). table XXX, column XXX, row XXX**). The average annual value of saved life per child of the dewormed population ($H$) is the average annual per-capita years of life lost due to premature mortality (YLL) at age 0-64 based on the assumption that the survived child will live up to age 64 if the deworming treatment to their parents prevents their death of under 5 (close to the life expectancy at birth: 66.18 (@united2019world; Life Expectancy at Birth (e0) - Both Sexes, column 2015-2020, row Kenya. Accessed July 12, 2021). We cited YLL of 0-64 years old of all causes and both sexes in Kenya in 2019 from the Global Burden of Disease (GBD) 2019 study (@gbd; Location Kenya, Year 2019, Context Cause, Age  <1 year to 60 to 64, Metric Number, Measure YLLs, Sex Both, Cause Totall All causes, Accessed July 12, 2021) and divided it by the estimated saved under 5 population and the length of the period (65 years) to get the target per-capita value of saved life ($H$). The monetary value of health benefits ($M$) is the saved cost when one YLL is averted. This report uses $27.42 as the cost per YLL averted in Kenya (@psi2015. table Net Cost per DALY Averted, 2015, column Net Cost per DALY Averted, row Kenya, Accessed June 18, 2021). The discounting rate is 5%, as used for approaches 2 and 3. To be conservative, this approach does not consider the factors generated when both parents are dewormed although additional effects might be produced if both male and female parents get treatment. This approach assumes that the benefits are only gained in the child of the treated student through the reduced mortality rates of their children. Estimating the direct health benefits to the treated students is not straightforward. Parasitic worm infections are not lethal, which makes it difficult to quantify the effects of deworming. For further extension of OPA, it is worth adding the direct health benefits.
+
+Note: The relationship between DALY and YLL. The disability-adjusted life year (DALY) is an indicator of the burden of disease, which comprises years of life lost due to premature mortality (YLL) and years lived with disability (YLD). This analysis uses YLL as an indicator of health benefits, assuming that the mortality rate reduction does not influence YLD.
+
+<details>
+
+<summary>Show all the details</summary>
+```{=tex}
+\begin{equation}
+IB = \sum_{t=0}^{22} fr_{t} γ_{t} H \left(  \frac{1}{1 + r}\right)^{t} M\\
+`r equationIndex <- equationIndex + 1`
+\label{eq:`r equationIndex`}
+\tag{`r equationIndex`}
+\end{equation}
+```
+Where:
+
+-   $IB$: the monetized value of years of life saved per dewormed individual\
+-   $fr_{t}$: the number of children one dewormed individual bears $t$ years after the deworming intervention\
+-   $γ_{t}$: the treatment effects on the under 5 mortality reduction of children of the dewormed cohort
+-   $H$: the annual average value of life per survived child of the dewormed population. Years of life lost due to premature mortality (YLL) at age 0-64 in Kenya in 2019 divided by the possible saved under 5 population and 65 years
+-   $M$: the monetary value of health benefits per $H$, cited from @psi2015 **(or calculated by 1) health expenditure per capita and Age-standardized rate (ASR) DALY per capita, 2) Willingness-to-pay, or 3) cause-specific cost per DALY and percentage of each cause to the overall DALYs of under 5 children)**
+
+For example: if 0.003 children are born per dewormed individual 0 years after the deworming ($fr_{t = 0}$), treating their parents at early ages with deworming reduced their child’s mortality rate by 1.6% ($γ_{t}$), and one survived child in Kenya averts 1.904422988 YLLs annually on average at age 0-64 ($H$), we can estimate the discounted monetized value for one dewormed student at the time of $t = 0$ by multiplying \$27.42 as the cost per DALY averted ($M$). Then, we sum up the benefits using the fertility rate in a specific year $t$ ($fr_{t}$: for $t = 0, 1, ...,22$ ) :
+
+```{=tex}
+\begin{equation}
+IB = 0.003 \times 0.016 \times 1.904422988 \times \left(  \frac{1}{1 + 0.05}\right)^{t = 0} \times \$27.42 + \dots \\
+\dots + 0.261301639 \times 0.016 \times 1.904422988 \times \left(  \frac{1}{1 + 0.05}\right)^{t = 10} \times \$27.42 + \dots \\
+\dots + 0.057591072 \times 0.016 \times 1.904422988 \times \left(  \frac{1}{1 + 0.05}\right)^{t = 22} \times \$27.42\\
+\end{equation}
+```
+
+</details>
+
+```{r intgen_benefits, echo=print_code}
+# - inputs: number of childbirth per dewormed individual year by year(fert_yr_so), new interest rate (interest_new_in), number of periods for childbearing of dewormed individual(periods_chldb_so), the treatment effects on under 5 mortality rate reduction (lambda1_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_so), Cost per DALY averted(cp_daly_so)
+# - outputs: function that computes the present value of intergenerational health benefits
+chunk_intgen_benefits <- function(){
+###############################################################################
+###############################################################################  
+  intgen_hlth_f <- function(
+    fert_yr_var,
+    interest_r_var = interest_new_in,
+    periods_chldb_var,
+    lambda1_mort_var, 
+    yll_pc_var,
+    cp_daly_var){
+      index_t <- 0:periods_chldb_var
+      res1 <- sum(fert_yr_var * lambda1_mort_var * yll_pc_var * cp_daly_var * (1 / (1 + interest_r_var) )^index_t)
+      return(res1)   
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("intgen_hlth_f" = intgen_hlth_f))
+}
+invisible( list2env(chunk_intgen_benefits(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+intgen_hlth_in <- intgen_hlth_f(
+                    fert_yr_var = fert_yr_so,
+                    periods_chldb_var = periods_chldb_so,
+                    lambda1_mort_var = lambda1_mort_so, 
+                    yll_pc_var = yll_pc_so,
+                    cp_daly_var = cp_daly_so)
+
+```
+
+</details>
+
+Under approach 4, and using the same assumptions as above, the present value of intergenerational benefits is $`r intgen_hlth_in`.
+
 
 ## Accounting for Uncertainty
 
