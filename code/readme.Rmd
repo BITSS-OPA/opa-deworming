@@ -6,13 +6,14 @@ output: github_document
 
 ```{r setup, include=FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-links <- read.csv("links.csv")
+library(here)
+links <- read.csv(here("data","links.csv"))
 rownames(links) <- links$name
 ```
 
 # Project on Open Policy Analysis For Cost Effectiveness Analysis of Deworming Interventions
 
-<img width="200" src="./code/images/BITSS_logo_horizontal.png"><img width="200" src="./code/images/CEGA_logo.png"><img height='80' src='./www/OPA_layers.png'></div>
+<img width="200" src="./images/BITSS_logo_horizontal.png"><img width="200" src="./images/CEGA_logo.png"><img height='80' src="./images/OPA_layers.png"></div>
 <br>
 
 Open in RStudio: [![Binder](http://mybinder.org/badge_logo.svg)](`r links['binder', 'url']`)
@@ -21,7 +22,7 @@ Go straight to the Shiny app: [here](`r links['shiny_app', 'url']`)
 
 This repository and its accompanying dynamic document and Shiny app are three key components of an Open Policy Analysis (OPA) on the costs and benefits of mass deworming interventions in various settings. Together, these materials create a transparent and reproducible analysis to facilitate collaboration and discussion about deworming policy.
 
-<img align="right" width="50%" src="./code/images/OPA_layers_materials.png">
+<img align="right" width="50%" src="./images/OPA_layers_materials.png">
 
 1 - [An interactive plot](`r links['shiny_app', 'url']`), which summarizes the interactions between all key parameters for a given set of assumptions. Materials can be found in: [`code/shiny_app`](`r links['shiny_code', 'url']`).
 
@@ -82,7 +83,7 @@ This list of contributors to this repository (also available at [this page](`r l
 
 library(tidyverse)
 deworming_contributors <- readr::read_csv(
-  "contributors.csv", col_types = list())
+  here("data","contributors.csv"), col_types = list())
 
 cat(str_c(deworming_contributors$desc, collapse = ", "))
 ```
