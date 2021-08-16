@@ -5,7 +5,6 @@ author: "<center><div class = 'contributors'>BITSS Team. Full list of contributo
 editor_options:
   chunk_output_type: console
 output:
-
   bookdown::html_document2:
     code_download: yes
     code_folding: hide
@@ -292,9 +291,11 @@ chunk_sources <- function(){
     unit_cost_local_so <- 43.66    #Deworm the World
     unit_cost_so <- 0.42           # Unit cost of deworming (in 2018 USD) - from Evidence Action
     #CALCULATIONS TO CONVERT ALL CURRENCY TO 2017 USD PPP
+    # 2018 Dollars -> 2018 Kenyan Schilling -> back to dollars adjusted by PPP 
     unit_cost_ppp_so <- unit_cost_so*ex_rate_2018_so/ex_rate_2018_ppp_so
-    unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
     # Adjust for inflation: convert all costs to 2017 USD
+    # takes 2018 ppp USD and turns into 2017 2017 ppp USD
+    unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
     # Move this calculations into the body of the document (and outside of the sources chunk)
     costs_par_so <- 1
     costs_par_sd_so <- 0.1
