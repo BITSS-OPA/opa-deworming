@@ -1,4 +1,4 @@
-## ----setup, include=FALSE, purl=TRUE-----------------------------------------------
+## ----setup, include=FALSE, purl=TRUE-----------------------------------------
 
 #With purl set to false, this chunk should be omitted from the all_analysis.R file -Keanu
 
@@ -63,7 +63,7 @@ knitr::purl("code/01_final_opa.Rmd", "code/all_analysis.R")
 
 
 
-## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE-----------
+## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE-----
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
 chunk_sources <- function(){
@@ -82,16 +82,22 @@ chunk_sources <- function(){
     costs_temp_so <- 1
     main_pe_so <- round(read.csv(here('data','ea3_pe'))[,2], digits=1)
 
-
-
     #############
     ##### Data  
     #############
     ex_rate_so <- 74                #Exchange Rate - Central Bank of Kenya 74 , 85
     ex_rate_2018_so <- 101.30       # Exchange rate (KES per international $)
                                     # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
-    ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
+    ex_rate_2011_so <- 88.81166667  # Exchange rate (KES per international $)
+                                    # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
+    ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank - old)
+    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank - old)
+    ex_rate_2011_ppp_so <- 35.39612198      # World Bank - new methodology 
+    ex_rate_2017_ppp_new_so <- 40.18493652  # https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
+    ex_rate_2018_pp_newp_so <- 40.19336962  
+
+    
+    
     growth_rate_so <- 1.52/100      #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
     gov_bonds_so <- 	0.1185	      #Kenyan interest on sovereign debt - Central Bank of Kenya
     gov_bonds_new_so <- 0.09
@@ -133,6 +139,9 @@ chunk_sources <- function(){
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "a2_tax_sim",
     # "a2_all_sim", "a3_inc_a1_all_sim", "a3_inc_a1_all_x_sim", "a3_inc_a2_all_sim"
 
+    yll_pc_so <- 16.88585134 # YLL per capita (YLL of age 0-64 in Kenya in 2019)/(Population of age 0-64 in 2019)*65 
+                             # Global Burden of Disease (http://ghdx.healthdata.org/gbd-results-tool?params=gbd-api-2019-permalink/426dce805f261258aaade61a91bf477d) and Kenya National Bureau of Statistics http://housingfinanceafrica.org/app/uploads/VOLUME-III-KPHC-2019.pdf
+    
     #############
     ##### Research
     #############
@@ -180,6 +189,7 @@ chunk_sources <- function(){
                                   # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
     cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
     cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
+    cpi_2011_so <- 224.939          # from the Bureau of Labor Statistics - Ave. of HALF 1&2 https://data.bls.gov/pdq/SurveyOutputServlet                              
     teach_sal_2017usdppp_so <- teach_sal_new_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
 
     n_students_so <- 45            #Average pupils per teacher	45
@@ -197,13 +207,44 @@ chunk_sources <- function(){
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
 
+    cp_daly_so <- 23.68 # Kremer et al. (2011) (2011 USD) http://emiguel.econ.berkeley.edu/wordpress/wp-content/uploads/2021/03/Paper__Spring_Cleaning.pdf
+    cp_daly_2017usdppp_so <- cp_daly_so * ex_rate_2011_so / ex_rate_2011_ppp_so * cpi_2017_so / cpi_2011_so
+    lambda1_mort_so <- 0.016      # The Treatment Effects. To be aligned with the new paper after publication
+    lambda1_mort_sd_so <- 0.006   # doi, page, table, col, row
+    fert_yr_so <-
+      c(
+        0.003093735,
+        0.014040798,
+        0.027129678,
+        0.043074314,
+        0.076867422,
+        0.103521141,
+        0.140883944,
+        0.166823724,
+        0.215847529,
+        0.249640637,
+        0.261301639,
+        0.263205477,
+        0.268916988,
+        0.234647920,
+        0.193001484,
+        0.161826152,
+        0.135648392,
+        0.120179716,
+        0.081151056,
+        0.081864995,
+        0.077819341,
+        0.067586216,
+        0.057591072
+      ) # the number of childbirth 0-22 years after the deworming treatment. To be aligned with the new paper after publication. Data shared by authors of STUDY (YEAR)
+
     #############
     ##### Guess work   
     #############
     new_prevalence_r_so <- NULL
     staff_time_so <- 0.3           #Added Deworming costs due to government staff time
     time_to_jm_so <- 10            #Time from initial period until individual join the labor force
-
+    periods_chldb_so <- 22         #years until the dewormed student can give childbirth
 
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
@@ -224,11 +265,18 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # adjustment beyond KLPS-3 (likely a conservative assumption).
 #
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
+# 
+# How to convert several values of KSh into 2017 USD PPP. 
+# In three values: teach_sal_2017usdppp_so, unit_cost_2017usdppp_so, and cp_daly_2017usdppp_so.
+## USD in year X --(exchange rate of KSh to USD in year X -  https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE)--> KSH in year X
+## --(exchange rate of KSh to USD PPP in year X - https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE)--> USD PPP in year X
+## --(CPI in year X & in 2017 - Ave. of HALF 1&2 https://data.bls.gov/timeseries/CUUR0000SA0)--> 2017 USD PPP
 
 
 
 
-## ----final-pe, echo=print_code-----------------------------------------------------
+
+## ----final-pe, echo=print_code-----------------------------------------------
 # - inputs: total per capita benefits, total per capita costs
 # - outputs: Net Present Value (NPV)
 chunk_final_pe <- function(){
@@ -250,7 +298,7 @@ invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 
 
-## ----benefits, echo=print_code-----------------------------------------------------
+## ----benefits, echo=print_code-----------------------------------------------
 # - inputs: stream earnings, discounting rate, number of periods
 # - outputs: function that computes the present value of benefits
 chunk_benefits <- function(){
@@ -276,7 +324,7 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 
 
-## ----interest-rate, echo=print_code------------------------------------------------
+## ----interest-rate, echo=print_code------------------------------------------
 # - inputs: nominal interest rate, inflation rate
 # - outputs: real interest rate. exact and approximate formula
 chunk_interest <- function(){
@@ -314,7 +362,7 @@ interest_new_in <- as.numeric(
 
 
 
-## ----earnings1, echo=print_code----------------------------------------------------
+## ----earnings1, echo=print_code----------------------------------------------
 # - inputs: earnings wihtout treatment (wage_in), direct treatment eff
 # (lambda1_so), indirect treatment eff (lambda2_so), saturation and coverage (coverage_so)
 # - outputs: earnings (no name specified)
@@ -340,7 +388,7 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 
 
-## ----wage_t, echo=print_code-------------------------------------------------------
+## ----wage_t, echo=print_code-------------------------------------------------
 #inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
@@ -411,7 +459,7 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 
 
 
-## ----lambdas, echo=print_code------------------------------------------------------
+## ----lambdas, echo=print_code------------------------------------------------
 # - inputs: direct (lambda1_so), and indirect (lambda2_so) treatment effects by gender
 # - outputs: simple average of direct and indirect treatment eff.
 chunk_lambdas<- function(){
@@ -437,7 +485,7 @@ lambda1_in <- lambda1_in_f()
 lambda2_in <- lambda2_in_f()
 
 
-## ----coverage-and-saturation, echo = print_code------------------------------------
+## ----coverage-and-saturation, echo = print_code------------------------------
 # - inputs: coverage (coverage_so), take-up with full subsidy (q_full_so), and
 # take-up with no subsidy (q_zero_so)
 # - outputs: saturation (saturation_in)
@@ -505,7 +553,7 @@ pv_benef_yes_ext_in <- pv_benef_f(
 
 
 
-## ----cost2, echo = print_code------------------------------------------------------
+## ----cost2, echo = print_code------------------------------------------------
 # - inputs: periods (periods_so), additional education (delta_ed_final_in),
 #  discount rate (interest) (varies by approach), cost per student
 #  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment
@@ -541,7 +589,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:  
 
 
-## ----unit_costs2, echo = print_code------------------------------------------------
+## ----unit_costs2, echo = print_code------------------------------------------
 # - inputs: unit costs in local currency (unit_cost_local_so), exchange rate
 #  (ex_rate_so), years of treatment (years_of_treat_0_so)
 # - outputs: unit costs of treatment (s2_f)
@@ -564,7 +612,7 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 s2_in <- s2_f()
 
 
-## ----ed-costs, echo = print_code---------------------------------------------------
+## ----ed-costs, echo = print_code---------------------------------------------
 # - inputs: teacher salary (teach_sal_so) and benefits (teach_ben_so), number
 # of students (n_students_so), include externalities (include_ext_so), extra ed
 # without ext (delta_ed_so), and extra ed due to ext (delta_ed_ext_so)
@@ -640,7 +688,7 @@ pv_cost_yes_ext_in <- pv_costs_f(
 
 
 
-## ----delta-earnings, eval=TRUE, echo = print_code----------------------------------
+## ----delta-earnings, eval=TRUE, echo = print_code----------------------------
 # - inputs: index for time (t_var), pooled treatment effect (lambda1_new_so[1])
 # - outputs: effect on lifetime earnings (earnings_app2_f)
 chunk_new_earnings <- function(){
@@ -665,7 +713,7 @@ earnings_no_ext_new_in <- earnings_app2_f(t_var = 0:50,
 
 
 
-## ----unit_costs2_new, echo = print_code--------------------------------------------
+## ----unit_costs2_new, echo = print_code--------------------------------------
 # - inputs: unit costs (unit_cost_local_so), exchange rate (ex_rate_so),
 #  new interest rate (interest_new_in)
 # - outputs: total unit costs (s2_new_f)
@@ -711,7 +759,7 @@ q2_in <- q_full_so
 
 
 
-## ----lambdas_eff, echo = print_code------------------------------------------------
+## ----lambdas_eff, echo = print_code------------------------------------------
 # - inputs: previously estimated treatment effect (lambda1_in_f), prevalence
 # rates in the original setting (prevalence_0_so), prevalence in the new setting
 # (prevalence_r_so), countries included in the analysis (country_sel_so)
@@ -756,7 +804,7 @@ lambda1_r_in <- lambda_eff_f()$lambda1_eff_in
 prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 
 
-## ----lambdas_t, echo = print_code--------------------------------------------------
+## ----lambdas_t, echo = print_code--------------------------------------------
 # - inputs: treatment effect (lambda1_in_f), length of treatment in original
 # study (years_of_treat_0_so), length of treatment in new setting (years_of_treat_t_so)
 # - outputs: per year treatment effect (lambda1_t1) and total treatment effect
@@ -861,7 +909,7 @@ app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
                                 periods_var = periods_so)
 
 
-## ----eq_3, echo=print_code, eval=TRUE----------------------------------------------
+## ----eq_3, echo=print_code, eval=TRUE----------------------------------------
 # - inputs: cost data by payer type at the contry/province level by year (df_costs_so)
 #  crosswalk between country/state and region (df_costs_cw_so), treatment counts
 #  by country/province and year (df_counts_so); staff time adjusment factor
@@ -977,7 +1025,42 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
 
 
 
-## ----mc-setup, eval=TRUE, echo = print_code----------------------------------------
+## ----intgen_benefits, echo=print_code----------------------------------------
+# - inputs: number of childbirth per dewormed individual year by year(fert_yr_so), new interest rate (0.1), number of periods for childbearing of dewormed individual(periods_chldb_so), the treatment effects on under 5 mortality rate reduction (lambda1_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_so), Cost per DALY averted(cp_daly_2017usdppp_so)
+# - outputs: function that computes the present value of intergenerational health benefits
+chunk_intgen_benefits <- function(){
+###############################################################################
+###############################################################################  
+  intgen_hlth_f <- function(
+    interest_r_var,
+    periods_chldb_var,
+    lambda1_mort_var, 
+    fert_yr_var,
+    yll_pc_var,
+    cp_daly_var){
+      index_t <- 0:periods_chldb_var
+      res1 <- sum((1 / (1 + interest_r_var) )^index_t * lambda1_mort_var * fert_yr_var * yll_pc_var * cp_daly_var)
+      return(res1)   
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("intgen_hlth_f" = intgen_hlth_f))
+}
+invisible( list2env(chunk_intgen_benefits(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
+intgen_hlth_in <- intgen_hlth_f(
+                    interest_r_var = 0.1,
+                    periods_chldb_var = periods_chldb_so,
+                    lambda1_mort_var = lambda1_mort_so, 
+                    fert_yr_var = fert_yr_so,
+                    yll_pc_var = yll_pc_so,
+                    cp_daly_var = cp_daly_2017usdppp_so)
+
+
+
+## ----mc-setup, eval=TRUE, echo = print_code----------------------------------
 # This function takes as inputs means and standard deviations of source
 # parameters and simualte draws of each source. When the source is a scalar,
 # it generates a draw from a noromal dist (mean, sd). When it is a "small"
@@ -1373,7 +1456,7 @@ policy_estimates_text <- c(
   )
 
 
-## ----all-steps, echo=print_code----------------------------------------------------
+## ----all-steps, echo=print_code----------------------------------------------
 # TODO: Wrap this code chunk in chunk_xxxfunction
 
 #chunk_runvalues <- function(){
@@ -1837,7 +1920,7 @@ invisible( list2env(one_run_f(),.GlobalEnv) )
 
 
 
-## ----generate-plot-function, purl = TRUE, echo = FALSE-----------------------------
+## ----generate-plot-function, purl = TRUE, echo = FALSE-----------------------
 # generate_plot_f: function to generate plots for both Dynamic Document and
 # shiny app. It takes in the simulated data, policy estimate text, and rescale
 # variable. These are intermediary variables to exclude the interactivity of

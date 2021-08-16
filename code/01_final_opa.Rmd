@@ -184,10 +184,14 @@ chunk_sources <- function(){
                                     # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
     ex_rate_2011_so <- 88.81166667  # Exchange rate (KES per international $)
                                     # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank)
-    ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank)
-    ex_rate_2011_ppp_so <- 35.39612198 # PPP conversion factor, GDP (LCU per international $) - Kenya 
-                                       # - https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
+    ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank - old)
+    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank - old)
+    ex_rate_2011_ppp_so <- 35.39612198      # World Bank - new methodology 
+    ex_rate_2017_ppp_new_so <- 40.18493652  # https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
+    ex_rate_2018_pp_newp_so <- 40.19336962  
+
+    
+    
     growth_rate_so <- 1.52/100      #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
     gov_bonds_so <- 	0.1185	      #Kenyan interest on sovereign debt - Central Bank of Kenya
     gov_bonds_new_so <- 0.09
@@ -229,7 +233,8 @@ chunk_sources <- function(){
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "a2_tax_sim",
     # "a2_all_sim", "a3_inc_a1_all_sim", "a3_inc_a1_all_x_sim", "a3_inc_a2_all_sim"
 
-    yll_pc_so <- 16.88585134 # YLL per capita (YLL of age 0-64 in Kenya in 2019)/(Population of age 0-64 in 2019)*65 Global Burden of Disease (http://ghdx.healthdata.org/gbd-results-tool?params=gbd-api-2019-permalink/426dce805f261258aaade61a91bf477d) and Kenya National Bureau of Statistics http://housingfinanceafrica.org/app/uploads/VOLUME-III-KPHC-2019.pdf
+    yll_pc_so <- 16.88585134 # YLL per capita (YLL of age 0-64 in Kenya in 2019)/(Population of age 0-64 in 2019)*65 
+                             # Global Burden of Disease (http://ghdx.healthdata.org/gbd-results-tool?params=gbd-api-2019-permalink/426dce805f261258aaade61a91bf477d) and Kenya National Bureau of Statistics http://housingfinanceafrica.org/app/uploads/VOLUME-III-KPHC-2019.pdf
     
     #############
     ##### Research
@@ -298,8 +303,34 @@ chunk_sources <- function(){
 
     cp_daly_so <- 23.68 # Kremer et al. (2011) (2011 USD) http://emiguel.econ.berkeley.edu/wordpress/wp-content/uploads/2021/03/Paper__Spring_Cleaning.pdf
     cp_daly_2017usdppp_so <- cp_daly_so * ex_rate_2011_so / ex_rate_2011_ppp_so * cpi_2017_so / cpi_2011_so
-    lambda1_mort_so <- 0.016 # The Treatment Effects. To be aligned with the new paper after publication
-    fert_yr_so <- c(0.003093735, 0.014040798, 0.027129678, 0.043074314, 0.076867422, 0.103521141, 0.140883944, 0.166823724, 0.215847529, 0.249640637, 0.261301639, 0.263205477, 0.268916988, 0.234647920, 0.193001484, 0.161826152, 0.135648392, 0.120179716, 0.081151056, 0.081864995, 0.077819341, 0.067586216, 0.057591072) # the number of childbirth 0-22 years after the deworming treatment. To be aligned with the new paper after publication
+    lambda1_mort_so <- 0.016      # The Treatment Effects. To be aligned with the new paper after publication
+    lambda1_mort_sd_so <- 0.006   # doi, page, table, col, row
+    fert_yr_so <-
+      c(
+        0.003093735,
+        0.014040798,
+        0.027129678,
+        0.043074314,
+        0.076867422,
+        0.103521141,
+        0.140883944,
+        0.166823724,
+        0.215847529,
+        0.249640637,
+        0.261301639,
+        0.263205477,
+        0.268916988,
+        0.234647920,
+        0.193001484,
+        0.161826152,
+        0.135648392,
+        0.120179716,
+        0.081151056,
+        0.081864995,
+        0.077819341,
+        0.067586216,
+        0.057591072
+      ) # the number of childbirth 0-22 years after the deworming treatment. To be aligned with the new paper after publication. Data shared by authors of STUDY (YEAR)
 
     #############
     ##### Guess work   
@@ -329,11 +360,11 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 #
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 # 
-# on teach_sal_2017usdppp_so, unit_cost_2017usdppp_so, and cp_daly_2017usdppp_so: 
-# They are converted to 2017 USD PPP
+# How to convert several values of KSh into 2017 USD PPP. 
+# In three values: teach_sal_2017usdppp_so, unit_cost_2017usdppp_so, and cp_daly_2017usdppp_so.
 ## USD in year X --(exchange rate of KSh to USD in year X -  https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE)--> KSH in year X
 ## --(exchange rate of KSh to USD PPP in year X - https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE)--> USD PPP in year X
-## --(CPI in year X & in 2017 - Ave. of HALF 1&2 https://data.bls.gov/pdq/SurveyOutputServlet)--> 2017 USD PPP
+## --(CPI in year X & in 2017 - Ave. of HALF 1&2 https://data.bls.gov/timeseries/CUUR0000SA0)--> 2017 USD PPP
 
 ```
 
@@ -555,7 +586,6 @@ interest_new_in <- as.numeric(
 
 The actual value varies across approaches depending on the time and country chosen. For example, Approach 1 uses the return from government bonds and the inflation rate in Kenya for 2016, while approaches 2 and 3 use the same country's value for 2019. This results in discount rates of `r paste(round(100 * interest_in,2), "%", sep="")` for approaches 1 and `r paste(round(100 * interest_new_in,2), "%", sep="")` for approaches 2 and 3.
 
-</details>
 ```{r sum-tables2, purl=FALSE, echo=FALSE, eval=show_summary_tables}
 # Summary tables, not used for now.
 table_1 <- matrix("", nrow = 1, ncol = 3)
@@ -1957,9 +1987,17 @@ In addition to the health and socioeconomic benefits of deworming to the treated
 
 ### Direct costs and benefits of the Primary School Deworming Project
 
+
+<!--
+Bring whatever you see fit to the introduction: 
+
 A randomized health intervention (the Primary School Deworming Project or PSDP) launched by a non-governmental organization (NGO) provided deworming treatment to Kenyan children during 1998-2003. Over 20 years, PSDP has gained significant benefits to dewormed students and their children.
 
-The total population of PSDP was 32,565 pupils in 75 primary schools, of which around two-thirds received deworming treatment for 2-3 years. On average, one person gives birth to **XXX children in a lifetime (XXX)**. The deworming treatment reduced the under 5 mortality rates of children of dewormed students by **16 (per 1,000 children)**. Overall, the PSDP roughly survived 1,347.76 children of the treated people. From a perspective of cost, the direct deworming costs per one student are **$1.39 (2017 USD PPP)**, given the treatment period of 2.4 years and take-up rate of 75%. Multiplying the per-capita cost by the number of treated students (21,710 people), the direct program cost is $30,256.
+
+The total population of PSDP was 32,565 pupils in 75 primary schools, of which around two-thirds received deworming treatment for 2-3 years. 
+-->
+
+On average, one person gives birth to **XXX children in a lifetime (XXX)**. The deworming treatment reduced the under 5 mortality rates of children of dewormed students by **`r lambda1_mort_so*1000` (per 1,000 children)**. Overall, the PSDP roughly survived 1,347.76 children of the treated people. From a perspective of cost, the direct deworming costs per one student are **$1.39 (2017 USD PPP)**, given the treatment period of 2.4 years and take-up rate of 75%. Multiplying the per-capita cost by the number of treated students (21,710 people), the direct program cost is $30,256.
 So, we could simply say that 1,347.76 lives can be protected by spending $30,256. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.
 
 ### Intergenerational Benefits
