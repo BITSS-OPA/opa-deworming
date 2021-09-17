@@ -2063,8 +2063,8 @@ F_{t} = V \times \frac{V_{t}}{\sum_{t=0}^{22} V_{t}}\\
 Where:
 
 -   $F_{t}$: the number of children one individual bears $t$ years after the deworming intervention\
--   $V$: the total number of childbirth per person in the PSDP\
--   $V_{t}$: the number of childbirth in the PSDP in year t\
+-   $V$: the total number of childbirth per KLPS participant in 2021\
+-   $V_{t}$: the number of childbirth  in year t  (CHANGE NOTATION)\
 
 
 ```{r fert_yr, echo=print_code}
@@ -2095,13 +2095,15 @@ fert_yr_in <- fert_yr_f(
 
 The average annual value of saved life per child of the PSDP population ($H$): the average annual per-capita years of life lost due to premature mortality ($YLL$) at age 0-64 based on the assumption that the survived child will live up to age 64 if the deworming treatment to their parents prevents their death of under 5 (close to the life expectancy at birth: 66.18 (@united2019world; Life Expectancy at Birth (e0) - Both Sexes, column 2015-2020, row Kenya. Accessed July 12, 2021). We calculated YLL of 0-64 years old of all causes and both sexes in Kenya in 2019 by summing up YLL for each age category cited from the Global Burden of Disease (GBD) 2019 study (@gbd; Location Kenya, Year 2019, Context Cause, Age <1 year, to 60 to 64, Metric Number, Measure YLLs, Sex Both, Cause Total All causes, Accessed July 12, 2021). Then, we  divided it by the population age 0-64 to get the target per-capita value of saved life, and multiplied it by the expected length of life (`r life_exp_so`) ($H$). 
 
+We sum the $YLL$ for all causes, both genders across age groups 0-64 for the year 2019.
+
 <details>
 
 <summary>Show all the details</summary>
 
 ```{=tex}
 \begin{equation}
-YLL = \sum_{c \in causes}\sum_{s \in sexes}\sum_{a \in ages}\sum_{t \in year} YLL_{c,s,a,t}\\
+YLL = \sum_{a \in ages}YLL_{a}\\
 H = \frac{YLL_{\text{all causes, both sexes, 0-64, 2019}}}{\text {Kenyan population of age 0-64}} \times 65 
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
@@ -2115,9 +2117,9 @@ H = \frac{YLL_{\text{all causes, both sexes, 0-64, 2019}}}{\text {Kenyan populat
 chunk_yll_pc <- function(){
 ###############################################################################
 ###############################################################################  
-  yll_pc_f <- function(yll_var,
-                      pop_var,
-                      life_exp_var) {
+  yll_pc_f <- function(yll_var = yll_so,
+                      pop_var = pop_so,
+                      life_exp_var = life_exp_so) {
     res1 <- sum(yll_var) / sum(pop_var) * life_exp_var
     return(res1)
   }
