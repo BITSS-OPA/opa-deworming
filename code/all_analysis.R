@@ -93,7 +93,7 @@ chunk_sources <- function(){
     ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank - old)
     ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank - old)
     ex_rate_2011_ppp_so <- 35.39612198      # World Bank - new methodology. the details are written in Appendix I in https://openknowledge.worldbank.org/bitstream/handle/10986/33623/9781464815300.pdf?sequence=4&isAllowed=y
-    
+
     ex_rate_2017_ppp_new_so <- 40.18493652  # World Bank https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
     ex_rate_2018_ppp_new_so <- 40.19336962  # World Bank https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
 
@@ -102,7 +102,7 @@ chunk_sources <- function(){
     gov_bonds_new_so <- 0.09
     inflation_so <-  0.02           #Kenyan inflation rate - World Bank Development Indicators
     inflation_new_so <- 0.04
-    interest_10_so <- 0.1           #10% discounting rate, used in the main estimate in Hamory et al. 2020
+    interest_10_so <- 0.1           #10% discounting rate
     tax_so <- 0.16575               #ADD INFO
 
     # costs data
@@ -172,7 +172,7 @@ chunk_sources <- function(){
       870022
     )
     # Population of age 0-64 in 2019 in Kenya - Kenya National Bureau of Statistics http://housingfinanceafrica.org/app/uploads/VOLUME-III-KPHC-2019.pdf
-    
+
     #############
     ##### Research
     #############
@@ -229,7 +229,7 @@ chunk_sources <- function(){
     unit_cost_local_so <- 43.66    #Deworm the World
     unit_cost_so <- 0.42           # Unit cost of deworming (in 2018 USD) - from Evidence Action
     #CALCULATIONS TO CONVERT ALL CURRENCY TO 2017 USD PPP
-    # 2018 Dollars -> 2018 Kenyan Schilling -> back to dollars adjusted by PPP 
+    # 2018 Dollars -> 2018 Kenyan Schilling -> back to dollars adjusted by PPP
     unit_cost_ppp_so <- unit_cost_so*ex_rate_2018_so/ex_rate_2018_ppp_so
     # Adjust for inflation: convert all costs to 2017 USD
     # takes 2018 ppp USD and turns into 2017 2017 ppp USD
@@ -247,9 +247,9 @@ chunk_sources <- function(){
     gamma_mort_so <- 0.016      # The Treatment Effects. To be aligned with the new paper after publication
     gamma_mort_sd_so <- 0.006   # doi, page, table, col, row
     tot_chld_so <- 3.045663      # doi, page, table, col, row
-    n_chldbirth_yr_so <- 
+    n_chldbirth_yr_so <-
       c(13,59,114,181,323,435,592,701,907,1049,1098,1106,1130,986,811,680,570,505,341,344,327,284,242) # the number of childbirth 0-22 years after the treatment period in the study pop. To be aligned with the new paper after publication. Data shared by authors of STUDY (YEAR)
-    
+
     #############
     ##### Guess work   
     #############
@@ -258,7 +258,7 @@ chunk_sources <- function(){
     time_to_jm_so <- 10            #Time from initial period until individual join the labor force
     periods_chldb_so <- 22         #years until the dewormed student can give childbirth
     life_exp_so <- 65             #expected length of life of saved children in Kenya in 2019 - United Nations 2019. “World Population Prospects 2019” https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/EXCEL_FILES/3_Mortality/WPP2019_MORT_F07_1_LIFE_EXPECTANCY_0_BOTH_SEXES.xlsx.
-    
+
     # Fix teach_sal_so       
     return( sapply( ls(pattern= "_so\\b"), function(x) get(x)) )
 ###############################################################################
@@ -278,8 +278,8 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # adjustment beyond KLPS-3 (likely a conservative assumption).
 #
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
-# 
-# How to convert several values of KSh into 2017 USD PPP. 
+#
+# How to convert several values of KSh into 2017 USD PPP.
 # In three values: teach_sal_2017usdppp_so, unit_cost_2017usdppp_so, and cp_daly_2017usdppp_so.
 ## USD in year X --(exchange rate of KSh to USD in year X -  https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE)--> KSH in year X
 ## --(exchange rate of KSh to USD PPP in year X - https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE)--> USD PPP in year X
@@ -553,7 +553,7 @@ earnings_yes_ext_in <- earnings_app1_f(
 
 pv_benef_no_ext_in <- pv_benef_f(
   earnings_var = earnings_no_ext_in,
-  interest_r_var = interest_new_in,
+  interest_r_var = interest_in,
   periods_var = periods_so
 )
 
@@ -1056,7 +1056,7 @@ chunk_fert_yr <- function(){
     res1 <- tot_chld_var * n_chldbirth_yr_var / sum(n_chldbirth_yr_var)
     return(res1)
   }
-  
+
 ###############################################################################
 ###############################################################################  
     return(list("fert_yr_f" = fert_yr_f))
@@ -1080,7 +1080,7 @@ chunk_yll_pc <- function(){
     res1 <- sum(yll_var) / sum(pop_var) * life_exp_var
     return(res1)
   }
-  
+
 ###############################################################################
 ###############################################################################  
     return(list("yll_pc_f" = yll_pc_f))
@@ -1101,17 +1101,17 @@ chunk_chldsurv_benefits <- function(){
   chldsurv_hlth_f <- function(
                     interest_r_var = interest_10_so,
                     periods_chldb_var = periods_chldb_so,
-                    gamma_mort_var = gamma_mort_so, 
+                    gamma_mort_var = gamma_mort_so,
                     fert_yr_var = fert_yr_in,
                     yll_pc_var = yll_pc_in,
                     cp_daly_var = cp_daly_2017usdppp_so){
     index_t <- 0:periods_chldb_var
     res1 <-
-      sum((1 / (1 + interest_r_var)) ^ index_t * 
+      sum((1 / (1 + interest_r_var)) ^ index_t *
             gamma_mort_var * fert_yr_var * yll_pc_var * cp_daly_var)
     return(res1)
   }
-  
+
 ###############################################################################
 ###############################################################################  
     return(list("chldsurv_hlth_f" = chldsurv_hlth_f))
@@ -1121,7 +1121,7 @@ invisible( list2env(chunk_chldsurv_benefits(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 chldsurv_hlth_in <- chldsurv_hlth_f(interest_10_so,
                     periods_chldb_so,
-                    gamma_mort_so, 
+                    gamma_mort_so,
                     fert_yr_in,
                     yll_pc_in,
                     cp_daly_2017usdppp_so)
@@ -1856,7 +1856,7 @@ one_run_f <-
     #KLPS4 w/t and no ext
     pv_benef_tax_new_in <- pv_benef_f(
       earnings_var = earnings_no_ext_new_in * tax_var1,
-      interest_r_var = interest_10_so,
+      interest_r_var = interest_new_in,
       periods_var = periods_var1
     )
     unit_test_f(pv_benef_tax_new_in, 88.1820199569814,
@@ -1864,7 +1864,7 @@ one_run_f <-
 
     # KLPS4 all and no ext
     pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
-                                   interest_r_var = interest_10_so,
+                                   interest_r_var = interest_new_in,
                                    periods_var = periods_var1)
     unit_test_f(pv_benef_all_new_in, 532.018219951622, main_run_var = main_run_var1)
     # KLPS4 all and no ext + prevalence
@@ -1933,7 +1933,7 @@ earnings_no_ext_in
     costs_a2_in <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
-      interest_r_var = interest_10_so,
+      interest_r_var = interest_new_in,
       cost_of_schooling_var = cost_per_student_new_in,
       s1_var = 0,
       q1_var = q_zero_var1,

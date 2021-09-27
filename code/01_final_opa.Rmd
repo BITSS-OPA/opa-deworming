@@ -195,7 +195,7 @@ chunk_sources <- function(){
     gov_bonds_new_so <- 0.09
     inflation_so <-  0.02           #Kenyan inflation rate - World Bank Development Indicators
     inflation_new_so <- 0.04
-    interest_10_so <- 0.1           #10% discounting rate, used in the main estimate in Hamory et al. 2020
+    interest_10_so <- 0.1           #10% discounting rate
     tax_so <- 0.16575               #ADD INFO
 
     # costs data
@@ -597,7 +597,7 @@ interest_new_in <- as.numeric(
 
 </details>
 
-The actual value varies across approaches depending on the time and country chosen. For example, Approach 1 uses the return from government bonds and the inflation rate in Kenya for 2016, while approaches 3 uses the same country's value for 2019. Approach 2 follows the main estimate in the original paper(@klps4) This results in discount rates of `r paste(round(100 * interest_in,2), "%", sep="")` for approach 1, `r paste(round(100 * interest_10_so,2), "%", sep="")` for approaches 2 **and 4**, and `r paste(round(100 * interest_new_in,2), "%", sep="")` for approach 3.
+The actual value varies across approaches depending on the time and country chosen. For example, Approach 1 uses the return from government bonds and the inflation rate in Kenya for 2016, while approaches 2 and 3 use the same country's value for 2019. This results in discount rates of `r paste(round(100 * interest_in,2), "%", sep="")` for approaches 1, `r paste(round(100 * interest_new_in,2), "%", sep="")` for approaches 2 and 3, **and `r paste(round(100 * interest_10_so,2), "%", sep="")` for approaches 4**.
 
 ```{r sum-tables2, purl=FALSE, echo=FALSE, eval=show_summary_tables}
 # Summary tables, not used for now.
@@ -904,7 +904,7 @@ lambda2_in <- lambda2_in_f()
 
 The coverage ($R$) is defined as the fraction, among all neighboring schools (within a 6 km radius) treated within the study. Since the treatment was applied to approximately two-thirds of the population, $R = `r round(coverage_so, 2)`$[^5].
 
-[^5]: Last paragraph of page 9(1645) of @baird2016worms
+[^5]: Last paragraph of page 9 (1645) of @baird2016worms
 
 The intervention's saturation, $p$, measures the fraction of the population that is effectively using the treatment. It is defined as a weighted average of the treatment take-up under a full subsidy for deworming and the take-up under zero subsidy.
 
@@ -984,7 +984,7 @@ earnings_yes_ext_in <- earnings_app1_f(
 
 pv_benef_no_ext_in <- pv_benef_f(
   earnings_var = earnings_no_ext_in,
-  interest_r_var = interest_new_in,
+  interest_r_var = interest_in,
   periods_var = periods_so
 )
 
@@ -1307,7 +1307,7 @@ knitr::kable(table_1, col.names = c("Data", "Research", "Guesswork"), caption = 
 
 ## Approach 2: @klps4
 
-@klps4 follow the same principle as in @baird2016worms (increase in lifetime earnings), however, using updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention. Costs are fairly similar to approach 1, with the addition that in this second approach, the costs also account for the discounting of the several rounds of treatment required for effective deworming. Additionally, the interest rate is updated to current values of return on Kenyan government bonds and inflation.
+@klps4 follows the same principle as in @baird2016worms (increase in lifetime earnings), however, using updated data on the effects on the labor market outcomes. Instead of projecting a trend of earnings into the future (after the estimated impact of the 10 year follow-up), this analysis uses additional data from 15 and 20 year follow-ups after the original intervention. Costs are fairly similar to approach 1, with the addition that in this second approach, the costs also account for the discounting of the several rounds of treatment required for effective deworming. Additionally, the interest rate is updated to current values of return on Kenyan government bonds and inflation.
 
 ### Gains in earnings
 
@@ -1508,7 +1508,7 @@ cost_per_student_new_in <- cost_per_student_f(
 pv_costs2_in <- pv_costs_f(
    periods_var = periods_so,
    delta_ed_var = delta_ed_in,
-   interest_r_var = interest_10_so,
+   interest_r_var = interest_new_in,
    cost_of_schooling_var = cost_per_student_new_in,
    s1_var = 0,
    q1_var = 0,
@@ -1518,7 +1518,7 @@ pv_costs2_in <- pv_costs_f(
 
 
 pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
-                                interest_r_var = interest_10_so,
+                                interest_r_var = interest_new_in,
                                 periods_var = periods_so)
 
 a2_all_pe <- NPV_pe_f(benefits_var = pv_benef_all_new_in,
@@ -1558,7 +1558,10 @@ Over this nine-year period, treated students attended school for an additional `
 
 ### Assessing computational reproducibility of original results
 
-The second approach does not report benefits and costs separately. With all these elements the main result from the original analysis that is comparable with the results discussed here is the NPV of `r df_research_so$param[9]` (table `r df_research_so$tablenum[9]`, column `r df_research_so$table_col[9]`, and row `r df_research_so$table_row[9]`) This result corresponds to a social internal rate of return of `r paste0(df_research_so$param[8], "%")` (located as an inline result in the paper - also in `r df_research_so$figure_num[8]` - and in the appendix at table `r df_research_so$tablenum[8]`, column `r df_research_so$table_col[8]`, and row `r df_research_so$table_row[8]`). Following the steps described in this section, this analysis obtains the same result (`r a2_all_pe` and `r paste0(irr_in * 100, "%")`, respectively, without rounding).
+The second approach does not report benefits and costs separately. With all these elements the main result from the original analysis that is comparable with the results discussed here is the NPV of `r df_research_so$param[9]` (table `r df_research_so$tablenum[9]`, column `r df_research_so$table_col[9]`, and row `r df_research_so$table_row[9]`)[^8]. This result corresponds to a social internal rate of return of `r paste0(df_research_so$param[8], "%")` (located as an inline result in the paper - also in `r df_research_so$figure_num[8]` - and in the appendix at table `r df_research_so$tablenum[8]`, column `r df_research_so$table_col[8]`, and row `r df_research_so$table_row[8]`). Following the steps described in this section, this analysis obtains the same result (`r a2_all_pe` and `r paste0(irr_in * 100, "%")`, respectively, without rounding).
+
+[^8]: While @klps4 uses an annual discount rate of 10% for the main estimates, this analysis follows the method written in Common Structure in 2. Methodology for consistency.
+
 
 ```{r sum-tables20, purl=FALSE, echo=FALSE, eval=show_summary_tables}
 table_1[9,2] <- paste0("$r_{16}=", interest_in, "$")
@@ -1817,9 +1820,9 @@ Under approach 3, and using the same assumptions as above, the net present value
 
 ### Costs
 
-Through Evidence Action's technical assistance, which typically includes financial support for program implementation, governments provide Evidence Action with country-level (and sometimes subnational-level) government cost data to feed into program costing analyses. To estimate the costs in this analysis, the report first takes the costs of deworming provided by Evidence Action (detailed below) and then follows a similar approach to @givewell, by including an additional estimate around the amount of government staff time required to run deworming programs (which is [not included](`r links['ev_action_article', 'url']`) in Evidence Action's per-unit costs). The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions [^8].
+Through Evidence Action's technical assistance, which typically includes financial support for program implementation, governments provide Evidence Action with country-level (and sometimes subnational-level) government cost data to feed into program costing analyses. To estimate the costs in this analysis, the report first takes the costs of deworming provided by Evidence Action (detailed below) and then follows a similar approach to @givewell, by including an additional estimate around the amount of government staff time required to run deworming programs (which is [not included](`r links['ev_action_article', 'url']`) in Evidence Action's per-unit costs). The default cost is the per unit cost per treatment round per child across all countries. This is obtained as the weighted average of per unit costs ($c_{i}$) in all countries where Evidence Action currently has data on implementation of deworming interventions [^9].
 
-[^8]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds.
+[^9]: In some settings Evidence Action provides two rounds of treatment per year. In those cases, the unit costs discussed here represent the sum of both rounds.
 
 Costs per country include Evidence Action's technical assistance costs, government expenditure (including estimates of government staff time), and any other partner costs such as the cost of drugs donated by WHO. These items include: drug procurement and management, monitoring and evaluation, policy and advocacy, prevalence surveys, program management, public mobilization/community sensitization, and training and distribution. Costs can vary by geography due to factors of population size, treatment strategies, age of the program, and costs of "doing business."
 
@@ -2037,9 +2040,9 @@ A randomized health intervention (the Primary School Deworming Project or PSDP) 
 
 The total population of PSDP was 32,565 pupils in 75 primary schools, of which around two-thirds received deworming treatment for 2-3 years.
 -->
-In the KLPS, on average, one person gives birth to **`r tot_chld_so` children in a lifetime (XXX)**. The deworming treatment reduced the under five mortality rates of children of dewormed students by **`r gamma_mort_so*1000` (per 1,000 children)**. Thus, the treatment to one person roughly averted the death of `r tot_chld_so * gamma_mort_so` children among the `r tot_chld_so` children born from one person in the treatment group. From a perspective of cost, the direct deworming costs per one student are `r round(s2_new_ppp_in*q2_in, 2)` (2017 USD PPP), given the treatment period of `r years_of_treat_0_so` years and take-up rate of `r q2_in*100`% [^9]. So, we could simply say that `r tot_chld_so * gamma_mort_so` lives can be protected by spending $`r round(s2_new_ppp_in*q2_in, 2)` per treatment to one person. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.
+In the KLPS, on average, one person gives birth to **`r tot_chld_so` children in a lifetime (XXX)**. The deworming treatment reduced the under five mortality rates of children of dewormed students by **`r gamma_mort_so*1000` (per 1,000 children)**. Thus, the treatment to one person roughly averted the death of `r tot_chld_so * gamma_mort_so` children among the `r tot_chld_so` children born from one person in the treatment group. From a perspective of cost, the direct deworming costs per one student are `r round(s2_new_ppp_in*q2_in, 2)` (2017 USD PPP), given the treatment period of `r years_of_treat_0_so` years and take-up rate of `r q2_in*100`% [^10]. So, we could simply say that `r tot_chld_so * gamma_mort_so` lives can be protected by spending $`r round(s2_new_ppp_in*q2_in, 2)` per treatment to one person. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.
 
-[^9]: The direct deworming costs per one student is different from \$`r format(round(s2_new_in * q2_in,2), nsmall = 2)` shown in approach 2 because approach 2 and 4 use different conversion rates[^4].
+[^10]: The direct deworming costs per one student is different from \$`r format(round(s2_new_in * q2_in,2), nsmall = 2)` shown in approach 2 because approach 2 and 4 use different conversion rates[^4].
 
 <!--Multiplying the per-capita cost by the number of treated students (21,710 people), the direct program cost is $30,256.
 So, we could simply say that 1,347.76 lives can be protected by spending $30,256. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.-->
@@ -2080,7 +2083,7 @@ The fertility rate ($F_{t}$): this figure is calculated as the number of childre
 
 ```{=tex}
 \begin{equation}
-F_{t} = T \times \frac{V_{t}}{\sum_{t=0}^{22} V_{t}}\\
+F_{t} = AC \times \frac{V_{t}}{\sum_{t=0}^{22} V_{t}}\\
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
@@ -2089,7 +2092,7 @@ F_{t} = T \times \frac{V_{t}}{\sum_{t=0}^{22} V_{t}}\\
 Where:
 
 -   $F_{t}$: the number of children one individual bears $t$ years after the deworming intervention\
--   $T$: the total number of children per individual in the KLPS\
+-   $AC$: the total number of children per individual in the KLPS\
 -   $V_{t}$: the number of childbirth in the KLPS in year t\
 
 
@@ -2651,9 +2654,9 @@ policy_estimates_text <- c(
 # Main Results
 This report has presented three different approaches to measuring the welfare effects of deworming interventions. The first approach was based on the original paper that measured the welfare effects of deworming [@baird2016worms] and proposed four different ways to compute this effect (with and without externalities, and from a societal or fiscal perspective). The second approach, based on more recent data, focused only on direct effects, and relies less on predictive effects over the lifecycle. Results for the second approach are also separated between the societal and fiscal perspective.
 
-The third and final approach uses similar methodologies with three main differences. First, the report allows the benefits to be scaled to account for differences in the prevalence of worm infections in settings different from the original study. Second, the report allows the benefits to be scaled by the length of treatment provided to children within a particular setting. Finally, based on feedback from Evidence Action on the relevant costs from present-day deworming programs, this approach uses more up to date information on treatment costs and it does not take into account the knock-on effects of additional schooling costs as a result of increased school attendance, which are accounted for in approaches \#1 and \#2[^10].
+The third and final approach uses similar methodologies with three main differences. First, the report allows the benefits to be scaled to account for differences in the prevalence of worm infections in settings different from the original study. Second, the report allows the benefits to be scaled by the length of treatment provided to children within a particular setting. Finally, based on feedback from Evidence Action on the relevant costs from present-day deworming programs, this approach uses more up to date information on treatment costs and it does not take into account the knock-on effects of additional schooling costs as a result of increased school attendance, which are accounted for in approaches \#1 and \#2[^11].
 
-[^10]: Evidence Action suggests that the added costs on education will not be considered as costs from a policy maker's perspective. Those costs correspond to another intervention on itself (education) and incorporating its costs would require incorporating its benefits.
+[^11]: Evidence Action suggests that the added costs on education will not be considered as costs from a policy maker's perspective. Those costs correspond to another intervention on itself (education) and incorporating its costs would require incorporating its benefits.
 
 The table below summarises the three different approaches and the different alternatives within each approach. The main policy estimate is defined as that of Evidence Action (approach 3) using the latest research [@klps4]: approach 3.3 in the table (in bold).
 
@@ -2993,7 +2996,7 @@ one_run_f <-
     #KLPS4 w/t and no ext
     pv_benef_tax_new_in <- pv_benef_f(
       earnings_var = earnings_no_ext_new_in * tax_var1,
-      interest_r_var = interest_10_so,
+      interest_r_var = interest_new_in,
       periods_var = periods_var1
     )
     unit_test_f(pv_benef_tax_new_in, 88.1820199569814,
@@ -3001,7 +3004,7 @@ one_run_f <-
 
     # KLPS4 all and no ext
     pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
-                                   interest_r_var = interest_10_so,
+                                   interest_r_var = interest_new_in,
                                    periods_var = periods_var1)
     unit_test_f(pv_benef_all_new_in, 532.018219951622, main_run_var = main_run_var1)
     # KLPS4 all and no ext + prevalence
@@ -3070,7 +3073,7 @@ earnings_no_ext_in
     costs_a2_in <- pv_costs_f(
       periods_var = periods_var1,
       delta_ed_var = delta_ed_final_in,
-      interest_r_var = interest_10_so,
+      interest_r_var = interest_new_in,
       cost_of_schooling_var = cost_per_student_new_in,
       s1_var = 0,
       q1_var = q_zero_var1,
