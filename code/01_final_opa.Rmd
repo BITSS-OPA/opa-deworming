@@ -2107,7 +2107,6 @@ chunk_fert_yr <- function(){
     res1 <- tot_chld_var * n_chldbirth_yr_var / sum(n_chldbirth_yr_var)
     return(res1)
   }
-
 ###############################################################################
 ###############################################################################  
     return(list("fert_yr_f" = fert_yr_f))
@@ -2439,6 +2438,10 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     )
     colnames(prevalence_r_sim) <- as.character(countries_var2)  
 
+    #SATOSHI INSERT RANDOM VARS FOR APP 4
+    AC_sim <- rnorm(nsims_var2, mean = AC_var2, sd = AC_sd_var2)
+    
+      
     # if there is a new entry of prevalence, draw from it. If there is not
     # then leave as null
     if (!is.null(new_prevl_r_var2)){
@@ -3012,6 +3015,8 @@ one_run_f <-
                                    interest_r_var = interest_new_in,
                                    periods_var = periods_var1)
     unit_test_f(pv_benef_all_prevl_new_in, 289.899107986178, main_run_var = main_run_var1)
+    # Insert all function to compute children survival benefits
+    
     #Costs asd
     # costs1: Evidence Action's costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
@@ -3104,6 +3109,7 @@ earnings_no_ext_in
       "s2_in" = s2_in,
       "pv_benef_tax_nx_in" = pv_benef_tax_nx_in,
       "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
+      "pv_benef_child_surv"= NULL,                      # SATOSHI FILL IN
       "pv_benef_all_nx_in" = pv_benef_all_nx_in,
       "pv_benef_all_nx_prevl_in" = pv_benef_all_nx_prevl_in,
       "pv_benef_all_yx_in" =  pv_benef_all_yx_in,
@@ -3158,6 +3164,10 @@ unit_test_f(ea2_pe, 701.849761243559)
 # EA3: benef= KLPS all and no ext; Costs=Evidence Action
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
+
+# Approach 4: 
+# 
+# EA3 with new currencies + CB
 
 ea3_save_path = here('data','ea3_pe')
 write.csv(ea3_pe, file = ea3_save_path)
