@@ -2439,7 +2439,7 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     colnames(prevalence_r_sim) <- as.character(countries_var2)  
 
     #SATOSHI INSERT RANDOM VARS FOR APP 4
-    AC_sim <- rnorm(nsims_var2, mean = AC_var2, sd = AC_sd_var2)
+    #AC_sim <- rnorm(nsims_var2, mean = AC_var2, sd = AC_sd_var2)
     
       
     # if there is a new entry of prevalence, draw from it. If there is not
