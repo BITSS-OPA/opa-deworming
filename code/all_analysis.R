@@ -85,17 +85,13 @@ chunk_sources <- function(){
     #############
     ##### Data  
     #############
-    ex_rate_so <- 74                #Exchange Rate - Central Bank of Kenya 74 , 85
-    ex_rate_2018_so <- 101.30       # Exchange rate (KES per international $)
-                                    # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2011_so <- 88.81166667  # Exchange rate (KES per international $)
-                                    # - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE
-    ex_rate_2017_ppp_so <- 49.773   # KLPS4_E+_globals.do (originally from the World Bank - old)
-    ex_rate_2018_ppp_so <- 50.058   # KLPS4_E+_globals.do (originally from the World Bank - old)
-    ex_rate_2011_ppp_so <- 35.39612198      # World Bank - new methodology. the details are written in Appendix I in https://openknowledge.worldbank.org/bitstream/handle/10986/33623/9781464815300.pdf?sequence=4&isAllowed=y
-
-    ex_rate_2017_ppp_new_so <- 40.18493652  # World Bank https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
-    ex_rate_2018_ppp_new_so <- 40.19336962  # World Bank https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
+    ex_rate_so <- 74                # Exchange Rate - Central Bank of Kenya 74 , 85
+    df_ex_rate_so <- data.frame(
+      year = c(seq.int(2011, 2020,1)),
+      ex_rate = c(88.81166667,84.53,86.12333333,87.9225,98.17916667,101.5041667,103.4104462,101.301574,101.9912984,106.4507802)) # Exchange rate (KES per international $)
+    df_ex_rate_ppp_so <- data.frame(
+      year = c(seq.int(2006,2018,1)),
+      ex_rate_ppp = c(23.765,25.024,28.266,31.317,31.603,34.298,36.809,38.044,40.35,43.926,45.862,49.773,50.058)) # KLPS4_E+_globals.do (originally from the World Bank as of 2019 June)
 
     growth_rate_so <- 1.52/100      #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
     gov_bonds_so <- 	0.1185	      #Kenyan interest on sovereign debt - Central Bank of Kenya
@@ -218,37 +214,27 @@ chunk_sources <- function(){
                                   #news sources * 12 / ex_rate_2017_ppp_so
                                   # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
                                   # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
-    cpi_2018_so <- 251.10           # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
-    cpi_2017_so <- 245.120          # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics)
-    cpi_2011_so <- 224.939          # from the Bureau of Labor Statistics - Ave. of HALF 1&2 https://data.bls.gov/pdq/SurveyOutputServlet                              
-    teach_sal_2017usdppp_so <- teach_sal_new_so * cpi_2017_so / cpi_2017_so # redundant, but for the sake of consistency
-
+    df_cpi_so <- data.frame(
+      year = c(seq.int(2006,2018,1)),
+      cpi = c(201.6,207.342,215.303,214.537,218.056,224.939,229.594,232.957,236.736,237.017,240.007,245.120,251.107)) # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics) - Ave. of HALF 1&2 https://data.bls.gov/pdq/SurveyOutputServlet                              
     n_students_so <- 45            #Average pupils per teacher	45
     #ATTENTION!
     years_of_treat_0_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
     unit_cost_local_so <- 43.66    #Deworm the World
     unit_cost_so <- 0.42           # Unit cost of deworming (in 2018 USD) - from Evidence Action
-    #CALCULATIONS TO CONVERT ALL CURRENCY TO 2017 USD PPP
-    # 2018 Dollars -> 2018 Kenyan Schilling -> back to dollars adjusted by PPP
-    unit_cost_ppp_so <- unit_cost_so*ex_rate_2018_so/ex_rate_2018_ppp_so
-    # Adjust for inflation: convert all costs to 2017 USD
-    # takes 2018 ppp USD and turns into 2017 2017 ppp USD
-    unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
-    # Move this calculations into the body of the document (and outside of the sources chunk)
-    unit_cost_ppp_new_so <- unit_cost_so * ex_rate_2018_so/ex_rate_2018_ppp_new_so
-    unit_cost_2017usdppp_new_so <- unit_cost_ppp_new_so * cpi_2017_so / cpi_2018_so
     costs_par_so <- 1
     costs_par_sd_so <- 0.1
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
 
-    cp_daly_so <- 23.68 # Kremer et al. (2011) (2011 USD) http://emiguel.econ.berkeley.edu/wordpress/wp-content/uploads/2021/03/Paper__Spring_Cleaning.pdf
-    cp_daly_2017usdppp_so <- cp_daly_so * ex_rate_2011_so / ex_rate_2011_ppp_so * cpi_2017_so / cpi_2011_so
-    gamma_mort_so <- 0.016      # The Treatment Effects. To be aligned with the new paper after publication
+    cp_daly_r_so <- 23.68 # Kremer et al. (2011) (2011 USD) http://emiguel.econ.berkeley.edu/wordpress/wp-content/uploads/2021/03/Paper__Spring_Cleaning.pdf
+    cp_daly_s_so <- 127.6831737 # new paper (2016 USD)
+    gamma_mort_so <- 0.021      # The Treatment Effects. To be aligned with the new paper after publication
     gamma_mort_sd_so <- 0.006   # doi, page, table, col, row
-    tot_chld_so <- 3.045663      # doi, page, table, col, row
-    n_chldbirth_yr_so <-
-      c(13,59,114,181,323,435,592,701,907,1049,1098,1106,1130,986,811,680,570,505,341,344,327,284,242) # the number of childbirth 0-22 years after the treatment period in the study pop. To be aligned with the new paper after publication. Data shared by authors of STUDY (YEAR)
+    tot_chld_so <- 3.060402      # doi, page, table, col, row
+    fert_yr_25_so <-
+     c(0.001850567, 0.008790192, 0.018968309, 0.029146426, 0.048577377, 0.071015498, 0.098774000, 0.118436271, 0.150821189, 0.173490632, 0.177954227, 0.187960980, 0.197002141, 0.175042903, 0.182224429, 0.187864335, 0.181718062, 0.179117393, 0.164984136, 0.170535714, 0.163392857, 0.151211073, 0.142182891, 0.142182891, 0.142182891)
+    # the childbirth per dewormed individual 0-25 years after the treatment period in the study pop. To be aligned with the new paper after publication. Data shared by authors of STUDY (YEAR)
 
     #############
     ##### Guess work   
@@ -256,7 +242,7 @@ chunk_sources <- function(){
     new_prevalence_r_so <- NULL
     staff_time_so <- 0.3           #Added Deworming costs due to government staff time
     time_to_jm_so <- 10            #Time from initial period until individual join the labor force
-    periods_chldb_so <- 22         #years until the dewormed student can give childbirth
+    periods_chldb_so <- 24         #years until the dewormed student can give childbirth
     life_exp_so <- 65             #expected length of life of saved children in Kenya in 2019 - United Nations 2019. “World Population Prospects 2019” https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/EXCEL_FILES/3_Mortality/WPP2019_MORT_F07_1_LIFE_EXPECTANCY_0_BOTH_SEXES.xlsx.
 
     # Fix teach_sal_so       
@@ -278,12 +264,6 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # adjustment beyond KLPS-3 (likely a conservative assumption).
 #
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
-#
-# How to convert several values of KSh into 2017 USD PPP.
-# In three values: teach_sal_2017usdppp_so, unit_cost_2017usdppp_so, and cp_daly_2017usdppp_so.
-## USD in year X --(exchange rate of KSh to USD in year X -  https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE)--> KSH in year X
-## --(exchange rate of KSh to USD PPP in year X - https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE)--> USD PPP in year X
-## --(CPI in year X & in 2017 - Ave. of HALF 1&2 https://data.bls.gov/timeseries/CUUR0000SA0)--> 2017 USD PPP
 
 
 
@@ -373,6 +353,33 @@ interest_new_in <- as.numeric(
 
 
 
+
+
+## ----curency-conversion, echo=print_code--------------------------------------
+# - inputs: price in USD in year X, df_ex_rate_so (exchange rate of the local currency to USD), ex_rate_ppp_so (exchange rate of the local currency to USD PPP), df_cpi_so (CPI), year X
+# - outputs: price in PPP 2017 USD
+chunk_currency <- function(){
+###############################################################################
+###############################################################################  
+
+    currency_f <- function(price_var,
+                           ex_rate_c_in = df_ex_rate_so,
+                           ex_rate_ppp_in = df_ex_rate_ppp_so,
+                           cpi_in = df_cpi_so,
+                           year_var) {  
+        price_ppp_in <- price_var*ex_rate_c_in[ex_rate_c_in["year"]==year_var,"ex_rate"]/ex_rate_ppp_in[ex_rate_ppp_in["year"]==year_var,"ex_rate_ppp"]
+        price_2017usdppp_in <- as.numeric(price_ppp_in * cpi_in[cpi_in["year"]==2017,"cpi"] / cpi_in[cpi_in["year"]==year_var,"cpi"])
+        return(price_2017usdppp_in)
+    }
+
+###############################################################################
+###############################################################################  
+    return(list("currency_f" = currency_f))
+}
+
+invisible( list2env(chunk_currency(),.GlobalEnv) )
+
+##### Execute values of the functions above when needed for the text:
 
 
 ## ----earnings1, echo=print_code-----------------------------------------------
@@ -759,20 +766,16 @@ chunk_unit_costs2_new <- function(){
 invisible( list2env(chunk_unit_costs2_new(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 # New costs are all in dollars so, will compute them using ex rate of 1.
+
+unit_cost_local_in <- currency_f(price_var = unit_cost_so, year_var = 2018)
 s2_new_in <- s2_new_f(
   interest_var = interest_new_in,
-  unit_cost_local_var = unit_cost_2017usdppp_so,
+  unit_cost_local_var = unit_cost_local_in,
   ex_rate_var = 1,
   year_of_treat_var = years_of_treat_t_so
 )
 q2_in <- q_full_so
 
-s2_new_ppp_in <- s2_new_f(
-  interest_var = interest_10_so,
-  unit_cost_local_var = unit_cost_2017usdppp_new_so,
-  ex_rate_var = 1,
-  year_of_treat_var = years_of_treat_t_so
-)
 
 
 
@@ -1045,32 +1048,9 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
 
 
 
-## ----fert_yr, echo=print_code-------------------------------------------------
-# - inputs: total number of childbirth per dewormed individual (tot_chld_so), the number of childbirth in the study population year by year during 1998-2020(n_chldbirth_yr_so)
-# - outputs: number of childbirth per dewormed individual year by year(fert_yr_in)
-chunk_fert_yr <- function(){
-###############################################################################
-###############################################################################  
-  fert_yr_f <- function(tot_chld_var = tot_chld_so,
-                        n_chldbirth_yr_var= n_chldbirth_yr_so) {
-    res1 <- tot_chld_var * n_chldbirth_yr_var / sum(n_chldbirth_yr_var)
-    return(res1)
-  }
-
-###############################################################################
-###############################################################################  
-    return(list("fert_yr_f" = fert_yr_f))
-}
-invisible( list2env(chunk_fert_yr(),.GlobalEnv) )
-
-##### Execute values of the functions above when needed for the text:
-fert_yr_in <- fert_yr_f(tot_chld_so, n_chldbirth_yr_so)
-
-
-
 ## ----yll_pc, echo=print_code--------------------------------------------------
 # - inputs: YLL for all causes, both sexes, 0-64 ages, in 2019 in Kenya (yll_so), the number of population of 0-64 ages in Kenya in 2019(pop_so), expected length of life of saved children (life_exp_so)
-# - outputs: the average annual per-capita YLL at age 0-64(yll_pc_in)
+# - outputs: the average per-capita YLL at age 0-64(yll_pc_in)
 chunk_yll_pc <- function(){
 ###############################################################################
 ###############################################################################  
@@ -1092,19 +1072,19 @@ yll_pc_in <- yll_pc_f(yll_so, pop_so, life_exp_so)
 
 
 
-## ----chldsurv_benefits, echo=print_code---------------------------------------
-# - inputs: number of childbirth per dewormed individual year by year(fert_yr_in), new interest rate (0.1), number of periods for childbearing of dewormed individual(periods_chldb_so), the treatment effects on under 5 mortality rate reduction (gamma_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_in), Cost per DALY averted(cp_daly_2017usdppp_so)
+## ----intgen_mort_benefits, echo=print_code------------------------------------
+# - inputs: number of childbirth per dewormed individual year by year(fert_yr_in), new interest rate (0.1), number of periods for childbearing of dewormed individual(periods_chldb_so), the treatment effects on under-five mortality rate reduction (gamma_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_in), Cost per DALY averted(cp_daly_r_so)
 # - outputs: function that computes the present value of child survival health benefits
-chunk_chldsurv_benefits <- function(){
+chunk_intgen_mort_benefits <- function(){
 ###############################################################################
 ###############################################################################  
-  chldsurv_hlth_f <- function(
+  intgen_mort_f <- function(
                     interest_r_var = interest_10_so,
                     periods_chldb_var = periods_chldb_so,
                     gamma_mort_var = gamma_mort_so,
-                    fert_yr_var = fert_yr_in,
+                    fert_yr_var = fert_yr_25_so,
                     yll_pc_var = yll_pc_in,
-                    cp_daly_var = cp_daly_2017usdppp_so){
+                    cp_daly_var = currency_f(price_var = cp_daly_r_so, year_var = 2011)){
     index_t <- 0:periods_chldb_var
     res1 <-
       sum((1 / (1 + interest_r_var)) ^ index_t *
@@ -1114,17 +1094,24 @@ chunk_chldsurv_benefits <- function(){
 
 ###############################################################################
 ###############################################################################  
-    return(list("chldsurv_hlth_f" = chldsurv_hlth_f))
+    return(list("intgen_mort_f" = intgen_mort_f))
 }
-invisible( list2env(chunk_chldsurv_benefits(),.GlobalEnv) )
+invisible( list2env(chunk_intgen_mort_benefits(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-chldsurv_hlth_in <- chldsurv_hlth_f(interest_10_so,
+intgen_mort_s_in <- intgen_mort_f(interest_10_so,
                     periods_chldb_so,
                     gamma_mort_so,
-                    fert_yr_in,
+                    fert_yr_25_so,
                     yll_pc_in,
-                    cp_daly_2017usdppp_so)
+                    currency_f(price_var = cp_daly_s_so, year_var = 2016))
+
+intgen_mort_r_in <- intgen_mort_f(interest_10_so,
+                    periods_chldb_so,
+                    gamma_mort_so,
+                    fert_yr_25_so,
+                    yll_pc_in,
+                    currency_f(price_var = cp_daly_r_so, year_var = 2011))
 
 
 
@@ -1314,6 +1301,10 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     )
     colnames(prevalence_r_sim) <- as.character(countries_var2)  
 
+    #SATOSHI INSERT RANDOM VARS FOR APP 4
+    #AC_sim <- rnorm(nsims_var2, mean = AC_var2, sd = AC_sd_var2)
+    
+      
     # if there is a new entry of prevalence, draw from it. If there is not
     # then leave as null
     if (!is.null(new_prevl_r_var2)){
@@ -1637,7 +1628,7 @@ one_run_f <-
            teach_sal_new_var1 = teach_sal_new_so,                                            
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
-           unit_cost_local_new_var1 = unit_cost_2017usdppp_so,
+           unit_cost_local_new_var1 = currency_f(price_var = unit_cost_so, year_var = 2018),
            new_costs_var1 = new_costs_so,    
            countries_var1 = country_sel_so,
            years_of_treat_0_var1 = years_of_treat_0_so,
@@ -1872,6 +1863,8 @@ one_run_f <-
                                    interest_r_var = interest_new_in,
                                    periods_var = periods_var1)
     unit_test_f(pv_benef_all_prevl_new_in, 289.899107986178, main_run_var = main_run_var1)
+    # Insert all function to compute children survival benefits
+    
     #Costs asd
     # costs1: Evidence Action's costs no externalities
     cost1_in <- costs1_p2_f(country_total_var = df_costs_var1$total,
@@ -1964,6 +1957,7 @@ earnings_no_ext_in
       "s2_in" = s2_in,
       "pv_benef_tax_nx_in" = pv_benef_tax_nx_in,
       "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
+      "pv_benef_child_surv"= NULL,                      # SATOSHI FILL IN
       "pv_benef_all_nx_in" = pv_benef_all_nx_in,
       "pv_benef_all_nx_prevl_in" = pv_benef_all_nx_prevl_in,
       "pv_benef_all_yx_in" =  pv_benef_all_yx_in,
