@@ -1,6 +1,6 @@
 ---
-title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>07 11月, 2021 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
+title: "Open Policy Analysis for Deworming"
+date: "<center><div class='mysubtitle'>16 December, 2021 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -43,6 +43,7 @@ knit:
 \def\blue{\color{blue}}
 \def\red{\color{red}}
 ```
+
 
 
 
@@ -300,7 +301,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
 ```
 
-<img src="C:/Users/koiso/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -308,9 +309,9 @@ Executive Summary
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. OPA is an approach to policy analysis wherein data, code, materials, and clear accounts of methodological decisions are made freely available to facilitate collaboration, discussion, and reuse. This OPA contains an [interactive graph](https://bitss-opa.shinyapps.io/dw-app/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [a repository](https://github.com/BITSS-OPA/opa-deworming) that contains all the materials to reproduce the report and final output.
 
-This report describes four approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by [Evidence Action](https://www.evidenceaction.org), a key technical assistance partner in this area that provides technical support to government-run deworming programs, and the fourth approach expands the previous three approaches with benefits from the mortality rate reduction of under-five children born from the deworming respondents with inspiration from **XXX (2021)**. The fourth approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates, treatment length across settings, and values for extended life Though these are modeled estimates and should be interpreted with caution, this report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
+This report describes four approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], the third approach is a combination of the previous two with some modification suggested by [Evidence Action](https://www.evidenceaction.org), a key technical assistance partner in this area that provides technical support to government-run deworming programs, and the fourth approach expands the previous three approaches with benefits from the mortality rate reduction of under-five children born from the deworming respondents following **XXX (2021)**. The fourth approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates, treatment length across settings, and values for extended life. Though these are modeled estimates and should be interpreted with caution, this report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
 
-The main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of a stream of benefits and costs from today's perspective) of USD \$289.8 (in 2018 dollars) per children for a setting with average prevalence and average unit costs (among the countries for which Evidence Action has data). We encourage readers interested in learning about the predicted value for a specific setting to use the [interactive app](https://bitss-opa.shinyapps.io/dw-app/).
+The main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of a stream of benefits and costs from today's perspective) of USD \$289.8 (in 2018 dollars) [UPDATE] per children for a setting with average prevalence and average unit costs (among the countries for which Evidence Action has data). We encourage readers interested in learning about the predicted value for a specific setting to use the [interactive app](https://bitss-opa.shinyapps.io/dw-app/).
 
 <div class = "divider"><span></span><span>
 *
@@ -324,13 +325,13 @@ This report is part of an Open Policy Analysis (OPA) project on deworming interv
 
 This OPA project contains three components, following the OPA principles laid out in the aforementioned paper:
 
-1.  One single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. This output is presented in the figure above, and described in the [results section](#3_Main_Results) of this report. Readers can use [this web app](https://bitss-opa.shinyapps.io/dw-app/) to explore the connection between each component of the analysis and the final output presented here.
+1.  One single output that best represents the factual information required by policy makers to inform their position regarding a policy of mass deworming. This output is presented in the figure above, and described in the [results section](#3main-results) of this report. Readers can use [this web app](https://bitss-opa.shinyapps.io/dw-app/) to explore the connection between each component of the analysis and the final output presented here.
 
 2.  This report that details the data, code, and assumptions behind each component of the analysis and describes how to obtain the final policy estimate.
 
 3.  [A repository](https://github.com/BITSS-OPA/opa-deworming) that contains all the materials needed to reproduce, or update the interactive app, the open policy report, and the overall analysis.
 
-This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, which appears after clicking in the ![screenshot](images/show_details.png?display%20=%20inline-block) contains equations that show how each piece of the analysis was carried out. The third and final layer displays the code used to operationalize each equation. This information is contained within this document using dynamic documentation [@xie2015dynamic], so interested readers can access the report's source file and easily reproduce the entire document in their own computing environments.
+This report provides a complete description of the analysis behind the results presented to inform a policy discussion on deworming interventions. It describes how to reproduce the analysis in its entirety, and includes all the methodological choices involved. In order to document all the steps without overwhelming the reader, the report is displayed in a layered fashion. The first layer consists of a narrative description of the analysis. The second layer, which appears after clicking in ![screenshot](images/show_details.png?display%200=%20inline-block) contains equations that show how each piece of the analysis was carried out. The third and final layer displays the code used to operationalize each equation. This information is contained within this document using dynamic documentation [@xie2015dynamic], so interested readers can access the report's source file and easily reproduce the entire document in their own computing environments.
 
 > *Note: This is Version 1.0 of the OPA. Please kindly report any errors in the dynamic document [here](https://github.com/BITSS-OPA/opa-deworming/blob/master/issue_template.md).*
 

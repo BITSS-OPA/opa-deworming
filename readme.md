@@ -35,8 +35,7 @@ found in:
 necessary to replicate the analysis in full with minimal effort.
 
 This project complies with the highest levels of the [Open Policy
-Analysis (OPA)
-Guidelines](https://www.bitss.org/opa/community-standards/). We also
+Analysis Standards](https://academic.oup.com/spp/article/48/2/154/6018524?guestAccessKey=ac30d681-5391-4f91-b4d8-44c6aed11161). We also
 look to demonstrate tools, ideas, and practices through which OPA can be
 implemented in practice. This exercise, and future case studies, in turn
 will inform the Guidelines.
@@ -44,7 +43,7 @@ will inform the Guidelines.
 To learn more about BITSS and our OPA initiative [click
 here](https://www.bitss.org/opa/). If you would like to collaborate with
 BITSS to develop a demonstration of a OPA in your organization please
-email Aleks Bogdanoski (<openpolicy@berkeley.edu>).
+email us at<openpolicy@berkeley.edu>.
 
 Major contributions to this project will be acknowledged below. This OPA
 employs the Contributor Roles Taxonomy

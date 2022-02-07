@@ -23,6 +23,7 @@ summary {
 
 /* Customizing the text configurations for first level header (header with only one #) */
 h1 {
+  text-align: center;
   padding-top: 0;
   padding-bottom: 5px;
   border-bottom: none;
