@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>12 3月, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
+date: "<center><div class='mysubtitle'>16 3月, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -122,10 +122,33 @@ chunk_sources <- function(){
     ex_rate_so <- 74                # Exchange Rate - Central Bank of Kenya 74 , 85
     df_ex_rate_so <- data.frame(
       year = c(seq.int(2011, 2020,1)),
-      ex_rate = c(88.81166667,84.53,86.12333333,87.9225,98.17916667,101.5041667,103.4104462,101.301574,101.9912984,106.4507802)) # Exchange rate (KES per international $)
+      ex_rate = c(
+        88.81166667,
+        84.53,
+        86.12333333,
+        87.9225,
+        98.17916667,
+        101.5041667,
+        103.4104462,
+        101.301574,
+        101.9912984,
+        106.4507802)) # Exchange rate (KES per international $)
     df_ex_rate_ppp_so <- data.frame(
       year = c(seq.int(2006,2018,1)),
-      ex_rate_ppp = c(23.765,25.024,28.266,31.317,31.603,34.298,36.809,38.044,40.35,43.926,45.862,49.773,50.058)) # KLPS4_E+_globals.do (originally from the World Bank as of 2019 June)
+      ex_rate_ppp = c(
+        23.765,
+        25.024,
+        28.266,
+        31.317,
+        31.603,
+        34.298,
+        36.809,
+        38.044,
+        40.35,
+        43.926,
+        45.862,
+        49.773,
+        50.058)) # KLPS4_E+_globals.do (originally from the World Bank as of 2019 June)
 
     growth_rate_so <- 1.52/100      #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
     gov_bonds_so <- 	0.1185	      #Kenyan interest on sovereign debt - Central Bank of Kenya
@@ -240,8 +263,8 @@ chunk_sources <- function(){
                            0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
     delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)
     include_ext_so <- TRUE
-    teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials
-    teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47
+    teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials #NOTES Fernando assumes this number is USD in 2016
+    teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47 #NOTES Fernando assumes this number is USD in 2016
     teach_sal_new_so <- (50000 * 12 / 49.773)
     teach_ben_new_so <- 0
                                   #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
@@ -250,7 +273,20 @@ chunk_sources <- function(){
                                   # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
     df_cpi_so <- data.frame(
       year = c(seq.int(2006,2018,1)),
-      cpi = c(201.6,207.342,215.303,214.537,218.056,224.939,229.594,232.957,236.736,237.017,240.007,245.120,251.107)) # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics) - Ave. of HALF 1&2 https://data.bls.gov/pdq/SurveyOutputServlet                              
+      cpi = c(
+        201.6,
+        207.342,
+        215.303,
+        214.537,
+        218.056,
+        224.939,
+        229.594,
+        232.957,
+        236.736,
+        237.017,
+        240.007,
+        245.120,
+        251.107)) # KLPS4_E+_globals.do (originally from the Bureau of Labor Statistics) - Ave. of HALF 1&2 https://data.bls.gov/pdq/SurveyOutputServlet                              
     n_students_so <- 45            #Average pupils per teacher	45
     #ATTENTION!
     years_of_treat_0_so <- 2.41      #Additional Years of Treatment - Table 1, Panel A
@@ -267,10 +303,12 @@ chunk_sources <- function(){
     gamma_mort_sd_so <- 0.008   # doi, page, table, col, row
     tot_chld_so <- 2.6 # doi, page, table 2, col 7, panel A
     fert_yr_25_so <-
-      c(0.001645897, 0.006818716, 0.016223842, 0.024923583, 0.038796145, 0.059017163, 0.082059726,
-        0.095697157, 0.125088170, 0.143428162, 0.149834052, 0.167573169, 0.198016912, 0.165645957,
-        0.173207432, 0.178807944, 0.173038900, 0.179104477, 0.169385627, 0.168831170, 0.157248154,
-        0.146458581, 0.143830940, 0.143830940, 0.143830940)
+      c(0.001645897, 0.006818716, 0.016223842, 0.024923583, 
+        0.038796145, 0.059017163, 0.082059726, 0.095697157, 
+        0.125088170, 0.143428162, 0.149834052, 0.167573169, 
+        0.198016912, 0.165645957, 0.173207432, 0.178807944, 
+        0.173038900, 0.179104477, 0.169385627, 0.168831170, 
+        0.157248154, 0.146458581, 0.143830940, 0.143830940, 0.143830940)
     # the childbirth per dewormed individual 0-25 years after the treatment period in the study pop. To be aligned with the new paper after publication. Data shared by authors of STUDY (YEAR)
 
     #############
@@ -543,14 +581,23 @@ For compatibility purpose, all approaches show monetary values in 2017 USD PPP t
 
 ```{=tex}
 \begin{equation}
-\text{Local currency in year X} = \text{USD in year X} \times \text{the exchange rate of the local currency to USD in year X}\\
-\text{USD PPP in year X} = \frac{\text{Local currency in year X}}{\text{the exchange rate of the local currency to USD PPP in year X}}\\
-\text{2017 USD PPP} = \text{USD PPP in year X} \times \frac{\text{CPI in 2017}}{\text{CPI in year X}}
+KSH_{t=X} = USD_{t=X} \times ex^{USD}_{t=X} \\
+USD^{PPP}_{t=X} = \frac{KSH_{t=X}}{ex^{PPP}_{t=X}}\\
+USD^{PPP}_{t=2017} = USD^{PPP}_{t=X} \times \frac{CPI_{t=2017}}{CPI_{t=X}}
 
 \label{eq:3}
 \tag{3}
 \end{equation}
 ```
+
+Where:
+
+-   $KSH_{t=X}$: Local currency (KSH) in year $t=X$\
+-   $USD_{t=X}$: USD spent on the ground in year $t=X$\
+-   $ex^{USD}_{t=X}$: the exchange rate of the local currency to USD in year $t=X$\
+-   $USD^{PPP}_{t=X}$: USD PPP in year $t=X$\
+-   $ex^{PPP}_{t=X}$: the exchange rate of the local currency to USD PPP in year $t=X$\
+-   $CPI_{t=X}$: the Consumer Price Index in year $t=X$
 
 
 
@@ -561,13 +608,20 @@ chunk_currency <- function(){
 ###############################################################################
 ###############################################################################  
 
-    currency_f <- function(price_var,
+    currency_f <- function(price_var, # USD spent on the gound
                            ex_rate_c_in = df_ex_rate_so,
                            ex_rate_ppp_in = df_ex_rate_ppp_so,
                            cpi_in = df_cpi_so,
                            year_var) {  
-        price_ppp_in <- price_var*ex_rate_c_in[ex_rate_c_in["year"]==year_var,"ex_rate"]/ex_rate_ppp_in[ex_rate_ppp_in["year"]==year_var,"ex_rate_ppp"]
-        price_2017usdppp_in <- as.numeric(price_ppp_in * cpi_in[cpi_in["year"]==2017,"cpi"] / cpi_in[cpi_in["year"]==year_var,"cpi"])
+      ex_rate_year <- ex_rate_c_in[ex_rate_c_in["year"]==year_var,"ex_rate"]
+      ex_rate_ppp_year <-
+        ex_rate_ppp_in[ex_rate_ppp_in["year"]==year_var,"ex_rate_ppp"]
+      cpi_2017 <- cpi_in[cpi_in["year"]==2017,"cpi"]
+      cpi_year <- cpi_in[cpi_in["year"]==year_var,"cpi"]
+      
+      ksh_year <- price_var * ex_rate_year
+      price_ppp_in <- ksh_year / ex_rate_ppp_year
+      price_2017usdppp_in <- as.numeric(price_ppp_in * cpi_2017 / cpi_year)
         return(price_2017usdppp_in)
     }
 
