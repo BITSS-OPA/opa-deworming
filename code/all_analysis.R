@@ -303,11 +303,12 @@ chunk_benefits <- function(){
 
   pv_benef_f <- function(
     earnings_var = earnings_in,
+    intgen_var = intgen_in,
     interest_r_var = interest_in,
     periods_var = periods_so
   ) {
       index_t <- 0:periods_var
-      res1 <- sum( ( 1 / (1 + interest_r_var) )^index_t * earnings_var )
+      res1 <- sum( ( 1 / (1 + interest_r_var) )^index_t * (earnings_var +intgen_var))
       return(res1)   
     }
 
@@ -543,6 +544,8 @@ saturation_in <- saturation_in_f()$saturation_in
 # |      |            
 # |      ├──── lambda1_in_f()
 # |      └──── lambda2_in_f()
+# |
+# ├──── intgen_var = 0
 # └──── interest_f()
 
 earnings_no_ext_in <- earnings_app1_f(
@@ -563,15 +566,18 @@ earnings_yes_ext_in <- earnings_app1_f(
 
 pv_benef_no_ext_in <- pv_benef_f(
   earnings_var = earnings_no_ext_in,
+  intgen_var = 0,
   interest_r_var = interest_in,
   periods_var = periods_so
 )
 
 pv_benef_yes_ext_in <- pv_benef_f(
   earnings_var = earnings_yes_ext_in,
+  intgen_var = 0,
   interest_r_var = interest_in,
   periods_var = periods_so
 )
+
 
 
 
@@ -679,7 +685,7 @@ delta_ed_final_yes_ext_in <- delta_ed_final_f(include_ext_var = TRUE)
 # pv_costs_f
 #  ├──── delta_ed_final_f
 #  ├──── interest_f
-#  └──── cost_per_student_f
+#  ├──── cost_per_student_f
 #  |      └──── x
 #  ├──── s2_f
 #  └──── lambda2_in_f
@@ -904,12 +910,14 @@ app3_earnings_yes_ext_in <- earnings_app1_f(
 
 app3_pv_benef_no_ext_in <- pv_benef_f(
   earnings_var = app3_earnings_no_ext_in,
+  intgen_var = 0,
   interest_r_var = interest_in,
   periods_var = periods_so
 )
 
 app3_pv_benef_yes_ext_in <- pv_benef_f(
   earnings_var = app3_earnings_yes_ext_in,
+  intgen_var = 0,
   interest_r_var = interest_in,
   periods_var = periods_so
 )
@@ -931,6 +939,7 @@ earnings_no_ext_new_in<- earnings_app2_f(t_var = 0:50,
                                       lambda1k1_var = lambda1_t_new_in)
 
 app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
+                                intgen_var = 0,
                                 interest_r_var = interest_new_in,
                                 periods_var = periods_so)
 
@@ -1051,6 +1060,7 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
 
 
 
+
 ## ----yll_pc, echo=print_code--------------------------------------------------
 # - inputs: YLL for all causes, both sexes, 0-64 ages, in Kenya in 2019 (yll_so), the number of population of 0-64 ages in Kenya in 2019(pop_so), expected length of life of saved children (life_exp_so)
 # - outputs: the average per-capita YLL at age 0-64(yll_pc_in)
@@ -1076,22 +1086,18 @@ yll_pc_in <- yll_pc_f(yll_so, pop_so, life_exp_so)
 
 
 ## ----intgen, echo=print_code--------------------------------------------------
-# - inputs: number of childbirth per dewormed individual year by year(fert_yr_25_so), interest rate (interest_new_in), number of periods for childbearing of dewormed individual(periods_chldb_25_so), the treatment effects on under-five mortality rate reduction (gamma_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_in), Cost per DALY averted(cp_daly_rp_so)
+# - inputs: number of childbirth per dewormed individual year by year(fert_yr_25_so), interest rate (interest_new_in), the treatment effects on under-five mortality rate reduction (gamma_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_in), Cost per DALY averted(cp_daly_rp_so)
 # - outputs: function that computes the present value of child survival health benefits
 chunk_intgen <- function(){
 ###############################################################################
 ###############################################################################  
   intgen_app4_f <- function(
-                    interest_r_var = interest_new_in,
-                    periods_chldb_var = periods_chldb_25_so,
                     gamma_mort_var = gamma_mort_so,
                     fert_yr_var = fert_yr_25_so,
                     yll_pc_var = yll_pc_in,
                     cp_daly_var = c(currency_f(price_var = cp_daly_rp_so, year_var = 2011),currency_f(price_var = cp_daly_sp_so, year_var = 2016))){
-    index_t <- 0:periods_chldb_var
     res1 <-
-      sum((1 / (1 + interest_r_var)) ^ index_t *
-            gamma_mort_var * fert_yr_var * yll_pc_var * cp_daly_var)
+      gamma_mort_var * fert_yr_var * yll_pc_var * cp_daly_var
     return(res1)
   }
 
@@ -1102,20 +1108,41 @@ chunk_intgen <- function(){
 invisible( list2env(chunk_intgen(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-intgen_app4_rp_in <- intgen_app4_f(interest_new_in,
-                    periods_chldb_25_so,
+# Computing values for inline text:
+
+# pv_benef
+# ├──── earnings_var = 0
+# ├──── intgen_app4_f()
+# |      ├─ yll_pc_f()
+# |      └─ currency_f()
+# └──── interest_f()
+
+
+intgen_app4_rp_in <- c(intgen_app4_f(
                     gamma_mort_so,
                     fert_yr_25_so,
                     yll_pc_in,
-                    currency_f(price_var = cp_daly_rp_so, year_var = 2011))
-
-intgen_app4_sp_in <- intgen_app4_f(interest_new_in,
-                    periods_chldb_25_so,
+                    currency_f(price_var = cp_daly_rp_so, year_var = 2011)),rep(0,26))
+                    
+intgen_app4_sp_in <- c(intgen_app4_f(
                     gamma_mort_so,
                     fert_yr_25_so,
                     yll_pc_in,
-                    currency_f(price_var = cp_daly_sp_so, year_var = 2016))
+                    currency_f(price_var = cp_daly_sp_so, year_var = 2016)),rep(0,26))
 
+app4_pv_benef_intgen_rp_in <- pv_benef_f(
+    earnings_var = 0,
+    intgen_var = intgen_app4_rp_in,
+    interest_r_var = interest_new_in,
+    periods_var = periods_so
+  )
+
+app4_pv_benef_intgen_sp_in <- pv_benef_f(
+    earnings_var = 0,
+    intgen_var = intgen_app4_sp_in,
+    interest_r_var = interest_new_in,
+    periods_var = periods_so
+  )
 
 
 
@@ -1328,7 +1355,6 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     # cp_daly_sp_sim <- rnorm(nsims_var2, mean = cp_daly_sp_var2, sd = cp_daly_sp_sd_var2)
     # gamma_mort_sim <- rnorm(nsims_var2, mean = gamma_mort_var2, sd = gamma_mort_sd_var2)
     # fert_yr_25_sim <- rnorm(nsims_var2, mean = fert_yr_25_var2, sd = fert_yr_25_sd_var2)
-    # periods_chldb_25_val <- 24
     # life_exp_sim <- rnorm(nsims_var2, mean = life_exp_var2, sd = life_exp_sd_var2)
 
     # if there is a new entry of prevalence, draw from it. If there is not
@@ -1485,7 +1511,6 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
                 # cp_daly_sp_var1 = cp_daly_sp_sim[i],
                 # gamma_mort_var1 = gamma_mort_sim[i],
                 # fert_yr_25_var1 = fert_yr_25_sim[i],
-                # periods_chldb_25_var1 = periods_chldb_25_so,
                 # life_exp_var1 = life_exp_sim[i]
                 ),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
@@ -1506,10 +1531,10 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
       a3_inc_a1_all_x_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prevl_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=Evidence Action
       a3_inc_a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
-      # XXX 1: benef=Intergenerational Child; cost=Evidence Action
-      # a4_intgen_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_intgen_in, costs_var = costs2_ea_in)
-      # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action
-      # a4_inc_a3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in, costs_var = costs2_ea_in)
+      # XXX 1: benef=Intergenerational Child; cost=deworming cost in KLPS4 no ext or teaching
+      # a4_intgen_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_intgen_in, costs_var = costs_a4_in)
+      # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action in 2017 USD PPP
+      # a4_inc_a3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in, costs_var = currency_f(costs2_ea_in,year_var=2018))
     }
 
     total_time_sim <- Sys.time() - start_time
@@ -1574,23 +1599,23 @@ policy_estimates_text <- c(
 # 1     2       3     4       5
 #       ##     ###    ####    #####
 # NPV_pe_f
-# ├─┬── pv_benef_f
-# │ │    ├──── earnings_app1_f
-# │ │    |      ├──── wage_t_f
-# │ │    |      |      └──── wage_0_f
-# | │    |      ├──── lambda_eff_f
-# │ │    |      |      └────lambda1_t_f
-# │ │    |      |            └────lambda1_in_f
-# | │    |      ├──── lambda1_in_f
-# | │    |      ├──── lambda2_in_f
-# │ │    |      └──── saturation_in_f
-# │ │    ├──── earnings_app2_f
-# │ │    |      └────lambda_eff_f
-# │ │    |           └────lambda1_t_f
-# │ │    └──── interest_f
-# │ └── (intgen_app4_f)
-# │      ├──── yll_pc_f
+# ├──── pv_benef_f
+# │      ├──── earnings_app1_f
+# │      |      ├──── wage_t_f
+# │      |      |      └──── wage_0_f
+# |      |      ├──── lambda_eff_f
+# │      |      |      └────lambda1_t_f
+# │      |      |            └────lambda1_in_f
+# |      |      ├──── lambda1_in_f
+# |      |      ├──── lambda2_in_f
+# │      |      └──── saturation_in_f
+# │      ├──── earnings_app2_f
+# │      |      └────lambda_eff_f
+# │      |           └────lambda1_t_f
+# │      ├──── intgen_app4_f
+# │      |      └────yll_pc_f
 # │      └──── interest_f
+# │  
 # └──── pv_costs_f (pv_costs_f)
 #        ├──── delta_ed_final_f
 #        ├──── interest_f
@@ -1690,7 +1715,6 @@ one_run_f <-
            # cp_daly_sp_var1 = cp_daly_sp_so,
            # gamma_mort_var1 = gamma_mort_so,
            # fert_yr_25_var1 = fert_yr_25_so,
-           # periods_chldb_25_var1 = periods_chldb_25_so,
            # life_exp_var1 = life_exp_so
            ) {                                        
     ####------------ Inputs for wage_t -----------------------------------------
@@ -1865,6 +1889,7 @@ one_run_f <-
     #Baird w/tax and no externalities (no ext)
     pv_benef_tax_nx_in <- pv_benef_f(
       earnings_var = earnings_no_ext_in * tax_var1,
+      intgen_var = 0,
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
@@ -1873,6 +1898,7 @@ one_run_f <-
     #Baird w/t and ext
     pv_benef_tax_yx_in <- pv_benef_f(
       earnings_var = earnings_yes_ext_in * tax_var1,
+      intgen_var = 0,
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
@@ -1880,6 +1906,7 @@ one_run_f <-
     #Baird all and no
     pv_benef_all_nx_in <- pv_benef_f(
       earnings_var = earnings_no_ext_in,
+      intgen_var = 0,
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
@@ -1887,6 +1914,7 @@ one_run_f <-
     #Baird all and no ext + prevalence
     pv_benef_all_nx_prevl_in <- pv_benef_f(
       earnings_var = earnings_no_ext_prevl_in,
+      intgen_var = 0,
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
@@ -1894,6 +1922,7 @@ one_run_f <-
     #Baird all and ext
     pv_benef_all_yx_in <- pv_benef_f(
       earnings_var = earnings_yes_ext_in,
+      intgen_var = 0,
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
@@ -1902,6 +1931,7 @@ one_run_f <-
     #Baird all and ext
     pv_benef_all_yx_prevl_in <- pv_benef_f(
       earnings_var = earnings_yes_ext_prevl_in,
+      intgen_var = 0,
       interest_r_var = interest_in,
       periods_var = periods_var1
     )
@@ -1911,6 +1941,7 @@ one_run_f <-
     #KLPS4 w/t and no ext
     pv_benef_tax_new_in <- pv_benef_f(
       earnings_var = earnings_no_ext_new_in * tax_var1,
+      intgen_var = 0,
       interest_r_var = interest_new_in,
       periods_var = periods_var1
     )
@@ -1919,36 +1950,43 @@ one_run_f <-
 
     # KLPS4 all and no ext
     pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
+                                   intgen_var = 0,
                                    interest_r_var = interest_new_in,
                                    periods_var = periods_var1)
     unit_test_f(pv_benef_all_new_in, 532.018219951622, main_run_var = main_run_var1)
     # KLPS4 all and no ext + prevalence
     pv_benef_all_prevl_new_in <- pv_benef_f(earnings_var = earnings_no_ext_prevl_new_in,
+                                   intgen_var = 0,
                                    interest_r_var = interest_new_in,
                                    periods_var = periods_var1)
     unit_test_f(pv_benef_all_prevl_new_in, 289.899107986178, main_run_var = main_run_var1)
 
     # Insert all function to compute children survival benefits
     # # XXX 1: Intergenerational Child Benefits
-    # pv_benef_intgen_in <- intgen_app4_f(interest_r_var = interest_new_in,
-    #                                     periods_chldb_var = periods_chldb_25_var1,
-    #                                     gamma_mort_var = gamma_mort_var1,
-    #                                     fert_yr_var = fert_yr_25_var1,
-    #                                     yll_pc_var = yll_pc_in,
-    #                                     cp_daly_var = cp_daly_rp_var1)
+    # pv_benef_intgen_rp_in <- pv_benef_f(
+    #   earnings_var = 0,
+    #   intgen_var = c(intgen_app4_f(
+    #                 gamma_mort_so,
+    #                 fert_yr_25_so,
+    #                 yll_pc_in,
+    #                 currency_f(price_var = cp_daly_rp_so, year_var = 2011)),rep(0,26)),
+    #   interest_r_var = interest_new_in,
+    #   periods_var = periods_so
+    #   )
     # 
-    # unit_test_f(pv_benef_intgen_in, NA, main_run_var = main_run_var1)
+    # unit_test_f(pv_benef_intgen_rp_in, NA, main_run_var = main_run_var1)
     # 
     # # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action
-    # pv_benef_all_prevl_new_intgen_in <- pv_benef_f(earnings_var = earnings_no_ext_prevl_new_in,
-    #                                interest_r_var = interest_new_in,
-    #                                periods_var = periods_var1) +
-    #                                     intgen_app4_f(interest_r_var = interest_new_in,
-    #                                     periods_chldb_var = periods_chldb_25_var1,
-    #                                     gamma_mort_var = gamma_mort_var1,
-    #                                     fert_yr_var = fert_yr_25_var1,
-    #                                     yll_pc_var = yll_pc_in,
-    #                                     cp_daly_var = cp_daly_rp_var1)
+    # pv_benef_all_prevl_new_intgen_in <- pv_benef_f(
+    #   earnings_var = earnings_no_ext_prevl_new_in,
+    #   intgen_var = c(intgen_app4_f(
+    #                 gamma_mort_so,
+    #                 fert_yr_25_so,
+    #                 yll_pc_in,
+    #                 currency_f(price_var = cp_daly_rp_so, year_var = 2011)),rep(0,26)),
+    #   interest_r_var = interest_new_in,
+    #   periods_var = periods_so
+    #   )
     # 
     # unit_test_f(pv_benef_all_prevl_new_intgen_in, NA, main_run_var = main_run_var1)
     
@@ -2023,7 +2061,7 @@ earnings_no_ext_in
     unit_test_f(costs_a2_in, 32.2977546110344, main_run_var = main_run_var1)
     
     #costs_a4: XXX(2022)
-    # costs_a4_1_in <- pv_costs_f(
+    # costs_a4_in <- pv_costs_f(
     #   periods_var = periods_var1,
     #   delta_ed_var = 0,
     #   interest_r_var = interest_new_in,
@@ -2058,7 +2096,7 @@ earnings_no_ext_in
       "s2_in" = s2_in,
       "pv_benef_tax_nx_in" = pv_benef_tax_nx_in,
       "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
-      # "pv_benef_intgen_in"= pv_benef_intgen_in,              # SATOSHI FILL IN
+      # "pv_benef_intgen_rp_in"= pv_benef_intgen_rp_in,              # SATOSHI FILL IN
       "pv_benef_all_nx_in" = pv_benef_all_nx_in,
       "pv_benef_all_nx_prevl_in" = pv_benef_all_nx_prevl_in,
       "pv_benef_all_yx_in" =  pv_benef_all_yx_in,
@@ -2072,7 +2110,7 @@ earnings_no_ext_in
       "costs2_x_in" = costs2_x_in,
       "costs_a2_in" = costs_a2_in,
       "cost1_in" = cost1_in
-      # "costs_a4_1_in" = costs_a4_1_in
+      # "costs_a4_in" = costs_a4_in
     ) )
   }
 
