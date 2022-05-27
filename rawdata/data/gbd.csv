@@ -1,0 +1,58 @@
+measure,location,sex,age,age_c,cause,metric,year,val,upper,lower,pop
+YLDs (Years Lived with Disability),Kenya,Both,Under 5,0-4,All causes,Number,2019,262848,347988,191593,5993267
+DALYs (Disability-Adjusted Life Years),Kenya,Both,Under 5,0-4,All causes,Number,2019,4960803,5985712,4054994,5993267
+YLLs (Years of Life Lost),Kenya,Both,Under 5,0-4,All causes,Number,2019,4697955,5706721,3791633,5993267
+YLLs (Years of Life Lost),Kenya,Both,1 to 4,1-4,All causes,Number,2019,1063777.658,1284416.307,871428.7925,4888193
+YLLs (Years of Life Lost),Kenya,Both,5 to 9,5-9,All causes,Number,2019,338999.1196,429553.1752,284326.0846,6202643
+YLLs (Years of Life Lost),Kenya,Both,10 to 14,10-14,All causes,Number,2019,297609.375,348733.51,258187.2186,6346072
+YLLs (Years of Life Lost),Kenya,Both,15 to 19,15-19,All causes,Number,2019,553843.3175,675969.3189,438090.685,5285857
+YLLs (Years of Life Lost),Kenya,Both,20 to 24,20-24,All causes,Number,2019,574434.6659,687688.8039,464536.7009,4447674
+YLLs (Years of Life Lost),Kenya,Both,25 to 29,25-29,All causes,Number,2019,579097.2208,713190.9019,454156.2476,3854555
+YLLs (Years of Life Lost),Kenya,Both,30 to 34,30-34,All causes,Number,2019,669139.0748,818290.2034,539018.5787,3570719
+YLLs (Years of Life Lost),Kenya,Both,35 to 39,35-39,All causes,Number,2019,766549.5948,912631.0115,619266.8002,2650116
+YLLs (Years of Life Lost),Kenya,Both,40 to 44,40-44,All causes,Number,2019,798138.6342,899581.3491,698625.2704,2259231
+YLLs (Years of Life Lost),Kenya,Both,45 to 49,45-49,All causes,Number,2019,763607.0756,872857.0712,657610.574,1786256
+YLLs (Years of Life Lost),Kenya,Both,50 to 54,50-54,All causes,Number,2019,683504.8302,783030.6522,587224.628,1308610
+YLLs (Years of Life Lost),Kenya,Both,55 to 59,55-59,All causes,Number,2019,602124.3822,694254.6544,521135.6254,1118094
+YLLs (Years of Life Lost),Kenya,Both,60 to 64,60-64,All causes,Number,2019,545261.4412,626172.9844,475298.805,870022
+YLLs (Years of Life Lost),Kenya,Both,65 to 69,65-69,All causes,Number,2019,463433.6835,523948.5572,412016.3255,658178
+YLLs (Years of Life Lost),Kenya,Both,70 to 74,70-74,All causes,Number,2019,388647.0981,425793.3974,353398.8137,514539
+YLLs (Years of Life Lost),Kenya,Both,75 to 79,75-79,All causes,Number,2019,281043.6538,298209.4361,257930.1569,283122
+YLLs (Years of Life Lost),Kenya,Both,80 plus,80+,All causes,Number,2019,291473.9576,311467.2593,270424.0303,414654
+YLLs (Years of Life Lost),Kenya,Both,<1 year,<1,All causes,Number,2019,3634177.675,4429992.995,2926376.162,1105074
+DALYs (Disability-Adjusted Life Years),Kenya,Both,1 to 4,1-4,All causes,Number,2019,1270510.931,1500218.479,1065044.471,4888193
+DALYs (Disability-Adjusted Life Years),Kenya,Both,5 to 9,5-9,All causes,Number,2019,615396.0377,750272.4252,519497.1041,6202643
+DALYs (Disability-Adjusted Life Years),Kenya,Both,10 to 14,10-14,All causes,Number,2019,625524.2703,745157.1902,528483.1909,6346072
+DALYs (Disability-Adjusted Life Years),Kenya,Both,15 to 19,15-19,All causes,Number,2019,941425.6376,1118903.932,790247.4257,5285857
+DALYs (Disability-Adjusted Life Years),Kenya,Both,20 to 24,20-24,All causes,Number,2019,965114.6429,1136259.861,810674.9744,4447674
+DALYs (Disability-Adjusted Life Years),Kenya,Both,25 to 29,25-29,All causes,Number,2019,974600.2106,1165654.229,814878.3013,3854555
+DALYs (Disability-Adjusted Life Years),Kenya,Both,30 to 34,30-34,All causes,Number,2019,1065331.436,1259138.607,904362.9724,3570719
+DALYs (Disability-Adjusted Life Years),Kenya,Both,35 to 39,35-39,All causes,Number,2019,1138216.276,1319332.178,967197.3756,2650116
+DALYs (Disability-Adjusted Life Years),Kenya,Both,40 to 44,40-44,All causes,Number,2019,1128975.107,1272332.394,1008164.028,2259231
+DALYs (Disability-Adjusted Life Years),Kenya,Both,45 to 49,45-49,All causes,Number,2019,1043390.787,1193527.958,907292.0168,1786256
+DALYs (Disability-Adjusted Life Years),Kenya,Both,50 to 54,50-54,All causes,Number,2019,917640.034,1034858.456,797237.765,1308610
+DALYs (Disability-Adjusted Life Years),Kenya,Both,55 to 59,55-59,All causes,Number,2019,801223.1594,916099.4753,701842.2704,1118094
+DALYs (Disability-Adjusted Life Years),Kenya,Both,60 to 64,60-64,All causes,Number,2019,710161.6855,809228.2034,627581.6366,870022
+DALYs (Disability-Adjusted Life Years),Kenya,Both,65 to 69,65-69,All causes,Number,2019,595597.2326,668937.1995,533470.0516,658178
+DALYs (Disability-Adjusted Life Years),Kenya,Both,70 to 74,70-74,All causes,Number,2019,490099.095,536510.968,445329.4844,514539
+DALYs (Disability-Adjusted Life Years),Kenya,Both,75 to 79,75-79,All causes,Number,2019,349608.2144,375587.1128,322899.0989,283122
+DALYs (Disability-Adjusted Life Years),Kenya,Both,80 plus,80+,All causes,Number,2019,357387.3315,385471.9451,329749.9372,414654
+DALYs (Disability-Adjusted Life Years),Kenya,Both,<1 year,<1,All causes,Number,2019,3690292.006,4486959.389,2978773.553,1105074
+YLDs (Years Lived with Disability),Kenya,Both,1 to 4,1-4,All causes,Number,2019,206733.2724,274358.2722,150996.4688,4888193
+YLDs (Years Lived with Disability),Kenya,Both,5 to 9,5-9,All causes,Number,2019,276396.9181,366974.488,199358.6609,6202643
+YLDs (Years Lived with Disability),Kenya,Both,10 to 14,10-14,All causes,Number,2019,327914.8953,435333.6391,238883.3242,6346072
+YLDs (Years Lived with Disability),Kenya,Both,15 to 19,15-19,All causes,Number,2019,387582.3201,505258.1521,283408.9521,5285857
+YLDs (Years Lived with Disability),Kenya,Both,20 to 24,20-24,All causes,Number,2019,390679.977,504030.4383,287720.0643,4447674
+YLDs (Years Lived with Disability),Kenya,Both,25 to 29,25-29,All causes,Number,2019,395502.9898,510938.4843,291269.4455,3854555
+YLDs (Years Lived with Disability),Kenya,Both,30 to 34,30-34,All causes,Number,2019,396192.3608,513874.7297,294606.8773,3570719
+YLDs (Years Lived with Disability),Kenya,Both,35 to 39,35-39,All causes,Number,2019,371666.6814,483074.8624,278053.9536,2650116
+YLDs (Years Lived with Disability),Kenya,Both,40 to 44,40-44,All causes,Number,2019,330836.473,428498.0152,247536.427,2259231
+YLDs (Years Lived with Disability),Kenya,Both,45 to 49,45-49,All causes,Number,2019,279783.7111,360971.7771,208130.5863,1786256
+YLDs (Years Lived with Disability),Kenya,Both,50 to 54,50-54,All causes,Number,2019,234135.2039,304803.6009,174136.2227,1308610
+YLDs (Years Lived with Disability),Kenya,Both,55 to 59,55-59,All causes,Number,2019,199098.7771,257373.2543,149449.9736,1118094
+YLDs (Years Lived with Disability),Kenya,Both,60 to 64,60-64,All causes,Number,2019,164900.2443,214028.6913,124098.8233,870022
+YLDs (Years Lived with Disability),Kenya,Both,65 to 69,65-69,All causes,Number,2019,132163.549,169820.7612,100182.4748,658178
+YLDs (Years Lived with Disability),Kenya,Both,70 to 74,70-74,All causes,Number,2019,101451.9969,129650.018,76688.09664,514539
+YLDs (Years Lived with Disability),Kenya,Both,75 to 79,75-79,All causes,Number,2019,68564.56063,87210.62972,51778.45109,283122
+YLDs (Years Lived with Disability),Kenya,Both,80 plus,80+,All causes,Number,2019,65913.3739,83407.0598,50287.59893,414654
+YLDs (Years Lived with Disability),Kenya,Both,<1 year,<1,All causes,Number,2019,56114.33067,74543.18748,40133.11733,1105074

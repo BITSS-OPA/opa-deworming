@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>08 4月, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
+date: "<center><div class='mysubtitle'>25 May, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -192,6 +192,7 @@ chunk_sources <- function(){
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "a2_tax_sim",
     # "a2_all_sim", "a3_inc_a1_all_sim", "a3_inc_a1_all_x_sim", "a3_inc_a2_all_sim"
 
+    # YLL of all causes, age 0-64 Both sexes, in Kenya in 2019 - Global Burden of Disease http://ghdx.healthdata.org/gbd-results-tool?params=gbd-api-2019-permalink/426dce805f261258aaade61a91bf477d
     yll_so <- c(
       3634178,
       1063778,
@@ -207,7 +208,6 @@ chunk_sources <- function(){
       683505,
       602124,
       545261)
-              # YLL of all causes, age 0-64 Both sexes, in Kenya in 2019 - Global Burden of Disease http://ghdx.healthdata.org/gbd-results-tool?params=gbd-api-2019-permalink/426dce805f261258aaade61a91bf477d
     pop_so <- c(
       1105074,
       4888193,
@@ -232,7 +232,7 @@ chunk_sources <- function(){
     df_research_so <- read_csv("rawdata/research/research_params.csv")   
     lambda1_so <- c(3.49, 0)            #Hrs per week increase for men and women, table 3, row 1, cols 2 & 3
     lambda1_sd_so <- c(1.42, 1.36)      #table 3, row 2, cols 2 & 3
-    lambda1_new_so <- c(79.51465)       # avg treatment effect from klps2-4 (already adjusted for ppp and inflation) - w@w
+    lambda1_new_so <- c(79.51465)       # avg treatment effect from klps2-4 (already adjusted for ppp and inflation to 2017) - w@w
     lambda1_new_sd_so <- c(76)          # Hamory et al 2021
     lambda2_so <- 10.2                  #Externality effect (proportional) - Table 3, row 1 col 4
     lambda2_sd_so <- 7.8                # Table 3, row 2 col 4
@@ -263,14 +263,16 @@ chunk_sources <- function(){
                            0.0558284756343451,	0.1546264843901160,	0.0055961489945619)
     delta_ed_ext_so <- cbind(delta_ed_ext_so, 1999:2007)
     include_ext_so <- TRUE
-    teach_sal_so <- 5041           #Yearly secondary schooling compensation	5041 - from ROI materials #NOTES Fernando assumes this number is USD in 2016
-    teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47 #NOTES Fernando assumes this number is USD in 2016
-    teach_sal_new_so <- (50000 * 12 / 49.773)
+    teach_sal_so <- 5041           #Yearly secondary schooling compensation. From SP (B85), Assumed 2016 dollars 
+    teach_ben_so <- 217.47         #Yearly secondary schooling teacher benefits	217.47.  From SP (B86), Assumed 2016 dollars
+   
+     #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
+    #news sources * 12 / ex_rate_2017_ppp_so
+    # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
+    # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
+    teach_sal_new_so <- (50000 * 12 / 49.773)                           # USD 2017 PPP
     teach_ben_new_so <- 0
-                                  #Monthly secondary schooling compensation	(in 2017 KES) overestimated to account for benefits -
-                                  #news sources * 12 / ex_rate_2017_ppp_so
-                                  # https://www.tuko.co.ke/287766-secondary-school-teachers-salary-kenya.html
-                                  # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
+
     df_cpi_so <- data.frame(
       year = c(seq.int(2006,2018,1)),
       cpi = c(
@@ -339,9 +341,10 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # adjustment beyond KLPS-3 (likely a conservative assumption).
 #
 # coverage_so: Overall Saturation (0.511) / 0.75 - not reported in table, average of T & C
+# SP = Baird-etal-QJE-2016_fiscal-impact-calculations.xlsx, sheet: Assumps&Panel A Calcs
 ```
 
-<img src="C:/Users/koiso/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -349,7 +352,9 @@ Executive Summary
 
 This report is part of an Open Policy Analysis (OPA) on deworming interventions. OPA is an approach to policy analysis wherein data, code, materials, and clear accounts of methodological decisions are made freely available to facilitate collaboration, discussion, and reuse. This OPA contains an [interactive graph](https://bitss-opa.shinyapps.io/dw-app/) that best represents the facts to inform policy makers, one report (this document) that clearly explains all the analysis, and [a repository](https://github.com/BITSS-OPA/opa-deworming) that contains all the materials to reproduce the report and final output.
 
-This report describes four approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], and the third approach is a combination of the previous two with some modification suggested by [Evidence Action](https://www.evidenceaction.org), a key technical assistance partner in this area that provides technical support to government-run deworming programs, and the fourth approach expands the previous three approaches with benefits from the mortality rate reduction of under-five children born from the deworming respondents with inspiration from **XXX (2022)**. The fourth approach uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates, treatment length across settings, and values for extended life Though these are modeled estimates and should be interpreted with caution, this report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
+This report describes four approaches to compute the net present value of mass deworming interventions. The first two approaches are exact reproductions from previous research [@baird2016worms; @klps4], the third approach is a combination of the previous two with some modification suggested by [Evidence Action](https://www.evidenceaction.org), a key technical assistance partner in this area that provides technical support to government-run deworming programs, and it represent the best estimate available for the [version 1.0](https://github.com/BITSS-OPA/opa-deworming/releases/tag/v1.0) of this OPA.  
+
+The fourth approach expands the previous approaches with benefits from the mortality rate reduction of under-five children born from the deworming respondents [@klps5]. It uses the same benefits as the previous approaches and adjusts for different costs, prevalence rates, and treatment length across settings. Though these are modeled estimates and should be interpreted with caution, this report suggests that this final approach should be used as the best available policy estimate to compare costs and benefits of deworming in different settings.
 
 The main policy estimate predicts that a mass deworming intervention will have a net present value (comparison of a stream of benefits and costs from today's perspective) of USD \$289.8 (in 2018 dollars) per children for a setting with average prevalence and average unit costs (among the countries for which Evidence Action has data). We encourage readers interested in learning about the predicted value for a specific setting to use the [interactive app](https://bitss-opa.shinyapps.io/dw-app/).
 
@@ -375,27 +380,26 @@ This report provides a complete description of the analysis behind the results p
 
 > *Note: This is Version 1.0 of the OPA. Please kindly report any errors in the dynamic document [here](https://github.com/BITSS-OPA/opa-deworming/blob/master/issue_template.md).*
 
-
 # Introduction
 
 Parasitic worm infections, also known as soil-transmitted helminths (STH) and schistosomiasis, are endemic in many countries, and disproportionately affect the poor. These parasitic worms interfere with regular bodily processes by decreasing nutrient uptake. Thus, these worms can lead to serious consequences on human health, education outcomes, and long-term economic well being. In particular, evidence indicates that these worms contribute to malnourishment, impairment of mental and physical development, lower school attendance, and decreased wages [@croke2014long; @miguel2004worms; @baird2016worms].
 
-Evidence from previous mass deworming interventions has demonstrated to be a highly effective public health policy. For example, A randomized health intervention (the Primary School Deworming Project or PSDP) launched by a non-governmental organization (NGO) provided deworming treatment to Kenyan children during 1998-2003. The total population of PSDP was 32,565 pupils in 75 primary schools, of which around two-thirds received deworming treatment for 2-3 years (@baird2016worms, inline page 1642 paragraph 3). The Kenya Life Panel Survey (KLPS), which has used data from representatives from PSDP, revealed that PSDP has gained significant benefits to dewormed students and their children over 20 years. This report provides a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into different policy-relevant scenarios.
+Evidence from previous mass deworming interventions has demonstrated to be a highly effective public health policy. A randomized health intervention, the Primary School Deworming Project  (PSDP), launched by a non-governmental organization (NGO) provided deworming treatment to Kenyan children during 1998-2003. The total population of PSDP was 32,565 pupils in 75 primary schools, of which around two-thirds received deworming treatment for 2-3 years (@baird2016worms, inline page 1642 paragraph 3). The Kenya Life Panel Survey (KLPS), which has used data from representatives from PSDP, revealed that PSDP has gained significant benefits to dewormed students and their children over 20 years. This report provides a policy analysis that compares benefits and costs of deworming across different settings, allowing for the translation of research findings into different policy-relevant scenarios.
 
 This OPA project contributes to strengthening the evidence-to-policy link in three areas. First, it identifies among several alternatives the result of a policy analyses, or policy estimate, that best represents the facts to policy makers. This is done with input from [Evidence Action](https://www.evidenceaction.org) (EA), a stakeholder who is closely involved in policymaking around deworming. Additionally an interactive app shows how this policy estimate varies when modifying any of its underlying assumptions. Second, this OPA project increases the transparency and reproducibility of existing policy analyses of costs and benefits of mass deworming programs. This is done by adding detailed documentation and code behind all the computational steps required to produce the final policy estimate as well the alternative approaches. Third, it makes available all the materials necessary to reproduce the result in this documentation, as well as the app with the final policy estimate.
 
-This document describes three different approaches:
+This document describes four different approaches:
 
-1.  The original cost benefit analysis (CBA) produced by @baird2016worms, which estimates the net present value of the PSDP after a 10-year follow-up of four different policy estimates.\
+1.  The original cost benefit analysis (CBA) produced by @baird2016worms, which estimates the net present value of the PSDP after a 10-year follow-up of four different policy estimates.
 2.  An updated version of @baird2016worms with additional follow-up data [@klps4].
-3.  A new analysis that, building from the previous two approaches, focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was developed in consultation with EA[^2].
-4.  An analysis that combines the previous three approaches and economic benefits of reduced mortality rates of under-five children born from the dewormed cohort through 20 years after the PSDP with the results of **XXX (2022)**.
+3.  A third analysis that, building from the previous two approaches, focuses on one specific policy estimate, and allows for results to vary depending on key characteristics of current settings where deworming policies are being implemented. This new approach was developed in consultation with EA[^2].
+4.  An analysis that combines the previous three approaches and economic benefits of reduced mortality rates of under-five children born from the dewormed cohort through 20 years after the PSDP with the results of [@klps5].
 
 [^2]: Evidence Action's version of the analysis follows a similar structure to the cost effectiveness analysis performed by the charity evaluator GiveWell [@givewell].
 
 # Methodology
 
-The report first describes the common elements across the first three approaches, and then describes each approach in detail.
+The report first describes the common elements across the all four approaches, and then describes each approach in detail.
 
 ## Common structure {.unnumbered}
 
@@ -408,13 +412,16 @@ The starting point is a comparison of a stream of benefits and costs over the li
 ```{=tex}
 \begin{equation}
 NPV = B - C \\
+
+\label{eq:1}
+\tag{1}
 \end{equation}
 ```
 Where:
 
--   $NPV$: net present value of the deworming treatment\
--   $B$: benefits of the deworming treatment\
--   $C$: costs of the deworming treatment
+-   $NPV$: net present value of the deworming treatment  
+-   $B$: present value of benefits of the deworming treatment  
+-   $C$: present value of costs of the deworming treatment
 
 
 ```r
@@ -427,9 +434,9 @@ chunk_final_pe <- function(){
     NPV_pe_f <- function(benefits_var = 1, costs_var = 1){
         benefits_var - costs_var
     }
-
 ###############################################################################
 ###############################################################################  
+
     return(list("NPV_pe_f" = NPV_pe_f))
 }
 # Excecute the previos function and load the listed objects in to the current R
@@ -452,8 +459,8 @@ The benefits are equal to the additional lifetime earnings and the intergenerati
 B =   \sum_{t=0}^{50}\left(  \frac{1}{1 + r}\right)^{t} (E_{t}+ IGMB_{t})
 
 
-\label{eq:1}
-\tag{1}
+\label{eq:2}
+\tag{2}
 \end{equation}
 ```
 Where:
@@ -470,18 +477,19 @@ Where:
 chunk_benefits <- function(){
 ###############################################################################
 ###############################################################################  
-
-  pv_benef_f <- function(
+ 
+   pv_benef_f <- function(
     earnings_var = earnings_in,
     intgen_var = intgen_in,
     interest_r_var = interest_in,
     periods_var = periods_so
   ) {
       index_t <- 0:periods_var
-      res1 <- sum( ( 1 / (1 + interest_r_var) )^index_t * (earnings_var +intgen_var))
+      res1 <- sum( ( 1 / (1 + interest_r_var) )^index_t * 
+                     (earnings_var +intgen_var))
       return(res1)   
-    }
-
+  }
+  
 ###############################################################################
 ###############################################################################  
     return(list("pv_benef_f" = pv_benef_f))
@@ -493,11 +501,11 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 
 </details>
 
-At a high level, all the first three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming interventions. This is likely an underestimate of the benefits as it does not quantify the non-pecuniary effects of improved health. The fourth approach integrates the intergenerational child mortality benefits of deworming into the third approach. The costs include direct costs of implementing deworming programs and indirect costs, such as the additional costs to the education system resulting from increased school attendance.
+At a high level, the first three approaches focus on the same type of benefits: the increase in incomes over the lifetime of beneficiaries of deworming interventions. This is likely an underestimate of the benefits as it does not quantify the non-pecuniary effects of improved health. The fourth approach integrates the intergenerational child mortality benefits of deworming into the third approach. The costs include direct costs of implementing deworming programs and indirect costs, such as the additional costs to the education system resulting from increased school attendance.
 
 The main differences in benefits across the first three approaches have to do with how to predict the earnings profiles over a lifetime, and how to account for differences in worm prevalence rates and the length of treatment across settings. Approaches 1 and 2 use different earning profiles; Approach 3 combines both earning profiles and adjusts for possible differences in prevalence rates of worm infections and length of treatment.
 
-The main differences in costs between the approaches are whether indirect costs are included, and how to compute the relevant unit cost for the analysis. The first two approaches include indirect costs and use the unit costs of a specific country (Kenya) where the study was originally conducted. In contrast, the third and fourth approaches do not include indirect costs and uses unit costs of various countries from the data provided by Evidence Action (see section 2.2.2.2 for the definition of indirect costs in this context).
+The main differences in costs between the approaches are whether indirect costs are included, and how to compute the relevant unit cost for the analysis. The first two approaches include indirect costs (due to additional schooling) and use the unit costs of a specific country (Kenya) where the study was originally conducted. In contrast, the third and fourth approaches do not include indirect costs and uses unit costs of various countries from the data provided by Evidence Action (see  this [section](#indi_costs) for the definition of indirect costs in this context).
 
 ### The discounting rate {.unnumbered}
 
@@ -512,8 +520,8 @@ All three approaches use the real interest rate ($r$) as the discounting rate, w
 r = \frac{1 + i}{1 + \pi} - 1 \\
 r \approx i - \pi
 
-\label{eq:2}
-\tag{2}
+\label{eq:3}
+\tag{3}
 \end{equation}
 ```
 Where:
@@ -546,7 +554,6 @@ chunk_interest <- function(){
 invisible( list2env(chunk_interest(),.GlobalEnv) )
 
 ##### Execute values of the functions above when needed for the text:
-
 interest_in <- as.numeric(
   interest_f(gov_bonds_var = gov_bonds_so,
              inflation_var = inflation_so)$interest_in
@@ -560,11 +567,10 @@ interest_new_in <- as.numeric(
 
 </details>
 
-The actual value varies across approaches depending on the time and country chosen. For example, Approach 1 uses the return from government bonds and the inflation rate in Kenya for 2016, while approaches 2, 3, and 4 use the same country's value for 2019. This results in discount rates of 9.85% for approaches 1, 5% for approaches 2, 3, and 4.
-
-
+The actual value varies across approaches depending on the time and country chosen. For example, Approach 1 uses the return from government bonds and the inflation rate in Kenya for 2016, while approaches 2, 3, and 4 use the same country's value for 2019. This results in discount rates of 9.85% for approach 1, and 5% for approaches 2, 3, and 4.
 
 ### The currency conversion {.unnumbered}
+
 <!---
 World Bank regularly updates the PPP conversion factor, GDP. Although a new PPP conversion factor is available in 2020, we use the one accessed in June 2019 for compatibility purpose. The details about the conversion in the papers are in https://osf.io/q74rh/
 the details about the World Bank conversion rates update are written in Appendix I in https://openknowledge.worldbank.org/bitstream/handle/10986/33623/9781464815300.pdf?sequence=4&isAllowed=y
@@ -573,7 +579,7 @@ the details about the World Bank conversion rates update are written in Appendix
 # ex_rate_2018_ppp_new_so <- 40.19336962  # World Bank (accessed in Sep 2021) https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
 --->
 
-For compatibility purpose, all approaches show monetary values in 2017 USD PPP terms in addition to the original monetary values. The adjustment of currency unit to the 2017 USD PPP uses PPP conversion factor, GDP @world2019ppp. It is calculated by exchanging US dollars in a specific year X into the local currency (e.g., Kenyan shilling) in the year X, converting it into US dollars PPP in the year X, and adjusting it for inflation with the Consumer Price Index (CPI) to get USD PPP in 2017.
+For compatibility purposes, all approaches show monetary values in 2017 USD in equivalent purchasing power parity (PPP) in addition to the original monetary values. The adjustment of currency unit to the 2017 USD PPP uses the World Bank PPP conversion factor [@world2019ppp]. It is calculated by exchanging US dollars in a specific year $t$ into the local currency (e.g., Kenyan shilling) in the same year, converting it into US dollars PPP in the year $t$, and then adjusting it for US inflation with the Consumer Price Index (CPI) to get USD PPP in 2017.
 
 <details>
 
@@ -581,23 +587,23 @@ For compatibility purpose, all approaches show monetary values in 2017 USD PPP t
 
 ```{=tex}
 \begin{equation}
-KSH_{t=X} = USD_{t=X} \times ex^{USD}_{t=X} \\
-USD^{PPP}_{t=X} = \frac{KSH_{t=X}}{ex^{PPP}_{t=X}}\\
-USD^{PPP}_{t=2017} = USD^{PPP}_{t=X} \times \frac{CPI_{t=2017}}{CPI_{t=X}}
+KSH_{t} = USD_{t} \times ex^{USD}_{t} \\
+USD^{PPP}_{t} = \frac{KSH_{t}}{ex^{PPP}_{t}}\\
+USD^{PPP}_{2017} = USD^{PPP}_{t} \times \frac{CPI_{2017}}{CPI_{t}}
 
-\label{eq:3}
-\tag{3}
+\label{eq:4}
+\tag{4}
 \end{equation}
 ```
 
 Where:
 
--   $KSH_{t=X}$: Local currency (KSH) in year $t=X$\
--   $USD_{t=X}$: USD spent on the ground in year $t=X$\
--   $ex^{USD}_{t=X}$: the exchange rate of the local currency to USD in year $t=X$\
--   $USD^{PPP}_{t=X}$: USD PPP in year $t=X$\
--   $ex^{PPP}_{t=X}$: the exchange rate of the local currency to USD PPP in year $t=X$\
--   $CPI_{t=X}$: the Consumer Price Index in year $t=X$
+-   $KSH_{t}$: Local currency (KSH) in year $t$\
+-   $USD_{t}$: USD spent on the ground in year $t$\
+-   $ex^{USD}_{t}$: the exchange rate of the local currency to USD in year $t$\
+-   $USD^{PPP}_{t}$: USD PPP in year $t$\
+-   $ex^{PPP}_{t}$: the exchange rate of the local currency to USD PPP in year $t$\
+-   $CPI_{t}$: the Consumer Price Index in year $t$
 
 
 
@@ -608,20 +614,20 @@ chunk_currency <- function(){
 ###############################################################################
 ###############################################################################  
 
-    currency_f <- function(price_var, # USD spent on the gound
-                           ex_rate_c_in = df_ex_rate_so,
-                           ex_rate_ppp_in = df_ex_rate_ppp_so,
-                           cpi_in = df_cpi_so,
-                           year_var) {  
-      ex_rate_year <- ex_rate_c_in[ex_rate_c_in["year"]==year_var,"ex_rate"]
-      ex_rate_ppp_year <-
-        ex_rate_ppp_in[ex_rate_ppp_in["year"]==year_var,"ex_rate_ppp"]
-      cpi_2017 <- cpi_in[cpi_in["year"]==2017,"cpi"]
-      cpi_year <- cpi_in[cpi_in["year"]==year_var,"cpi"]
+    currency_f <- function(price_var, # USD spent on the ground
+                           ex_rate_t_var = df_ex_rate_so,
+                           ex_rate_ppp_t_var = df_ex_rate_ppp_so,
+                           cpi_var = df_cpi_so,
+                           t_var) {  
+      ex_rate_t <- ex_rate_t_var[ex_rate_t_var["year"]==t_var,"ex_rate"]
+      ex_rate_ppp_t <- ex_rate_ppp_t_var[ex_rate_ppp_t_var["year"]==t_var,
+                                            "ex_rate_ppp"]
+      cpi_2017 <- cpi_var[cpi_var["year"]==2017,"cpi"]
+      cpi_t <- cpi_var[cpi_var["year"]==t_var,"cpi"]
       
-      ksh_year <- price_var * ex_rate_year
-      price_ppp_in <- ksh_year / ex_rate_ppp_year
-      price_2017usdppp_in <- as.numeric(price_ppp_in * cpi_2017 / cpi_year)
+      ksh_t <- price_var * ex_rate_t
+      price_usdppp_t <- ksh_t / ex_rate_ppp_t
+      price_2017usdppp_in <- as.numeric(price_usdppp_t * cpi_2017 / cpi_t)
         return(price_2017usdppp_in)
     }
 
@@ -655,8 +661,8 @@ Gains in earnings ($\Delta W_{t}$) result from multiplying expected earnings in 
 \begin{equation}
 \Delta W_{t} = w_{t}\left( \lambda_{1} + \frac{p \lambda_{2}}{R} \right)
 
-\label{eq:4}
-\tag{4}
+\label{eq:5}
+\tag{5}
 \end{equation}
 ```
 Where:
@@ -716,8 +722,8 @@ The wages/earnings are determined by:
 \begin{equation}
 w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2} Xp^2) \quad \text{for } t=10, \dots, 50
 
-\label{eq:5}
-\tag{5}
+\label{eq:6}
+\tag{6}
 \end{equation}
 ```
 ```{=tex}
@@ -725,16 +731,16 @@ w_t =  \text{#weeks} \times w_0 (1 + g)^{Xp}(1 + \hat{\beta_1} Xp + \hat{\beta_2
 w_0 = \frac{1}{ex} \sum_{l \in \{ag, ww, se\}}w_{l}\alpha_{l}
 \\ \quad \text{with: } \alpha_{l}= \frac{ h_{l}}{h_{ag} + h_{ww} + h_{se}}
 
-\label{eq:6}
-\tag{6}
+\label{eq:7}
+\tag{7}
 \end{equation}
 ```
 ```{=tex}
 \begin{equation}
 w_{se} =  \frac{ \text{Monthly self-employed profits} }{4.5 \times E[h_{se}|h_{se}>0] }
 
-\label{eq:7}
-\tag{7}
+\label{eq:8}
+\tag{8}
 \end{equation}
 ```
 Where:
@@ -828,7 +834,7 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 
 The estimated impact of deworming on hours worked comes from @baird2016worms and are estimated separately for men ($\lambda_{1,male}$) and women ($\lambda_{1,female}$). These two parameters are combined with a simple mean in the analysis.
 
-The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not receive the treatment but still saw reductions in the likelihood of infection due to lower worm prevalence in their community. This parameter is not estimated by gender, so the report repeats its value two times. All the components of the equation \\ref{eq:8} come from @baird2016worms. The externality effects are adjusted by the coverage and saturation from the original study.
+The estimated externality effect ($\lambda_{2}$) reflects the additional hours worked due to individuals who did not receive the treatment but still saw reductions in the likelihood of infection due to lower worm prevalence in their community. This parameter is not estimated by gender, so the report repeats its value two times. All the components of the equation \\ref{eq:9} come from @baird2016worms. The externality effects are adjusted by the coverage and saturation from the original study.
 
 <details>
 
@@ -838,8 +844,8 @@ The estimated externality effect ($\lambda_{2}$) reflects the additional hours w
 \begin{equation}
 \lambda_{1} = \frac{1}{2} \lambda_{1,male} + \frac{1}{2} \lambda_{1,female}\\
 
-\label{eq:8}
-\tag{8}
+\label{eq:9}
+\tag{9}
 \end{equation}
 ```
 Where:
@@ -895,8 +901,8 @@ For this setting, @kremer2007illusion (Page 48, Table 1, Panel C, Col 1, Row 3) 
 \begin{equation}
 p = R \times Q(full)  + (1 - R) \times Q(0)
 
-\label{eq:9}
-\tag{9}
+\label{eq:10}
+\tag{10}
 \end{equation}
 ```
 Where:
@@ -983,9 +989,7 @@ pv_benef_yes_ext_in <- pv_benef_f(
 
 #### Assessing computational reproducibility of original results
 
-Without externalities, @baird2016worms obtained a present value of benefits of 142.43 (table 5, column 3, and row 9). Including externalities, they obtain a present value of benefits of 766.81 (table 5, column 3, and row 12). Following the steps described in this section, this analysis obtains the same result (142.4258784 and 766.8143995 respectively without rounding; 321.9397676 and 1733.3089493 in 2017 USD PPP).
-
-
+Without externalities, @baird2016worms obtained a present value of benefits of 142.43, or 321.95 in 2017 USD PPP (table 5, column 3, and row 9). Including externalities, they obtain a present value of benefits of 766.81, or 1733.3 (table 5, column 3, and row 12). Following the steps described in this section, this analysis obtains the same result (142.4258784 and 766.8143995 respectively without rounding).
 
 ### Costs
 
@@ -999,8 +1003,8 @@ The costs are a combination of direct costs of mass deworming (relative to the s
 \begin{equation}
 C =  \left( S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \right) + K \sum_{t=0}^{50} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_{t}(S1,S2)
 
-\label{eq:10}
-\tag{10}
+\label{eq:11}
+\tag{11}
 \end{equation}
 ```
 Where:
@@ -1067,8 +1071,8 @@ With complete subsidy, the relevant costs represent the total direct costs of de
 \begin{equation}
 S_{2} = \frac{c_{kenya}}{ex}\times L_0 \\
 
-\label{eq:11}
-\tag{11}
+\label{eq:12}
+\tag{12}
 \end{equation}
 ```
 Where:
@@ -1081,6 +1085,7 @@ Where:
 # - inputs: unit costs in local currency (unit_cost_local_so), exchange rate
 #  (ex_rate_so), years of treatment (years_of_treat_0_so)
 # - outputs: unit costs of treatment (s2_f)
+#                                                                               Harmonize with currency_f()
 chunk_unit_costs2 <- function(){
 ###############################################################################
 ###############################################################################  
@@ -1104,7 +1109,7 @@ s2_in <- s2_f()
 
 
 
-#### Indirect costs: additional years of education and its costs for government
+#### Indirect costs: additional years of education and its costs for government {#indi_costs}
 
 As a result of deworming treatment, there is an estimated increase in school attendance, which is multiplied by the cost of education per student to calculate the additional indirect cost on the education system imposed by a treated individual. The additional costs on education are computed as follows: first compute a cost per student ($K$). This is calculated as the salary of the teacher plus benefits, divided by the average number of students per teacher. Second, the cost per student is multiplied by the estimated increase in school attendance ($\Delta \overline{E}_{t}(S1,S2)$). For this the report uses a series of estimated effects, including the additional direct increase in secondary schooling from 1999 to 2007 obtained from an additional analysis related to @baird2016worms. This series does not take into account the externality effects. To incorporate externality effects, the report requires another series (from the same source) that estimates the additional secondary schooling increase due to the externality in order to add it to the original series.
 
@@ -1116,8 +1121,8 @@ As a result of deworming treatment, there is an estimated increase in school att
 \begin{equation}
 K = \frac{\text{teacher salary} + \text{teacher benefits}}{\text{# Students}}
 
-\label{eq:12}
-\tag{12}
+\label{eq:13}
+\tag{13}
 \end{equation}
 ```
 
@@ -1197,9 +1202,7 @@ pv_cost_yes_ext_in <- pv_costs_f(
 
 #### Assessing computational reproducibility of original results
 
-Without externalities, the original analysis (@baird2016worms) obtains a present value of costs of 11.78 (table 5, column 3, and adding rows 6 and 3). Including externalities, they obtain a present value of benefits of 25.2 (table 5, column 3, and adding rows 6 and 3 and 7). Following the steps described in this section, this analysis obtains the same result (11.7761881 and 25.1962131, respectively, without rounding; 26.6189214 and 56.9535752 in 2017 USD PPP).
-
-
+Without externalities, the original analysis (@baird2016worms) obtains a present value of costs of 11.78, or 26.63 in 2017 USD PPP (table 5, column 3, and adding rows 6 and 3). Including externalities, they obtain a present value of benefits of 25.2 or  56.96 in 2017 USD PPP (table 5, column 3, and adding rows 6 and 3 and 7). Following the steps described in this section, this analysis obtains the same result (11.7761881 and 25.1962131, respectively, without rounding).
 
 
 
@@ -1223,8 +1226,8 @@ Gains in yearly earnings represent the treatment effect on welfare ($\alpha^{poo
 \begin{equation}
 \Delta W_{t} = \mathbf{1}(10 < t \leq 25)\alpha^{pooled}
 
-\label{eq:13}
-\tag{13}
+\label{eq:14}
+\tag{14}
 \end{equation}
 ```
 Where:
@@ -1258,10 +1261,6 @@ earnings_no_ext_new_in <- earnings_app2_f(t_var = 0:50,
 
 </details>
 
-
-
-
-
 ### Costs
 
 #### Direct costs: increase in deworming costs
@@ -1276,8 +1275,8 @@ Similar to approach 1, the direct deworming costs under approach 2 are calculate
 \begin{equation}
 DC = \sum_{t=0}^{1.4} \left( \frac{1}{1 + r}\right)^{t} \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
 
-\label{eq:14}
-\tag{14}
+\label{eq:15}
+\tag{15}
 \end{equation}
 ```
 Since the analysis is discrete and cannot sum over a non-integer, the following is found:
@@ -1287,8 +1286,8 @@ Since the analysis is discrete and cannot sum over a non-integer, the following 
 DC = \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \left( \frac{1}{1 + r}\right)\big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big] + \\
 .4\left( \frac{1}{1 + r}\right)^2 \big[S_{2}Q(S_{2}) - S_{1}Q(S_{1}) \big]
 
-\label{eq:15}
-\tag{15}
+\label{eq:16}
+\tag{16}
 \end{equation}
 ```
 Where:
@@ -1335,7 +1334,8 @@ invisible( list2env(chunk_unit_costs2_new(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 # New costs are all in dollars so, will compute them using ex rate of 1.
 
-unit_cost_local_in <- currency_f(price_var = unit_cost_so, year_var = 2018)
+unit_cost_local_in <- currency_f(price_var = unit_cost_so, t_var = 2018)
+
 s2_new_in <- s2_new_f(
   interest_var = interest_new_in,
   unit_cost_local_var = unit_cost_local_in,
@@ -1347,9 +1347,10 @@ q2_in <- q_full_so
 
 </details>
 
-With complete subsidy, the costs of the intervention become the total direct costs of deworming each child (in USD). The original study [@baird2016worms] identifies the unit cost to be \$0.42 per year. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$0.83. Adding all indirect costs over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is \$1.92, and after accounting for a take-up rate of 0.75 results in an average cost of \$1.44 (2017 USD PPP).
+With complete subsidy, the costs of the intervention become the total direct costs of deworming each child . The second study [@klps4] identifies the unit cost to be \$0.42 per year, in 2018 USD. Adjusting for purchasing power and inflation, the report gets a per capita cost of \$0.83. Adding all indirect costs over an average 2.4 years of treatment, the average cost of deworming each child over the entire treatment period is \$1.92, and after accounting for a take-up rate of 0.75 results in an average cost of \$1.44 (2017 USD PPP).
 
 #### Indirect costs: additional years of education and its costs for government
+THERE IS A POTENTIAL BUG HERE: `teach_sal_new_so` is already in PPP Dollars for 2017. 
 
 The indirect cost on the education system is calculated similarly to approach 1: the cost per student is multiplied by the increase in school attendance due to deworming. The cost of additional schooling is computed as the the annual cost of schooling per children times the number of additional years of schooling due to deworming. This analysis assumes that pressure is added to educational institutions for a maximum of nine years, starting at year zero, for a total of 10 years. The cost per student ($K$) is updated with new information on annual teacher salary (including benefits)[^6], \$25,045 (also adjusted for PPP), and the same average number of students per teacher (45).
 
@@ -1365,8 +1366,8 @@ Hence, the cost of schooling each child for an additional year is now \$556.6 (2
 \begin{equation}
 K \sum_{t=0}^{8} \left( \frac{1}{1 + r}\right)^{t} \Delta \overline{E}_t(S1,S2)
 
-\label{eq:16}
-\tag{16}
+\label{eq:17}
+\tag{17}
 \end{equation}
 ```
 Where:
@@ -1389,11 +1390,9 @@ The second approach does not report benefits and costs separately. With all thes
 [^7]: While @klps4 uses an annual discount rate of 10% for the main estimates, this analysis follows the method written in Common Structure in 2. Methodology for consistency.
 
 
-
-
 ## Approach 3: Combination of Previous Approaches and Input From Key Policy Partners
 
-In this third and the fourth approaches, the report borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key technical assistance partner to best identify one clear output to inform policy makers. BITSS worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. For this report, Evidence Action provided insights on the updated costs and benefits across different country contexts to offer a broader perspective helpful for policy makers.
+In this third approach, the report borrowed some methodological elements from @baird2016worms and @klps4 and sought feedback from a key technical assistance partner to best identify one clear output to inform policy makers. BITSS worked in collaboration with the NGO Evidence Action, a key technical assistance partner in this area. Evidence Action's Deworm the World Initiative provides technical assistance to governments to implement school-based deworming programs. Deworm the World works closely with policymakers and government staff who are responsible for ensuring the implementation of deworming programs within their geographies to plan, scale, and sustain school-based deworming programs targeting at-risk children. Deworm the World works to gain and maintain critical support amongst these key stakeholders, thus having important influence over how policymakers take-in and use evidence for decision making. For this report, Evidence Action provided insights on the updated costs and benefits across different country contexts to offer a broader perspective helpful for policy makers.
 
 Under this approach, the benefits from deworming described in Approaches 1 and 2 are scaled to reflect differences in baseline prevalence rates and length of treatment. Additionally, the relevant costs are constrained to direct costs alone (excluding additional costs on education). Finally, this approach uses inputs costs and prevalence that reflect the current settings where Evidence Action is supporting deworming interventions. As of 2020, Evidence Action supports deworming interventions in four countries.
 
@@ -1416,8 +1415,8 @@ For approach 3, the report will modify the treatment effects of approaches 1 and
 \lambda_{1} = \eta \lambda^{eff}_{1} + (1 -  \eta) \times 0 \\
 \lambda^{r}_{1} = \eta_{new}\lambda^{eff}_{1}
 
-\label{eq:17}
-\tag{17}
+\label{eq:18}
+\tag{18}
 \end{equation}
 ```
 Where:
@@ -1500,8 +1499,8 @@ t \lambda_{1,t = 1} \quad \text{for } t=1, \dots, 6\\
 6  \lambda_{1,t = 1} \quad \text{for } t > 6\\
 \end{cases}
 
-\label{eq:18}
-\tag{18}
+\label{eq:19}
+\tag{19}
 \end{equation}
 ```
 
@@ -1642,8 +1641,8 @@ The country weights are computed as the fraction of all treated individuals that
 \begin{equation}
 C = \sum_{i \in Countries } \omega_{i} c_{i}
 
-\label{eq:19}
-\tag{19}
+\label{eq:20}
+\tag{20}
 \end{equation}
 ```
 ```{=tex}
@@ -1652,8 +1651,8 @@ C = \sum_{i \in Countries } \omega_{i} c_{i}
 
 c_{i} = \frac{C_{i}}{N_{i}} \\
 
-\label{eq:20}
-\tag{20}
+\label{eq:21}
+\tag{21}
 \end{equation}
 ```
 ```{=tex}
@@ -1788,30 +1787,28 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
 
 </details>
 
-The unit costs of treatments, although small, vary substantially across regions. When including cost information for all the countries where Evidence Action has data (India, Kenya, Nigeria, Vietnam) the unit costs is $0.08 per round of treatment (\$0.17 (2017 USD PPP)). This final cost is primarily driven by the cost and large population of India, with a unit cost of $0.06, the other 3 remaining countries have relatively larger unit costs: $0.54, $0.86, $0.52 for Kenya, Nigeria and Vietnam respectively.
+The unit costs of treatments, although small, vary substantially across regions. When including cost information for all the countries where Evidence Action has data (India, Kenya, Nigeria, Vietnam) the unit costs is $0.08 per round of treatment (\$0.17 in 2017 USD PPP). This final cost is primarily driven by the cost and large population of India, with a unit cost of $0.06, the other 3 remaining countries have relatively larger unit costs: $0.54, $0.86, $0.52 for Kenya, Nigeria and Vietnam respectively.
 
+## Approach 4: Combination of Approach 3 and Intergeneratinoal Child Mortality Benefits
 
-
-</details>
-
-## Approach 4: Combination of Previous Approaches and Intergeneratinoal Child Mortality Benefits
-
-In this fourth approach, the report adds intergenerational mortality benefits of mortality reduction of under-five children born from deworming respondents to the third approach.
+In this fourth approach, the report adds intergenerational mortality benefits of mortality reduction of under-five children born from dewormed population of the original study. This benefits are added to the benefits computed under the third approach.
 
 ### Concept of Intergeneratinoal Child Mortality Benefits
 
-In addition to the direct health and socioeconomic benefits of deworming to the treated students, we extrapolate the intergenerational mortality benefits to the children of the dewormed students (who are adults now). The Potential mechanism is that the improved health and socioeconomic status of dewormed students, which can be captured as living standards and residential choice, education, fertility patterns, and usage of health care, also improve their children’s health by reducing the mortality rates (Figure: Potential Mechanism). The detailed discussion is written in **(XXX, 2022)**. ![Potential Mechanism](images/Mechanisms.png)
+In addition to the direct benefits in earnings of deworming to the treated students, we extrapolate the intergenerational mortality benefits to the children of the dewormed students (who are adults now). The potential mechanism is that the improved health and socioeconomic status of dewormed students, which can be captured as living standards and residential choice, education, fertility patterns, and usage of health care, also improve their children’s health by reducing the mortality rates as illustrated by the figure below. For a more detailed discussion see @klps5. 
+
+![](images/Mechanisms.png)
 
 ### Direct costs and benefits of the Primary School Deworming Project
 
-In the KLPS, on average, one person gives birth to **2.6 children in a lifetime (XXX)**. The deworming treatment reduced the under-five mortality rates of children of dewormed students by **18 (per 1,000 children)**. Thus, the treatment to one person roughly averted the death of 0.05 children among the 2.6 children born from one person in the treatment group. From a perspective of cost, the direct deworming costs per one student are 1.44 (2017 USD PPP), given the treatment period of 2.41 years and take-up rate of 75%. So, we could simply say that 0.0468 lives can be protected by spending $1.44 per treatment to one person. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.
+In the KLPS, on average, one person has **2.6 children in a lifetime [@klps5]**. The deworming treatment reduced the under-five mortality rates of children of dewormed students by **18 (per 1,000 children)**. Thus, the treatment to one person roughly averted the death of 0.05 children among per treated individual. From a perspective of cost, the direct deworming costs per one student are \$1.44 (2017 USD PPP), given the treatment period of 2.41 years and take-up rate of 75%. So, we could simply say that 0.0468 lives can be protected by spending \$1.44 per treatment to one person. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.
 
 <!--Multiplying the per-capita cost by the number of treated students (21,710 people), the direct program cost is $30,256.
 So, we could simply say that 1,347.76 lives can be protected by spending $30,256. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.-->
 
 ### Intergenerational Mortality Benefits
 
-The benefits are calculated as a monetary value of years of saved under-five children's lives per dewormed individual ($IGMB$). The calculation is conducted as the multiplication of the monetary value of health benefits ($M_p$) and the discounted sum of the average treatment effects on the under-five mortality reduction of children of the dewormed cohort ($γ_{t}$) times childbirth t years after deworming ($F_{t}$), and the average value of saved life per child of the KLPS population in terms of DALY ($H$). This approach assumes that the benefits are added for a maximum of 25 years after the deworming intervention, which is analyzed in **XXX(2022)**.
+The benefits are calculated as a monetary value of years of saved under-five children's lives per dewormed individual ($IGMB$). The calculation is conducted as the multiplication of the monetary value of health benefits ($M_p$) and the discounted sum of the average treatment effects on the under-five mortality reduction of children of the dewormed cohort ($γ_{t}$) times childbirth t years after deworming ($F_{t}$), and the average value of saved life per child of the KLPS population in terms of DALY ($H$). This approach assumes that the benefits are added for a maximum of 25 years after the deworming intervention, which is analyzed in [@klps5].
 
 <details>
 
@@ -1821,8 +1818,8 @@ The benefits are calculated as a monetary value of years of saved under-five chi
 \begin{equation}
 IGMB_{t} = M_p \gamma_{t} F_{t} H \\
 
-\label{eq:21}
-\tag{21}
+\label{eq:22}
+\tag{22}
 \end{equation}
 ```
 Where:
@@ -1835,12 +1832,12 @@ Where:
 
 </details>
 
-The monetary value of health benefits ($M_p$) is the saved cost when one DALY (YLL) is averted. **XXX (2022)** uses two approaches: revealed preference and stated preference. 
+The monetary value of health benefits ($M_p$) is the saved cost when one DALY (YLL) is averted. [@klps5] uses two approaches: revealed preference and stated preference. 
 Adjusted by the inflation and PPP to USD in 2017, the $M_p$ for revealed preference is 66.82, and the $M_p$ for stated preference is 3611.2, respectively (2017 USD PPP). The reader can modify the values for $M_p$ in the interactive app of this OPA. 
 
-The treatment effects on the under-five mortality reduction of children of the dewormed cohort ($γ_{t}$): the difference between the mortality rate of under-five children of the control group and that of the treatment group (**XXX(2022). Table 1, Panel A, Column 1**).   
+The treatment effects on the under-five mortality reduction of children of the dewormed cohort ($γ_{t}$): the difference between the mortality rate of under-five children of the control group and that of the treatment group ([@klps5]. Table 1, Panel A, Column 1**).   
 
-The childbirth $t$ years after deworming ($F_{t}$): this figure is calculated as the number of children born per individual at $t$ years after the deworming intervention. (**XXX(2022). Figure XXX, column XXX, row XXX**: 1998 as $t$ = 0).
+The childbirth $t$ years after deworming ($F_{t}$): this figure is calculated as the number of children born per individual at $t$ years after the deworming intervention. ([@klps5]. Figure XXX, column XXX, row XXX**: 1998 as $t$ = 0).
 
 The average value of saved life per child of the KLPS population ($H$): the average per-capita years of life lost due to premature mortality ($YLL$) incurred by the population aged 0-64 in Kenya. We assume under-5 mortality reduction influences only $YLL$ out of the disability-adjusted life year (DALY)[^10]. The assumption is that the survived child will live up to age 64 if the deworming treatment to their parent prevents their under-5 mortality (based on the life expectancy at birth: 66.18 (@united2019world; Life Expectancy at Birth (e0) - Both Sexes, column 2015-2020, row Kenya. Accessed July 12, 2021). We calculate the $YLLs$ for all causes, both genders across age groups 0-64 in Kenya for the year 2019 by summing up $YLLs$ for each age category cited from the Global Burden of Disease (GBD) 2019 study (@gbd; Location Kenya, Year 2019, Context Cause, Age <1 year, to 60 to 64, Metric Number, Measure YLLs, Sex Both, Cause Total All causes, Accessed July 12, 2021). Then, we divide it by the population of age 0-64 to get the target per-capita value of saved life for one year, and multiplied it by the expected length of life, 65 years ($H$).
 
@@ -1855,8 +1852,8 @@ The average value of saved life per child of the KLPS population ($H$): the aver
 H = \frac{\sum_{a \in ages}YLL_{\text{all causes, both sexes, a, 2019}}}{\sum_{a \in ages}\text {Kenyan population of age a}} \times 65
 \quad \text{for a = <1, 1-4} \dots, \text{60-64}
 
-\label{eq:22}
-\tag{22}
+\label{eq:23}
+\tag{23}
 \end{equation}
 ```
 
@@ -1912,7 +1909,7 @@ chunk_intgen <- function(){
                     gamma_mort_var = gamma_mort_so,
                     fert_yr_var = fert_yr_25_so,
                     yll_pc_var = yll_pc_in,
-                    cp_daly_var = c(currency_f(price_var = cp_daly_rp_so, year_var = 2011),currency_f(price_var = cp_daly_sp_so, year_var = 2016))){
+                    cp_daly_var = c(currency_f(price_var = cp_daly_rp_so, t_var = 2011),currency_f(price_var = cp_daly_sp_so, t_var = 2016))){
     res1 <-
       gamma_mort_var * fert_yr_var * yll_pc_var * cp_daly_var
     return(res1)
@@ -1939,13 +1936,13 @@ intgen_app4_rp_in <- c(intgen_app4_f(
                     gamma_mort_so,
                     fert_yr_25_so,
                     yll_pc_in,
-                    currency_f(price_var = cp_daly_rp_so, year_var = 2011)),rep(0,26))
+                    currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26))
                     
 intgen_app4_sp_in <- c(intgen_app4_f(
                     gamma_mort_so,
                     fert_yr_25_so,
                     yll_pc_in,
-                    currency_f(price_var = cp_daly_sp_so, year_var = 2016)),rep(0,26))
+                    currency_f(price_var = cp_daly_sp_so, t_var = 2016)),rep(0,26))
 
 app4_pv_benef_intgen_rp_in <- pv_benef_f(
     earnings_var = 0,
@@ -1977,7 +1974,7 @@ Approach 4 adopts the direct deworming costs under Approach 2 (\$1.44 (2017 USD 
 
 ### Assessing computational reproducibility of original results
 
-The original analysis in **XXX(2022)** implies the NPV of 29.78 (table A6, column 2, and row 3) for revealed preference and the NPV of 1686.14 (table A6, column 3, and row 3) for stated preference. These results corresponds to social internal rates of return of 55% (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A6, column 2, and row 5) and $1.9\times10^{12}%$ (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A6, column 3, and row 5) for revealed preference and stated preference, respectively. Following the steps described in this section, this approach 4 obtains the same results (29.7848713 and 55.03% for revealed preference and 1686.1397316 and 1898560669173.72% for stated preference, respectively). 
+The original analysis in [@klps5] implies the NPV of 29.78 (table A6, column 2, and row 3) for revealed preference and the NPV of 1686.14 (table A6, column 3, and row 3) for stated preference. These results corresponds to social internal rates of return of 55% (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A6, column 2, and row 5) and $1.9\times10^{12}%$ (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A6, column 3, and row 5) for revealed preference and stated preference, respectively. Following the steps described in this section, this approach 4 obtains the same results (29.7848713 and 55.03% for revealed preference and 1686.1397316 and 1898560669173.72% for stated preference, respectively). 
 
 
 ## Accounting for Uncertainty
@@ -1996,8 +1993,8 @@ Let $x$ denote each source used in this analysis.
 \begin{equation}
 x \sim N(\hat{x}, \sigma_{x})
 
-\label{eq:23}
-\tag{23}
+\label{eq:24}
+\tag{24}
 \\
 \sigma_{x} =
 \begin{cases}
@@ -2394,7 +2391,7 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
       # XXX 1: benef=Intergenerational Child; cost=deworming cost in KLPS4 no ext or teaching
       # a4_intgen_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_intgen_in, costs_var = costs_a4_in)
       # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action in 2017 USD PPP
-      # a4_inc_a3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in, costs_var = currency_f(costs2_ea_in,year_var=2018))
+      # a4_inc_a3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in, costs_var = currency_f(costs2_ea_in,t_var=2018))
     }
 
     total_time_sim <- Sys.time() - start_time
@@ -2455,7 +2452,7 @@ The third approach uses similar methodologies with three main differences. First
 
 [^9]: Evidence Action suggests that the added costs on education will not be considered as costs from a policy maker's perspective. Those costs correspond to another intervention on itself (education) and incorporating its costs would require incorporating its benefits.
 
-The fourth approach shows two different results: one is based on **XXX (2022)**, which sheds light on the  intergenerational child mortality benefits and deworming drug costs. To be conservative, this result only focus on the revealed preference valuation. The other adds the intergenerational mortality benefits to approach 3.3.
+The fourth approach shows two different results: one is based on [@klps5], which sheds light on the  intergenerational child mortality benefits and deworming drug costs. To be conservative, this result only focus on the revealed preference valuation. The other adds the intergenerational mortality benefits to approach 3.3.
 
 The table below summarises the four different approaches and the different alternatives within each approach. The main policy estimate is defined as that of Evidence Action (approach 4) using the latest research [@klps4]: approach 4.2 in the table (in bold).
 
@@ -2580,7 +2577,7 @@ one_run_f <-
            teach_sal_new_var1 = teach_sal_new_so,                                            
            teach_ben_new_var1 = teach_ben_new_so,                              
            unit_cost_local_var1 = unit_cost_local_so,     
-           unit_cost_local_new_var1 = currency_f(price_var = unit_cost_so, year_var = 2018),
+           unit_cost_local_new_var1 = currency_f(price_var = unit_cost_so, t_var = 2018),
            new_costs_var1 = new_costs_so,    
            countries_var1 = country_sel_so,
            years_of_treat_0_var1 = years_of_treat_0_so,
@@ -2843,7 +2840,7 @@ one_run_f <-
     #                 gamma_mort_so,
     #                 fert_yr_25_so,
     #                 yll_pc_in,
-    #                 currency_f(price_var = cp_daly_rp_so, year_var = 2011)),rep(0,26)),
+    #                 currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26)),
     #   interest_r_var = interest_new_in,
     #   periods_var = periods_so
     #   )
@@ -2857,7 +2854,7 @@ one_run_f <-
     #                 gamma_mort_so,
     #                 fert_yr_25_so,
     #                 yll_pc_in,
-    #                 currency_f(price_var = cp_daly_rp_so, year_var = 2011)),rep(0,26)),
+    #                 currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26)),
     #   interest_r_var = interest_new_in,
     #   periods_var = periods_so
     #   )
@@ -2934,7 +2931,7 @@ earnings_no_ext_in
     )
     unit_test_f(costs_a2_in, 32.2977546110344, main_run_var = main_run_var1)
     
-    #costs_a4: XXX(2022)
+    #costs_a4: [@klps5]
     # costs_a4_in <- pv_costs_f(
     #   periods_var = periods_var1,
     #   delta_ed_var = 0,
@@ -3002,7 +2999,7 @@ invisible( list2env(one_run_f(),.GlobalEnv) )
 a1_tax_pe <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
 unit_test_f(a1_tax_pe, 11.8309012188904)
 #Benef = Baird no ext in 2017 USD PPP
-a1_tax_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in),year_var = 2016)
+a1_tax_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in),t_var = 2016)
 #unit_test_f(a1_tax_pe_2017usdppp, NA)
 
 #Baird 2: Costs = Baird w/tax and yes externalities (no ext);
@@ -3010,21 +3007,21 @@ a1_tax_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_tax_nx_in, c
 a1_x_tax_pe <- NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_x_in)
 unit_test_f(a1_x_tax_pe, 101.903273665711)
 #Benef = Baird yes ext in 2017 USD PPP
-a1_x_tax_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_x_in), year_var = 2016)
+a1_x_tax_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_tax_yx_in, costs_var = costs2_x_in), t_var = 2016)
 #unit_test_f(a1_x_tax_pe_2017usdppp, NA)
 
 # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext
 a1_all_pe <- NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in)
 unit_test_f(a1_all_pe, 130.649690239252)
 # Baird 3: Benefits = Baird all and no ext; Costs = Baird no ext in 2017 USD PPP
-a1_all_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in),year_var = 2016)
+a1_all_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_all_nx_in, costs_var = costs2_in),t_var = 2016)
 #unit_test_f(a1_all_pe_2017usdppp, NA)
 
 # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext
 a1_x_all_pe <- NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_x_in)
 unit_test_f(a1_x_all_pe, 741.618186471615)
 # Baird 4: Benefits = Baird all and yes ext; Costs = Baird yes ext in 2017 USD PPP
-a1_x_all_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_x_in),year_var = 2016)
+a1_x_all_pe_2017usdppp <- currency_f(NPV_pe_f(benefits_var = pv_benef_all_yx_in, costs_var = costs2_x_in),t_var = 2016)
 #unit_test_f(a1_x_all_pe_2017usdppp, NA)
 
 #KLPS4_1: benefits = KLPS4 w/t and no ext; Costs =	Baird no ext
@@ -3038,7 +3035,7 @@ unit_test_f(klps4_2_pe, 499.720465340588)
 ea1_pe <- NPV_pe_f(benefits_var = pv_benef_all_nx_prevl_in, costs_var = costs2_ea_in)
 unit_test_f(ea1_pe, 77.4612400741955)
 # EA1: no externality NPV using Evidence Action's costs 2017 USD PPP
-ea1_pe_2017usdppp <- NPV_pe_f(benefits_var = currency_f(pv_benef_all_nx_prevl_in,year_var = 2016), costs_var = currency_f(costs2_ea_in, year_var = 2018))
+ea1_pe_2017usdppp <- NPV_pe_f(benefits_var = currency_f(pv_benef_all_nx_prevl_in,t_var = 2016), costs_var = currency_f(costs2_ea_in, t_var = 2018))
 #unit_test_f(ea1_pe_2017usdppp, NA)
 
 
@@ -3046,21 +3043,21 @@ ea1_pe_2017usdppp <- NPV_pe_f(benefits_var = currency_f(pv_benef_all_nx_prevl_in
 ea2_pe <- NPV_pe_f(benefits_var = pv_benef_all_yx_prevl_in, costs_var = costs2_ea_in)
 unit_test_f(ea2_pe, 701.849761243559)
 # EA2: yes externality NPV using Evidence Action's costs 2017 USD PPP
-ea2_pe_2017usdppp <- NPV_pe_f(benefits_var = currency_f(pv_benef_all_yx_prevl_in,year_var = 2016), costs_var = currency_f(costs2_ea_in,year_var = 2018))
+ea2_pe_2017usdppp <- NPV_pe_f(benefits_var = currency_f(pv_benef_all_yx_prevl_in,t_var = 2016), costs_var = currency_f(costs2_ea_in,t_var = 2018))
 #unit_test_f(ea2_pe_2017usdppp, NA)
 
 # EA3: benef= KLPS all and no ext; Costs=Evidence Action
 ea3_pe <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
 unit_test_f(ea3_pe, 289.751849813911)
 # EA3: benef= KLPS all and no ext; Costs=Evidence Action 2017 USD PPP
-ea3_pe_2017usdppp <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = currency_f(costs2_ea_in,year_var = 2018))
+ea3_pe_2017usdppp <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = currency_f(costs2_ea_in,t_var = 2018))
 #unit_test_f(ea3_pe_2017usdppp, NA)
 
 # XXX 1: benef=Intergenerational Child; cost=Evidence Action
 # a4_intgen_pe  <- NPV_pe_f(benefits_var = pv_benef_intgen_in, costs_var = costs_a4_in)
 # unit_test_f(a4_intgen_pe, NA)
 # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action
-# a4_inc_a3_pe  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in, costs_var = currency_f(costs2_ea_in,year_var = 2018))
+# a4_inc_a3_pe  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in, costs_var = currency_f(costs2_ea_in,t_var = 2018))
 # unit_test_f(a4_inc_a3_pe, NA)
 
 ea3_save_path = here('data','ea3_pe')
