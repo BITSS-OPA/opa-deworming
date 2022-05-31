@@ -377,7 +377,13 @@ chunk_sources <- function(){
     # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
     teach_sal_new_so <- (50000 * 12 / 49.773)                           # USD 2017 PPP
     teach_ben_new_so <- 0
-
+    ## Cost per DALY averted in Spring Cleaning (2011 USD) p. 148, paragraph 1
+    ## https://academic.oup.com/qje/article-abstract/126/1/145/1903056?redirectedFrom=fulltext
+    cost_per_daly_so <- 23.68
+    #Cost per DALY averted per month in Stated_Preference_WTP_Child_Health.Rmd - WTP_child_med_med 
+    #In 2016 USD
+    WTP_child_med_so <- 13513.52
+    
     df_cpi_so <- data.frame(
       year = c(seq.int(2006,2018,1)),
       cpi = c(
@@ -2018,30 +2024,24 @@ Where:
 # Adjust for inflation: convert all costs to 2017 USD PPP
 unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018) 
 
+#####SECTION ON Mp
 # Cost per DALY (Mp)
-## Revealed Preference - Spring Cleaning (2011 USD) https://academic.oup.com/qje/article-abstract/126/1/145/1903056?redirectedFrom=fulltext
-rp_ksh_in <-  currency_f(23.68, t_var = 2011)                                   # EXPLAIN  23.68      
-## USD spent in Kenya --(exchange rate)--> KSH: (23.68 * ex_rate_2011_so)
-## KSH --(exchange rate)--> USD PPP: rp_ksh_so / ex_rate_2011_ppp_so
-## USD PPP --(CPI)--> USD PPP 2017: rp_ppp_so * (cpi_2017_so / cpi_2011_so)
+## Revealed Preference - Spring Cleaning (2011 USD)
+rp_ksh_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
 
-## Stated Preference - Health Status WTP (2016 USD) - Based on DW 21/12/17
-sp_in <-      currency_f(162162.2 / ex_rate_2016_so, t_var = 2016)              # EXPLAIN 162162.2
+## Stated Preference - Health Status WTP (2017 USD PPP) - Based on monthly WTP
+sp_in <-      currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
 
-## KSH spent in Kenya ----> KSH: (162162.2/ex_rate_2016_so * ex_rate_2016_so) - WTP_child_med_med *12 (KES) from "Stated_Preference_WTP_Child_Health.Rmd"
-## KSH --(exchange rate)--> USD PPP: sp_ksh_so / ex_rate_2016_ppp_so
-## USD PPP --(CPI)--> USD PPP 2017: sp_ppp_so * (cpi_2017_so / cpi_2016_so)
-
-#EXPLAIN FOLLOWING SECTION
+#######SECTION ON H
 gbd$age_c <- as.factor(gbd$age_c) 
 
-# sorting
+# Selecting YLD data for under 5 
 gbd_YLD_u5 <-gbd[gbd$measure == "YLDs (Years Lived with Disability)" & 
                  gbd$age_c %in% c("0-4"), ]
-gbd_YLD_u5$age_c <- factor( gbd_YLD_u5$age_c, levels = c("0-4") ) # sorting
-gbd_YLD_u5 <- gbd_YLD_u5[order(gbd_YLD_u5$age_c, decreasing = F), ]
-# EXPLAIN
+# Removing unused factor labels
+gbd_YLD_u5$age_c <- factor( gbd_YLD_u5$age_c, levels = c("0-4") ) 
 
+# Selecting YLL data for 5 to 64  
 gbd_YLL_5t65 <- gbd[gbd$measure == "YLLs (Years of Life Lost)" &
                       gbd$age_c %in% c(
                                         "5-9",
@@ -2057,6 +2057,7 @@ gbd_YLL_5t65 <- gbd[gbd$measure == "YLLs (Years of Life Lost)" &
                                         "55-59",
                                         "60-64"
                                         ), ]
+#Removing unused factor labels
 gbd_YLL_5t65$age_c <- factor( gbd_YLL_5t65$age_c, levels = c(
                                                               "5-9",
                                                               "10-14",
@@ -2072,10 +2073,9 @@ gbd_YLL_5t65$age_c <- factor( gbd_YLL_5t65$age_c, levels = c(
                                                               "60-64"
                                                               )
                               ) # sorting
-gbd_YLL_5t65 <-gbd_YLL_5t65[order(gbd_YLL_5t65$age_c, decreasing = F), ]
+#gbd_YLL_5t65 <-gbd_YLL_5t65[order(gbd_YLL_5t65$age_c, decreasing = F), ]       TO DELETE
 
-# EXPLAIN THE DIV BY 5 STEP
-
+# Selecting YLD data for 5 to 64  
 gbd_YLD_5t65 <- gbd[gbd$measure == "YLDs (Years Lived with Disability)" &
                     gbd$age_c %in% c(
                                       "5-9",
@@ -2091,6 +2091,7 @@ gbd_YLD_5t65 <- gbd[gbd$measure == "YLDs (Years Lived with Disability)" &
                                       "55-59",
                                       "60-64"
                                       ), ]
+# Remove unused levels
 gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
                                                               "5-9",
                                                               "10-14",
@@ -2106,7 +2107,7 @@ gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
                                                               "60-64" 
                                                               )
                               ) # sorting
-gbd_YLD_5t65 <-  gbd_YLD_5t65[order(gbd_YLD_5t65$age_c, decreasing = F), ]
+# gbd_YLD_5t65 <-  gbd_YLD_5t65[order(gbd_YLD_5t65$age_c, decreasing = F), ]    TO DELETE
 
 #EXPLAIN
 gbd_YLD_u5$py_pc <-   (gbd_YLD_u5$val / 5) / gbd_YLD_u5$pop
