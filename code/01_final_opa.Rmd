@@ -256,11 +256,11 @@ chunk_sources <- function(){
 
 
     # GBD DALYs Kenya 2019 All causes, Both sexes, All ages
-    gbd <-read.csv("rawdata/data/gbd.csv") 
+    gbd_so <-read.csv("rawdata/data/gbd.csv") 
     # Fertility rate (Ft)
-    klps_fert <- read_excel("rawdata/data/mortality_data_21.02.17.xlsx") # data from Michelle Layvant 02/17/2022
+    klps_fert_so <- read_excel("rawdata/data/mortality_data_21.02.17.xlsx") # data from Michelle Layvant 02/17/2022
     ## Life benefits in DALYs term per child
-    ave_death_u5 <- 0.652 # From Matthew Krupoff April 19 2022                        CHECK: Documentation and source
+    ave_death_u5_so <- 0.652 # From Matthew Krupoff April 19 2022                        CHECK: Documentation and source
 
     
     # costs data
@@ -2027,23 +2027,23 @@ unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018)
 #####SECTION ON Mp
 # Cost per DALY (Mp)
 ## Revealed Preference - Spring Cleaning (2011 USD)
-rp_ksh_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
+rp_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
 
 ## Stated Preference - Health Status WTP (2017 USD PPP) - Based on monthly WTP
 sp_in <-      currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
 
 #######SECTION ON H
-gbd$age_c <- as.factor(gbd$age_c) 
+gbd_so$age_c <- as.factor(gbd_so$age_c) 
 
 # Selecting YLD data for under 5 
-gbd_YLD_u5 <-gbd[gbd$measure == "YLDs (Years Lived with Disability)" & 
-                 gbd$age_c %in% c("0-4"), ]
+gbd_YLD_u5 <-gbd_so[gbd_so$measure == "YLDs (Years Lived with Disability)" & 
+                 gbd_so$age_c %in% c("0-4"), ]
 # Removing unused factor labels
 gbd_YLD_u5$age_c <- factor( gbd_YLD_u5$age_c, levels = c("0-4") ) 
 
 # Selecting YLL data for 5 to 64  
-gbd_YLL_5t65 <- gbd[gbd$measure == "YLLs (Years of Life Lost)" &
-                      gbd$age_c %in% c(
+gbd_YLL_5t65 <- gbd_so[gbd_so$measure == "YLLs (Years of Life Lost)" &
+                      gbd_so$age_c %in% c(
                                         "5-9",
                                         "10-14",
                                         "15-19",
@@ -2076,8 +2076,8 @@ gbd_YLL_5t65$age_c <- factor( gbd_YLL_5t65$age_c, levels = c(
 #gbd_YLL_5t65 <-gbd_YLL_5t65[order(gbd_YLL_5t65$age_c, decreasing = F), ]       TO DELETE
 
 # Selecting YLD data for 5 to 64  
-gbd_YLD_5t65 <- gbd[gbd$measure == "YLDs (Years Lived with Disability)" &
-                    gbd$age_c %in% c(
+gbd_YLD_5t65 <- gbd_so[gbd_so$measure == "YLDs (Years Lived with Disability)" &
+                    gbd_so$age_c %in% c(
                                       "5-9",
                                       "10-14",
                                       "15-19",
@@ -2109,18 +2109,23 @@ gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
                               ) # sorting
 # gbd_YLD_5t65 <-  gbd_YLD_5t65[order(gbd_YLD_5t65$age_c, decreasing = F), ]    TO DELETE
 
-#EXPLAIN
+# YLD and YLL per capita and per year. Div by 5 due to 5 year YLD bins.  
+# pop under 5
 gbd_YLD_u5$py_pc <-   (gbd_YLD_u5$val / 5) / gbd_YLD_u5$pop
-
+# pop from 5 to 64
 gbd_YLL_5t65$py_pc <- (gbd_YLL_5t65$val / 5) / gbd_YLL_5t65$pop
 gbd_YLD_5t65$py_pc <- (gbd_YLD_5t65$val / 5) / gbd_YLD_5t65$pop 
 
+# SUGGESTED TEXT FOR THE PAPER : 
+# REPLACE: 
+# Our average per-capita YLL (YLD) estimate is computed by summing across all causes of mortality (disability) occurring within the Kenyan population aged 0-64 as of 2019, then dividing by the Kenyan population aged 0-64
+# WITH: 
+# Where a key term for the equation for H is the yearly per capita YLL (YLD) computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts. 
+
 # H
-addlife_in_paper <- (5 - ave_death_u5) * (1 -  sum(gbd_YLD_u5$val/5 ) / sum(gbd_YLD_u5$pop) )  +
+addlife_in_paper <- (5 - ave_death_u5_so) * (1 -  sum(gbd_YLD_u5$val/5 ) / sum(gbd_YLD_u5$pop) )  +
               (65 - 5) * (1 -  sum(gbd_YLD_5t65$val/5) / sum(gbd_YLD_5t65$pop) ) * 
               (1 - sum(gbd_YLL_5t65$val / 5) / sum(gbd_YLL_5t65$pop))
-addlife_in_paper
-
 
 if(FALSE){
 #code
@@ -2132,85 +2137,32 @@ sum(gbd_YLL_5t65$val / 5) / sum(gbd_YLL_5t65$pop)
 mean( (gbd_YLD_5t65$val / 5) / gbd_YLD_5t65$pop )
 #paper
 sum(gbd_YLD_5t65$val / 5) / sum(gbd_YLD_5t65$pop) 
-}
-
 
 # H (1 - \sum_{a\in A} yll_a /#A )(1 - \sum{a\in A} yld_a}/#A)
 addlife_in_code <- (5 - ave_death_u5) * (1 - mean(gbd_YLD_u5$py_pc))  +
                    (65 - 5)           * (1 - mean(gbd_YLD_5t65$py_pc)) * 
                    (1 - mean(gbd_YLL_5t65$py_pc))
 addlife_in_code
-# limit children born bw 1998 and 2020 and drop na
-klps_fert_9820_t <- klps_fert %>%
+addlife_in_paper
+}
+###### END OF SECTION FOR H 
+
+
+####SECTION FOR Ft
+# limit fertility between 1998 and 2020 for treated group
+klps_fert_9820_t <- klps_fert_so %>%
   filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
 
-# fertility rate vector
+# Add 2 additional years of fertility rates under the assumption that it remains 
+# constant and equal to its last value
 fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
 fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
 ```
 
 
 
-```{r}
-###########################
-# Intergenerational Child Mortality Benefits  
-###########################
-# - inputs: fert_yr_25_so, gamma_mort_so, addlife_in,rp_in,sp_in
-# - outputs: intgen_b_in
-#
-#   addlife_in <-
-#   (5-ave_death_u5) * (1-mean(gbd_YLD_u5$py_pc))  +
-#   (65-5)           * (1-mean(gbd_YLD_5t65$py_pc)) * (1-mean(gbd_YLL_5t65$py_pc))
-chunk_interg_ben <- function(){
-###############################################################################
-###############################################################################  
-  intgen_b_in_f <- function( fert_yr_var = fert_yr_25_so,
-                             gamma_mort_var = gamma_mort_so,
-                             addlife_var = addlife_in,
-                             cp_daly_var = c(rp_in, sp_in)
-                             ){
-        # Store results for Revealed Preference method and Survery Preference method
-      intgen_b_in <- matrix(NA,25,2)
-      for (i in 1:2){
-        intgen_b_in[,i] <- fert_yr_var * gamma_mort_var * addlife_var * cp_daly_var[i]
-      }
-      yr_0_4_row <- matrix(0,5,2)
-      intgen_b_in <- rbind(yr_0_4_row, intgen_b_in) # assuming the benefits emerge at age 5, shift benefits by five years                                                                         #EXPLAIN   
-      
-      return(intgen_b_in)
-    }
-###############################################################################
-###############################################################################  
-  return( list("intgen_b_in_f" = intgen_b_in_f) )
-}
-invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
-
-intgen_b_in <- intgen_b_in_f() 
-
-#Next: fix legth diff in pv_benef
-```
 
 
-```{r NPV function}
-###########################
-# NPV  
-###########################
-# - inputs: interest_in, intgen_b_in, s2_in, q2_in, periods_chldb_25_so inflation_so
-# - outputs: NPV
-npv_f <- function(interest_r_var = interest_in,
-                  intgen_b_var = intgen_b_in[, 1],
-                  s1_var = 0, q1_var = 0, s2_var = s2_in, q2_var = q2_in,
-                  periods_chldb_var = periods_chldb_30_so) {
-    index_t <- 0:periods_chldb_var
-###############################################################################
-    index_t <- 0:periods_chldb_var
-    res1 <- sum( ( 1 / (1 + interest_r_var) )^index_t * (intgen_b_var) ) -
-            sum( ( 1 / (1 + interest_r_var) )^(0:2) *
-                   (s2_var * q2_var  - s1_var * q1_var) )
-###############################################################################
-      return(res1)   
-    }
-```
 
 </details>
 
@@ -2262,6 +2214,54 @@ invisible( list2env(chunk_yll_pc(),.GlobalEnv) )
 yll_pc_in <- yll_pc_f(yll_so, pop_so, life_exp_so)
 
 ```
+
+
+```{r}
+###########################
+# Intergenerational Child Mortality Benefits  
+###########################
+# - inputs: fert_yr_25_so, gamma_mort_so, addlife_in,rp_in,sp_in
+# - outputs: intgen_b_in
+chunk_interg_ben <- function(){
+###############################################################################
+###############################################################################  
+  intgen_b_in_f <- function( fert_yr_var = fert_yr_25_so,
+                             gamma_mort_var = gamma_mort_so,
+                             addlife_var = addlife_in_paper,
+                             cp_daly_var = c(rp_in, sp_in)
+                             ){
+      # Store results for Revealed Preference method and Survery Preference method
+      intgen_b_in <- matrix(NA,25,2)
+      for (i in 1:2){
+        # gamma * Ft * H * Mp 
+        intgen_b_in[,i] <- gamma_mort_var * fert_yr_var *  addlife_var * cp_daly_var[i]
+      }
+      # We impute the benefits starting at age 5, given the outcome variable in  Walker et. al. 2022
+      # is survival at age 5. So each row in the benefit matrix/vector, should be read as benefits 
+      # in year of children born in years t-5
+      yr_0_4_row  <- matrix(0,5,2)
+      intgen_b_in <- rbind(yr_0_4_row, intgen_b_in) # assuming the benefits emerge at age 5, shift benefits by five years                                                                         #EXPLAIN   
+      return(intgen_b_in)
+    }
+###############################################################################
+###############################################################################  
+  return( list("intgen_b_in_f" = intgen_b_in_f) )
+}
+invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
+
+intgen_b_in <- intgen_b_in_f() 
+IGMB_t_in <- intgen_b_in_f() 
+
+
+#MAKE SURE THAT THIS REPRDUCES APP3 (289.9)
+pv_benef_f(
+  earnings_var = earnings_no_ext_new_in,
+  intgen_var = c(IGMB_t_in[, 1], rep(0, 21)),
+  interest_r_var = interest_new_in,
+  periods_var = periods_so
+)
+```
+
 
 </details>
 

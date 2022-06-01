@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>25 May, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
+date: "<center><div class='mysubtitle'>31 May, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -150,6 +150,43 @@ chunk_sources <- function(){
         49.773,
         50.058)) # KLPS4_E+_globals.do (originally from the World Bank as of 2019 June)
 
+    # Currency Conversion - ALL CURRENCY TO 2017 USD PPP
+    ## USD --(exchange rate)--> KSH --(exchange rate)--> USD PPP --(CPI)--> USD PPP 2017
+    ## unit_cost_ppp_so <- unit_cost_so*ex_rate_2018_so/ex_rate_2018_ppp_so
+    ## unit_cost_2017usdppp_so <- unit_cost_ppp_so * cpi_2017_so / cpi_2018_so  # 0.8296927
+    ## Exchange rate (USD -> KSH) - https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=KE as of 2021/7/21
+    ex_rate_2006_so <- 72.10083502
+    ex_rate_2011_so <- 88.81166667
+    ex_rate_2015_so <- 98.17916667
+    ex_rate_2016_so <- 101.5041667
+    ex_rate_2017_so <- 103.4104462
+    ex_rate_2018_so <- 101.301574
+    
+    ## Exchange rate (KSH -> USD PPP) - # The exchange rate from Worms20_Globals.do as of Publishment of Hamory et al. 2021
+    ex_rate_2006_ppp_so <- 23.765
+    ex_rate_2011_ppp_so <- 34.298
+    ex_rate_2015_ppp_so <- 43.926
+    ex_rate_2016_ppp_so <- 45.862
+    ex_rate_2017_ppp_so <- 49.773
+    ex_rate_2018_ppp_so <- 50.058
+    
+    ## (For reference) Exchange rate (KSH -> USD PPP) - the NEW https://data.worldbank.org/indicator/PA.NUS.PPP?locations=KE
+    # ex_rate_2006_ppp_so <- 24.52531877
+    # ex_rate_2011_ppp_so <- 35.39612198
+    # ex_rate_2015_ppp_so <- 39.04047775
+    # ex_rate_2016_ppp_so <- 39.38495636
+    # ex_rate_2017_ppp_so <- 40.18493652
+    # ex_rate_2018_ppp_so <- 40.19336962
+    
+    ## CPI index - Ave. of HALF 1&2 https://data.bls.gov/timeseries/CUUR0000SA0 as of 2022/01/20
+    cpi_2006_so <- 201.6
+    cpi_2011_so <- 224.939
+    cpi_2015_so <- 237.017
+    cpi_2016_so <- 240.007
+    cpi_2017_so <- 245.120
+    cpi_2018_so <- 251.107
+    
+    
     growth_rate_so <- 1.52/100      #Per-capita GDP growth, 2002-2011 (accessed 1/29/13) -	World Bank - see notes
     gov_bonds_so <- 	0.1185	      #Kenyan interest on sovereign debt - Central Bank of Kenya
     gov_bonds_new_so <- 0.09
@@ -158,6 +195,14 @@ chunk_sources <- function(){
     interest_10_so <- 0.1           #10% discounting rate
     tax_so <- 0.16575               #ADD INFO
 
+    # GBD DALYs Kenya 2019 All causes, Both sexes, All ages
+    gbd_so <-read.csv("rawdata/data/gbd.csv") 
+    # Fertility rate (Ft)
+    klps_fert_so <- read_excel("rawdata/data/mortality_data_21.02.17.xlsx") # data from Michelle Layvant 02/17/2022
+    ## Life benefits in DALYs term per child
+    ave_death_u5_so <- 0.652 # From Matthew Krupoff April 19 2022                        CHECK: Documentation and source
+
+    
     # costs data
     df_costs_so <- read_excel("rawdata/data/DtW Cost per Child Data.xlsx",
                            sheet = "DtW Costs")
@@ -272,7 +317,13 @@ chunk_sources <- function(){
     # https://www.standardmedia.co.ke/article/2001249581/windfall-for-teachers-as-tsc-releases-new-salaries
     teach_sal_new_so <- (50000 * 12 / 49.773)                           # USD 2017 PPP
     teach_ben_new_so <- 0
-
+    ## Cost per DALY averted in Spring Cleaning (2011 USD) p. 148, paragraph 1
+    ## https://academic.oup.com/qje/article-abstract/126/1/145/1903056?redirectedFrom=fulltext
+    cost_per_daly_so <- 23.68
+    #Cost per DALY averted per month in Stated_Preference_WTP_Child_Health.Rmd - WTP_child_med_med 
+    #In 2016 USD
+    WTP_child_med_so <- 13513.52
+    
     df_cpi_so <- data.frame(
       year = c(seq.int(2006,2018,1)),
       cpi = c(
@@ -486,7 +537,7 @@ chunk_benefits <- function(){
   ) {
       index_t <- 0:periods_var
       res1 <- sum( ( 1 / (1 + interest_r_var) )^index_t * 
-                     (earnings_var +intgen_var))
+                     (earnings_var + intgen_var))
       return(res1)   
   }
   
@@ -610,15 +661,16 @@ Where:
 ```r
 # - inputs: price in USD in year X, df_ex_rate_so (exchange rate of the local currency to USD), ex_rate_ppp_so (exchange rate of the local currency to USD PPP), df_cpi_so (CPI), year X
 # - outputs: price in PPP 2017 USD
+# Possible improvement:rewrite fn using tivyverse syntax to improve readability
 chunk_currency <- function(){
 ###############################################################################
 ###############################################################################  
 
-    currency_f <- function(price_var, # USD spent on the ground
+    currency_f <- function(price_var = 1, # USD spent on the ground
                            ex_rate_t_var = df_ex_rate_so,
                            ex_rate_ppp_t_var = df_ex_rate_ppp_so,
                            cpi_var = df_cpi_so,
-                           t_var) {  
+                           t_var = 2017) {  
       ex_rate_t <- ex_rate_t_var[ex_rate_t_var["year"]==t_var,"ex_rate"]
       ex_rate_ppp_t <- ex_rate_ppp_t_var[ex_rate_ppp_t_var["year"]==t_var,
                                             "ex_rate_ppp"]
@@ -1801,7 +1853,7 @@ In addition to the direct benefits in earnings of deworming to the treated stude
 
 ### Direct costs and benefits of the Primary School Deworming Project
 
-In the KLPS, on average, one person has **2.6 children in a lifetime [@klps5]**. The deworming treatment reduced the under-five mortality rates of children of dewormed students by **18 (per 1,000 children)**. Thus, the treatment to one person roughly averted the death of 0.05 children among per treated individual. From a perspective of cost, the direct deworming costs per one student are \$1.44 (2017 USD PPP), given the treatment period of 2.41 years and take-up rate of 75%. So, we could simply say that 0.0468 lives can be protected by spending \$1.44 per treatment to one person. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.
+In the KLPS, on average, one person has **2.6 children in a lifetime [@klps5]**. The deworming treatment reduced the under-five mortality rates of children of dewormed students by **18 (per 1,000 children)**. Thus, the treatment to one person roughly averted the death of 0.05 children among per treated individual. From a perspective of cost, the direct deworming costs per one student are \$1.44 (2017 USD PPP), given the treatment period of 2.41 years and take-up rate of 75%. So, we could simply say that 0.05 lives can be protected by spending \$1.44 per treatment to one person. The below sections further explains the costs and benefits of saved children of dewormed students with additional parameters.
 
 <!--Multiplying the per-capita cost by the number of treated students (21,710 people), the direct program cost is $30,256.
 So, we could simply say that 1,347.76 lives can be protected by spending $30,256. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.-->
@@ -1825,10 +1877,177 @@ IGMB_{t} = M_p \gamma_{t} F_{t} H \\
 Where:
 
 -   $IGMB_{t}$: the monetary value of years of saved under-five children's lives per dewormed individual.
--   $M_p$: the monetary value of health benefits per $H$, cited from **XXX (2022)**. Other possible values are shown in the OPA shiny app.
+-   $M_p$: the monetary value of health benefits per $H$, cited from @klps5. Other possible values are shown in the interactive graph of this OPA.
 -   $γ_{t}$: the average treatment effects on the under-five mortality reduction of children born from the dewormed cohort.
 -   $F_{t}$: the number of childbirth one individual bears $t$ years after the deworming intervention.
 -   $H$: the average value of life per saved child of the treatment population in terms of DALY (YLL). Years of life lost due to premature mortality (YLL) at age 0-64 in Kenya in 2019 divided by the population age 0-64 and multiplied by 65.
+
+
+
+
+```r
+# TODOs:
+# - Replace all currency conversions with currency_f wherever possible
+# - Explain all unexplained numbers
+# - Describe added data sets to readme file
+# - Separate and explain into 3 code chunks: clean up, conversions, computing H
+# - Feed intgen_b_in into pv_benef
+# - Review costs
+# - Reproduce result of app 3 with new function (feeding ingen_b_in=0)
+# - Update one-run
+# - Update simulations
+# - Update shiny app 
+
+
+# app4_pv_benef_intgen_rp_in <- pv_benef_f(
+#     earnings_var = 0,
+#     intgen_var = intgen_app4_rp_in,
+#     interest_r_var = interest_new_in,
+#     periods_var = periods_so
+#   )
+
+# Adjust for inflation: convert all costs to 2017 USD PPP
+unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018) 
+
+#####SECTION ON Mp
+# Cost per DALY (Mp)
+## Revealed Preference - Spring Cleaning (2011 USD)
+rp_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
+
+## Stated Preference - Health Status WTP (2017 USD PPP) - Based on monthly WTP
+sp_in <-      currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
+
+#######SECTION ON H
+gbd_so$age_c <- as.factor(gbd_so$age_c) 
+
+# Selecting YLD data for under 5 
+gbd_YLD_u5 <-gbd_so[gbd_so$measure == "YLDs (Years Lived with Disability)" & 
+                 gbd_so$age_c %in% c("0-4"), ]
+# Removing unused factor labels
+gbd_YLD_u5$age_c <- factor( gbd_YLD_u5$age_c, levels = c("0-4") ) 
+
+# Selecting YLL data for 5 to 64  
+gbd_YLL_5t65 <- gbd_so[gbd_so$measure == "YLLs (Years of Life Lost)" &
+                      gbd_so$age_c %in% c(
+                                        "5-9",
+                                        "10-14",
+                                        "15-19",
+                                        "20-24",
+                                        "25-29",
+                                        "30-34",
+                                        "35-39",
+                                        "40-44",
+                                        "45-49",
+                                        "50-54",
+                                        "55-59",
+                                        "60-64"
+                                        ), ]
+#Removing unused factor labels
+gbd_YLL_5t65$age_c <- factor( gbd_YLL_5t65$age_c, levels = c(
+                                                              "5-9",
+                                                              "10-14",
+                                                              "15-19",
+                                                              "20-24",
+                                                              "25-29",
+                                                              "30-34",
+                                                              "35-39",
+                                                              "40-44",
+                                                              "45-49",
+                                                              "50-54",
+                                                              "55-59",
+                                                              "60-64"
+                                                              )
+                              ) # sorting
+#gbd_YLL_5t65 <-gbd_YLL_5t65[order(gbd_YLL_5t65$age_c, decreasing = F), ]       TO DELETE
+
+# Selecting YLD data for 5 to 64  
+gbd_YLD_5t65 <- gbd_so[gbd_so$measure == "YLDs (Years Lived with Disability)" &
+                    gbd_so$age_c %in% c(
+                                      "5-9",
+                                      "10-14",
+                                      "15-19",
+                                      "20-24",
+                                      "25-29",
+                                      "30-34",
+                                      "35-39",
+                                      "40-44",
+                                      "45-49",
+                                      "50-54",
+                                      "55-59",
+                                      "60-64"
+                                      ), ]
+# Remove unused levels
+gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
+                                                              "5-9",
+                                                              "10-14",
+                                                              "15-19",
+                                                              "20-24",
+                                                              "25-29",
+                                                              "30-34",
+                                                              "35-39",
+                                                              "40-44",
+                                                              "45-49",
+                                                              "50-54",
+                                                              "55-59",
+                                                              "60-64" 
+                                                              )
+                              ) # sorting
+# gbd_YLD_5t65 <-  gbd_YLD_5t65[order(gbd_YLD_5t65$age_c, decreasing = F), ]    TO DELETE
+
+# YLD and YLL per capita and per year. Div by 5 due to 5 year YLD bins.  
+# pop under 5
+gbd_YLD_u5$py_pc <-   (gbd_YLD_u5$val / 5) / gbd_YLD_u5$pop
+# pop from 5 to 64
+gbd_YLL_5t65$py_pc <- (gbd_YLL_5t65$val / 5) / gbd_YLL_5t65$pop
+gbd_YLD_5t65$py_pc <- (gbd_YLD_5t65$val / 5) / gbd_YLD_5t65$pop 
+
+# SUGGESTED TEXT FOR THE PAPER : 
+# REPLACE: 
+# Our average per-capita YLL (YLD) estimate is computed by summing across all causes of mortality (disability) occurring within the Kenyan population aged 0-64 as of 2019, then dividing by the Kenyan population aged 0-64
+# WITH: 
+# Where a key term for the equation for H is the yearly per capita YLL (YLD) computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts. 
+
+# H
+addlife_in_paper <- (5 - ave_death_u5_so) * (1 -  sum(gbd_YLD_u5$val/5 ) / sum(gbd_YLD_u5$pop) )  +
+              (65 - 5) * (1 -  sum(gbd_YLD_5t65$val/5) / sum(gbd_YLD_5t65$pop) ) * 
+              (1 - sum(gbd_YLL_5t65$val / 5) / sum(gbd_YLL_5t65$pop))
+
+if(FALSE){
+#code
+mean( (gbd_YLL_5t65$val / 5) / gbd_YLL_5t65$pop )
+#paper
+sum(gbd_YLL_5t65$val / 5) / sum(gbd_YLL_5t65$pop) 
+
+#code
+mean( (gbd_YLD_5t65$val / 5) / gbd_YLD_5t65$pop )
+#paper
+sum(gbd_YLD_5t65$val / 5) / sum(gbd_YLD_5t65$pop) 
+
+# H (1 - \sum_{a\in A} yll_a /#A )(1 - \sum{a\in A} yld_a}/#A)
+addlife_in_code <- (5 - ave_death_u5) * (1 - mean(gbd_YLD_u5$py_pc))  +
+                   (65 - 5)           * (1 - mean(gbd_YLD_5t65$py_pc)) * 
+                   (1 - mean(gbd_YLL_5t65$py_pc))
+addlife_in_code
+addlife_in_paper
+}
+###### END OF SECTION FOR H 
+
+
+####SECTION FOR Ft
+# limit fertility between 1998 and 2020 for treated group
+klps_fert_9820_t <- klps_fert_so %>%
+  filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
+
+# Add 2 additional years of fertility rates under the assumption that it remains 
+# constant and equal to its last value
+fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
+fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
+```
+
+
+
+
+
 
 </details>
 
@@ -1881,6 +2100,59 @@ invisible( list2env(chunk_yll_pc(),.GlobalEnv) )
 yll_pc_in <- yll_pc_f(yll_so, pop_so, life_exp_so)
 ```
 
+
+
+```r
+###########################
+# Intergenerational Child Mortality Benefits  
+###########################
+# - inputs: fert_yr_25_so, gamma_mort_so, addlife_in,rp_in,sp_in
+# - outputs: intgen_b_in
+chunk_interg_ben <- function(){
+###############################################################################
+###############################################################################  
+  intgen_b_in_f <- function( fert_yr_var = fert_yr_25_so,
+                             gamma_mort_var = gamma_mort_so,
+                             addlife_var = addlife_in_paper,
+                             cp_daly_var = c(rp_in, sp_in)
+                             ){
+      # Store results for Revealed Preference method and Survery Preference method
+      intgen_b_in <- matrix(NA,25,2)
+      for (i in 1:2){
+        # gamma * Ft * H * Mp 
+        intgen_b_in[,i] <- gamma_mort_var * fert_yr_var *  addlife_var * cp_daly_var[i]
+      }
+      # We impute the benefits starting at age 5, given the outcome variable in  Walker et. al. 2022
+      # is survival at age 5. So each row in the benefit matrix/vector, should be read as benefits 
+      # in year of children born in years t-5
+      yr_0_4_row  <- matrix(0,5,2)
+      intgen_b_in <- rbind(yr_0_4_row, intgen_b_in) # assuming the benefits emerge at age 5, shift benefits by five years                                                                         #EXPLAIN   
+      return(intgen_b_in)
+    }
+###############################################################################
+###############################################################################  
+  return( list("intgen_b_in_f" = intgen_b_in_f) )
+}
+invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
+
+intgen_b_in <- intgen_b_in_f() 
+IGMB_t_in <- intgen_b_in_f() 
+
+
+#MAKE SURE THAT THIS REPRDUCES APP3 (289.9)
+pv_benef_f(
+  earnings_var = earnings_no_ext_new_in,
+  intgen_var = c(IGMB_t_in[, 1], rep(0, 21)),
+  interest_r_var = interest_new_in,
+  periods_var = periods_so
+)
+```
+
+```
+## [1] 378.3519
+```
+
+
 </details>
 
 To be conservative, this approach does not consider the factors generated when both parents are dewormed although additional effects might be produced if both male and female parents get treatment. This approach assumes that the benefits are only gained in the children born from the treated student through their under-five mortality reduction. Estimating the direct health benefits to the treated students is not necessarily straightforward. Parasitic worm infections are not lethal, which makes it complex to quantify the direct health effects of deworming. For future extension of the OPA, it would be worth adding the direct health benefits.
@@ -1909,7 +2181,10 @@ chunk_intgen <- function(){
                     gamma_mort_var = gamma_mort_so,
                     fert_yr_var = fert_yr_25_so,
                     yll_pc_var = yll_pc_in,
-                    cp_daly_var = c(currency_f(price_var = cp_daly_rp_so, t_var = 2011),currency_f(price_var = cp_daly_sp_so, t_var = 2016))){
+                    cp_daly_var = c(
+                      currency_f(price_var = cp_daly_rp_so, t_var = 2011),
+                      currency_f(price_var = cp_daly_sp_so, t_var = 2016)
+                    )){
     res1 <-
       gamma_mort_var * fert_yr_var * yll_pc_var * cp_daly_var
     return(res1)
