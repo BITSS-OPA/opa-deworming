@@ -1157,7 +1157,7 @@ chunk_interg_ben <- function(){
 ###############################################################################  
   intgen_b_in_f <- function( fert_yr_var = fert_yr_25_in,
                              gamma_mort_var = gamma_mort_so,
-                             addlife_var = addlife_in_paper,
+                             addlife_var = h_in,
                              cp_daly_var = c(rp_in, sp_in)
                              ){
       # Store results for Revealed Preference method and Survery Preference method
@@ -1181,7 +1181,7 @@ invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
 
 
 
-## ----cleaning and H, eval=TRUE------------------------------------------------
+## ----cleaning for H, eval=TRUE------------------------------------------------
 # TODOs:
 # - Replace all currency conversions with currency_f wherever possible            DONE
 # - Explain all unexplained numbers
@@ -1202,26 +1202,6 @@ invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
 #     periods_var = periods_so
 #   )
 
-# Adjust for inflation: convert all costs to 2017 USD PPP
-unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018) 
-
-#####SECTION ON Mp
-# Cost per DALY (Mp)
-## Revealed Preference - Spring Cleaning (2011 USD)
-rp_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
-
-## Stated Preference - Health Status WTP from 2016 Kenyan Schillings ot 2017 USD PPP - Based on monthly WTP
-sp_in <- currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
-
-####SECTION FOR Ft
-# limit fertility between 1998 and 2020 for treated group
-klps_fert_9820_t <- klps_fert_so %>%
-  filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
-
-# Add 2 additional years of fertility rates under the assumption that it remains 
-# constant and equal to its last value
-fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
-fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
 
 #######SECTION ON H
 gbd_so$age_c <- as.factor(gbd_so$age_c) 
@@ -1306,38 +1286,61 @@ gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
 # WITH: 
 # Where a key term for the equation for H is the yearly per capita YLL (YLD) computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts. 
 
+
+## ----computing h--------------------------------------------------------------
+###########################
 # H
-addlife_in_paper <- (5 - ave_death_u5_so) * (1 -  sum(gbd_YLD_u5$val/5 ) / sum(gbd_YLD_u5$pop) )  +
-              (65 - 5) * (1 -  sum(gbd_YLD_5t65$val/5) / sum(gbd_YLD_5t65$pop) ) * 
-              (1 - sum(gbd_YLL_5t65$val / 5) / sum(gbd_YLL_5t65$pop))
-
-if(FALSE){
-#code
-mean( (gbd_YLL_5t65$val / 5) / gbd_YLL_5t65$pop )
-#paper
-sum(gbd_YLL_5t65$val / 5) / sum(gbd_YLL_5t65$pop) 
-
-#code
-mean( (gbd_YLD_5t65$val / 5) / gbd_YLD_5t65$pop )
-#paper
-sum(gbd_YLD_5t65$val / 5) / sum(gbd_YLD_5t65$pop) 
-
-# H (1 - \sum_{a\in A} yll_a /#A )(1 - \sum{a\in A} yld_a}/#A)
-addlife_in_code <- (5 - ave_death_u5_so) * (1 - mean(gbd_YLD_u5$py_pc))  +
-                   (65 - 5)           * (1 - mean(gbd_YLD_5t65$py_pc)) * 
-                   (1 - mean(gbd_YLL_5t65$py_pc))
-addlife_in_code
-addlife_in_paper
+###########################
+# - inputs: ave_death_u5_so, gbd_YLD_u5$val, gbd_YLD_u5$pop, gbd_YLD_5t65$val, 
+#           gbd_YLD_5t65$pop, gbd_YLL_5t65$val, gbd_YLL_5t65$pop
+# - outputs: h_in
+chunk_h <- function(){
+###############################################################################
+###############################################################################  
+  h_f <- function(ave_death_u5_var = ave_death_u5_so,
+                  pop_u5_var = gbd_YLD_u5$pop,
+                  pop_5t65_var = gbd_YLD_5t65$pop,
+                  yld_u5_var = gbd_YLD_u5$val,
+                  yld_5t65_var = gbd_YLD_5t65$val,
+                  yll_5t65_var = gbd_YLL_5t65$val){
+    res1 <- (5 - ave_death_u5_var) * (1 -  sum( yld_u5_var/5 ) / sum(pop_u5_var) )  +
+            (65 - 5) * (1 -  sum(yld_5t65_var/5) / sum(pop_5t65_var) ) * 
+            (1 - sum(yll_5t65_var / 5) / sum(pop_5t65_var))
+    return(res1)
+  }
+###############################################################################
+###############################################################################  
+return( list("h_f" = h_f) )
 }
-###### END OF SECTION FOR H 
+invisible( list2env(chunk_h(),.GlobalEnv) )
+
+h_in <- h_f()
 
 
+## ----computing IGMB-----------------------------------------------------------
+ # Adjust for inflation: convert all costs to 2017 USD PPP
+unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018) 
+
+#####SECTION ON Mp
+# Cost per DALY (Mp)
+## Revealed Preference - Spring Cleaning (2011 USD)
+rp_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
+
+## Stated Preference - Health Status WTP from 2016 Kenyan Schillings ot 2017 USD PPP - Based on monthly WTP
+sp_in <- currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
+
+####SECTION FOR Ft
+# limit fertility between 1998 and 2020 for treated group
+klps_fert_9820_t <- klps_fert_so %>%
+  filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
+
+# Add 2 additional years of fertility rates under the assumption that it remains 
+# constant and equal to its last value
+fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
+fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
 
 #COMPUTE IGMB
-
-intgen_b_in <- intgen_b_in_f() 
 IGMB_t_in <- intgen_b_in_f() 
-
 
 #COMPUTE PV of benefits
 pv_benef_f(

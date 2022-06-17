@@ -2057,7 +2057,7 @@ H = \frac{\sum_{a \in ages}YLL_{\text{all causes, both sexes, a, 2019}}}{\sum_{a
 \end{equation}
 ```
 
-```{r cleaning and H, eval=TRUE}
+```{r cleaning for H, eval=TRUE}
 # TODOs:
 # - Replace all currency conversions with currency_f wherever possible            DONE
 # - Explain all unexplained numbers
@@ -2070,34 +2070,6 @@ H = \frac{\sum_{a \in ages}YLL_{\text{all causes, both sexes, a, 2019}}}{\sum_{a
 # - Update simulations
 # - Update shiny app 
 
-
-# app4_pv_benef_intgen_rp_in <- pv_benef_f(
-#     earnings_var = 0,
-#     intgen_var = intgen_app4_rp_in,
-#     interest_r_var = interest_new_in,
-#     periods_var = periods_so
-#   )
-
-# Adjust for inflation: convert all costs to 2017 USD PPP
-unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018) 
-
-#####SECTION ON Mp
-# Cost per DALY (Mp)
-## Revealed Preference - Spring Cleaning (2011 USD)
-rp_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
-
-## Stated Preference - Health Status WTP from 2016 Kenyan Schillings ot 2017 USD PPP - Based on monthly WTP
-sp_in <- currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
-
-####SECTION FOR Ft
-# limit fertility between 1998 and 2020 for treated group
-klps_fert_9820_t <- klps_fert_so %>%
-  filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
-
-# Add 2 additional years of fertility rates under the assumption that it remains 
-# constant and equal to its last value
-fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
-fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
 
 #######SECTION ON H
 gbd_so$age_c <- as.factor(gbd_so$age_c) 
@@ -2181,7 +2153,9 @@ gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
 # Our average per-capita YLL (YLD) estimate is computed by summing across all causes of mortality (disability) occurring within the Kenyan population aged 0-64 as of 2019, then dividing by the Kenyan population aged 0-64
 # WITH: 
 # Where a key term for the equation for H is the yearly per capita YLL (YLD) computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts. 
+```
 
+```{r computing h}
 ###########################
 # H
 ###########################
@@ -2209,9 +2183,10 @@ return( list("h_f" = h_f) )
 invisible( list2env(chunk_h(),.GlobalEnv) )
 
 h_in <- h_f()
-   
-    
-    # Adjust for inflation: convert all costs to 2017 USD PPP
+```
+
+```{r computing IGMB}
+ # Adjust for inflation: convert all costs to 2017 USD PPP
 unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018) 
 
 #####SECTION ON Mp
@@ -2230,23 +2205,10 @@ klps_fert_9820_t <- klps_fert_so %>%
 # Add 2 additional years of fertility rates under the assumption that it remains 
 # constant and equal to its last value
 fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
-fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))  
-    
-ave_death_u5_so, gbd_YLD_u5$val, gbd_YLD_u5$pop, gbd_YLD_5t65$val, gbd_YLD_5t65$pop, gbd_YLL_5t65$val, gbd_YLL_5t65$pop
-
-h_in <- (5 - ave_death_u5_so) * (1 -  sum(gbd_YLD_u5$val/5 ) / sum(gbd_YLD_u5$pop) )  +
-        (65 - 5) * (1 -  sum(gbd_YLD_5t65$val/5) / sum(gbd_YLD_5t65$pop) ) * 
-        (1 - sum(gbd_YLL_5t65$val / 5) / sum(gbd_YLL_5t65$pop))
-
-###### END OF SECTION FOR H 
-
-
+fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
 
 #COMPUTE IGMB
-
-intgen_b_in <- intgen_b_in_f() 
 IGMB_t_in <- intgen_b_in_f() 
-
 
 #COMPUTE PV of benefits
 pv_benef_f(
@@ -2255,38 +2217,10 @@ pv_benef_f(
   interest_r_var = interest_new_in,
   periods_var = periods_so
 )
-```
+```   
 
 
 </details>
-
-
-```{r yll_pc, echo=FALSE, eval=TRUE}
-# - inputs: YLL for all causes, both sexes, 0-64 ages, in Kenya in 2019 (yll_so), the number of population of 0-64 ages in Kenya in 2019(pop_so), expected length of life of saved children (life_exp_so)
-# - outputs: the average per-capita YLL at age 0-64(yll_pc_in)
-chunk_yll_pc <- function(){
-###############################################################################
-###############################################################################  
-  yll_pc_f <- function(yll_var = yll_so,
-                      pop_var = pop_so,
-                      life_exp_var = life_exp_so) {
-    res1 <- sum(yll_var) / sum(pop_var) * life_exp_var
-    return(res1)
-  }
-
-###############################################################################
-###############################################################################  
-    return(list("yll_pc_f" = yll_pc_f))
-}
-invisible( list2env(chunk_yll_pc(),.GlobalEnv) )
-
-##### Execute values of the functions above when needed for the text:
-yll_pc_in <- yll_pc_f(yll_so, pop_so, life_exp_so)
-
-```
-
-
-
 
 To be conservative, this approach does not consider the factors generated when both parents are dewormed although additional effects might be produced if both male and female parents get treatment. This approach assumes that the benefits are only gained in the children born from the treated student through their under-five mortality reduction. Estimating the direct health benefits to the treated students is not necessarily straightforward. Parasitic worm infections are not lethal, which makes it complex to quantify the direct health effects of deworming. For future extension of the OPA, it would be worth adding the direct health benefits.
 
