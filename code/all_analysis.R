@@ -1195,14 +1195,6 @@ invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
 # - Update shiny app 
 
 
-# app4_pv_benef_intgen_rp_in <- pv_benef_f(
-#     earnings_var = 0,
-#     intgen_var = intgen_app4_rp_in,
-#     interest_r_var = interest_new_in,
-#     periods_var = periods_so
-#   )
-
-
 #######SECTION ON H
 gbd_so$age_c <- as.factor(gbd_so$age_c) 
 
@@ -1278,13 +1270,6 @@ gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
                                                               "60-64" 
                                                               )
                               ) # sorting
-# gbd_YLD_5t65 <-  gbd_YLD_5t65[order(gbd_YLD_5t65$age_c, decreasing = F), ]    TO DELETE
-
-# SUGGESTED TEXT FOR THE PAPER : 
-# REPLACE: 
-# Our average per-capita YLL (YLD) estimate is computed by summing across all causes of mortality (disability) occurring within the Kenyan population aged 0-64 as of 2019, then dividing by the Kenyan population aged 0-64
-# WITH: 
-# Where a key term for the equation for H is the yearly per capita YLL (YLD) computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts. 
 
 
 ## ----computing h--------------------------------------------------------------
@@ -1343,100 +1328,32 @@ fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))
 IGMB_t_in <- intgen_b_in_f() 
 
 #COMPUTE PV of benefits
-pv_benef_f(
-  earnings_var = earnings_no_ext_new_in,
+app4_pv_benef_rp_in <- pv_benef_f(
+  earnings_var = 0,
   intgen_var = c(IGMB_t_in[, 1], rep(0, 21)),
   interest_r_var = interest_new_in,
   periods_var = periods_so
 )
 
-
-## ----yll_pc, echo=FALSE, eval=TRUE--------------------------------------------
-# - inputs: YLL for all causes, both sexes, 0-64 ages, in Kenya in 2019 (yll_so), the number of population of 0-64 ages in Kenya in 2019(pop_so), expected length of life of saved children (life_exp_so)
-# - outputs: the average per-capita YLL at age 0-64(yll_pc_in)
-chunk_yll_pc <- function(){
-###############################################################################
-###############################################################################  
-  yll_pc_f <- function(yll_var = yll_so,
-                      pop_var = pop_so,
-                      life_exp_var = life_exp_so) {
-    res1 <- sum(yll_var) / sum(pop_var) * life_exp_var
-    return(res1)
-  }
-
-###############################################################################
-###############################################################################  
-    return(list("yll_pc_f" = yll_pc_f))
-}
-invisible( list2env(chunk_yll_pc(),.GlobalEnv) )
-
-##### Execute values of the functions above when needed for the text:
-yll_pc_in <- yll_pc_f(yll_so, pop_so, life_exp_so)
+app4_pv_benef_sp_in <- pv_benef_f(
+  earnings_var = 0,
+  intgen_var = c(IGMB_t_in[, 2], rep(0, 21)),
+  interest_r_var = interest_new_in,
+  periods_var = periods_so
+)
 
 
 
-## ----intgen, echo=print_code--------------------------------------------------
-# - inputs: number of childbirth per dewormed individual year by year(fert_yr_25_in), interest rate (interest_new_in), the treatment effects on under-five mortality rate reduction (gamma_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_in), Cost per DALY averted(cp_daly_rp_so)
-# - outputs: function that computes the present value of child survival health benefits
-chunk_intgen <- function(){
-###############################################################################
-###############################################################################  
-  intgen_app4_f <- function(
-                    gamma_mort_var = gamma_mort_so,
-                    fert_yr_var = fert_yr_25_in,
-                    yll_pc_var = yll_pc_in,
-                    cp_daly_var = c(
-                      currency_f(price_var = cp_daly_rp_so, t_var = 2011),
-                      currency_f(price_var = cp_daly_sp_so, t_var = 2016)
-                    )){
-    res1 <-
-      gamma_mort_var * fert_yr_var * yll_pc_var * cp_daly_var
-    return(res1)
-  }
-
-###############################################################################
-###############################################################################  
-    return(list("intgen_app4_f" = intgen_app4_f))
-}
-invisible( list2env(chunk_intgen(),.GlobalEnv) )
-
-##### Execute values of the functions above when needed for the text:
-# Computing values for inline text:
-
-# pv_benef
-# ├──── earnings_var = 0
-# ├──── intgen_app4_f()
-# |      ├─ yll_pc_f()
-# |      └─ currency_f()
-# └──── interest_f()
-
-
-intgen_app4_rp_in <- c(intgen_app4_f(
-                    gamma_mort_so,
-                    fert_yr_25_in,
-                    yll_pc_in,
-                    currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26))
-                    
-intgen_app4_sp_in <- c(intgen_app4_f(
-                    gamma_mort_so,
-                    fert_yr_25_in,
-                    yll_pc_in,
-                    currency_f(price_var = cp_daly_sp_so, t_var = 2016)),rep(0,26))
-
-app4_pv_benef_intgen_rp_in <- pv_benef_f(
-    earnings_var = 0,
-    intgen_var = intgen_app4_rp_in,
-    interest_r_var = interest_new_in,
-    periods_var = periods_so
-  )
-
-app4_pv_benef_intgen_sp_in <- pv_benef_f(
-    earnings_var = 0,
-    intgen_var = intgen_app4_sp_in,
-    interest_r_var = interest_new_in,
-    periods_var = periods_so
-  )
-
+## ---- eval=FALSE, echo=FALSE--------------------------------------------------
+## # pv_benef
+## # ├──── earnings_var = 0
+## # ├──── intgen_app4_f()
+## # |      ├─ yll_pc_f()
+## # |      └─ currency_f()
+## # └──── interest_f()
+## 
+## 
+## 
 
 
 
