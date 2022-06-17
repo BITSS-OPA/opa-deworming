@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>31 May, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
+date: "<center><div class='mysubtitle'>17 June, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -198,7 +198,8 @@ chunk_sources <- function(){
     # GBD DALYs Kenya 2019 All causes, Both sexes, All ages
     gbd_so <-read.csv("rawdata/data/gbd.csv") 
     # Fertility rate (Ft)
-    klps_fert_so <- read_excel("rawdata/data/mortality_data_21.02.17.xlsx") # data from Michelle Layvant 02/17/2022
+    klps_fert_so <- read_excel("rawdata/data/mortality_data_21.02.17.xlsx") # data from team of Walker et. al. 2022 (sent from: Michelle Layvant 02/17/2022, to: Satoshi Koiso, subject: "Data needed for figure")
+
     ## Life benefits in DALYs term per child
     ave_death_u5_so <- 0.652 # From Matthew Krupoff April 19 2022                        CHECK: Documentation and source
 
@@ -355,14 +356,8 @@ chunk_sources <- function(){
     gamma_mort_so <- 0.018      # The Treatment Effects. To be aligned with the new paper after publication
     gamma_mort_sd_so <- 0.008   # doi, page, table, col, row
     tot_chld_so <- 2.6 # doi, page, table 2, col 7, panel A
-    fert_yr_25_so <-
-      c(0.001645897, 0.006818716, 0.016223842, 0.024923583, 
-        0.038796145, 0.059017163, 0.082059726, 0.095697157, 
-        0.125088170, 0.143428162, 0.149834052, 0.167573169, 
-        0.198016912, 0.165645957, 0.173207432, 0.178807944, 
-        0.173038900, 0.179104477, 0.169385627, 0.168831170, 
-        0.157248154, 0.146458581, 0.143830940, 0.143830940, 0.143830940)
-    # the childbirth per dewormed individual 0-25 years after the treatment period in the study pop. To be aligned with the new paper after publication. Data shared by authors of STUDY (YEAR)
+
+    # the childbirth per dewormed individual 0-25 years after the treatment period in the study pop. To be aligned with the new paper after publication. Data shared by authors of Walker et. al. (2022)
 
     #############
     ##### Guess work   
@@ -1853,14 +1848,14 @@ In addition to the direct benefits in earnings of deworming to the treated stude
 
 ### Direct costs and benefits of the Primary School Deworming Project
 
-In the KLPS, on average, one person has **2.6 children in a lifetime [@klps5]**. The deworming treatment reduced the under-five mortality rates of children of dewormed students by **18 (per 1,000 children)**. Thus, the treatment to one person roughly averted the death of 0.05 children among per treated individual. From a perspective of cost, the direct deworming costs per one student are \$1.44 (2017 USD PPP), given the treatment period of 2.41 years and take-up rate of 75%. So, we could simply say that 0.05 lives can be protected by spending \$1.44 per treatment to one person. The below sections further explains the costs and benefits of saved children of dewormed students with additional parameters.
+In the KLPS, on average, one person has **2.6 children in a lifetime [@klps5]**. The deworming treatment reduced the under-five mortality rates of children of dewormed students by **18 per 1,000 children**. Thus, the treatment to one person roughly averted the death of 0.05 children among per treated individual. From a perspective of cost, the direct deworming costs per one student are \$1.44 (2017 USD PPP), given the treatment period of 2.41 years and take-up rate of 75%. So, we could simply say that 0.05 lives can be protected by spending \$1.44 per treatment to one person. The below sections further explains the costs and benefits of saved children of dewormed students with additional parameters.
 
 <!--Multiplying the per-capita cost by the number of treated students (21,710 people), the direct program cost is $30,256.
 So, we could simply say that 1,347.76 lives can be protected by spending $30,256. The below sections further explain the costs and benefits of saved children of dewormed students with additional parameters.-->
 
 ### Intergenerational Mortality Benefits
 
-The benefits are calculated as a monetary value of years of saved under-five children's lives per dewormed individual ($IGMB$). The calculation is conducted as the multiplication of the monetary value of health benefits ($M_p$) and the discounted sum of the average treatment effects on the under-five mortality reduction of children of the dewormed cohort ($γ_{t}$) times childbirth t years after deworming ($F_{t}$), and the average value of saved life per child of the KLPS population in terms of DALY ($H$). This approach assumes that the benefits are added for a maximum of 25 years after the deworming intervention, which is analyzed in [@klps5].
+The yearly benefits are calculated as a monetary value of years of lives saved of under-five children's per dewormed individual ($IGMB_t$). The calculation is conducted as the multiplication of the monetary value of health benefits per adjusted year of life saved ($M_p$) and the average treatment effects on the mortality under-five of children of the dewormed cohort ($γ_{t}$) times the fertility rate t years after deworming ($F_{t}$), and the life expectancy in Disability Adjusted Life Years, or DALYs, ($H$). This approach assumes that the benefits are added for a maximum of 25 years after the deworming intervention, which is analyzed in [@klps5].
 
 <details>
 
@@ -1876,18 +1871,80 @@ IGMB_{t} = M_p \gamma_{t} F_{t} H \\
 ```
 Where:
 
--   $IGMB_{t}$: the monetary value of years of saved under-five children's lives per dewormed individual.
--   $M_p$: the monetary value of health benefits per $H$, cited from @klps5. Other possible values are shown in the interactive graph of this OPA.
+-   $IGMB_{t}$: the monetary value of years of saved of under-five children's per dewormed individual.
+-   $M_p$: the monetary value of health benefits per adjusted year of life saved ($H$), measured in @klps5. Other possible values are shown in the interactive graph of this OPA.
 -   $γ_{t}$: the average treatment effects on the under-five mortality reduction of children born from the dewormed cohort.
--   $F_{t}$: the number of childbirth one individual bears $t$ years after the deworming intervention.
--   $H$: the average value of life per saved child of the treatment population in terms of DALY (YLL). Years of life lost due to premature mortality (YLL) at age 0-64 in Kenya in 2019 divided by the population age 0-64 and multiplied by 65.
-
+-   $F_{t}$: the fertility rate per individual $t$ years after the deworming intervention.
+-   $H$: life expectancy in Disability Adjusted Life Years, or DALYs. 
 
 
 
 ```r
+###########################
+# Intergenerational Child Mortality Benefits  
+###########################
+# - inputs: fert_yr_25_in, gamma_mort_so, addlife_in,rp_in,sp_in
+# - outputs: intgen_b_in
+chunk_interg_ben <- function(){
+###############################################################################
+###############################################################################  
+  intgen_b_in_f <- function( fert_yr_var = fert_yr_25_in,
+                             gamma_mort_var = gamma_mort_so,
+                             addlife_var = addlife_in_paper,
+                             cp_daly_var = c(rp_in, sp_in)
+                             ){
+      # Store results for Revealed Preference method and Survery Preference method
+      intgen_b_in <- matrix(NA,25,2)
+      for (i in 1:2){
+        # gamma * Ft * H * Mp 
+        intgen_b_in[,i] <- gamma_mort_var * fert_yr_var *  addlife_var * cp_daly_var[i]
+      }
+      # We impute the benefits starting at age 5, given the outcome variable in  Walker et. al. 2022
+      # is survival at age 5. So each row in the benefit matrix/vector, should be read as benefits 
+      # in year of children born in years t-5
+      yr_0_4_row  <- matrix(0,5,2)
+      intgen_b_in <- rbind(yr_0_4_row, intgen_b_in) # assuming the benefits emerge at age 5, shift benefits by five years                                                                         #EXPLAIN   
+      return(intgen_b_in)
+    }
+###############################################################################
+###############################################################################  
+  return( list("intgen_b_in_f" = intgen_b_in_f) )
+}
+invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
+```
+
+
+
+
+
+</details>
+
+The monetary value of health benefits ($M_p$) is the saved cost when one DALY is averted. @klps5 uses two approaches: revealed preference and stated preference. 
+Adjusted by the inflation and PPP to USD in 2017, the $M_p$ for revealed preference is \$66.82, and the $M_p$ for stated preference is \$3611.2, respectively (2017 USD PPP). The reader can modify the values for $M_p$ in the interactive app of this OPA. 
+
+The treatment effects on under-five mortality for the children of the dewormed cohort is 0.018 (@klps5. Table 1, Panel A, Column 1, Row 1). The fertilty rate $t$ years after deworming ($F_{t}$ is calculated as the number of children born per individual at $t$ years after the deworming intervention. (@klps5. Figure A.2). 
+
+We separate H into two terms: the first term captures the additional healthy life years for those who died before age 5 and the second term captures the additional healthy life years for those who survived past age 5 (up to age 65). For each term, in order to compute the number of additional healthy life years, we consider both the average per-capita years of life lost due to premature mortality (YLL) and the average per-capita years of life lived with disability (YLD), incurred by the population aged 0-64 in Kenya across 5-year age groups. Each of this terms is computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts. 
+
+
+<details>
+
+<summary>Show all the details</summary>
+
+```{=tex}
+\begin{equation}
+H = \frac{\sum_{a \in ages}YLL_{\text{all causes, both sexes, a, 2019}}}{\sum_{a \in ages}\text {Kenyan population of age a}} \times 65
+\quad \text{for a = <1, 1-4} \dots, \text{60-64}
+
+\label{eq:23}
+\tag{23}
+\end{equation}
+```
+
+
+```r
 # TODOs:
-# - Replace all currency conversions with currency_f wherever possible
+# - Replace all currency conversions with currency_f wherever possible            DONE
 # - Explain all unexplained numbers
 # - Describe added data sets to readme file
 # - Separate and explain into 3 code chunks: clean up, conversions, computing H
@@ -1914,8 +1971,18 @@ unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018)
 ## Revealed Preference - Spring Cleaning (2011 USD)
 rp_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
 
-## Stated Preference - Health Status WTP (2017 USD PPP) - Based on monthly WTP
-sp_in <-      currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
+## Stated Preference - Health Status WTP from 2016 Kenyan Schillings ot 2017 USD PPP - Based on monthly WTP
+sp_in <- currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
+
+####SECTION FOR Ft
+# limit fertility between 1998 and 2020 for treated group
+klps_fert_9820_t <- klps_fert_so %>%
+  filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
+
+# Add 2 additional years of fertility rates under the assumption that it remains 
+# constant and equal to its last value
+fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
+fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
 
 #######SECTION ON H
 gbd_so$age_c <- as.factor(gbd_so$age_c) 
@@ -1994,13 +2061,6 @@ gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
                               ) # sorting
 # gbd_YLD_5t65 <-  gbd_YLD_5t65[order(gbd_YLD_5t65$age_c, decreasing = F), ]    TO DELETE
 
-# YLD and YLL per capita and per year. Div by 5 due to 5 year YLD bins.  
-# pop under 5
-gbd_YLD_u5$py_pc <-   (gbd_YLD_u5$val / 5) / gbd_YLD_u5$pop
-# pop from 5 to 64
-gbd_YLL_5t65$py_pc <- (gbd_YLL_5t65$val / 5) / gbd_YLL_5t65$pop
-gbd_YLD_5t65$py_pc <- (gbd_YLD_5t65$val / 5) / gbd_YLD_5t65$pop 
-
 # SUGGESTED TEXT FOR THE PAPER : 
 # REPLACE: 
 # Our average per-capita YLL (YLD) estimate is computed by summing across all causes of mortality (disability) occurring within the Kenyan population aged 0-64 as of 2019, then dividing by the Kenyan population aged 0-64
@@ -2024,7 +2084,7 @@ mean( (gbd_YLD_5t65$val / 5) / gbd_YLD_5t65$pop )
 sum(gbd_YLD_5t65$val / 5) / sum(gbd_YLD_5t65$pop) 
 
 # H (1 - \sum_{a\in A} yll_a /#A )(1 - \sum{a\in A} yld_a}/#A)
-addlife_in_code <- (5 - ave_death_u5) * (1 - mean(gbd_YLD_u5$py_pc))  +
+addlife_in_code <- (5 - ave_death_u5_so) * (1 - mean(gbd_YLD_u5$py_pc))  +
                    (65 - 5)           * (1 - mean(gbd_YLD_5t65$py_pc)) * 
                    (1 - mean(gbd_YLL_5t65$py_pc))
 addlife_in_code
@@ -2033,113 +2093,14 @@ addlife_in_paper
 ###### END OF SECTION FOR H 
 
 
-####SECTION FOR Ft
-# limit fertility between 1998 and 2020 for treated group
-klps_fert_9820_t <- klps_fert_so %>%
-  filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
 
-# Add 2 additional years of fertility rates under the assumption that it remains 
-# constant and equal to its last value
-fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
-fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
-```
-
-
-
-
-
-
-</details>
-
-The monetary value of health benefits ($M_p$) is the saved cost when one DALY (YLL) is averted. [@klps5] uses two approaches: revealed preference and stated preference. 
-Adjusted by the inflation and PPP to USD in 2017, the $M_p$ for revealed preference is 66.82, and the $M_p$ for stated preference is 3611.2, respectively (2017 USD PPP). The reader can modify the values for $M_p$ in the interactive app of this OPA. 
-
-The treatment effects on the under-five mortality reduction of children of the dewormed cohort ($γ_{t}$): the difference between the mortality rate of under-five children of the control group and that of the treatment group ([@klps5]. Table 1, Panel A, Column 1**).   
-
-The childbirth $t$ years after deworming ($F_{t}$): this figure is calculated as the number of children born per individual at $t$ years after the deworming intervention. ([@klps5]. Figure XXX, column XXX, row XXX**: 1998 as $t$ = 0).
-
-The average value of saved life per child of the KLPS population ($H$): the average per-capita years of life lost due to premature mortality ($YLL$) incurred by the population aged 0-64 in Kenya. We assume under-5 mortality reduction influences only $YLL$ out of the disability-adjusted life year (DALY)[^10]. The assumption is that the survived child will live up to age 64 if the deworming treatment to their parent prevents their under-5 mortality (based on the life expectancy at birth: 66.18 (@united2019world; Life Expectancy at Birth (e0) - Both Sexes, column 2015-2020, row Kenya. Accessed July 12, 2021). We calculate the $YLLs$ for all causes, both genders across age groups 0-64 in Kenya for the year 2019 by summing up $YLLs$ for each age category cited from the Global Burden of Disease (GBD) 2019 study (@gbd; Location Kenya, Year 2019, Context Cause, Age <1 year, to 60 to 64, Metric Number, Measure YLLs, Sex Both, Cause Total All causes, Accessed July 12, 2021). Then, we divide it by the population of age 0-64 to get the target per-capita value of saved life for one year, and multiplied it by the expected length of life, 65 years ($H$).
-
-[^10]: The relationship between DALY and YLL. The disability-adjusted life year (DALY) is an indicator of the burden of disease, which comprises two units of DALY: years of life lost due to premature mortality (YLL) and years lived with disability (YLD). YLL is considered as a measure of premature mortality, and YLD is considered as a measure of morbidity. This analysis uses YLL as an indicator of health benefits, assuming that the mortality rate reduction does not influence YLD.
-
-<details>
-
-<summary>Show all the details</summary>
-
-```{=tex}
-\begin{equation}
-H = \frac{\sum_{a \in ages}YLL_{\text{all causes, both sexes, a, 2019}}}{\sum_{a \in ages}\text {Kenyan population of age a}} \times 65
-\quad \text{for a = <1, 1-4} \dots, \text{60-64}
-
-\label{eq:23}
-\tag{23}
-\end{equation}
-```
-
-
-```r
-# - inputs: YLL for all causes, both sexes, 0-64 ages, in Kenya in 2019 (yll_so), the number of population of 0-64 ages in Kenya in 2019(pop_so), expected length of life of saved children (life_exp_so)
-# - outputs: the average per-capita YLL at age 0-64(yll_pc_in)
-chunk_yll_pc <- function(){
-###############################################################################
-###############################################################################  
-  yll_pc_f <- function(yll_var = yll_so,
-                      pop_var = pop_so,
-                      life_exp_var = life_exp_so) {
-    res1 <- sum(yll_var) / sum(pop_var) * life_exp_var
-    return(res1)
-  }
-
-###############################################################################
-###############################################################################  
-    return(list("yll_pc_f" = yll_pc_f))
-}
-invisible( list2env(chunk_yll_pc(),.GlobalEnv) )
-
-##### Execute values of the functions above when needed for the text:
-yll_pc_in <- yll_pc_f(yll_so, pop_so, life_exp_so)
-```
-
-
-
-```r
-###########################
-# Intergenerational Child Mortality Benefits  
-###########################
-# - inputs: fert_yr_25_so, gamma_mort_so, addlife_in,rp_in,sp_in
-# - outputs: intgen_b_in
-chunk_interg_ben <- function(){
-###############################################################################
-###############################################################################  
-  intgen_b_in_f <- function( fert_yr_var = fert_yr_25_so,
-                             gamma_mort_var = gamma_mort_so,
-                             addlife_var = addlife_in_paper,
-                             cp_daly_var = c(rp_in, sp_in)
-                             ){
-      # Store results for Revealed Preference method and Survery Preference method
-      intgen_b_in <- matrix(NA,25,2)
-      for (i in 1:2){
-        # gamma * Ft * H * Mp 
-        intgen_b_in[,i] <- gamma_mort_var * fert_yr_var *  addlife_var * cp_daly_var[i]
-      }
-      # We impute the benefits starting at age 5, given the outcome variable in  Walker et. al. 2022
-      # is survival at age 5. So each row in the benefit matrix/vector, should be read as benefits 
-      # in year of children born in years t-5
-      yr_0_4_row  <- matrix(0,5,2)
-      intgen_b_in <- rbind(yr_0_4_row, intgen_b_in) # assuming the benefits emerge at age 5, shift benefits by five years                                                                         #EXPLAIN   
-      return(intgen_b_in)
-    }
-###############################################################################
-###############################################################################  
-  return( list("intgen_b_in_f" = intgen_b_in_f) )
-}
-invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
+#COMPUTE IGMB
 
 intgen_b_in <- intgen_b_in_f() 
 IGMB_t_in <- intgen_b_in_f() 
 
 
-#MAKE SURE THAT THIS REPRDUCES APP3 (289.9)
+#COMPUTE PV of benefits
 pv_benef_f(
   earnings_var = earnings_no_ext_new_in,
   intgen_var = c(IGMB_t_in[, 1], rep(0, 21)),
@@ -2154,6 +2115,12 @@ pv_benef_f(
 
 
 </details>
+
+
+
+
+
+
 
 To be conservative, this approach does not consider the factors generated when both parents are dewormed although additional effects might be produced if both male and female parents get treatment. This approach assumes that the benefits are only gained in the children born from the treated student through their under-five mortality reduction. Estimating the direct health benefits to the treated students is not necessarily straightforward. Parasitic worm infections are not lethal, which makes it complex to quantify the direct health effects of deworming. For future extension of the OPA, it would be worth adding the direct health benefits.
 
@@ -2172,14 +2139,14 @@ IGMB_{t} = \left( \$66.82;
 
 
 ```r
-# - inputs: number of childbirth per dewormed individual year by year(fert_yr_25_so), interest rate (interest_new_in), the treatment effects on under-five mortality rate reduction (gamma_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_in), Cost per DALY averted(cp_daly_rp_so)
+# - inputs: number of childbirth per dewormed individual year by year(fert_yr_25_in), interest rate (interest_new_in), the treatment effects on under-five mortality rate reduction (gamma_mort_so), the years of life lost due to premature mortality per survived child in Kenya(yll_pc_in), Cost per DALY averted(cp_daly_rp_so)
 # - outputs: function that computes the present value of child survival health benefits
 chunk_intgen <- function(){
 ###############################################################################
 ###############################################################################  
   intgen_app4_f <- function(
                     gamma_mort_var = gamma_mort_so,
-                    fert_yr_var = fert_yr_25_so,
+                    fert_yr_var = fert_yr_25_in,
                     yll_pc_var = yll_pc_in,
                     cp_daly_var = c(
                       currency_f(price_var = cp_daly_rp_so, t_var = 2011),
@@ -2209,13 +2176,13 @@ invisible( list2env(chunk_intgen(),.GlobalEnv) )
 
 intgen_app4_rp_in <- c(intgen_app4_f(
                     gamma_mort_so,
-                    fert_yr_25_so,
+                    fert_yr_25_in,
                     yll_pc_in,
                     currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26))
                     
 intgen_app4_sp_in <- c(intgen_app4_f(
                     gamma_mort_so,
-                    fert_yr_25_so,
+                    fert_yr_25_in,
                     yll_pc_in,
                     currency_f(price_var = cp_daly_sp_so, t_var = 2016)),rep(0,26))
 
@@ -2249,7 +2216,7 @@ Approach 4 adopts the direct deworming costs under Approach 2 (\$1.44 (2017 USD 
 
 ### Assessing computational reproducibility of original results
 
-The original analysis in [@klps5] implies the NPV of 29.78 (table A6, column 2, and row 3) for revealed preference and the NPV of 1686.14 (table A6, column 3, and row 3) for stated preference. These results corresponds to social internal rates of return of 55% (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A6, column 2, and row 5) and $1.9\times10^{12}%$ (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A6, column 3, and row 5) for revealed preference and stated preference, respectively. Following the steps described in this section, this approach 4 obtains the same results (29.7848713 and 55.03% for revealed preference and 1686.1397316 and 1898560669173.72% for stated preference, respectively). 
+The original analysis in [@klps5] implies the NPV of 29.78 (table A6, column 2, and row 3) for revealed preference and the NPV of 1686.14 (table A6, column 3, and row 3) for stated preference. These results corresponds to social internal rates of return of 55% (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A6, column 2, and row 5) and $1.9\times10^{12}%$ (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A6, column 3, and row 5) for revealed preference and stated preference, respectively. Following the steps described in this section, this approach 4 obtains the same results (29.7848713 and 55.03% for revealed preference and 1686.1397329 and 1900609186308.21% for stated preference, respectively). 
 
 
 ## Accounting for Uncertainty
@@ -2864,7 +2831,7 @@ one_run_f <-
            # cp_daly_rp_var1 = cp_daly_rp_so,
            # cp_daly_sp_var1 = cp_daly_sp_so,
            # gamma_mort_var1 = gamma_mort_so,
-           # fert_yr_25_var1 = fert_yr_25_so,
+           # fert_yr_25_var1 = fert_yr_25_in,
            # life_exp_var1 = life_exp_so
            ) {                                        
     ####------------ Inputs for wage_t -----------------------------------------
@@ -3113,7 +3080,7 @@ one_run_f <-
     #   earnings_var = 0,
     #   intgen_var = c(intgen_app4_f(
     #                 gamma_mort_so,
-    #                 fert_yr_25_so,
+    #                 fert_yr_25_in,
     #                 yll_pc_in,
     #                 currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26)),
     #   interest_r_var = interest_new_in,
@@ -3127,7 +3094,7 @@ one_run_f <-
     #   earnings_var = earnings_no_ext_prevl_new_in,
     #   intgen_var = c(intgen_app4_f(
     #                 gamma_mort_so,
-    #                 fert_yr_25_so,
+    #                 fert_yr_25_in,
     #                 yll_pc_in,
     #                 currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26)),
     #   interest_r_var = interest_new_in,
