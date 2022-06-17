@@ -2001,15 +2001,34 @@ Show all the details
 
 ```{=tex}
 \begin{equation}
-\begin{aligned}
-H &= \left( 5-\left( \textrm{Avg Age of Death} | \textrm{Dying before Age 5} \right) \right) \left( 1- \frac{\sum_{a=0}^{a<5} YLD_a}{\sum_{a=0}^{a<5} Pop_a}\right) \\ &+ (65-5) \left(1-  \frac{\sum_{a=5}^{a<65} YLL_a}{\sum_{a=5}^{a<65} Pop_a} \right) \left( 1- \frac{\sum_{a=5}^{a<65} YLD_a}{\sum_{a=5}^{a<65} Pop_a} \right) \\
-    &\textrm{for} \; a = \{0-4, 5-9, \cdots , 60-64\}
+H = \left( 5- 
+            \left( \text{Avg Age of Death} | \text{Dying before Age 5} \right) 
+      \right) \left( 
+      1 - \frac{\sum_{a=0}^{a<5} YLD_a}{\sum_{a=0}^{a<5} Pop_a}
+              \right) \\ 
+              + (65-5) \left(
+                              1-\frac{\sum_{a=5}^{a<65} YLL_a}{\sum_{a=5}^{a<65} Pop_a} 
+                       \right) 
+                       \left( 1- \frac{\sum_{a=5}^{a<65} YLD_a}{\sum_{a=5}^{a<65} Pop_a} 
+                       \right) \\
+    \text{for} \; a = \{0-4, 5-9, \cdots , 60-64\}
 
 \label{eq:23}
 \tag{23}
-\end{aligned}
 \end{equation}
 ```
+
+
+```{=tex}
+\begin{equation}
+IGMB_{t} = M_p \gamma_{t} F_{t} H \\
+
+\label{eq:24}
+\tag{24}
+\end{equation}
+```
+
+
 
 ```r
 # TODOs:
@@ -2219,8 +2238,8 @@ Let $x$ denote each source used in this analysis.
 \begin{equation}
 x \sim N(\hat{x}, \sigma_{x})
 
-\label{eq:24}
-\tag{24}
+\label{eq:25}
+\tag{25}
 \\
 \sigma_{x} =
 \begin{cases}

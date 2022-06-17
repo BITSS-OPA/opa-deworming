@@ -2117,15 +2117,24 @@ Show all the details
 
 ```{=tex}
 \begin{equation}
-\begin{aligned}
-H &= \left( 5-\left( \textrm{Avg Age of Death} | \textrm{Dying before Age 5} \right) \right) \left( 1- \frac{\sum_{a=0}^{a<5} YLD_a}{\sum_{a=0}^{a<5} Pop_a}\right) \\ &+ (65-5) \left(1-  \frac{\sum_{a=5}^{a<65} YLL_a}{\sum_{a=5}^{a<65} Pop_a} \right) \left( 1- \frac{\sum_{a=5}^{a<65} YLD_a}{\sum_{a=5}^{a<65} Pop_a} \right) \\
-    &\textrm{for} \; a = \{0-4, 5-9, \cdots , 60-64\}
+H = \left( 5- 
+            \left( \text{Avg Age of Death} | \text{Dying before Age 5} \right) 
+      \right) \left( 
+      1 - \frac{\sum_{a=0}^{a<5} YLD_a}{\sum_{a=0}^{a<5} Pop_a}
+              \right) \\ 
+              + (65-5) \left(
+                              1-\frac{\sum_{a=5}^{a<65} YLL_a}{\sum_{a=5}^{a<65} Pop_a} 
+                       \right) 
+                       \left( 1- \frac{\sum_{a=5}^{a<65} YLD_a}{\sum_{a=5}^{a<65} Pop_a} 
+                       \right) \\
+    \text{for} \; a = \{0-4, 5-9, \cdots , 60-64\}
 `r equationIndex <- equationIndex + 1`
 \label{eq:`r equationIndex`}
 \tag{`r equationIndex`}
-\end{aligned}
 \end{equation}
 ```
+
+
 ```{r cleaning for H, eval=TRUE}
 # TODOs:
 # - Replace all currency conversions with currency_f wherever possible            DONE
@@ -2298,13 +2307,10 @@ To be conservative, this approach does not consider the factors generated when b
 ```{r, eval=FALSE, echo=FALSE}
 # pv_benef
 # ├──── earnings_var = 0
-# ├──── intgen_app4_f()
-# |      ├─ yll_pc_f()
+# ├──── intgen_b_in_f()
+# |      ├─ h_f()
 # |      └─ currency_f()
 # └──── interest_f()
-
-
-
 ```
 
 </details>
@@ -2459,6 +2465,14 @@ As a default $\delta_{u} = 0.1$
 # parameters and simualte draws of each source. When the source is a scalar,
 # it generates a draw from a noromal dist (mean, sd). When it is a "small"
 # (less than 4 elements) vector, generates independent multivariate normals.
+
+# LIST ALL NEW PARAMETERS: 
+# - H
+# - M
+# - Ft
+# - Gamma
+
+
 
 
 #begin by cleaning up the cost data once
