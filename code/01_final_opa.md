@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>17 June, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
+date: "<center><div class='mysubtitle'>19 12月, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -194,8 +194,8 @@ chunk_sources <- function(){
     interest_10_so <- 0.1           #10% discounting rate
     tax_so <- 0.16575               #ADD INFO
 
-    # GBD DALYs Kenya 2019 All causes, Both sexes, All ages
-    gbd_so <-read.csv("rawdata/data/gbd.csv") 
+    # GBD DALYs Kenya 2019 All causes, Both sexes, All ages 
+    gbd_so <-read.csv("rawdata/data/gbd.csv") # data from Global Burden of Disease Study 2019 (GBD 2019) on 04/26/2022 and data on population from Kenya National Bureau of Statistics. 2019 Kenya Population and Housing Census Volume III: Distribution of Population by Age, Sex and Administrative Units. http://housingfinanceafrica.org/app/uploads/VOLUME-III-KPHC-2019.pdf
     # Fertility rate (Ft)
     klps_fert_so <- read_excel("rawdata/data/mortality_data_21.02.17.xlsx") # data from team of Walker et. al. 2022 (sent from: Michelle Layvant 02/17/2022, to: Satoshi Koiso, subject: "Data needed for figure")
 
@@ -236,40 +236,6 @@ chunk_sources <- function(){
     #https://data.worldbank.org/indicator/SP.POP.TOTL
     # options: "a1_tax_sim","a1_x_tax_sim","a1_all_sim", "a1_x_all_sim", "a2_tax_sim",
     # "a2_all_sim", "a3_inc_a1_all_sim", "a3_inc_a1_all_x_sim", "a3_inc_a2_all_sim"
-
-    # YLL of all causes, age 0-64 Both sexes, in Kenya in 2019 - Global Burden of Disease http://ghdx.healthdata.org/gbd-results-tool?params=gbd-api-2019-permalink/426dce805f261258aaade61a91bf477d
-    yll_so <- c(
-      3634178,
-      1063778,
-      338999,
-      297609,
-      553843,
-      574435,
-      579097,
-      669139,
-      766550,
-      798139,
-      763607,
-      683505,
-      602124,
-      545261)
-    pop_so <- c(
-      1105074,
-      4888193,
-      6202643,
-      6346072,
-      5285857,
-      4447674,
-      3854555,
-      3570719,
-      2650116,
-      2259231,
-      1786256,
-      1308610,
-      1118094,
-      870022
-    )
-    # Population of age 0-64 in 2019 in Kenya - Kenya National Bureau of Statistics http://housingfinanceafrica.org/app/uploads/VOLUME-III-KPHC-2019.pdf
 
     #############
     ##### Research
@@ -350,8 +316,6 @@ chunk_sources <- function(){
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
 
-    cp_daly_rp_so <- 23.68 # Kremer et al. (2011) (2011 USD) http://emiguel.econ.berkeley.edu/wordpress/wp-content/uploads/2021/03/Paper__Spring_Cleaning.pdf
-    cp_daly_sp_so <- 1597.592 # new paper (2016 USD)
     gamma_mort_so <- 0.018      # The Treatment Effects. To be aligned with the new paper after publication
     gamma_mort_sd_so <- 0.008   # doi, page, table, col, row
     tot_chld_so <- 2.6 # doi, page, table 2, col 7, panel A
@@ -389,7 +353,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # SP = Baird-etal-QJE-2016_fiscal-impact-calculations.xlsx, sheet: Assumps&Panel A Calcs
 ```
 
-<img src="/Users/fhoces/Desktop/sandbox/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="C:/Users/koiso/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 ::: divider
 Executive Summary
@@ -1922,7 +1886,7 @@ So, we could simply say that 1,347.76 lives can be protected by spending $30,256
 ```
 ### Intergenerational Mortality Benefits
 
-The yearly benefits are calculated as a monetary value of years of lives saved of under-five children's per dewormed individual ($IGMB_t$). The calculation is conducted as the multiplication of the monetary value of health benefits per adjusted year of life saved ($M_p$) and the average treatment effects on the mortality under-five of children of the dewormed cohort ($γ_{t}$) times the fertility rate t years after deworming ($F_{t}$), and the life expectancy in Disability Adjusted Life Years, or DALYs, ($H$). This approach assumes that the benefits are added for a maximum of 25 years after the deworming intervention, which is analyzed in [@klps5].
+The yearly benefits are calculated as a monetary value of years of lives saved of under-five children's per dewormed individual ($IGMB_t$). The calculation is conducted as the multiplication of the monetary value of health benefits per adjusted year of life saved ($M_p$) and the average treatment effects on the mortality under-five of children of the dewormed cohort ($γ_{t}$) times the fertility rate t years after deworming ($F_{t}$), and the life expectancy in Disability Adjusted Life Years, or DALYs, ($H$). This approach assumes that the benefits are added for a maximum of 25 years after the deworming intervention, which is analyzed in @klps5.
 
 <details>
 
@@ -1954,31 +1918,31 @@ Where:
 # Intergenerational Child Mortality Benefits  
 ###########################
 # - inputs: fert_yr_25_in, gamma_mort_so, addlife_in,rp_in,sp_in
-# - outputs: intgen_b_in
+# - outputs: intgen_b
 chunk_interg_ben <- function(){
 ###############################################################################
 ###############################################################################  
-  intgen_b_in_f <- function( fert_yr_var = fert_yr_25_in,
-                             gamma_mort_var = gamma_mort_so,
-                             addlife_var = h_in,
-                             cp_daly_var = c(rp_in, sp_in)
+  intgen_app4_f <- function( fert_yr_var = fert_yr_25_in,    # F_t
+                             gamma_mort_var = gamma_mort_so, # gamma
+                             addlife_var = h_in,             # H
+                             cp_daly_var = c(rp_in, sp_in)   # M_p
                              ){
       # Store results for Revealed Preference method and Survery Preference method
-      intgen_b_in <- matrix(NA,25,2)
+      intgen_b <- matrix(NA,25,2)
       for (i in 1:2){
         # gamma * Ft * H * Mp 
-        intgen_b_in[,i] <- gamma_mort_var * fert_yr_var *  addlife_var * cp_daly_var[i]
+        intgen_b[,i] <- gamma_mort_var * fert_yr_var *  addlife_var * cp_daly_var[i]
       }
       # We impute the benefits starting at age 5, given the outcome variable in  Walker et. al. 2022
       # is survival at age 5. So each row in the benefit matrix/vector, should be read as benefits 
       # in year of children born in years t-5
       yr_0_4_row  <- matrix(0,5,2)
-      intgen_b_in <- rbind(yr_0_4_row, intgen_b_in) # assuming the benefits emerge at age 5, shift benefits by five years                                                                         #EXPLAIN   
-      return(intgen_b_in)
+      intgen_b <- rbind(yr_0_4_row, intgen_b) # assuming the benefits emerge at age 5, shift benefits by five years                                                                         #EXPLAIN   
+      return(intgen_b)
     }
 ###############################################################################
 ###############################################################################  
-  return( list("intgen_b_in_f" = intgen_b_in_f) )
+  return( list("intgen_app4_f" = intgen_app4_f) )
 }
 invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
 ```
@@ -1987,9 +1951,9 @@ invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
 
 The monetary value of health benefits ($M_p$) is the saved cost when one DALY is averted. @klps5 uses two approaches: revealed preference and stated preference. Adjusted by the inflation and PPP to USD in 2017, the $M_p$ for revealed preference is \$66.82, and the $M_p$ for stated preference is \$3611.2, respectively (2017 USD PPP). The reader can modify the values for $M_p$ in the interactive app of this OPA.
 
-The treatment effects on under-five mortality for the children of the dewormed cohort is 0.018 (@klps5. Table 1, Panel A, Column 1, Row 1). The fertilty rate $t$ years after deworming ($F_{t}$ is calculated as the number of children born per individual at $t$ years after the deworming intervention. (@klps5. Figure A.2).
+The treatment effects on under-five mortality for the children of the dewormed cohort ($γ_{t}$) is 0.018 (@klps5. Table 1, Panel A, Column 1, Row 1). The fertility rate $t$ years after deworming ($F_{t}$) is calculated as the number of children born per individual at $t$ years after the deworming intervention. (@klps5. Figure A.2).
 
-We separate H into two terms: the first term captures the additional healthy life years for those who died before age 5 and the second term captures the additional healthy life years for those who survived past age 5 (up to age 65). For each term, in order to compute the number of additional healthy life years, we consider both the average per-capita years of life lost due to premature mortality (YLL) and the average per-capita years of life lived with disability (YLD), incurred by the population aged 0-64 in Kenya across 5-year age groups. Each of this terms is computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts.
+We separate $H$ into two terms: the first term captures the additional healthy life years for those who died before age 5 and the second term captures the additional healthy life years for those who survived past age 5 (up to age 65). For each term, in order to compute the number of additional healthy life years, we consider both the average per-capita years of life lost due to premature mortality (YLL) and the average per-capita years of life lived with disability (YLD), incurred by the population aged 0-64 in Kenya across 5-year age groups. Each of these terms is computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts.
 
 <details>
 
@@ -2019,24 +1983,14 @@ H = \left( 5-
 ```
 
 
-```{=tex}
-\begin{equation}
-IGMB_{t} = M_p \gamma_{t} F_{t} H \\
-
-\label{eq:24}
-\tag{24}
-\end{equation}
-```
-
-
 
 ```r
 # TODOs:
 # - Replace all currency conversions with currency_f wherever possible            DONE
 # - Explain all unexplained numbers
-# - Describe added data sets to readme file
-# - Separate and explain into 3 code chunks: clean up, conversions, computing H
-# - Feed intgen_b_in into pv_benef
+# - Describe added data sets to readme file                                       DONE
+# - Separate and explain into 3 code chunks: clean up, conversions, computing H   
+# - Feed intgen_app4_f into pv_benef
 # - Review costs
 # - Reproduce result of app 3 with new function (feeding ingen_b_in=0)
 # - Update one-run
@@ -2085,7 +2039,6 @@ gbd_YLL_5t65$age_c <- factor( gbd_YLL_5t65$age_c, levels = c(
                                                               "60-64"
                                                               )
                               ) # sorting
-#gbd_YLL_5t65 <-gbd_YLL_5t65[order(gbd_YLL_5t65$age_c, decreasing = F), ]       TO DELETE
 
 # Selecting YLD data for 5 to 64  
 gbd_YLD_5t65 <- gbd_so[gbd_so$measure == "YLDs (Years Lived with Disability)" &
@@ -2155,18 +2108,24 @@ h_in <- h_f()
 ```
 
 
-```r
- # Adjust for inflation: convert all costs to 2017 USD PPP
-unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018) 
 
+```r
 #####SECTION ON Mp
 # Cost per DALY (Mp)
 ## Revealed Preference - Spring Cleaning (2011 USD)
 rp_in <-  currency_f(cost_per_daly_so, t_var = 2011)                                     
 
-## Stated Preference - Health Status WTP from 2016 Kenyan Schillings ot 2017 USD PPP - Based on monthly WTP
+## Stated Preference - Health Status WTP from 2016 Kenyan Schillings to 2017 USD PPP - Based on monthly WTP
 sp_in <- currency_f((12 * WTP_child_med_so) / ex_rate_2016_so, t_var = 2016)              
 
+#####Costs
+# Adjust for inflation: convert all costs to 2017 USD PPP
+unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018) 
+```
+
+
+
+```r
 ####SECTION FOR Ft
 # limit fertility between 1998 and 2020 for treated group
 klps_fert_9820_t <- klps_fert_so %>%
@@ -2176,9 +2135,14 @@ klps_fert_9820_t <- klps_fert_so %>%
 # constant and equal to its last value
 fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
 fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))                      
+```
 
+
+
+
+```r
 #COMPUTE IGMB
-IGMB_t_in <- intgen_b_in_f() 
+IGMB_t_in <- intgen_app4_f() 
 
 #COMPUTE PV of benefits
 app4_pv_benef_rp_in <- pv_benef_f(
@@ -2186,14 +2150,14 @@ app4_pv_benef_rp_in <- pv_benef_f(
   intgen_var = c(IGMB_t_in[, 1], rep(0, 21)),
   interest_r_var = interest_new_in,
   periods_var = periods_so
-)
+) # revealed preference
 
 app4_pv_benef_sp_in <- pv_benef_f(
   earnings_var = 0,
   intgen_var = c(IGMB_t_in[, 2], rep(0, 21)),
   interest_r_var = interest_new_in,
   periods_var = periods_so
-)
+) # stated preference
 ```
 
 </details>
@@ -2208,7 +2172,7 @@ Under approach 4, and using the same assumptions as above, the present value of 
 
 ### Costs
 
-The cost for approahc for follow the costs of @klps5 (which adopts the direct deworming costs under @baird2016worms, \$1.44 (2017 USD PPP), 2.4 years of treatment, and take-up rate of 0.75).
+The costs for approach four follow the costs of @klps5 (which adopts the direct deworming costs under @baird2016worms, \$1.44 (2017 USD PPP), 2.4 years of treatment, and take-up rate of 0.75).
 
 
 
@@ -2238,8 +2202,8 @@ Let $x$ denote each source used in this analysis.
 \begin{equation}
 x \sim N(\hat{x}, \sigma_{x})
 
-\label{eq:25}
-\tag{25}
+\label{eq:24}
+\tag{24}
 \\
 \sigma_{x} =
 \begin{cases}
@@ -2254,9 +2218,17 @@ As a default $\delta_{u} = 0.1$
 
 ```r
 # This function takes as inputs means and standard deviations of source
-# parameters and simualte draws of each source. When the source is a scalar,
-# it generates a draw from a noromal dist (mean, sd). When it is a "small"
+# parameters and simulate draws of each source. When the source is a scalar,
+# it generates a draw from a normal dist (mean, sd). When it is a "small"
 # (less than 4 elements) vector, generates independent multivariate normals.
+
+# LIST ALL NEW PARAMETERS: 
+# - H: ave_death_u5_so, gbd_YLD_u5$val, gbd_YLD_u5$pop, gbd_YLD_5t65$val, gbd_YLD_5t65$pop, gbd_YLL_5t65$val, gbd_YLL_5t65$pop
+# - M: cost_per_daly_so, WTP_child_med_so, ex_rate_2016_so
+# - Ft: fert_yr_25_in
+# - Gamma: gamma_mort_so
+
+
 
 
 #begin by cleaning up the cost data once
@@ -2267,7 +2239,7 @@ costs_data_in <- costs1_p1_f(df_costs_var = df_costs_so,
 
 # Data: source comes from a standard data source. Government statistic or other
 # publicly available statistic
-# Research: any sources that requieres some type of investigation to obtain
+# Research: any sources that requires some type of investigation to obtain
 # Guesswork: no clear source available
 
 sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
@@ -2355,20 +2327,31 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
                       staff_time_sd_var2,
                       new_costs_var2,
                       new_costs_sd_var2
-                      # yll_var2,           # app4
-                      # yll_sd_var2,
-                      # pop_var2,
-                      # pop_sd_var2,
-                      # cp_daly_rp_var2,
-                      # cp_daly_rp_sd_var2,
-                      # cp_daly_sp_var2,
-                      # cp_daly_sp_sd_var2,
+                      
+                      # ave_death_u5_var2,    # app4
+                      # ave_death_u5_sd_var2,
+                      # gbd_YLD_u5_val_var2,              
+                      # gbd_YLD_u5_val_sd_var2,              
+                      # gbd_YLD_u5_pop_var2,           
+                      # gbd_YLD_u5_pop_sd_var2,           
+                      # gbd_YLD_5t65_val_var2,            
+                      # gbd_YLD_5t65_val_sd_var2,            
+                      # gbd_YLD_5t65_pop_var2,         
+                      # gbd_YLD_5t65_pop_sd_var2,         
+                      # gbd_YLL_5t65_val_var2,            
+                      # gbd_YLL_5t65_val_sd_var2,         
+                      # gbd_YLL_5t65_pop_var2,            
+                      # gbd_YLL_5t65_pop_sd_var2,         
+                      # cost_per_daly_var2,
+                      # cost_per_daly_sd_var2,
+                      # WTP_child_med_var2,
+                      # WTP_child_med_sd_var2,
+                      # ex_rate_2016_var2,
+                      # ex_rate_2016_sd_var2,
+                      # fert_yr_25_var2,               
+                      # fert_yr_25_sd_var2,            
                       # gamma_mort_var2,
-                      # gamma_mort_sd_var2,
-                      # fert_yr_25_var2,
-                      # fert_yr_25_sd_var2,
-                      # life_exp_var2,
-                      # life_exp_sd_var2,
+                      # gamma_mort_sd_var2
                       ) {
     start_time <- Sys.time()
     ################
@@ -2452,14 +2435,107 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     colnames(prevalence_r_sim) <- as.character(countries_var2)  
 
     #SATOSHI INSERT RANDOM VARS FOR APP 4
-    # yll_sim <-  rnorm(nsims_var2, mean = yll_var2, sd = yll_sd_var2)
-    # pop_sim <-  rnorm(nsims_var2, mean = pop_var2, sd = pop_sd_var2)
-    # cp_daly_rp_sim <- rnorm(nsims_var2, mean = cp_daly_rp_var2, sd = cp_daly_rp_sd_var2)
-    # cp_daly_sp_sim <- rnorm(nsims_var2, mean = cp_daly_sp_var2, sd = cp_daly_sp_sd_var2)
+    # ave_death_u5_sim <-  rnorm(nsims_var2, mean = ave_death_u5_var2, sd = ave_death_u5_sd_var2)
+    # 
+    # # For H  # referred to `costs1_df_sim`
+    # gbd_YLD_u5_val_in <- gbd_YLD_u5_var2$val
+    # gbd_YLD_u5_pop_in <- gbd_YLD_u5_var2$pop
+    #
+    # # drawing samples form gbd_YLD_u5
+    # gbd_YLD_u5_val_sim <- sapply(gbd_YLD_u5_val_in,
+    #                            function(x)  rnorm(nsims_var2,
+    #                                               mean = x * gbd_YLD_u5_val_var2,  
+    #                                               sd = x * gbd_YLD_u5_val_sd_var2)
+    #                            )
+    # gbd_YLD_u5_pop_sim <- sapply(gbd_YLD_u5_pop_in,
+    #                            function(x)  rnorm(nsims_var2,
+    #                                               mean = x * gbd_YLD_u5_pop_var2,  
+    #                                               sd = x * gbd_YLD_u5_pop_sd_var2)
+    #                            )
+    # #computing unit cost for each simulation draw
+    # gbd_YLD_u5_sim <- NULL
+    # 
+    # #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
+    # for (aux1_i in 1:nsims_var2){
+    #   gbd_YLD_u5_sim[[aux1_i]] <- data.frame(
+    #     "age_c" = gbd_YLD_u5_var2$age_c,
+    #     "val" = gbd_YLD_u5_val_sim[aux1_i,],
+    #     "pop" = gbd_YLD_u5_pop_sim[aux1_i,]
+    #     )
+    # }
+    #
+    #
+    #
+    # gbd_YLD_5t65_val_in <- gbd_YLD_5t65_var2$val
+    # gbd_YLD_5t65_pop_in <- gbd_YLD_5t65_var2$pop
+    #
+    #
+    # # drawing samples form gbd_YLD_5t65
+    # gbd_YLD_5t65_val_sim <- sapply(gbd_YLD_5t65_val_in,
+    #                            function(x)  rnorm(nsims_var2,
+    #                                               mean = x * gbd_YLD_5t65_val_var2,  
+    #                                               sd = x * gbd_YLD_5t65_val_sd_var2)
+    #                            )
+    # gbd_YLD_5t65_pop_sim <- sapply(gbd_YLD_5t65_pop_in,
+    #                            function(x)  rnorm(nsims_var2,
+    #                                               mean = x * gbd_YLD_5t65_pop_var2,  
+    #                                               sd = x * gbd_YLD_5t65_pop_sd_var2)
+    #                            )
+    #
+    # #computing unit cost for each simulation draw
+    # gbd_YLD_5t65_sim <- NULL
+    # 
+    # #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
+    # for (aux1_i in 1:nsims_var2){
+    #   gbd_YLD_5t65_sim[[aux1_i]] <- data.frame(
+    #     "age_c" = gbd_YLD_5t65_var2$age_c,
+    #     "val" = gbd_YLD_5t65_val_sim[aux1_i,],
+    #     "pop" = gbd_YLD_5t65_pop_sim[aux1_i,]
+    #     )
+    # }
+    #
+    # gbd_YLL_5t65_val_in <- gbd_YLL_5t65_var2$val
+    # gbd_YLL_5t65_pop_in <- gbd_YLL_5t65_var2$pop    
+    # # drawing samples form gbd_YLL_5t65
+    # gbd_YLL_5t65_val_sim <- sapply(gbd_YLL_5t65_val_in,
+    #                            function(x)  rnorm(nsims_var2,
+    #                                               mean = x * gbd_YLL_5t65_val_var2,  
+    #                                               sd = x * gbd_YLL_5t65_val_sd_var2)
+    #                            )
+    # gbd_YLL_5t65_pop_sim <- sapply(gbd_YLL_5t65_pop_in,
+    #                            function(x)  rnorm(nsims_var2,
+    #                                               mean = x * gbd_YLL_5t65_pop_var2,  
+    #                                               sd = x * gbd_YLL_5t65_pop_sd_var2)
+    #                            )
+    # #computing unit cost for each simulation draw
+    # gbd_YLL_5t65_sim <- NULL
+    # 
+    # #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
+    # for (aux1_i in 1:nsims_var2){
+    #   gbd_YLL_5t65_sim[[aux1_i]] <- data.frame(
+    #     "age_c" = gbd_YLL_5t65_var2$age_c,
+    #     "val" = gbd_YLL_5t65_val_sim[aux1_i,],
+    #     "pop" = gbd_YLL_5t65_pop_sim[aux1_i,]
+    #     )
+    # }
+    #
+    # cost_per_daly_sim <- rnorm(nsims_var2, mean = cost_per_daly_var2, sd = cost_per_daly_sd_var2)
+    # WTP_child_med_sim <- rnorm(nsims_var2, mean = WTP_child_med_var2, sd = WTP_child_med_sd_var2)
+    # ex_rate_2016_sim <- rnorm(nsims_var2, mean = ex_rate_2016_var2, sd = ex_rate_2016_sd_var2)
     # gamma_mort_sim <- rnorm(nsims_var2, mean = gamma_mort_var2, sd = gamma_mort_sd_var2)
-    # fert_yr_25_sim <- rnorm(nsims_var2, mean = fert_yr_25_var2, sd = fert_yr_25_sd_var2)
-    # life_exp_sim <- rnorm(nsims_var2, mean = life_exp_var2, sd = life_exp_sd_var2)
-
+    #
+    # For fert_yr25_sim
+    # klps_fert_9820_t <- klps_fert_so %>%
+    #  filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
+    # # Add 2 additional years of fertility rates under the assumption that it remains
+    # # constant and equal to its last value
+    # fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
+    # fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))
+    # fert_yr_25_sim <- sapply(fert_yr_25_in, 
+    #                     function(x) rnorm(nsims_var2, 
+    #                                       mean = x * fert_yr_25_var2, 
+    #                                       sd = x * fert_yr_25_sd_var2))
+    #
     # if there is a new entry of prevalence, draw from it. If there is not
     # then leave as null
     if (!is.null(new_prevl_r_var2)){
@@ -2607,13 +2683,15 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
                 new_costs_var1 = temp_cost_sim[i],    
                 staff_time_var1 = staff_time_sim[i],
                 countries_var1 = countries_var2
-                # yll_var1 = yll_sim[i],
-                # pop_var1 = pop_sim[i],
-                # cp_daly_rp_var1 = cp_daly_rp_sim[i],
-                # cp_daly_sp_var1 = cp_daly_sp_sim[i],
-                # gamma_mort_var1 = gamma_mort_sim[i],
+                # ave_death_u5_var1 = ave_death_u5_sim[i],
+                # gbd_YLD_u5_var1 = gbd_YLD_u5_sim[i],
+                # gbd_YLD_5t65_var1 = gbd_YLD_5t65_sim[i],
+                # gbd_YLL_5t65_var1 = gbd_YLL_5t65_sim[i],
                 # fert_yr_25_var1 = fert_yr_25_sim[i],
-                # life_exp_var1 = life_exp_sim[i]
+                # cost_per_daly_var1 = cost_per_daly_sim[i],
+                # WTP_child_med_var1 = WTP_child_med_sim[i]
+                # ex_rate_2016_var1 = ex_rate_2016_sim[i],
+                # gamma_mort_var1 = gamma_mort_sim[i]
                 ),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
       a1_tax_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
@@ -2633,8 +2711,8 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
       a3_inc_a1_all_x_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prevl_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=Evidence Action
       a3_inc_a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
-      # XXX 1: benef=Intergenerational Child; cost=deworming cost in KLPS4 no ext or teaching
-      # a4_intgen_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_intgen_in, costs_var = costs_a4_in)
+      # XXX 1: benef = Intergenerational Child in revealed preference; cost=deworming cost in KLPS4 no ext or teaching
+      # a4_intgen_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_intgen_rp_in, costs_var = costs_a4_in)
       # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action in 2017 USD PPP
       # a4_inc_a3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in, costs_var = currency_f(costs2_ea_in,t_var=2018))
     }
@@ -2738,7 +2816,8 @@ Show all the details
 # │      |      └────lambda_eff_f
 # │      |           └────lambda1_t_f
 # │      ├──── intgen_app4_f
-# │      |      └────yll_pc_f
+# |      |      ├─ h_f()
+# |      |      └─ currency_f()
 # │      └──── interest_f
 # │  
 # └──── pv_costs_f (pv_costs_f)
@@ -2834,13 +2913,15 @@ one_run_f <-
            years_of_treat_t_var1 = years_of_treat_t_so,
            tax_var1 = tax_so,                                        
            periods_var1 = periods_so
-           # yll_var1 = yll_so,
-           # pop_var1 = pop_so,
-           # cp_daly_rp_var1 = cp_daly_rp_so,
-           # cp_daly_sp_var1 = cp_daly_sp_so,
-           # gamma_mort_var1 = gamma_mort_so,
+           # ave_death_u5_var1 = ave_death_u5_so,
+           # gbd_YLD_u5_var1 = gbd_YLD_u5,
+           # gbd_YLD_5t65_var1 = gbd_YLD_5t65,
+           # gbd_YLL_5t65_var1 = gbd_YLL_5t65,
            # fert_yr_25_var1 = fert_yr_25_in,
-           # life_exp_var1 = life_exp_so
+           # cost_per_daly_var1 = cost_per_daly_so,
+           # WTP_child_med_var1 = WTP_child_med_so,
+           # ex_rate_2016_var1 = ex_rate_2016_so,
+           # gamma_mort_var1 = gamma_mort_so
            ) {                                        
     ####------------ Inputs for wage_t -----------------------------------------
     wage_0_in <- wage_0_f(
@@ -2960,10 +3041,22 @@ one_run_f <-
     unit_test_f(interest_in, 0.0985, main_run_var = main_run_var1)
 
     ###------------ Inputs for intgen_app4_f --------------------------------------
-    # yll_pc_in <- yll_pc_f(yll_var = yll_so,
-    #                       pop_var = pop_so,
-    #                       life_exp_var = life_exp_so) 
-    # unit_test_f(yll_pc_in, NA, main_run_var = main_run_var1)
+    # h_in <- h_f(ave_death_u5_var = ave_death_u5_var1,
+                  # pop_u5_var = gbd_YLD_u5_var1$pop,
+                  # pop_5t65_var = gbd_YLD_5t65_var1$pop,
+                  # yld_u5_var = gbd_YLD_u5_var1$val,
+                  # yld_5t65_var = gbd_YLD_5t65_var1$val,
+                  # yll_5t65_var = gbd_YLL_5t65_var1$val)
+    # ## Revealed Preference - Spring Cleaning (2011 USD)
+    # rp_in <-  currency_f(cost_per_daly_var1, t_var = 2011)                              
+    # 
+    # ## Stated Preference - Health Status WTP from 2016 Kenyan Schillings to 2017 USD PPP - Based on monthly WTP
+    # sp_in <- currency_f((12 * WTP_child_med_var1) / ex_rate_2016_var1, t_var = 2016)
+
+    # unit_test_f(h_in, 61.04799, main_run_var = main_run_var1)
+    # unit_test_f(rp_in, 66.81853, main_run_var = main_run_var1)
+    # unit_test_f(sp_in, 3611.199, main_run_var = main_run_var1)
+    
     
     ##-------------- Inputs for costs2_f----------------------------------------
     # Make explicit non-function inputs:
@@ -3083,14 +3176,13 @@ one_run_f <-
     unit_test_f(pv_benef_all_prevl_new_in, 289.899107986178, main_run_var = main_run_var1)
 
     # Insert all function to compute children survival benefits
-    # # XXX 1: Intergenerational Child Benefits
+    # # XXX 1: Intergenerational Child Benefits with revealed preference
     # pv_benef_intgen_rp_in <- pv_benef_f(
-    #   earnings_var = 0,
-    #   intgen_var = c(intgen_app4_f(
-    #                 gamma_mort_so,
-    #                 fert_yr_25_in,
-    #                 yll_pc_in,
-    #                 currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26)),
+    # earnings_var = 0,
+    # intgen_var = c(intgen_app4_f(fert_yr_var = fert_yr_25_var1,
+    #                          gamma_mort_var = gamma_mort_var1,
+    #                          addlife_var = h_in,
+    #                          cp_daly_var = c(rp_in, sp_in)),rep(0,21)),
     #   interest_r_var = interest_new_in,
     #   periods_var = periods_so
     #   )
@@ -3100,11 +3192,10 @@ one_run_f <-
     # # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action
     # pv_benef_all_prevl_new_intgen_in <- pv_benef_f(
     #   earnings_var = earnings_no_ext_prevl_new_in,
-    #   intgen_var = c(intgen_app4_f(
-    #                 gamma_mort_so,
-    #                 fert_yr_25_in,
-    #                 yll_pc_in,
-    #                 currency_f(price_var = cp_daly_rp_so, t_var = 2011)),rep(0,26)),
+    #   intgen_var = c(intgen_app4_f(fert_yr_var = fert_yr_25_var1,
+    #                          gamma_mort_var = gamma_mort_var1,
+    #                          addlife_var = h_in,
+    #                          cp_daly_var = c(rp_in, sp_in)),rep(0,21)),
     #   interest_r_var = interest_new_in,
     #   periods_var = periods_so
     #   )
@@ -3192,7 +3283,7 @@ earnings_no_ext_in
     #   s2_var = s2_new_in,
     #   q2_var = q_full_var1
     #   )
-    # unit_test_f(costs_a4_1_in, NA, main_run_var = main_run_var1)
+    # unit_test_f(costs_a4_in, NA, main_run_var = main_run_var1)
 
     return( list(
       "wage_0_in" = wage_0_in,
