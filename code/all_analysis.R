@@ -284,7 +284,7 @@ chunk_sources <- function(){
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
 
-    gamma_mort_so <- 0.018      # The Treatment Effects. To be aligned with the new paper after publication
+    gamma_mort_so <- 0.017      # The Treatment Effects. To be aligned with the new paper after publication
     gamma_mort_sd_so <- 0.008   # doi, page, table, col, row
     tot_chld_so <- 2.6 # doi, page, table 2, col 7, panel A
 

@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>19 12月, 2022 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
+date: "<center><div class='mysubtitle'>30 March, 2023 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
@@ -316,7 +316,7 @@ chunk_sources <- function(){
     counts_par_so <- 1
     counts_par_sd_so <- 0.1
 
-    gamma_mort_so <- 0.018      # The Treatment Effects. To be aligned with the new paper after publication
+    gamma_mort_so <- 0.017      # The Treatment Effects. To be aligned with the new paper after publication
     gamma_mort_sd_so <- 0.008   # doi, page, table, col, row
     tot_chld_so <- 2.6 # doi, page, table 2, col 7, panel A
 
@@ -353,7 +353,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 # SP = Baird-etal-QJE-2016_fiscal-impact-calculations.xlsx, sheet: Assumps&Panel A Calcs
 ```
 
-<img src="C:/Users/koiso/Documents/GitHub/opa-deworming/code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
+<img src="code/images/main_pe.png" width="100%" style="display: block; margin: auto;" />
 
 ::: divider
 Executive Summary
@@ -1878,7 +1878,7 @@ In addition to the direct benefits in earnings of deworming to the treated stude
 
 ### Direct costs and benefits of the Primary School Deworming Project
 
-In the KLPS, on average, one person has **2.6 children in a lifetime [@klps5]**. The deworming treatment reduced the under-five mortality rates of children of dewormed students by **18 per 1,000 children**. Thus, the treatment to one person roughly averted the death of 0.05 children among per treated individual. From a perspective of cost, the direct deworming costs per one student are \$1.44 (2017 USD PPP), given the treatment period of 2.41 years and take-up rate of 75%. So, we could simply say that 0.05 lives can be protected by spending \$1.44 per treatment to one person. The below sections further explains the costs and benefits of saved children of dewormed students with additional parameters.
+In the KLPS, on average, one person has **2.6 children in a lifetime [@klps5]**. The deworming treatment reduced the under-five mortality rates of children of dewormed students by **17 per 1,000 children**. Thus, the treatment to one person roughly averted the death of 0.04 children among per treated individual. From a perspective of cost, the direct deworming costs per one student are \$1.44 (2017 USD PPP), given the treatment period of 2.41 years and take-up rate of 75%. So, we could simply say that 0.04 lives can be protected by spending \$1.44 per treatment to one person. The below sections further explains the costs and benefits of saved children of dewormed students with additional parameters.
 
 ```{=html}
 <!--Multiplying the per-capita cost by the number of treated students (21,710 people), the direct program cost is $30,256.
@@ -1951,7 +1951,7 @@ invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
 
 The monetary value of health benefits ($M_p$) is the saved cost when one DALY is averted. @klps5 uses two approaches: revealed preference and stated preference. Adjusted by the inflation and PPP to USD in 2017, the $M_p$ for revealed preference is \$66.82, and the $M_p$ for stated preference is \$3611.2, respectively (2017 USD PPP). The reader can modify the values for $M_p$ in the interactive app of this OPA.
 
-The treatment effects on under-five mortality for the children of the dewormed cohort ($γ_{t}$) is 0.018 (@klps5. Table 1, Panel A, Column 1, Row 1). The fertility rate $t$ years after deworming ($F_{t}$) is calculated as the number of children born per individual at $t$ years after the deworming intervention. (@klps5. Figure A.2).
+The treatment effects on under-five mortality for the children of the dewormed cohort ($γ_{t}$) is 0.017 (@klps5. Table 1, Panel A, Column 1, Row 1). The fertility rate $t$ years after deworming ($F_{t}$) is calculated as the number of children born per individual at $t$ years after the deworming intervention. (@klps5. Figure A.2).
 
 We separate $H$ into two terms: the first term captures the additional healthy life years for those who died before age 5 and the second term captures the additional healthy life years for those who survived past age 5 (up to age 65). For each term, in order to compute the number of additional healthy life years, we consider both the average per-capita years of life lost due to premature mortality (YLL) and the average per-capita years of life lived with disability (YLD), incurred by the population aged 0-64 in Kenya across 5-year age groups. Each of these terms is computed by summing across the total YLL (YLD) of each 5-year age cohort (dividing by 5 to get a per year estimate) and then diving it by the total population across all of the relevant 5-year age cohorts.
 
@@ -2168,7 +2168,7 @@ To be conservative, this approach does not consider the factors generated when b
 
 </details>
 
-Under approach 4, and using the same assumptions as above, the present value of child survival benefits is \$88.45 for revealed preference and \$4780.42 for stated preference.
+Under approach 4, and using the same assumptions as above, the present value of child survival benefits is \$83.54 for revealed preference and \$4514.84 for stated preference.
 
 ### Costs
 
@@ -2180,7 +2180,7 @@ The costs for approach four follow the costs of @klps5 (which adopts the direct 
 
 The original analysis in [@klps5] estimtates an NPV of 87.01 (table A7, column 2, and row 3) for revealed preference and an NPV of 4778.98 (table A6, column 3, and row 3) for stated preference. These results corresponds to social internal rates of return of 41.8% (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A7, column 2, and row 5) and 125.4% (located as an inline result in the paper - also in Figure 2 - and in the appendix at table A7, column 3, and row 5) for revealed preference and stated preference, respectively. 
 
-Following the steps described in this section, this approach obtains the same results (87.0121606 and 41.81% for revealed preference and 4778.9825018 and 125.37% for stated preference, respectively).
+Following the steps described in this section, this approach obtains the same results (82.0981152 and 41.06% for revealed preference and 4513.4034375 and 123.6% for stated preference, respectively).
 
 ## Accounting for Uncertainty
 
