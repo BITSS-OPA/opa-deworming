@@ -1338,8 +1338,6 @@ app4_pv_benef_sp_in <- pv_benef_f(
 # - Gamma: gamma_mort_so
 
 
-
-
 #begin by cleaning up the cost data once
 costs_data_in <- costs1_p1_f(df_costs_var = df_costs_so,
                           df_costs_cw_var = df_costs_cw_so,
@@ -1435,32 +1433,32 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
                       staff_time_var2,      # Guesswork
                       staff_time_sd_var2,
                       new_costs_var2,
-                      new_costs_sd_var2
+                      new_costs_sd_var2,
                       
-                      # ave_death_u5_var2,    # app4
-                      # ave_death_u5_sd_var2,
-                      # gbd_YLD_u5_val_var2,              
-                      # gbd_YLD_u5_val_sd_var2,              
-                      # gbd_YLD_u5_pop_var2,           
-                      # gbd_YLD_u5_pop_sd_var2,           
-                      # gbd_YLD_5t65_val_var2,            
-                      # gbd_YLD_5t65_val_sd_var2,            
-                      # gbd_YLD_5t65_pop_var2,         
-                      # gbd_YLD_5t65_pop_sd_var2,         
-                      # gbd_YLL_5t65_val_var2,            
-                      # gbd_YLL_5t65_val_sd_var2,         
-                      # gbd_YLL_5t65_pop_var2,            
-                      # gbd_YLL_5t65_pop_sd_var2,         
-                      # cost_per_daly_var2,
-                      # cost_per_daly_sd_var2,
-                      # WTP_child_med_var2,
-                      # WTP_child_med_sd_var2,
-                      # ex_rate_2016_var2,
-                      # ex_rate_2016_sd_var2,
-                      # fert_yr_25_var2,               
-                      # fert_yr_25_sd_var2,            
-                      # gamma_mort_var2,
-                      # gamma_mort_sd_var2
+                      ave_death_u5_var2,    # app4
+                      ave_death_u5_sd_var2,
+                      gbd_YLD_u5_val_var2,
+                      gbd_YLD_u5_val_sd_var2,
+                      gbd_YLD_u5_pop_var2,
+                      gbd_YLD_u5_pop_sd_var2,
+                      gbd_YLD_5t65_val_var2,
+                      gbd_YLD_5t65_val_sd_var2,
+                      gbd_YLD_5t65_pop_var2,
+                      gbd_YLD_5t65_pop_sd_var2,
+                      gbd_YLL_5t65_val_var2,
+                      gbd_YLL_5t65_val_sd_var2,
+                      gbd_YLL_5t65_pop_var2,
+                      gbd_YLL_5t65_pop_sd_var2,
+                      cost_per_daly_var2,
+                      cost_per_daly_sd_var2,
+                      WTP_child_med_var2,
+                      WTP_child_med_sd_var2,
+                      ex_rate_2016_var2,
+                      ex_rate_2016_sd_var2,
+                      fert_yr_25_var2,
+                      fert_yr_25_sd_var2,
+                      gamma_mort_var2,
+                      gamma_mort_sd_var2
                       ) {
     start_time <- Sys.time()
     ################
@@ -1545,107 +1543,111 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     colnames(prevalence_r_sim) <- as.character(countries_var2)  
 
     #SATOSHI INSERT RANDOM VARS FOR APP 4
-    # ave_death_u5_sim <-  rnorm(nsims_var2, mean = ave_death_u5_var2, sd = ave_death_u5_sd_var2)
-    # 
-    # # For H  # referred to `costs1_df_sim`
-    # gbd_YLD_u5_val_in <- gbd_YLD_u5_var2$val
-    # gbd_YLD_u5_pop_in <- gbd_YLD_u5_var2$pop
-    #
-    # # drawing samples form gbd_YLD_u5
-    # gbd_YLD_u5_val_sim <- sapply(gbd_YLD_u5_val_in,
-    #                            function(x)  rnorm(nsims_var2,
-    #                                               mean = x * gbd_YLD_u5_val_var2,  
-    #                                               sd = x * gbd_YLD_u5_val_sd_var2)
-    #                            )
-    # gbd_YLD_u5_pop_sim <- sapply(gbd_YLD_u5_pop_in,
-    #                            function(x)  rnorm(nsims_var2,
-    #                                               mean = x * gbd_YLD_u5_pop_var2,  
-    #                                               sd = x * gbd_YLD_u5_pop_sd_var2)
-    #                            )
-    # #computing unit cost for each simulation draw
-    # gbd_YLD_u5_sim <- NULL
-    # 
-    # #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
-    # for (aux1_i in 1:nsims_var2){
-    #   gbd_YLD_u5_sim[[aux1_i]] <- data.frame(
-    #     "age_c" = gbd_YLD_u5_var2$age_c,
-    #     "val" = gbd_YLD_u5_val_sim[aux1_i,],
-    #     "pop" = gbd_YLD_u5_pop_sim[aux1_i,]
-    #     )
-    # }
-    #
-    #
-    #
-    # gbd_YLD_5t65_val_in <- gbd_YLD_5t65_var2$val
-    # gbd_YLD_5t65_pop_in <- gbd_YLD_5t65_var2$pop
-    #
-    #
-    # # drawing samples form gbd_YLD_5t65
-    # gbd_YLD_5t65_val_sim <- sapply(gbd_YLD_5t65_val_in,
-    #                            function(x)  rnorm(nsims_var2,
-    #                                               mean = x * gbd_YLD_5t65_val_var2,  
-    #                                               sd = x * gbd_YLD_5t65_val_sd_var2)
-    #                            )
-    # gbd_YLD_5t65_pop_sim <- sapply(gbd_YLD_5t65_pop_in,
-    #                            function(x)  rnorm(nsims_var2,
-    #                                               mean = x * gbd_YLD_5t65_pop_var2,  
-    #                                               sd = x * gbd_YLD_5t65_pop_sd_var2)
-    #                            )
-    #
-    # #computing unit cost for each simulation draw
-    # gbd_YLD_5t65_sim <- NULL
-    # 
-    # #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
-    # for (aux1_i in 1:nsims_var2){
-    #   gbd_YLD_5t65_sim[[aux1_i]] <- data.frame(
-    #     "age_c" = gbd_YLD_5t65_var2$age_c,
-    #     "val" = gbd_YLD_5t65_val_sim[aux1_i,],
-    #     "pop" = gbd_YLD_5t65_pop_sim[aux1_i,]
-    #     )
-    # }
-    #
-    # gbd_YLL_5t65_val_in <- gbd_YLL_5t65_var2$val
-    # gbd_YLL_5t65_pop_in <- gbd_YLL_5t65_var2$pop    
-    # # drawing samples form gbd_YLL_5t65
-    # gbd_YLL_5t65_val_sim <- sapply(gbd_YLL_5t65_val_in,
-    #                            function(x)  rnorm(nsims_var2,
-    #                                               mean = x * gbd_YLL_5t65_val_var2,  
-    #                                               sd = x * gbd_YLL_5t65_val_sd_var2)
-    #                            )
-    # gbd_YLL_5t65_pop_sim <- sapply(gbd_YLL_5t65_pop_in,
-    #                            function(x)  rnorm(nsims_var2,
-    #                                               mean = x * gbd_YLL_5t65_pop_var2,  
-    #                                               sd = x * gbd_YLL_5t65_pop_sd_var2)
-    #                            )
-    # #computing unit cost for each simulation draw
-    # gbd_YLL_5t65_sim <- NULL
-    # 
-    # #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
-    # for (aux1_i in 1:nsims_var2){
-    #   gbd_YLL_5t65_sim[[aux1_i]] <- data.frame(
-    #     "age_c" = gbd_YLL_5t65_var2$age_c,
-    #     "val" = gbd_YLL_5t65_val_sim[aux1_i,],
-    #     "pop" = gbd_YLL_5t65_pop_sim[aux1_i,]
-    #     )
-    # }
-    #
-    # cost_per_daly_sim <- rnorm(nsims_var2, mean = cost_per_daly_var2, sd = cost_per_daly_sd_var2)
-    # WTP_child_med_sim <- rnorm(nsims_var2, mean = WTP_child_med_var2, sd = WTP_child_med_sd_var2)
-    # ex_rate_2016_sim <- rnorm(nsims_var2, mean = ex_rate_2016_var2, sd = ex_rate_2016_sd_var2)
-    # gamma_mort_sim <- rnorm(nsims_var2, mean = gamma_mort_var2, sd = gamma_mort_sd_var2)
-    #
+    ave_death_u5_sim <-  rnorm(nsims_var2, mean = ave_death_u5_var2, 
+                               sd = ave_death_u5_sd_var2)
+
+    # For H  # referred to `costs1_df_sim`
+    gbd_YLD_u5_val_in <- gbd_YLD_u5_val_var2
+    gbd_YLD_u5_pop_in <- gbd_YLD_u5_pop_var2
+
+    # drawing samples form gbd_YLD_u5
+    gbd_YLD_u5_val_sim <- sapply(gbd_YLD_u5_val_in,
+                               function(x)  rnorm(nsims_var2,
+                                                  mean = x * gbd_YLD_u5_val_var2,
+                                                  sd = x * gbd_YLD_u5_val_sd_var2)
+                               )
+    gbd_YLD_u5_pop_sim <- sapply(gbd_YLD_u5_pop_in,
+                               function(x)  rnorm(nsims_var2,
+                                                  mean = x * gbd_YLD_u5_pop_var2,
+                                                  sd = x * gbd_YLD_u5_pop_sd_var2)
+                               )
+    #computing unit cost for each simulation draw
+    gbd_YLD_u5_sim <- NULL
+
+    #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
+    for (aux1_i in 1:nsims_var2){
+      gbd_YLD_u5_sim[[aux1_i]] <- data.frame(
+        "age_c" = gbd_YLD_u5$age_c,
+        "val" = gbd_YLD_u5_val_sim[aux1_i,],
+        "pop" = gbd_YLD_u5_pop_sim[aux1_i,]
+        )
+    }
+
+
+
+    gbd_YLD_5t65_val_in <- gbd_YLD_5t65_val_var2
+    gbd_YLD_5t65_pop_in <- gbd_YLD_5t65_pop_var2
+
+
+    # drawing samples form gbd_YLD_5t65
+    gbd_YLD_5t65_val_sim <- sapply(gbd_YLD_5t65_val_in,
+                               function(x)  rnorm(nsims_var2,
+                                                  mean = x * gbd_YLD_5t65_val_var2,
+                                                  sd = x * gbd_YLD_5t65_val_sd_var2)
+                               )
+    gbd_YLD_5t65_pop_sim <- sapply(gbd_YLD_5t65_pop_in,
+                               function(x)  rnorm(nsims_var2,
+                                                  mean = x * gbd_YLD_5t65_pop_var2,
+                                                  sd = x * gbd_YLD_5t65_pop_sd_var2)
+                               )
+
+    #computing unit cost for each simulation draw
+    gbd_YLD_5t65_sim <- NULL
+
+    #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
+    for (aux1_i in 1:nsims_var2){
+      gbd_YLD_5t65_sim[[aux1_i]] <- data.frame(
+        "age_c" = gbd_YLD_5t65$age_c,
+        "val" = gbd_YLD_5t65_val_sim[aux1_i,],
+        "pop" = gbd_YLD_5t65_pop_sim[aux1_i,]
+        )
+    }
+
+    gbd_YLL_5t65_val_in <- gbd_YLL_5t65_val_var2
+    gbd_YLL_5t65_pop_in <- gbd_YLL_5t65_pop_var2
+    # drawing samples form gbd_YLL_5t65
+    gbd_YLL_5t65_val_sim <- sapply(gbd_YLL_5t65_val_in,
+                               function(x)  rnorm(nsims_var2,
+                                                  mean = x * gbd_YLL_5t65_val_var2,
+                                                  sd = x * gbd_YLL_5t65_val_sd_var2)
+                               )
+    gbd_YLL_5t65_pop_sim <- sapply(gbd_YLL_5t65_pop_in,
+                               function(x)  rnorm(nsims_var2,
+                                                  mean = x * gbd_YLL_5t65_pop_var2,
+                                                  sd = x * gbd_YLL_5t65_pop_sd_var2)
+                               )
+    #computing unit cost for each simulation draw
+    gbd_YLL_5t65_sim <- NULL
+
+    #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
+    for (aux1_i in 1:nsims_var2){
+      gbd_YLL_5t65_sim[[aux1_i]] <- data.frame(
+        "age_c" = gbd_YLL_5t65$age_c,
+        "val" = gbd_YLL_5t65_val_sim[aux1_i,],
+        "pop" = gbd_YLL_5t65_pop_sim[aux1_i,]
+        )
+    }
+
+    cost_per_daly_sim <- rnorm(nsims_var2, mean = cost_per_daly_var2, 
+                               sd = cost_per_daly_sd_var2)
+    WTP_child_med_sim <- rnorm(nsims_var2, mean = WTP_child_med_var2, 
+                               sd = WTP_child_med_sd_var2)
+    ex_rate_2016_sim <- rnorm(nsims_var2, mean = ex_rate_2016_var2, 
+                              sd = ex_rate_2016_sd_var2)
+    gamma_mort_sim <- rnorm(nsims_var2, mean = gamma_mort_var2, sd = gamma_mort_sd_var2)
+
     # For fert_yr25_sim
-    # klps_fert_9820_t <- klps_fert_so %>%
-    #  filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
-    # # Add 2 additional years of fertility rates under the assumption that it remains
-    # # constant and equal to its last value
-    # fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
-    # fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))
-    # fert_yr_25_sim <- sapply(fert_yr_25_in, 
-    #                     function(x) rnorm(nsims_var2, 
-    #                                       mean = x * fert_yr_25_var2, 
-    #                                       sd = x * fert_yr_25_sd_var2))
-    #
+    klps_fert_9820_t <- klps_fert_so %>%
+     filter(date_merge >= 1998 & date_merge <=2020 & psdp_treat == 1)
+    # Add 2 additional years of fertility rates under the assumption that it remains
+    # constant and equal to its last value
+    fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
+    fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))
+    fert_yr_25_sim <- sapply(fert_yr_25_in,
+                        function(x) rnorm(nsims_var2,
+                                          mean = x * fert_yr_25_var2,
+                                          sd = x * fert_yr_25_sd_var2))
+
     # if there is a new entry of prevalence, draw from it. If there is not
     # then leave as null
     if (!is.null(new_prevl_r_var2)){
@@ -1745,8 +1747,8 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     a3_inc_a1_all_sim    <- rep(NA, nsims_var2) #a3_inc_a1_all
     a3_inc_a1_all_x_sim  <- rep(NA, nsims_var2) #a3_inc_a1_all_x
     a3_inc_a2_all_sim    <- rep(NA, nsims_var2) #a3_inc_a2_all_mpe
-    # a4_intgen_sim        <- rep(NA, nsims_var2)
-    # a4_inc_a3_sim        <- rep(NA, nsims_var2)
+    a4_intgen_sim        <- rep(NA, nsims_var2)
+    a4_inc_a3_sim        <- rep(NA, nsims_var2)
 
 
     for (i in 1:nsims_var2) {
@@ -1793,16 +1795,16 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
                 df_costs_var1 = costs1_df_sim[[i]],
                 new_costs_var1 = temp_cost_sim[i],    
                 staff_time_var1 = staff_time_sim[i],
-                countries_var1 = countries_var2
-                # ave_death_u5_var1 = ave_death_u5_sim[i],
-                # gbd_YLD_u5_var1 = gbd_YLD_u5_sim[i],
-                # gbd_YLD_5t65_var1 = gbd_YLD_5t65_sim[i],
-                # gbd_YLL_5t65_var1 = gbd_YLL_5t65_sim[i],
-                # fert_yr_25_var1 = fert_yr_25_sim[i],
-                # cost_per_daly_var1 = cost_per_daly_sim[i],
-                # WTP_child_med_var1 = WTP_child_med_sim[i]
-                # ex_rate_2016_var1 = ex_rate_2016_sim[i],
-                # gamma_mort_var1 = gamma_mort_sim[i]
+                countries_var1 = countries_var2,
+                ave_death_u5_var1 = ave_death_u5_sim[i],
+                gbd_YLD_u5_var1 = gbd_YLD_u5_sim[i],
+                gbd_YLD_5t65_var1 = gbd_YLD_5t65_sim[i],
+                gbd_YLL_5t65_var1 = gbd_YLL_5t65_sim[i],
+                fert_yr_25_var1 = fert_yr_25_sim[i],
+                cost_per_daly_var1 = cost_per_daly_sim[i],
+                WTP_child_med_var1 = WTP_child_med_sim[i],
+                ex_rate_2016_var1 = ex_rate_2016_sim[i],
+                gamma_mort_var1 = gamma_mort_sim[i]
                 ),.GlobalEnv) ) # add costs here
       #Baird 1: Costs = Baird w/tax and no externalities (no ext); Benef = Baird no ext
       a1_tax_sim[i] <- NPV_pe_f(benefits_var = pv_benef_tax_nx_in, costs_var = costs2_in)
@@ -1822,10 +1824,16 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
       a3_inc_a1_all_x_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_yx_prevl_in, costs_var = costs2_ea_in)
       # EA3: benef= KLPS all and no ext; Costs=Evidence Action
       a3_inc_a2_all_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_in, costs_var = costs2_ea_in)
-      # XXX 1: benef = Intergenerational Child in revealed preference; cost=deworming cost in KLPS4 no ext or teaching
-      # a4_intgen_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_intgen_rp_in, costs_var = costs_a4_in)
-      # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action in 2017 USD PPP
-      # a4_inc_a3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in, costs_var = currency_f(costs2_ea_in,t_var=2018))
+      # INTGEN 1: 
+      # benef = Intergenerational Child in revealed preference; 
+      # cost=deworming cost in KLPS4 no ext or teaching
+      a4_intgen_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_intgen_rp_in, 
+                                    costs_var = costs_a4_in)
+      # INTGEN 2: 
+      # benef= KLPS all and no ext + Intergenerational child; 
+      # costs=Evidence Action in 2017 USD PPP
+      a4_inc_a3_sim[i]  <- NPV_pe_f(benefits_var = pv_benef_all_prevl_new_intgen_in,
+                                    costs_var = currency_f(costs2_ea_in,t_var=2018))
     }
 
     total_time_sim <- Sys.time() - start_time
@@ -1842,8 +1850,8 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
       "a3_inc_a1_all_sim"   = a3_inc_a1_all_sim,            
       "a3_inc_a1_all_x_sim" = a3_inc_a1_all_x_sim,            
       "a3_inc_a2_all_sim"   = a3_inc_a2_all_sim,
-      # "a4_intgen_sim"       = a4_intgen_sim,
-      # "a4_inc_a3_sim"       = a4_inc_a3_sim,
+      "a4_intgen_sim"       = a4_intgen_sim,
+      "a4_inc_a3_sim"       = a4_inc_a3_sim,
       "total_time_sim"      = total_time_sim
     ) )
 }
@@ -1857,9 +1865,9 @@ policy_estimates_varnames <- c(
   "a2_all_sim",
   "a3_inc_a1_all_sim",
   "a3_inc_a1_all_x_sim",
-  "a3_inc_a2_all_sim"
-  # "a4_intgen_sim",
-  # "a4_inc_a3_sim"
+  "a3_inc_a2_all_sim",
+  "a4_intgen_sim",
+  "a4_inc_a3_sim"
 )
 
 policy_estimates_text <- c(
@@ -1871,9 +1879,9 @@ policy_estimates_text <- c(
   "A2. All income",
   "A3. All income of A1",
   "A3. All income of A1, with ext.",
-  "A3. All income of A2. Main Policy Estimate"
-  # "A4. Intergenerational Mortality",
-  # "A4. All income of A2 and Intergenerational Mortality"
+  "A3. All income of A2. Main Policy Estimate",
+  "A4. Intergenerational Mortality",
+  "A4. All income of A2 and Intergenerational Mortality"
   )
 
 
@@ -2000,16 +2008,16 @@ one_run_f <-
            years_of_treat_0_var1 = years_of_treat_0_so,
            years_of_treat_t_var1 = years_of_treat_t_so,
            tax_var1 = tax_so,                                        
-           periods_var1 = periods_so
-           # ave_death_u5_var1 = ave_death_u5_so,
-           # gbd_YLD_u5_var1 = gbd_YLD_u5,
-           # gbd_YLD_5t65_var1 = gbd_YLD_5t65,
-           # gbd_YLL_5t65_var1 = gbd_YLL_5t65,
-           # fert_yr_25_var1 = fert_yr_25_in,
-           # cost_per_daly_var1 = cost_per_daly_so,
-           # WTP_child_med_var1 = WTP_child_med_so,
-           # ex_rate_2016_var1 = ex_rate_2016_so,
-           # gamma_mort_var1 = gamma_mort_so
+           periods_var1 = periods_so,
+           ave_death_u5_var1 = ave_death_u5_so,
+           gbd_YLD_u5_var1 = gbd_YLD_u5,
+           gbd_YLD_5t65_var1 = gbd_YLD_5t65,
+           gbd_YLL_5t65_var1 = gbd_YLL_5t65,
+           fert_yr_25_var1 = fert_yr_25_in,
+           cost_per_daly_var1 = cost_per_daly_so,
+           WTP_child_med_var1 = WTP_child_med_so,
+           ex_rate_2016_var1 = ex_rate_2016_so,
+           gamma_mort_var1 = gamma_mort_so
            ) {                                        
     ####------------ Inputs for wage_t -----------------------------------------
     wage_0_in <- wage_0_f(
@@ -2131,22 +2139,21 @@ one_run_f <-
     unit_test_f(interest_in, 0.0985, main_run_var = main_run_var1)
 
     ###------------ Inputs for intgen_app4_f --------------------------------------
-    # h_in <- h_f(ave_death_u5_var = ave_death_u5_var1,
-                  # pop_u5_var = gbd_YLD_u5_var1$pop,
-                  # pop_5t65_var = gbd_YLD_5t65_var1$pop,
-                  # yld_u5_var = gbd_YLD_u5_var1$val,
-                  # yld_5t65_var = gbd_YLD_5t65_var1$val,
-                  # yll_5t65_var = gbd_YLL_5t65_var1$val)
-    # ## Revealed Preference - Spring Cleaning (2011 USD)
-    # rp_in <-  currency_f(cost_per_daly_var1, t_var = 2011)                              
-    # 
-    # ## Stated Preference - Health Status WTP from 2016 Kenyan Schillings to 2017 USD PPP - Based on monthly WTP
-    # sp_in <- currency_f((12 * WTP_child_med_var1) / ex_rate_2016_var1, t_var = 2016)
+    h_in <- h_f(ave_death_u5_var = ave_death_u5_var1,
+                pop_u5_var = gbd_YLD_u5_var1$pop,
+                pop_5t65_var = gbd_YLD_5t65_var1$pop,
+                yld_u5_var = gbd_YLD_u5_var1$val,
+                yld_5t65_var = gbd_YLD_5t65_var1$val,
+                yll_5t65_var = gbd_YLL_5t65_var1$val)
+    ## Revealed Preference - Spring Cleaning (2011 USD)
+    rp_in <-  currency_f(cost_per_daly_var1, t_var = 2011)
+  
+    ## Stated Preference - Health Status WTP from 2016 Kenyan Schillings to 2017 USD PPP - Based on monthly WTP
+    sp_in <- currency_f((12 * WTP_child_med_var1) / ex_rate_2016_var1, t_var = 2016)
 
-    # unit_test_f(h_in, 61.04799, main_run_var = main_run_var1)
-    # unit_test_f(rp_in, 66.81853, main_run_var = main_run_var1)
-    # unit_test_f(sp_in, 3611.199, main_run_var = main_run_var1)
-    
+    unit_test_f(h_in, 61.04799, main_run_var = main_run_var1)
+    unit_test_f(rp_in, 66.81853, main_run_var = main_run_var1)
+    unit_test_f(sp_in, 3611.199, main_run_var = main_run_var1)
     
     ##-------------- Inputs for costs2_f----------------------------------------
     # Make explicit non-function inputs:
@@ -2268,30 +2275,30 @@ one_run_f <-
     unit_test_f(pv_benef_all_prevl_new_in, 289.899107986178, main_run_var = main_run_var1)
 
     # Insert all function to compute children survival benefits
-    # # XXX 1: Intergenerational Child Benefits with revealed preference
-    # pv_benef_intgen_rp_in <- pv_benef_f(
-    # earnings_var = 0,
-    # intgen_var = c(intgen_app4_f(fert_yr_var = fert_yr_25_var1,
-    #                          gamma_mort_var = gamma_mort_var1,
-    #                          addlife_var = h_in,
-    #                          cp_daly_var = c(rp_in, sp_in)),rep(0,21)),
-    #   interest_r_var = interest_new_in,
-    #   periods_var = periods_so
-    #   )
-    # 
+    # INTGEN 1: Intergenerational Child Benefits with revealed preference
+    pv_benef_intgen_rp_in <- pv_benef_f(
+    earnings_var = 0,
+    intgen_var = c(intgen_app4_f(fert_yr_var = fert_yr_25_var1,
+                             gamma_mort_var = gamma_mort_var1,
+                             addlife_var = h_in,
+                             cp_daly_var = c(rp_in, sp_in)),rep(0,21)),
+      interest_r_var = interest_new_in,
+      periods_var = periods_so
+      )
+
     # unit_test_f(pv_benef_intgen_rp_in, NA, main_run_var = main_run_var1)
-    # 
-    # # XXX 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action
-    # pv_benef_all_prevl_new_intgen_in <- pv_benef_f(
-    #   earnings_var = earnings_no_ext_prevl_new_in,
-    #   intgen_var = c(intgen_app4_f(fert_yr_var = fert_yr_25_var1,
-    #                          gamma_mort_var = gamma_mort_var1,
-    #                          addlife_var = h_in,
-    #                          cp_daly_var = c(rp_in, sp_in)),rep(0,21)),
-    #   interest_r_var = interest_new_in,
-    #   periods_var = periods_so
-    #   )
-    # 
+
+    # INTGEN 2: benef= KLPS all and no ext + Intergenerational child; costs=Evidence Action
+    pv_benef_all_prevl_new_intgen_in <- pv_benef_f(
+      earnings_var = earnings_no_ext_prevl_new_in,
+      intgen_var = c(intgen_app4_f(fert_yr_var = fert_yr_25_var1,
+                             gamma_mort_var = gamma_mort_var1,
+                             addlife_var = h_in,
+                             cp_daly_var = c(rp_in, sp_in)),rep(0,21)),
+      interest_r_var = interest_new_in,
+      periods_var = periods_so
+      )
+
     # unit_test_f(pv_benef_all_prevl_new_intgen_in, NA, main_run_var = main_run_var1)
     
     #Costs asd
@@ -2365,16 +2372,16 @@ earnings_no_ext_in
     unit_test_f(costs_a2_in, 32.2977546110344, main_run_var = main_run_var1)
     
     #costs_a4: [@klps5]
-    # costs_a4_in <- pv_costs_f(
-    #   periods_var = periods_var1,
-    #   delta_ed_var = 0,
-    #   interest_r_var = interest_new_in,
-    #   cost_of_schooling_var = 0,
-    #   s1_var = 0,
-    #   q1_var = q_zero_var1,
-    #   s2_var = s2_new_in,
-    #   q2_var = q_full_var1
-    #   )
+    costs_a4_in <- pv_costs_f(
+      periods_var = periods_var1,
+      delta_ed_var = 0,
+      interest_r_var = interest_new_in,
+      cost_of_schooling_var = 0,
+      s1_var = 0,
+      q1_var = q_zero_var1,
+      s2_var = s2_new_in,
+      q2_var = q_full_var1
+      )
     # unit_test_f(costs_a4_in, NA, main_run_var = main_run_var1)
 
     return( list(
@@ -2400,7 +2407,7 @@ earnings_no_ext_in
       "s2_in" = s2_in,
       "pv_benef_tax_nx_in" = pv_benef_tax_nx_in,
       "pv_benef_tax_yx_in" = pv_benef_tax_yx_in,
-      # "pv_benef_intgen_rp_in"= pv_benef_intgen_rp_in,              # SATOSHI FILL IN
+      "pv_benef_intgen_rp_in"= pv_benef_intgen_rp_in,              # SATOSHI FILL IN
       "pv_benef_all_nx_in" = pv_benef_all_nx_in,
       "pv_benef_all_nx_prevl_in" = pv_benef_all_nx_prevl_in,
       "pv_benef_all_yx_in" =  pv_benef_all_yx_in,
@@ -2408,13 +2415,13 @@ earnings_no_ext_in
       "pv_benef_tax_new_in" = pv_benef_tax_new_in,
       "pv_benef_all_new_in" = pv_benef_all_new_in,
       "pv_benef_all_prevl_new_in" = pv_benef_all_prevl_new_in,
-      # "pv_benef_all_prevl_new_intgen_in" = pv_benef_all_prevl_new_intgen_in,
+      "pv_benef_all_prevl_new_intgen_in" = pv_benef_all_prevl_new_intgen_in,
       "costs2_ea_in" = costs2_ea_in,
       "costs2_in" = costs2_in,
       "costs2_x_in" = costs2_x_in,
       "costs_a2_in" = costs_a2_in,
-      "cost1_in" = cost1_in
-      # "costs_a4_in" = costs_a4_in
+      "cost1_in" = cost1_in,
+      "costs_a4_in" = costs_a4_in
     ) )
   }
 

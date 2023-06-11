@@ -1,6 +1,6 @@
 ---
 title: "<center><div class= 'mytitle'>Open Policy Analysis for Deworming</div></center>"
-date: "<center><div class='mysubtitle'>30 March, 2023 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
+date: "<center><div class='mysubtitle'>11 6月, 2023 <br><img height = '60px' src = './images/BITSS_logo_horizontal.png'><img height='60px' src='./images/CEGA_logo.png'><a href = 'http://www.bitss.org/opa/projects/deworming/'><img height = '60px' src = './images/OPA_layers.png'></a></div></center>"
 author: "<center><div class = 'contributors'>BITSS Team. Full list of contributors [here](https://github.com/BITSS-OPA/opa-deworming#list-of-contributors)</div></center>"
 editor_options:
   chunk_output_type: console
