@@ -43,6 +43,7 @@ knit:
 \def\blue{\color{blue}}
 \def\red{\color{red}}
 ```
+
 ```{r setup, include=FALSE, purl=TRUE}
 
 #With purl set to false, this chunk should be omitted from the all_analysis.R file -Keanu
@@ -415,7 +416,8 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 ```{r main-pe-print, out.width = '100%', fig.align='center', echo=FALSE, purl=FALSE}
 # url
-knitr::include_graphics("code/images/main_pe.png")
+# TODO: Fix issue with path down below
+# knitr::include_graphics("code/images/main_pe.png")
 ```
 
 ::: divider
@@ -2665,6 +2667,11 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
                                                   mean = x * gbd_YLD_u5_val_var2,
                                                   sd = x * gbd_YLD_u5_val_sd_var2)
                                )
+    
+    # Suggested solution
+    # gbd_YLD_u5_val_sim <- rnorm(nsims_var2, mean = gbd_YLD_u5_val_var2, 
+    #                           sd = gbd_YLD_u5_val_sd_var2)
+    
     gbd_YLD_u5_pop_sim <- sapply(gbd_YLD_u5_pop_in,
                                function(x)  rnorm(nsims_var2,
                                                   mean = x * gbd_YLD_u5_pop_var2,
@@ -2859,6 +2866,7 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     a4_intgen_sim        <- rep(NA, nsims_var2)
     a4_inc_a3_sim        <- rep(NA, nsims_var2)
 
+    browser()
 
     for (i in 1:nsims_var2) {
     # one_run_f, for the most part, does not include standard deviations   
@@ -3086,11 +3094,11 @@ unit_test_f <- function(to_test_var, original_var, main_run_var = TRUE){
             fails_test <- ( abs(to_test_var - original_var) > 0.0001 )
             text_val <- to_test_var
         }
-        if (fails_test) {
-            print(paste("Output has changed at",
-                        deparse(substitute(to_test_var) ),
-                        " to ", text_val) )
-        }
+        # if (fails_test) {
+        #     print(paste("Output has changed at",
+        #                 deparse(substitute(to_test_var) ),
+        #                 " to ", text_val) )
+        # }
       }
 }
 
@@ -3731,7 +3739,7 @@ return(list("generate_plot_f" = generate_plot_f))
 invisible( list2env(chunk_generate_plot(),.GlobalEnv) )
 ```
 
-```{r run-mc, dpi = 400, purl=FALSE, echo=FALSE}
+```{r run-mc, dpi = 400, purl=FALSE, echo=FALSE, eval=FALSE}
 npv_all_sim <-   sim_data1_f(
             nsims_var2 = nsims_so,                        
             gov_bonds_var2          = round(gov_bonds_so,2)             ,    #asd gov_bonds_so, NO CHANGE                              
