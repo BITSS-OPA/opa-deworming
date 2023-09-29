@@ -1,4 +1,4 @@
-## ----setup, include=FALSE, purl=TRUE------------------------------------------
+## ----setup, include=FALSE, purl=TRUE--------------------------------------------------------------------------------
 
 #With purl set to false, this chunk should be omitted from the all_analysis.R file -Keanu
 
@@ -63,7 +63,7 @@ knitr::purl("code/01_final_opa.Rmd", "code/all_analysis.R")
 
 
 
-## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE------
+## ----sources, eval = TRUE, echo=print_code, message=FALSE, warning=FALSE--------------------------------------------
 # - inputs: none
 # - outputs: all sources coming from data, research and guesswork
 chunk_sources <- function(){
@@ -323,7 +323,7 @@ invisible( list2env(chunk_sources(),.GlobalEnv) )
 
 
 
-## ----final-pe, echo=print_code------------------------------------------------
+## ----final-pe, echo=print_code--------------------------------------------------------------------------------------
 # - inputs: total per capita benefits, total per capita costs
 # - outputs: Net Present Value (NPV)
 chunk_final_pe <- function(){
@@ -345,7 +345,7 @@ invisible( list2env(chunk_final_pe(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 
 
-## ----benefits, echo=print_code------------------------------------------------
+## ----benefits, echo=print_code--------------------------------------------------------------------------------------
 # - inputs: stream earnings, discounting rate, number of periods
 # - outputs: function that computes the present value of benefits
 chunk_benefits <- function(){
@@ -373,7 +373,7 @@ invisible( list2env(chunk_benefits(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 
 
-## ----interest-rate, echo=print_code-------------------------------------------
+## ----interest-rate, echo=print_code---------------------------------------------------------------------------------
 # - inputs: nominal interest rate, inflation rate
 # - outputs: real interest rate. exact and approximate formula
 chunk_interest <- function(){
@@ -408,7 +408,7 @@ interest_new_in <- as.numeric(
 
 
 
-## ----curency-conversion, echo=print_code--------------------------------------
+## ----curency-conversion, echo=print_code----------------------------------------------------------------------------
 # - inputs: price in USD in year X, df_ex_rate_so (exchange rate of the local currency to USD), ex_rate_ppp_so (exchange rate of the local currency to USD PPP), df_cpi_so (CPI), year X
 # - outputs: price in PPP 2017 USD
 # Possible improvement:rewrite fn using tivyverse syntax to improve readability
@@ -443,7 +443,7 @@ invisible( list2env(chunk_currency(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:
 
 
-## ----earnings1, echo=print_code-----------------------------------------------
+## ----earnings1, echo=print_code-------------------------------------------------------------------------------------
 # - inputs: earnings wihtout treatment (wage_in), direct treatment eff
 # (lambda1_so), indirect treatment eff (lambda2_so), saturation and coverage (coverage_so)
 # - outputs: earnings (no name specified)
@@ -469,7 +469,7 @@ chunk_earnings1 <- function(){
 invisible( list2env(chunk_earnings1(),.GlobalEnv) )
 
 
-## ----wage_t, echo=print_code--------------------------------------------------
+## ----wage_t, echo=print_code----------------------------------------------------------------------------------------
 #inputs: wages (wage_ag_so, wage_ww_so) self employed income (profits_se_so,
 #  hours_se_cond_so) hours of work (hours_ag_so, hours_ww_so, hours_se_so),
 #  exchange rate (ex_rate_so), timing vars (periods_so, time_to_jm_so),
@@ -540,7 +540,7 @@ wage_t_in <- wage_t_f(wage_0_var = wage_0_in,
 
 
 
-## ----lambdas, echo=print_code-------------------------------------------------
+## ----lambdas, echo=print_code---------------------------------------------------------------------------------------
 # - inputs: direct (lambda1_so), and indirect (lambda2_so) treatment effects by gender
 # - outputs: simple average of direct and indirect treatment eff.
 chunk_lambdas<- function(){
@@ -566,7 +566,7 @@ lambda1_in <- lambda1_in_f()
 lambda2_in <- lambda2_in_f()
 
 
-## ----coverage-and-saturation, echo = print_code-------------------------------
+## ----coverage-and-saturation, echo = print_code---------------------------------------------------------------------
 # - inputs: coverage (coverage_so), take-up with full subsidy (q_full_so), and
 # take-up with no subsidy (q_zero_so)
 # - outputs: saturation (saturation_in)
@@ -637,7 +637,7 @@ pv_benef_yes_ext_in <- pv_benef_f(
 
 
 
-## ----cost2, echo = print_code-------------------------------------------------
+## ----cost2, echo = print_code---------------------------------------------------------------------------------------
 # - inputs: periods (periods_so), additional education (delta_ed_final_in),
 #  discount rate (interest) (varies by approach), cost per student
 #  (cost_per_student_in), cost per treatment (s2_in), take-up with treatment
@@ -673,7 +673,7 @@ invisible( list2env(chunk_cost2(),.GlobalEnv) )
 ##### Execute values of the functions above when needed for the text:  
 
 
-## ----unit_costs2, echo = print_code-------------------------------------------
+## ----unit_costs2, echo = print_code---------------------------------------------------------------------------------
 # - inputs: unit costs in local currency (unit_cost_local_so), exchange rate
 #  (ex_rate_so), years of treatment (years_of_treat_0_so)
 # - outputs: unit costs of treatment (s2_f)
@@ -697,7 +697,7 @@ invisible( list2env(chunk_unit_costs2(),.GlobalEnv) )
 s2_in <- s2_f()
 
 
-## ----ed-costs, echo = print_code----------------------------------------------
+## ----ed-costs, echo = print_code------------------------------------------------------------------------------------
 # - inputs: teacher salary (teach_sal_so) and benefits (teach_ben_so), number
 # of students (n_students_so), include externalities (include_ext_so), extra ed
 # without ext (delta_ed_so), and extra ed due to ext (delta_ed_ext_so)
@@ -771,7 +771,7 @@ pv_cost_yes_ext_in <- pv_costs_f(
 
 
 
-## ----delta-earnings, eval=TRUE, echo = print_code-----------------------------
+## ----delta-earnings, eval=TRUE, echo = print_code-------------------------------------------------------------------
 # - inputs: index for time (t_var), pooled treatment effect (lambda1_new_so[1])
 # - outputs: effect on lifetime earnings (earnings_app2_f)
 chunk_new_earnings <- function(){
@@ -794,7 +794,7 @@ earnings_no_ext_new_in <- earnings_app2_f(t_var = 0:50,
                                       lambda1k1_var = lambda1_new_so[1])
 
 
-## ----unit_costs2_new, echo = print_code---------------------------------------
+## ----unit_costs2_new, echo = print_code-----------------------------------------------------------------------------
 # - inputs: unit costs (unit_cost_local_so), exchange rate (ex_rate_so),
 #  new interest rate (interest_new_in)
 # - outputs: total unit costs (s2_new_f)
@@ -842,7 +842,7 @@ q2_in <- q_full_so
 
 
 
-## ----lambdas_eff, echo = print_code-------------------------------------------
+## ----lambdas_eff, echo = print_code---------------------------------------------------------------------------------
 # - inputs: previously estimated treatment effect (lambda1_in_f), prevalence
 # rates in the original setting (prevalence_0_so), prevalence in the new setting
 # (prevalence_r_so), countries included in the analysis (country_sel_so)
@@ -887,7 +887,7 @@ lambda1_r_in <- lambda_eff_f()$lambda1_eff_in
 prevalence_r_in <- lambda_eff_f()$prevalence_r_final_in
 
 
-## ----lambdas_t, echo = print_code---------------------------------------------
+## ----lambdas_t, echo = print_code-----------------------------------------------------------------------------------
 # - inputs: treatment effect (lambda1_in_f), length of treatment in original
 # study (years_of_treat_0_so), length of treatment in new setting (years_of_treat_t_so)
 # - outputs: per year treatment effect (lambda1_t1) and total treatment effect
@@ -995,7 +995,7 @@ app3_pv_benef_all_new_in <- pv_benef_f(earnings_var = earnings_no_ext_new_in,
                                 periods_var = periods_so)
 
 
-## ----eq_3, echo=print_code, eval=TRUE-----------------------------------------
+## ----eq_3, echo=print_code, eval=TRUE-------------------------------------------------------------------------------
 # - inputs: cost data by payer type at the contry/province level by year (df_costs_so)
 #  crosswalk between country/state and region (df_costs_cw_so), treatment counts
 #  by country/province and year (df_counts_so); staff time adjusment factor
@@ -1110,7 +1110,7 @@ costs1_p2_in <- costs1_p2_f(select_var = list("india", "kenya", "nigeria",
 
 
 
-## -----------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------------------------------------
 ###########################
 # Intergenerational Child Mortality Benefits  
 ###########################
@@ -1145,7 +1145,7 @@ invisible( list2env(chunk_interg_ben(),.GlobalEnv) )
 
 
 
-## ----cleaning for H, eval=TRUE------------------------------------------------
+## ----cleaning for H, eval=TRUE--------------------------------------------------------------------------------------
 # TODOs:
 # - Replace all currency conversions with currency_f wherever possible            DONE
 # - Explain all unexplained numbers
@@ -1235,7 +1235,7 @@ gbd_YLD_5t65$age_c <- factor( gbd_YLD_5t65$age_c, levels = c(
                               ) # sorting
 
 
-## ----computing h--------------------------------------------------------------
+## ----computing h----------------------------------------------------------------------------------------------------
 ###########################
 # H
 ###########################
@@ -1265,7 +1265,7 @@ invisible( list2env(chunk_h(),.GlobalEnv) )
 h_in <- h_f()
 
 
-## ----converions for Mp and costs----------------------------------------------
+## ----converions for Mp and costs------------------------------------------------------------------------------------
 #####SECTION ON Mp
 # Cost per DALY (Mp)
 ## Revealed Preference - Spring Cleaning (2011 USD)
@@ -1280,7 +1280,7 @@ unit_cost_2017usdppp_in <- currency_f(unit_cost_so, t_var = 2018)
 
 
 
-## ----cleaning for Ft----------------------------------------------------------
+## ----cleaning for Ft------------------------------------------------------------------------------------------------
 ####SECTION FOR Ft
 # limit fertility between 1998 and 2020 for treated group
 klps_fert_9820_t <- klps_fert_so %>%
@@ -1293,7 +1293,7 @@ fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))
 
 
 
-## ----computing IGMB-----------------------------------------------------------
+## ----computing IGMB-------------------------------------------------------------------------------------------------
 #COMPUTE IGMB
 IGMB_t_in <- intgen_app4_f() 
 
@@ -1314,7 +1314,7 @@ app4_pv_benef_sp_in <- pv_benef_f(
 
 
 
-## ---- eval=FALSE, echo=FALSE--------------------------------------------------
+## ---- eval=FALSE, echo=FALSE----------------------------------------------------------------------------------------
 ## # pv_benef
 ## # ├──── earnings_var = 0
 ## # ├──── intgen_app4_f()
@@ -1325,7 +1325,7 @@ app4_pv_benef_sp_in <- pv_benef_f(
 
 
 
-## ----mc-setup, eval=TRUE, echo = print_code-----------------------------------
+## ----mc-setup, eval=TRUE, echo = print_code-------------------------------------------------------------------------
 # This function takes as inputs means and standard deviations of source
 # parameters and simulate draws of each source. When the source is a scalar,
 # it generates a draw from a normal dist (mean, sd). When it is a "small"
@@ -1546,50 +1546,43 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     ave_death_u5_sim <-  rnorm(nsims_var2, mean = ave_death_u5_var2, 
                                sd = ave_death_u5_sd_var2)
 
-    # For H  # referred to `costs1_df_sim`
-    gbd_YLD_u5_val_in <- gbd_YLD_u5_val_var2
-    gbd_YLD_u5_pop_in <- gbd_YLD_u5_pop_var2
-
     # drawing samples form gbd_YLD_u5
-    gbd_YLD_u5_val_sim <- sapply(gbd_YLD_u5_val_in,
-                               function(x)  rnorm(nsims_var2,
-                                                  mean = x * gbd_YLD_u5_val_var2,
-                                                  sd = x * gbd_YLD_u5_val_sd_var2)
-                               )
-    gbd_YLD_u5_pop_sim <- sapply(gbd_YLD_u5_pop_in,
-                               function(x)  rnorm(nsims_var2,
-                                                  mean = x * gbd_YLD_u5_pop_var2,
-                                                  sd = x * gbd_YLD_u5_pop_sd_var2)
-                               )
-    #computing unit cost for each simulation draw
-    gbd_YLD_u5_sim <- NULL
+    gbd_YLD_u5_val_sim <- rnorm(nsims_var2, mean = gbd_YLD_u5_val_var2, 
+                               sd = gbd_YLD_u5_val_sd_var2)
+
+    gbd_YLD_u5_pop_sim <- rnorm(nsims_var2, mean = gbd_YLD_u5_pop_var2, 
+                               sd = gbd_YLD_u5_pop_sd_var2)
+    
+    
+    a <- data.frame(
+      age_c = gbd_YLD_u5$age_c,
+      val = gbd_YLD_u5_val_sim,
+      pop = gbd_YLD_u5_pop_sim
+      )
+
+    gbd_YLD_u5_sim <- list()
 
     #building "nsims_var2" simulated data sets (corresponding to costs_data_in)
-    for (aux1_i in 1:nsims_var2){
-      gbd_YLD_u5_sim[[aux1_i]] <- data.frame(
-        "age_c" = gbd_YLD_u5$age_c,
-        "val" = gbd_YLD_u5_val_sim[aux1_i,],
-        "pop" = gbd_YLD_u5_pop_sim[aux1_i,]
-        )
+     for (aux1_i in 1:nsims_var2){
+      gbd_YLD_u5_sim[[aux1_i]] <- a[aux1_i,]
+        
     }
 
-
-
-    gbd_YLD_5t65_val_in <- gbd_YLD_5t65_val_var2
-    gbd_YLD_5t65_pop_in <- gbd_YLD_5t65_pop_var2
-
-
     # drawing samples form gbd_YLD_5t65
-    gbd_YLD_5t65_val_sim <- sapply(gbd_YLD_5t65_val_in,
+    gbd_YLD_5t65_val_sim <- sapply(c(rep(1,length(gbd_YLD_5t65_val_in))),
                                function(x)  rnorm(nsims_var2,
                                                   mean = x * gbd_YLD_5t65_val_var2,
                                                   sd = x * gbd_YLD_5t65_val_sd_var2)
                                )
-    gbd_YLD_5t65_pop_sim <- sapply(gbd_YLD_5t65_pop_in,
+    colnames(gbd_YLD_5t65_val_sim) <- as.character(gbd_YLD_5t65$age_c)
+    
+    gbd_YLD_5t65_pop_sim <- sapply(c(rep(1,length(gbd_YLD_5t65_pop_in))),
                                function(x)  rnorm(nsims_var2,
                                                   mean = x * gbd_YLD_5t65_pop_var2,
                                                   sd = x * gbd_YLD_5t65_pop_sd_var2)
                                )
+    
+    colnames(gbd_YLD_5t65_pop_sim) <- as.character(gbd_YLD_5t65$age_c)
 
     #computing unit cost for each simulation draw
     gbd_YLD_5t65_sim <- NULL
@@ -1603,15 +1596,13 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
         )
     }
 
-    gbd_YLL_5t65_val_in <- gbd_YLL_5t65_val_var2
-    gbd_YLL_5t65_pop_in <- gbd_YLL_5t65_pop_var2
     # drawing samples form gbd_YLL_5t65
-    gbd_YLL_5t65_val_sim <- sapply(gbd_YLL_5t65_val_in,
+    gbd_YLL_5t65_val_sim <- sapply(c(rep(1,length(gbd_YLL_5t65_val_in))),
                                function(x)  rnorm(nsims_var2,
                                                   mean = x * gbd_YLL_5t65_val_var2,
                                                   sd = x * gbd_YLL_5t65_val_sd_var2)
                                )
-    gbd_YLL_5t65_pop_sim <- sapply(gbd_YLL_5t65_pop_in,
+    gbd_YLL_5t65_pop_sim <- sapply(c(rep(1,length(gbd_YLL_5t65_pop_in))),
                                function(x)  rnorm(nsims_var2,
                                                   mean = x * gbd_YLL_5t65_pop_var2,
                                                   sd = x * gbd_YLL_5t65_pop_sd_var2)
@@ -1643,7 +1634,7 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     # constant and equal to its last value
     fert_t_23 <- klps_fert_9820_t$avg_child_resp_treat
     fert_yr_25_in <- c(fert_t_23, rep(fert_t_23[23], 2))
-    fert_yr_25_sim <- sapply(fert_yr_25_in,
+    fert_yr_25_sim <- sapply(c(rep(1,length(fert_yr_25_in))),
                         function(x) rnorm(nsims_var2,
                                           mean = x * fert_yr_25_var2,
                                           sd = x * fert_yr_25_sd_var2))
@@ -1750,6 +1741,7 @@ sim_data1_f <- function(nsims_var2 = 1e2,                   # "Setup" vars
     a4_intgen_sim        <- rep(NA, nsims_var2)
     a4_inc_a3_sim        <- rep(NA, nsims_var2)
 
+    browser()
 
     for (i in 1:nsims_var2) {
     # one_run_f, for the most part, does not include standard deviations   
@@ -1885,7 +1877,7 @@ policy_estimates_text <- c(
   )
 
 
-## ----all-steps, echo=print_code-----------------------------------------------
+## ----all-steps, echo=print_code-------------------------------------------------------------------------------------
 # TODO: Wrap this code chunk in chunk_xxxfunction
 
 #chunk_runvalues <- function(){
@@ -1955,11 +1947,11 @@ unit_test_f <- function(to_test_var, original_var, main_run_var = TRUE){
             fails_test <- ( abs(to_test_var - original_var) > 0.0001 )
             text_val <- to_test_var
         }
-        if (fails_test) {
-            print(paste("Output has changed at",
-                        deparse(substitute(to_test_var) ),
-                        " to ", text_val) )
-        }
+        # if (fails_test) {
+        #     print(paste("Output has changed at",
+        #                 deparse(substitute(to_test_var) ),
+        #                 " to ", text_val) )
+        # }
       }
 }
 
@@ -2434,7 +2426,7 @@ invisible( list2env(one_run_f(),.GlobalEnv) )
 
 
 
-## ----generate-plot-function, purl = TRUE, echo = FALSE------------------------
+## ----generate-plot-function, purl = TRUE, echo = FALSE--------------------------------------------------------------
 # generate_plot_f: function to generate plots for both Dynamic Document and
 # shiny app. It takes in the simulated data, policy estimate text, and rescale
 # variable. These are intermediary variables to exclude the interactivity of
